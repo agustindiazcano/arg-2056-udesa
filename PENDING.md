@@ -1,5 +1,12 @@
 # PENDING
 
+## Progress Overview (~38% Complete)
+* **Foundational & Data Contracts**: 6/6 completed (100%)
+* **Core App Architecture**: 1/1 completed (100%)
+* **Modeling & Real Data**: 0/4 completed (0%)
+* **Interactive UI Scenes**: 0/6 completed (0%)
+* **Finalization**: 0/1 completed (0%)
+
 ## Task queue (in order)
 
 1. [ ] `data-pipeline`: scripts and processed datasets with `source` + `retrieved_at` (resources, economy, population, provinces).
