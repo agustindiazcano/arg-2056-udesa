@@ -1,10 +1,12 @@
 import json
-import pytest
-from pathlib import Path
-from jsonschema import Draft202012Validator, ValidationError
 
 # We will implement these in the next step
 import sys
+from pathlib import Path
+
+import pytest
+from jsonschema import Draft202012Validator, ValidationError
+
 sys.path.append(str(Path(__file__).parent.parent.parent))
 from scripts.forecast_checks import check_forecast
 
@@ -142,8 +144,6 @@ def test_check_duplicate_series_key(valid_doc):
 
 def test_validate_data_script_fails_on_invalid_forecast(valid_doc):
     import subprocess
-    import tempfile
-    import shutil
     
     # We will temporarily create data/processed/forecast_output.json
     processed_dir = Path("data/processed")
@@ -157,7 +157,7 @@ def test_validate_data_script_fails_on_invalid_forecast(valid_doc):
         json.dump(valid_doc, f)
         
     try:
-        result = subprocess.run([sys.executable, "scripts/validate_data.py"], capture_output=True)
+        result = subprocess.run([sys.executable, "scripts/validate_data.py"], capture_output=True, check=False)
         assert result.returncode != 0
     finally:
         test_file.unlink()

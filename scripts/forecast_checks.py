@@ -5,9 +5,8 @@ def check_forecast(doc: dict) -> list[str]:
     start_year = horizon.get("start_year")
     end_year = horizon.get("end_year")
     
-    if start_year is not None and end_year is not None:
-        if start_year > end_year:
-            errors.append(f"Horizon start_year ({start_year}) > end_year ({end_year})")
+    if start_year is not None and end_year is not None and start_year > end_year:
+        errors.append(f"Horizon start_year ({start_year}) > end_year ({end_year})")
             
     series_list = doc.get("series", [])
     seen_keys = set()
@@ -29,23 +28,19 @@ def check_forecast(doc: dict) -> list[str]:
         for p_idx, point in enumerate(points):
             y = point.get("year")
             if y is not None:
-                if start_year is not None and end_year is not None:
-                    if not (start_year <= y <= end_year):
-                        errors.append(f"Year {y} is outside horizon [{start_year}, {end_year}]")
-                if prev_year is not None:
-                    if y <= prev_year:
-                        errors.append(f"Years are not strictly increasing: {prev_year} then {y}")
+                if start_year is not None and end_year is not None and not (start_year <= y <= end_year):
+                    errors.append(f"Year {y} is outside horizon [{start_year}, {end_year}]")
+                if prev_year is not None and y <= prev_year:
+                    errors.append(f"Years are not strictly increasing: {prev_year} then {y}")
                 prev_year = y
                 
             p10 = point.get("p10")
             p50 = point.get("p50")
             p90 = point.get("p90")
             
-            if p10 is not None and p50 is not None:
-                if p10 > p50:
-                    errors.append(f"p10 <= p50 is violated: p10={p10}, p50={p50} at year {y}")
-            if p50 is not None and p90 is not None:
-                if p50 > p90:
-                    errors.append(f"p50 <= p90 is violated: p50={p50}, p90={p90} at year {y}")
+            if p10 is not None and p50 is not None and p10 > p50:
+                errors.append(f"p10 <= p50 is violated: p10={p10}, p50={p50} at year {y}")
+            if p50 is not None and p90 is not None and p50 > p90:
+                errors.append(f"p50 <= p90 is violated: p50={p50}, p90={p90} at year {y}")
                     
     return errors
