@@ -1,0 +1,676 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cruce de los Andes - PoC visual</title>
+<style>
+:root{--ink:#eef3fb;--mute:#a9b7cc;--gold:#f4c95d;--blue:#5ab0ff;--red:#ff7a6b;--glass:rgba(10,18,32,.58);--line:rgba(255,255,255,.14)}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:#0b1220;color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;overflow:hidden}
+#c{position:fixed;inset:0;width:100%;height:100%;display:block}
+.glass{position:fixed;background:var(--glass);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid var(--line);border-radius:14px;box-shadow:0 8px 30px rgba(0,0,0,.25)}
+#loading{position:fixed;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;background:#0b1220;color:var(--mute);font-size:15px;letter-spacing:.08em}
+
+/* Title card */
+#title{top:18px;left:18px;padding:14px 18px 12px;width:min(380px,calc(100vw - 36px - 330px))}
+.badge{display:inline-block;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);border:1px solid rgba(244,201,93,.45);border-radius:20px;padding:2px 9px;margin-bottom:8px}
+h1{margin:0;font-size:26px;line-height:1.1;letter-spacing:.04em;text-transform:uppercase}
+.date{margin-top:6px;color:var(--mute);font-size:13px}
+.readout{display:flex;gap:18px;margin-top:12px}
+.readout div{display:flex;flex-direction:column}
+.readout b{font-size:15px;font-variant-numeric:tabular-nums}
+.readout span{font-size:10px;color:var(--mute);text-transform:uppercase;letter-spacing:.08em}
+.prog{height:4px;border-radius:2px;background:rgba(255,255,255,.12);margin-top:12px;overflow:hidden}
+.prog i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--blue),var(--gold))}
+
+/* Controls */
+#controls{left:18px;bottom:210px;padding:8px 10px;display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+#controls button{background:rgba(255,255,255,.07);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:6px 11px;font-size:12px;cursor:pointer}
+#controls button:hover{background:rgba(255,255,255,.15)}
+#controls button.on{background:var(--gold);color:#1b1608;border-color:var(--gold);font-weight:600}
+#controls label{font-size:11px;color:var(--mute);display:flex;align-items:center;gap:6px;margin-left:6px}
+#controls input{width:80px;accent-color:var(--gold)}
+#controls .hint{font-size:10px;color:var(--mute);width:100%}
+
+/* Story panel */
+#story{top:18px;right:18px;bottom:210px;width:310px;padding:16px 16px 12px;overflow:auto}
+#story h2{margin:0 0 4px;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+#story .lead{margin:0 0 12px;font-size:12px;color:var(--mute);line-height:1.45}
+.chips{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
+.chip{background:rgba(255,255,255,.06);border:1px solid var(--line);border-radius:10px;padding:8px 6px;text-align:center}
+.chip b{display:block;font-size:16px}
+.chip span{font-size:9.5px;color:var(--mute);text-transform:uppercase;letter-spacing:.06em}
+.steps{position:relative;margin:0;padding:0;list-style:none}
+.steps::before{content:"";position:absolute;left:15px;top:8px;bottom:8px;width:2px;background:rgba(255,255,255,.14)}
+.step{position:relative;padding:0 0 14px 44px;opacity:.5;transition:opacity .4s}
+.step .dot{position:absolute;left:0;top:0;width:32px;height:32px;border-radius:50%;background:#16233a;border:2px solid rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;transition:all .4s}
+.step h3{margin:0 0 3px;font-size:14px}
+.step p{margin:0;font-size:12px;line-height:1.45;color:var(--mute)}
+.step.done{opacity:.8}
+.step.done .dot{background:#244a73;border-color:var(--blue)}
+.step.active{opacity:1}
+.step.active .dot{background:var(--gold);color:#1b1608;border-color:var(--gold);box-shadow:0 0 0 5px rgba(244,201,93,.2)}
+.step.active h3{color:var(--gold)}
+
+/* Bottom panel */
+#bottom{left:18px;right:18px;bottom:18px;height:176px;padding:12px 16px;display:grid;grid-template-columns:1.25fr 1fr 1.1fr;gap:20px}
+#bottom .sec{display:flex;flex-direction:column;min-width:0;min-height:0}
+#bottom h4{margin:0 0 8px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--mute);display:flex;justify-content:space-between;align-items:center}
+#bottom h4 em{font-style:normal;color:var(--gold);font-size:9px;border:1px solid rgba(244,201,93,.4);border-radius:10px;padding:1px 7px}
+.frow{margin-bottom:9px}
+.fhead{display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px}
+.fhead b{font-variant-numeric:tabular-nums}
+.bar{display:flex;height:14px;border-radius:7px;overflow:hidden;background:rgba(255,255,255,.08)}
+.bar i{display:block;height:100%;width:0;transition:width 1.4s cubic-bezier(.2,.8,.2,1)}
+.fsub{font-size:10px;color:var(--mute);margin-top:3px}
+.legend{display:flex;gap:12px;font-size:10px;color:var(--mute);margin-top:auto}
+.legend span::before{content:"";display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:5px;background:#fff;vertical-align:-1px;opacity:var(--o)}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:8px;flex:1}
+.tile{background:rgba(255,255,255,.06);border:1px solid var(--line);border-radius:10px;padding:8px 10px;display:flex;flex-direction:column;justify-content:center}
+.tile b{font-size:20px;font-variant-numeric:tabular-nums}
+.tile span{font-size:10px;color:var(--mute);line-height:1.25}
+.tile.a b{color:var(--blue)}.tile.r b{color:var(--red)}
+.chartbox{flex:1;min-height:0}
+#prof{width:100%;height:100%;display:block}
+
+/* 3D labels */
+#tags{position:fixed;inset:0;pointer-events:none;overflow:hidden}
+.tag{position:fixed;left:0;top:0;white-space:nowrap;font-size:11px;background:rgba(10,18,32,.72);border:1px solid rgba(244,201,93,.6);color:var(--ink);padding:3px 9px;border-radius:12px;opacity:0;will-change:transform}
+#banner{position:fixed;left:50%;top:22%;transform:translate(-50%,-10px);background:rgba(10,18,32,.8);border:1px solid var(--gold);color:var(--ink);padding:12px 22px;border-radius:12px;font-size:16px;letter-spacing:.04em;opacity:0;transition:all .6s;pointer-events:none;text-align:center}
+#banner.show{opacity:1;transform:translate(-50%,0)}
+#banner small{display:block;color:var(--gold);font-size:11px;letter-spacing:.14em;text-transform:uppercase;margin-bottom:3px}
+#fade{position:fixed;inset:0;background:#000;opacity:0;transition:opacity .7s;pointer-events:none;z-index:50}
+
+@media (max-width:980px){
+  #story{width:250px}
+  #title{width:min(360px,calc(100vw - 36px - 270px))}
+}
+@media (max-width:760px){
+  #story{display:none}
+  #title{width:calc(100vw - 36px)}
+  #bottom{grid-template-columns:1fr 1fr;height:150px}
+  #bottom .sec:nth-child(3){display:none}
+  #controls{bottom:184px}
+}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="loading">Generando cordillera...</div>
+
+<div id="title" class="glass">
+  <div class="badge">PoC visual &middot; datos mock</div>
+  <h1>Cruce de los Andes</h1>
+  <div class="date">Enero &ndash; Febrero de 1817 &middot; Ej&eacute;rcito de los Andes</div>
+  <div class="readout">
+    <div><b id="rDay">D&iacute;a 1 / 21</b><span>jornada</span></div>
+    <div><b id="rAlt">-</b><span>altitud aprox.</span></div>
+    <div><b id="rKm">0 km</b><span>recorrido aprox.</span></div>
+  </div>
+  <div class="prog"><i id="rProg"></i></div>
+</div>
+
+<div id="controls" class="glass">
+  <button data-mode="follow" class="on">Seguir</button>
+  <button data-mode="aerial">A&eacute;rea</button>
+  <button data-mode="side">Lateral</button>
+  <button data-mode="map">Mapa</button>
+  <button id="bPause">Pausa</button>
+  <label>Vel. <input id="spd" type="range" min="0.5" max="3" step="0.25" value="1"></label>
+  <div class="hint">Teclas: 1-4 c&aacute;mara &middot; Espacio pausa</div>
+</div>
+
+<aside id="story" class="glass">
+  <h2>Relato del cruce</h2>
+  <p class="lead">Resumen gen&eacute;rico de la traves&iacute;a, en cinco etapas. La etapa activa sigue a la columna.</p>
+  <div class="chips">
+    <div class="chip"><b>&asymp; 21</b><span>d&iacute;as</span></div>
+    <div class="chip"><b>6</b><span>columnas</span></div>
+    <div class="chip"><b>~3.800 m</b><span>pasos</span></div>
+  </div>
+  <ol class="steps" id="steps">
+    <li class="step" data-at="0"><div class="dot">1</div><h3>Preparaci&oacute;n</h3><p>Mendoza, 1816-17. Se re&uacute;nen tropas, mulas y v&iacute;veres, y se reparten las columnas que cruzar&aacute;n por distintos pasos.</p></li>
+    <li class="step" data-at="0.2"><div class="dot">2</div><h3>Ascenso</h3><p>La columna remonta valles y quebradas siguiendo los cauces, por sendas angostas y curvas cerradas.</p></li>
+    <li class="step" data-at="0.42"><div class="dot">3</div><h3>Alta cordillera</h3><p>Fr&iacute;o, viento y falta de ox&iacute;geno. Las mulas cargan el parque y la artiller&iacute;a desarmada.</p></li>
+    <li class="step" data-at="0.62"><div class="dot">4</div><h3>El paso</h3><p>Se alcanzan los pasos a casi 4.000 m. Es el tramo m&aacute;s duro y expuesto de toda la traves&iacute;a.</p></li>
+    <li class="step" data-at="0.84"><div class="dot">5</div><h3>Descenso y reuni&oacute;n</h3><p>Las columnas bajan al valle chileno y se re&uacute;nen antes del combate del 12 de febrero de 1817.</p></li>
+  </ol>
+</aside>
+
+<section id="bottom" class="glass">
+  <div class="sec">
+    <h4>Fuerzas en combate <em>MOCK</em></h4>
+    <div id="forces"></div>
+    <div class="legend"><span style="--o:1">Infanter&iacute;a</span><span style="--o:.68">Caballer&iacute;a</span><span style="--o:.42">Artiller&iacute;a</span></div>
+  </div>
+  <div class="sec">
+    <h4>Estad&iacute;sticas de la batalla <em>MOCK</em></h4>
+    <div class="tiles" id="tiles"></div>
+  </div>
+  <div class="sec">
+    <h4>Perfil de altitud del cruce</h4>
+    <div class="chartbox"><canvas id="prof"></canvas></div>
+  </div>
+</section>
+
+<div id="tags"></div>
+<div id="banner"><small>Fin del recorrido</small>Chacabuco &middot; 12 de febrero de 1817</div>
+<div id="fade"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function () {
+  'use strict';
+  var loading = document.getElementById('loading');
+  if (typeof THREE === 'undefined') {
+    loading.textContent = 'No se pudo cargar three.js (el CDN requiere conexion a internet).';
+    return;
+  }
+  setTimeout(main, 40); // let the loading overlay paint before the heavy terrain build
+
+  function main() {
+    var $ = function (id) { return document.getElementById(id); };
+    var clamp = function (v, a, b) { return Math.min(Math.max(v, a), b); };
+    var mix = function (a, b, t) { return a + (b - a) * t; };
+    var smooth = function (a, b, x) { var t = clamp((x - a) / (b - a), 0, 1); return t * t * (3 - 2 * t); };
+
+    /* ------------------------------------------------------------------ noise */
+    function rnd(ix, iy) {
+      var h = (Math.imul(ix, 374761393) + Math.imul(iy, 668265263) + 1013904223) | 0;
+      h = Math.imul(h ^ (h >>> 13), 1274126177);
+      h ^= h >>> 16;
+      return (h >>> 0) / 4294967296;
+    }
+    function grad(ix, iy, x, y) { var a = rnd(ix, iy) * 6.2831853; return Math.cos(a) * x + Math.sin(a) * y; }
+    function fade(t) { return t * t * t * (t * (t * 6 - 15) + 10); }
+    function noise2(x, y) {
+      var xi = Math.floor(x), yi = Math.floor(y), xf = x - xi, yf = y - yi;
+      var u = fade(xf), v = fade(yf);
+      var n00 = grad(xi, yi, xf, yf), n10 = grad(xi + 1, yi, xf - 1, yf);
+      var n01 = grad(xi, yi + 1, xf, yf - 1), n11 = grad(xi + 1, yi + 1, xf - 1, yf - 1);
+      var a = n00 + (n10 - n00) * u, b = n01 + (n11 - n01) * u;
+      return a + (b - a) * v;
+    }
+
+    /* ------------------------------------------------------------------- path */
+    var ctrl = [[150, 40], [120, 72], [85, 40], [55, -12], [20, -48], [-15, -22], [-42, 30], [-72, 66], [-108, 30], [-132, -18], [-152, -52]];
+    var curve = new THREE.CatmullRomCurve3(ctrl.map(function (p) { return new THREE.Vector3(p[0], 0, p[1]); }), false, 'centripetal');
+    var N = 600, L = curve.getLength(), ds = L / N;
+    var spaced = curve.getSpacedPoints(N);
+    var px = new Float32Array(N + 1), pz = new Float32Array(N + 1), ph = new Float32Array(N + 1);
+    function profile(u) {
+      var f = u <= 0.62 ? Math.pow(u / 0.62, 1.4) : 1 - 0.8 * smooth(0, 1, (u - 0.62) / 0.38);
+      return 6 + 40 * f + 2 * Math.sin(u * 22);
+    }
+    for (var i = 0; i <= N; i++) { px[i] = spaced[i].x; pz[i] = spaced[i].z; ph[i] = profile(i / N); }
+
+    var nI = 0, nD = 0;
+    function nearest(x, z) {
+      var best = 1e18, bi = 0;
+      for (var i = 0; i <= N; i++) {
+        var dx = px[i] - x, dz = pz[i] - z, d = dx * dx + dz * dz;
+        if (d < best) { best = d; bi = i; }
+      }
+      nI = bi; nD = Math.sqrt(best);
+    }
+    function mountain(x, z) {
+      var f = 0.0075, a = 1, sum = 0, ws = 0;
+      for (var o = 0; o < 6; o++) {
+        var n = noise2(x * f + o * 17.3, z * f - o * 9.1);
+        var v = Math.max(1 - Math.abs(n) * 1.5, 0);
+        sum += v * v * a; ws += a; a *= 0.5; f *= 2.05;
+      }
+      var r = sum / ws;
+      var wall = smooth(230, 320, Math.hypot(x, z)) * 90;
+      return 18 + 120 * Math.pow(r, 1.5) + wall;
+    }
+    function heightAt(x, z) {
+      nearest(x, z);
+      var w = smooth(4.5, 36, nD);
+      return ph[nI] * (1 - w) + mountain(x, z) * w;
+    }
+
+    /* ---------------------------------------------------------------- renderer */
+    var canvas = $('c');
+    var renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+    var HORIZON = new THREE.Color(0.80, 0.88, 0.95);
+    var scene = new THREE.Scene();
+    scene.fog = new THREE.Fog(HORIZON, 80, 460);
+    var camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.5, 1600);
+
+    // Sky dome
+    var sunDir = new THREE.Vector3(-0.45, 0.5, 0.35).normalize();
+    var sky = new THREE.Mesh(
+      new THREE.SphereGeometry(900, 32, 16),
+      new THREE.ShaderMaterial({
+        side: THREE.BackSide, depthWrite: false, fog: false,
+        uniforms: { uSun: { value: sunDir.clone() } },
+        vertexShader: 'varying vec3 vDir; void main(){ vDir = position; gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }',
+        fragmentShader: 'varying vec3 vDir; uniform vec3 uSun; void main(){' +
+          'vec3 d = normalize(vDir); float h = clamp(d.y,0.0,1.0);' +
+          'vec3 hor = vec3(0.80,0.88,0.95); vec3 zen = vec3(0.16,0.38,0.76);' +
+          'vec3 col = mix(hor, zen, pow(h,0.45));' +
+          'float s = max(dot(d, normalize(uSun)),0.0);' +
+          'col += vec3(1.0,0.85,0.6) * (pow(s,6.0)*0.25 + pow(s,400.0)*1.2);' +
+          'gl_FragColor = vec4(col,1.0); }'
+      })
+    );
+    sky.renderOrder = -1; sky.frustumCulled = false;
+    scene.add(sky);
+
+    // Lights
+    scene.add(new THREE.HemisphereLight(0xcfe3ff, 0x6a5a48, 0.7));
+    var sun = new THREE.DirectionalLight(0xfff0d8, 1.25);
+    sun.castShadow = true;
+    sun.shadow.mapSize.set(2048, 2048);
+    sun.shadow.bias = -0.0004;
+    sun.shadow.normalBias = 0.5;
+    scene.add(sun); scene.add(sun.target);
+    var sunDist = 170;
+    function setShadowExtent(e, dist) {
+      var c = sun.shadow.camera;
+      c.left = -e; c.right = e; c.top = e; c.bottom = -e; c.near = 1; c.far = dist * 2 + e;
+      c.updateProjectionMatrix();
+      sunDist = dist;
+    }
+    setShadowExtent(75, 170);
+
+    /* ----------------------------------------------------------------- terrain */
+    var SIZE = 600, SEG = 260;
+    var tg = new THREE.PlaneGeometry(SIZE, SIZE, SEG, SEG);
+    tg.rotateX(-Math.PI / 2);
+    var pos = tg.attributes.position;
+    var dArr = new Float32Array(pos.count);
+    for (var vi = 0; vi < pos.count; vi++) {
+      var vh = heightAt(pos.getX(vi), pos.getZ(vi));
+      pos.setY(vi, vh);
+      dArr[vi] = nD;
+    }
+    tg.computeVertexNormals();
+    var nor = tg.attributes.normal;
+    var cols = new Float32Array(pos.count * 3);
+    for (var ci = 0; ci < pos.count; ci++) {
+      var x = pos.getX(ci), z = pos.getZ(ci), h = pos.getY(ci), ny = nor.getY(ci), sl = 1 - ny;
+      var n1 = noise2(x * 0.06, z * 0.06), n2 = noise2(x * 0.25 + 40, z * 0.25);
+      var r = 0.46 + 0.05 * n1, g = 0.41 + 0.04 * n1, b = 0.37 + 0.04 * n1;
+      var k = 1 + 0.12 * n2 * smooth(0.2, 0.5, sl);
+      r *= k; g *= k; b *= k;
+      var veg = smooth(32, 12, h + n1 * 5) * (1 - smooth(0.18, 0.42, sl));
+      r = mix(r, 0.36 + 0.06 * n2, veg); g = mix(g, 0.45 + 0.07 * n2, veg); b = mix(b, 0.24, veg);
+      var sn = smooth(70, 92, h + n1 * 10 + n2 * 3) * (1 - smooth(0.30, 0.60, sl));
+      r = mix(r, 0.94, sn); g = mix(g, 0.96, sn); b = mix(b, 1.0, sn);
+      var tr = smooth(5.6, 3.4, dArr[ci]);
+      r = mix(r, 0.64, tr); g = mix(g, 0.54, tr); b = mix(b, 0.40, tr);
+      var sh = 0.82 + 0.18 * ny;
+      cols[ci * 3] = r * sh; cols[ci * 3 + 1] = g * sh; cols[ci * 3 + 2] = b * sh;
+    }
+    tg.setAttribute('color', new THREE.BufferAttribute(cols, 3));
+    var terrain = new THREE.Mesh(tg, new THREE.MeshLambertMaterial({ vertexColors: true }));
+    terrain.receiveShadow = true; terrain.castShadow = true;
+    scene.add(terrain);
+
+    // Trees in the low valleys
+    var treeGeo = new THREE.ConeGeometry(1, 1, 7); treeGeo.translate(0, 0.5, 0);
+    var treeMax = 1100, trees = new THREE.InstancedMesh(treeGeo, new THREE.MeshLambertMaterial({ color: 0x2f5a34 }), treeMax);
+    var dummy = new THREE.Object3D(), tc = 0, tries = 0;
+    while (tc < treeMax && tries < 7000) {
+      tries++;
+      var tx = (Math.random() - 0.5) * 420, tz = (Math.random() - 0.5) * 420;
+      var th = heightAt(tx, tz);
+      if (th > 26 || nD < 8) continue;
+      var tslope = Math.abs(heightAt(tx + 1.5, tz) - th) / 1.5;
+      if (tslope > 0.6) continue;
+      var sx = 1 + Math.random() * 0.8;
+      dummy.position.set(tx, th - 0.2, tz);
+      dummy.scale.set(sx, 4 + Math.random() * 4, sx);
+      dummy.updateMatrix();
+      trees.setMatrixAt(tc++, dummy.matrix);
+    }
+    trees.count = tc; trees.castShadow = true; trees.receiveShadow = true;
+    scene.add(trees);
+
+    // Clouds
+    function cloudTexture() {
+      var c = document.createElement('canvas'); c.width = 256; c.height = 128;
+      var x = c.getContext('2d');
+      for (var i = 0; i < 9; i++) {
+        var cx = 40 + i * 22 + Math.random() * 10, cy = 64 + (Math.random() - 0.5) * 20, r = 28 + Math.random() * 22;
+        var gr = x.createRadialGradient(cx, cy, 0, cx, cy, r);
+        gr.addColorStop(0, 'rgba(255,255,255,.55)'); gr.addColorStop(1, 'rgba(255,255,255,0)');
+        x.fillStyle = gr; x.beginPath(); x.arc(cx, cy, r, 0, 6.283); x.fill();
+      }
+      return new THREE.CanvasTexture(c);
+    }
+    var cloudTex = cloudTexture(), clouds = [];
+    for (var cl = 0; cl < 16; cl++) {
+      var sp = new THREE.Sprite(new THREE.SpriteMaterial({ map: cloudTex, transparent: true, depthWrite: false, fog: false, opacity: 0.85 }));
+      var cw = 90 + Math.random() * 120;
+      sp.scale.set(cw, cw * 0.4, 1);
+      sp.position.set((Math.random() - 0.5) * 900, 140 + Math.random() * 70, (Math.random() - 0.5) * 900);
+      scene.add(sp); clouds.push(sp);
+    }
+
+    /* -------------------------------------------------------- path sampling API */
+    var tTan = new THREE.Vector3();
+    function pathPoint(s, lat, out) {
+      var f = clamp(s, 0, L) / ds, i = Math.min(Math.floor(f), N - 1), t = f - i;
+      var x = px[i] + (px[i + 1] - px[i]) * t, z = pz[i] + (pz[i + 1] - pz[i]) * t;
+      var a = Math.max(i - 3, 0), b = Math.min(i + 4, N);
+      var tx = px[b] - px[a], tz = pz[b] - pz[a], m = Math.hypot(tx, tz) || 1;
+      tx /= m; tz /= m;
+      tTan.set(tx, 0, tz);
+      out.set(x - tz * lat, 0, z + tx * lat); // normal = (-tz, tx)
+      out.y = heightAt(out.x, out.z);
+      return out;
+    }
+
+    /* ------------------------------------------------------------------ balls */
+    var LEAD_OFF = 5.6, START = 58;
+    var specs = [];
+    function add(off, lat, r, color, type) { specs.push({ off: off, lat: lat, r: r, color: color, type: type, phase: Math.random() * 6.28, mesh: null }); }
+    var i2;
+    for (i2 = 0; i2 < 4; i2++) add(0.6 + i2 * 1.2, (i2 % 2 ? 1 : -1) * 1.0, 0.6, 0xe6edff, 'van');
+    add(LEAD_OFF, 0, 1.25, 0xf4c95d, 'lead');
+    for (i2 = 0; i2 < 20; i2++) add(8 + Math.floor(i2 / 2) * 1.6, (i2 % 2 ? 1 : -1) * 1.25 + (Math.random() - 0.5) * 0.3, 0.55, (i2 % 4 < 2) ? 0x3a7bd5 : 0x2c63b8, 'inf');
+    for (i2 = 0; i2 < 4; i2++) add(26 + i2 * 2.6, i2 % 2 ? 0.7 : -0.7, 0.95, 0x555b68, 'art');
+    for (i2 = 0; i2 < 12; i2++) add(38 + Math.floor(i2 / 2) * 1.7, i2 % 2 ? 1.4 : -1.4, 0.72, 0x8a5a34, 'mule');
+    for (i2 = 0; i2 < 3; i2++) add(50 + i2 * 2, i2 % 2 ? 0.8 : -0.8, 0.65, 0xc9503c, 'rear');
+
+    var ballGeo = new THREE.SphereGeometry(1, 20, 14), matCache = {};
+    var leaderSpec = null;
+    specs.forEach(function (sp) {
+      if (!matCache[sp.color]) matCache[sp.color] = new THREE.MeshStandardMaterial({ color: sp.color, roughness: 0.6, metalness: 0.05 });
+      var m = new THREE.Mesh(ballGeo, matCache[sp.color]);
+      m.scale.setScalar(sp.r); m.castShadow = true; m.receiveShadow = true;
+      scene.add(m); sp.mesh = m;
+      if (sp.type === 'lead') leaderSpec = sp;
+    });
+
+    // Flag on the leader
+    function flagTexture() {
+      var c = document.createElement('canvas'); c.width = 128; c.height = 80;
+      var x = c.getContext('2d');
+      x.fillStyle = '#74acdf'; x.fillRect(0, 0, 128, 80);
+      x.fillStyle = '#fff'; x.fillRect(0, 27, 128, 26);
+      x.fillStyle = '#f6b40e'; x.beginPath(); x.arc(64, 40, 7, 0, 6.283); x.fill();
+      return new THREE.CanvasTexture(c);
+    }
+    var flagGroup = new THREE.Group();
+    var pole = new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.07, 4.2, 8), new THREE.MeshStandardMaterial({ color: 0x3b2f22 }));
+    pole.position.y = 2.1; pole.castShadow = true;
+    var flagGeo = new THREE.PlaneGeometry(2.4, 1.4, 12, 1);
+    var flag = new THREE.Mesh(flagGeo, new THREE.MeshBasicMaterial({ map: flagTexture(), side: THREE.DoubleSide }));
+    flag.position.set(1.2, 3.4, 0); flag.castShadow = true;
+    flagGroup.add(pole); flagGroup.add(flag);
+    scene.add(flagGroup);
+    var flagBase = Float32Array.from(flagGeo.attributes.position.array);
+
+    /* ------------------------------------------------------------ 3D waypoints */
+    var iPass = 0;
+    for (var pi = 0; pi <= N; pi++) if (ph[pi] > ph[iPass]) iPass = pi;
+    var stops = [
+      { s: 70, text: 'Mendoza · El Plumerillo' },
+      { s: iPass * ds, text: 'Paso de la cordillera' },
+      { s: L - 2, text: 'Chacabuco · 12 feb 1817' }
+    ];
+    var tagsEl = $('tags'), tags = [];
+    var markMat = new THREE.MeshBasicMaterial({ color: 0xf4c95d });
+    stops.forEach(function (st) {
+      var p = pathPoint(st.s, 0, new THREE.Vector3());
+      var cyl = new THREE.Mesh(new THREE.CylinderGeometry(0.15, 0.15, 10, 8), markMat);
+      cyl.position.set(p.x, p.y + 5, p.z); scene.add(cyl);
+      var cap = new THREE.Mesh(new THREE.SphereGeometry(0.55, 12, 8), markMat);
+      cap.position.set(p.x, p.y + 10, p.z); scene.add(cap);
+      var el = document.createElement('div'); el.className = 'tag'; el.textContent = st.text; tagsEl.appendChild(el);
+      tags.push({ el: el, pos: new THREE.Vector3(p.x, p.y + 12, p.z) });
+    });
+
+    /* ------------------------------------------------------------------ state */
+    var sLead = START, state = 'run', endT = 0, paused = false, speed = 1;
+    var animT = 0, clockT = 0, moving = 1, mode = 'follow';
+    var BASE = 12;
+    var s0 = START - LEAD_OFF, sEnd = L - 2 - LEAD_OFF;
+    var camPos = new THREE.Vector3(), camLook = new THREE.Vector3();
+    var desPos = new THREE.Vector3(), desLook = new THREE.Vector3(), tmp = new THREE.Vector3();
+    var focus = new THREE.Vector3();
+    var fogNear = 80, fogFar = 460;
+
+    function altOf(h) { return Math.max(500, 750 + (h - 6) / 40 * 3100); }
+
+    function computeCam() {
+      var c = sLead - 26;
+      if (mode === 'follow') {
+        pathPoint(sLead - 72, 3 * Math.sin(clockT * 0.25), desPos); desPos.y += 14;
+        pathPoint(sLead - 12, 0, desLook); desLook.y += 2.5;
+      } else if (mode === 'aerial') {
+        pathPoint(c, 0, desLook);
+        pathPoint(c - 34, 0, desPos); desPos.y = desLook.y + 62;
+      } else if (mode === 'side') {
+        pathPoint(c, 0, desLook);
+        desPos.set(desLook.x - tTan.z * 46 - tTan.x * 8, desLook.y + 18, desLook.z + tTan.x * 46 - tTan.z * 8);
+      } else {
+        var a = clockT * 0.04;
+        desPos.set(Math.sin(a) * 340, 230, Math.cos(a) * 340);
+        desLook.set(0, 15, 0);
+      }
+    }
+    function applyCam() {
+      camPos.y = Math.max(camPos.y, heightAt(camPos.x, camPos.z) + 5);
+      camera.position.copy(camPos);
+      camera.lookAt(camLook);
+    }
+    function snapCam() { computeCam(); camPos.copy(desPos); camLook.copy(desLook); applyCam(); }
+
+    function setMode(m) {
+      mode = m;
+      document.querySelectorAll('#controls button[data-mode]').forEach(function (b) { b.classList.toggle('on', b.dataset.mode === m); });
+      if (m === 'map') { setShadowExtent(330, 450); fogNear = 520; fogFar = 1500; }
+      else { setShadowExtent(75, 170); fogNear = 80; fogFar = 460; }
+    }
+    document.querySelectorAll('#controls button[data-mode]').forEach(function (b) {
+      b.addEventListener('click', function () { setMode(b.dataset.mode); });
+    });
+    var bPause = $('bPause');
+    function togglePause() { paused = !paused; bPause.textContent = paused ? 'Reanudar' : 'Pausa'; }
+    bPause.addEventListener('click', togglePause);
+    $('spd').addEventListener('input', function (e) { speed = parseFloat(e.target.value); });
+    window.addEventListener('keydown', function (e) {
+      if (e.key === '1') setMode('follow'); else if (e.key === '2') setMode('aerial');
+      else if (e.key === '3') setMode('side'); else if (e.key === '4') setMode('map');
+      else if (e.code === 'Space') { e.preventDefault(); togglePause(); }
+    });
+    window.addEventListener('resize', function () {
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      camera.aspect = window.innerWidth / window.innerHeight; camera.updateProjectionMatrix();
+    });
+
+    /* ------------------------------------------------------------------- HUD */
+    var rDay = $('rDay'), rAlt = $('rAlt'), rKm = $('rKm'), rProg = $('rProg');
+    var stepEls = Array.prototype.slice.call(document.querySelectorAll('#steps .step'));
+    var banner = $('banner'), fadeEl = $('fade');
+
+    var forces = [
+      { name: 'Ejército de los Andes', color: '#5ab0ff', parts: [['Infantería', 2600], ['Caballería', 900], ['Artillería', 120]] },
+      { name: 'Fuerzas realistas', color: '#ff7a6b', parts: [['Infantería', 1200], ['Caballería', 330], ['Artillería', 100]] }
+    ];
+    var maxTot = 3620, fx = $('forces'), fmt = function (n) { return n.toLocaleString('es-AR'); };
+    forces.forEach(function (f) {
+      var tot = f.parts.reduce(function (a, p) { return a + p[1]; }, 0);
+      var row = document.createElement('div'); row.className = 'frow';
+      row.innerHTML = '<div class="fhead"><span>' + f.name + '</span><b>' + fmt(tot) + '</b></div>' +
+        '<div class="bar">' + f.parts.map(function (p, i) {
+          return '<i style="background:' + f.color + ';opacity:' + [1, 0.68, 0.42][i] + '" data-w="' + (p[1] / maxTot * 100) + '" title="' + p[0] + ': ' + p[1] + '"></i>';
+        }).join('') + '</div>' +
+        '<div class="fsub">' + f.parts.map(function (p) { return p[0].slice(0, 3) + '. ' + fmt(p[1]); }).join(' · ') + '</div>';
+      fx.appendChild(row);
+    });
+    var tiles = [
+      { cls: '', k: 'Duración del combate', v: 4, pre: '≈ ', suf: ' h' },
+      { cls: '', k: 'Cañones en campo (Andes vs realistas)', txt: '9 vs 4' },
+      { cls: 'a', k: 'Bajas Ejército de los Andes', v: 132 },
+      { cls: 'r', k: 'Bajas realistas (incl. prisioneros)', v: 1100 }
+    ];
+    var tilesEl = $('tiles');
+    tiles.forEach(function (t) {
+      var d = document.createElement('div'); d.className = 'tile ' + t.cls;
+      d.innerHTML = '<b>' + (t.txt || '0') + '</b><span>' + t.k + '</span>';
+      tilesEl.appendChild(d); t.el = d.querySelector('b');
+    });
+    setTimeout(function () {
+      document.querySelectorAll('.bar i').forEach(function (b) { b.style.width = b.dataset.w + '%'; });
+      var t0 = performance.now();
+      (function tick(now) {
+        var k = clamp((now - t0) / 1400, 0, 1), e = 1 - Math.pow(1 - k, 3);
+        tiles.forEach(function (t) { if (t.v !== undefined) t.el.textContent = (t.pre || '') + fmt(Math.round(t.v * e)) + (t.suf || ''); });
+        if (k < 1) requestAnimationFrame(tick);
+      })(t0);
+    }, 400);
+
+    var prof = $('prof'), pctx = prof.getContext('2d');
+    var i0 = Math.round(s0 / ds), i1 = Math.round(sEnd / ds);
+    function drawProfile(u) {
+      var dpr = Math.min(window.devicePixelRatio || 1, 2), w = prof.clientWidth, h = prof.clientHeight;
+      if (!w || !h) return;
+      if (prof.width !== Math.round(w * dpr) || prof.height !== Math.round(h * dpr)) { prof.width = Math.round(w * dpr); prof.height = Math.round(h * dpr); }
+      pctx.setTransform(dpr, 0, 0, dpr, 0, 0); pctx.clearRect(0, 0, w, h);
+      var padL = 34, padR = 8, padT = 8, padB = 16, iw = w - padL - padR, ih = h - padT - padB, aMin = 500, aMax = 4200;
+      var X = function (i) { return padL + (i - i0) / (i1 - i0) * iw; };
+      var Y = function (a) { return padT + ih - (a - aMin) / (aMax - aMin) * ih; };
+      pctx.font = '9px system-ui'; pctx.textBaseline = 'middle';
+      [1000, 2000, 3000, 4000].forEach(function (a) {
+        pctx.strokeStyle = 'rgba(255,255,255,.1)'; pctx.setLineDash([2, 3]);
+        pctx.beginPath(); pctx.moveTo(padL, Y(a)); pctx.lineTo(w - padR, Y(a)); pctx.stroke();
+        pctx.fillStyle = '#a9b7cc'; pctx.textAlign = 'right'; pctx.fillText(fmt(a), padL - 4, Y(a));
+      });
+      pctx.setLineDash([]);
+      function trace() { pctx.beginPath(); pctx.moveTo(X(i0), Y(altOf(ph[i0]))); for (var i = i0 + 1; i <= i1; i += 2) pctx.lineTo(X(i), Y(altOf(ph[i]))); }
+      var xm = padL + clamp(u, 0, 1) * iw;
+      trace(); pctx.lineTo(X(i1), padT + ih); pctx.lineTo(X(i0), padT + ih); pctx.closePath();
+      var gr = pctx.createLinearGradient(0, padT, 0, padT + ih); gr.addColorStop(0, 'rgba(90,176,255,.35)'); gr.addColorStop(1, 'rgba(90,176,255,.04)');
+      pctx.fillStyle = gr; pctx.fill();
+      pctx.save(); pctx.beginPath(); pctx.rect(0, 0, xm, h); pctx.clip();
+      trace(); pctx.lineTo(X(i1), padT + ih); pctx.lineTo(X(i0), padT + ih); pctx.closePath();
+      pctx.fillStyle = 'rgba(244,201,93,.35)'; pctx.fill(); pctx.restore();
+      trace(); pctx.strokeStyle = '#5ab0ff'; pctx.lineWidth = 1.6; pctx.stroke();
+      var iy = clamp(Math.round(s0 / ds + clamp(u, 0, 1) * (i1 - i0)), 0, N);
+      var my = Y(altOf(ph[iy]));
+      pctx.strokeStyle = 'rgba(244,201,93,.6)'; pctx.lineWidth = 1; pctx.beginPath(); pctx.moveTo(xm, padT); pctx.lineTo(xm, padT + ih); pctx.stroke();
+      pctx.fillStyle = '#f4c95d'; pctx.beginPath(); pctx.arc(xm, my, 4, 0, 6.283); pctx.fill();
+      pctx.fillStyle = '#a9b7cc'; pctx.textBaseline = 'alphabetic';
+      pctx.textAlign = 'left'; pctx.fillText('Mendoza', padL, h - 3);
+      pctx.textAlign = 'center'; pctx.fillText('Paso', X(iPass), h - 3);
+      pctx.textAlign = 'right'; pctx.fillText('Chacabuco', w - padR, h - 3);
+    }
+
+    /* ----------------------------------------------------------------- update */
+    function resetRun() {
+      sLead = START; state = 'run'; animT = 0;
+      banner.classList.remove('show');
+      snapCam();
+    }
+    var tmpP = new THREE.Vector3(), leadPos = new THREE.Vector3(), tv = new THREE.Vector3();
+
+    function update(dt) {
+      clockT += dt;
+      var running = !paused && state === 'run';
+      if (running) {
+        animT += dt;
+        var li = Math.min(Math.floor(Math.max(sLead - LEAD_OFF, 0) / ds), N - 3);
+        var slope = (ph[li + 3] - ph[li]) / (3 * ds);
+        sLead += BASE * clamp(1 - slope * 2.6, 0.5, 1.3) * speed * dt;
+        if (sLead >= L - 2) { sLead = L - 2; state = 'end'; endT = 0; }
+      } else if (!paused && state === 'end') {
+        endT += dt;
+        if (endT > 0.3) banner.classList.add('show');
+        if (endT > 4.5) {
+          state = 'fading'; fadeEl.style.opacity = 1;
+          setTimeout(function () { resetRun(); fadeEl.style.opacity = 0; }, 800);
+        }
+      }
+      moving += ((running ? 1 : 0) - moving) * Math.min(1, dt * 6);
+
+      // Balls
+      for (var i = 0; i < specs.length; i++) {
+        var sp = specs[i];
+        var sway = Math.sin(animT * 0.8 + i) * 0.3;
+        pathPoint(sLead - sp.off, sp.lat + sway, tmpP);
+        var hop = Math.abs(Math.sin(animT * 5 + sp.phase)) * 0.22 * (sp.type === 'art' ? 0.3 : 1) * moving;
+        sp.mesh.position.set(tmpP.x, tmpP.y + sp.r + hop, tmpP.z);
+        if (sp === leaderSpec) leadPos.copy(sp.mesh.position);
+      }
+      pathPoint(sLead - LEAD_OFF, 0, tv);
+      var lheading = Math.atan2(tTan.x, tTan.z);
+      flagGroup.position.set(leadPos.x, leadPos.y + leaderSpec.r - 0.1, leadPos.z);
+      flagGroup.rotation.y = lheading;
+      var fp = flagGeo.attributes.position;
+      for (var v = 0; v < fp.count; v++) {
+        var fxp = flagBase[v * 3];
+        fp.setZ(v, Math.sin(fxp * 3 - clockT * 6) * 0.12 * ((fxp + 1.2) / 2.4));
+      }
+      fp.needsUpdate = true;
+
+      // Camera
+      computeCam();
+      var kp = 1 - Math.exp(-dt * 2.2), kl = 1 - Math.exp(-dt * 3);
+      camPos.lerp(desPos, kp); camLook.lerp(desLook, kl);
+      applyCam();
+      sky.position.copy(camera.position);
+
+      // Sun follows the focus point so the shadow map stays sharp
+      if (mode === 'map') focus.set(0, 0, 0); else pathPoint(sLead - 26, 0, focus);
+      sun.target.position.copy(focus);
+      sun.position.copy(focus).addScaledVector(sunDir, sunDist);
+      scene.fog.near += (fogNear - scene.fog.near) * kp;
+      scene.fog.far += (fogFar - scene.fog.far) * kp;
+
+      // Clouds
+      for (var c = 0; c < clouds.length; c++) {
+        clouds[c].position.x += dt * 2.5;
+        if (clouds[c].position.x > 480) clouds[c].position.x = -480;
+      }
+
+      // HUD
+      var u = clamp((sLead - LEAD_OFF - s0) / (sEnd - s0), 0, 1);
+      var hi = clamp(Math.round((sLead - LEAD_OFF) / ds), 0, N);
+      rDay.textContent = 'Día ' + (1 + Math.min(20, Math.floor(u * 21))) + ' / 21';
+      rAlt.textContent = fmt(Math.round(altOf(ph[hi]) / 10) * 10) + ' m';
+      rKm.textContent = Math.round(u * 480) + ' km';
+      rProg.style.width = (u * 100).toFixed(1) + '%';
+      var active = 0;
+      stepEls.forEach(function (el, idx) { if (u >= parseFloat(el.dataset.at)) active = idx; });
+      stepEls.forEach(function (el, idx) { el.classList.toggle('active', idx === active); el.classList.toggle('done', idx < active); });
+      drawProfile(u);
+
+      // 3D labels
+      for (var t = 0; t < tags.length; t++) {
+        var tg2 = tags[t];
+        tv.copy(tg2.pos).project(camera);
+        var vis = tv.z > -1 && tv.z < 1 && Math.abs(tv.x) < 1.05 && Math.abs(tv.y) < 1.05;
+        var o = mode === 'map' ? 0.95 : clamp(1 - (camera.position.distanceTo(tg2.pos) - 140) / 240, 0, 1);
+        tg2.el.style.opacity = vis ? o : 0;
+        if (vis) tg2.el.style.transform = 'translate(' + ((tv.x * 0.5 + 0.5) * window.innerWidth) + 'px,' + ((-tv.y * 0.5 + 0.5) * window.innerHeight) + 'px) translate(-50%,-100%)';
+      }
+    }
+
+    /* ------------------------------------------------------------------ start */
+    snapCam();
+    loading.style.display = 'none';
+    var last = performance.now();
+    function frame(now) {
+      var dt = Math.min(0.05, (now - last) / 1000); last = now;
+      update(dt);
+      renderer.render(scene, camera);
+      requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+  }
+})();
+</script>
+</body>
+</html>
