@@ -80,5 +80,7 @@ def test_no_write_to_real_data_dir(tmp_path):
     processed = Path("data/processed")
     if processed.exists():
         for f in processed.glob("*"):
+            if f.name == ".gitkeep":
+                continue
             if time.time() - f.stat().st_mtime < 5:
                 pytest.fail(f"Test modified real data dir: {f}")
