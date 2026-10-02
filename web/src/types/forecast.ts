@@ -44,7 +44,7 @@ export function parseForecastOutput(json: unknown): ForecastOutput {
     const err = validate.errors?.[0];
     throw new Error(`Forecast validation failed: ${err?.instancePath} ${err?.message}`);
   }
-  return json as ForecastOutput;
+  return json as unknown as ForecastOutput;
 }
 
 export function selectSeries(
