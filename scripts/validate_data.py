@@ -1,25 +1,33 @@
+import argparse
 import json
 import sys
 from pathlib import Path
 
+# Imports at module top only
+from forecast_checks import check_forecast
 from jsonschema import Draft202012Validator, FormatChecker
 
 
 def main():
-    processed_dir = Path("data/processed")
-    schemas_dir = Path("data/schemas")
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--processed", default="data/processed")
+    parser.add_argument("--schemas", default="data/schemas")
+    args = parser.parse_args()
+
+    processed_dir = Path(args.processed)
+    schemas_dir = Path(args.schemas)
     
     if not processed_dir.exists():
-        return 0
+        sys.exit(0)
         
     has_errors = False
     
     for data_file in processed_dir.glob("*.json"):
-        name = data_file.stem  # e.g. "economy_series" from "economy_series.json"
+        name = data_file.stem
         schema_path = schemas_dir / f"{name}.schema.json"
         
         if not schema_path.exists():
-            print(f"ERROR: No matching schema found for {data_file.name} at {schema_path}")
+            print(f"ERROR: No matching schema found for {data_file.name}", file=sys.stderr)
             has_errors = True
             continue
             
@@ -33,22 +41,15 @@ def main():
         
         errors = list(validator.iter_errors(data))
         if errors:
-            print(f"ERROR: {data_file.name} failed validation:")
             for error in errors:
-                print(f"  - {error.json_path}: {error.message}")
+                print(f"ERROR: {data_file.name} failed schema validation: {error.json_path} - {error.message}", file=sys.stderr)
             has_errors = True
         else:
-            # Check extra logic if it's the forecast_output
             if data_file.name == "forecast_output.json":
-                # It's in the same directory as validate_data.py
-                sys.path.append(str(Path(__file__).parent))
-                from forecast_checks import check_forecast
-                
                 extra_errors = check_forecast(data)
                 if extra_errors:
-                    print(f"ERROR: {data_file.name} failed extra forecast checks:")
                     for e in extra_errors:
-                        print(f"  - {e}")
+                        print(f"ERROR: {data_file.name} failed forecast checks: {e}", file=sys.stderr)
                     has_errors = True
                 else:
                     print(f"OK: {data_file.name}")
@@ -59,6 +60,6 @@ def main():
         sys.exit(1)
         
     print("All processed data files are valid.")
-    
+
 if __name__ == "__main__":
     main()

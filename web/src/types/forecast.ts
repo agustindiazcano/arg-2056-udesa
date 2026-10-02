@@ -5,7 +5,7 @@ import schema from '../../../data/schemas/forecast_output.schema.json' with { ty
 
 const ajv = new Ajv({ allErrors: true });
 ajvFormats(ajv);
-const validate = ajv.compile(schema);
+const validate = ajv.compile<ForecastOutput>(schema);
 
 export type Indicator = 'gdp_constant_usd' | 'gdp_per_capita_usd' | 'population' | 'hdi' | 'resource_production';
 export type ResourceId = 'lithium' | 'copper' | 'gold' | 'silver' | 'oil' | 'gas' | 'soy' | 'wheat' | 'corn' | 'other';
@@ -44,7 +44,7 @@ export function parseForecastOutput(json: unknown): ForecastOutput {
     const err = validate.errors?.[0];
     throw new Error(`Forecast validation failed: ${err?.instancePath} ${err?.message}`);
   }
-  return json as unknown as ForecastOutput;
+  return json;
 }
 
 export function selectSeries(
