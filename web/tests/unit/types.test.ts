@@ -3,6 +3,7 @@ import {
   SCENES,
   nextScene,
   prevScene,
+  Scene
 } from '../../src/types/scene.js';
 import { parseYear, Year } from '../../src/types/year.js';
 import { parseDayOfCampaign, DayOfCampaign } from '../../src/types/campaign.js';
@@ -18,8 +19,8 @@ describe('Types', () => {
     });
 
     it('nextScene / prevScene clamp at both ends and visit each exactly once', () => {
-      let current = SCENES[0]; // 'andes'
-      const visited = new Set([current]);
+      let current: Scene = SCENES[0]; // 'andes'
+      const visited = new Set<Scene>([current]);
       
       // walking forward
       for (let i = 0; i < SCENES.length - 1; i++) {
@@ -79,6 +80,12 @@ describe('Types', () => {
       const _assignToDay: DayOfCampaign = year;
       
       expect(true).toBe(true);
+    });
+  });
+
+  describe('scenario.ts', () => {
+    it('SCENARIOS has 3 specific entries', () => {
+      expect(SCENARIOS).toEqual(['pessimistic', 'expected', 'optimistic']);
     });
   });
 
