@@ -32,6 +32,6 @@
 - [ ] Competition deadline and evaluation criteria.
 
 ## Done
-
-- [x] `contract`: shared types (`Scene`, `Year`, `Scenario`, `Province`, `KeyAction`), dataset JSON Schemas, base CI (lint, typecheck, test, schema validation).
+- [x] `mock-data`: deterministic mock data generator and CI gate.
+- [x] `forecast-contract`: shared types (`Scene`, `Year`, `Scenario`, `Province`, `KeyAction`), dataset JSON Schemas, base CI (lint, typecheck, test, schema validation).
 - [x] Folder tree and context files scaffolded.
