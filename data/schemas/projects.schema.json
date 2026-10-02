@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["id", "name", "resource", "geo", "status", "capex_usd", "start_year", "capacity_per_year", "source", "retrieved_at"],
+    "properties": {
+      "id": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+      "name": { "type": "string", "minLength": 1 },
+      "resource": { "enum": ["lithium", "copper", "gold", "silver", "oil", "gas", "soy", "wheat", "corn", "other"] },
+      "geo": { "type": "string", "pattern": "^AR-[A-Z]$" },
+      "status": { "enum": ["operating", "construction", "approved", "proposed"] },
+      "capex_usd": {
+        "anyOf": [
+          { "type": "number", "minimum": 0 },
+          { "type": "null" }
+        ]
+      },
+      "start_year": {
+        "anyOf": [
+          { "type": "integer" },
+          { "type": "null" }
+        ]
+      },
+      "capacity_per_year": {
+        "anyOf": [
+          { "type": "number", "minimum": 0 },
+          { "type": "null" }
+        ]
+      },
+      "capacity_unit": {
+        "anyOf": [
+          { "type": "string" },
+          { "type": "null" }
+        ]
+      },
+      "source": { "type": "string", "minLength": 1 },
+      "retrieved_at": { "type": "string", "format": "date" },
+      "note": { "type": "string" }
+    },
+    "allOf": [
+      {
+        "if": {
+          "anyOf": [
+            { "properties": { "capex_usd": { "type": "null" } } },
+            { "properties": { "start_year": { "type": "null" } } },
+            { "properties": { "capacity_per_year": { "type": "null" } } }
+          ]
+        },
+        "then": { "required": ["note"] }
+      },
+      {
+        "if": { "not": { "properties": { "capacity_per_year": { "type": "null" } } } },
+        "then": {
+          "required": ["capacity_unit"],
+          "properties": {
+            "capacity_unit": { "type": "string" }
+          }
+        }
+      }
+    ]
+  }
+}
