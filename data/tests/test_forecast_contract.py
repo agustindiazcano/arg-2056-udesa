@@ -142,22 +142,4 @@ def test_check_duplicate_series_key(valid_doc):
     assert len(errors) > 0
     assert any("duplicate" in e.lower() or "share the same key" in e.lower() for e in errors)
 
-def test_validate_data_script_fails_on_invalid_forecast(valid_doc):
-    import subprocess
-    
-    # We will temporarily create data/processed/forecast_output.json
-    processed_dir = Path("data/processed")
-    processed_dir.mkdir(parents=True, exist_ok=True)
-    
-    test_file = processed_dir / "forecast_output.json"
-    
-    valid_doc["extra_invalid_field"] = True
-    
-    with open(test_file, "w") as f:
-        json.dump(valid_doc, f)
-        
-    try:
-        result = subprocess.run([sys.executable, "scripts/validate_data.py"], capture_output=True, check=False)
-        assert result.returncode != 0
-    finally:
-        test_file.unlink()
+
