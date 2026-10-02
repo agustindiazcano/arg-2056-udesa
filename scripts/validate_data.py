@@ -1,7 +1,9 @@
-import sys
 import json
+import sys
 from pathlib import Path
+
 from jsonschema import Draft202012Validator, FormatChecker
+
 
 def main():
     processed_dir = Path("data/processed")
