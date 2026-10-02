@@ -1,25 +1,18 @@
-# LASTCONTEXT
+# Last Context
 
-Overwrite at the end of every task. Keep under 80 lines.
+**Task:** Execute `docs/tasks/composition-contract.md` (Implementation of data schemas and mock data for composition and projects).
 
-## State
-- Date: 2026-10-02
-- Branch: `task/shell`
-- Implemented the `web` shell: Vite + React setup, Zustand store with reducer, keyboard hook, requestAnimationFrame ticker, and basic component scaffolding (TabBar, Hud, MockBadge, ProvinceFilter, Scenes placeholders). Test coverage for all logic is 100% green. Lint and typecheck are green.
+**State:**
+- Completed TDD cycle for `composition.schema.json` and `projects.schema.json`.
+- Implemented `check_composition` and `check_projects` in `dataset_checks.py`.
+- Updated `validate_data.py` to enforce the schemas and dataset checks.
+- Wrote mock data generators (`gen_composition`, `gen_projects`) in `scripts/gen_mock.py` matching the strict schema constraints and invariants.
+- Fixed TS type exports (`types/composition.ts`, `types/projects.ts`) and wrote generic selector/parser functions using `ajv` and `ajv-formats`.
+- All `precheck.py` validation passes (including `ruff`, `pytest`, schema validation, TS lint, typecheck, and vitest).
 
-## Decisions
-- Stack: Vite + React + TypeScript, Zustand, MapLibre GL terrain + deck.gl, Three.js for custom layers, D3 + ECharts, GSAP.
-- Model: Python reference (calibration, backtest, Monte Carlo fan) + reduced TS port with parity test.
-- Workflow: one agent at a time, one branch per task, TDD, CI validation, human approval of every PR.
-- Package manager: npm (not pnpm).
-- `forecast-contract`: Schema uses Draft 2020-12 to enforce exact shapes for the model output.
-- `mock-data`: Deterministic generator creates realistic mock JSONs so UI development can proceed. 
-- `precheck`: Run `python scripts/precheck.py` locally before every push.
-- `shell`: Basic React tree set up. All game loop logic inside `reducer.ts` for predictability. `useKeyboard` handles keybindings. `useTicker` handles time progression. Components built.
+**Decisions:**
+- Decided to use `ajv-formats` to enforce `date` formatting in our strict `draft-2020` parsing.
+- Stored all TS types and selector logic cleanly with corresponding tests checking order invariants (`projects.ts` orders by `capex_usd` descending with nulls last).
 
-## Open questions
-- Competition deadline and evaluation criteria (determines MVP scope).
-- Which provinces and which time range have usable historical production data.
-
-## Next step
-- `model-py`: population cohorts, growth accounting, resource pipeline, scenarios, AI multiplier, Monte Carlo fan. OR `data-pipeline`.
+**Next Step:**
+Wait for a human code review on `task/composition-contract`. If merged, proceed to `task/projections-contract` as per the agreed sequence.

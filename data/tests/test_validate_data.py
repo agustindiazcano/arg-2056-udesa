@@ -84,3 +84,97 @@ def test_no_write_to_real_data_dir(tmp_path):
                 continue
             if time.time() - f.stat().st_mtime < 5:
                 pytest.fail(f"Test modified real data dir: {f}")
+
+# --- Composition & Projects tests ---
+
+@pytest.fixture
+def comp_valid():
+    return [
+        {
+            "kind": "gdp_by_sector",
+            "year": 2020,
+            "group": "Primary",
+            "category": "agri",
+            "label": "Agriculture",
+            "value_usd": 1500.5,
+            "source": "MOCK",
+            "retrieved_at": "2026-10-02"
+        },
+        {
+            "kind": "gdp_by_sector",
+            "year": 2020,
+            "group": "Secondary",
+            "category": "ind",
+            "label": "Industry",
+            "value_usd": 2500.5,
+            "source": "MOCK",
+            "retrieved_at": "2026-10-02"
+        }
+    ]
+
+@pytest.fixture
+def proj_valid():
+    return [
+        {
+            "id": "proj-1",
+            "name": "Project One",
+            "resource": "lithium",
+            "geo": "AR-J",
+            "status": "operating",
+            "capex_usd": 1000000,
+            "start_year": 2025,
+            "capacity_per_year": 50000,
+            "capacity_unit": "t",
+            "source": "MOCK",
+            "retrieved_at": "2026-10-02"
+        }
+    ]
+
+def test_validate_valid_composition(tmp_path, comp_valid):
+    with open(tmp_path / "composition.json", "w") as f:
+        json.dump(comp_valid, f)
+    res = run_validate(tmp_path)
+    assert res.returncode == 0
+    assert "OK: composition.json" in res.stdout
+
+def test_validate_invalid_composition_schema(tmp_path, comp_valid):
+    del comp_valid[0]["source"]
+    with open(tmp_path / "composition.json", "w") as f:
+        json.dump(comp_valid, f)
+    res = run_validate(tmp_path)
+    assert res.returncode == 1
+    assert "composition.json failed schema validation" in res.stderr
+
+def test_validate_invalid_composition_check(tmp_path, comp_valid):
+    comp_valid[1]["category"] = "agri"  # Duplicate category
+    with open(tmp_path / "composition.json", "w") as f:
+        json.dump(comp_valid, f)
+    res = run_validate(tmp_path)
+    assert res.returncode == 1
+    assert "composition.json failed composition checks" in res.stderr
+    assert "agri" in res.stderr
+
+def test_validate_valid_projects(tmp_path, proj_valid):
+    with open(tmp_path / "projects.json", "w") as f:
+        json.dump(proj_valid, f)
+    res = run_validate(tmp_path)
+    assert res.returncode == 0
+    assert "OK: projects.json" in res.stdout
+
+def test_validate_invalid_projects_schema(tmp_path, proj_valid):
+    del proj_valid[0]["source"]
+    with open(tmp_path / "projects.json", "w") as f:
+        json.dump(proj_valid, f)
+    res = run_validate(tmp_path)
+    assert res.returncode == 1
+    assert "projects.json failed schema validation" in res.stderr
+
+def test_validate_invalid_projects_check(tmp_path, proj_valid):
+    proj2 = dict(proj_valid[0])
+    proj_valid.append(proj2)  # Duplicate id
+    with open(tmp_path / "projects.json", "w") as f:
+        json.dump(proj_valid, f)
+    res = run_validate(tmp_path)
+    assert res.returncode == 1
+    assert "projects.json failed projects checks" in res.stderr
+    assert "proj-1" in res.stderr

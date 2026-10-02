@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["kind", "year", "group", "category", "label", "value_usd", "source", "retrieved_at"],
+    "properties": {
+      "kind": { "enum": ["gdp_by_sector", "exports_by_product"] },
+      "year": { "type": "integer", "minimum": 1810, "maximum": 2056 },
+      "group": { "type": "string", "minLength": 1 },
+      "category": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+      "label": { "type": "string", "minLength": 1 },
+      "value_usd": {
+        "anyOf": [
+          { "type": "number", "minimum": 0 },
+          { "type": "null" }
+        ]
+      },
+      "source": { "type": "string", "minLength": 1 },
+      "retrieved_at": { "type": "string", "format": "date" },
+      "note": { "type": "string" }
+    },
+    "allOf": [
+      {
+        "if": { "properties": { "value_usd": { "type": "null" } } },
+        "then": { "required": ["note"] }
+      }
+    ]
+  }
+}

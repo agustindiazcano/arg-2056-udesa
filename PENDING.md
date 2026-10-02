@@ -33,6 +33,7 @@
 
 ## Done
 
+- [x] `composition-contract`: schema, checks, types and mock data generator.
 - [x] `precheck`: added local python verification script.
 - [x] `mock-data`: deterministic mock data generator and CI gate.
 - [x] `forecast-contract`: Draft 2020-12 schemas for forecast output.

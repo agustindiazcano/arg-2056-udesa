@@ -248,6 +248,110 @@ def gen_forecast(rng, resource_provs):
         "series": series
     }
 
+def gen_composition(rng):
+    data = []
+    nulls_added = 0
+    groups = ["Primary", "Secondary", "Tertiary", "Quaternary", "Quinary"]
+    
+    for kind in ["gdp_by_sector", "exports_by_product"]:
+        leaves = []
+        for g in groups:
+            num_leaves = rng.randint(3, 5)
+            for i in range(num_leaves):
+                cat_id = f"{kind.replace('_', '-')}-{g.lower()}-{i}"
+                leaves.append({"group": g, "category": cat_id, "share": rng.uniform(5, 20)})
+                
+        total = sum(l["share"] for l in leaves)
+        for l in leaves:
+            l["share"] = (l["share"] / total) * 1000
+            l["drift"] = rng.uniform(0.98, 1.02)
+            
+        for year in range(2000, 2026):
+            for l in leaves:
+                l["share"] *= l["drift"]
+            
+            for l in leaves:
+                if year < 2005 and l["category"].endswith("-0") and kind == "gdp_by_sector":
+                    continue
+                    
+                record = {
+                    "kind": kind,
+                    "year": year,
+                    "group": l["group"],
+                    "category": l["category"],
+                    "label": f"Mock {l['category']}",
+                    "value_usd": round(l["share"], 2),
+                    "source": "MOCK",
+                    "retrieved_at": RETRIEVED_AT
+                }
+                
+                if nulls_added < 2 and rng.random() < 0.01:
+                    record["value_usd"] = None
+                    record["note"] = "Mock missing composition data"
+                    nulls_added += 1
+                    
+                data.append(record)
+                
+    while nulls_added < 2:
+        idx = rng.randint(0, len(data) - 1)
+        if data[idx]["value_usd"] is not None:
+            data[idx]["value_usd"] = None
+            data[idx]["note"] = "Forced missing composition data"
+            nulls_added += 1
+            
+    return data
+
+def gen_projects(rng, resource_provs):
+    data = []
+    nulls_added = 0
+    resources = ["lithium", "copper", "gold", "oil", "gas"]
+    statuses = ["operating", "construction", "approved", "proposed"]
+    
+    status_pool = statuses * 2 + [rng.choice(statuses) for _ in range(25 - 8)]
+    rng.shuffle(status_pool)
+    
+    for i in range(25):
+        r = rng.choice(resources)
+        provs = resource_provs.get(r, [])
+        geo = rng.choice(provs) if provs else "AR-B"
+        has_capacity = rng.choice([True, False])
+        
+        record = {
+            "id": f"mock-proj-{i}",
+            "name": f"Mock Project {i}",
+            "resource": r,
+            "geo": geo,
+            "status": status_pool[i],
+            "capex_usd": round(rng.uniform(1e6, 1e9), 2),
+            "start_year": rng.randint(2020, 2035),
+            "capacity_per_year": round(rng.uniform(1000, 50000), 2) if has_capacity else None,
+            "capacity_unit": "t" if has_capacity else None,
+            "source": "MOCK",
+            "retrieved_at": RETRIEVED_AT
+        }
+        
+        if not has_capacity:
+            record["note"] = "Mock missing capacity"
+            
+        if nulls_added < 3 and rng.random() < 0.2:
+            record["capex_usd"] = None
+            if "note" in record:
+                record["note"] += "; Mock missing capex"
+            else:
+                record["note"] = "Mock missing capex"
+            nulls_added += 1
+            
+        data.append(record)
+        
+    while nulls_added < 3:
+        idx = rng.randint(0, len(data) - 1)
+        if data[idx].get("capex_usd") is not None:
+            data[idx]["capex_usd"] = None
+            data[idx]["note"] = "Forced missing capex"
+            nulls_added += 1
+            
+    return data
+
 def main(out_dir: str):
     rng = random.Random(SEED)
     out = Path(out_dir)
@@ -267,6 +371,12 @@ def main(out_dir: str):
     
     fc = gen_forecast(rng, rprovs)
     dump_json(fc, out / "forecast_output.json")
+    
+    comp = gen_composition(rng)
+    dump_json(comp, out / "composition.json")
+    
+    proj = gen_projects(rng, rprovs)
+    dump_json(proj, out / "projects.json")
 
 if __name__ == "__main__":
     out = sys.argv[1] if len(sys.argv) > 1 else "data/mock"

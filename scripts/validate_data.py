@@ -3,6 +3,8 @@ import json
 import sys
 from pathlib import Path
 
+from dataset_checks import check_composition, check_projects
+
 # Imports at module top only
 from forecast_checks import check_forecast
 from jsonschema import Draft202012Validator, FormatChecker
@@ -50,6 +52,22 @@ def main():
                 if extra_errors:
                     for e in extra_errors:
                         print(f"ERROR: {data_file.name} failed forecast checks: {e}", file=sys.stderr)
+                    has_errors = True
+                else:
+                    print(f"OK: {data_file.name}")
+            elif data_file.name == "composition.json":
+                extra_errors = check_composition(data)
+                if extra_errors:
+                    for e in extra_errors:
+                        print(f"ERROR: {data_file.name} failed composition checks: {e}", file=sys.stderr)
+                    has_errors = True
+                else:
+                    print(f"OK: {data_file.name}")
+            elif data_file.name == "projects.json":
+                extra_errors = check_projects(data)
+                if extra_errors:
+                    for e in extra_errors:
+                        print(f"ERROR: {data_file.name} failed projects checks: {e}", file=sys.stderr)
                     has_errors = True
                 else:
                     print(f"OK: {data_file.name}")
