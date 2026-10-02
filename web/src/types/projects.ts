@@ -6,7 +6,7 @@ const ajv = new Ajv();
 addFormats(ajv);
 const validate = ajv.compile<ProjectRecord[]>(schema);
 
-export type ProjectStatus = 'operating' | 'construction' | 'approved' | 'proposed';
+export type ProjectStatus = 'operating' | 'ramp_up' | 'construction' | 'approved' | 'feasibility' | 'prefeasibility' | 'exploration' | 'announced';
 
 export interface ProjectRecord {
   id: string;
@@ -14,6 +14,8 @@ export interface ProjectRecord {
   resource: 'lithium' | 'copper' | 'gold' | 'silver' | 'oil' | 'gas' | 'soy' | 'wheat' | 'corn' | 'other';
   geo: string;
   status: ProjectStatus;
+  company?: string | null;
+  owners?: string[] | null;
   capex_usd: number | null;
   start_year: number | null;
   capacity_per_year: number | null;

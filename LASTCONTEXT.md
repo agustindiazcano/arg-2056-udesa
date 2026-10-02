@@ -1,18 +1,21 @@
 # Last Context
 
-**Task:** Execute `docs/tasks/composition-contract.md` (Implementation of data schemas and mock data for composition and projects).
+**Task:** Execute `docs/tasks/projections-contract.md` (migrate projects schema, create production_projections schema, checks, TS types, mock generation, and docs).
 
 **State:**
-- Completed TDD cycle for `composition.schema.json` and `projects.schema.json`.
-- Implemented `check_composition` and `check_projects` in `dataset_checks.py`.
-- Updated `validate_data.py` to enforce the schemas and dataset checks.
-- Wrote mock data generators (`gen_composition`, `gen_projects`) in `scripts/gen_mock.py` matching the strict schema constraints and invariants.
-- Fixed TS type exports (`types/composition.ts`, `types/projects.ts`) and wrote generic selector/parser functions using `ajv` and `ajv-formats`.
-- All `precheck.py` validation passes (including `ruff`, `pytest`, schema validation, TS lint, typecheck, and vitest).
+- Created branch `task/projections-contract`.
+- Migrated `projects.schema.json` to include new statuses, `company`, `owners`, updated `capacity_unit` enum, and added description to `start_year`.
+- Created `production_projections.schema.json` with strict validation rules using Draft 2020-12 schemas.
+- Implemented `check_projections` in `scripts/dataset_checks.py` and wired it into `scripts/validate_data.py`.
+- Created TS types in `web/src/types/projections.ts`, exported them in `index.ts`.
+- Updated `scripts/gen_mock.py` to generate the new fields for projects and the `production_projections.json` mock file, supporting disagreed sources and capacity forecasts.
+- Created `docs/data-dictionary.md` containing units, basis, year conventions, and schema mappings.
+- Wrote full unit tests for schema, checks, and TS types.
+- All `precheck.py` validation passes (including `ruff`, `pytest`, schema validation, TS lint, typecheck, and vitest tests).
 
 **Decisions:**
-- Decided to use `ajv-formats` to enforce `date` formatting in our strict `draft-2020` parsing.
-- Stored all TS types and selector logic cleanly with corresponding tests checking order invariants (`projects.ts` orders by `capex_usd` descending with nulls last).
+- MOCK source disagreement was handled using "MOCK2" in the generation logic to clearly pass provenance checks.
+- Handled `rfc3987` dependency absence for URI validation in Python by adding a regex pattern constraint for `source_url` so validation tests would properly catch bad URIs without needing extra dependencies.
 
 **Next Step:**
-Wait for a human code review on `task/composition-contract`. If merged, proceed to `task/projections-contract` as per the agreed sequence.
+- Submit a PR for human review of `task/projections-contract` and verify `year` agriculture conventions, enums, unit list, and the decision to keep `production_actual` out.

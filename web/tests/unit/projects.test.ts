@@ -31,10 +31,10 @@ describe('projects types', () => {
 
   it('selects and filters projects, ordering by capex descending with null last', () => {
     const records: ProjectRecord[] = [
-      { id: 'p1', name: 'N', resource: 'lithium', geo: 'AR-J', status: 'operating', capex_usd: 50, start_year: null, capacity_per_year: null, capacity_unit: null, source: 'S', retrieved_at: 'R' },
-      { id: 'p2', name: 'N', resource: 'lithium', geo: 'AR-S', status: 'proposed', capex_usd: null, start_year: null, capacity_per_year: null, capacity_unit: null, source: 'S', retrieved_at: 'R', note: 'null capex' },
-      { id: 'p3', name: 'N', resource: 'copper', geo: 'AR-J', status: 'operating', capex_usd: 200, start_year: null, capacity_per_year: null, capacity_unit: null, source: 'S', retrieved_at: 'R' },
-      { id: 'p4', name: 'N', resource: 'lithium', geo: 'AR-J', status: 'operating', capex_usd: 100, start_year: null, capacity_per_year: null, capacity_unit: null, source: 'S', retrieved_at: 'R' },
+      { id: 'p1', name: 'N', resource: 'lithium', geo: 'AR-J', status: 'operating', capex_usd: 50, start_year: null, capacity_per_year: null, capacity_unit: null, source: 'S', retrieved_at: 'R', note: 'no capex' },
+      { id: 'p2', name: 'N', resource: 'lithium', geo: 'AR-S', status: 'announced', capex_usd: null, start_year: null, capacity_per_year: null, capacity_unit: null, source: 'S', retrieved_at: 'R', note: 'null capex' },
+      { id: 'p3', name: 'N', resource: 'copper', geo: 'AR-J', status: 'operating', capex_usd: 200, start_year: null, capacity_per_year: null, capacity_unit: null, source: 'S', retrieved_at: 'R', note: 'no capex' },
+      { id: 'p4', name: 'N', resource: 'lithium', geo: 'AR-J', status: 'operating', capex_usd: 100, start_year: null, capacity_per_year: null, capacity_unit: null, source: 'S', retrieved_at: 'R', note: 'no capex' },
     ];
     
     // filter by resource 'lithium'

@@ -1,0 +1,131 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["entity_type", "geo", "resource", "metric", "year", "unit", "scenario", "source", "retrieved_at"],
+    "properties": {
+      "entity_type": { "enum": ["project", "province", "national"] },
+      "project_id": {
+        "anyOf": [
+          { "type": "string", "pattern": "^[a-z0-9-]+$" },
+          { "type": "null" }
+        ]
+      },
+      "geo": { "type": "string", "pattern": "^(AR|AR-[A-Z])$" },
+      "resource": { "enum": ["lithium", "copper", "gold", "silver", "oil", "gas", "soy", "wheat", "corn", "other"] },
+      "metric": { "enum": ["capacity_nameplate", "production_expected", "guidance", "forecast"] },
+      "year": {
+        "description": "For capacity_* metrics: year the capacity is expected to be in place. For agriculture: calendar year in which the campaign ends.",
+        "type": "integer",
+        "minimum": 1990,
+        "maximum": 2056
+      },
+      "period_label": {
+        "description": "For agriculture, e.g. '2030/31'.",
+        "anyOf": [
+          { "type": "string" },
+          { "type": "null" }
+        ]
+      },
+      "value": {
+        "anyOf": [
+          { "type": "number", "minimum": 0 },
+          { "type": "null" }
+        ]
+      },
+      "value_low": {
+        "anyOf": [
+          { "type": "number", "minimum": 0 },
+          { "type": "null" }
+        ]
+      },
+      "value_high": {
+        "anyOf": [
+          { "type": "number", "minimum": 0 },
+          { "type": "null" }
+        ]
+      },
+      "unit": { "enum": ["t_per_year", "oz_per_year", "bbl_per_day", "mm3_per_day", "mtpa", "t", "ha", "other"] },
+      "unit_basis": {
+        "anyOf": [
+          { "type": "string", "pattern": "^[a-z0-9_]+$" },
+          { "type": "null" }
+        ]
+      },
+      "scenario": { "enum": ["base", "low", "high", "not_stated"] },
+      "stage_as_of": {
+        "anyOf": [
+          { "type": "string", "format": "date" },
+          { "type": "null" }
+        ]
+      },
+      "assumptions": {
+        "anyOf": [
+          { "type": "string" },
+          { "type": "null" }
+        ]
+      },
+      "source": { "type": "string", "minLength": 1 },
+      "source_url": {
+        "anyOf": [
+          { "type": "string", "format": "uri", "pattern": "^https?://" },
+          { "type": "null" }
+        ]
+      },
+      "locator": {
+        "anyOf": [
+          { "type": "string" },
+          { "type": "null" }
+        ]
+      },
+      "confidence": {
+        "anyOf": [
+          { "enum": ["high", "medium", "low"] }
+        ]
+      },
+      "retrieved_at": { "type": "string", "format": "date" },
+      "note": { "type": "string" }
+    },
+    "allOf": [
+      {
+        "if": { "properties": { "entity_type": { "const": "project" } } },
+        "then": { "properties": { "project_id": { "type": "string" } } },
+        "else": { "properties": { "project_id": { "type": "null" } } }
+      },
+      {
+        "if": { "properties": { "resource": { "enum": ["lithium", "copper"] } } },
+        "then": { "properties": { "unit_basis": { "type": "string" } } }
+      },
+      {
+        "if": {
+          "anyOf": [
+            { "not": { "properties": { "value_low": { "type": "null" } } } },
+            { "not": { "properties": { "value_high": { "type": "null" } } } }
+          ]
+        },
+        "then": {
+          "properties": {
+            "value_low": { "type": "number" },
+            "value_high": { "type": "number" }
+          }
+        }
+      },
+      {
+        "if": {
+          "properties": {
+            "value": { "type": "null" },
+            "value_low": { "type": "null" },
+            "value_high": { "type": "null" }
+          }
+        },
+        "then": { "required": ["note"] }
+      },
+      {
+        "if": { "properties": { "unit": { "const": "other" } } },
+        "then": { "required": ["note"] }
+      }
+    ]
+  }
+}

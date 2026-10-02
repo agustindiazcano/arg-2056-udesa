@@ -305,12 +305,12 @@ def gen_projects(rng, resource_provs):
     data = []
     nulls_added = 0
     resources = ["lithium", "copper", "gold", "oil", "gas"]
-    statuses = ["operating", "construction", "approved", "proposed"]
+    statuses = ["operating", "ramp_up", "construction", "approved", "feasibility", "prefeasibility", "exploration", "announced"]
     
-    status_pool = statuses * 2 + [rng.choice(statuses) for _ in range(25 - 8)]
+    status_pool = statuses * 2 + [rng.choice(statuses) for _ in range(30 - 16)]
     rng.shuffle(status_pool)
     
-    for i in range(25):
+    for i in range(30):
         r = rng.choice(resources)
         provs = resource_provs.get(r, [])
         geo = rng.choice(provs) if provs else "AR-B"
@@ -322,10 +322,12 @@ def gen_projects(rng, resource_provs):
             "resource": r,
             "geo": geo,
             "status": status_pool[i],
+            "company": f"Mock Company {i}",
+            "owners": [f"Owner {i}A", f"Owner {i}B"],
             "capex_usd": round(rng.uniform(1e6, 1e9), 2),
             "start_year": rng.randint(2020, 2035),
             "capacity_per_year": round(rng.uniform(1000, 50000), 2) if has_capacity else None,
-            "capacity_unit": "t" if has_capacity else None,
+            "capacity_unit": "t_per_year" if has_capacity else None,
             "source": "MOCK",
             "retrieved_at": RETRIEVED_AT
         }
@@ -350,6 +352,164 @@ def gen_projects(rng, resource_provs):
             data[idx]["note"] = "Forced missing capex"
             nulls_added += 1
             
+    return data
+
+def gen_projections(rng, projects, resource_provs):
+    data = []
+    
+    def get_unit_basis(resource):
+        if resource == "lithium": return "lce"
+        if resource == "copper": return "contained_cu"
+        return None
+
+    # Projects
+    advanced_statuses = {"operating", "ramp_up", "construction", "approved"}
+    null_bounds_added = 0
+    disagreements_added = 0
+
+    for proj in projects:
+        ub = get_unit_basis(proj["resource"])
+        base_record = {
+            "entity_type": "project",
+            "project_id": proj["id"],
+            "geo": proj["geo"],
+            "resource": proj["resource"],
+            "unit": proj["capacity_unit"] or "t_per_year",
+            "scenario": "base",
+            "source": "MOCK",
+            "retrieved_at": RETRIEVED_AT
+        }
+        if ub: base_record["unit_basis"] = ub
+
+        start_year = proj["start_year"] or 2025
+        nameplate = proj["capacity_per_year"] or 10000
+
+        if proj["status"] in advanced_statuses:
+            end_year = min(start_year + 14, 2040)
+            for y in range(start_year, end_year + 1):
+                # ramp linearly to nameplate in 3 years
+                ramp_factor = min((y - start_year + 1) / 3, 1.0)
+                val = nameplate * ramp_factor
+                rec = dict(base_record)
+                rec.update({"metric": "production_expected", "year": y, "value": val})
+                
+                # add disagreement
+                if disagreements_added < 4 and y == start_year + 2 and rng.random() < 0.3:
+                    rec["confidence"] = "high"
+                    rec2 = dict(rec)
+                    rec2["source"] = "MOCK2"
+                    rec2["value"] = val * 0.8
+                    rec2["confidence"] = "medium"
+                    data.append(rec2)
+                    disagreements_added += 1
+                
+                data.append(rec)
+            
+            # capacity_nameplate row at start_year + 3
+            cap_rec = dict(base_record)
+            cap_rec.update({"metric": "capacity_nameplate", "year": start_year + 3, "value": nameplate})
+            data.append(cap_rec)
+        else:
+            # only capacity_nameplate row
+            cap_rec = dict(base_record)
+            cap_rec.update({"metric": "capacity_nameplate", "year": start_year + 3, "value": nameplate})
+            
+            if null_bounds_added < 3 and rng.random() < 0.3:
+                cap_rec["value"] = None
+                cap_rec["value_low"] = nameplate * 0.8
+                cap_rec["value_high"] = nameplate * 1.2
+                null_bounds_added += 1
+                
+            data.append(cap_rec)
+            
+    while null_bounds_added < 3:
+        # find an early-stage project row to modify
+        for row in data:
+            if row["metric"] == "capacity_nameplate" and row.get("value") is not None:
+                v = row["value"]
+                row["value"] = None
+                row["value_low"] = v * 0.8
+                row["value_high"] = v * 1.2
+                null_bounds_added += 1
+                if null_bounds_added >= 3:
+                    break
+
+    while disagreements_added < 4:
+        # force disagreement on an existing production_expected row
+        for row in data:
+            if row["metric"] == "production_expected" and row["source"] == "MOCK":
+                row["confidence"] = "high"
+                r2 = dict(row)
+                r2["source"] = "MOCK2"
+                r2["value"] = row["value"] * 0.9
+                r2["confidence"] = "medium"
+                data.append(r2)
+                disagreements_added += 1
+                if disagreements_added >= 4:
+                    break
+
+    # Provinces forecast
+    provs_selected = rng.sample(PROVINCES, 3)
+    resources_selected = rng.sample(["lithium", "copper", "gold", "oil", "gas"], 3)
+    for p in provs_selected:
+        for r in resources_selected:
+            ub = get_unit_basis(r)
+            for y in range(2026, 2036):
+                val_base = 1000 + (y - 2026) * 50
+                for scen, mul in [("low", 0.8), ("base", 1.0), ("high", 1.2)]:
+                    rec = {
+                        "entity_type": "province",
+                        "geo": p,
+                        "resource": r,
+                        "metric": "forecast",
+                        "year": y,
+                        "value": val_base * mul,
+                        "unit": "t_per_year",
+                        "scenario": scen,
+                        "source": "MOCK",
+                        "retrieved_at": RETRIEVED_AT
+                    }
+                    if ub: rec["unit_basis"] = ub
+                    data.append(rec)
+
+    # National forecast
+    for r in ["lithium", "copper", "oil"]:
+        ub = get_unit_basis(r)
+        for y in range(2026, 2036):
+            rec = {
+                "entity_type": "national",
+                "geo": "AR",
+                "resource": r,
+                "metric": "forecast",
+                "year": y,
+                "value": 50000 + (y - 2026) * 2000,
+                "unit": "t_per_year",
+                "scenario": "base",
+                "source": "MOCK",
+                "retrieved_at": RETRIEVED_AT
+            }
+            if ub: rec["unit_basis"] = ub
+            data.append(rec)
+            
+    # National agriculture forecast
+    for r in ["soy", "corn", "wheat"]:
+        for y in range(2026, 2036):
+            period = f"{y-1}/{str(y)[2:]}"
+            rec = {
+                "entity_type": "national",
+                "geo": "AR",
+                "resource": r,
+                "metric": "forecast",
+                "year": y,
+                "period_label": period,
+                "value": 30000000 + (y - 2026) * 1000000,
+                "unit": "t",
+                "scenario": "base",
+                "source": "MOCK",
+                "retrieved_at": RETRIEVED_AT
+            }
+            data.append(rec)
+
     return data
 
 def main(out_dir: str):
@@ -377,6 +537,9 @@ def main(out_dir: str):
     
     proj = gen_projects(rng, rprovs)
     dump_json(proj, out / "projects.json")
+    
+    projs = gen_projections(rng, proj, rprovs)
+    dump_json(projs, out / "production_projections.json")
 
 if __name__ == "__main__":
     out = sys.argv[1] if len(sys.argv) > 1 else "data/mock"
