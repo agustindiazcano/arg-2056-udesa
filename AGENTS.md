@@ -66,11 +66,15 @@ docs/               assumptions.md, sources.md, decisions.md
 
 1. One agent at a time. One branch per task: `task/<short-slug>`.
 2. Strict TDD for logic: write the failing test, then the code, then refactor. Commit atomically.
-3. Heavy validation runs in CI, not locally. Locally run only the fast tests for the files you touched.
+3. Heavy validation runs in CI, not locally. Locally run only the fast tests for the files you touched. Before every push run `python scripts/precheck.py` (same cheap checks as CI: ruff, pytest, validate_data, web lint, typecheck, tests). Never push if it fails. Heavy validation (mutation testing, backtest, visual snapshots) runs only in CI.
 4. Mutation testing runs on the diff for `model/` and `web/src/state`, `web/src/model-ts`.
 5. A human approves every pull request. Never merge. Never push to `main`.
 6. Small PRs: one chart, one layer, one dataset, one model component.
 7. Never bypass hooks, skip tests, lower thresholds or weaken a test to make CI pass. If a test is wrong, say so in the PR and fix it explicitly.
+8. Never claim CI is green. Report "pushed, CI not checked" unless you read the run status.
+9. Tests of scripts assert the exact exit code and a message fragment, and always include the positive case (exit 0).
+10. Tests never write inside the real `data/` directory; use temporary directories.
+11. Never silence a checker (`as unknown as`, `@ts-ignore`, `# noqa`, `--unsafe-fixes`) without a one-line justification in the PR.
 
 Commit format: `type(scope): imperative summary` (types: feat, fix, test, refactor, data, docs, chore, ci).
 

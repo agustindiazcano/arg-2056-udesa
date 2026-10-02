@@ -1,9 +1,9 @@
 import json
-import pytest
 import subprocess
 import sys
-import shutil
 from pathlib import Path
+
+import pytest
 from jsonschema import Draft202012Validator, FormatChecker
 
 # Add scripts to path for importing forecast checks
@@ -34,8 +34,8 @@ def test_determinism(tmp_path):
     run_gen_mock(dir1)
     run_gen_mock(dir2)
     
-    files1 = sorted(list(dir1.glob("*.json")))
-    files2 = sorted(list(dir2.glob("*.json")))
+    files1 = sorted(dir1.glob("*.json"))
+    files2 = sorted(dir2.glob("*.json"))
     
     assert len(files1) == 5
     assert len(files1) == len(files2)
@@ -69,12 +69,10 @@ def _find_numeric_nulls_and_provenance(obj):
     
     # Check provenance if it looks like a record with source
     if isinstance(obj, dict):
-        if "source" in obj:
-            if obj["source"] != "MOCK":
-                errors.append("source is not MOCK")
-        if "retrieved_at" in obj:
-            if obj["retrieved_at"] != "2026-10-02":
-                errors.append("retrieved_at is not 2026-10-02")
+        if "source" in obj and obj["source"] != "MOCK":
+            errors.append("source is not MOCK")
+        if "retrieved_at" in obj and obj["retrieved_at"] != "2026-10-02":
+            errors.append("retrieved_at is not 2026-10-02")
                 
         # Check null numeric values
         for k, v in obj.items():
@@ -170,7 +168,7 @@ def test_gate_check_no_mock(tmp_path):
     with open(clean_dir / "valid.json", "w") as f:
         json.dump({"source": "real"}, f)
         
-    res = subprocess.run([sys.executable, check_script, str(clean_dir)])
+    res = subprocess.run([sys.executable, check_script, str(clean_dir)], check=False)
     assert res.returncode == 0
     
     # mock file name -> exit 1
@@ -179,7 +177,7 @@ def test_gate_check_no_mock(tmp_path):
     with open(mock_name_dir / "my_mock_file.json", "w") as f:
         json.dump({"source": "real"}, f)
         
-    res = subprocess.run([sys.executable, check_script, str(mock_name_dir)], capture_output=True)
+    res = subprocess.run([sys.executable, check_script, str(mock_name_dir)], capture_output=True, check=False)
     assert res.returncode == 1
     assert "mock" in res.stdout.decode().lower()
     
@@ -189,7 +187,7 @@ def test_gate_check_no_mock(tmp_path):
     with open(mock_src_dir / "valid.json", "w") as f:
         json.dump({"data": [{"source": "MOCK"}]}, f)
         
-    res = subprocess.run([sys.executable, check_script, str(mock_src_dir)], capture_output=True)
+    res = subprocess.run([sys.executable, check_script, str(mock_src_dir)], capture_output=True, check=False)
     assert res.returncode == 1
     
     # broken JSON -> exit 2
@@ -198,9 +196,9 @@ def test_gate_check_no_mock(tmp_path):
     with open(broken_dir / "broken.json", "w") as f:
         f.write("{broken")
         
-    res = subprocess.run([sys.executable, check_script, str(broken_dir)], capture_output=True)
+    res = subprocess.run([sys.executable, check_script, str(broken_dir)], capture_output=True, check=False)
     assert res.returncode == 2
 
     # missing default dir -> skip without error
-    res = subprocess.run([sys.executable, check_script, str(tmp_path / "missing")], capture_output=True)
+    res = subprocess.run([sys.executable, check_script, str(tmp_path / "missing")], capture_output=True, check=False)
     assert res.returncode == 0

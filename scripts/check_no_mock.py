@@ -1,6 +1,7 @@
-import sys
 import json
+import sys
 from pathlib import Path
+
 
 def has_mock_source(obj):
     if isinstance(obj, dict):
