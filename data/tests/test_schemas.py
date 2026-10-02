@@ -1,7 +1,7 @@
 import json
 import pytest
 from pathlib import Path
-from jsonschema import Draft202012Validator, ValidationError
+from jsonschema import Draft202012Validator, ValidationError, FormatChecker
 
 SCHEMAS_DIR = Path("data/schemas")
 
@@ -23,7 +23,7 @@ def test_schema_is_valid_draft202012(schema_name):
 def get_validator(schema_name):
     with open(SCHEMAS_DIR / schema_name) as f:
         schema = json.load(f)
-    return Draft202012Validator(schema)
+    return Draft202012Validator(schema, format_checker=FormatChecker())
 
 VALID_RECORDS = {
     "economy_series.schema.json": {
