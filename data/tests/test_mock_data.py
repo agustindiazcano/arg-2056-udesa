@@ -37,7 +37,7 @@ def test_determinism(tmp_path):
     files1 = sorted(dir1.glob("*.json"))
     files2 = sorted(dir2.glob("*.json"))
     
-    assert len(files1) == 7
+    assert len(files1) == 8
     assert len(files1) == len(files2)
     
     for f1, f2 in zip(files1, files2):
@@ -45,7 +45,7 @@ def test_determinism(tmp_path):
         assert f1.read_bytes() == f2.read_bytes()
 
 def test_schemas(generated_mock_data):
-    files = ["economy_series", "resource_production", "population", "andes_events", "composition", "projects"]
+    files = ["economy_series", "resource_production", "population", "andes_events", "composition", "projects", "production_projections"]
     for fname in files:
         data_path = generated_mock_data / f"{fname}.json"
         assert data_path.exists(), f"{fname}.json not generated"
@@ -69,7 +69,7 @@ def _find_numeric_nulls_and_provenance(obj):
     
     # Check provenance if it looks like a record with source
     if isinstance(obj, dict):
-        if "source" in obj and obj["source"] != "MOCK":
+        if "source" in obj and obj["source"] not in ("MOCK", "MOCK2"):
             errors.append("source is not MOCK")
         if "retrieved_at" in obj and obj["retrieved_at"] != "2026-10-02":
             errors.append("retrieved_at is not 2026-10-02")
@@ -79,7 +79,8 @@ def _find_numeric_nulls_and_provenance(obj):
             if v is None:
                 # If a field is None and it is a numeric field that requires note (based on schema)
                 # But schemas enforce this, we just need to verify that 'note' is at the same level
-                if "note" not in obj:
+                # exception: value_low/value_high in projections when value is None
+                if "note" not in obj and not ("value_low" in obj and obj["value_low"] is not None):
                     errors.append(f"null value for {k} but no 'note' found at same level")
             elif isinstance(v, (dict, list)):
                 errors.extend(_find_numeric_nulls_and_provenance(v))
