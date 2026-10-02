@@ -89,6 +89,27 @@ def test_composition_extra_field(comp_valid):
 def test_projects_valid(proj_valid):
     get_validator(PROJECTS_SCHEMA).validate([proj_valid])
 
+def test_projects_statuses(proj_valid):
+    statuses = ["operating", "ramp_up", "construction", "approved", "feasibility", "prefeasibility", "exploration", "announced"]
+    for s in statuses:
+        proj_valid["status"] = s
+        get_validator(PROJECTS_SCHEMA).validate([proj_valid])
+
+def test_projects_status_proposed_fails(proj_valid):
+    proj_valid["status"] = "proposed"
+    with pytest.raises(ValidationError):
+        get_validator(PROJECTS_SCHEMA).validate([proj_valid])
+
+def test_projects_capacity_unit_outside_enum(proj_valid):
+    proj_valid["capacity_unit"] = "invalid_unit"
+    with pytest.raises(ValidationError):
+        get_validator(PROJECTS_SCHEMA).validate([proj_valid])
+
+def test_projects_owners_empty_string_fails(proj_valid):
+    proj_valid["owners"] = ["owner1", ""]
+    with pytest.raises(ValidationError):
+        get_validator(PROJECTS_SCHEMA).validate([proj_valid])
+
 def test_projects_geo_ar(proj_valid):
     proj_valid["geo"] = "AR"
     with pytest.raises(ValidationError):

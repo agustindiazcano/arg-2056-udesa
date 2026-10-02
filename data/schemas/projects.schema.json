@@ -10,7 +10,23 @@
       "name": { "type": "string", "minLength": 1 },
       "resource": { "enum": ["lithium", "copper", "gold", "silver", "oil", "gas", "soy", "wheat", "corn", "other"] },
       "geo": { "type": "string", "pattern": "^AR-[A-Z]$" },
-      "status": { "enum": ["operating", "construction", "approved", "proposed"] },
+      "status": { "enum": ["operating", "ramp_up", "construction", "approved", "feasibility", "prefeasibility", "exploration", "announced"] },
+      "company": {
+        "anyOf": [
+          { "type": "string" },
+          { "type": "null" }
+        ]
+      },
+      "owners": {
+        "anyOf": [
+          {
+            "type": "array",
+            "items": { "type": "string", "minLength": 1 },
+            "minItems": 1
+          },
+          { "type": "null" }
+        ]
+      },
       "capex_usd": {
         "anyOf": [
           { "type": "number", "minimum": 0 },
@@ -18,6 +34,7 @@
         ]
       },
       "start_year": {
+        "description": "Year of first production, actual or expected.",
         "anyOf": [
           { "type": "integer" },
           { "type": "null" }
@@ -31,7 +48,7 @@
       },
       "capacity_unit": {
         "anyOf": [
-          { "type": "string" },
+          { "enum": ["t_per_year", "oz_per_year", "bbl_per_day", "mm3_per_day", "mtpa", "t", "ha", "other"] },
           { "type": "null" }
         ]
       },
@@ -55,7 +72,7 @@
         "then": {
           "required": ["capacity_unit"],
           "properties": {
-            "capacity_unit": { "type": "string" }
+            "capacity_unit": { "not": { "type": "null" } }
           }
         }
       }
