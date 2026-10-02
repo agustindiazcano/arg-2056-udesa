@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "resource": {
+        "type": "string",
+        "enum": [
+          "lithium",
+          "copper",
+          "gold",
+          "silver",
+          "oil",
+          "gas",
+          "soy",
+          "wheat",
+          "corn",
+          "other"
+        ]
+      },
+      "geo": { "type": "string", "pattern": "^(AR|AR-[A-Z])$" },
+      "year": { "type": "integer" },
+      "value": { "type": ["number", "null"] },
+      "unit": { "type": "string" },
+      "source": { "type": "string", "minLength": 1 },
+      "retrieved_at": { "type": "string", "format": "date" },
+      "note": { "type": "string" }
+    },
+    "required": [
+      "resource",
+      "geo",
+      "year",
+      "value",
+      "unit",
+      "source",
+      "retrieved_at"
+    ],
+    "additionalProperties": false,
+    "allOf": [
+      {
+        "if": { "properties": { "value": { "type": "null" } } },
+        "then": { "required": ["note"] }
+      }
+    ]
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "geo": { "type": "string" },
+      "year": { "type": "integer" },
+      "value": { "type": ["number", "null"] },
+      "unit": { "type": "string" },
+      "source": { "type": "string", "minLength": 1 },
+      "retrieved_at": { "type": "string", "format": "date" },
+      "note": { "type": "string" }
+    },
+    "required": [
+      "geo",
+      "year",
+      "value",
+      "unit",
+      "source",
+      "retrieved_at"
+    ],
+    "additionalProperties": false,
+    "allOf": [
+      {
+        "if": { "properties": { "value": { "type": "null" } } },
+        "then": { "required": ["note"] }
+      }
+    ]
+  }
+}
