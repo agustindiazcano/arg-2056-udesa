@@ -32,6 +32,9 @@
 - [ ] Competition deadline and evaluation criteria.
 
 ## Done
+
+- [x] `precheck`: added local python verification script.
 - [x] `mock-data`: deterministic mock data generator and CI gate.
-- [x] `forecast-contract`: shared types (`Scene`, `Year`, `Scenario`, `Province`, `KeyAction`), dataset JSON Schemas, base CI (lint, typecheck, test, schema validation).
+- [x] `forecast-contract`: Draft 2020-12 schemas for forecast output.
+- [x] `contract`: shared types (`Scene`, `Year`, `Scenario`, `Province`, `KeyAction`), dataset JSON Schemas, base CI (lint, typecheck, test, schema validation).
 - [x] Folder tree and context files scaffolded.

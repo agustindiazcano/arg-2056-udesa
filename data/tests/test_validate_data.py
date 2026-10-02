@@ -5,6 +5,7 @@ from pathlib import Path
 
 import pytest
 
+
 # We need the valid_doc fixture from test_forecast_contract or just create one here
 @pytest.fixture
 def valid_doc():

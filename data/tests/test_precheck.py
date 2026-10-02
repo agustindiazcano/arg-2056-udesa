@@ -7,6 +7,7 @@ import pytest
 sys.path.append(str(Path(__file__).parent.parent.parent / "scripts"))
 import precheck
 
+
 class FakeRunner:
     def __init__(self, outcomes):
         # outcomes is a dict of step_name -> returncode

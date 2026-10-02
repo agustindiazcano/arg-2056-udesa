@@ -3,6 +3,7 @@ import subprocess
 import sys
 from pathlib import Path
 
+
 class Step:
     def __init__(self, name, cmd, cwd):
         self.name = name

@@ -3,10 +3,10 @@ import json
 import sys
 from pathlib import Path
 
-from jsonschema import Draft202012Validator, FormatChecker
-
 # Imports at module top only
 from forecast_checks import check_forecast
+from jsonschema import Draft202012Validator, FormatChecker
+
 
 def main():
     parser = argparse.ArgumentParser()
