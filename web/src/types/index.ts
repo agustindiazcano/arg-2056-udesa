@@ -4,3 +4,4 @@ export * from './campaign.js';
 export * from './scenario.js';
 export * from './province.js';
 export * from './keys.js';
+export * from './forecast.js';

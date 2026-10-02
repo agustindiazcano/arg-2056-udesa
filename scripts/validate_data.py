@@ -38,7 +38,22 @@ def main():
                 print(f"  - {error.json_path}: {error.message}")
             has_errors = True
         else:
-            print(f"OK: {data_file.name}")
+            # Check extra logic if it's the forecast_output
+            if data_file.name == "forecast_output.json":
+                # It's in the same directory as validate_data.py
+                sys.path.append(str(Path(__file__).parent))
+                from forecast_checks import check_forecast
+                
+                extra_errors = check_forecast(data)
+                if extra_errors:
+                    print(f"ERROR: {data_file.name} failed extra forecast checks:")
+                    for e in extra_errors:
+                        print(f"  - {e}")
+                    has_errors = True
+                else:
+                    print(f"OK: {data_file.name}")
+            else:
+                print(f"OK: {data_file.name}")
             
     if has_errors:
         sys.exit(1)
