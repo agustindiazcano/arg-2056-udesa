@@ -71,6 +71,28 @@ def main():
                     has_errors = True
                 else:
                     print(f"OK: {data_file.name}")
+            elif data_file.name == "production_projections.json":
+                # Need to load projects if projection entity_type == project
+                has_project_type = any(p.get("entity_type") == "project" for p in data)
+                projects_path = processed_dir / "projects.json"
+                if has_project_type and not projects_path.exists():
+                    print("ERROR: projects.json is required for checking project projections", file=sys.stderr)
+                    has_errors = True
+                    continue
+                
+                projects = []
+                if projects_path.exists():
+                    with open(projects_path) as pf:
+                        projects = json.load(pf)
+                
+                from dataset_checks import check_projections
+                extra_errors = check_projections(data, projects)
+                if extra_errors:
+                    for e in extra_errors:
+                        print(f"ERROR: {data_file.name} failed projections checks: {e}", file=sys.stderr)
+                    has_errors = True
+                else:
+                    print(f"OK: {data_file.name}")
             else:
                 print(f"OK: {data_file.name}")
             

@@ -178,3 +178,57 @@ def test_validate_invalid_projects_check(tmp_path, proj_valid):
     assert res.returncode == 1
     assert "projects.json failed projects checks" in res.stderr
     assert "proj-1" in res.stderr
+
+@pytest.fixture
+def proj_projections_valid():
+    return [
+        {
+            "entity_type": "project",
+            "project_id": "proj-1",
+            "geo": "AR-J",
+            "resource": "lithium",
+            "metric": "production_expected",
+            "year": 2030,
+            "value": 1000,
+            "unit": "t",
+            "unit_basis": "lce",
+            "scenario": "base",
+            "source": "MOCK",
+            "retrieved_at": "2026-10-02"
+        }
+    ]
+
+def test_validate_valid_projections(tmp_path, proj_valid, proj_projections_valid):
+    with open(tmp_path / "projects.json", "w") as f:
+        json.dump(proj_valid, f)
+    with open(tmp_path / "production_projections.json", "w") as f:
+        json.dump(proj_projections_valid, f)
+    res = run_validate(tmp_path)
+    assert res.returncode == 0
+    assert "OK: production_projections.json" in res.stdout
+
+def test_validate_invalid_projections_schema(tmp_path, proj_projections_valid):
+    del proj_projections_valid[0]["source"]
+    with open(tmp_path / "production_projections.json", "w") as f:
+        json.dump(proj_projections_valid, f)
+    res = run_validate(tmp_path)
+    assert res.returncode == 1
+    assert "production_projections.json failed schema validation" in res.stderr
+
+def test_validate_invalid_projections_check(tmp_path, proj_valid, proj_projections_valid):
+    proj_projections_valid[0]["project_id"] = "unknown"
+    with open(tmp_path / "projects.json", "w") as f:
+        json.dump(proj_valid, f)
+    with open(tmp_path / "production_projections.json", "w") as f:
+        json.dump(proj_projections_valid, f)
+    res = run_validate(tmp_path)
+    assert res.returncode == 1
+    assert "production_projections.json failed projections checks" in res.stderr
+    assert "unknown project_id" in res.stderr
+
+def test_validate_projections_missing_projects(tmp_path, proj_projections_valid):
+    with open(tmp_path / "production_projections.json", "w") as f:
+        json.dump(proj_projections_valid, f)
+    res = run_validate(tmp_path)
+    assert res.returncode == 1
+    assert "projects.json is required for checking project projections" in res.stderr
