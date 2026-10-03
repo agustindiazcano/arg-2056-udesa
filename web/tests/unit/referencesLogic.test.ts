@@ -104,8 +104,16 @@ describe('formatCitation', () => {
 });
 
 describe('parseReferences', () => {
-  const valid = () => ({
-    sources: [src('s:1')],
+  interface Doc {
+    sources: Array<Record<string, unknown>>;
+    leads: Array<Record<string, unknown>>;
+    attributions: Array<Record<string, unknown>>;
+    stats: Record<string, unknown>;
+    mock: boolean;
+    [key: string]: unknown;
+  }
+  const valid = (): Doc => ({
+    sources: [{ ...src('s:1') }],
     leads: [{ id: 's:2', url: 'https://example.com/2', title: 'T', authors_or_publisher: 'P' }],
     attributions: [{ label: 'Terrain', text: 'x', source_url: null }],
     stats: {
@@ -123,19 +131,18 @@ describe('parseReferences', () => {
     expect(parseReferences(valid()).sources[0]!.id).toBe('s:1');
   });
 
-  type Doc = ReturnType<typeof valid> & Record<string, unknown>;
   const bad: Array<[string, (d: Doc) => void, string]> = [
     ['an extra field', (d) => { d.extra = 1; }, 'extra'],
     ['a bad date', (d) => { d.sources[0]!.retrieved_at = '2026-13-45'; }, '/sources/0/retrieved_at'],
-    ['an unknown publisher type', (d) => { (d.sources[0] as Record<string, unknown>).publisher_type = 'blog'; }, '/sources/0/publisher_type'],
-    ['a missing used_by', (d) => { delete (d.sources[0] as Record<string, unknown>).used_by; }, 'used_by'],
+    ['an unknown publisher type', (d) => { d.sources[0]!.publisher_type = 'blog'; }, '/sources/0/publisher_type'],
+    ['a missing used_by', (d) => { delete d.sources[0]!.used_by; }, 'used_by'],
     ['a negative record_count', (d) => { d.sources[0]!.record_count = -1; }, '/sources/0/record_count'],
-    ['an invalid attribution label', (d) => { (d.attributions[0] as Record<string, unknown>).label = 'Other'; }, '/attributions/0/label'],
-    ['a missing stats', (d) => { delete (d as Record<string, unknown>).stats; }, 'stats']
+    ['an invalid attribution label', (d) => { d.attributions[0]!.label = 'Other'; }, '/attributions/0/label'],
+    ['a missing stats', (d) => { delete d.stats; }, 'stats']
   ];
 
   it.each(bad)('rejects %s naming the field', (_name, mutate, fragment) => {
-    const doc = valid() as Doc;
+    const doc = valid();
     mutate(doc);
     expect(() => parseReferences(doc)).toThrow('Invalid references data');
     expect(() => parseReferences(doc)).toThrow(fragment);

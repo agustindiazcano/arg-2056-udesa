@@ -12,3 +12,4 @@ export * from './resourceProduction.js';
 export * from './research';
 export * from './terrain.js';
 export * from './economy.js';
+export * from './references.js';
