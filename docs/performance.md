@@ -94,6 +94,11 @@ selector for the node and is matched as a substring, and an exception without a 
 
 None.
 
+### Fixed by the audit
+
+- Links had the browser default blue (about 2:1): `a { color: var(--blue) }` now (5.19:1 on the body background). The human approved reusing the existing token.
+- The resources scene put `role="img"` on a wrapper that also held the table view and left the chart unnamed: the label is now on the chart itself.
+
 ### Open findings (for the human, no color was changed)
 
 | Finding | Numbers |

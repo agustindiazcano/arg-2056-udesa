@@ -1,21 +1,18 @@
 # Last Context
 
 ## State
-- Task `integration` on branch `task/integration`: the whole app can be verified as one system, automatically.
-- Data: `web/src/data/registry.ts` (`DATASETS`: file, parser, `requiredBy`) and `web/tests/unit/data-smoke.test.ts` (every file registered and parsed, manifest and `_version.json` consistent, every scene has data or is in `NO_DATA`, scene sources match the registry, `check_data_budget.py` exits 0). `andes_events.json` and `population.json` had no TS parser, so the registry builds one from their existing schema. `references.json` is optional and is the only file not in the manifest.
-- Bundle: `web/scripts/lib/bundle.ts` (`closureOf`, `dynamicChunks`, `gzipSizes`, `measure`, `compare`, `suggestedBudget`), `web/scripts/check-bundle.ts` (`npm run check:bundle`, exit 0/1/2, `--report`), `web/budgets.json` (measured values, marked initial), `build.manifest: true`.
-- E2E: `@playwright/test` 1.63.0 (only new dependency), `web/playwright.config.ts`, `web/e2e/*.spec.ts`, fixture that fails on console errors, page errors, failed requests and other origins. `npm run test:e2e` (its `pretest:e2e` syncs data and builds references). CI job `e2e` runs on every PR: data sync, build, `check:bundle`, the expected-failure step, Playwright, artifacts `playwright-report` and `e2e-screenshots`. Web job now syncs data and has Python (the smoke test needs both).
-- `scripts/expect_failure.py` (exit 0 only if the command fails with the text; 1 mismatch; 2 usage). `docs/release-checklist.md` written.
-- Hooks added to the UI: `data-testid="scene"` (scene container) and `data-testid="hud-year"` with `data-value` (HUD year). No other UI change except the bug fix below.
-- Bug found and fixed: scene controls were not clickable with the mouse (overlay `pointer-events: none` is inherited). Rule in `tokens.css` for interactive elements inside `.scene-container`, separate commit `fix(shell)`.
+- Task `performance-a11y` on branch `task/performance-a11y` (PR to open; pushed state: see below).
+- Bundles: each scene is `React.lazy` (`SceneHost`, "Loading scene"); ECharts only through `web/src/charts/echarts.ts` (registry coverage test); `manualChunks` puts echarts+zrender in the `echarts` chunk; `check:bundle` fails if main/references load it or a scene statically. Initial main 503,824 -> ~117,000 B gzip; references 112,749 -> ~113,600 B. `web/budgets.json` rewritten (134,144 / 131,072 / chunk_max 277,504).
+- Runtime (`web/src/runtime/`): `capabilities.ts` (readCapabilities, qualityTier, nextTier, QUALITY_PRESETS, `?quality=`, `?debug=1`), `CapabilityProvider` (mounted in `App`) with `useQuality`, `WebGLRequired` (not wired into any scene), `useReducedMotion` (EChart animation off; one global CSS rule).
+- A11y: skip link, `main#main`, `nav` "Scenes", title `<scene> | Argentina 2056` (`app/title.ts`), `aria-pressed` on HUD toggles, province filter is a named dialog with focus in/out, links in `--blue`, resources charts labelled, `eslint-plugin-jsx-a11y` (override for eslint 10 peer), `@axe-core/playwright` (e2e `a11y.spec.ts`, `axe-exceptions.ts`: none), contrast tests (`styles/contrast.ts`).
+- Docs: `docs/performance.md`. precheck OK, 50 Playwright tests pass locally.
 
 ## Decisions
-- The brief's arrow-key e2e test was adapted: ArrowRight/Left change the scene (KEY_MAP), the year moves with Space. The brief's missing script `sync-data` is `data:sync`.
-- The e2e text check uses "error loading", not "error" (legitimate copy contains "error"), and `NaN` case-sensitive.
-- `chunk_max` applies to dynamic chunks only; none exist today, so it was set from the largest emitted file and is not exercised yet.
-- E2E locally: Chromium installed with `npx playwright install chromium` and run. Result: see the PR.
+- No `APP_TITLE` existed: created it equal to the `<title>` of `index.html`. Two e2e title asserts adapted.
+- Link color: human approved option A (`--blue`). `--color-focus` (#ffc107) kept although design.md says #3987e5.
+- Nothing silenced; the `@ts-ignore` in EChart was replaced by a typed cast.
 
 ## Next step
-- Human: review the PR; confirm budgets; check the `e2e` job and screenshots in CI; decide whether to keep the `fix(shell)` commit.
-- Next: `performance-a11y`.
-- Pushed, CI not checked.
+- Human: review PR; tier thresholds/presets on real devices; decide `--state-critical` text contrast; confirm budgets; Lighthouse.
+- Next tasks: `scene-ai-revolution`, `scene-andes` (uses `useQuality`, `QUALITY_PRESETS`, `WebGLRequired`).
+- CI not checked unless stated in the PR.
