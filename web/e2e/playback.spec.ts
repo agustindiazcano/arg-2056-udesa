@@ -5,9 +5,11 @@ const YEARS_PER_SECOND = 2;
 const SPEED = 1;
 
 test('playback follows the clock: it advances while playing and stops when paused', async ({ page }) => {
-  await page.clock.install();
+  // install() fakes the timers but lets time flow; pausing after the load makes the clock move only with runFor
+  await page.clock.install({ time: 0 });
   await page.goto('/');
   await releaseFocus(page);
+  await page.clock.pauseAt(60_000); // any time later than the load
 
   const year = page.getByTestId('hud-year');
   const read = async () => Number(await year.getAttribute('data-value'));
