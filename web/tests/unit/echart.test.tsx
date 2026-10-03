@@ -41,8 +41,8 @@ describe('EChart', () => {
   it('initializes echarts, calls setOption, and disposes on unmount', () => {
     const option = { title: { text: 'Test' } };
     
-    // eslint-disable-next-line react/no-deprecated
-    const { unmount } = render(<EChart option={option} />);
+    
+    render(<EChart option={option} />);
     
     expect(mockInit).toHaveBeenCalledTimes(1);
     expect(mockSetOption).toHaveBeenCalledWith(option, true);
@@ -53,7 +53,7 @@ describe('EChart', () => {
   });
 
   it('resizes on window resize', () => {
-    // eslint-disable-next-line react/no-deprecated
+    
     const { unmount } = render(<EChart option={{}} />);
     
     window.dispatchEvent(new Event('resize'));

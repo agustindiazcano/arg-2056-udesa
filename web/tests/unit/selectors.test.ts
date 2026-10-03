@@ -15,12 +15,12 @@ describe('Resources Selectors', () => {
     expect(result).toHaveLength(3);
     
     // Sort order: 200, 50, null
-    expect(result[0]!!.name).toBe('D');
-    expect(result[1]!!.name).toBe('C');
-    expect(result[2]!!.name).toBe('A');
+    expect(result[0]!.name).toBe('D');
+    expect(result[1]!.name).toBe('C');
+    expect(result[2]!.name).toBe('A');
 
     // Province name mapped
-    expect(result[2]!!.province).toBe('Salta'); // AR-A -> Salta
+    expect(result[2]!.province).toBe('Salta'); // AR-A -> Salta
   });
 
   it('getAvailableYears and clampYear', () => {

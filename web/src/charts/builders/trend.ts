@@ -10,13 +10,13 @@ interface TrendOpts {
 export function buildTrend(records: ResourceProductionRecord[], opts: TrendOpts) {
   const { resource, geo = 'AR' } = opts;
   
-  let excluded = 0; // null is kept, but what does the spec say?
+  const excluded = 0; // null is kept, but what does the spec say?
   // Spec: "a null value stays null in the data (a gap) and the series has connectNulls: false; never converted to 0"
   
   const filtered = records.filter(r => r.resource === resource && r.geo === geo);
   filtered.sort((a, b) => a.year - b.year);
   
-  const unit = filtered.length > 0 ? filtered[0].unit! : '';
+  const unit = filtered.length > 0 ? (filtered[0].unit || '') : '';
   
   const years = filtered.map(r => r.year.toString());
   const values = filtered.map(r => r.value); // null is kept
@@ -24,7 +24,7 @@ export function buildTrend(records: ResourceProductionRecord[], opts: TrendOpts)
   const option = {
     tooltip: {
       trigger: 'axis',
-      formatter: (params: any) => {
+      formatter: (params: { name: string; value: number | null }[]) => {
         const p = params[0];
         if (p.value === null || p.value === undefined) return `${p.name}: No data`;
         return `${p.name}: ${formatValue(p.value, unit)}`;

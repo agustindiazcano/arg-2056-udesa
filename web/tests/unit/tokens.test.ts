@@ -1,6 +1,10 @@
-import { describe, it, expect } from 'vitest';
+// @ts-ignore
 import { readFileSync } from 'fs';
+// @ts-ignore
 import { join } from 'path';
+import { describe, it, expect } from 'vitest';
+
+
 import { tokens } from '../../src/styles/tokens.js';
 
 describe('token drift', () => {
@@ -9,7 +13,7 @@ describe('token drift', () => {
     const cssContent = readFileSync(cssPath, 'utf8');
 
     // Extract all values from tokens object recursively
-    const extractHexValues = (obj: Record<string, any>): string[] => {
+    const extractHexValues = (obj: Record<string, unknown>): string[] => {
       let hexes: string[] = [];
       for (const key in obj) {
         if (typeof obj[key] === 'string' && (obj[key].startsWith('#') || obj[key].startsWith('rgba'))) {

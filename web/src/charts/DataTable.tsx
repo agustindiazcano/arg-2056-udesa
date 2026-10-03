@@ -10,7 +10,7 @@ interface Column {
 
 interface DataTableProps {
   columns: Column[];
-  data: any[];
+  data: Record<string, unknown>[];
   caption: string;
 }
 
@@ -32,7 +32,7 @@ export const DataTable: React.FC<DataTableProps> = ({ columns, data, caption }) 
           {data.map((row, i) => (
             <tr key={i}>
               {columns.map(c => {
-                let val = row[c.key];
+                let val = row[c.key] as any;
                 if (c.format === 'unit' && c.unit) {
                   val = formatValue(val, c.unit);
                 } else if (c.format === 'usd') {

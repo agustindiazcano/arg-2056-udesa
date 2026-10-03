@@ -64,7 +64,7 @@ export function buildTreemap(records: CompositionRecord[], opts: TreemapOpts = {
 
   const option = {
     tooltip: {
-      formatter: (info: any) => {
+      formatter: (info: { name: string; value: number }) => {
         const val = formatValue(info.value, 'USD');
         return `${info.name}: ${val}`;
       }
@@ -90,7 +90,7 @@ export function buildTreemap(records: CompositionRecord[], opts: TreemapOpts = {
 
   let summary = 'No data available.';
   if (groups.length > 0) {
-    const largest = groups[0]! || { name: "", value: 0 };
+    const largest = groups[0] || { name: "", value: 0 };
     const share = totalValue ? ((largest.value / totalValue) * 100).toFixed(1) : '0';
     summary = `Treemap showing ${groups.length} groups. The largest is ${largest.name} with ${share}% of the total.`;
   }

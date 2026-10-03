@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import Scene from '../../src/scenes/resources/index.js';
 import * as useDatasetModule from '../../src/data/useDataset.js';
@@ -8,7 +8,7 @@ import * as storeModule from '../../src/state/store.js';
 
 // Mock EChart entirely to avoid dealing with the DOM ref in integration test
 vi.mock('../../src/charts/EChart.js', () => ({
-  EChart: ({ option, 'aria-label': ariaLabel, role }: any) => (
+  EChart: ({ option, 'aria-label': ariaLabel, role }: { option: unknown, 'aria-label'?: string, role?: string }) => (
     <div data-testid="echart" role={role} aria-label={ariaLabel}>
       {JSON.stringify(option)}
     </div>

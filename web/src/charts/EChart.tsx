@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import * as echarts from 'echarts';
 
 interface EChartProps {
-  option: any;
+  option: unknown;
   style?: React.CSSProperties;
   'aria-label'?: string;
   role?: string;

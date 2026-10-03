@@ -9,7 +9,7 @@ export interface ResourceProductionRecord {
   note?: string;
 }
 
-export function parseResourceProduction(json: any): ResourceProductionRecord[] {
+export function parseResourceProduction(json: unknown): ResourceProductionRecord[] {
   // Simple passthrough since schema validation is done offline by Python checks
   return json as ResourceProductionRecord[];
 }

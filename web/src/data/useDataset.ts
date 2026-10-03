@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 
 export type DatasetStatus = 'loading' | 'success' | 'error';
 
-export function useDataset<T>(name: string, parser?: (data: any) => T) {
+export function useDataset<T>(name: string, parser?: (data: unknown) => T) {
   const [status, setStatus] = useState<DatasetStatus>('loading');
   const [data, setData] = useState<T | null>(null);
   const [error, setError] = useState<Error | null>(null);

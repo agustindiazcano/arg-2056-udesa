@@ -28,9 +28,9 @@ export default function Scene() {
   const [barsTable, setBarsTable] = useState(false);
   const [trendTable, setTrendTable] = useState(false);
 
-  const { status: compStatus, data: compData, error: compErr } = useDataset('composition', parseComposition);
-  const { status: projStatus, data: projData, error: projErr } = useDataset('projects', parseProjects);
-  const { status: rpStatus, data: rpData, error: rpErr } = useDataset('resource_production', parseResourceProduction);
+  const { status: compStatus, data: compData } = useDataset('composition', parseComposition);
+  const { status: projStatus, data: projData } = useDataset('projects', parseProjects);
+  const { status: rpStatus, data: rpData } = useDataset('resource_production', parseResourceProduction);
 
   const isLoading = compStatus === 'loading' || projStatus === 'loading' || rpStatus === 'loading';
   const isError = compStatus === 'error' || projStatus === 'error' || rpStatus === 'error';
@@ -74,7 +74,7 @@ export default function Scene() {
   const sourcesAndDates = useMemo(() => {
     const s = new Set<string>();
     const d = new Set<string>();
-    const add = (records: any[]) => {
+    const add = (records: { source?: string; retrieved_at?: string }[]) => {
       records.forEach(r => {
         if (r.source) s.add(r.source);
         if (r.retrieved_at) d.add(r.retrieved_at);
