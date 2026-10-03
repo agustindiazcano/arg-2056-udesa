@@ -1,0 +1,29 @@
+a {
+  color: var(--blue);
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+summary:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 2px;
+}
+
+@media print {
+  [data-print='hide'] {
+    display: none;
+  }
+
+  a[href^='http']::after {
+    content: ' (' attr(href) ')';
+  }
+
+  article {
+    break-inside: avoid;
+  }
+
+  details {
+    display: block;
+  }
+}
