@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { init } from './echarts.js';
+import { useReducedMotion } from '../runtime/useReducedMotion';
 import type { ECharts } from './echarts.js';
 
 export interface ChartClickParams {
@@ -17,9 +18,17 @@ interface EChartProps {
   role?: string;
 }
 
+/** The option type of ECharts is too large to build from `unknown`: the builders own its shape. */
+type SetOptionArg = Parameters<ECharts['setOption']>[0];
+
+function withoutAnimation(option: unknown): unknown {
+  return typeof option === 'object' && option !== null ? { ...option, animation: false } : option;
+}
+
 export const EChart: React.FC<EChartProps> = ({ option, onClick, style, 'aria-label': ariaLabel, role = 'img' }) => {
   const chartRef = useRef<HTMLDivElement>(null);
   const instanceRef = useRef<ECharts | null>(null);
+  const reducedMotion = useReducedMotion();
   const onClickRef = useRef(onClick);
   onClickRef.current = onClick;
 
@@ -49,10 +58,10 @@ export const EChart: React.FC<EChartProps> = ({ option, onClick, style, 'aria-la
 
   useEffect(() => {
     if (instanceRef.current && option) {
-      // @ts-ignore Option type is too complex to cast from any
-      instanceRef.current.setOption(option, true); // true = not merge
+      // true = not merge. With reduced motion the chart does not animate; a copy keeps the builder's option intact.
+      instanceRef.current.setOption((reducedMotion ? withoutAnimation(option) : option) as SetOptionArg, true);
     }
-  }, [option]);
+  }, [option, reducedMotion]);
 
   return (
     <div 

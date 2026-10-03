@@ -97,9 +97,13 @@ button:focus-visible {
   padding-bottom: var(--story-panel-height, 0px);
 }
 
+/* The one rule that switches off decorative motion everywhere (design.md section 5); components add no copies of it. */
 @media (prefers-reduced-motion: reduce) {
-  .scene-container {
-    transition: none;
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+    animation: none !important;
   }
 }
 
