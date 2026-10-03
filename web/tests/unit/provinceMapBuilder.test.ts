@@ -3,7 +3,7 @@ import { MAP_NAME, buildProvinceMap } from '../../src/charts/builders/provinceMa
 import { MALVINAS_ID } from '../../src/geo/malvinas.js';
 import { mapSummary } from '../../src/scenes/forecast/mapSelectors.js';
 import type { MapValues } from '../../src/scenes/forecast/mapSelectors.js';
-import type { ProvincesGeo } from '../../src/geo/provinces.js';
+import type { Position, ProvincesGeo } from '../../src/geo/provinces.js';
 import { DIVERGING, NO_DATA, SEQUENTIAL_BLUE, tokens } from '../../src/styles/tokens.js';
 
 interface Option {
@@ -28,6 +28,7 @@ interface Option {
   }>;
 }
 
+const ring: Position[] = [[-70, -40], [-60, -40], [-60, -30], [-70, -40]];
 const features = ['AR-A', 'AR-B', 'AR-C', 'AR-D'].map((id, i) => ({
   type: 'Feature' as const,
   properties: {
@@ -38,7 +39,7 @@ const features = ['AR-A', 'AR-B', 'AR-C', 'AR-D'].map((id, i) => ({
     centroid_inside: true,
     bbox: [-70, -40, -60, -30] as [number, number, number, number]
   },
-  geometry: { type: 'Polygon' as const, coordinates: [[[-70, -40], [-60, -40], [-60, -30], [-70, -40]]] }
+  geometry: { type: 'Polygon' as const, coordinates: [ring] }
 }));
 const geo: ProvincesGeo = { type: 'FeatureCollection', features };
 const centroids = Object.fromEntries(features.map((f) => [f.properties.id, f.properties.centroid]));
