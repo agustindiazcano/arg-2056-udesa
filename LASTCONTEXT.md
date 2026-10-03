@@ -1,20 +1,21 @@
 # Last Context
 
 ## State
-- Task `references-page` on branch `task/references-page`: a build step that turns the source registry into `references.json`, and a standalone page that lists the sources behind every published file.
-- Python: `scripts/datapipe/references.py` (`build_references`, `write_references`, `ReferencesError`), `data/schemas/references.schema.json`, CLI `python -m datapipe build-references` and the wrapper `scripts/build_references.py` (exit 0 / 1 errors / 2 usage). Only opened sources that a record cites are listed; not-opened sources become "leads"; terrain and province-boundary attributions come from their metadata files; output is deterministic (sorted keys, LF).
-- Release gate: `scripts/check_no_mock.py --references FILE` fails when `mock` is true or no source is listed; the default run checks `web/public/data/references.json` when it exists. `npm run build:release` builds references first and passes `--references`. `scripts/precheck.py` has a ninth step `references`.
-- Web: `web/references.html`, `web/src/references/{ReferencesPage.tsx,main.tsx,selectors.ts,citation.ts,references.css}`, `web/src/types/references.ts` (ajv parser), `vite.config.ts` exports `inputs` (app + references). The shell Hud has a "Sources and methods" link. Page: grouping by publisher type, accent-insensitive search, type chips, copy citation, derived-from anchors, attributions, collapsed leads, print styles.
-- Removed the dead `test` block from `vite.config.ts` (`vitest.config.ts` is the real config). `KeyAction`, `KEY_MAP`, store untouched. No new dependency.
-- TDD: each test commit precedes its implementation. `python scripts/precheck.py`: all 9 steps pass.
+- Task `storytelling-substeps` on branch `task/storytelling-substeps`: a narrative layer over the scenes. Each scene has an ordered list of steps; a caption panel shows the current step and moving between steps drives the shared store fields (year, scenario, province, AI overlay, playing, speed only when a step gives one).
+- Pure code in `web/src/story/`: `types.ts` (`Step`, `StepFocus`, `StepsByScene`, `Speed`), `focus.ts` (`applyFocus`, `stepDeviates`, `FocusFields`), `validate.ts` (`validateSteps`). UI: `StoryCaption.tsx` (+ `story.css`), `StepRunner.tsx`; both mounted in `App.tsx` (not in the references entry). `.scene-container` has bottom padding from `--story-panel-height`, set by the panel.
+- Content: `web/src/content/steps/index.ts` has 18 placeholder steps (3 per scene), written as literal objects so the gate can read them. Economy drives years 1880/1950/2025; forecast drives the three scenarios and plays 2026-2056 in step 3; ai-revolution turns the overlay on in step 2; the rest have empty focus.
+- State: `State.stepIndex: Record<Scene, number>` (all 0), `INITIAL_STEP_INDEX`, `SPEEDS` exported. Actions are camelCase like the existing ones: `stepNext`, `stepPrev`, `stepFirst` (KeyAction) and `stepSet {index}` (UiAction). `reduce(state, action, steps = STEPS)`; the third argument is only for tests. Keys added: `PageDown`, `PageUp`, `Home`; all previous entries are unchanged and tested against a copy written in the test.
+- Release gate: `scripts/check_no_mock.py` now finds the object that holds `placeholder: true` with brace counting (the old flat-object regex could not see a step with a nested `focus`), reads its own id and prefixes the key of the array that holds it (`andes/step-1`). Today `--content web/src/content` prints 3 eras and 18 steps and exits 1. No new dependency.
+- TDD: each test commit precedes its implementation. `python scripts/precheck.py` result: see the PR.
 
 ## Decisions
-- Records are matched to sources by `source_url` through `normalize_url`; a record with a `source` but no `source_url` counts in `records_without_url`.
-- With no `sources.json` the file is written empty (not an error) so dev and CI keep working; the release gate is what blocks it.
-- `vite.config.ts` resolves the HTML entries from `process.cwd()` (vite and vitest both run from `web/`).
+- Entering a scene by any route (`setScene`, `nextScene`, `prevScene`) restarts its story at step 1 and applies that focus in the same state. `setScene` to the scene already shown keeps its step.
+- `stepNext` at the last step and `stepPrev` at the first return the same state (no focus re-applied), so a clicker misfire does not undo exploration. `stepSet` with the current index re-applies the focus ("Return to step").
+- The runner pauses at `toYear` when the year reaches or passes it while playing. A manual jump past `toYear` while playing is indistinguishable from the ticker and snaps to `toYear` too.
+- Sources show as links to `references.html#<id>` only for ids in `registryIds`; the shell does not load the registry yet, so today they are plain ids.
 
 ## Next step
-- Human: review the PR; `npm run build:release` fails today on purpose (mock data, no registered sources). Check the page wording and layout in `npm run dev` at `/references.html`.
-- Observation: tracked `web/fix_ts.ts` has lint errors when running `eslint .` from `web/` (the precheck lint passes); looks like a stray file, not touched.
-- Next in `TASKS.md`: `storytelling-substeps`, then `integration`.
+- Human: review the PR; decide the four points of section 9 of the brief (keys, restart on entering a scene, no automatic crossing between scenes, panel at the bottom); try the clicker keys on the presenter hardware; check the panel against `docs/design.md`.
+- Human before release: write the real steps with sources.
+- Next in `TASKS.md`: `integration`.
 - Pushed, CI not checked.
