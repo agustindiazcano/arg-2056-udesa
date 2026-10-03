@@ -108,7 +108,7 @@ describe('parseReferences', () => {
     sources: Array<Record<string, unknown>>;
     leads: Array<Record<string, unknown>>;
     attributions: Array<Record<string, unknown>>;
-    stats: Record<string, unknown>;
+    stats?: Record<string, unknown>;
     mock: boolean;
     [key: string]: unknown;
   }
