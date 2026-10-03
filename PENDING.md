@@ -21,7 +21,8 @@
    14. [ ] `model-provinces` (blocked by 9)
 6. [x] `scene-resources`: treemap, bars, critical resources, investment and production.
 7. [x] `scene-forecast`: 2056 fan, scenarios, province ranking, AI overlay, resource selector (PR open; choropleth moved to `scene-forecast-map`).
-   - [ ] `scene-forecast-map`: province choropleth. Blocked by province geometry (`geo-provinces`, real geometry committed by the human).
+   - [ ] **Human step before `scene-forecast-map`**: choose the source, register the file, fill `geo/config.json`, run `npm run build:geo`, review the metadata, commit the outputs in `web/public/geo/`. See `docs/geo.md`.
+   - [ ] `scene-forecast-map`: province choropleth. Blocked by the human step above (real geometry committed by the human).
 8. [ ] `scene-economy`: growth since 1880s, LATAM ranking.
 9. [ ] `scene-ai-revolution`: sourced multiplier range, 10 and 20 year horizons.
 10. [ ] `scene-sandbox`: editable indicators, rule of 70 explainer, HDI and GDP per capita implications.
@@ -44,6 +45,7 @@
 ## Blocked / questions
 
 - [ ] Competition deadline and evaluation criteria.
+- [ ] `geo-provinces` decisions (human): source dataset and license; how the national territory is drawn; `target_max_bytes` and `max_area_change_pct` after seeing real results.
 - [ ] Mock `forecast_output` has province series only for `resource_production` (18 provinces, 6 resources); GDP, GDP per capita, population and HDI have national series only, so the province ranking is empty for them. Not extended, per the brief.
 - [ ] Acceptance item "arrows moving the year" conflicts with `KEY_MAP` (left and right arrows change scene); the year moves with play (Space) or the store. `KEY_MAP` was not changed.
 - [ ] Open decisions D-scen-1 to D-data-1 in section 9 of `docs/model-design.md`.
@@ -51,6 +53,7 @@
 
 ## Done
 
+- [x] `geo-provinces`: build tool (`web/scripts/geo`), schemas, typed loader (`web/src/geo`), `docs/geo.md`. No real geometry committed.
 - [x] `research-contracts`: Draft 2020-12 schemas for research, TS types, mock data generation and precheck CI gates.
 - [x] `projections-contract`: schemas, tests, checks, mock generation, types and docs for production projections.
 - [x] `composition-contract`: schema, checks, types and mock data generator.
