@@ -1,8 +1,8 @@
 {
-  "_note": "Initial values: measured, not decided. The human confirms or tightens them. Sizes are gzip level 9 bytes: measured x 1.15 rounded up to the next 1024. chunk_max applies to dynamic chunks only (none exist yet) and was set from the largest emitted file.",
+  "_note": "Measured after code splitting and tree-shaken ECharts, not decided: the human confirms or tightens them. Sizes are gzip level 9 bytes: measured x 1.15 rounded up to the next 1024. Measured: main 116045, references 113441, largest dynamic chunk (the forecast scene with the ECharts chunk it loads) 240444. Before the split: main 503824, references 112749.",
   "initial": {
-    "main": 579584,
-    "references": 130048
+    "main": 134144,
+    "references": 131072
   },
-  "chunk_max": 452608
+  "chunk_max": 277504
 }
