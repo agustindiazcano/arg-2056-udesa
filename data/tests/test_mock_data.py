@@ -200,6 +200,18 @@ def test_gate_check_no_mock(tmp_path):
     res = subprocess.run([sys.executable, check_script, str(broken_dir)], capture_output=True, check=False)
     assert res.returncode == 2
 
+    # _manifest.json origin mock -> exit 1
+    manifest_dir = tmp_path / "manifest"
+    manifest_dir.mkdir()
+    with open(manifest_dir / "_manifest.json", "w") as f:
+        json.dump({"files": [{"name": "file.json", "origin": "mock"}]}, f)
+    with open(manifest_dir / "file.json", "w") as f:
+        json.dump({"source": "real"}, f)
+        
+    res = subprocess.run([sys.executable, check_script, str(manifest_dir)], capture_output=True, check=False)
+    assert res.returncode == 1
+    assert "file.json" in res.stdout.decode()
+
     # missing default dir -> skip without error
     res = subprocess.run([sys.executable, check_script, str(tmp_path / "missing")], capture_output=True, check=False)
     assert res.returncode == 0
