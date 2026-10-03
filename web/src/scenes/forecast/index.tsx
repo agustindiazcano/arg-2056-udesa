@@ -8,7 +8,10 @@ import { buildRanking } from '../../charts/builders/ranking.js';
 import { formatValue } from '../../charts/format.js';
 import { EChart } from '../../charts/EChart.js';
 import { DataTable } from '../../charts/DataTable.js';
+import { ProvinceMap, useProvinces } from './ProvinceMap.js';
 import { StatTiles } from './StatTiles.js';
+import { provinceMapValues } from './mapSelectors.js';
+import type { MapMetric } from './mapSelectors.js';
 import { clampYear, forecastView, rankProvinces } from './selectors.js';
 import type { ForecastView, RankRow } from './selectors.js';
 
@@ -80,6 +83,10 @@ export default function Scene() {
   const [resourceChoice, setResourceChoice] = useState<ResourceId | null>(null);
   const [fanAsTable, setFanAsTable] = useState(false);
   const [rankAsTable, setRankAsTable] = useState(false);
+  const [userTab, setUserTab] = useState<'map' | 'ranking' | null>(null);
+  const [metric, setMetric] = useState<MapMetric>('level');
+
+  const provinces = useProvinces();
 
   const aiOverlay = aiState === 'on';
 
@@ -126,6 +133,17 @@ export default function Scene() {
     const unit = data.series.find((s) => s.indicator === indicator && s.resource === resource)?.unit ?? '';
     return { ...result, unit, built: buildRanking(result.rows, { scenario, unit, highlight: province, excluded: result.excluded }) };
   }, [data, indicator, resource, year, scenario, aiOverlay, province]);
+
+  // The map is the default tab once its geometry is available; until then (and if it never is) the ranking is.
+  const tab = userTab ?? (provinces.status === 'success' ? 'map' : 'ranking');
+
+  const mapValues = useMemo(
+    () =>
+      data && indicator && provinces.status === 'success'
+        ? provinceMapValues(data, provinces.geo, { indicator, resource, year, scenario, aiOverlay, metric })
+        : null,
+    [data, indicator, resource, year, scenario, aiOverlay, metric, provinces]
+  );
 
   if (status === 'loading') return <div style={{ color: 'var(--ink)' }}>Loading...</div>;
   if (status === 'error' || !data || !view || !indicator) {
@@ -198,45 +216,90 @@ export default function Scene() {
         </div>
 
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: '320px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 'var(--space-sm)' }}>
-            <span>Provinces in {year}</span>
-            <button aria-pressed={rankAsTable} onClick={() => setRankAsTable(!rankAsTable)}>
-              Table view
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--space-sm)', marginBottom: 'var(--space-sm)' }}>
+            <button aria-pressed={tab === 'map'} onClick={() => setUserTab('map')}>
+              Map
             </button>
+            <button aria-pressed={tab === 'ranking'} onClick={() => setUserTab('ranking')}>
+              Ranking
+            </button>
+            {tab === 'map' && (
+              <>
+                <button aria-pressed={metric === 'level'} onClick={() => setMetric('level')}>
+                  Level
+                </button>
+                <button aria-pressed={metric === 'change'} onClick={() => setMetric('change')}>
+                  {`Change since ${data.horizon.start_year}`}
+                </button>
+              </>
+            )}
           </div>
-          <div style={{ flex: 1, minHeight: '280px' }}>
-            {ranking && ranking.rows.length === 0 && (
-              <div style={{ color: 'var(--muted)' }}>
-                {ranking.excluded > 0
-                  ? `No province has a value for ${year}.`
-                  : 'No province series for this indicator in the data.'}
+
+          {tab === 'map' && provinces.status === 'loading' && (
+            <div style={{ color: 'var(--muted)' }}>Loading province geometry...</div>
+          )}
+          {tab === 'map' && provinces.status === 'error' && (
+            <div style={{ color: 'var(--state-warning)' }}>
+              {`Province geometry is not available: ${provinces.message}`}
+            </div>
+          )}
+          {tab === 'map' && provinces.status === 'success' && mapValues && (
+            <ProvinceMap
+              geo={provinces.geo}
+              values={mapValues}
+              unit={data.series.find((s) => s.indicator === indicator && s.resource === resource)?.unit ?? ''}
+              indicatorLabel={resource ? `${INDICATOR_LABEL[indicator]} (${resource})` : INDICATOR_LABEL[indicator]}
+              metric={metric}
+              selectedId={province}
+              scenario={scenario}
+              year={year}
+              onSelect={(id) => dispatch({ type: 'selectProvince', province: id })}
+            />
+          )}
+
+          {tab === 'ranking' && (
+            <>
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 'var(--space-sm)' }}>
+                <span>Provinces in {year}</span>
+                <button aria-pressed={rankAsTable} onClick={() => setRankAsTable(!rankAsTable)}>
+                  Table view
+                </button>
               </div>
-            )}
-            {ranking && ranking.rows.length > 0 && rankAsTable && (
-              <DataTable
-                caption="Province ranking"
-                columns={[
-                  { key: 'rank', header: 'Rank' },
-                  { key: 'name', header: 'Province' },
-                  { key: 'p10', header: 'p10' },
-                  { key: 'p50', header: 'p50' },
-                  { key: 'p90', header: 'p90' },
-                  { key: 'change', header: 'Change' }
-                ]}
-                data={ranking.rows.map((r) => ({
-                  rank: r.rank,
-                  name: r.name,
-                  p10: formatValue(r.p10, ranking.unit),
-                  p50: formatValue(r.p50, ranking.unit),
-                  p90: formatValue(r.p90, ranking.unit),
-                  change: changeText(r)
-                }))}
-              />
-            )}
-            {ranking && ranking.rows.length > 0 && !rankAsTable && (
-              <EChart option={ranking.built.option} aria-label={ranking.built.summary} />
-            )}
-          </div>
+              <div style={{ flex: 1, minHeight: '280px' }}>
+                {ranking && ranking.rows.length === 0 && (
+                  <div style={{ color: 'var(--muted)' }}>
+                    {ranking.excluded > 0
+                      ? `No province has a value for ${year}.`
+                      : 'No province series for this indicator in the data.'}
+                  </div>
+                )}
+                {ranking && ranking.rows.length > 0 && rankAsTable && (
+                  <DataTable
+                    caption="Province ranking"
+                    columns={[
+                      { key: 'rank', header: 'Rank' },
+                      { key: 'name', header: 'Province' },
+                      { key: 'p10', header: 'p10' },
+                      { key: 'p50', header: 'p50' },
+                      { key: 'p90', header: 'p90' },
+                      { key: 'change', header: 'Change' }
+                    ]}
+                    data={ranking.rows.map((r) => ({
+                      rank: r.rank,
+                      name: r.name,
+                      p10: formatValue(r.p10, ranking.unit),
+                      p50: formatValue(r.p50, ranking.unit),
+                      p90: formatValue(r.p90, ranking.unit),
+                      change: changeText(r)
+                    }))}
+                  />
+                )}
+                {ranking && ranking.rows.length > 0 && !rankAsTable && (
+                  <EChart option={ranking.built.option} aria-label={ranking.built.summary} />
+                )}
+              </div>
+            </>
+          )}
         </div>
       </div>
 
@@ -247,6 +310,11 @@ export default function Scene() {
       <div style={{ marginTop: 'auto', paddingTop: 'var(--space-md)', fontSize: '12px', color: 'var(--ink-2)' }}>
         {`Source: ${data.source}, model ${data.model_version}, generated ${data.generated_at}, horizon ${data.horizon.start_year}-${data.horizon.end_year}`}
       </div>
+      {provinces.status === 'success' && (
+        <div style={{ fontSize: '12px', color: 'var(--ink-2)' }}>
+          {`Province geometry: ${provinces.meta.source}. ${provinces.meta.attribution}`}
+        </div>
+      )}
     </div>
   );
 }

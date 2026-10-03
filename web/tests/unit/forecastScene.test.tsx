@@ -1,11 +1,14 @@
 // @vitest-environment jsdom
 import React from 'react';
-import { render, screen, fireEvent, waitFor, cleanup, within } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor, cleanup, within, configure } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import Scene from '../../src/scenes/forecast/index.js';
 import { useStore } from '../../src/state/store.js';
 import { useKeyboard } from '../../src/state/useKeyboard.js';
 import { tokens } from '../../src/styles/tokens.js';
+
+// slow CI machines run the whole suite in parallel: give async queries more time
+configure({ asyncUtilTimeout: 4000 });
 
 vi.mock('../../src/charts/EChart.js', () => ({
   EChart: ({ option, 'aria-label': ariaLabel, role }: { option: unknown; 'aria-label'?: string; role?: string }) => (

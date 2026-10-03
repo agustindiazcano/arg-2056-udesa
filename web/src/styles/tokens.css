@@ -28,6 +28,35 @@
 
   --band-alpha: 0.18;
 
+  /* Sequential blue ramp, lowest to highest (design.md section 3) */
+  --seq-1: #0d366b;
+  --seq-2: #184f95;
+  --seq-3: #1c5cab;
+  --seq-4: #256abf;
+  --seq-5: #2a78d6;
+  --seq-6: #3987e5;
+  --seq-7: #5598e7;
+  --seq-8: #6da7ec;
+  --seq-9: #86b6ef;
+  --seq-10: #9ec5f4;
+  --seq-11: #b7d3f6;
+  --seq-12: #cde2fb;
+
+  /* Diverging ramp, red (lowest) to blue (highest); the red arm is a PLACEHOLDER, see tokens.ts */
+  --div-1: #e53956;
+  --div-2: #c2394f;
+  --div-3: #a03949;
+  --div-4: #7d3842;
+  --div-5: #5b383c;
+  --div-6: #383835;
+  --div-7: #384858;
+  --div-8: #38587b;
+  --div-9: #39679f;
+  --div-10: #3977c2;
+  --div-11: #3987e5;
+
+  --no-data: #383835;
+
   /* Spacing */
   --space-sm: 0.5rem;
   --space-md: 1rem;

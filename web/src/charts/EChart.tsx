@@ -1,16 +1,26 @@
 import React, { useEffect, useRef } from 'react';
 import * as echarts from 'echarts';
 
+export interface ChartClickParams {
+  name?: string;
+  componentType?: string;
+  seriesType?: string;
+  data?: { provinceId?: string } | null;
+}
+
 interface EChartProps {
   option: unknown;
+  onClick?: (params: ChartClickParams) => void;
   style?: React.CSSProperties;
   'aria-label'?: string;
   role?: string;
 }
 
-export const EChart: React.FC<EChartProps> = ({ option, style, 'aria-label': ariaLabel, role = 'img' }) => {
+export const EChart: React.FC<EChartProps> = ({ option, onClick, style, 'aria-label': ariaLabel, role = 'img' }) => {
   const chartRef = useRef<HTMLDivElement>(null);
   const instanceRef = useRef<echarts.ECharts | null>(null);
+  const onClickRef = useRef(onClick);
+  onClickRef.current = onClick;
 
   useEffect(() => {
     if (!chartRef.current) return;
@@ -21,6 +31,7 @@ export const EChart: React.FC<EChartProps> = ({ option, style, 'aria-label': ari
     }
     
     const chart = instanceRef.current;
+    chart.on('click', (params) => onClickRef.current?.(params as ChartClickParams));
     
     const handleResize = () => {
       chart.resize();

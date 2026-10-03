@@ -26,3 +26,46 @@ export const tokens = {
 
 /** Opacity of the p10-p90 band (design.md section 4, fan chart). Mirrors --band-alpha in tokens.css. */
 export const BAND_ALPHA = 0.18;
+
+/**
+ * Sequential blue ramp (design.md section 3, magnitude), ordered from the lowest values (700, darkest, close to
+ * the surface) to the highest (100, lightest). Used for choropleths and heatmaps. Mirrors --seq-1..12.
+ */
+export const SEQUENTIAL_BLUE = [
+  '#0d366b',
+  '#184f95',
+  '#1c5cab',
+  '#256abf',
+  '#2a78d6',
+  '#3987e5',
+  '#5598e7',
+  '#6da7ec',
+  '#86b6ef',
+  '#9ec5f4',
+  '#b7d3f6',
+  '#cde2fb'
+];
+
+/**
+ * Diverging ramp for deltas, ordered from the lowest values (red) through the neutral midpoint (baseline) to the
+ * highest (blue), 5 equal steps per arm. design.md gives the midpoint and the blue hue but no red: the red arm is
+ * a PLACEHOLDER derived with the same saturation and lightness as the blue token (hue 350), to be replaced by the
+ * human. Mirrors --div-1..11.
+ */
+export const DIVERGING = [
+  '#e53956',
+  '#c2394f',
+  '#a03949',
+  '#7d3842',
+  '#5b383c',
+  '#383835',
+  '#384858',
+  '#38587b',
+  '#39679f',
+  '#3977c2',
+  '#3987e5'
+];
+
+/** Fill of a province without data: the baseline color (design.md), never a step of the ramps. Mirrors --no-data. */
+export const NO_DATA = '#383835';
+
