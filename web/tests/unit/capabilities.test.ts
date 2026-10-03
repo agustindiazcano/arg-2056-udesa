@@ -70,6 +70,22 @@ describe('readCapabilities', () => {
     expect(readCapabilities(env).webgl2).toBe(false);
   });
 
+  it('releases the probe context so it does not count against the browser limit of live contexts', () => {
+    let lost = 0;
+    const context = { getExtension: (name: string) => (name === 'WEBGL_lose_context' ? { loseContext: () => (lost += 1) } : null) };
+    expect(readCapabilities({ createCanvas: () => ({ getContext: () => context }) }).webgl2).toBe(true);
+    expect(lost).toBe(1);
+  });
+
+  it('still reports WebGL2 when the probe context cannot be released', () => {
+    const context = {
+      getExtension: () => {
+        throw new Error('no extension');
+      }
+    };
+    expect(readCapabilities({ createCanvas: () => ({ getContext: () => context }) }).webgl2).toBe(true);
+  });
+
   it('reports no WebGL2 when getContext returns null', () => {
     expect(readCapabilities({ createCanvas: () => ({ getContext: () => null }) }).webgl2).toBe(false);
   });
