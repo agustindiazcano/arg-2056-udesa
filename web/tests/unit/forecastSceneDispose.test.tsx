@@ -4,12 +4,11 @@ import { render, screen, cleanup } from '@testing-library/react';
 import { describe, it, expect, vi, afterEach } from 'vitest';
 import Scene from '../../src/scenes/forecast/index.js';
 
-const { mockInit, mockSetOption, mockResize, mockDispose } = vi.hoisted(() => {
+const { mockInit, mockSetOption, mockDispose } = vi.hoisted(() => {
   const mockSetOption = vi.fn();
-  const mockResize = vi.fn();
   const mockDispose = vi.fn();
-  const mockInit = vi.fn(() => ({ setOption: mockSetOption, resize: mockResize, dispose: mockDispose }));
-  return { mockInit, mockSetOption, mockResize, mockDispose };
+  const mockInit = vi.fn(() => ({ setOption: mockSetOption, resize: vi.fn(), dispose: mockDispose }));
+  return { mockInit, mockSetOption, mockDispose };
 });
 
 vi.mock('echarts', () => ({ init: mockInit }));
