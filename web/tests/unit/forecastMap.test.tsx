@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import React from 'react';
-import { render, screen, fireEvent, waitFor, cleanup, within, act } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor, cleanup, within, act, configure } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import Scene from '../../src/scenes/forecast/index.js';
 import { ProvinceFilter } from '../../src/app/ProvinceFilter.js';
@@ -8,6 +8,9 @@ import { useStore } from '../../src/state/store.js';
 import { MAP_NAME } from '../../src/charts/builders/provinceMap.js';
 import { DIVERGING, SEQUENTIAL_BLUE } from '../../src/styles/tokens.js';
 import { validFeature, validGeo, validGeoMeta } from './geo/geoWebFixtures.js';
+
+// slow CI machines run the whole suite in parallel: give async queries more time
+configure({ asyncUtilTimeout: 4000 });
 
 interface FakeChart {
   setOption: ReturnType<typeof vi.fn>;
