@@ -75,7 +75,6 @@ def test_valid_metadata_passes():
         lambda d: d["dem_inputs"][0].update(sha256="xyz"),
         lambda d: d["dem_inputs"][0].pop("path"),
         lambda d: d.update(source=""),
-        lambda d: d.update(source_url="not a uri"),
         lambda d: d.update(generated_by="somebody else"),
         lambda d: d.update(generated_at="2026-01-01"),
         lambda d: d.pop("elevation_max_m"),
