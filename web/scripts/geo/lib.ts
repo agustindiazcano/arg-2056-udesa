@@ -117,3 +117,179 @@ export function validateConfig(raw: unknown): GeoConfig {
     sanity_bounds: { lon: parseRange(bounds.lon, 'lon'), lat: parseRange(bounds.lat, 'lat') }
   };
 }
+
+// ---- geometry types ----
+
+export type Position = [number, number]; // [lon, lat]
+export type Ring = Position[];
+
+export interface PolygonGeometry {
+  type: 'Polygon';
+  coordinates: Ring[];
+}
+
+export interface MultiPolygonGeometry {
+  type: 'MultiPolygon';
+  coordinates: Ring[][];
+}
+
+export type AreaGeometry = PolygonGeometry | MultiPolygonGeometry;
+
+export interface ProvinceInput {
+  id: string;
+  geometry: AreaGeometry;
+}
+
+// ---- area ----
+
+/** Mean Earth radius in km (IUGG), the sphere used for every area in this tool. */
+export const EARTH_RADIUS_KM = 6371.0088;
+
+const rad = (deg: number) => (deg * Math.PI) / 180;
+const round3 = (x: number) => Math.round(x * 1000) / 1000;
+
+/**
+ * Area of a ring on a sphere of radius EARTH_RADIUS_KM, by the Chamberlain-Duquette line integral:
+ *   area = R^2 / 2 * | sum over edges of (lon2 - lon1) * (2 + sin(lat1) + sin(lat2)) |
+ * Edges are straight lines in lon/lat, so a ring bounded by meridians and parallels is a spherical rectangle and
+ * gets exactly R^2 * (lon2 - lon1) * (sin(lat2) - sin(lat1)). The ring is assumed closed and not to cross the
+ * antimeridian. The result does not depend on the winding direction.
+ */
+export function ringAreaKm2(ring: Ring): number {
+  let sum = 0;
+  for (let i = 0; i < ring.length - 1; i++) {
+    const [lon1, lat1] = ring[i]!;
+    const [lon2, lat2] = ring[i + 1]!;
+    sum += (rad(lon2) - rad(lon1)) * (2 + Math.sin(rad(lat1)) + Math.sin(rad(lat2)));
+  }
+  return (Math.abs(sum) * EARTH_RADIUS_KM * EARTH_RADIUS_KM) / 2;
+}
+
+/** Exterior ring minus the holes. */
+export function polygonAreaKm2(polygon: Ring[]): number {
+  const [outer, ...holes] = polygon;
+  if (!outer) return 0;
+  return ringAreaKm2(outer) - holes.reduce((sum, hole) => sum + ringAreaKm2(hole), 0);
+}
+
+export function geometryAreaKm2(geometry: AreaGeometry): number {
+  if (geometry.type === 'Polygon') return polygonAreaKm2(geometry.coordinates);
+  return geometry.coordinates.reduce((sum, polygon) => sum + polygonAreaKm2(polygon), 0);
+}
+
+// ---- input check ----
+
+const fmt = (n: number) => String(n);
+
+function checkPositions(name: string, geometry: AreaGeometry, cfg: GeoConfig): void {
+  const { lon, lat } = cfg.sanity_bounds;
+  const polygons = geometry.type === 'Polygon' ? [geometry.coordinates] : geometry.coordinates;
+  for (const polygon of polygons) {
+    if (!Array.isArray(polygon)) throw new GeoError(`feature ${name} has malformed coordinates`);
+    for (const ring of polygon) {
+      if (!Array.isArray(ring)) throw new GeoError(`feature ${name} has malformed coordinates`);
+      for (const position of ring) {
+        if (
+          !Array.isArray(position) ||
+          position.length < 2 ||
+          !Number.isFinite(position[0]) ||
+          !Number.isFinite(position[1])
+        ) {
+          throw new GeoError(`feature ${name} has a coordinate that is not a finite [lon, lat] pair`);
+        }
+        const [x, y] = position as Position;
+        if (x < lon[0] || x > lon[1] || y < lat[0] || y > lat[1]) {
+          throw new GeoError(
+            `feature ${name} has coordinate [${fmt(x)}, ${fmt(y)}] outside sanity_bounds ` +
+              `lon [${fmt(lon[0])}, ${fmt(lon[1])}] lat [${fmt(lat[0])}, ${fmt(lat[1])}]`
+          );
+        }
+      }
+    }
+  }
+}
+
+/** Validates the input FeatureCollection and returns the 24 provinces keyed by their final ids, sorted by id. */
+export function checkInput(raw: unknown, cfg: GeoConfig): ProvinceInput[] {
+  if (!isObject(raw) || raw.type !== 'FeatureCollection' || !Array.isArray(raw.features)) {
+    throw new GeoError('input must be a GeoJSON FeatureCollection');
+  }
+
+  const entries: Array<{ code: string; geometry: AreaGeometry }> = [];
+  raw.features.forEach((feature: unknown, index: number) => {
+    const properties = isObject(feature) && isObject(feature.properties) ? feature.properties : {};
+    const value = properties[cfg.id_property];
+    if (value === undefined || value === null) {
+      throw new GeoError(`feature at index ${index} has no property ${cfg.id_property}`);
+    }
+    const name = String(value);
+    const geometry = isObject(feature) ? feature.geometry : undefined;
+    const type = isObject(geometry) ? geometry.type : undefined;
+    if (type !== 'Polygon' && type !== 'MultiPolygon') {
+      throw new GeoError(
+        `feature ${name} has geometry type ${String(type)}; only Polygon and MultiPolygon are allowed`
+      );
+    }
+    const area = geometry as AreaGeometry;
+    checkPositions(name, area, cfg);
+    entries.push({ code: name, geometry: area });
+  });
+
+  const unmapped: string[] = [];
+  const byId = new Map<string, Array<{ code: string; geometry: AreaGeometry }>>();
+  for (const entry of entries) {
+    const id = cfg.id_map[entry.code];
+    if (id === undefined) {
+      if (!unmapped.includes(entry.code)) unmapped.push(entry.code);
+      continue;
+    }
+    byId.set(id, [...(byId.get(id) ?? []), entry]);
+  }
+
+  const problems: string[] = [];
+  if (unmapped.length > 0) problems.push(`unmapped input ids: ${unmapped.join(', ')}`);
+  for (const [id, group] of byId) {
+    if (group.length > 1) problems.push(`duplicate province ${id} (input ids: ${group.map((g) => g.code).join(', ')})`);
+  }
+  const missing = PROVINCES.map((p) => p.id).filter((id) => !byId.has(id));
+  if (missing.length > 0) problems.push(`missing provinces: ${missing.join(', ')}`);
+  if (problems.length > 0) throw new GeoError(problems.join('; '));
+
+  return [...byId.entries()]
+    .map(([id, group]) => ({ id, geometry: group[0]!.geometry }))
+    .sort((a, b) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0));
+}
+
+// ---- islands ----
+
+export interface DroppedPolygon {
+  id: string;
+  area_km2: number;
+}
+
+/**
+ * Drops the polygons of a MultiPolygon whose original area is below minAreaKm2, always keeping the largest
+ * polygon of every province. Reported areas are rounded to 3 decimals.
+ */
+export function dropIslands(
+  inputs: ProvinceInput[],
+  minAreaKm2: number
+): { kept: ProvinceInput[]; dropped: DroppedPolygon[] } {
+  const dropped: DroppedPolygon[] = [];
+  const kept = inputs.map((input) => {
+    if (input.geometry.type === 'Polygon' || minAreaKm2 <= 0) return input;
+    const polygons = input.geometry.coordinates;
+    const areas = polygons.map((polygon) => polygonAreaKm2(polygon));
+    const largest = areas.indexOf(Math.max(...areas));
+    const keep: Ring[][] = [];
+    polygons.forEach((polygon, i) => {
+      if (i === largest || areas[i]! >= minAreaKm2) {
+        keep.push(polygon);
+      } else {
+        dropped.push({ id: input.id, area_km2: round3(areas[i]!) });
+      }
+    });
+    return { id: input.id, geometry: { type: 'MultiPolygon' as const, coordinates: keep } };
+  });
+  return { kept, dropped };
+}
