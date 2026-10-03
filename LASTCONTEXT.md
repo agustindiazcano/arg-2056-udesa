@@ -1,19 +1,22 @@
 # Last Context
 
 ## State
-- Model component `population` implementation started in branch `task/model-population`.
-- Python implementation of `step_population` and `project_population` in `model/src/argmodel/population/cohort.py`.
-- Unit tests added in `model/tests/test_population.py`.
-- Parity script added at `model/parity/gen_parity.py` that generates deterministic golden vectors of the cohort model in `population_parity.json`.
-- TypeScript port implemented in `web/src/model-ts/population.ts`.
-- Parity tests added in `web/tests/parity/population.test.ts`.
-- `pytest.ini` created to include `model/src` in `PYTHONPATH`.
-- Added `@types/node` in `web` and updated `tsconfig.json` to include `"types": ["node"]` to support `fs` in parity test.
+- Task `model-design` (documentation only) on branch `task/model-design`.
+- Added `docs/model-design.md` (about 5,500 words), `docs/assumptions.md` (34 entries), `docs/decisions.md` (7 entries). Updated `PENDING.md` (model queue replaced by 14 implementation tasks).
+- Independent audit of `main` is in PR #17 (`docs/audits/main.md`): verdict safe with fixes; blocker F1 (model code without design) is addressed by this task.
+- No code, schema, data or mock changed.
 
-## Decisions
-- Followed strict TDD (failing test -> code).
-- Verified mathematical equivalence between the Python reference model and the TypeScript web model.
-- We did not yet integrate the UN WPP dataset, just the mathematical model core, maintaining small PR scope.
+## Decisions (proposals, waiting for the human)
+- Scenarios are conditional terciles of the TFP-growth driver within one joint distribution.
+- Resources are a separate additive block; project capex stays outside core investment.
+- AI overlay modifies TFP growth only and is independent of the scenario.
+- Backtest: train to 2005, test 2006-2025, single origin 2005, criteria C1-C5 written before any run.
 
-## Next Step
-- Integrate the UN WPP baseline data into the model initialization, or move on to the next component (e.g. growth accounting / GDP) as directed by the user.
+## Not available
+- `docs/sources.md`, `docs/research-prompts.md`, `data/raw/research/` do not exist: no parameter has a `source_id`; all are `needs_source` or `assumption`.
+- No age-structured population dataset contract; no real series.
+
+## Next step
+- Human reviews section 9 of `docs/model-design.md` (open decisions) and `docs/assumptions.md`.
+- Then start `model-params`, `model-population-hardening`, `population-age-contract`, `model-growth-core`.
+- Pushed, CI not checked.
