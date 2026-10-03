@@ -1,9 +1,10 @@
 import numpy as np
 import pytest
 import rasterio
-from terrain import TerrainError
 from terrain.mosaic import load_dem_inputs, mosaic_tiles
 from terrain_testlib import make_dataset, register, write_tif
+
+from terrain import TerrainError
 
 
 def tile(array, west, north, dx=1.0, **kw):
