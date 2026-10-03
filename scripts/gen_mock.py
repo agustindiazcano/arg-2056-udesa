@@ -512,6 +512,320 @@ def gen_projections(rng, projects, resource_provs):
 
     return data
 
+def gen_external_forecasts(rng):
+    forecasters = ["MOCK_IMF", "MOCK_WB", "MOCK_OECD"]
+    indicators = ["gdp_growth_real_pct", "population", "fertility_rate"]
+    variants = ["low", "medium", "high"]
+    mappings = ["pessimistic", "expected", "optimistic"]
+    
+    data = []
+    i = 0
+    base_record = {
+        "publication_title": "Report",
+        "vintage": "2026",
+        "price_basis": None,
+        "mapping_rationale": None,
+        "scenario_by_source": None,
+        "variant": None,
+        "assumptions": None,
+        "source_url": None,
+        "locator": None,
+        "snippet": None,
+        "confidence": "high",
+        "retrieved_at": RETRIEVED_AT
+    }
+    for f in forecasters:
+        for ind in indicators:
+            geos = ["AR"]
+            if ind == "population":
+                geos.extend(["AR-A", "AR-B", "AR-C"])
+            
+            for geo in geos:
+                for y in range(2025, 2057):
+                    # UN-style rows
+                    if ind == "population":
+                        base_val = 45.0 + (y - 2025) * 0.1
+                        for v, m in zip(variants, mappings):
+                            val = base_val
+                            if v == "low": val -= 1.0
+                            if v == "high": val += 1.0
+                            i += 1
+                            rec = dict(base_record)
+                            rec.update({
+                                "id": f"ef{i}",
+                                "forecaster": f,
+                                "indicator": ind,
+                                "geo": geo,
+                                "year": y,
+                                "value": round(val, 2),
+                                "value_low": None,
+                                "value_high": None,
+                                "unit": "millions",
+                                "scenario_mapping": m,
+                                "mapping_rationale": "mock rationale",
+                                "variant": v,
+                                "source_id": f"mock:M{i:03d}",
+                                "source": "MOCK"
+                            })
+                            data.append(rec)
+                    else:
+                        # other indicators
+                        val_opt = 3.0
+                        val_exp = 2.0
+                        val_pes = 1.0
+                        
+                        i += 1
+                        rec_pes = dict(base_record)
+                        rec_pes.update({
+                            "id": f"ef{i}_pes", "forecaster": f, "indicator": ind, "geo": geo, "year": y,
+                            "value": val_pes, "value_low": None, "value_high": None, "unit": "pct", "scenario_mapping": "pessimistic", "mapping_rationale": "r", "source_id": f"mock:M{i:03d}p", "source": "MOCK"
+                        })
+                        data.append(rec_pes)
+                        
+                        rec_exp = dict(base_record)
+                        rec_exp.update({
+                            "id": f"ef{i}_exp", "forecaster": f, "indicator": ind, "geo": geo, "year": y,
+                            "value": val_exp, "value_low": None, "value_high": None, "unit": "pct", "scenario_mapping": "expected", "mapping_rationale": "r", "source_id": f"mock:M{i:03d}e", "source": "MOCK"
+                        })
+                        data.append(rec_exp)
+                        
+                        rec_opt = dict(base_record)
+                        rec_opt.update({
+                            "id": f"ef{i}_opt", "forecaster": f, "indicator": ind, "geo": geo, "year": y,
+                            "value": val_opt, "value_low": None, "value_high": None, "unit": "pct", "scenario_mapping": "optimistic", "mapping_rationale": "r", "source_id": f"mock:M{i:03d}o", "source": "MOCK"
+                        })
+                        data.append(rec_opt)
+
+    # at least 2 rows with not_stated
+    rec_ns1 = dict(base_record)
+    rec_ns1.update({
+        "id": "ef_ns1", "forecaster": "MOCK_IMF", "indicator": "gdp_growth_real_pct", "geo": "AR", "year": 2026,
+        "value": 1.0, "value_low": None, "value_high": None, "unit": "pct", "scenario_mapping": "not_stated", "source_id": "mock:NS1", "source": "MOCK"
+    })
+    data.append(rec_ns1)
+    
+    rec_ns2 = dict(base_record)
+    rec_ns2.update({
+        "id": "ef_ns2", "forecaster": "MOCK_IMF", "indicator": "gdp_growth_real_pct", "geo": "AR", "year": 2026,
+        "value": 1.0, "value_low": None, "value_high": None, "unit": "pct", "scenario_mapping": "not_stated", "source_id": "mock:NS2", "source": "MOCK"
+    })
+    data.append(rec_ns2)
+
+    # at least 3 rows with value: null and a range or a note
+    for j in range(3):
+        rec_null = dict(base_record)
+        rec_null.update({
+            "id": f"ef_null_{j}", "forecaster": "MOCK_IMF", "indicator": "gdp_growth_real_pct", "geo": "AR", "year": 2026,
+            "value": None, "value_low": None, "value_high": None, "unit": "pct", "scenario_mapping": "not_stated", "source_id": f"mock:NULL{j}", "source": "MOCK", "note": "null value"
+        })
+        data.append(rec_null)
+
+    return data
+
+def gen_forecast_vintages(rng):
+    data = []
+    i = 0
+    base_record = {
+        "source_url": None,
+        "locator": None,
+        "snippet": None
+    }
+    for f in ["MOCK_IMF", "MOCK_WB"]:
+        for ty in range(2008, 2021):
+            for hy in range(1, 6):
+                i += 1
+                vy = ty - hy
+                rec = dict(base_record)
+                rec.update({
+                    "id": f"fv{i}",
+                    "forecaster": f,
+                    "vintage_date": f"{vy}-04-01",
+                    "indicator": "gdp_growth_real_pct",
+                    "target_year": ty,
+                    "horizon_years": hy,
+                    "forecast_value": round(rng.uniform(-5.0, 8.0), 1),
+                    "unit": "pct",
+                    "source_id": f"mock:M{i:03d}",
+                    "source": "MOCK",
+                    "confidence": "high",
+                    "retrieved_at": RETRIEVED_AT
+                })
+                data.append(rec)
+    return data
+
+def gen_base_rates(rng):
+    data = []
+    base_record = {
+        "source_url": None,
+        "locator": None,
+        "snippet": None
+    }
+    for i in range(5):
+        rec = dict(base_record)
+        rec.update({
+            "id": f"br{i}",
+            "description": "desc",
+            "country_or_group": "AR",
+            "period": "1990-2000",
+            "metric": "gdp",
+            "value": 2.0,
+            "unit": "pct",
+            "definition": "def",
+            "source_id": f"mock:M{i:03d}",
+            "source": "MOCK",
+            "confidence": "high",
+            "retrieved_at": RETRIEVED_AT
+        })
+        data.append(rec)
+    
+    rec_null = dict(base_record)
+    rec_null.update({
+        "id": "br_null",
+        "description": "desc",
+        "country_or_group": "AR",
+        "period": "1990-2000",
+        "metric": "gdp",
+        "value": None,
+        "unit": "pct",
+        "definition": "def",
+        "source_id": "mock:M_null",
+        "source": "MOCK",
+        "confidence": "high",
+        "retrieved_at": RETRIEVED_AT,
+        "note": "null value"
+    })
+    data.append(rec_null)
+    return data
+
+def gen_ai_estimates(rng):
+    data = []
+    
+    base_record = {
+        "sponsor_conflict_note": None,
+        "geography_detail": None,
+        "value_low": None,
+        "value_high": None,
+        "scenario_by_source": None,
+        "mapping_rationale": None,
+        "key_assumptions": None,
+        "derived_annualized_pp": None,
+        "derivation": None,
+        "source_url": None,
+        "locator": None,
+        "snippet": None
+    }
+    
+    metrics = ["tfp_level_gain_pct_cumulative", "labor_productivity_gain_pct_cumulative", "employment_exposed_pct"]
+    geos = ["argentina", "global", "us"]
+    pubs = ["peer_reviewed", "consultancy", "think_tank"]
+    
+    for i in range(6):
+        rec = dict(base_record)
+        rec.update({
+            "id": f"a{i}", "authors_or_institution": "A", "title": "T", "publication_date": "2026-01-01",
+            "publisher_type": pubs[i % 3], "record_type": "projection", "geography": geos[i % 3],
+            "outcome_metric": metrics[0], "horizon_start_year": 2026, "horizon_end_year": 2036,
+            "value": 10.0, "unit": "pct", "scenario_mapping": "not_stated", "method": "expert_judgment",
+            "time_profile": "linear", "derived_annualized_pp": 0.96, "derivation": "d",
+            "source_id": f"mock:M{i:03d}", "source": "MOCK", "confidence": "high", "retrieved_at": RETRIEVED_AT
+        })
+        data.append(rec)
+    
+    # 2 sponsor conflicts
+    data[0]["sponsor_conflict_note"] = "C1"
+    data[1]["sponsor_conflict_note"] = "C2"
+    
+    rec_pes = dict(base_record)
+    rec_pes.update({
+        "id": "a_pes", "authors_or_institution": "A", "title": "T", "publication_date": "2026-01-01",
+        "publisher_type": "consultancy", "record_type": "projection", "geography": "argentina",
+        "outcome_metric": "tfp_level_gain_pct_cumulative", "horizon_start_year": 2026, "horizon_end_year": 2036,
+        "value": 1.0, "value_low": 0.5, "value_high": 1.5, "unit": "pct", "scenario_mapping": "pessimistic", "mapping_rationale": "r", "method": "expert_judgment",
+        "time_profile": "linear", "source_id": "mock:M_pes", "source": "MOCK", "confidence": "high", "retrieved_at": RETRIEVED_AT
+    })
+    data.append(rec_pes)
+    
+    rec_opt = dict(base_record)
+    rec_opt.update({
+        "id": "a_opt", "authors_or_institution": "A", "title": "T", "publication_date": "2026-01-01",
+        "publisher_type": "consultancy", "record_type": "projection", "geography": "argentina",
+        "outcome_metric": "tfp_level_gain_pct_cumulative", "horizon_start_year": 2026, "horizon_end_year": 2036,
+        "value": 6.0, "value_low": 5.0, "value_high": 7.0, "unit": "pct", "scenario_mapping": "optimistic", "mapping_rationale": "r", "method": "expert_judgment",
+        "time_profile": "linear", "source_id": "mock:M_opt", "source": "MOCK", "confidence": "high", "retrieved_at": RETRIEVED_AT
+    })
+    data.append(rec_opt)
+    
+    rec_exp = dict(base_record)
+    rec_exp.update({
+        "id": "a_exp", "authors_or_institution": "A", "title": "T", "publication_date": "2026-01-01",
+        "publisher_type": "consultancy", "record_type": "projection", "geography": "argentina",
+        "outcome_metric": "tfp_level_gain_pct_cumulative", "horizon_start_year": 2026, "horizon_end_year": 2036,
+        "value": 3.0, "unit": "pct", "scenario_mapping": "expected", "mapping_rationale": "r", "method": "expert_judgment",
+        "time_profile": "linear", "source_id": "mock:M_exp", "source": "MOCK", "confidence": "high", "retrieved_at": RETRIEVED_AT
+    })
+    data.append(rec_exp)
+    
+    # 2 observed
+    for i in range(2):
+        rec_obs = dict(base_record)
+        rec_obs.update({
+            "id": f"a_obs{i}", "authors_or_institution": "A", "title": "T", "publication_date": "2026-01-01",
+            "publisher_type": "consultancy", "record_type": "observed", "geography": "global",
+            "outcome_metric": "tfp_growth_pp_per_year", "horizon_start_year": 2020, "horizon_end_year": 2025,
+            "value": 0.5, "unit": "pp", "scenario_mapping": "not_stated", "method": "expert_judgment",
+            "time_profile": "linear", "source_id": f"mock:M_obs{i}", "source": "MOCK", "confidence": "high", "retrieved_at": RETRIEVED_AT
+        })
+        data.append(rec_obs)
+        
+    # 2 exposure
+    for i in range(3):
+        rec_expo = dict(base_record)
+        rec_expo.update({
+            "id": f"a_expo{i}", "authors_or_institution": "A", "title": "T", "publication_date": "2026-01-01",
+            "publisher_type": "consultancy", "record_type": "exposure", "geography": "global",
+            "outcome_metric": "employment_exposed_pct", "horizon_start_year": 2026, "horizon_end_year": 2036,
+            "value": 20.0, "unit": "pct", "scenario_mapping": "not_stated", "method": "expert_judgment",
+            "time_profile": "not_stated", "source_id": f"mock:M_expo{i}", "source": "MOCK", "confidence": "high", "retrieved_at": RETRIEVED_AT
+        })
+        data.append(rec_expo)
+        
+    return data
+
+def gen_dataset_catalog(rng):
+    data = []
+    base_record = {
+        "version": None,
+        "direct_download_url": None,
+        "license_or_terms": None,
+        "revisions_or_rebasing_notes": None,
+        "recommended_use": None,
+        "source_url": None,
+        "locator": None,
+        "snippet": None
+    }
+    
+    uses = ["calibration", "baseline", "scenario_structure"]
+    for i in range(4):
+        rec = dict(base_record)
+        rec.update({
+            "dataset_name": f"D{i}", "publisher": "P", "landing_url": "https://a.com",
+            "variables": ["v"], "geographies": ["g"], "years_covered": "y", "frequency": "f",
+            "format": "csv", "access": "opened", "recommended_use": uses[i % 3],
+            "source_id": f"mock:M{i:03d}", "source": "MOCK", "confidence": "high", "retrieved_at": RETRIEVED_AT
+        })
+        data.append(rec)
+        
+    rec_no = dict(base_record)
+    rec_no.update({
+        "dataset_name": "D_not_opened", "publisher": "P", "landing_url": "https://a.com",
+        "variables": ["v"], "geographies": ["g"], "years_covered": "y", "frequency": "f",
+        "format": "csv", "access": "not_opened", "recommended_use": "calibration",
+        "note": "need request",
+        "source_id": "mock:M_no", "source": "MOCK", "confidence": "high", "retrieved_at": RETRIEVED_AT
+    })
+    data.append(rec_no)
+    return data
+
 def main(out_dir: str):
     rng = random.Random(SEED)
     out = Path(out_dir)
@@ -540,6 +854,21 @@ def main(out_dir: str):
     
     projs = gen_projections(rng, proj, rprovs)
     dump_json(projs, out / "production_projections.json")
+    
+    ext = gen_external_forecasts(rng)
+    dump_json(ext, out / "external_forecasts.json")
+    
+    vint = gen_forecast_vintages(rng)
+    dump_json(vint, out / "forecast_vintages.json")
+    
+    base = gen_base_rates(rng)
+    dump_json(base, out / "base_rates.json")
+    
+    ai = gen_ai_estimates(rng)
+    dump_json(ai, out / "ai_estimates.json")
+    
+    cat = gen_dataset_catalog(rng)
+    dump_json(cat, out / "dataset_catalog.json")
 
 if __name__ == "__main__":
     out = sys.argv[1] if len(sys.argv) > 1 else "data/mock"

@@ -1,19 +1,13 @@
 # Last Context
 
-**Task completed**: Implemented the data pipeline (`task/data-pipeline`).
-- Created schemas `raw_manifest.schema.json` and `sources.schema.json`.
-- Implemented `manifest.py` for registering raw files and verifying `MANIFEST.json`.
-- Implemented `adapters/__init__.py` registry for processing raw data.
-- Implemented `runner.py` with `run_dataset` and `check_dataset` ensuring atomic commits to `processed/` and provenance tracking.
-- Implemented `provenance.py` to record sha256 hashes and verify data intactness.
-- Implemented `sources.py` for coverage tracking and generating `sources.json`.
-- Replaced `sync-mock.mjs` with `sync-data.mjs` overlaying `processed/` on top of `mock/` files.
-- Added file size limit and total size limit checking in `check_data_budget.py`.
-- Added strict dataset CLI via `__main__.py` with multiple endpoints (`run`, `check`, `register`, `verify-provenance`, `build-sources`).
-- Updated `check_no_mock.py` to verify `_manifest.json` from `web/public/data`.
-- Updated `precheck.py` to include `check_data_budget.py`.
-- Added documentation in `docs/data-pipeline.md`.
+**Task completed**: Implemented research contracts (`task/research-contracts`).
+- Created draft-2020-12 JSON schemas for `external_forecasts`, `forecast_vintages`, `base_rates`, `ai_estimates`, and `dataset_catalog`.
+- Written `scripts/dataset_checks.py` to enforce domain-specific constraints (e.g. valid scenario mapping rules, numeric nullness, publication limits) matching `research-contracts.md` perfectly.
+- Generated mock data deterministic generators (`scripts/gen_mock.py`) matching the complex conditions laid out in the brief.
+- Implemented TS validators in `web/src/types/research.ts` (`ajv.compile<T>`), data models, and complex selectors (`selectExternalForecasts`, `selectAiEstimates`, `spreadByScenario`) according to the brief constraints.
+- Updated `docs/data-dictionary.md` to reflect these new datasets and constraints.
+- Resolved pipeline integration, making sure strict lints, typescript constraints, and ruff checks pass seamlessly in `scripts/precheck.py` without bypassing rules.
 
-**Next step**: A human needs to verify changes, test pipeline operation end-to-end, and merge the PR.
+**Next step**: A human must review the PR, verify that mock data looks correct, and merge it.
 
-**Status**: Tests pass and CI prechecks complete properly. No new dependencies introduced. TDD fully applied.
+**Status**: Tests pass perfectly. Prechecks complete properly. No new dependencies introduced. TDD fully applied.

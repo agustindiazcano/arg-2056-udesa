@@ -1,0 +1,130 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "array",
+    "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+            "id": { "type": "string" },
+            "authors_or_institution": { "type": "string" },
+            "title": { "type": "string" },
+            "publication_date": { "type": "string", "format": "date" },
+            "publisher_type": {
+                "enum": [
+                    "peer_reviewed", "working_paper", "international_org",
+                    "central_bank", "consultancy", "investment_bank",
+                    "think_tank", "ai_company", "government", "other"
+                ]
+            },
+            "sponsor_conflict_note": { "type": ["string", "null"] },
+            "record_type": {
+                "enum": ["projection", "observed", "exposure", "adoption"]
+            },
+            "geography": {
+                "enum": [
+                    "global", "advanced_economies", "emerging_economies",
+                    "latam", "argentina", "us", "eu", "other"
+                ]
+            },
+            "geography_detail": { "type": ["string", "null"] },
+            "outcome_metric": {
+                "enum": [
+                    "tfp_level_gain_pct_cumulative", "tfp_growth_pp_per_year",
+                    "labor_productivity_gain_pct_cumulative", "labor_productivity_growth_pp_per_year",
+                    "gdp_level_gain_pct_cumulative", "gdp_growth_pp_per_year",
+                    "employment_exposed_pct", "employment_displaced_pct",
+                    "adoption_rate_pct", "other"
+                ]
+            },
+            "horizon_start_year": { "type": "integer", "minimum": 2000, "maximum": 2100 },
+            "horizon_end_year": { "type": "integer", "minimum": 2000, "maximum": 2100 },
+            "value": { "type": ["number", "null"] },
+            "value_low": { "type": ["number", "null"] },
+            "value_high": { "type": ["number", "null"] },
+            "unit": { "type": "string" },
+            "scenario_by_source": { "type": ["string", "null"] },
+            "scenario_mapping": {
+                "enum": ["pessimistic", "expected", "optimistic", "not_stated"]
+            },
+            "mapping_rationale": { "type": ["string", "null"] },
+            "method": {
+                "enum": [
+                    "task_based_model", "growth_model", "survey",
+                    "historical_analogy", "field_experiment", "expert_judgment", "other"
+                ]
+            },
+            "key_assumptions": { "type": ["string", "null"] },
+            "time_profile": {
+                "enum": ["back_loaded", "linear", "s_curve", "accelerating", "not_stated"]
+            },
+            "derived_annualized_pp": { "type": ["number", "null"] },
+            "derivation": { "type": ["string", "null"] },
+            "source_id": { "type": "string", "pattern": "^[a-z0-9_-]+:[A-Za-z0-9_.-]+$" },
+            "source": { "type": "string", "minLength": 1 },
+            "source_url": { "type": ["string", "null"], "format": "uri" },
+            "locator": { "type": ["string", "null"] },
+            "snippet": { "type": ["string", "null"] },
+            "confidence": { "enum": ["high", "medium", "low"] },
+            "retrieved_at": { "type": "string", "format": "date" },
+            "note": { "type": "string" }
+        },
+        "required": [
+            "id", "authors_or_institution", "title", "publication_date",
+            "publisher_type", "sponsor_conflict_note", "record_type", "geography",
+            "geography_detail", "outcome_metric", "horizon_start_year", "horizon_end_year",
+            "value", "value_low", "value_high", "unit", "scenario_by_source",
+            "scenario_mapping", "mapping_rationale", "method", "key_assumptions",
+            "time_profile", "derived_annualized_pp", "derivation",
+            "source_id", "source", "source_url", "locator", "snippet",
+            "confidence", "retrieved_at"
+        ],
+        "allOf": [
+            {
+                "if": {
+                    "properties": { "value_low": { "type": "number" } }
+                },
+                "then": {
+                    "properties": { "value_high": { "type": "number" } }
+                }
+            },
+            {
+                "if": {
+                    "properties": { "value_high": { "type": "number" } }
+                },
+                "then": {
+                    "properties": { "value_low": { "type": "number" } }
+                }
+            },
+            {
+                "if": {
+                    "properties": {
+                        "value": { "type": "null" },
+                        "value_low": { "type": "null" },
+                        "value_high": { "type": "null" }
+                    }
+                },
+                "then": {
+                    "required": ["note"]
+                }
+            },
+            {
+                "if": {
+                    "not": {
+                        "properties": { "scenario_mapping": { "const": "not_stated" } }
+                    }
+                },
+                "then": {
+                    "properties": { "mapping_rationale": { "type": "string" } }
+                }
+            },
+            {
+                "if": {
+                    "properties": { "outcome_metric": { "const": "other" } }
+                },
+                "then": {
+                    "required": ["note"]
+                }
+            }
+        ]
+    }
+}

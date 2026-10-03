@@ -37,7 +37,7 @@ def test_determinism(tmp_path):
     files1 = sorted(dir1.glob("*.json"))
     files2 = sorted(dir2.glob("*.json"))
     
-    assert len(files1) == 8
+    assert len(files1) == 13
     assert len(files1) == len(files2)
     
     for f1, f2 in zip(files1, files2):
@@ -45,7 +45,7 @@ def test_determinism(tmp_path):
         assert f1.read_bytes() == f2.read_bytes()
 
 def test_schemas(generated_mock_data):
-    files = ["economy_series", "resource_production", "population", "andes_events", "composition", "projects", "production_projections"]
+    files = ["economy_series", "resource_production", "population", "andes_events", "composition", "projects", "production_projections", "external_forecasts", "forecast_vintages", "base_rates", "ai_estimates", "dataset_catalog"]
     for fname in files:
         data_path = generated_mock_data / f"{fname}.json"
         assert data_path.exists(), f"{fname}.json not generated"
@@ -64,30 +64,18 @@ def test_schemas(generated_mock_data):
     Draft202012Validator(forecast_schema, format_checker=FormatChecker()).validate(forecast_data)
 
 def _find_numeric_nulls_and_provenance(obj):
-    # Recursively check for provenance and numeric nulls
     errors = []
-    
-    # Check provenance if it looks like a record with source
     if isinstance(obj, dict):
-        if "source" in obj and obj["source"] not in ("MOCK", "MOCK2"):
-            errors.append("source is not MOCK")
-        if "retrieved_at" in obj and obj["retrieved_at"] != "2026-10-02":
-            errors.append("retrieved_at is not 2026-10-02")
-                
-        # Check null numeric values
-        for k, v in obj.items():
-            if v is None:
-                # If a field is None and it is a numeric field that requires note (based on schema)
-                # But schemas enforce this, we just need to verify that 'note' is at the same level
-                # exception: value_low/value_high in projections when value is None
-                if "note" not in obj and not ("value_low" in obj and obj["value_low"] is not None):
-                    errors.append(f"null value for {k} but no 'note' found at same level")
-            elif isinstance(v, (dict, list)):
-                errors.extend(_find_numeric_nulls_and_provenance(v))
+        if "source" in obj and obj["source"] not in ("MOCK", "MOCK2"): errors.append("source is not MOCK")
+        if "retrieved_at" in obj and obj["retrieved_at"] != "2026-10-02": errors.append("retrieved_at is not 2026-10-02")
+        if "value" in obj and obj["value"] is None and "value_low" in obj and obj["value_low"] is None and "value_high" in obj and obj["value_high"] is None and "note" not in obj:
+            errors.append("null values but no note")
+        elif "value" in obj and obj["value"] is None and "value_low" not in obj and "note" not in obj:
+            errors.append("null value but no note")
+        for v in obj.values():
+            if isinstance(v, (dict, list)): errors.extend(_find_numeric_nulls_and_provenance(v))
     elif isinstance(obj, list):
-        for item in obj:
-            errors.extend(_find_numeric_nulls_and_provenance(item))
-            
+        for item in obj: errors.extend(_find_numeric_nulls_and_provenance(item))
     return errors
 
 def test_provenance_and_nulls(generated_mock_data):
@@ -215,3 +203,93 @@ def test_gate_check_no_mock(tmp_path):
     # missing default dir -> skip without error
     res = subprocess.run([sys.executable, check_script, str(tmp_path / "missing")], capture_output=True, check=False)
     assert res.returncode == 0
+
+def test_research_mock_files(generated_mock_data):
+    # Verify presence
+    files = ["external_forecasts", "forecast_vintages", "base_rates", "ai_estimates", "dataset_catalog"]
+    for fname in files:
+        data_path = generated_mock_data / f"{fname}.json"
+        assert data_path.exists(), f"{fname}.json not generated"
+        with open(data_path) as f:
+            data = json.load(f)
+            
+        schema = load_schema(fname)
+        validator = Draft202012Validator(schema, format_checker=FormatChecker())
+        validator.validate(data)
+
+    # Specific tests for external_forecasts
+    with open(generated_mock_data / "external_forecasts.json") as f:
+        ext = json.load(f)
+        forecasters = {r["forecaster"] for r in ext}
+        assert len(forecasters) >= 3
+        indicators = {r["indicator"] for r in ext}
+        assert "gdp_growth_real_pct" in indicators
+        assert "population" in indicators
+        assert "fertility_rate" in indicators
+        
+        pop_geos = {r["geo"] for r in ext if r["indicator"] == "population"}
+        assert "AR" in pop_geos
+        provs = [g for g in pop_geos if g.startswith("AR-")]
+        assert len(provs) >= 3
+        
+        mappings = {r["scenario_mapping"] for r in ext}
+        assert mappings.issuperset({"pessimistic", "expected", "optimistic", "not_stated"})
+        
+        not_stated_count = sum(1 for r in ext if r["scenario_mapping"] == "not_stated")
+        assert not_stated_count >= 2
+        
+        null_value_count = sum(1 for r in ext if r.get("value") is None)
+        assert null_value_count >= 3
+        
+        max_year = max(r["year"] for r in ext)
+        assert max_year >= 2056
+        
+    # Specific tests for forecast_vintages
+    with open(generated_mock_data / "forecast_vintages.json") as f:
+        vint = json.load(f)
+        forecasters = {r["forecaster"] for r in vint}
+        assert len(forecasters) >= 2
+        for r in vint:
+            assert 2008 <= r["target_year"] <= 2020
+            assert 1 <= r["horizon_years"] <= 5
+            assert -10 <= r["forecast_value"] <= 10
+            v_year = int(r["vintage_date"].split("-")[0])
+            assert r["horizon_years"] == r["target_year"] - v_year
+
+    # Specific tests for base_rates
+    with open(generated_mock_data / "base_rates.json") as f:
+        base = json.load(f)
+        assert len(base) >= 6
+        null_value_count = sum(1 for r in base if r.get("value") is None and r.get("note"))
+        assert null_value_count >= 1
+
+    # Specific tests for ai_estimates
+    with open(generated_mock_data / "ai_estimates.json") as f:
+        ai = json.load(f)
+        assert len(ai) >= 14
+        metrics = {r["outcome_metric"] for r in ai}
+        assert len(metrics) >= 3
+        geos = {r["geography"] for r in ai}
+        assert len(geos) >= 3
+        assert "argentina" in geos
+        mappings = {r["scenario_mapping"] for r in ai}
+        assert mappings == {"pessimistic", "expected", "optimistic", "not_stated"}
+        pubs = {r["publisher_type"] for r in ai}
+        assert len(pubs) >= 3
+        conflict_notes = sum(1 for r in ai if r.get("sponsor_conflict_note") is not None)
+        assert conflict_notes >= 2
+        derived = sum(1 for r in ai if r.get("derived_annualized_pp") is not None)
+        assert derived >= 3
+        obs = sum(1 for r in ai if r["record_type"] == "observed")
+        assert obs >= 2
+        exp = sum(1 for r in ai if r["record_type"] == "exposure")
+        assert exp >= 2
+        
+    # Specific tests for dataset_catalog
+    with open(generated_mock_data / "dataset_catalog.json") as f:
+        cat = json.load(f)
+        assert len(cat) >= 5
+        not_opened = [r for r in cat if r["access"] == "not_opened" and r.get("note")]
+        assert len(not_opened) >= 1
+        uses = {r.get("recommended_use") for r in cat if r.get("recommended_use")}
+        assert uses == {"calibration", "baseline", "scenario_structure"}

@@ -93,6 +93,51 @@ def main():
                     has_errors = True
                 else:
                     print(f"OK: {data_file.name}")
+            elif data_file.name == "external_forecasts.json":
+                from dataset_checks import check_external_forecasts
+                extra_errors = check_external_forecasts(data)
+                if extra_errors:
+                    for e in extra_errors:
+                        print(f"ERROR: {data_file.name} failed external_forecasts checks: {e}", file=sys.stderr)
+                    has_errors = True
+                else:
+                    print(f"OK: {data_file.name}")
+            elif data_file.name == "forecast_vintages.json":
+                from dataset_checks import check_forecast_vintages
+                extra_errors = check_forecast_vintages(data)
+                if extra_errors:
+                    for e in extra_errors:
+                        print(f"ERROR: {data_file.name} failed forecast_vintages checks: {e}", file=sys.stderr)
+                    has_errors = True
+                else:
+                    print(f"OK: {data_file.name}")
+            elif data_file.name == "base_rates.json":
+                from dataset_checks import check_base_rates
+                extra_errors = check_base_rates(data)
+                if extra_errors:
+                    for e in extra_errors:
+                        print(f"ERROR: {data_file.name} failed base_rates checks: {e}", file=sys.stderr)
+                    has_errors = True
+                else:
+                    print(f"OK: {data_file.name}")
+            elif data_file.name == "ai_estimates.json":
+                from dataset_checks import check_ai_estimates
+                extra_errors = check_ai_estimates(data)
+                if extra_errors:
+                    for e in extra_errors:
+                        print(f"ERROR: {data_file.name} failed ai_estimates checks: {e}", file=sys.stderr)
+                    has_errors = True
+                else:
+                    print(f"OK: {data_file.name}")
+            elif data_file.name == "dataset_catalog.json":
+                from dataset_checks import check_dataset_catalog
+                extra_errors = check_dataset_catalog(data)
+                if extra_errors:
+                    for e in extra_errors:
+                        print(f"ERROR: {data_file.name} failed dataset_catalog checks: {e}", file=sys.stderr)
+                    has_errors = True
+                else:
+                    print(f"OK: {data_file.name}")
             else:
                 print(f"OK: {data_file.name}")
             
