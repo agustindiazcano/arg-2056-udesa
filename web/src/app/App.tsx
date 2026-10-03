@@ -10,6 +10,7 @@ import { StoryCaption } from '../story/StoryCaption';
 import { StepRunner } from '../story/StepRunner';
 import { SceneHost } from './SceneHost';
 import { loadForecast } from '../data/load';
+import { CapabilityProvider, QualityDebugLine } from '../runtime/CapabilityProvider';
 
 export function App() {
   useKeyboard();
@@ -26,7 +27,7 @@ export function App() {
   }, []);
 
   return (
-    <>
+    <CapabilityProvider>
       <div id="stage">
         {/* Canvas will go here */}
       </div>
@@ -36,6 +37,7 @@ export function App() {
           <TabBar />
           <Hud />
           <ProvinceFilter />
+          <QualityDebugLine />
         </div>
         
         <div className="scene-container" data-testid="scene">
@@ -47,6 +49,6 @@ export function App() {
         <StoryCaption />
         <StepRunner />
       </div>
-    </>
+    </CapabilityProvider>
   );
 }
