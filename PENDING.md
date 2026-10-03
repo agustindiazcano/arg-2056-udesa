@@ -33,6 +33,7 @@
 
 ## Done
 
+- [x] `research-contracts`: Draft 2020-12 schemas for research, TS types, mock data generation and precheck CI gates.
 - [x] `projections-contract`: schemas, tests, checks, mock generation, types and docs for production projections.
 - [x] `composition-contract`: schema, checks, types and mock data generator.
 - [x] `precheck`: added local python verification script.
