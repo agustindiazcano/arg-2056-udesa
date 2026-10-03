@@ -9,3 +9,4 @@ export * from './composition.js';
 export * from './projects.js';
 export * from './projections.js';
 export * from './resourceProduction.js';
+export * from './research';

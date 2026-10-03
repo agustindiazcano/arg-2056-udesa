@@ -14,15 +14,15 @@ import {
 test('parseExternalForecasts valid', () => {
     const data = [{
         id: "1", forecaster: "F", publication_title: "T", vintage: "V", indicator: "gdp_growth_real_pct", geo: "AR", year: 2026,
-        value: 1, value_low: null, value_high: null, unit: "pct", price_basis: null, scenario_by_source: null, scenario_mapping: "expected", mapping_rationale: null,
+        value: 1, value_low: null, value_high: null, unit: "pct", price_basis: null, scenario_by_source: null, scenario_mapping: "expected", mapping_rationale: "r",
         variant: null, assumptions: null, source_id: "economy:S", source: "S", source_url: null, locator: null, snippet: null, confidence: "high", retrieved_at: "2026-10-01", note: "N"
     }];
     expect(parseExternalForecasts(data)).toEqual(data);
 });
 
 test('parseExternalForecasts invalid throws descriptive error', () => {
-    const data = [{ id: "1" }];
-    expect(() => parseExternalForecasts(data)).toThrow(/forecaster/);
+    const data = [{ note: "N" }];
+    expect(() => parseExternalForecasts(data)).toThrow(/required property 'id'/);
 });
 
 test('selectExternalForecasts sorts by forecaster, vintage, year', () => {
