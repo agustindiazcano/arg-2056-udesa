@@ -9,6 +9,7 @@ import {
   dynamicChunks,
   entryNames,
   gzipSizes,
+  initialViolations,
   measure,
   suggestedBudget,
   type Budgets,
@@ -230,5 +231,73 @@ describe('suggestedBudget', () => {
   it('is 0 for 0 and rounds a value just past a multiple up to the next one', () => {
     expect(suggestedBudget(0)).toBe(0);
     expect(suggestedBudget(2000)).toBe(3072); // 2300 -> 3 * 1024
+  });
+});
+
+// ---- initial-load assertions: no ECharts and no scene chunk in an initial load -------------------------------------
+
+const SPLIT: ViteManifest = {
+  'index.html': {
+    file: 'assets/index-A.js',
+    src: 'index.html',
+    isEntry: true,
+    imports: ['_react-R.js'],
+    dynamicImports: ['src/scenes/economy/index.tsx', 'src/scenes/andes/index.tsx']
+  },
+  'references.html': { file: 'assets/references-D.js', src: 'references.html', isEntry: true, imports: ['_react-R.js'] },
+  '_react-R.js': { file: 'assets/react-R.js', name: 'react' },
+  '_echarts-E.js': { file: 'assets/echarts-E.js', name: 'echarts' },
+  'src/scenes/economy/index.tsx': {
+    file: 'assets/economy-S.js',
+    src: 'src/scenes/economy/index.tsx',
+    isDynamicEntry: true,
+    imports: ['_react-R.js', '_echarts-E.js']
+  },
+  'src/scenes/andes/index.tsx': {
+    file: 'assets/andes-T.js',
+    src: 'src/scenes/andes/index.tsx',
+    isDynamicEntry: true,
+    imports: ['_react-R.js']
+  }
+};
+
+describe('initialViolations', () => {
+  it('finds nothing when ECharts and the scenes are only dynamic imports', () => {
+    expect(initialViolations(SPLIT)).toEqual([]);
+  });
+
+  it('reports the ECharts chunk when main imports it statically', () => {
+    const manifest: ViteManifest = {
+      ...SPLIT,
+      'index.html': { ...SPLIT['index.html']!, imports: ['_react-R.js', '_echarts-E.js'] }
+    };
+    expect(initialViolations(manifest)).toEqual([{ entry: 'main', file: 'assets/echarts-E.js', kind: 'echarts' }]);
+  });
+
+  it('reports the ECharts chunk when it arrives through another static import, and names the entry', () => {
+    const manifest: ViteManifest = {
+      ...SPLIT,
+      '_react-R.js': { file: 'assets/react-R.js', name: 'react', imports: ['_echarts-E.js'] }
+    };
+    expect(initialViolations(manifest)).toEqual([
+      { entry: 'main', file: 'assets/echarts-E.js', kind: 'echarts' },
+      { entry: 'references', file: 'assets/echarts-E.js', kind: 'echarts' }
+    ]);
+  });
+
+  it('reports a scene chunk that main imports statically', () => {
+    const manifest: ViteManifest = {
+      ...SPLIT,
+      'index.html': { ...SPLIT['index.html']!, imports: ['_react-R.js', 'src/scenes/andes/index.tsx'] }
+    };
+    expect(initialViolations(manifest)).toEqual([{ entry: 'main', file: 'assets/andes-T.js', kind: 'scene' }]);
+  });
+
+  it('does not follow dynamic imports', () => {
+    const manifest: ViteManifest = {
+      ...SPLIT,
+      'references.html': { ...SPLIT['references.html']!, dynamicImports: ['src/scenes/economy/index.tsx'] }
+    };
+    expect(initialViolations(manifest)).toEqual([]);
   });
 });

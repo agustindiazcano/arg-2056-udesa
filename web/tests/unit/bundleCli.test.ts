@@ -124,4 +124,29 @@ describe('check-bundle', () => {
     expect(runCli(args(), io())).toBe(2);
     expect(err.join('')).toContain('file named by the manifest is missing: assets/t.js');
   });
+  it('exits 1 and names the file when main loads ECharts statically, before any size check', () => {
+    const manifest: ViteManifest = {
+      ...MANIFEST,
+      'index.html': { ...MANIFEST['index.html']!, imports: ['_t.js', '_e.js'] },
+      '_e.js': { file: 'assets/echarts-X.js', name: 'echarts' }
+    };
+    buildDist(manifest);
+    fs.writeFileSync(path.join(dist, 'assets', 'echarts-X.js'), 'e'.repeat(9000));
+    writeBudgets(MAIN + 99999, REFS);
+    expect(runCli(args(), io())).toBe(1);
+    expect(err.join('')).toContain('main loads echarts in its initial load: assets/echarts-X.js');
+  });
+
+  it('exits 1 and names the file when references loads a scene chunk statically', () => {
+    const manifest: ViteManifest = {
+      ...MANIFEST,
+      'references.html': { ...MANIFEST['references.html']!, imports: ['_t.js', 'src/scenes/sandbox/index.tsx'] },
+      'src/scenes/sandbox/index.tsx': { file: 'assets/sandbox-Y.js', src: 'src/scenes/sandbox/index.tsx', isDynamicEntry: true }
+    };
+    buildDist(manifest);
+    fs.writeFileSync(path.join(dist, 'assets', 'sandbox-Y.js'), 's'.repeat(2000));
+    writeBudgets(MAIN, REFS + 99999);
+    expect(runCli(args(), io())).toBe(1);
+    expect(err.join('')).toContain('references loads scene in its initial load: assets/sandbox-Y.js');
+  });
 });
