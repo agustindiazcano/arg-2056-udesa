@@ -8,7 +8,7 @@ import { ProvinceFilter } from './ProvinceFilter';
 import { MockBadge } from './MockBadge';
 import { StoryCaption } from '../story/StoryCaption';
 import { StepRunner } from '../story/StepRunner';
-import { SCENE_COMPONENTS } from '../scenes/registry';
+import { SceneHost } from './SceneHost';
 import { loadForecast } from '../data/load';
 
 export function App() {
@@ -16,7 +16,6 @@ export function App() {
   useTicker();
 
   const scene = useStore((s) => s.scene);
-  const CurrentScene = SCENE_COMPONENTS[scene];
 
   const [forecastSource, setForecastSource] = useState<string | null>(null);
 
@@ -40,7 +39,7 @@ export function App() {
         </div>
         
         <div className="scene-container" data-testid="scene">
-          <CurrentScene />
+          <SceneHost scene={scene} />
         </div>
         
         {forecastSource && <MockBadge source={forecastSource} />}

@@ -1,20 +1,15 @@
-import { ComponentType } from 'react';
+import { ComponentType, lazy } from 'react';
 import type { Scene } from '../types/scene';
 
-import AndesScene from './andes/index';
-import EconomyScene from './economy/index';
-import ResourcesScene from './resources/index';
-import ForecastScene from './forecast/index';
-import AiRevolutionScene from './ai-revolution/index';
-import SandboxScene from './sandbox/index';
-
+// Every scene is its own chunk, loaded when it is first shown. Heavy libraries (ECharts) then load only with the
+// first scene that needs them. The registry stays the single source of truth for scenes.
 export const SCENE_COMPONENTS: Record<Scene, ComponentType> = {
-  'andes': AndesScene,
-  'economy': EconomyScene,
-  'resources': ResourcesScene,
-  'forecast': ForecastScene,
-  'ai-revolution': AiRevolutionScene,
-  'sandbox': SandboxScene,
+  'andes': lazy(() => import('./andes/index')),
+  'economy': lazy(() => import('./economy/index')),
+  'resources': lazy(() => import('./resources/index')),
+  'forecast': lazy(() => import('./forecast/index')),
+  'ai-revolution': lazy(() => import('./ai-revolution/index')),
+  'sandbox': lazy(() => import('./sandbox/index')),
 };
 
 export const SCENE_LABELS: Record<Scene, string> = {
