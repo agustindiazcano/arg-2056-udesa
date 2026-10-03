@@ -17,6 +17,8 @@
   "include": [
     "src/**/*",
     "tests/**/*",
+    "e2e/**/*",
+    "playwright.config.ts",
     "../data/schemas/**/*.json"
   ]
 }

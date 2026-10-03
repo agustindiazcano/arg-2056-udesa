@@ -9,11 +9,14 @@
   "scripts": {
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
-    "lint": "eslint src tests",
+    "lint": "eslint src tests e2e",
     "data:sync": "node scripts/sync-data.mjs",
     "data:mock": "npm run data:sync",
     "build:geo": "tsx scripts/geo/build-provinces.ts",
     "check:bundle": "tsx scripts/check-bundle.ts",
+    "pretest:e2e": "npm run data:sync && python ../scripts/build_references.py",
+    "test:e2e": "playwright test",
+    "test:e2e:report": "playwright show-report",
     "predev": "npm run data:sync",
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
@@ -24,6 +27,7 @@
   "license": "ISC",
   "type": "module",
   "devDependencies": {
+    "@playwright/test": "1.63.0",
     "@testing-library/react": "^16.3.3",
     "@types/echarts": "^4.9.22",
     "@types/node": "^26.6.4",

@@ -16,3 +16,8 @@ htmlcov/
 .mypy_cache/
 .tox/
 data/raw/_private/
+
+# Playwright
+web/e2e/screenshots/
+web/playwright-report/
+web/test-results/

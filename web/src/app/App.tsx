@@ -39,7 +39,7 @@ export function App() {
           <ProvinceFilter />
         </div>
         
-        <div className="scene-container">
+        <div className="scene-container" data-testid="scene">
           <CurrentScene />
         </div>
         
