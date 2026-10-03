@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { parseArgs } from 'node:util';
 import { pathToFileURL } from 'node:url';
-import { compare, measure, suggestedBudget } from './lib/bundle.js';
+import { compare, initialViolations, measure, suggestedBudget } from './lib/bundle.js';
 import type { Budgets, BundleSizes, ViteManifest } from './lib/bundle.js';
 
 export interface Io {
@@ -42,7 +42,7 @@ function reportTable(sizes: BundleSizes): string {
   return table(rows);
 }
 
-/** Exit 0: within budget (or --report). Exit 1: something is over budget. Exit 2: usage error or unreadable input. */
+/** Exit 0: within budget (or --report). Exit 1: something is over budget, or ECharts or a scene is in an initial load. Exit 2: usage error or unreadable input. */
 export function runCli(argv: string[], io: Io = defaultIo): number {
   let values: { report?: boolean; dist?: string; budgets?: string };
   try {
@@ -70,6 +70,13 @@ export function runCli(argv: string[], io: Io = defaultIo): number {
       return 2;
     }
     const manifest = JSON.parse(fs.readFileSync(manifestFile, 'utf8')) as ViteManifest;
+
+    if (!values.report) {
+      const violations = initialViolations(manifest);
+      for (const v of violations) io.stderr(`${v.entry} loads ${v.kind} in its initial load: ${v.file}\n`);
+      if (violations.length > 0) return 1;
+    }
+
     const sizes = measure(manifest, dist);
 
     if (values.report) {

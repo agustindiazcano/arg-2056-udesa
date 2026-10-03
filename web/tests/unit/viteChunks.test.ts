@@ -19,6 +19,7 @@ describe('manualChunks', () => {
 
   it('is wired into the build as the function form of output.manualChunks', () => {
     const output = config.build?.rollupOptions?.output;
+    expect(manualChunks).toBeTypeOf('function');
     expect(output && !Array.isArray(output) ? output.manualChunks : undefined).toBe(manualChunks);
   });
 });
