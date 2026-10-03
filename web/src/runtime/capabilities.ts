@@ -43,9 +43,24 @@ function matches(env: CapabilityEnv, query: string): boolean {
   }
 }
 
+/** Frees the probe context at once: browsers cap the number of live WebGL contexts and the scene needs its own. */
+function release(context: unknown): void {
+  try {
+    const lose = (context as { getExtension?: (name: string) => { loseContext?: () => void } | null }).getExtension?.(
+      'WEBGL_lose_context'
+    );
+    lose?.loseContext?.();
+  } catch {
+    // the probe already answered; failing to free it changes nothing
+  }
+}
+
 function hasWebGL2(env: CapabilityEnv): boolean {
   try {
-    return env.createCanvas?.().getContext('webgl2') != null;
+    const context = env.createCanvas?.().getContext('webgl2');
+    if (context == null) return false;
+    release(context);
+    return true;
   } catch {
     return false;
   }
