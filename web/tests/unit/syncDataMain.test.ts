@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { isMainModule } from '../scripts/sync-data.mjs';
+import { isMainModule } from '../../scripts/sync-data.mjs';
 
 describe('isMainModule', () => {
   const script = path.resolve('scripts', 'sync-data.mjs');
