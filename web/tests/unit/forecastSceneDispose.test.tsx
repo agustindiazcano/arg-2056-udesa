@@ -7,7 +7,7 @@ import Scene from '../../src/scenes/forecast/index.js';
 const { mockInit, mockSetOption, mockDispose } = vi.hoisted(() => {
   const mockSetOption = vi.fn();
   const mockDispose = vi.fn();
-  const mockInit = vi.fn(() => ({ setOption: mockSetOption, resize: vi.fn(), dispose: mockDispose }));
+  const mockInit = vi.fn(() => ({ setOption: mockSetOption, resize: vi.fn(), dispose: mockDispose, on: vi.fn() }));
   return { mockInit, mockSetOption, mockDispose };
 });
 
