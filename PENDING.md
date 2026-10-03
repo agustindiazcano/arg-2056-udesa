@@ -4,9 +4,21 @@
 
 1. [x] `data-pipeline`: scripts and processed datasets with `source` + `retrieved_at` (resources, economy, population, provinces).
 2. [x] `shell`: Vite app, tabs, Zustand store, keyboard map, scene state machine, 2D/3D toggle, province filter.
-3. [ ] `model-py`: population cohorts, growth accounting, resource pipeline, scenarios, AI multiplier, Monte Carlo fan.
-4. [ ] `backtest`: calibrate to 2005, evaluate 2006-2025, store baseline, CI gate.
-5. [ ] `model-ts`: reduced TS port with parity test against golden vectors.
+3. [ ] `model-design`: written in `docs/model-design.md`; the 14 tasks below replace the old `model-py`, `backtest` and `model-ts` lines.
+   1. [ ] `model-params` (can start now)
+   2. [ ] `model-population-hardening` (can start now; audit F5, F8, F9)
+   3. [ ] `population-age-contract` (can start now)
+   4. [ ] `model-population-drivers` (blocked by 3)
+   5. [ ] `model-growth-core` (can start now)
+   6. [ ] `model-hdi` (blocked by 4)
+   7. [ ] `model-resources` (can start now, mock)
+   8. [ ] `model-ai-overlay` (can start now)
+   9. [ ] `model-montecarlo` (blocked by 4, 5, 7, 8)
+   10. [ ] `backtest-baselines` (blocked by real series 1990-2025)
+   11. [ ] `backtest-run` (blocked by 9, 10)
+   12. [ ] `sensitivity` (blocked by 9)
+   13. [ ] `model-ts-port` (blocked by 5, 8)
+   14. [ ] `model-provinces` (blocked by 9)
 6. [x] `scene-resources`: treemap, bars, critical resources, investment and production.
 7. [ ] `scene-forecast`: 2056 fan, scenarios, province choropleth, rankings, resource selector.
 8. [ ] `scene-economy`: growth since 1880s, LATAM ranking.
@@ -21,7 +33,7 @@
 
 ## Model assumptions (record in `docs/assumptions.md`)
 
-- [ ] (empty)
+- [ ] 34 entries A01-A34 in `docs/assumptions.md`, all unsourced. Human decides: A10, A13, A15, A16, A24, A26, A31, A32, A33.
 
 ## Visual debt (deliberately left rough until `polish`)
 
@@ -30,6 +42,8 @@
 ## Blocked / questions
 
 - [ ] Competition deadline and evaluation criteria.
+- [ ] Open decisions D-scen-1 to D-data-1 in section 9 of `docs/model-design.md`.
+- [ ] `docs/sources.md` and `docs/research-prompts.md` do not exist; no parameter can have a `source_id` yet.
 
 ## Done
 
