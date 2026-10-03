@@ -50,6 +50,20 @@ jobs:
       - run: ruff check .
       - run: pytest
 
+  terrain:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+          cache-dependency-path: |
+            requirements-dev.txt
+            scripts/terrain/requirements.txt
+      - run: pip install -r requirements-dev.txt -r scripts/terrain/requirements.txt
+      - run: python -m pytest -q scripts/terrain/tests
+
   data:
     runs-on: ubuntu-latest
     steps:

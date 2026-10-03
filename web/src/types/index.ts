@@ -10,3 +10,4 @@ export * from './projects.js';
 export * from './projections.js';
 export * from './resourceProduction.js';
 export * from './research';
+export * from './terrain.js';

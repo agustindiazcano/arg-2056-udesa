@@ -1,3 +1,4 @@
+import importlib.util
 import shutil
 import subprocess
 import sys
@@ -10,6 +11,14 @@ class Step:
         self.cmd = cmd
         self.cwd = cwd
 
+TERRAIN_PACKAGES = ("numpy", "rasterio", "PIL")
+TERRAIN_SKIP_MESSAGE = "SKIP terrain: install scripts/terrain/requirements.txt"
+
+
+def terrain_deps_available():
+    return all(importlib.util.find_spec(name) is not None for name in TERRAIN_PACKAGES)
+
+
 def build_steps(root_dir, only, npm_path):
     root = Path(root_dir)
     steps = []
@@ -17,11 +26,15 @@ def build_steps(root_dir, only, npm_path):
     do_python = not only or only == "python"
     do_data = not only or only == "data"
     do_web = not only or only == "web"
+    do_terrain = not only or only == "terrain"
     
     if do_python:
         steps.append(Step("ruff", [sys.executable, "-m", "ruff", "check", "."], root))
         steps.append(Step("pytest", [sys.executable, "-m", "pytest", "-q"], root))
         
+    if do_terrain:
+        steps.append(Step("terrain", [sys.executable, "-m", "pytest", "-q", "scripts/terrain/tests"], root))
+
     if do_data:
         steps.append(Step("validate-data", [sys.executable, "scripts/validate_data.py"], root))
         steps.append(Step("check-budget", [sys.executable, "scripts/check_data_budget.py"], root))
@@ -42,6 +55,10 @@ def build_steps(root_dir, only, npm_path):
 def run_steps(steps, runner):
     results = []
     for step in steps:
+        if step.name == "terrain" and not terrain_deps_available():
+            print(TERRAIN_SKIP_MESSAGE)
+            results.append((step, "SKIPPED", 0.0, "install scripts/terrain/requirements.txt"))
+            continue
         if step.name.startswith("web-"):
             pkg = step.cwd / "package.json"
             if not pkg.exists():
@@ -95,7 +112,7 @@ def real_runner(cmd, cwd):
 def main(argv):
     import argparse
     parser = argparse.ArgumentParser()
-    parser.add_argument("--only", choices=["python", "data", "web"])
+    parser.add_argument("--only", choices=["python", "data", "web", "terrain"])
     args = parser.parse_args(argv[1:])
     
     root_dir = Path(__file__).parent.parent.resolve()

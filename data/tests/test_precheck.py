@@ -8,6 +8,11 @@ sys.path.append(str(Path(__file__).parent.parent.parent / "scripts"))
 import precheck
 
 
+@pytest.fixture(autouse=True)
+def terrain_deps_installed(monkeypatch):
+    monkeypatch.setattr(precheck, "terrain_deps_available", lambda: True)
+
+
 class FakeRunner:
     def __init__(self, outcomes):
         # outcomes is a dict of step_name -> returncode
@@ -18,7 +23,8 @@ class FakeRunner:
         if isinstance(cmd, str):
             pytest.fail("shell=True was used (cmd is a string)")
         step_name = "unknown"
-        if "ruff" in cmd: step_name = "ruff"
+        if "scripts/terrain/tests" in cmd: step_name = "terrain"
+        elif "ruff" in cmd: step_name = "ruff"
         elif "pytest" in cmd: step_name = "pytest"
         elif "validate_data.py" in cmd[-1]: step_name = "validate-data"
         elif "check_data_budget.py" in cmd[-1]: step_name = "check-budget"
@@ -48,7 +54,7 @@ def test_precheck_all_pass(capsys, tmp_path):
     out, _err = capsys.readouterr()
     assert rc == 0
     assert "PRECHECK OK" in out
-    assert len(runner.calls) == 7
+    assert len(runner.calls) == 8
 
 def test_precheck_one_fails(capsys, tmp_path):
     web_dir = tmp_path / "web"
@@ -63,8 +69,8 @@ def test_precheck_one_fails(capsys, tmp_path):
     out, _err = capsys.readouterr()
     assert rc == 1
     assert "PRECHECK FAILED: pytest" in out
-    # All 7 should have been called despite the failure
-    assert len(runner.calls) == 7
+    # All 8 should have been called despite the failure
+    assert len(runner.calls) == 8
 
 def test_precheck_only_data(capsys, tmp_path):
     steps = precheck.build_steps(tmp_path, "data", "fake-npm")
@@ -128,3 +134,47 @@ def test_precheck_no_node_modules(capsys, tmp_path):
     assert rc == 1
     assert 'run "npm ci" in web/ first' in out
     assert "PRECHECK FAILED: web-lint, web-typecheck, web-test" in out
+
+
+def test_precheck_terrain_step_runs_the_terrain_tests(tmp_path):
+    steps = precheck.build_steps(tmp_path, "terrain", "fake-npm")
+    assert [s.name for s in steps] == ["terrain"]
+    assert steps[0].cmd[-4:] == ["-m", "pytest", "-q", "scripts/terrain/tests"]
+    assert steps[0].cwd == tmp_path
+
+
+def test_precheck_python_only_does_not_include_terrain(tmp_path):
+    steps = precheck.build_steps(tmp_path, "python", "fake-npm")
+    assert [s.name for s in steps] == ["ruff", "pytest"]
+
+
+def test_precheck_terrain_failure_fails_the_precheck(capsys, tmp_path):
+    runner = FakeRunner({"terrain": 1})
+    steps = precheck.build_steps(tmp_path, "terrain", "fake-npm")
+    rc = precheck.main_logic(steps, runner.run)
+    out, _err = capsys.readouterr()
+    assert rc == 1
+    assert "PRECHECK FAILED: terrain" in out
+
+
+def test_precheck_terrain_skips_with_the_exact_message_when_packages_are_missing(capsys, tmp_path, monkeypatch):
+    monkeypatch.setattr(precheck, "terrain_deps_available", lambda: False)
+    runner = FakeRunner({})
+    steps = precheck.build_steps(tmp_path, "terrain", "fake-npm")
+    rc = precheck.main_logic(steps, runner.run)
+    out, _err = capsys.readouterr()
+    assert rc == 0
+    assert runner.calls == []
+    assert "SKIP terrain: install scripts/terrain/requirements.txt" in out.splitlines()
+    assert "PRECHECK OK" in out
+
+
+def test_terrain_deps_available_reports_missing_packages(monkeypatch):
+    import importlib.util
+
+    monkeypatch.undo()
+    real = importlib.util.find_spec
+    monkeypatch.setattr(importlib.util, "find_spec", lambda name, *a, **k: None if name == "rasterio" else real(name, *a, **k))
+    assert precheck.terrain_deps_available() is False
+    monkeypatch.setattr(importlib.util, "find_spec", lambda name, *a, **k: object())
+    assert precheck.terrain_deps_available() is True
