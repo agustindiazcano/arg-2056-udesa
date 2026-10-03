@@ -38,6 +38,7 @@ def build_steps(root_dir, only, npm_path):
     if do_data:
         steps.append(Step("validate-data", [sys.executable, "scripts/validate_data.py"], root))
         steps.append(Step("check-budget", [sys.executable, "scripts/check_data_budget.py"], root))
+        steps.append(Step("references", [sys.executable, "scripts/build_references.py"], root))
         
     if do_web:
         web_dir = root / "web"

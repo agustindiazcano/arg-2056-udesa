@@ -48,28 +48,61 @@ def check_content(content_dir):
     return found
 
 
+def check_references(path, required):
+    """Release conditions of references.json: not mock, and at least one source. Returns True when one fails."""
+    p = Path(path)
+    if not p.exists():
+        if required:
+            print(f"references file not found: {p}")
+            return True
+        return False
+    try:
+        doc = json.loads(p.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as e:
+        print(f"Invalid JSON in {p}: {e}")
+        sys.exit(2)
+    failed = False
+    if doc.get("mock") is True:
+        print(f"{p.name} has mock: true")
+        failed = True
+    if not doc.get("sources"):
+        print(f"{p.name} lists no sources")
+        failed = True
+    return failed
+
+
 def parse_args(argv):
     dirs = []
     content_dirs = []
+    references = []
     i = 0
     while i < len(argv):
         if argv[i] == "--content" and i + 1 < len(argv):
             content_dirs.append(argv[i + 1])
             i += 2
+        elif argv[i] == "--references" and i + 1 < len(argv):
+            references.append((argv[i + 1], True))
+            i += 2
         else:
             dirs.append(argv[i])
             i += 1
-    if not dirs and not content_dirs:
+    if not dirs and not content_dirs and not references:
         # default run (release build on CI): the processed data and the public data, plus the content folder
+        # and the references file when it exists
         dirs = ["data/processed", "web/public/data"]
         content_dirs = ["web/src/content"]
-    return dirs, content_dirs
+        references = [("web/public/data/references.json", False)]
+    return dirs, content_dirs, references
 
 
 def main():
-    dirs, content_dirs = parse_args(sys.argv[1:])
+    dirs, content_dirs, references = parse_args(sys.argv[1:])
 
     found_mock = False
+
+    for path, required in references:
+        if check_references(path, required):
+            found_mock = True
 
     for content_dir in content_dirs:
         if check_content(content_dir):
