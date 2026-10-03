@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import React from 'react';
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
-import { render, screen, fireEvent, cleanup, within } from '@testing-library/react';
+import { render, screen, fireEvent, cleanup, within, act } from '@testing-library/react';
 import { StoryCaption } from '../../src/story/StoryCaption';
 import { useStore } from '../../src/state/store';
 import { INITIAL_STEP_INDEX } from '../../src/state/reducer';
@@ -117,7 +117,7 @@ describe('StoryCaption', () => {
     expect(useStore.getState().scenario).toBe('expected');
     expect(screen.queryByRole('button', { name: 'Return to step' })).toBeNull();
 
-    useStore.getState().dispatch({ type: 'setScenario', scenario: 'optimistic' });
+    act(() => useStore.getState().dispatch({ type: 'setScenario', scenario: 'optimistic' }));
     const back = screen.getByRole('button', { name: 'Return to step' });
     fireEvent.click(back);
     expect(useStore.getState().scenario).toBe('expected');
@@ -128,7 +128,7 @@ describe('StoryCaption', () => {
   it('never shows Return to step for a step with an empty focus', () => {
     reset({ scene: 'sandbox' });
     render(<StoryCaption />);
-    useStore.getState().dispatch({ type: 'setScenario', scenario: 'optimistic' });
+    act(() => useStore.getState().dispatch({ type: 'setScenario', scenario: 'optimistic' }));
     expect(screen.queryByRole('button', { name: 'Return to step' })).toBeNull();
   });
 

@@ -1,4 +1,6 @@
 // @vitest-environment jsdom
+import fs from 'node:fs';
+import path from 'node:path';
 import React from 'react';
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { render, screen, cleanup, act } from '@testing-library/react';
@@ -78,10 +80,8 @@ describe('App shell with the story layer', () => {
     expect(screen.getByText('Step 1 of 3')).toBeTruthy();
   });
 
-  it('the caption panel is not part of the references entry', async () => {
-    const source = await import('node:fs').then((fs) =>
-      fs.readFileSync(new URL('../../src/references/main.tsx', import.meta.url), 'utf8')
-    );
-    expect(source).not.toMatch(/story|StoryCaption|StepRunner/);
+  it('the caption panel is not part of the references entry', () => {
+    const source = fs.readFileSync(path.join(process.cwd(), 'src', 'references', 'main.tsx'), 'utf8');
+    expect(source).not.toMatch(/story|StoryCaption|StepRunner/i);
   });
 });
