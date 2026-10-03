@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { reduce, State, Action } from './reducer';
+import { reduce, INITIAL_STEP_INDEX, State, Action } from './reducer';
 
 export interface AppStore extends State {
   dispatch: (action: Action) => void;
@@ -17,7 +17,8 @@ const initialState: State = {
   mode: '3d',
   province: null,
   provinceFilterOpen: false,
-  aiOverlay: 'off'
+  aiOverlay: 'off',
+  stepIndex: INITIAL_STEP_INDEX
 };
 
 import { tick as tickReducer } from './reducer';

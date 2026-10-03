@@ -7,7 +7,8 @@ export type KeyAction =
   | { type: 'setScenario'; scenario: Scenario }
   | { type: 'toggle3D' }
   | { type: 'openProvinceFilter' }
-  | { type: 'back' };
+  | { type: 'back' }
+  | { type: 'stepNext' } | { type: 'stepPrev' } | { type: 'stepFirst' };
 
 export const KEY_MAP: Readonly<Record<string, KeyAction>> = {
   'ArrowRight': { type: 'nextScene' },
@@ -21,7 +22,10 @@ export const KEY_MAP: Readonly<Record<string, KeyAction>> = {
   '3': { type: 'setScenario', scenario: 'optimistic' },
   'd': { type: 'toggle3D' },
   'p': { type: 'openProvinceFilter' },
-  'Escape': { type: 'back' }
+  'Escape': { type: 'back' },
+  'PageDown': { type: 'stepNext' },
+  'PageUp': { type: 'stepPrev' },
+  'Home': { type: 'stepFirst' }
 };
 
 export function resolveKey(key: string): KeyAction | undefined {

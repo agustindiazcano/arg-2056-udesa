@@ -33,6 +33,11 @@
 10b. [ ] **Human step before `andes-integration`**: download the DEM, register it with `python -m datapipe register`, set the bounding boxes in `terrain/config.json`, run `python -m terrain bake`, run `python -m terrain verify` against the Andes facts, commit the outputs in `web/public/terrain/`. See `docs/terrain.md`.
 11. [ ] `scene-andes`: terrain map, army particles, animation, speed, battle selection, side panel (uses `web/src/terrain/`; blocked by the human step above).
 12. [x] `references-page`: sources and attributions page, build step and release gate (PR open). Human: register real sources in `data/processed/sources.json` before release.
+12b. [x] `storytelling-substeps`: steps per scene, caption panel, clicker keys, placeholder gate for steps (PR open).
+   - [ ] **Human task before release**: write the real story steps with sources in `web/src/content/steps/index.ts` (today 18 placeholders; `scripts/check_no_mock.py --content` fails until they are replaced).
+   - [ ] (later) let steps control scene-local settings (indicator, resource, metric, peers, slider values); today steps drive only the shared store fields.
+   - [ ] (later) campaign day in `StepFocus`, together with `andes-integration`.
+   - [ ] (later) load the references registry in the shell and pass `registryIds` to `StoryCaption`, so source ids become links.
 13. [ ] `polish`: bloom, easing, palette, transitions, reduced-motion, performance pass.
 
 ## Data to verify (human, against original source)
@@ -54,8 +59,11 @@
 - [ ] Forecast scene: look and feel against `design.md`, history line and "History | Forecast" divider (mock has no history), plain buttons, layout spacing.
 - [ ] Forecast ranking: rows beyond top 10 are hidden, a selected province outside the top 10 is not shown.
 
+- [ ] Story caption panel: look and feel against `design.md`, dot hit targets are small, the "Placeholder" tag uses the warning token, no transition on collapse, the panel covers the bottom of the 3D stage.
+
 ## Blocked / questions
 
+- [ ] `storytelling-substeps` decisions (human), default taken in brackets: keys `PageDown`/`PageUp`/`Home` [taken]; entering a scene restarts its story at step 1 [taken]; the story does not cross scenes except the "Next scene" button on the last step [taken]; caption panel at the bottom [taken]. Resolves open decision 5 of `docs/design.md` once confirmed (the file was not edited).
 - [ ] Competition deadline and evaluation criteria.
 - [ ] `geo-provinces` decisions (human): source dataset and license; `target_max_bytes` and `max_area_change_pct` after seeing real results. Decided: the territory is the continental provinces plus an imprecise Malvinas outline (`docs/decisions.md` D-geo-1); the registered layer must exclude the Antarctic sector and far islands.
 - [ ] `terrain-bake`: dependency exception (numpy, rasterio, Pillow pinned, only under `scripts/terrain/`) and the local precheck SKIP when they are missing: human decision.
@@ -67,6 +75,7 @@
 
 ## Done
 
+- [x] `storytelling-substeps`: story layer (types, `applyFocus`, `stepDeviates`, `validateSteps`, step actions, three keys, caption panel, runner, 18 placeholder steps) and the extended placeholder gate.
 - [x] `scene-sandbox`: sandbox scene (sliders, presets, doubling curve, tiles, table views); illustrative arithmetic, not the model.
 - [x] `scene-economy`: economy scene (long-run chart, rank bars, rank history, tiles, table views, level and index modes) and the placeholder era list with its release gate.
 - [x] `scene-forecast-map`: province map in the forecast scene (Map and Ranking tabs, Level and Change modes, small-province markers, table view). Needs the real geometry for the manual check.

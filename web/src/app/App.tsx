@@ -6,6 +6,8 @@ import { TabBar } from './TabBar';
 import { Hud } from './Hud';
 import { ProvinceFilter } from './ProvinceFilter';
 import { MockBadge } from './MockBadge';
+import { StoryCaption } from '../story/StoryCaption';
+import { StepRunner } from '../story/StepRunner';
 import { SCENE_COMPONENTS } from '../scenes/registry';
 import { loadForecast } from '../data/load';
 
@@ -42,6 +44,9 @@ export function App() {
         </div>
         
         {forecastSource && <MockBadge source={forecastSource} />}
+
+        <StoryCaption />
+        <StepRunner />
       </div>
     </>
   );

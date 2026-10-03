@@ -1,0 +1,88 @@
+/* Caption panel docked at the bottom of the viewport. Colors and spacing come from tokens.css only. */
+.story {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 20;
+  box-sizing: border-box;
+  padding: var(--space-md);
+  background: var(--surface);
+  color: var(--ink);
+  border-top: 1px solid var(--border);
+  pointer-events: auto;
+}
+
+.story-live {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.story-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+}
+
+.story-count {
+  color: var(--muted);
+}
+
+.story-title {
+  margin: var(--space-sm) 0;
+  font-size: var(--font-lg);
+}
+
+.story-tag {
+  margin-left: var(--space-sm);
+  padding: 0 var(--space-sm);
+  border: 1px solid var(--state-warning);
+  color: var(--state-warning);
+  font-size: var(--font-base);
+  font-weight: normal;
+}
+
+.story-text {
+  margin: 0 0 var(--space-sm);
+  color: var(--ink-2);
+}
+
+.story-sources {
+  margin: 0 0 var(--space-sm);
+  color: var(--muted);
+}
+
+.story-controls {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.story-dots {
+  display: flex;
+  gap: var(--space-sm);
+}
+
+.story-dot {
+  width: var(--space-md);
+  height: var(--space-md);
+  padding: 0;
+  border-radius: 50%;
+  border: 1px solid var(--muted);
+  background: transparent;
+}
+
+.story-dot[aria-current='step'] {
+  background: var(--blue);
+  border-color: var(--blue);
+}
+
+.story button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}

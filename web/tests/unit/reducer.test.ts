@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { reduce, tick, State } from '../../src/state/reducer';
+import { reduce, tick, INITIAL_STEP_INDEX, State } from '../../src/state/reducer';
 import { YEAR_MAX } from '../../src/types/year';
 
 describe('Reducer', () => {
@@ -12,7 +12,8 @@ describe('Reducer', () => {
     mode: '3d',
     province: null,
     provinceFilterOpen: false,
-    aiOverlay: 'off'
+    aiOverlay: 'off',
+    stepIndex: INITIAL_STEP_INDEX
   });
 
   describe('KeyActions', () => {
