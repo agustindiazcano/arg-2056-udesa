@@ -14,11 +14,11 @@ export function Hud() {
       <div>Province: {store.province || 'All'}</div>
       <div>AI Overlay: {store.aiOverlay}</div>
 
-      <button aria-label="Play or Pause" onClick={() => store.dispatch({ type: 'togglePlay' })}>
+      <button aria-label="Play or Pause" aria-pressed={store.playing} onClick={() => store.dispatch({ type: 'togglePlay' })}>
         {store.playing ? 'Pause' : 'Play'}
       </button>
       
-      <button aria-label="Toggle 2D/3D Mode" onClick={() => store.dispatch({ type: 'toggle3D' })}>
+      <button aria-label="Toggle 2D/3D Mode" aria-pressed={store.mode === '3d'} onClick={() => store.dispatch({ type: 'toggle3D' })}>
         Toggle 3D
       </button>
 
@@ -26,7 +26,7 @@ export function Hud() {
         Filter Province
       </button>
 
-      <button aria-label="Toggle AI Overlay" onClick={() => store.dispatch({ type: 'setAiOverlay', aiOverlay: store.aiOverlay === 'off' ? 'on' : 'off' })}>
+      <button aria-label="Toggle AI Overlay" aria-pressed={store.aiOverlay === 'on'} onClick={() => store.dispatch({ type: 'setAiOverlay', aiOverlay: store.aiOverlay === 'off' ? 'on' : 'off' })}>
         Toggle AI
       </button>
       <a href="references.html">Sources and methods</a>

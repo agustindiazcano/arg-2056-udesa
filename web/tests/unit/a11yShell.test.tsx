@@ -91,18 +91,18 @@ describe('document title', () => {
 });
 
 describe('toggle buttons expose aria-pressed', () => {
+  // [accessible name, aria-pressed at start]: not playing, 3D mode on (the store starts in 3d), AI overlay off
   it.each([
-    ['Play or Pause', 'togglePlay'],
-    ['Toggle 2D/3D Mode', 'toggle3D'],
-    ['Toggle AI Overlay', 'setAiOverlay']
-  ])('"%s" is aria-pressed false, then true after activation, then false again', (name) => {
+    ['Play or Pause', 'false', 'true'],
+    ['Toggle 2D/3D Mode', 'true', 'false'],
+    ['Toggle AI Overlay', 'false', 'true']
+  ])('"%s" starts aria-pressed %s, becomes %s after activation and returns after a second one', (name, start, flipped) => {
     render(<App />);
-    const button = screen.getByRole('button', { name });
-    expect(button.getAttribute('aria-pressed')).toBe('false');
-    fireEvent.click(button);
-    expect(screen.getByRole('button', { name }).getAttribute('aria-pressed')).toBe('true');
+    expect(screen.getByRole('button', { name }).getAttribute('aria-pressed')).toBe(start);
     fireEvent.click(screen.getByRole('button', { name }));
-    expect(screen.getByRole('button', { name }).getAttribute('aria-pressed')).toBe('false');
+    expect(screen.getByRole('button', { name }).getAttribute('aria-pressed')).toBe(flipped);
+    fireEvent.click(screen.getByRole('button', { name }));
+    expect(screen.getByRole('button', { name }).getAttribute('aria-pressed')).toBe(start);
   });
 });
 
