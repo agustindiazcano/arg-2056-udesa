@@ -1,0 +1,33 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "array",
+    "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+            "id": { "type": "string" },
+            "forecaster": { "type": "string" },
+            "vintage_date": { "type": "string", "format": "date" },
+            "indicator": {
+                "enum": ["gdp_growth_real_pct"]
+            },
+            "target_year": { "type": "integer", "minimum": 1990, "maximum": 2056 },
+            "horizon_years": { "type": "integer", "minimum": 0, "maximum": 10 },
+            "forecast_value": { "type": "number" },
+            "unit": { "type": "string" },
+            "source_id": { "type": "string", "pattern": "^[a-z0-9_-]+:[A-Za-z0-9_.-]+$" },
+            "source": { "type": "string", "minLength": 1 },
+            "source_url": { "type": ["string", "null"], "format": "uri" },
+            "locator": { "type": ["string", "null"] },
+            "snippet": { "type": ["string", "null"] },
+            "confidence": { "enum": ["high", "medium", "low"] },
+            "retrieved_at": { "type": "string", "format": "date" },
+            "note": { "type": "string" }
+        },
+        "required": [
+            "id", "forecaster", "vintage_date", "indicator", "target_year",
+            "horizon_years", "forecast_value", "unit", "source_id", "source",
+            "source_url", "locator", "snippet", "confidence", "retrieved_at"
+        ]
+    }
+}

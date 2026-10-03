@@ -1,0 +1,41 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "array",
+    "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+            "id": { "type": "string" },
+            "description": { "type": "string" },
+            "country_or_group": { "type": "string" },
+            "period": { "type": "string" },
+            "metric": { "type": "string" },
+            "value": { "type": ["number", "null"] },
+            "unit": { "type": "string" },
+            "definition": { "type": "string", "minLength": 1 },
+            "source_id": { "type": "string", "pattern": "^[a-z0-9_-]+:[A-Za-z0-9_.-]+$" },
+            "source": { "type": "string", "minLength": 1 },
+            "source_url": { "type": ["string", "null"], "format": "uri" },
+            "locator": { "type": ["string", "null"] },
+            "snippet": { "type": ["string", "null"] },
+            "confidence": { "enum": ["high", "medium", "low"] },
+            "retrieved_at": { "type": "string", "format": "date" },
+            "note": { "type": "string" }
+        },
+        "required": [
+            "id", "description", "country_or_group", "period", "metric",
+            "value", "unit", "definition", "source_id", "source", "source_url",
+            "locator", "snippet", "confidence", "retrieved_at"
+        ],
+        "allOf": [
+            {
+                "if": {
+                    "properties": { "value": { "type": "null" } }
+                },
+                "then": {
+                    "required": ["note"]
+                }
+            }
+        ]
+    }
+}

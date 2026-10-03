@@ -1,0 +1,48 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "array",
+    "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+            "dataset_name": { "type": "string" },
+            "version": { "type": ["string", "null"] },
+            "publisher": { "type": "string" },
+            "landing_url": { "type": "string", "format": "uri" },
+            "direct_download_url": { "type": ["string", "null"], "format": "uri" },
+            "variables": {
+                "type": "array",
+                "items": { "type": "string", "minLength": 1 },
+                "minItems": 1
+            },
+            "geographies": {
+                "type": "array",
+                "items": { "type": "string", "minLength": 1 },
+                "minItems": 1
+            },
+            "years_covered": { "type": "string" },
+            "frequency": { "type": "string" },
+            "format": { "type": "string" },
+            "license_or_terms": { "type": ["string", "null"] },
+            "access": { "enum": ["opened", "not_opened"] },
+            "revisions_or_rebasing_notes": { "type": ["string", "null"] },
+            "recommended_use": { "enum": ["calibration", "baseline", "scenario_structure"] },
+            "source_id": { "type": "string", "pattern": "^[a-z0-9_-]+:[A-Za-z0-9_.-]+$" },
+            "source": { "type": "string", "minLength": 1 },
+            "source_url": { "type": ["string", "null"], "format": "uri" },
+            "locator": { "type": ["string", "null"] },
+            "snippet": { "type": ["string", "null"] },
+            "confidence": { "enum": ["high", "medium", "low"] },
+            "retrieved_at": { "type": "string", "format": "date" },
+            "note": { "type": "string" }
+        },
+        "required": [
+            "dataset_name", "version", "publisher", "landing_url",
+            "direct_download_url", "variables", "geographies", "years_covered",
+            "frequency", "format", "license_or_terms", "access",
+            "revisions_or_rebasing_notes", "recommended_use",
+            "source_id", "source", "source_url", "locator", "snippet",
+            "confidence", "retrieved_at"
+        ]
+    }
+}

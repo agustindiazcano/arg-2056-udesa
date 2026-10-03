@@ -1,0 +1,100 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "array",
+    "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+            "id": { "type": "string" },
+            "forecaster": { "type": "string" },
+            "publication_title": { "type": "string" },
+            "vintage": { "type": "string" },
+            "indicator": {
+                "enum": [
+                    "gdp_growth_real_pct", "gdp_real_level", "gdp_per_capita_real",
+                    "population", "population_growth_pct", "fertility_rate",
+                    "life_expectancy_at_birth", "working_age_population",
+                    "investment_rate_pct_gdp", "potential_growth_pct",
+                    "tfp_growth_pct", "exports_usd", "hdi", "other"
+                ]
+            },
+            "geo": { "type": "string", "minLength": 1 },
+            "year": { "type": "integer", "minimum": 1990, "maximum": 2100 },
+            "value": { "type": ["number", "null"] },
+            "value_low": { "type": ["number", "null"] },
+            "value_high": { "type": ["number", "null"] },
+            "unit": { "type": "string", "minLength": 1 },
+            "price_basis": { "type": ["string", "null"] },
+            "scenario_by_source": { "type": ["string", "null"] },
+            "scenario_mapping": {
+                "enum": ["pessimistic", "expected", "optimistic", "not_stated"]
+            },
+            "mapping_rationale": { "type": ["string", "null"] },
+            "variant": { "enum": ["low", "medium", "high", null] },
+            "assumptions": { "type": ["string", "null"] },
+            "source_id": { "type": "string", "pattern": "^[a-z0-9_-]+:[A-Za-z0-9_.-]+$" },
+            "source": { "type": "string", "minLength": 1 },
+            "source_url": { "type": ["string", "null"], "format": "uri" },
+            "locator": { "type": ["string", "null"] },
+            "snippet": { "type": ["string", "null"] },
+            "confidence": { "enum": ["high", "medium", "low"] },
+            "retrieved_at": { "type": "string", "format": "date" },
+            "note": { "type": "string" }
+        },
+        "required": [
+            "id", "forecaster", "publication_title", "vintage", "indicator", "geo", "year",
+            "value", "value_low", "value_high", "unit", "price_basis", "scenario_by_source",
+            "scenario_mapping", "mapping_rationale", "variant", "assumptions",
+            "source_id", "source", "source_url", "locator", "snippet", "confidence",
+            "retrieved_at"
+        ],
+        "allOf": [
+            {
+                "if": {
+                    "properties": { "value_low": { "type": "number" } }
+                },
+                "then": {
+                    "properties": { "value_high": { "type": "number" } }
+                }
+            },
+            {
+                "if": {
+                    "properties": { "value_high": { "type": "number" } }
+                },
+                "then": {
+                    "properties": { "value_low": { "type": "number" } }
+                }
+            },
+            {
+                "if": {
+                    "properties": {
+                        "value": { "type": "null" },
+                        "value_low": { "type": "null" },
+                        "value_high": { "type": "null" }
+                    }
+                },
+                "then": {
+                    "required": ["note"]
+                }
+            },
+            {
+                "if": {
+                    "not": {
+                        "properties": { "scenario_mapping": { "const": "not_stated" } }
+                    }
+                },
+                "then": {
+                    "properties": { "mapping_rationale": { "type": "string" } }
+                }
+            },
+            {
+                "if": {
+                    "properties": { "indicator": { "const": "other" } }
+                },
+                "then": {
+                    "required": ["note"]
+                }
+            }
+        ]
+    }
+}
