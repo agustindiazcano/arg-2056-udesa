@@ -111,9 +111,9 @@ export default function Scene() {
             <button aria-pressed={treemapTable} onClick={() => setTreemapTable(!treemapTable)}>Table view</button>
           </div>
           
-          <div role="img" aria-label={treemapResult?.summary} style={{ flex: 1, minHeight: '300px' }}>
+          <div style={{ flex: 1, minHeight: '300px' }}>
             {!treemapTable && treemapResult && (
-              <EChart option={treemapResult.option} />
+              <EChart option={treemapResult.option} aria-label={treemapResult.summary} />
             )}
             {treemapTable && compData && (
               <DataTable 
@@ -145,9 +145,9 @@ export default function Scene() {
                 <span>Production by Province ({rpYear})</span>
                 <button aria-pressed={barsTable} onClick={() => setBarsTable(!barsTable)}>Table view</button>
               </div>
-              <div role="img" aria-label={provinceBarsResult?.summary} style={{ flex: 1, minHeight: '200px' }}>
+              <div style={{ flex: 1, minHeight: '200px' }}>
                 {!barsTable && provinceBarsResult && (
-                  <EChart option={provinceBarsResult.option} />
+                  <EChart option={provinceBarsResult.option} aria-label={provinceBarsResult.summary} />
                 )}
                 {barsTable && rpData && (
                   <DataTable 
@@ -168,9 +168,9 @@ export default function Scene() {
                 <span>National Trend</span>
                 <button aria-pressed={trendTable} onClick={() => setTrendTable(!trendTable)}>Table view</button>
               </div>
-              <div role="img" aria-label={trendResult?.summary} style={{ flex: 1, minHeight: '200px' }}>
+              <div style={{ flex: 1, minHeight: '200px' }}>
                 {!trendTable && trendResult && (
-                  <EChart option={trendResult.option} />
+                  <EChart option={trendResult.option} aria-label={trendResult.summary} />
                 )}
                 {trendTable && rpData && (
                   <DataTable 

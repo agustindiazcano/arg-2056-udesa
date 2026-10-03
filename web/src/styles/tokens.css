@@ -165,3 +165,8 @@ main:focus {
 .scene-container [role='img'] {
   pointer-events: auto;
 }
+
+/* Links use the blue token (5.19:1 on the body background); the browser default fails contrast. */
+a {
+  color: var(--blue);
+}
