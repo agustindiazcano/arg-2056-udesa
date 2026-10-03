@@ -122,3 +122,16 @@ button:focus-visible {
   display: flex;
   flex-direction: column;
 }
+
+/*
+ * The overlay is pointer-events: none so the canvas below stays usable, and pointer-events is inherited, so the
+ * interactive elements of a scene switch it back on or the mouse falls through to #stage.
+ */
+.scene-container button,
+.scene-container input,
+.scene-container select,
+.scene-container textarea,
+.scene-container a,
+.scene-container [role='img'] {
+  pointer-events: auto;
+}
