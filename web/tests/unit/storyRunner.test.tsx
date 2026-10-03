@@ -3,11 +3,11 @@ import React from 'react';
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { render, cleanup, act } from '@testing-library/react';
 import { StepRunner } from '../../src/story/StepRunner';
-import { useStore } from '../../src/state/store';
+import { useStore, type AppStore } from '../../src/state/store';
 import { INITIAL_STEP_INDEX } from '../../src/state/reducer';
 
 // forecast step 3 (index 2) plays 2026 -> 2056; economy step 1 only has a year
-function playing(over: Parameters<typeof useStore.setState>[0] = {}) {
+function playing(over: Partial<AppStore> = {}) {
   useStore.setState({
     scene: 'forecast',
     stepIndex: { ...INITIAL_STEP_INDEX, forecast: 2 },

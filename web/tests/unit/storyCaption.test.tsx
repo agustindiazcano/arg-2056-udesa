@@ -3,12 +3,12 @@ import React from 'react';
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent, cleanup, within, act } from '@testing-library/react';
 import { StoryCaption } from '../../src/story/StoryCaption';
-import { useStore } from '../../src/state/store';
+import { useStore, type AppStore } from '../../src/state/store';
 import { INITIAL_STEP_INDEX } from '../../src/state/reducer';
 import { STEPS } from '../../src/content/steps';
 import type { StepsByScene } from '../../src/story/types';
 
-function reset(over: Parameters<typeof useStore.setState>[0] = {}) {
+function reset(over: Partial<AppStore> = {}) {
   useStore.setState({
     scene: 'economy',
     yearFloat: 1880,
