@@ -32,10 +32,60 @@ jobs:
           node-version: '20'
           cache: 'npm'
           cache-dependency-path: web/package-lock.json
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
       - run: npm ci
       - run: npm run lint
       - run: npm run typecheck
+      # the data smoke test reads the generated web/public/data and runs scripts/check_data_budget.py
+      - run: npm run data:sync
       - run: npm test
+
+  # End-to-end smoke suite on the production build, bundle budgets and the release gate expectation.
+  e2e:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: web
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: web/package-lock.json
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+          cache-dependency-path: requirements-dev.txt
+      - run: pip install -r ../requirements-dev.txt
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npm run data:sync
+      - run: python ../scripts/build_references.py
+      - run: npm run build
+      - run: npm run check:bundle
+      # While the data is mock the release build must fail because of the mock. Delete this step at the same time
+      # the release gate starts passing (docs/release-checklist.md, item 1).
+      - name: Release gate fails on mock data
+        working-directory: .
+        run: |
+          python scripts/expect_failure.py npm --prefix web run build:release --stdout-contains "File contains source: MOCK"
+      - run: npm run test:e2e
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report
+          path: web/playwright-report
+          if-no-files-found: warn
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: e2e-screenshots
+          path: web/e2e/screenshots
+          if-no-files-found: warn
 
   python:
     runs-on: ubuntu-latest

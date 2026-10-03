@@ -38,7 +38,13 @@
    - [ ] (later) let steps control scene-local settings (indicator, resource, metric, peers, slider values); today steps drive only the shared store fields.
    - [ ] (later) campaign day in `StepFocus`, together with `andes-integration`.
    - [ ] (later) load the references registry in the shell and pass `registryIds` to `StoryCaption`, so source ids become links.
-13. [ ] `polish`: bloom, easing, palette, transitions, reduced-motion, performance pass.
+12c. [x] `integration`: data registry and smoke test, bundle budgets, Playwright e2e suite (CI job `e2e`), `expect_failure.py`, `docs/release-checklist.md` (PR open).
+   - [ ] **Human step: confirm or tighten `web/budgets.json`** (first values were measured: main 503,824 B, references 112,749 B gzip, then x1.15).
+   - [ ] **Human: confirm the e2e job passes in CI and review the `e2e-screenshots` artifact.**
+   - [ ] At release: delete the CI step `Release gate fails on mock data` and the mock assertions in `web/e2e/boot.spec.ts` and `web/e2e/references.spec.ts` (release-checklist item 1).
+   - [ ] (later) the sandbox shows "(error +0.2%)" in its copy; the e2e text check therefore looks for "error loading", not "error".
+13. [ ] `performance-a11y` (next): bundle splitting (the main chunk is ~1.2 MB minified), Lighthouse, accessibility audit.
+14. [ ] `polish`: bloom, easing, palette, transitions, reduced-motion, performance pass.
 
 ## Data to verify (human, against original source)
 
@@ -75,6 +81,7 @@
 
 ## Done
 
+- [x] `integration`: `web/src/data/registry.ts` + `data-smoke.test.ts`, `web/scripts/check-bundle.ts` + `budgets.json`, Playwright suite (`web/e2e`), `scripts/expect_failure.py`, CI job `e2e`, `docs/release-checklist.md`. Fixed a real bug found by the suite: scene controls were not clickable with the mouse (`pointer-events` inherited from the overlay).
 - [x] `storytelling-substeps`: story layer (types, `applyFocus`, `stepDeviates`, `validateSteps`, step actions, three keys, caption panel, runner, 18 placeholder steps) and the extended placeholder gate.
 - [x] `scene-sandbox`: sandbox scene (sliders, presets, doubling curve, tiles, table views); illustrative arithmetic, not the model.
 - [x] `scene-economy`: economy scene (long-run chart, rank bars, rank history, tiles, table views, level and index modes) and the placeholder era list with its release gate.
