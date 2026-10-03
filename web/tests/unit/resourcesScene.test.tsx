@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, cleanup } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import Scene from '../../src/scenes/resources/index.js';
 import * as useDatasetModule from '../../src/data/useDataset.js';
@@ -16,9 +16,13 @@ vi.mock('../../src/charts/EChart.js', () => ({
 }));
 
 describe('Resources Scene', () => {
-  afterEach(cleanup);
   beforeEach(() => {
+    cleanup();
     vi.restoreAllMocks();
+  });
+  
+  afterEach(() => {
+    cleanup();
   });
 
   it('shows loading initially', () => {

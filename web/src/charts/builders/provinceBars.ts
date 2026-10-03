@@ -28,7 +28,7 @@ export function buildProvinceBars(records: ResourceProductionRecord[], opts: Pro
   filtered.sort((a, b) => (b.value || 0) - (a.value || 0));
 
   // Determine unit
-  const unit = filtered.length > 0 ? (filtered[0].unit || '') : '';
+  const unit = filtered.length > 0 && filtered[0] ? (filtered[0].unit || '') : '';
 
   // Get top N
   const top = filtered.slice(0, topN);
@@ -60,7 +60,7 @@ export function buildProvinceBars(records: ResourceProductionRecord[], opts: Pro
     tooltip: {
       trigger: 'axis',
       axisPointer: { type: 'shadow' },
-      formatter: (params: { name: string; value: number }[]) => {
+      formatter: (params: any[]) => {
         const p = params[0];
         return `${p.name}: ${formatValue(p.value, unit)}`;
       }

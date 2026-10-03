@@ -21,8 +21,8 @@ export function buildTreemap(records: CompositionRecord[], opts: TreemapOpts = {
   // Group the records
   const grouped: Record<string, typeof validRecords> = {};
   for (const r of validRecords) {
-    if (!grouped[r.group]) grouped[r.group] = [];
-    grouped[r.group].push(r);
+    if (!grouped[r.group]) { grouped[r.group] = []; }
+    grouped[r.group]!.push(r);
   }
 
   // Calculate group totals and sort groups

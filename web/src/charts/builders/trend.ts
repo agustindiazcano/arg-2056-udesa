@@ -16,7 +16,7 @@ export function buildTrend(records: ResourceProductionRecord[], opts: TrendOpts)
   const filtered = records.filter(r => r.resource === resource && r.geo === geo);
   filtered.sort((a, b) => a.year - b.year);
   
-  const unit = filtered.length > 0 ? (filtered[0].unit || '') : '';
+  const unit = filtered.length > 0 && filtered[0] ? (filtered[0].unit || '') : '';
   
   const years = filtered.map(r => r.year.toString());
   const values = filtered.map(r => r.value); // null is kept
@@ -24,7 +24,7 @@ export function buildTrend(records: ResourceProductionRecord[], opts: TrendOpts)
   const option = {
     tooltip: {
       trigger: 'axis',
-      formatter: (params: { name: string; value: number | null }[]) => {
+      formatter: (params: any[]) => {
         const p = params[0];
         if (p.value === null || p.value === undefined) return `${p.name}: No data`;
         return `${p.name}: ${formatValue(p.value, unit)}`;

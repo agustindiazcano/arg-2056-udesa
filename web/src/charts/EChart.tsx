@@ -37,6 +37,7 @@ export const EChart: React.FC<EChartProps> = ({ option, style, 'aria-label': ari
 
   useEffect(() => {
     if (instanceRef.current && option) {
+      // @ts-ignore Option type is too complex to cast from any
       instanceRef.current.setOption(option, true); // true = not merge
     }
   }, [option]);

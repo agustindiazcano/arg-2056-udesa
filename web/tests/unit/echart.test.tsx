@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import React from 'react';
 import { render } from '@testing-library/react';
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { EChart } from '../../src/charts/EChart.js';
 
 // Mock echarts
@@ -22,39 +22,25 @@ vi.mock('echarts', () => ({
 }));
 
 describe('EChart', () => {
-  let container: HTMLDivElement | null = null;
-
   beforeEach(() => {
-    container = document.createElement('div');
-    document.body.appendChild(container);
     vi.clearAllMocks();
-  });
-
-  afterEach(() => {
-    if (container) {
-      unmountComponentAtNode(container);
-      container.remove();
-      container = null;
-    }
   });
 
   it('initializes echarts, calls setOption, and disposes on unmount', () => {
     const option = { title: { text: 'Test' } };
     
-    
-    render(<EChart option={option} />);
+    const { unmount } = render(<EChart option={option} />);
     
     expect(mockInit).toHaveBeenCalledTimes(1);
     expect(mockSetOption).toHaveBeenCalledWith(option, true);
     
-    
+    unmount();
     
     expect(mockDispose).toHaveBeenCalledTimes(1);
   });
 
   it('resizes on window resize', () => {
-    
-    const { unmount } = render(<EChart option={{}} />);
+    render(<EChart option={{}} />);
     
     window.dispatchEvent(new Event('resize'));
     expect(mockResize).toHaveBeenCalled();
