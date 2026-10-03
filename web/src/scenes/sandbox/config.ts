@@ -30,6 +30,6 @@ export const FIELD_LABELS: Record<SandboxField, { label: string; unit: string; h
   aiPp: {
     label: 'AI uplift',
     unit: 'percentage points per year',
-    help: 'Added to the per-capita growth rate in percentage points (2% plus 0.5 points is 2.5%). It is not a multiplier.'
+    help: 'Percentage points added to the per-capita growth rate (2% plus 0.5 points is 2.5%). It is not a multiplier.'
   }
 };
