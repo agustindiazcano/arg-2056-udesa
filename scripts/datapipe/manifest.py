@@ -24,7 +24,7 @@ def verify_manifest(dataset_id: str, dataset_dir: Path) -> bool:
     registered_files = set()
     for entry in manifest.get("files", []):
         fpath = entry["path"]
-        if ".." in fpath or fpath.startswith("/") or fpath.startswith("\\"):
+        if ".." in fpath or fpath.startswith(("/", "\\")):
             raise ManifestError(f"ERROR {dataset_id} {fpath} invalid path")
             
         is_private = entry.get("private", False)

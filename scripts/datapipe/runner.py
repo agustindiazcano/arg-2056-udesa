@@ -5,9 +5,10 @@ import tempfile
 from pathlib import Path
 
 from jsonschema import Draft202012Validator, FormatChecker
-from .manifest import verify_manifest
-from .provenance import update_provenance, _hash_file
+
 from .adapters import REGISTRY
+from .manifest import ManifestError, verify_manifest
+from .provenance import _hash_file, update_provenance
 
 def run_dataset(dataset_id: str, raw_root: Path, out_root: Path, schemas_root: Path, registry=None) -> tuple[int, str]:
     if registry is None:
@@ -22,7 +23,7 @@ def run_dataset(dataset_id: str, raw_root: Path, out_root: Path, schemas_root: P
     # 1. Verify manifest
     try:
         verify_manifest(dataset_id, dataset_dir)
-    except Exception as e:
+    except ManifestError as e:
         return 1, str(e)
         
     # Load manifest data
@@ -43,8 +44,8 @@ def run_dataset(dataset_id: str, raw_root: Path, out_root: Path, schemas_root: P
     # 2. Call build
     try:
         outputs = adapter.build(files, manifest_data)
-    except Exception as e:
-        return 1, f"ERROR {dataset_id} build failed: {str(e)}"
+    except (ValueError, KeyError, TypeError, OSError, RuntimeError) as e:
+        return 1, f"ERROR {dataset_id} build failed: {e!s}"
         
     expected_keys = set(adapter.OUTPUTS.keys())
     actual_keys = set(outputs.keys())
@@ -68,14 +69,18 @@ def run_dataset(dataset_id: str, raw_root: Path, out_root: Path, schemas_root: P
                 errors = list(validator.iter_errors(records))
                 if errors:
                     return 1, f"ERROR {dataset_id} {fname} failed schema validation: {errors[0].message}"
-            except Exception as e:
-                return 1, f"ERROR {dataset_id} {fname} schema read failed: {str(e)}"
+            except (ValueError, OSError, RuntimeError) as e:
+                return 1, f"ERROR {dataset_id} {fname} schema read failed: {e!s}"
                 
         # Existing consistency checks
         try:
             # We import them lazily so tests that don't need them don't break
             sys.path.insert(0, str(Path(__file__).parent.parent.parent / "scripts"))
-            from dataset_checks import check_composition, check_projects, check_projections
+            from dataset_checks import (
+                check_composition,
+                check_projections,
+                check_projects,
+            )
             from forecast_checks import check_forecast
             sys.path.pop(0)
             
@@ -168,7 +173,7 @@ def check_dataset(dataset_id: str, raw_root: Path, out_root: Path, schemas_root:
         
     try:
         verify_manifest(dataset_id, dataset_dir)
-    except Exception as e:
+    except ManifestError as e:
         return 1, str(e)
         
     adapter = registry[dataset_id]

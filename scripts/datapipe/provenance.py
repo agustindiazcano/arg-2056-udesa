@@ -1,5 +1,5 @@
-import json
 import hashlib
+import json
 from pathlib import Path
 
 def _hash_file(path: Path) -> str:
@@ -34,7 +34,7 @@ def update_provenance(dataset_id: str, adapter_name: str, files: dict[str, Path]
         
     # Remove entries for outputs that don't exist
     to_delete = []
-    for k in prov["outputs"].keys():
+    for k in prov["outputs"]:
         if not (out_root / k).exists():
             to_delete.append(k)
     for k in to_delete:
@@ -50,22 +50,22 @@ def update_provenance(dataset_id: str, adapter_name: str, files: dict[str, Path]
 def verify_provenance(out_root: Path) -> bool:
     prov_path = out_root / "_provenance.json"
     if not prov_path.exists():
-        raise Exception("missing _provenance.json")
+        raise RuntimeError("missing _provenance.json")
     with open(prov_path, "r", encoding="utf-8") as f:
         prov = json.load(f)
         
     for fname, info in prov.get("outputs", {}).items():
         out_path = out_root / fname
         if not out_path.exists():
-            raise Exception(f"{fname} missing")
+            raise RuntimeError(f"{fname} missing")
         if _hash_file(out_path) != info["sha256"]:
-            raise Exception(f"{fname} sha256 mismatch")
+            raise RuntimeError(f"{fname} sha256 mismatch")
             
     # Also check if all files in out_root are in provenance (except _provenance.json and sources.json)
     for out_path in out_root.glob("*.json"):
         if out_path.name in ("_provenance.json", "sources.json"):
             continue
         if out_path.name not in prov.get("outputs", {}):
-            raise Exception(f"{out_path.name} not in provenance")
+            raise RuntimeError(f"{out_path.name} not in provenance")
             
     return True

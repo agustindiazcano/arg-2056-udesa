@@ -18,8 +18,7 @@ def normalize_url(url: str) -> str:
     scheme = parsed.scheme.lower()
     netloc = parsed.netloc.lower()
     path = parsed.path
-    if path.endswith('/'):
-        path = path[:-1]
+    path = parsed.path.removesuffix('/')
     
     q_pairs = urllib.parse.parse_qsl(parsed.query, keep_blank_values=True)
     filtered = [(k, v) for k, v in q_pairs if not k.startswith("utm_")]
@@ -129,7 +128,7 @@ def check_sources_coverage(processed_dir: Path, sources: list[dict]) -> list[str
         if p.name in ("_provenance.json", "sources.json"): continue
         try:
             data = json.loads(p.read_text(encoding="utf-8"))
-        except:
+        except json.JSONDecodeError:
             continue
             
         if not isinstance(data, list):
