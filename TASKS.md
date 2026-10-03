@@ -50,7 +50,7 @@ Rules:
 
 When finished: overwrite LASTCONTEXT.md, update PENDING.md as the brief says, and write a PR description with (a) what changed, (b) what was verified, (c) what the human must verify.v
 
-2. scene-forecast.md  [IN PROGRESS - branch task/scene-forecast]
+2. scene-forecast.md  [DONE - PR open, waiting for review]
 
 Before doing anything, read these files in this order:
 1. AGENTS.md
