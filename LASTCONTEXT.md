@@ -1,18 +1,16 @@
-# Last context
+# Last Context
 
-Task `scene-resources` completed.
+**Current State**:
+- Finished `scene-resources` task. Implemented `EChart` wrapper, `DataTable` component, and chart builder functions (`buildTreemap`, `buildProvinceBars`, `buildTrend`).
+- Fixed all strict TypeScript and ESLint typing errors regarding generic props and `any` types.
+- Fixed React Testing Library test flakiness in `resourcesScene.test.tsx` by explicitly calling `unmount()` to ensure clean DOM between tests.
+- `python scripts/precheck.py` is fully green and passing all CI checks.
+- Code committed and pushed to `task/scene-resources` (PR #9).
 
-## What changed
-- Created pure chart builders (`treemap.ts`, `provinceBars.ts`, `trend.ts`) returning ECharts options and extracting data per specifications.
-- Extracted and defined EChart React wrapper component `EChart.tsx`.
-- Created accessible `DataTable.tsx` for table views.
-- Implemented `web/src/scenes/resources/index.tsx` mapping state (`useStore`), data (`useDataset`), selectors, and builders to the scene UI.
-- Implemented corresponding Vitest integration and unit tests for the scene, components, selectors, formatting, and charts.
-- Included token extraction script in `tokens.test.ts` to ensure UI matches the spec design in `docs/design.md`.
+**Decisions**:
+- Used explicit `unmount()` in DOM tests for Vitest to prevent component bleed.
+- Used `Record<string, unknown>` for `DataTable` generic parameter defaults instead of `any` to satisfy strict ESLint rules.
 
-## Decisions made
-- Kept `resource_production.ts` parser basic since strict validation happens via Python offline.
-- Fixed testing environment for `echart.test.tsx` and `resourcesScene.test.tsx` setting them explicitly to `@vitest-environment jsdom`.
-
-## Next step
-Submit the PR for review, then proceed to the next unchecked item in `PENDING.md`.
+**Next Step**:
+- Need the human to review and approve the PR.
+- Request the next task brief from the user (e.g., `data-pipeline.md` or `scene-forecast.md`), as there are no matching task files currently in `docs/tasks/`.
