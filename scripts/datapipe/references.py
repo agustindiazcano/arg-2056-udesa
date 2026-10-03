@@ -164,4 +164,5 @@ def build_references(sources_path: Path, data_dir: Path, terrain_dir: Path, geo_
 def write_references(result: dict, out: Path) -> None:
     out = Path(out)
     out.parent.mkdir(parents=True, exist_ok=True)
-    out.write_text(json.dumps(result, indent=2, sort_keys=True, ensure_ascii=False) + "\n", encoding="utf-8")
+    with open(out, "w", encoding="utf-8", newline="\n") as f:  # LF on every platform: byte-identical output
+        f.write(json.dumps(result, indent=2, sort_keys=True, ensure_ascii=False) + "\n")
