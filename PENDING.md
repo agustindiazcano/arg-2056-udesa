@@ -22,7 +22,9 @@
 6. [x] `scene-resources`: treemap, bars, critical resources, investment and production.
 7. [x] `scene-forecast`: 2056 fan, scenarios, province ranking, AI overlay, resource selector (merged; choropleth moved to `scene-forecast-map`).
    - [ ] **Human step before `scene-forecast-map`**: choose the source, register the file, fill `geo/config.json`, run `npm run build:geo`, review the metadata, commit the outputs in `web/public/geo/`. See `docs/geo.md`.
-   - [ ] `scene-forecast-map`: province choropleth. Blocked by the human step above (real geometry committed by the human).
+   - [x] `scene-forecast-map`: province choropleth, level and change modes, markers, table view (code done; with no geometry committed the scene shows the ranking and the fallback message). The `mode` field of the store (2D/3D) is ignored by the map.
+   - [ ] `scene-forecast-map-3d` (optional, later): a 3D variant of the province map; depends on the renderer decision.
+   - [ ] Replace the PLACEHOLDER red arm of the diverging ramp (`DIVERGING` in `web/src/styles/tokens.ts`, `--div-1..5` in `tokens.css`) with the real design color.
 8. [ ] `scene-economy`: growth since 1880s, LATAM ranking.
 9. [ ] `scene-ai-revolution`: sourced multiplier range, 10 and 20 year horizons.
 10. [ ] `scene-sandbox`: editable indicators, rule of 70 explainer, HDI and GDP per capita implications.
@@ -40,6 +42,8 @@
 
 ## Visual debt (deliberately left rough until `polish`)
 
+- [ ] Province map: the PLACEHOLDER red arm of the diverging ramp, the hatch of the no-data fill (design.md asks for a hatched fill; only the baseline color is applied), the selected-province border may be partly covered by neighbours, the illustrative Malvinas outline.
+
 - [ ] Forecast scene: look and feel against `design.md`, history line and "History | Forecast" divider (mock has no history), plain buttons, layout spacing.
 - [ ] Forecast ranking: rows beyond top 10 are hidden, a selected province outside the top 10 is not shown.
 
@@ -56,6 +60,7 @@
 
 ## Done
 
+- [x] `scene-forecast-map`: province map in the forecast scene (Map and Ranking tabs, Level and Change modes, small-province markers, table view). Needs the real geometry for the manual check.
 - [x] `geo-provinces`: build tool (`web/scripts/geo`), schemas, typed loader (`web/src/geo`), `docs/geo.md`. No real geometry committed.
 - [x] `terrain-bake`: terrain baking tool (`scripts/terrain`), metadata schema, web loader (`web/src/terrain`), CI job `terrain`, `docs/terrain.md`. No real terrain committed.
 - [x] `research-contracts`: Draft 2020-12 schemas for research, TS types, mock data generation and precheck CI gates.
