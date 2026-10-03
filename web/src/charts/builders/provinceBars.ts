@@ -60,9 +60,11 @@ export function buildProvinceBars(records: ResourceProductionRecord[], opts: Pro
     tooltip: {
       trigger: 'axis',
       axisPointer: { type: 'shadow' },
-      formatter: (params: any[]) => {
-        const p = params[0];
-        return `${p.name}: ${formatValue(p.value, unit)}`;
+      formatter: (params: Record<string, unknown>[]) => {
+        const pList = params as { name: string; value: number }[];
+        const p = pList[0];
+        if (!p) return '';
+        return `<strong>${p.name}</strong><br/>${formatValue(p.value, unit)}`;
       }
     },
     grid: {

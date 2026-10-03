@@ -24,8 +24,10 @@ export function buildTrend(records: ResourceProductionRecord[], opts: TrendOpts)
   const option = {
     tooltip: {
       trigger: 'axis',
-      formatter: (params: any[]) => {
-        const p = params[0];
+      formatter: (params: Record<string, unknown>[]) => {
+        const pList = params as { name: string; value: number | null }[];
+        const p = pList[0];
+        if (!p) return "";
         if (p.value === null || p.value === undefined) return `${p.name}: No data`;
         return `${p.name}: ${formatValue(p.value, unit)}`;
       }

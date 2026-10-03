@@ -32,17 +32,17 @@ export function DataTable<T>({ columns, data, caption }: DataTableProps<T>) {
           {data.map((row, i) => (
             <tr key={i}>
               {columns.map(c => {
-                let val = (row as any)[c.key];
+                let val = (row as Record<string, unknown>)[c.key];
                 if (c.format === 'unit' && c.unit) {
-                  val = formatValue(val, c.unit);
+                  val = formatValue(val as number | null, c.unit);
                 } else if (c.format === 'usd') {
-                  val = formatValue(val, 'USD');
+                  val = formatValue(val as number | null, 'USD');
                 } else if (val === null || val === undefined) {
                   val = '-';
                 }
                 return (
                   <td key={c.key} style={{ padding: '8px', borderBottom: '1px solid var(--grid)' }}>
-                    {val}
+                    {String(val)}
                   </td>
                 );
               })}
