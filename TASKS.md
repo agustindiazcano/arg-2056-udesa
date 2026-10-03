@@ -50,7 +50,7 @@ Rules:
 
 When finished: overwrite LASTCONTEXT.md, update PENDING.md as the brief says, and write a PR description with (a) what changed, (b) what was verified, (c) what the human must verify.v
 
-2. scene-forecast.md  [DONE - PR open, waiting for review]
+2. scene-forecast.md  [DONE - PR #19 merged]
 
 Before doing anything, read these files in this order:
 1. AGENTS.md
@@ -79,7 +79,7 @@ Rules:
 
 When finished: overwrite LASTCONTEXT.md, update PENDING.md, and write a PR description with (a) what changed, (b) what was verified, (c) what the human must verify (look and feel against docs/design.md, wording of the caveat and of the p10-p90 label, mock coverage).
 
-3. terrain-bake.md
+3. terrain-bake.md  [IN PROGRESS - branch task/terrain-bake]
 
 Before doing anything, read these files in this order:
 1. AGENTS.md
