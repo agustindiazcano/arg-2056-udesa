@@ -1,13 +1,19 @@
 # Last Context
 
-**Task completed**: Implemented research contracts (`task/research-contracts`).
-- Created draft-2020-12 JSON schemas for `external_forecasts`, `forecast_vintages`, `base_rates`, `ai_estimates`, and `dataset_catalog`.
-- Written `scripts/dataset_checks.py` to enforce domain-specific constraints (e.g. valid scenario mapping rules, numeric nullness, publication limits) matching `research-contracts.md` perfectly.
-- Generated mock data deterministic generators (`scripts/gen_mock.py`) matching the complex conditions laid out in the brief.
-- Implemented TS validators in `web/src/types/research.ts` (`ajv.compile<T>`), data models, and complex selectors (`selectExternalForecasts`, `selectAiEstimates`, `spreadByScenario`) according to the brief constraints.
-- Updated `docs/data-dictionary.md` to reflect these new datasets and constraints.
-- Resolved pipeline integration, making sure strict lints, typescript constraints, and ruff checks pass seamlessly in `scripts/precheck.py` without bypassing rules.
+## State
+- Model component `population` implementation started in branch `task/model-population`.
+- Python implementation of `step_population` and `project_population` in `model/src/argmodel/population/cohort.py`.
+- Unit tests added in `model/tests/test_population.py`.
+- Parity script added at `model/parity/gen_parity.py` that generates deterministic golden vectors of the cohort model in `population_parity.json`.
+- TypeScript port implemented in `web/src/model-ts/population.ts`.
+- Parity tests added in `web/tests/parity/population.test.ts`.
+- `pytest.ini` created to include `model/src` in `PYTHONPATH`.
+- Added `@types/node` in `web` and updated `tsconfig.json` to include `"types": ["node"]` to support `fs` in parity test.
 
-**Next step**: A human must review the PR, verify that mock data looks correct, and merge it.
+## Decisions
+- Followed strict TDD (failing test -> code).
+- Verified mathematical equivalence between the Python reference model and the TypeScript web model.
+- We did not yet integrate the UN WPP dataset, just the mathematical model core, maintaining small PR scope.
 
-**Status**: Tests pass perfectly. Prechecks complete properly. No new dependencies introduced. TDD fully applied.
+## Next Step
+- Integrate the UN WPP baseline data into the model initialization, or move on to the next component (e.g. growth accounting / GDP) as directed by the user.

@@ -41,3 +41,5 @@
 - [x] `forecast-contract`: Draft 2020-12 schemas for forecast output.
 - [x] `contract`: shared types (`Scene`, `Year`, `Scenario`, `Province`, `KeyAction`), dataset JSON Schemas, base CI (lint, typecheck, test, schema validation).
 - [x] Folder tree and context files scaffolded.
+
+- [x] model-population: Population cohorts model and TS port parity test.
