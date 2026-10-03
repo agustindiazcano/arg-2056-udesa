@@ -23,3 +23,6 @@ export const tokens = {
 
   blue: '#3987e5',
 };
+
+/** Opacity of the p10-p90 band (design.md section 4, fan chart). Mirrors --band-alpha in tokens.css. */
+export const BAND_ALPHA = 0.18;

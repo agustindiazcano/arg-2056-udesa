@@ -20,7 +20,8 @@
    13. [ ] `model-ts-port` (blocked by 5, 8)
    14. [ ] `model-provinces` (blocked by 9)
 6. [x] `scene-resources`: treemap, bars, critical resources, investment and production.
-7. [ ] `scene-forecast`: 2056 fan, scenarios, province choropleth, rankings, resource selector.
+7. [x] `scene-forecast`: 2056 fan, scenarios, province ranking, AI overlay, resource selector (PR open; choropleth moved to `scene-forecast-map`).
+   - [ ] `scene-forecast-map`: province choropleth. Blocked by province geometry (`geo-provinces`, real geometry committed by the human).
 8. [ ] `scene-economy`: growth since 1880s, LATAM ranking.
 9. [ ] `scene-ai-revolution`: sourced multiplier range, 10 and 20 year horizons.
 10. [ ] `scene-sandbox`: editable indicators, rule of 70 explainer, HDI and GDP per capita implications.
@@ -29,7 +30,7 @@
 
 ## Data to verify (human, against original source)
 
-- [ ] (empty)
+- [ ] (empty; the forecast scene shows mock data only)
 
 ## Model assumptions (record in `docs/assumptions.md`)
 
@@ -37,11 +38,14 @@
 
 ## Visual debt (deliberately left rough until `polish`)
 
-- [ ] (empty)
+- [ ] Forecast scene: look and feel against `design.md`, history line and "History | Forecast" divider (mock has no history), plain buttons, layout spacing.
+- [ ] Forecast ranking: rows beyond top 10 are hidden, a selected province outside the top 10 is not shown.
 
 ## Blocked / questions
 
 - [ ] Competition deadline and evaluation criteria.
+- [ ] Mock `forecast_output` has province series only for `resource_production` (18 provinces, 6 resources); GDP, GDP per capita, population and HDI have national series only, so the province ranking is empty for them. Not extended, per the brief.
+- [ ] Acceptance item "arrows moving the year" conflicts with `KEY_MAP` (left and right arrows change scene); the year moves with play (Space) or the store. `KEY_MAP` was not changed.
 - [ ] Open decisions D-scen-1 to D-data-1 in section 9 of `docs/model-design.md`.
 - [ ] `docs/sources.md` and `docs/research-prompts.md` do not exist; no parameter can have a `source_id` yet.
 
