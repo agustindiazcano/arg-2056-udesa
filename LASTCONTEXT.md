@@ -1,21 +1,18 @@
-# Last Context
+# Last context
 
-**Task:** Execute `docs/tasks/projections-contract.md` (migrate projects schema, create production_projections schema, checks, TS types, mock generation, and docs).
+Task `scene-resources` completed.
 
-**State:**
-- Created branch `task/projections-contract`.
-- Migrated `projects.schema.json` to include new statuses, `company`, `owners`, updated `capacity_unit` enum, and added description to `start_year`.
-- Created `production_projections.schema.json` with strict validation rules using Draft 2020-12 schemas.
-- Implemented `check_projections` in `scripts/dataset_checks.py` and wired it into `scripts/validate_data.py`.
-- Created TS types in `web/src/types/projections.ts`, exported them in `index.ts`.
-- Updated `scripts/gen_mock.py` to generate the new fields for projects and the `production_projections.json` mock file, supporting disagreed sources and capacity forecasts.
-- Created `docs/data-dictionary.md` containing units, basis, year conventions, and schema mappings.
-- Wrote full unit tests for schema, checks, and TS types.
-- All `precheck.py` validation passes (including `ruff`, `pytest`, schema validation, TS lint, typecheck, and vitest tests).
+## What changed
+- Created pure chart builders (`treemap.ts`, `provinceBars.ts`, `trend.ts`) returning ECharts options and extracting data per specifications.
+- Extracted and defined EChart React wrapper component `EChart.tsx`.
+- Created accessible `DataTable.tsx` for table views.
+- Implemented `web/src/scenes/resources/index.tsx` mapping state (`useStore`), data (`useDataset`), selectors, and builders to the scene UI.
+- Implemented corresponding Vitest integration and unit tests for the scene, components, selectors, formatting, and charts.
+- Included token extraction script in `tokens.test.ts` to ensure UI matches the spec design in `docs/design.md`.
 
-**Decisions:**
-- MOCK source disagreement was handled using "MOCK2" in the generation logic to clearly pass provenance checks.
-- Handled `rfc3987` dependency absence for URI validation in Python by adding a regex pattern constraint for `source_url` so validation tests would properly catch bad URIs without needing extra dependencies.
+## Decisions made
+- Kept `resource_production.ts` parser basic since strict validation happens via Python offline.
+- Fixed testing environment for `echart.test.tsx` and `resourcesScene.test.tsx` setting them explicitly to `@vitest-environment jsdom`.
 
-**Next Step:**
-- Submit a PR for human review of `task/projections-contract` and verify `year` agriculture conventions, enums, unit list, and the decision to keep `production_actual` out.
+## Next step
+Submit the PR for review, then proceed to the next unchecked item in `PENDING.md`.
