@@ -25,7 +25,8 @@
    - [x] `scene-forecast-map`: province choropleth, level and change modes, markers, table view (code done; with no geometry committed the scene shows the ranking and the fallback message). The `mode` field of the store (2D/3D) is ignored by the map.
    - [ ] `scene-forecast-map-3d` (optional, later): a 3D variant of the province map; depends on the renderer decision.
    - [ ] Replace the PLACEHOLDER red arm of the diverging ramp (`DIVERGING` in `web/src/styles/tokens.ts`, `--div-1..5` in `tokens.css`) with the real design color.
-8. [ ] `scene-economy`: growth since 1880s, LATAM ranking.
+8. [x] `scene-economy`: growth since 1880s, LATAM ranking (PR open).
+   - [ ] **Human task before release**: the real era list with sources in `web/src/content/eras.ts` (today three placeholders; the release gate `scripts/check_no_mock.py --content` fails until they are replaced).
 9. [ ] `scene-ai-revolution`: sourced multiplier range, 10 and 20 year horizons.
 10. [ ] `scene-sandbox`: editable indicators, rule of 70 explainer, HDI and GDP per capita implications.
 10b. [ ] **Human step before `andes-integration`**: download the DEM, register it with `python -m datapipe register`, set the bounding boxes in `terrain/config.json`, run `python -m terrain bake`, run `python -m terrain verify` against the Andes facts, commit the outputs in `web/public/terrain/`. See `docs/terrain.md`.
@@ -41,6 +42,8 @@
 - [ ] 34 entries A01-A34 in `docs/assumptions.md`, all unsourced. Human decides: A10, A13, A15, A16, A24, A26, A31, A32, A33.
 
 ## Visual debt (deliberately left rough until `polish`)
+
+- [ ] Economy scene: look and feel against `design.md` (home country in `ink` and peers in `muted`), era band styling, the chips, the year slider, country labels are ISO codes (the dataset has no names).
 
 - [ ] Province map: the PLACEHOLDER red arm of the diverging ramp, the hatch of the no-data fill (design.md asks for a hatched fill; only the baseline color is applied), the selected-province border may be partly covered by neighbours, the illustrative Malvinas outline.
 
@@ -60,6 +63,7 @@
 
 ## Done
 
+- [x] `scene-economy`: economy scene (long-run chart, rank bars, rank history, tiles, table views, level and index modes) and the placeholder era list with its release gate.
 - [x] `scene-forecast-map`: province map in the forecast scene (Map and Ranking tabs, Level and Change modes, small-province markers, table view). Needs the real geometry for the manual check.
 - [x] `geo-provinces`: build tool (`web/scripts/geo`), schemas, typed loader (`web/src/geo`), `docs/geo.md`. No real geometry committed.
 - [x] `terrain-bake`: terrain baking tool (`scripts/terrain`), metadata schema, web loader (`web/src/terrain`), CI job `terrain`, `docs/terrain.md`. No real terrain committed.
