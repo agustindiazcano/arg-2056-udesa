@@ -7,7 +7,7 @@
 3. [ ] `model-py`: population cohorts, growth accounting, resource pipeline, scenarios, AI multiplier, Monte Carlo fan.
 4. [ ] `backtest`: calibrate to 2005, evaluate 2006-2025, store baseline, CI gate.
 5. [ ] `model-ts`: reduced TS port with parity test against golden vectors.
-6. [ ] `scene-resources`: treemap, bars, critical resources, investment and production.
+6. [x] `scene-resources`: treemap, bars, critical resources, investment and production.
 7. [ ] `scene-forecast`: 2056 fan, scenarios, province choropleth, rankings, resource selector.
 8. [ ] `scene-economy`: growth since 1880s, LATAM ranking.
 9. [ ] `scene-ai-revolution`: sourced multiplier range, 10 and 20 year horizons.

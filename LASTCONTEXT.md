@@ -1,21 +1,16 @@
 # Last Context
 
-**Task:** Execute `docs/tasks/projections-contract.md` (migrate projects schema, create production_projections schema, checks, TS types, mock generation, and docs).
+**Current State**:
+- Finished `scene-resources` task. Implemented `EChart` wrapper, `DataTable` component, and chart builder functions (`buildTreemap`, `buildProvinceBars`, `buildTrend`).
+- Fixed all strict TypeScript and ESLint typing errors regarding generic props and `any` types.
+- Fixed React Testing Library test flakiness in `resourcesScene.test.tsx` by explicitly calling `unmount()` to ensure clean DOM between tests.
+- `python scripts/precheck.py` is fully green and passing all CI checks.
+- Code committed and pushed to `task/scene-resources` (PR #9).
 
-**State:**
-- Created branch `task/projections-contract`.
-- Migrated `projects.schema.json` to include new statuses, `company`, `owners`, updated `capacity_unit` enum, and added description to `start_year`.
-- Created `production_projections.schema.json` with strict validation rules using Draft 2020-12 schemas.
-- Implemented `check_projections` in `scripts/dataset_checks.py` and wired it into `scripts/validate_data.py`.
-- Created TS types in `web/src/types/projections.ts`, exported them in `index.ts`.
-- Updated `scripts/gen_mock.py` to generate the new fields for projects and the `production_projections.json` mock file, supporting disagreed sources and capacity forecasts.
-- Created `docs/data-dictionary.md` containing units, basis, year conventions, and schema mappings.
-- Wrote full unit tests for schema, checks, and TS types.
-- All `precheck.py` validation passes (including `ruff`, `pytest`, schema validation, TS lint, typecheck, and vitest tests).
+**Decisions**:
+- Used explicit `unmount()` in DOM tests for Vitest to prevent component bleed.
+- Used `Record<string, unknown>` for `DataTable` generic parameter defaults instead of `any` to satisfy strict ESLint rules.
 
-**Decisions:**
-- MOCK source disagreement was handled using "MOCK2" in the generation logic to clearly pass provenance checks.
-- Handled `rfc3987` dependency absence for URI validation in Python by adding a regex pattern constraint for `source_url` so validation tests would properly catch bad URIs without needing extra dependencies.
-
-**Next Step:**
-- Submit a PR for human review of `task/projections-contract` and verify `year` agriculture conventions, enums, unit list, and the decision to keep `production_actual` out.
+**Next Step**:
+- Need the human to review and approve the PR.
+- Request the next task brief from the user (e.g., `data-pipeline.md` or `scene-forecast.md`), as there are no matching task files currently in `docs/tasks/`.
