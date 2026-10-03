@@ -184,7 +184,7 @@ describe('build-provinces CLI', () => {
     fs.rmSync(s.config);
     expect(run(s).stderr).toContain('ERROR config cannot read');
     fs.writeFileSync(s.config, '{nope');
-    expect(run(s).stderr).toContain('ERROR config is not valid JSON');
+    expect(run(s).stderr).toContain('ERROR config file is not valid JSON');
   });
 
   it('fails with ERROR input when the input is not valid JSON', () => {
