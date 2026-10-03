@@ -1,3 +1,8 @@
+import type { Feature, FeatureCollection, MultiPolygon, Polygon } from 'geojson';
+import { feature as topoFeature } from 'topojson-client';
+import { topology } from 'topojson-server';
+import type { Objects, Topology } from 'topojson-specification';
+import { planarTriangleArea, presimplify, simplify } from 'topojson-simplify';
 import { PROVINCES } from '../../src/types/province.js';
 
 export class GeoError extends Error {}
@@ -292,4 +297,330 @@ export function dropIslands(
     return { id: input.id, geometry: { type: 'MultiPolygon' as const, coordinates: keep } };
   });
   return { kept, dropped };
+}
+
+// ---- simplification ----
+
+export interface SimplifiedFeature {
+  id: string;
+  geometry: AreaGeometry;
+}
+
+const roundTo = (x: number, decimals: number) => {
+  const factor = 10 ** decimals;
+  return Math.round(x * factor) / factor + 0; // "+ 0" turns -0 into 0
+};
+
+function roundRing(ring: Ring, decimals: number): Ring {
+  const out: Ring = [];
+  for (const [x, y] of ring) {
+    const position: Position = [roundTo(x, decimals), roundTo(y, decimals)];
+    const last = out[out.length - 1];
+    if (!last || last[0] !== position[0] || last[1] !== position[1]) out.push(position);
+  }
+  return out;
+}
+
+function toGeoJsonFeatures(inputs: ProvinceInput[]): FeatureCollection<Polygon | MultiPolygon, { id: string }> {
+  return {
+    type: 'FeatureCollection',
+    features: inputs.map(
+      (input): Feature<Polygon | MultiPolygon, { id: string }> => ({
+        type: 'Feature',
+        properties: { id: input.id },
+        geometry: input.geometry
+      })
+    )
+  };
+}
+
+function buildTopology(inputs: ProvinceInput[]): Topology<Objects> {
+  // topojson-server types the properties as GeoJsonProperties (possibly null), topojson-simplify as {}
+  const built = topology({ provinces: toGeoJsonFeatures(inputs) }) as Topology<Objects>;
+  return presimplify(built, planarTriangleArea);
+}
+
+type Weighted = ReturnType<typeof buildTopology>;
+
+function byId(a: SimplifiedFeature, b: SimplifiedFeature): number {
+  return a.id < b.id ? -1 : a.id > b.id ? 1 : 0;
+}
+
+function render(topo: Weighted, minWeight: number, decimals: number): SimplifiedFeature[] {
+  const simplified = simplify(topo, minWeight);
+  const object = simplified.objects.provinces;
+  if (!object || object.type !== 'GeometryCollection') {
+    throw new GeoError('internal error: unexpected topology object');
+  }
+  const result: SimplifiedFeature[] = [];
+  for (const geometry of object.geometries) {
+    const id = String((geometry.properties as { id: string }).id);
+    const converted = topoFeature(simplified, geometry);
+    if (converted.type !== 'Feature') throw new GeoError('internal error: expected a Feature');
+    const g = converted.geometry as Polygon | MultiPolygon | null;
+    if (!g) {
+      result.push({ id, geometry: { type: 'MultiPolygon', coordinates: [] } });
+    } else if (g.type === 'Polygon') {
+      result.push({
+        id,
+        geometry: { type: 'Polygon', coordinates: g.coordinates.map((r) => roundRing(r as Ring, decimals)) }
+      });
+    } else {
+      result.push({
+        id,
+        geometry: {
+          type: 'MultiPolygon',
+          coordinates: g.coordinates.map((poly) => poly.map((r) => roundRing(r as Ring, decimals)))
+        }
+      });
+    }
+  }
+  return result.sort(byId);
+}
+
+/**
+ * Builds a topology (shared borders become shared arcs), simplifies it with Visvalingam-Whyatt (triangle areas in
+ * square degrees, topojson-simplify) removing every point whose weight is below minWeight, and rounds the
+ * coordinates. Neighbouring provinces keep exactly the same border because they share the same arcs.
+ */
+export function simplifyFeatures(inputs: ProvinceInput[], minWeight: number, decimals: number): SimplifiedFeature[] {
+  return render(buildTopology(inputs), minWeight, decimals);
+}
+
+// ---- geometry checks and properties ----
+
+export function findGeometryProblems(geometry: AreaGeometry): string[] {
+  const polygons: Ring[][] = geometry.type === 'Polygon' ? [geometry.coordinates] : geometry.coordinates;
+  const rings = polygons.flat();
+  if (rings.length === 0) return ['geometry is empty'];
+  const problems = new Set<string>();
+  for (const ring of rings) {
+    if (ring.length < 4) problems.add(`ring has ${ring.length} positions, at least 4 are required`);
+    const first = ring[0];
+    const last = ring[ring.length - 1];
+    if (first && last && (first[0] !== last[0] || first[1] !== last[1])) problems.add('ring is not closed');
+    if (ring.some((p) => !Number.isFinite(p[0]) || !Number.isFinite(p[1]))) problems.add('coordinate is not finite');
+  }
+  return [...problems];
+}
+
+function signedArea(ring: Ring): number {
+  let sum = 0;
+  for (let i = 0; i < ring.length - 1; i++) {
+    sum += ring[i]![0] * ring[i + 1]![1] - ring[i + 1]![0] * ring[i]![1];
+  }
+  return sum / 2;
+}
+
+function ringCentroid(ring: Ring): Position {
+  const a = signedArea(ring);
+  let cx = 0;
+  let cy = 0;
+  for (let i = 0; i < ring.length - 1; i++) {
+    const [x1, y1] = ring[i]!;
+    const [x2, y2] = ring[i + 1]!;
+    const cross = x1 * y2 - x2 * y1;
+    cx += (x1 + x2) * cross;
+    cy += (y1 + y2) * cross;
+  }
+  return a === 0 ? ring[0]! : [cx / (6 * a), cy / (6 * a)];
+}
+
+function inRing(point: Position, ring: Ring): boolean {
+  let inside = false;
+  for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+    const [xi, yi] = ring[i]!;
+    const [xj, yj] = ring[j]!;
+    if (yi > point[1] !== yj > point[1] && point[0] < ((xj - xi) * (point[1] - yi)) / (yj - yi) + xi) {
+      inside = !inside;
+    }
+  }
+  return inside;
+}
+
+export interface GeometryProperties {
+  centroid: Position;
+  centroid_inside: boolean;
+  bbox: [number, number, number, number];
+}
+
+/**
+ * Planar area-weighted centroid of the largest polygon (holes subtract), whether it lies inside that polygon, and
+ * the bbox of the whole geometry. Values are rounded to `decimals`.
+ */
+export function polygonProperties(geometry: AreaGeometry, decimals: number): GeometryProperties {
+  const polygons: Ring[][] = geometry.type === 'Polygon' ? [geometry.coordinates] : geometry.coordinates;
+  let largest = polygons[0]!;
+  let largestArea = -Infinity;
+  for (const polygon of polygons) {
+    const area = polygonAreaKm2(polygon);
+    if (area > largestArea) {
+      largest = polygon;
+      largestArea = area;
+    }
+  }
+
+  let weight = 0;
+  let cx = 0;
+  let cy = 0;
+  largest.forEach((ring, index) => {
+    const w = Math.abs(signedArea(ring)) * (index === 0 ? 1 : -1);
+    const [x, y] = ringCentroid(ring);
+    weight += w;
+    cx += w * x;
+    cy += w * y;
+  });
+  const centroid: Position = [cx / weight, cy / weight];
+  const inside = inRing(centroid, largest[0]!) && !largest.slice(1).some((hole) => inRing(centroid, hole));
+
+  let west = Infinity;
+  let south = Infinity;
+  let east = -Infinity;
+  let north = -Infinity;
+  for (const position of polygons.flat(2)) {
+    west = Math.min(west, position[0]);
+    east = Math.max(east, position[0]);
+    south = Math.min(south, position[1]);
+    north = Math.max(north, position[1]);
+  }
+  return {
+    centroid: [roundTo(centroid[0], decimals), roundTo(centroid[1], decimals)],
+    centroid_inside: inside,
+    bbox: [roundTo(west, decimals), roundTo(south, decimals), roundTo(east, decimals), roundTo(north, decimals)]
+  };
+}
+
+// ---- build ----
+
+export interface BuildMeta {
+  simplification: {
+    algorithm: string;
+    parameter: number;
+    vertices_before: number;
+    vertices_after: number;
+    bytes: number;
+  };
+  dropped_polygons: DroppedPolygon[];
+  area_change_pct: Record<string, number>;
+}
+
+export interface BuildResult {
+  /** Serialized FeatureCollection, ending with a newline. */
+  geojson: string;
+  meta: BuildMeta;
+}
+
+export const SIMPLIFICATION_ALGORITHM =
+  'visvalingam-whyatt (topojson-simplify, planar triangle area in square degrees)';
+const SEARCH_ITERATIONS = 40;
+
+function countPositions(geometries: AreaGeometry[]): number {
+  return geometries.reduce((sum, g) => {
+    const polygons: Ring[][] = g.type === 'Polygon' ? [g.coordinates] : g.coordinates;
+    return sum + polygons.flat().reduce((n, ring) => n + ring.length, 0);
+  }, 0);
+}
+
+function serialize(features: SimplifiedFeature[], originalAreas: Map<string, number>, decimals: number): string {
+  const collection = {
+    type: 'FeatureCollection',
+    features: features.map((f) => {
+      const props = polygonProperties(f.geometry, decimals);
+      return {
+        type: 'Feature',
+        properties: {
+          id: f.id,
+          name: PROVINCES.find((p) => p.id === f.id)!.name,
+          area_km2: round3(originalAreas.get(f.id)!),
+          centroid: props.centroid,
+          centroid_inside: props.centroid_inside,
+          bbox: props.bbox
+        },
+        geometry: f.geometry
+      };
+    })
+  };
+  return JSON.stringify(collection) + '\n';
+}
+
+function maxFiniteWeight(topo: Weighted): number {
+  let max = 0;
+  for (const arc of topo.arcs) {
+    for (const point of arc) {
+      const z = point[2];
+      if (typeof z === 'number' && Number.isFinite(z) && z > max) max = z;
+    }
+  }
+  return max;
+}
+
+/**
+ * Whole pipeline: input check, island drop, area before simplification, topology and budget search, quality gates.
+ * area_km2 comes from the original geometry (islands included); the area change gate compares the geometry that
+ * went into the simplification (after the island drop, which is reported separately) with the simplified one.
+ */
+export function buildProvinces(raw: unknown, cfg: GeoConfig): BuildResult {
+  const inputs = checkInput(raw, cfg);
+  const originalAreas = new Map(inputs.map((i) => [i.id, geometryAreaKm2(i.geometry)]));
+  const { kept, dropped } = dropIslands(inputs, cfg.min_island_area_km2);
+  const verticesBefore = countPositions(kept.map((k) => k.geometry));
+
+  const topo = buildTopology(kept);
+  const decimals = cfg.coordinate_decimals;
+  const attempt = (minWeight: number) => {
+    const features = render(topo, minWeight, decimals);
+    const geojson = serialize(features, originalAreas, decimals);
+    return { features, geojson, bytes: Buffer.byteLength(geojson) };
+  };
+
+  let parameter = 0;
+  let result = attempt(0);
+  if (result.bytes > cfg.target_max_bytes) {
+    let hi = Math.max(maxFiniteWeight(topo) * 2, 1e-12);
+    const coarsest = attempt(hi);
+    if (coarsest.bytes > cfg.target_max_bytes) {
+      throw new GeoError(
+        `cannot fit target_max_bytes ${cfg.target_max_bytes}: achieved size ${coarsest.bytes} bytes at maximum simplification`
+      );
+    }
+    let lo = 0;
+    for (let i = 0; i < SEARCH_ITERATIONS; i++) {
+      const mid = (lo + hi) / 2;
+      if (attempt(mid).bytes <= cfg.target_max_bytes) hi = mid;
+      else lo = mid;
+    }
+    parameter = hi;
+    result = attempt(hi);
+  }
+
+  const areaChange: Record<string, number> = {};
+  const before = new Map(kept.map((k) => [k.id, k.geometry]));
+  for (const f of result.features) {
+    const problems = findGeometryProblems(f.geometry);
+    if (problems.length > 0) throw new GeoError(`province ${f.id} ${problems.join('; ')}`);
+    const beforeArea = geometryAreaKm2(before.get(f.id)!);
+    const afterArea = geometryAreaKm2(f.geometry);
+    const pct = beforeArea === 0 ? (afterArea === 0 ? 0 : 100) : (Math.abs(afterArea - beforeArea) / beforeArea) * 100;
+    if (pct > cfg.max_area_change_pct) {
+      throw new GeoError(
+        `province ${f.id} area changed ${pct.toFixed(6)}% which exceeds max_area_change_pct ${cfg.max_area_change_pct}`
+      );
+    }
+    areaChange[f.id] = Math.round(pct * 1e6) / 1e6;
+  }
+
+  return {
+    geojson: result.geojson,
+    meta: {
+      simplification: {
+        algorithm: SIMPLIFICATION_ALGORITHM,
+        parameter,
+        vertices_before: verticesBefore,
+        vertices_after: countPositions(result.features.map((f) => f.geometry)),
+        bytes: result.bytes
+      },
+      dropped_polygons: dropped,
+      area_change_pct: areaChange
+    }
+  };
 }
