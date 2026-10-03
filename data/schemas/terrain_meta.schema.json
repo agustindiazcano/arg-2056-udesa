@@ -1,0 +1,91 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "terrain_meta",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id", "crs", "bbox", "width", "height", "pixel_size_deg", "meters_per_pixel", "encoding",
+    "elevation_min_m", "elevation_max_m", "filled_fraction", "hillshade", "files", "bytes",
+    "dem_inputs", "source", "source_url", "retrieved_at", "license_or_terms", "attribution", "generated_by"
+  ],
+  "properties": {
+    "id": { "type": "string", "pattern": "^[a-z0-9_]+$" },
+    "crs": { "const": "EPSG:4326" },
+    "bbox": {
+      "type": "array",
+      "items": { "type": "number" },
+      "minItems": 4,
+      "maxItems": 4
+    },
+    "width": { "type": "integer", "minimum": 1 },
+    "height": { "type": "integer", "minimum": 1 },
+    "pixel_size_deg": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["x", "y"],
+      "properties": {
+        "x": { "type": "number", "exclusiveMinimum": 0 },
+        "y": { "type": "number", "exclusiveMinimum": 0 }
+      }
+    },
+    "meters_per_pixel": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["x", "y"],
+      "properties": {
+        "x": { "type": "number", "exclusiveMinimum": 0 },
+        "y": { "type": "number", "exclusiveMinimum": 0 }
+      }
+    },
+    "encoding": { "const": "terrarium" },
+    "elevation_min_m": { "type": "number" },
+    "elevation_max_m": { "type": "number" },
+    "filled_fraction": { "type": "number", "minimum": 0, "maximum": 1 },
+    "hillshade": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["azimuth_deg", "altitude_deg", "z_factor"],
+      "properties": {
+        "azimuth_deg": { "type": "number" },
+        "altitude_deg": { "type": "number" },
+        "z_factor": { "type": "number" }
+      }
+    },
+    "files": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["height", "hillshade"],
+      "properties": {
+        "height": { "type": "string", "minLength": 1 },
+        "hillshade": { "type": "string", "minLength": 1 }
+      }
+    },
+    "bytes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["height", "hillshade"],
+      "properties": {
+        "height": { "type": "integer", "minimum": 0 },
+        "hillshade": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "dem_inputs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["path", "sha256"],
+        "properties": {
+          "path": { "type": "string", "minLength": 1 },
+          "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+        }
+      }
+    },
+    "source": { "type": "string", "minLength": 1 },
+    "source_url": { "type": ["string", "null"], "format": "uri" },
+    "retrieved_at": { "type": "string", "format": "date" },
+    "license_or_terms": { "type": ["string", "null"] },
+    "attribution": { "type": "string", "minLength": 1 },
+    "generated_by": { "const": "scripts/terrain" }
+  }
+}
