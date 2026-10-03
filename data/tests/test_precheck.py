@@ -24,6 +24,7 @@ class FakeRunner:
             pytest.fail("shell=True was used (cmd is a string)")
         step_name = "unknown"
         if "scripts/terrain/tests" in cmd: step_name = "terrain"
+        elif "scripts/build_references.py" in cmd: step_name = "references"
         elif "ruff" in cmd: step_name = "ruff"
         elif "pytest" in cmd: step_name = "pytest"
         elif "validate_data.py" in cmd[-1]: step_name = "validate-data"
@@ -54,7 +55,7 @@ def test_precheck_all_pass(capsys, tmp_path):
     out, _err = capsys.readouterr()
     assert rc == 0
     assert "PRECHECK OK" in out
-    assert len(runner.calls) == 8
+    assert len(runner.calls) == 9
 
 def test_precheck_one_fails(capsys, tmp_path):
     web_dir = tmp_path / "web"
@@ -69,15 +70,13 @@ def test_precheck_one_fails(capsys, tmp_path):
     out, _err = capsys.readouterr()
     assert rc == 1
     assert "PRECHECK FAILED: pytest" in out
-    # All 8 should have been called despite the failure
-    assert len(runner.calls) == 8
+    # All 9 should have been called despite the failure
+    assert len(runner.calls) == 9
 
 def test_precheck_only_data(capsys, tmp_path):
     steps = precheck.build_steps(tmp_path, "data", "fake-npm")
     
-    assert len(steps) == 2
-    assert steps[0].name == "validate-data"
-    assert steps[1].name == "check-budget"
+    assert [s.name for s in steps] == ["validate-data", "check-budget", "references"]
     
 def test_precheck_only_web(capsys, tmp_path):
     web_dir = tmp_path / "web"
@@ -178,3 +177,19 @@ def test_terrain_deps_available_reports_missing_packages(monkeypatch):
     assert precheck.terrain_deps_available() is False
     monkeypatch.setattr(importlib.util, "find_spec", lambda name, *a, **k: object())
     assert precheck.terrain_deps_available() is True
+
+
+def test_precheck_references_step_runs_the_build_script(tmp_path):
+    steps = precheck.build_steps(tmp_path, "data", "fake-npm")
+    references = next(s for s in steps if s.name == "references")
+    assert references.cmd[-1] == "scripts/build_references.py"
+    assert references.cwd == tmp_path
+
+
+def test_precheck_references_failure_fails_the_precheck(capsys, tmp_path):
+    runner = FakeRunner({"references": 1})
+    steps = precheck.build_steps(tmp_path, "data", "fake-npm")
+    rc = precheck.main_logic(steps, runner.run)
+    out, _err = capsys.readouterr()
+    assert rc == 1
+    assert "PRECHECK FAILED: references" in out

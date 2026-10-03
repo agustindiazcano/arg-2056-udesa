@@ -1,0 +1,83 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "references",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["sources", "leads", "attributions", "stats", "mock"],
+  "properties": {
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id", "url", "title", "authors_or_publisher", "publisher_type", "publication_date", "retrieved_at",
+          "language", "license_or_terms", "derived_from", "used_by", "record_count"
+        ],
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z0-9_-]+:[A-Za-z0-9_.-]+$" },
+          "url": { "type": "string", "format": "uri" },
+          "title": { "type": "string" },
+          "authors_or_publisher": { "type": "string" },
+          "publisher_type": {
+            "type": "string",
+            "enum": [
+              "official", "international", "peer_reviewed", "working_paper", "technical_report",
+              "company", "association", "bank", "consultancy", "think_tank", "archive", "press"
+            ]
+          },
+          "publication_date": { "type": ["string", "null"], "format": "date" },
+          "retrieved_at": { "type": "string", "format": "date" },
+          "language": { "type": ["string", "null"] },
+          "license_or_terms": { "type": ["string", "null"] },
+          "derived_from": { "type": ["string", "null"] },
+          "used_by": { "type": "array", "items": { "type": "string" } },
+          "record_count": { "type": "integer", "minimum": 0 }
+        }
+      }
+    },
+    "leads": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "url", "title", "authors_or_publisher"],
+        "properties": {
+          "id": { "type": "string" },
+          "url": { "type": "string" },
+          "title": { "type": "string" },
+          "authors_or_publisher": { "type": "string" }
+        }
+      }
+    },
+    "attributions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["label", "text", "source_url"],
+        "properties": {
+          "label": { "enum": ["Terrain", "Province boundaries"] },
+          "text": { "type": "string" },
+          "source_url": { "type": ["string", "null"] }
+        }
+      }
+    },
+    "stats": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "published_files", "records_total", "records_without_url", "sources_used", "retrieved_min", "retrieved_max"
+      ],
+      "properties": {
+        "published_files": { "type": "integer", "minimum": 0 },
+        "records_total": { "type": "integer", "minimum": 0 },
+        "records_without_url": { "type": "integer", "minimum": 0 },
+        "sources_used": { "type": "integer", "minimum": 0 },
+        "retrieved_min": { "type": ["string", "null"], "format": "date" },
+        "retrieved_max": { "type": ["string", "null"], "format": "date" }
+      }
+    },
+    "mock": { "type": "boolean" }
+  }
+}

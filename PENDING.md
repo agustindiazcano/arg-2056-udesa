@@ -32,7 +32,8 @@
    - [ ] (optional, later) plug the sandbox into the reduced TS model (`model-ts-port`) so it uses the model mechanics instead of plain compounding.
 10b. [ ] **Human step before `andes-integration`**: download the DEM, register it with `python -m datapipe register`, set the bounding boxes in `terrain/config.json`, run `python -m terrain bake`, run `python -m terrain verify` against the Andes facts, commit the outputs in `web/public/terrain/`. See `docs/terrain.md`.
 11. [ ] `scene-andes`: terrain map, army particles, animation, speed, battle selection, side panel (uses `web/src/terrain/`; blocked by the human step above).
-12. [ ] `polish`: bloom, easing, palette, transitions, reduced-motion, performance pass.
+12. [x] `references-page`: sources and attributions page, build step and release gate (PR open). Human: register real sources in `data/processed/sources.json` before release.
+13. [ ] `polish`: bloom, easing, palette, transitions, reduced-motion, performance pass.
 
 ## Data to verify (human, against original source)
 

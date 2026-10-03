@@ -16,7 +16,7 @@
     "predev": "npm run data:sync",
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
-    "build:release": "python ../scripts/check_no_mock.py ../data/processed public/data --content src/content && tsc --noEmit && vite build"
+    "build:release": "python ../scripts/build_references.py && python ../scripts/check_no_mock.py ../data/processed public/data --content src/content --references public/data/references.json && tsc --noEmit && vite build"
   },
   "keywords": [],
   "author": "",

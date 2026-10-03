@@ -29,6 +29,7 @@ export function Hud() {
       <button aria-label="Toggle AI Overlay" onClick={() => store.dispatch({ type: 'setAiOverlay', aiOverlay: store.aiOverlay === 'off' ? 'on' : 'off' })}>
         Toggle AI
       </button>
+      <a href="references.html">Sources and methods</a>
     </div>
   );
 }
