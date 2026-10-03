@@ -12,7 +12,7 @@ test.describe('references page', () => {
   test('the link back to the app works', async ({ page }) => {
     await page.goto('/references.html');
     await page.getByRole('link', { name: 'Back to the app' }).click();
-    await expect(page).toHaveTitle('Argentina 2056');
+    await expect(page).toHaveTitle('Andes | Argentina 2056');
     await expect(page.getByRole('tab', { name: 'Andes' })).toBeVisible();
   });
 
