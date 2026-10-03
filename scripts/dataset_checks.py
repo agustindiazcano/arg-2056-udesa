@@ -137,17 +137,17 @@ def check_ai_estimates(records):
         he = r.get("horizon_end_year")
         if hs is not None and he is not None:
             if he < hs:
-                errors.append(f"horizon_end_year < horizon_start_year in ai_estimates.json")
+                errors.append("horizon_end_year < horizon_start_year in ai_estimates.json")
                 
             derived = r.get("derived_annualized_pp")
             derivation = r.get("derivation")
             if (derived is None) != (derivation is None):
-                errors.append(f"derived_annualized_pp and derivation must be both null or both non-null in ai_estimates.json")
+                errors.append("derived_annualized_pp and derivation must be both null or both non-null in ai_estimates.json")
                 
             metric = r.get("outcome_metric")
             if derived is not None:
                 if not (metric and metric.endswith("_cumulative")):
-                    errors.append(f"derived_annualized_pp only allowed for _cumulative metric in ai_estimates.json")
+                    errors.append("derived_annualized_pp only allowed for _cumulative metric in ai_estimates.json")
                 
                 v = r.get("value")
                 if v is not None:
@@ -162,11 +162,11 @@ def check_ai_estimates(records):
         rt = r.get("record_type")
         metric = r.get("outcome_metric")
         if rt == "adoption" and metric != "adoption_rate_pct":
-            errors.append(f"record_type adoption requires adoption_rate_pct in ai_estimates.json")
+            errors.append("record_type adoption requires adoption_rate_pct in ai_estimates.json")
         if rt == "exposure" and metric not in ["employment_exposed_pct", "employment_displaced_pct"]:
-            errors.append(f"record_type exposure requires employment_exposed_pct or employment_displaced_pct in ai_estimates.json")
+            errors.append("record_type exposure requires employment_exposed_pct or employment_displaced_pct in ai_estimates.json")
         if rt in ["projection", "observed"] and metric == "adoption_rate_pct":
-            errors.append(f"record_type {rt} must not use adoption_rate_pct in ai_estimates.json")
+            errors.append("record_type {rt} must not use adoption_rate_pct in ai_estimates.json")
     return errors
 
 def check_dataset_catalog(records):

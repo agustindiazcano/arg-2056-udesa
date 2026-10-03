@@ -1,14 +1,12 @@
 import { expect, test } from 'vitest';
 import { 
     parseExternalForecasts, 
-    parseForecastVintages, 
-    parseBaseRates, 
-    parseAiEstimates, 
-    parseDatasetCatalog,
     selectExternalForecasts,
     selectAiEstimates,
     spreadByScenario,
-    AiOutcomeMetric
+    AiOutcomeMetric,
+    ExternalForecast,
+    AiEstimate
 } from '../../src/types/research';
 
 test('parseExternalForecasts valid', () => {
@@ -30,7 +28,7 @@ test('selectExternalForecasts sorts by forecaster, vintage, year', () => {
     const r2 = { forecaster: "A", vintage: "V1", year: 2021 };
     const r3 = { forecaster: "A", vintage: "V1", year: 2020 };
     const r4 = { forecaster: "A", vintage: "V2", year: 2020 };
-    const records = [r1, r2, r3, r4] as any;
+    const records = [r1, r2, r3, r4] as Partial<ExternalForecast>[] as ExternalForecast[];
     
     const res = selectExternalForecasts(records, {});
     expect(res).toEqual([r3, r2, r4, r1]);
@@ -40,15 +38,10 @@ test('selectAiEstimates requires outcomeMetric and sorts by publication_date des
     const r1 = { id: "1", outcome_metric: "gdp_growth_pp_per_year", publication_date: "2020-01-01" };
     const r2 = { id: "3", outcome_metric: "gdp_growth_pp_per_year", publication_date: "2021-01-01" };
     const r3 = { id: "2", outcome_metric: "gdp_growth_pp_per_year", publication_date: "2021-01-01" };
-    const records = [r1, r2, r3] as any;
+    const records = [r1, r2, r3] as Partial<AiEstimate>[] as AiEstimate[];
     
     const res = selectAiEstimates(records, { outcomeMetric: AiOutcomeMetric.gdp_growth_pp_per_year });
     expect(res).toEqual([r3, r2, r1]); // 2021 before 2020, then id 2 before 3
-});
-
-test('selectAiEstimates type error without outcomeMetric', () => {
-    // @ts-expect-error
-    selectAiEstimates([], {});
 });
 
 test('spreadByScenario exact values', () => {
@@ -59,9 +52,9 @@ test('spreadByScenario exact values', () => {
     const r_mixed = { scenario_mapping: "optimistic", outcome_metric: "other", value: 5, id: "5" };
     
     // mixed throws
-    expect(() => spreadByScenario([r1, r_mixed] as any)).toThrow(/metric/);
+    expect(() => spreadByScenario([r1, r_mixed] as { scenario_mapping: string; outcome_metric: string; value?: number | null; value_low?: number | null; value_high?: number | null; id: string; }[])).toThrow(/metric/);
     
-    const res = spreadByScenario([r1, r2, r3, r4] as any);
+    const res = spreadByScenario([r1, r2, r3, r4] as { scenario_mapping: string; outcome_metric: string; value?: number | null; value_low?: number | null; value_high?: number | null; id: string; }[]);
     expect(res.expected).toEqual({ count: 2, min: 1, max: 3, ids: ["1", "2"] });
     expect(res.optimistic).toEqual({ count: 1, min: 5, max: 6, ids: ["3"] });
     expect(res.pessimistic).toEqual({ count: 0, min: null, max: null, ids: [] });

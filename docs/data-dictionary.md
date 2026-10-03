@@ -51,3 +51,25 @@ Table mapping the research agent's `findings.json` fields to the JSON schemas:
 | `metric: resource_estimate / reserve_estimate / price_assumption` | not modeled yet |
 | `source_id` + sources registry | `source` (title and publisher), `source_url`, `retrieved_at` |
 | `locator`, `confidence`, `assumptions`, `stage_as_of` | same names |
+
+## Macro and Demographic Research Contracts
+
+The following files track external data used to model macroeconomic trends, demographic baselines, AI impacts, and dataset metadata.
+
+### external_forecasts
+Forecasts from major institutions (e.g., IMF, World Bank, UN) covering variables such as GDP growth, population, and fertility rates.
+- **Scenario Mapping**: The central or aseline scenario from sources must be mapped to expected in our scenario_mapping.
+
+### ase_rates
+Historical reference data (e.g., growth spurts in peer countries) used to ground scenario assumptions.
+
+### i_estimates
+Projections of AI's impact on productivity, employment, and economic growth.
+- **Metric Rules**: Data must strictly distinguish between annual percentage points (pp) and cumulative percentages (pct).
+- **Compounding Rule**: The only acceptable arithmetic during validation is verifying that a compounded annualized percentage point (PP) figure correctly compounds to the reported cumulative figure over the stated horizon. Other conversions (e.g. GDP level to growth) are not allowed.
+
+### dataset_catalog
+Registry of foundational datasets (e.g., UN WPP, Maddison Project) tracking access status, versions, and recommended use.
+
+### macro_assumptions
+Underlying macroeconomic assumptions (e.g., target capital expenditure, population trends) that inform the forecast models.

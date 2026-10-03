@@ -1,11 +1,11 @@
-import pytest
 from scripts.dataset_checks import (
+    check_ai_estimates,
+    check_base_rates,
+    check_dataset_catalog,
     check_external_forecasts,
     check_forecast_vintages,
-    check_base_rates,
-    check_ai_estimates,
-    check_dataset_catalog
 )
+
 
 def test_common_checks_snippet():
     # 26 words
@@ -20,11 +20,13 @@ def test_common_checks_snippet():
     errors2 = check_base_rates([r2])
     assert not any("snippet" in e.lower() for e in errors2)
 
+
 def test_common_checks_id_duplicate():
     r1 = {"id": "1"}
     r2 = {"id": "1"}
     errors = check_base_rates([r1, r2])
     assert any("Duplicate" in e and "id" in e for e in errors)
+
 
 def test_common_checks_value_range():
     # value_low > value_high

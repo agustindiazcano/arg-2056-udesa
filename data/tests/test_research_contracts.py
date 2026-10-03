@@ -1,6 +1,7 @@
 import json
-import pytest
 from pathlib import Path
+
+import pytest
 from jsonschema import Draft202012Validator, FormatChecker, ValidationError
 
 SCHEMAS_DIR = Path("data/schemas")

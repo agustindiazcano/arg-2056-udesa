@@ -241,7 +241,7 @@ export function selectAiEstimates(
 
 export function spreadByScenario(records: Array<{ scenario_mapping: string | ScenarioMapping; outcome_metric: string; value?: number | null; value_low?: number | null; value_high?: number | null; id: string; }>) {
     if (records.length > 0) {
-        const metric = records[0].outcome_metric;
+        const metric = records[0]!.outcome_metric;
         if (!records.every(r => r.outcome_metric === metric)) {
             throw new Error(`Mixed outcome_metric in spreadByScenario: ${metric}`);
         }
