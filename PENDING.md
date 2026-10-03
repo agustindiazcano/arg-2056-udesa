@@ -46,7 +46,7 @@
 ## Blocked / questions
 
 - [ ] Competition deadline and evaluation criteria.
-- [ ] `geo-provinces` decisions (human): source dataset and license; how the national territory is drawn; `target_max_bytes` and `max_area_change_pct` after seeing real results.
+- [ ] `geo-provinces` decisions (human): source dataset and license; `target_max_bytes` and `max_area_change_pct` after seeing real results. Decided: the territory is the continental provinces plus an imprecise Malvinas outline (`docs/decisions.md` D-geo-1); the registered layer must exclude the Antarctic sector and far islands.
 - [ ] `terrain-bake`: dependency exception (numpy, rasterio, Pillow pinned, only under `scripts/terrain/`) and the local precheck SKIP when they are missing: human decision.
 - [ ] `terrain-bake`: Earth radius 6,371,008.8 m for the hillshade ground distances was chosen by the tool (the brief gave none).
 - [ ] Mock `forecast_output` has province series only for `resource_production` (18 provinces, 6 resources); GDP, GDP per capita, population and HDI have national series only, so the province ranking is empty for them. Not extended, per the brief.

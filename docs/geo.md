@@ -8,7 +8,11 @@ This repository contains the tool, not geometry. The human chooses the source, r
 
 The source dataset and its license are a human decision. Leads to verify (not facts): the national geographic institute's province layer, Natural Earth admin-1, other open province layers. Check each license, the date of the data and how the national territory is drawn before choosing.
 
-How the national territory is drawn (continental provinces only, or including the southern islands and the Antarctic sector in the same layer) is also a human decision, and the rules for representing the national territory on published maps should be checked before publishing. The tool handles either layout and decides nothing about it.
+**Decision (human): how the national territory is drawn.** The map shows the continental provinces and the Malvinas Islands, nothing else. Consequences:
+
+- The input GeoJSON you register must contain only the continental provinces, with Tierra del Fuego as its main island. Remove the Antarctic sector and the other southern islands from the layer before registering it (the tool does not decide this: `min_island_area_km2` only drops small polygons and always keeps the largest polygon of each province).
+- The Malvinas are not part of the province build. They are an **illustrative, imprecise outline** hand-drawn in `web/src/geo/malvinas.ts`, drawn by the scene only so that the islands appear on the map as national territory. They carry no data, are not selectable and are painted as "no data". The outline is approximate and not surveyed; replace it with a sourced geometry if precision is ever needed.
+- The rules for representing the national territory on published maps should still be checked before publishing.
 
 ## 2. Input requirements
 

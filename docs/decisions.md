@@ -43,3 +43,10 @@ One entry per major design decision. Each entry: context, options, decision, con
 - Options: omit it in v1; include it.
 - Decision: omit it and fold it into TFP; adopt it only after a backtest shows an error that a mechanism change explains.
 - Consequences: two fewer parameters and no schooling series needed now.
+
+## D-geo-1: National territory on the map
+- Context: the province build (`docs/geo.md`) needs a human decision on how the national territory is drawn; the source layer may include the Antarctic sector and the southern islands.
+- Options: continental provinces only; continental provinces plus the southern islands and the Antarctic sector in the same layer; continental provinces plus the Malvinas as a separate illustration.
+- Decision (human, 2026-10-03): continental provinces and the Malvinas Islands, nothing else. The Malvinas are an imprecise hand-drawn outline, shown only as territory (no data, not selectable).
+- Consequences: the registered input layer must exclude the Antarctic sector and far islands; the outline lives in `web/src/geo/malvinas.ts` and is labeled illustrative; no claim of precision is made.
+
