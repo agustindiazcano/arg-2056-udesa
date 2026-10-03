@@ -11,6 +11,7 @@ export const inputs = {
 export default defineConfig({
   plugins: [react()],
   build: {
+    manifest: true,
     rollupOptions: { input: inputs }
   },
 });

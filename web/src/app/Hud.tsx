@@ -7,7 +7,7 @@ export function Hud() {
   return (
     <div id="hud">
       <div>Scene: {store.scene}</div>
-      <div>Year: {Math.floor(store.yearFloat)}</div>
+      <div data-testid="hud-year" data-value={store.yearFloat}>Year: {Math.floor(store.yearFloat)}</div>
       <div>Scenario: {store.scenario}</div>
       <div>Speed: {store.speed}x</div>
       <div>Mode: {store.mode}</div>
