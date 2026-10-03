@@ -10,8 +10,9 @@
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
     "lint": "eslint src tests",
-    "data:mock": "node scripts/sync-mock.mjs",
-    "predev": "npm run data:mock",
+    "data:sync": "node scripts/sync-data.mjs",
+    "data:mock": "npm run data:sync",
+    "predev": "npm run data:sync",
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
     "build:release": "python ../scripts/check_no_mock.py ../data/processed public/data && tsc --noEmit && vite build"

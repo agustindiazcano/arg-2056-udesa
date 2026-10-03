@@ -21,6 +21,7 @@ class FakeRunner:
         if "ruff" in cmd: step_name = "ruff"
         elif "pytest" in cmd: step_name = "pytest"
         elif "validate_data.py" in cmd[-1]: step_name = "validate-data"
+        elif "check_data_budget.py" in cmd[-1]: step_name = "check-budget"
         elif "lint" in cmd: step_name = "web-lint"
         elif "typecheck" in cmd: step_name = "web-typecheck"
         elif "test" in cmd: step_name = "web-test"
@@ -47,7 +48,7 @@ def test_precheck_all_pass(capsys, tmp_path):
     out, _err = capsys.readouterr()
     assert rc == 0
     assert "PRECHECK OK" in out
-    assert len(runner.calls) == 6
+    assert len(runner.calls) == 7
 
 def test_precheck_one_fails(capsys, tmp_path):
     web_dir = tmp_path / "web"
@@ -62,14 +63,15 @@ def test_precheck_one_fails(capsys, tmp_path):
     out, _err = capsys.readouterr()
     assert rc == 1
     assert "PRECHECK FAILED: pytest" in out
-    # All 6 should have been called despite the failure
-    assert len(runner.calls) == 6
+    # All 7 should have been called despite the failure
+    assert len(runner.calls) == 7
 
 def test_precheck_only_data(capsys, tmp_path):
     steps = precheck.build_steps(tmp_path, "data", "fake-npm")
     
-    assert len(steps) == 1
+    assert len(steps) == 2
     assert steps[0].name == "validate-data"
+    assert steps[1].name == "check-budget"
     
 def test_precheck_only_web(capsys, tmp_path):
     web_dir = tmp_path / "web"

@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "array",
+  "additionalProperties": false,
+  "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["id", "aliases", "url", "title", "authors_or_publisher", "publisher_type", "retrieved_at", "access", "license_or_terms", "derived_from"],
+    "properties": {
+      "id": {
+        "type": "string",
+        "pattern": "^[a-z0-9_-]+:[A-Za-z0-9_.-]+$"
+      },
+      "aliases": {
+        "type": "array",
+        "items": { "type": "string" }
+      },
+      "url": {
+        "type": "string",
+        "format": "uri"
+      },
+      "title": { "type": "string" },
+      "authors_or_publisher": { "type": "string" },
+      "publisher_type": {
+        "type": "string",
+        "enum": [
+          "official", "international", "peer_reviewed", "working_paper", "technical_report",
+          "company", "association", "bank", "consultancy", "think_tank", "archive", "press"
+        ]
+      },
+      "publication_date": {
+        "type": ["string", "null"],
+        "format": "date"
+      },
+      "retrieved_at": {
+        "type": "string",
+        "format": "date"
+      },
+      "access": {
+        "type": "string",
+        "enum": ["opened", "not_opened"]
+      },
+      "language": {
+        "type": ["string", "null"]
+      },
+      "license_or_terms": {
+        "type": ["string", "null"]
+      },
+      "derived_from": {
+        "type": ["string", "null"]
+      }
+    }
+  }
+}

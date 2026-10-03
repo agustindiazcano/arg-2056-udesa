@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["dataset_id", "files"],
+  "properties": {
+    "dataset_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9_]+$"
+    },
+    "files": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["path", "sha256", "source", "retrieved_at", "redistributable"],
+        "properties": {
+          "path": {
+            "type": "string"
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "source": {
+            "type": "string",
+            "minLength": 1
+          },
+          "source_url": {
+            "type": ["string", "null"],
+            "format": "uri"
+          },
+          "retrieved_at": {
+            "type": "string",
+            "format": "date"
+          },
+          "license_or_terms": {
+            "type": ["string", "null"]
+          },
+          "redistributable": {
+            "type": "boolean"
+          },
+          "note": {
+            "type": "string"
+          },
+          "private": {
+            "type": "boolean",
+            "default": false
+          }
+        },
+        "allOf": [
+          {
+            "if": {
+              "required": ["redistributable"],
+              "properties": {
+                "redistributable": { "const": false }
+              }
+            },
+            "then": {
+              "required": ["note"]
+            }
+          },
+          {
+            "if": {
+              "required": ["private"],
+              "properties": {
+                "private": { "const": true }
+              }
+            },
+            "then": {
+              "properties": {
+                "redistributable": { "const": false }
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

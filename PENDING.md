@@ -2,7 +2,7 @@
 
 ## Task queue (in order)
 
-1. [ ] `data-pipeline`: scripts and processed datasets with `source` + `retrieved_at` (resources, economy, population, provinces).
+1. [x] `data-pipeline`: scripts and processed datasets with `source` + `retrieved_at` (resources, economy, population, provinces).
 2. [x] `shell`: Vite app, tabs, Zustand store, keyboard map, scene state machine, 2D/3D toggle, province filter.
 3. [ ] `model-py`: population cohorts, growth accounting, resource pipeline, scenarios, AI multiplier, Monte Carlo fan.
 4. [ ] `backtest`: calibrate to 2005, evaluate 2006-2025, store baseline, CI gate.

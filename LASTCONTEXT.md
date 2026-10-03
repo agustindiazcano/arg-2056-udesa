@@ -1,16 +1,19 @@
 # Last Context
 
-**Current State**:
-- Finished `scene-resources` task. Implemented `EChart` wrapper, `DataTable` component, and chart builder functions (`buildTreemap`, `buildProvinceBars`, `buildTrend`).
-- Fixed all strict TypeScript and ESLint typing errors regarding generic props and `any` types.
-- Fixed React Testing Library test flakiness in `resourcesScene.test.tsx` by explicitly calling `unmount()` to ensure clean DOM between tests.
-- `python scripts/precheck.py` is fully green and passing all CI checks.
-- Code committed and pushed to `task/scene-resources` (PR #9).
+**Task completed**: Implemented the data pipeline (`task/data-pipeline`).
+- Created schemas `raw_manifest.schema.json` and `sources.schema.json`.
+- Implemented `manifest.py` for registering raw files and verifying `MANIFEST.json`.
+- Implemented `adapters/__init__.py` registry for processing raw data.
+- Implemented `runner.py` with `run_dataset` and `check_dataset` ensuring atomic commits to `processed/` and provenance tracking.
+- Implemented `provenance.py` to record sha256 hashes and verify data intactness.
+- Implemented `sources.py` for coverage tracking and generating `sources.json`.
+- Replaced `sync-mock.mjs` with `sync-data.mjs` overlaying `processed/` on top of `mock/` files.
+- Added file size limit and total size limit checking in `check_data_budget.py`.
+- Added strict dataset CLI via `__main__.py` with multiple endpoints (`run`, `check`, `register`, `verify-provenance`, `build-sources`).
+- Updated `check_no_mock.py` to verify `_manifest.json` from `web/public/data`.
+- Updated `precheck.py` to include `check_data_budget.py`.
+- Added documentation in `docs/data-pipeline.md`.
 
-**Decisions**:
-- Used explicit `unmount()` in DOM tests for Vitest to prevent component bleed.
-- Used `Record<string, unknown>` for `DataTable` generic parameter defaults instead of `any` to satisfy strict ESLint rules.
+**Next step**: A human needs to verify changes, test pipeline operation end-to-end, and merge the PR.
 
-**Next Step**:
-- Need the human to review and approve the PR.
-- Request the next task brief from the user (e.g., `data-pipeline.md` or `scene-forecast.md`), as there are no matching task files currently in `docs/tasks/`.
+**Status**: Tests pass and CI prechecks complete properly. No new dependencies introduced. TDD fully applied.
