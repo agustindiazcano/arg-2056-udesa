@@ -55,7 +55,7 @@ describe('Resources Scene', () => {
     expect(charts.length).toBeGreaterThanOrEqual(0);
     
     // Bottom projects table is always visible
-    expect(screen.getByText(/Investment Projects/)).toBeDefined();
+    expect(screen.getAllByText(/Investment Projects/).length).toBeGreaterThan(0);
     
     // Toggle table view for Treemap
     const tableToggleBtns = screen.getAllByText('Table view');
