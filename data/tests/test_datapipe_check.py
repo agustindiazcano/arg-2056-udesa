@@ -1,11 +1,13 @@
 import json
-from pathlib import Path
-import pytest
 import sys
+from pathlib import Path
+from typing import ClassVar
+
+import pytest
 
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 from scripts.datapipe.runner import check_dataset, run_dataset
-from scripts.datapipe.provenance import update_provenance
+
 
 def fake_build(files, manifest):
     return {
@@ -14,7 +16,7 @@ def fake_build(files, manifest):
 
 class FakeAdapter:
     DATASET_ID = "test_ds"
-    OUTPUTS = {"output1.json": "output1.schema.json"}
+    OUTPUTS: ClassVar[dict] = {"output1.json": "output1.schema.json"}
     build = staticmethod(fake_build)
 
 def test_check_clean(tmp_path):
@@ -25,11 +27,11 @@ def test_check_clean(tmp_path):
     (ds_dir / "MANIFEST.json").write_text(json.dumps({"dataset_id": "test_ds", "files": []}))
     
     # run first
-    code, msg = run_dataset("test_ds", raw_root, out_root, schemas_root, registry={"test_ds": FakeAdapter})
+    code, _msg = run_dataset("test_ds", raw_root, out_root, schemas_root, registry={"test_ds": FakeAdapter})
     assert code == 0
     
     # check
-    code, msg = check_dataset("test_ds", raw_root, out_root, schemas_root, registry={"test_ds": FakeAdapter})
+    code, _msg = check_dataset("test_ds", raw_root, out_root, schemas_root, registry={"test_ds": FakeAdapter})
     assert code == 0
 
 def test_check_modified_processed(tmp_path):

@@ -1,10 +1,11 @@
 import json
-from pathlib import Path
-import pytest
 import sys
+from pathlib import Path
+from typing import ClassVar
 
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
-from scripts.datapipe.runner import run_dataset, check_dataset
+from scripts.datapipe.runner import run_dataset
+
 
 def fake_build(files, manifest):
     return {
@@ -14,7 +15,7 @@ def fake_build(files, manifest):
 
 class FakeAdapter:
     DATASET_ID = "test_ds"
-    OUTPUTS = {
+    OUTPUTS: ClassVar[dict] = {
         "output1.json": "output1.schema.json",
         "output2.json": "output2.schema.json"
     }
@@ -51,7 +52,7 @@ def test_runner_success(tmp_path):
     (ds_dir / "MANIFEST.json").write_text(json.dumps(manifest))
 
     # Run
-    code, msg = run_dataset("test_ds", raw_root, out_root, schemas_root, registry={"test_ds": FakeAdapter})
+    code, _msg = run_dataset("test_ds", raw_root, out_root, schemas_root, registry={"test_ds": FakeAdapter})
     assert code == 0
     
     assert (out_root / "output1.json").exists()
@@ -137,7 +138,7 @@ def test_runner_atomic_write(tmp_path, monkeypatch):
     (schemas_root / "output1.schema.json").write_text(json.dumps(schema_content))
     (schemas_root / "output2.schema.json").write_text(json.dumps(schema_content))
 
-    code, msg = run_dataset("test_ds", raw_root, out_root, schemas_root, registry={"test_ds": BadSchemaAdapter})
+    code, _msg = run_dataset("test_ds", raw_root, out_root, schemas_root, registry={"test_ds": BadSchemaAdapter})
     assert code == 1
     assert not (out_root / "output1.json").exists()
     assert not (out_root / "output2.json").exists()

@@ -7,6 +7,8 @@ from .manifest import ManifestError, register_file
 from .provenance import verify_provenance
 from .runner import check_dataset, run_dataset
 from .sources import SourcesError, build_sources
+
+
 def main():
     parser = argparse.ArgumentParser(prog="datapipe")
     subparsers = parser.add_subparsers(dest="cmd", required=True)

@@ -2,6 +2,7 @@ import hashlib
 import json
 from pathlib import Path
 
+
 def _hash_file(path: Path) -> str:
     h = hashlib.sha256()
     with open(path, "rb") as f:

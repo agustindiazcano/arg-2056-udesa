@@ -10,6 +10,7 @@ from .adapters import REGISTRY
 from .manifest import ManifestError, verify_manifest
 from .provenance import _hash_file, update_provenance
 
+
 def run_dataset(dataset_id: str, raw_root: Path, out_root: Path, schemas_root: Path, registry=None) -> tuple[int, str]:
     if registry is None:
         registry = REGISTRY

@@ -7,6 +7,8 @@ import pytest
 
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 from scripts.datapipe.sources import SourcesError, build_sources, check_sources_coverage
+
+
 def test_sources_build(tmp_path):
     rs_dir = tmp_path / "research"
     out_file = tmp_path / "sources.json"

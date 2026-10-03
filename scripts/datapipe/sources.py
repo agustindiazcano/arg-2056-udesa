@@ -3,6 +3,7 @@ import json
 import urllib.parse
 from pathlib import Path
 
+
 class SourcesError(Exception):
     pass
 

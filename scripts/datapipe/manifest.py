@@ -3,6 +3,7 @@ import json
 import os
 from pathlib import Path
 
+
 class ManifestError(Exception):
     pass
 

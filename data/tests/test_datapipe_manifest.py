@@ -1,7 +1,9 @@
 import json
 from pathlib import Path
+
 import pytest
 from jsonschema import Draft202012Validator, FormatChecker
+
 
 def test_manifest_schema():
     schema_path = Path("data/schemas/raw_manifest.schema.json")
@@ -92,8 +94,10 @@ def test_manifest_schema():
     assert len(list(validator.iter_errors(invalid_extra))) > 0
 
 import sys
+
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
-from scripts.datapipe.manifest import verify_manifest, register_file, ManifestError
+from scripts.datapipe.manifest import ManifestError, register_file, verify_manifest
+
 
 def test_manifest_verification(tmp_path):
     dataset_dir = tmp_path / "test_data"
