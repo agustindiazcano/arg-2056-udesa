@@ -11,7 +11,7 @@ from jsonschema import Draft202012Validator, FormatChecker
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "scripts"))
 
-from datapipe.references import ReferencesError, build_references  # noqa: E402
+from datapipe.references import ReferencesError, build_references
 
 ROOT = Path(__file__).resolve().parents[2]
 SCHEMA = json.loads((ROOT / "data" / "schemas" / "references.schema.json").read_text(encoding="utf-8")) if (
@@ -203,9 +203,8 @@ def test_stats_are_exact(env):
 
 
 def test_a_single_object_file_with_a_source_counts_as_one_record(env):
-    env.write_sources([])
     env.write_data("forecast_output.json", {"source": "argmodel@1", "series": [{"x": 1}]})
-    refs = env.build()
+    refs = env.build()  # no sources.json yet
     assert refs["stats"]["published_files"] == 0  # no sources.json yet: zero stats
     env.write_sources([source("s:A", "https://example.com/a")])
     refs = env.build()

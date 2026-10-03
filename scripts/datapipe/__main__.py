@@ -5,6 +5,7 @@ from pathlib import Path
 from .adapters import REGISTRY
 from .manifest import ManifestError, register_file
 from .provenance import verify_provenance
+from .references import ReferencesError, build_references, write_references
 from .runner import check_dataset, run_dataset
 from .sources import SourcesError, build_sources
 
@@ -52,6 +53,14 @@ def main():
     p_bs.add_argument("--research-root", default="data/raw/research")
     p_bs.add_argument("--out", default="data/processed/sources.json")
     
+    # build-references
+    p_br = subparsers.add_parser("build-references")
+    p_br.add_argument("--sources", default="data/processed/sources.json")
+    p_br.add_argument("--data-dir", default="web/public/data")
+    p_br.add_argument("--terrain-dir", default="web/public/terrain")
+    p_br.add_argument("--geo-meta", default="web/public/geo/provinces.meta.json")
+    p_br.add_argument("--out", default="web/public/data/references.json")
+
     args = parser.parse_args()
     
     if args.cmd == "run":
@@ -119,5 +128,15 @@ def main():
             print(e)
             sys.exit(1)
             
+    elif args.cmd == "build-references":
+        try:
+            result = build_references(
+                Path(args.sources), Path(args.data_dir), Path(args.terrain_dir), Path(args.geo_meta)
+            )
+        except ReferencesError as e:
+            print(e)
+            sys.exit(1)
+        write_references(result, Path(args.out))
+
 if __name__ == "__main__":
     main()
