@@ -25,7 +25,7 @@ export type UiAction =
 
 export type Action = KeyAction | UiAction;
 
-const SPEEDS = [0.25, 0.5, 1, 2, 4, 8];
+export const SPEEDS: readonly number[] = [0.25, 0.5, 1, 2, 4, 8];
 const YEARS_PER_SECOND = 2;
 
 export function reduce(state: State, action: Action): State {
