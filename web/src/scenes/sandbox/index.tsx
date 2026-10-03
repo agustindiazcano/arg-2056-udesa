@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useReducer, useRef, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { buildDoublingCurve, DOUBLING_RATES } from '../../charts/builders/doublingCurve.js';
 import { buildSandboxPath } from '../../charts/builders/sandboxPath.js';
 import { DataTable } from '../../charts/DataTable.js';
@@ -21,7 +21,7 @@ import {
   userPath
 } from './selectors.js';
 import { sandboxReducer, ZERO_STATE } from './state.js';
-import type { SandboxState } from './state.js';
+import type { SandboxAction, SandboxState } from './state.js';
 
 const NO_DATA = 'no data';
 const PRESETS: Scenario[] = ['pessimistic', 'expected', 'optimistic'];
@@ -34,19 +34,19 @@ export default function Scene() {
 
   const { status, data } = useDataset('forecast_output', parseForecastOutput);
 
-  const [state, update] = useReducer(sandboxReducer, ZERO_STATE);
   const [target, setTarget] = useState(2);
   const [pathAsTable, setPathAsTable] = useState(false);
   const [curveAsTable, setCurveAsTable] = useState(false);
 
-  // The initial state is the expected preset (without the AI overlay), computed once when the forecast loads.
-  const initial = useRef<SandboxState | null>(null);
-  useEffect(() => {
-    if (data && initial.current === null) {
-      initial.current = scenarioPreset(data, { scenario: 'expected', aiOverlay: false }) ?? ZERO_STATE;
-      update({ type: 'reset', initial: initial.current });
-    }
+  // The initial state is the expected preset (without the AI overlay), known as soon as the forecast is loaded, so
+  // the sliders never flash zeros. What the visitor changes is kept on top of it.
+  const initial = useMemo<SandboxState>(() => {
+    const preset = data ? scenarioPreset(data, { scenario: 'expected', aiOverlay: false }) : null;
+    return preset ? sandboxReducer(ZERO_STATE, { type: 'applyPreset', preset }) : ZERO_STATE; // rounded to the step
   }, [data]);
+  const [changed, setChanged] = useState<SandboxState | null>(null);
+  const state = changed ?? initial;
+  const update = (action: SandboxAction) => setChanged(sandboxReducer(state, action));
 
   const baseResult = useMemo(() => (data ? basePoint(data, { scenario: 'expected' }) : null), [data]);
   const base = baseResult?.base ?? null;
@@ -154,7 +154,7 @@ export default function Scene() {
                 </button>
               );
             })}
-            <button onClick={() => update({ type: 'reset', initial: initial.current ?? ZERO_STATE })}>Reset</button>
+            <button onClick={() => update({ type: 'reset', initial })}>Reset</button>
           </div>
         </div>
 
