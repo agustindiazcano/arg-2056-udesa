@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
-import * as echarts from 'echarts';
+import { init } from './echarts.js';
+import type { ECharts } from './echarts.js';
 
 export interface ChartClickParams {
   name?: string;
@@ -18,7 +19,7 @@ interface EChartProps {
 
 export const EChart: React.FC<EChartProps> = ({ option, onClick, style, 'aria-label': ariaLabel, role = 'img' }) => {
   const chartRef = useRef<HTMLDivElement>(null);
-  const instanceRef = useRef<echarts.ECharts | null>(null);
+  const instanceRef = useRef<ECharts | null>(null);
   const onClickRef = useRef(onClick);
   onClickRef.current = onClick;
 
@@ -27,7 +28,7 @@ export const EChart: React.FC<EChartProps> = ({ option, onClick, style, 'aria-la
     
     // init
     if (!instanceRef.current) {
-      instanceRef.current = echarts.init(chartRef.current);
+      instanceRef.current = init(chartRef.current);
     }
     
     const chart = instanceRef.current;

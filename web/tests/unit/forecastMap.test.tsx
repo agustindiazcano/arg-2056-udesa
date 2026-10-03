@@ -23,7 +23,7 @@ const { instances, mockRegisterMap } = vi.hoisted(() => ({
   mockRegisterMap: vi.fn()
 }));
 
-vi.mock('echarts', () => ({
+vi.mock('../../src/charts/echarts.js', () => ({
   init: vi.fn(() => {
     const chart: FakeChart = { setOption: vi.fn(), dispose: vi.fn(), handlers: {} };
     instances.push(chart);

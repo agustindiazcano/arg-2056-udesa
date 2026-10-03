@@ -14,7 +14,7 @@ const { mockInit, mockSetOption, mockDispose } = vi.hoisted(() => {
   return { mockInit, mockSetOption, mockDispose };
 });
 
-vi.mock('echarts', () => ({ init: mockInit }));
+vi.mock('../../src/charts/echarts.js', () => ({ init: mockInit }));
 
 const doc = {
   model_version: 'mock-1',

@@ -14,7 +14,7 @@ const { mockInit, mockSetOption, mockDispose } = vi.hoisted(() => {
   return { mockInit, mockSetOption, mockDispose };
 });
 
-vi.mock('echarts', () => ({ init: mockInit }));
+vi.mock('../../src/charts/echarts.js', () => ({ init: mockInit }));
 
 const records = ['ARG', 'BRA', 'CHL'].flatMap((country, c) =>
   [1900, 1901].map((year, i) => ({
