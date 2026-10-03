@@ -1,6 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import crypto from 'node:crypto';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -65,7 +65,12 @@ export function syncData(mockDir, processedDir, destDir) {
   );
 }
 
-if (import.meta.url === `file://${process.argv[1]}`) {
+/** True when this module is the script node was started with (comparing file URLs works on Windows too). */
+export function isMainModule(moduleUrl, entryPath) {
+  return entryPath !== undefined && moduleUrl === pathToFileURL(path.resolve(entryPath)).href;
+}
+
+if (isMainModule(import.meta.url, process.argv[1])) {
   const root = path.join(__dirname, '..', '..');
   syncData(
     path.join(root, 'data', 'mock'),
