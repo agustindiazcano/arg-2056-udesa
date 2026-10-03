@@ -1,6 +1,6 @@
 Read roadmap.md to see whats next
 
-0. audit.md
+0. audit.md  [DONE - PR #17 merged]
 
 TARGET: <main | task slug | branch name>   (replace before sending)
 
@@ -26,7 +26,7 @@ Rules:
 When finished: write the report in the format of the brief, and a PR description with the verdict, the count of findings per severity, and the three findings I should read first.
 
 
-1. model-design.md
+1. model-design.md  [DONE - PR #18 merged]
 
 Before doing anything, read these files in this order:
 1. AGENTS.md
@@ -50,7 +50,7 @@ Rules:
 
 When finished: overwrite LASTCONTEXT.md, update PENDING.md as the brief says, and write a PR description with (a) what changed, (b) what was verified, (c) what the human must verify.v
 
-2. scene-forecast.md
+2. scene-forecast.md  [IN PROGRESS - branch task/scene-forecast]
 
 Before doing anything, read these files in this order:
 1. AGENTS.md
