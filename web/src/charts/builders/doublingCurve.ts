@@ -9,7 +9,8 @@ const MIN_RATE = 0.5;
 const MAX_RATE = 12;
 const STEP = 0.5;
 
-const RATES = Array.from({ length: Math.round((MAX_RATE - MIN_RATE) / STEP) + 1 }, (_, i) => MIN_RATE + i * STEP);
+/** The growth rates plotted by the curve and listed in its table view. */
+export const DOUBLING_RATES = Array.from({ length: Math.round((MAX_RATE - MIN_RATE) / STEP) + 1 }, (_, i) => MIN_RATE + i * STEP);
 
 export function buildDoublingCurve(opts: DoublingCurveOpts) {
   const { ratePct } = opts;
@@ -17,7 +18,7 @@ export function buildDoublingCurve(opts: DoublingCurveOpts) {
   const exact = {
     name: 'exact',
     type: 'line',
-    data: RATES.map((r) => [r, doublingYears(r)]),
+    data: DOUBLING_RATES.map((r) => [r, doublingYears(r)]),
     symbol: 'none',
     lineStyle: { color: tokens.ink, width: 2 },
     itemStyle: { color: tokens.ink },
@@ -26,7 +27,7 @@ export function buildDoublingCurve(opts: DoublingCurveOpts) {
   const approximate = {
     name: 'rule of 70',
     type: 'line',
-    data: RATES.map((r) => [r, rule70(r)]),
+    data: DOUBLING_RATES.map((r) => [r, rule70(r)]),
     symbol: 'none',
     lineStyle: { color: tokens.muted, width: 1, type: 'dashed' },
     itemStyle: { color: tokens.muted },
