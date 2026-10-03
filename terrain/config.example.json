@@ -1,0 +1,12 @@
+{
+  "dem_dataset_id": "fake_dem_dataset_replace_me",
+  "regions": [
+    {
+      "id": "fake_region_replace_me",
+      "bbox": [0.0, 0.0, 1.0, 1.0],
+      "max_size": 512
+    }
+  ],
+  "hillshade": { "azimuth_deg": 315, "altitude_deg": 45, "z_factor": 1.0 },
+  "max_bytes_per_region": 1500000
+}

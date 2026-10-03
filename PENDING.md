@@ -20,12 +20,13 @@
    13. [ ] `model-ts-port` (blocked by 5, 8)
    14. [ ] `model-provinces` (blocked by 9)
 6. [x] `scene-resources`: treemap, bars, critical resources, investment and production.
-7. [x] `scene-forecast`: 2056 fan, scenarios, province ranking, AI overlay, resource selector (PR open; choropleth moved to `scene-forecast-map`).
+7. [x] `scene-forecast`: 2056 fan, scenarios, province ranking, AI overlay, resource selector (merged; choropleth moved to `scene-forecast-map`).
    - [ ] `scene-forecast-map`: province choropleth. Blocked by province geometry (`geo-provinces`, real geometry committed by the human).
 8. [ ] `scene-economy`: growth since 1880s, LATAM ranking.
 9. [ ] `scene-ai-revolution`: sourced multiplier range, 10 and 20 year horizons.
 10. [ ] `scene-sandbox`: editable indicators, rule of 70 explainer, HDI and GDP per capita implications.
-11. [ ] `scene-andes`: terrain map, army particles, animation, speed, battle selection, side panel.
+10b. [ ] **Human step before `andes-integration`**: download the DEM, register it with `python -m datapipe register`, set the bounding boxes in `terrain/config.json`, run `python -m terrain bake`, run `python -m terrain verify` against the Andes facts, commit the outputs in `web/public/terrain/`. See `docs/terrain.md`.
+11. [ ] `scene-andes`: terrain map, army particles, animation, speed, battle selection, side panel (uses `web/src/terrain/`; blocked by the human step above).
 12. [ ] `polish`: bloom, easing, palette, transitions, reduced-motion, performance pass.
 
 ## Data to verify (human, against original source)
@@ -44,6 +45,8 @@
 ## Blocked / questions
 
 - [ ] Competition deadline and evaluation criteria.
+- [ ] `terrain-bake`: dependency exception (numpy, rasterio, Pillow pinned, only under `scripts/terrain/`) and the local precheck SKIP when they are missing: human decision.
+- [ ] `terrain-bake`: Earth radius 6,371,008.8 m for the hillshade ground distances was chosen by the tool (the brief gave none).
 - [ ] Mock `forecast_output` has province series only for `resource_production` (18 provinces, 6 resources); GDP, GDP per capita, population and HDI have national series only, so the province ranking is empty for them. Not extended, per the brief.
 - [ ] Acceptance item "arrows moving the year" conflicts with `KEY_MAP` (left and right arrows change scene); the year moves with play (Space) or the store. `KEY_MAP` was not changed.
 - [ ] Open decisions D-scen-1 to D-data-1 in section 9 of `docs/model-design.md`.
@@ -51,6 +54,7 @@
 
 ## Done
 
+- [x] `terrain-bake`: terrain baking tool (`scripts/terrain`), metadata schema, web loader (`web/src/terrain`), CI job `terrain`, `docs/terrain.md`. No real terrain committed.
 - [x] `research-contracts`: Draft 2020-12 schemas for research, TS types, mock data generation and precheck CI gates.
 - [x] `projections-contract`: schemas, tests, checks, mock generation, types and docs for production projections.
 - [x] `composition-contract`: schema, checks, types and mock data generator.
