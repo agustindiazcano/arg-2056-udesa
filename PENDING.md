@@ -21,7 +21,8 @@
    14. [ ] `model-provinces` (blocked by 9)
 6. [x] `scene-resources`: treemap, bars, critical resources, investment and production.
 7. [x] `scene-forecast`: 2056 fan, scenarios, province ranking, AI overlay, resource selector (merged; choropleth moved to `scene-forecast-map`).
-   - [ ] `scene-forecast-map`: province choropleth. Blocked by province geometry (`geo-provinces`, real geometry committed by the human).
+   - [ ] **Human step before `scene-forecast-map`**: choose the source, register the file, fill `geo/config.json`, run `npm run build:geo`, review the metadata, commit the outputs in `web/public/geo/`. See `docs/geo.md`.
+   - [ ] `scene-forecast-map`: province choropleth. Blocked by the human step above (real geometry committed by the human).
 8. [ ] `scene-economy`: growth since 1880s, LATAM ranking.
 9. [ ] `scene-ai-revolution`: sourced multiplier range, 10 and 20 year horizons.
 10. [ ] `scene-sandbox`: editable indicators, rule of 70 explainer, HDI and GDP per capita implications.
@@ -45,6 +46,7 @@
 ## Blocked / questions
 
 - [ ] Competition deadline and evaluation criteria.
+- [ ] `geo-provinces` decisions (human): source dataset and license; how the national territory is drawn; `target_max_bytes` and `max_area_change_pct` after seeing real results.
 - [ ] `terrain-bake`: dependency exception (numpy, rasterio, Pillow pinned, only under `scripts/terrain/`) and the local precheck SKIP when they are missing: human decision.
 - [ ] `terrain-bake`: Earth radius 6,371,008.8 m for the hillshade ground distances was chosen by the tool (the brief gave none).
 - [ ] Mock `forecast_output` has province series only for `resource_production` (18 provinces, 6 resources); GDP, GDP per capita, population and HDI have national series only, so the province ranking is empty for them. Not extended, per the brief.
@@ -54,6 +56,7 @@
 
 ## Done
 
+- [x] `geo-provinces`: build tool (`web/scripts/geo`), schemas, typed loader (`web/src/geo`), `docs/geo.md`. No real geometry committed.
 - [x] `terrain-bake`: terrain baking tool (`scripts/terrain`), metadata schema, web loader (`web/src/terrain`), CI job `terrain`, `docs/terrain.md`. No real terrain committed.
 - [x] `research-contracts`: Draft 2020-12 schemas for research, TS types, mock data generation and precheck CI gates.
 - [x] `projections-contract`: schemas, tests, checks, mock generation, types and docs for production projections.

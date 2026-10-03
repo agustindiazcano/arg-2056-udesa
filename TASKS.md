@@ -79,7 +79,7 @@ Rules:
 
 When finished: overwrite LASTCONTEXT.md, update PENDING.md, and write a PR description with (a) what changed, (b) what was verified, (c) what the human must verify (look and feel against docs/design.md, wording of the caveat and of the p10-p90 label, mock coverage).
 
-3. terrain-bake.md  [DONE - PR open, waiting for review]
+3. terrain-bake.md  [DONE - PR #20 merged]
 
 Before doing anything, read these files in this order:
 1. AGENTS.md
@@ -107,7 +107,7 @@ Rules:
 
 When finished: overwrite LASTCONTEXT.md, update PENDING.md, and write a PR description with (a) what changed, (b) what was verified, (c) what the human must verify.
 
-4. geo-provinces.md
+4. geo-provinces.md  [DONE - PR open, waiting for review]
 
 Before doing anything, read these files in this order:
 1. AGENTS.md

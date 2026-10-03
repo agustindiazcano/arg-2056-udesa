@@ -1,0 +1,18 @@
+{
+  "dataset_id": "fake_geo_dataset_replace_me",
+  "input_file": "fake_provinces_replace_me.geojson",
+  "id_property": "fake_code_replace_me",
+  "id_map": {
+    "FAKE-01": "AR-A", "FAKE-02": "AR-B", "FAKE-03": "AR-C", "FAKE-04": "AR-D",
+    "FAKE-05": "AR-E", "FAKE-06": "AR-F", "FAKE-07": "AR-G", "FAKE-08": "AR-H",
+    "FAKE-09": "AR-J", "FAKE-10": "AR-K", "FAKE-11": "AR-L", "FAKE-12": "AR-M",
+    "FAKE-13": "AR-N", "FAKE-14": "AR-P", "FAKE-15": "AR-Q", "FAKE-16": "AR-R",
+    "FAKE-17": "AR-S", "FAKE-18": "AR-T", "FAKE-19": "AR-U", "FAKE-20": "AR-V",
+    "FAKE-21": "AR-W", "FAKE-22": "AR-X", "FAKE-23": "AR-Y", "FAKE-24": "AR-Z"
+  },
+  "target_max_bytes": 300000,
+  "max_area_change_pct": 2,
+  "min_island_area_km2": 0,
+  "coordinate_decimals": 3,
+  "sanity_bounds": { "lon": [-1, 1], "lat": [-1, 1] }
+}

@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "geo_meta",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "source", "source_url", "retrieved_at", "license_or_terms", "attribution", "input_sha256",
+    "simplification", "dropped_polygons", "area_change_pct", "provinces_count", "generated_by"
+  ],
+  "properties": {
+    "source": { "type": "string", "minLength": 1 },
+    "source_url": { "type": ["string", "null"], "format": "uri" },
+    "retrieved_at": { "type": "string", "format": "date" },
+    "license_or_terms": { "type": ["string", "null"] },
+    "attribution": { "type": "string", "minLength": 1 },
+    "input_sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "simplification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["algorithm", "parameter", "vertices_before", "vertices_after", "bytes"],
+      "properties": {
+        "algorithm": { "type": "string", "minLength": 1 },
+        "parameter": { "type": "number", "minimum": 0 },
+        "vertices_before": { "type": "integer", "minimum": 0 },
+        "vertices_after": { "type": "integer", "minimum": 0 },
+        "bytes": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "dropped_polygons": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "area_km2"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^AR-[A-Z]$" },
+          "area_km2": { "type": "number", "minimum": 0 }
+        }
+      }
+    },
+    "area_change_pct": {
+      "type": "object",
+      "propertyNames": { "pattern": "^AR-[A-Z]$" },
+      "additionalProperties": { "type": "number", "minimum": 0 }
+    },
+    "provinces_count": { "const": 24 },
+    "generated_by": { "const": "web/scripts/geo" }
+  }
+}

@@ -1,22 +1,24 @@
 # Last Context
 
 ## State
-- Task `terrain-bake` on branch `task/terrain-bake`: the tool that bakes measured elevation (DEM GeoTIFF) into static terrain files, plus a renderer-agnostic web loader. No real DEM data and no real terrain output committed.
-- Python (`scripts/terrain/`): `config.py`, `mosaic.py` (manifest verification, mosaic), `resample.py` (crop, nodata fill, block-mean resample), `encode.py` (terrarium), `hillshade.py` (Horn), `bake.py` (orchestration, atomic writes, `verify_points`), `__main__.py` (CLI `bake` and `verify`). Tests in `scripts/terrain/tests/` (142), plus `data/schemas/terrain_meta.schema.json`.
-- Web (`web/src/terrain/`, `web/src/types/terrain.ts`): `parseTerrainMeta`, `decodeTerrarium`, `sampleElevation`, `lonLatToPixel`, `pixelToLonLat`, `elevationRange`, `loadTerrain` with injectable fetch and decoder. 33 Vitest tests.
-- Plumbing: `scripts/terrain/requirements.txt` (numpy, rasterio, Pillow, pinned), `scripts/precheck.py` step `terrain` (prints `SKIP terrain: install scripts/terrain/requirements.txt` when the packages are missing), root `pytest.ini` skips `terrain` directories, CI job `terrain` (always runs), `docs/terrain.md`, `terrain/config.example.json` (fake values).
-- TDD: each test commit precedes its implementation commit.
+- Task `geo-provinces` on branch `task/geo-provinces`: the build tool and typed loader for the geometry of the 24 provinces. No real geometry committed.
+- Build (`web/scripts/geo/`): `lib.ts` (config validation, input check, spherical area, island drop, topology simplification with budget search, quality gates, properties), `manifest.ts` (TypeScript port of `verify_manifest`), `build-provinces.ts` (CLI, `npm run build:geo`). Output: `web/public/geo/provinces.geojson` and `provinces.meta.json`, written atomically and byte-identical across runs.
+- Web (`web/src/geo/`): `parseProvincesGeo`, `checkProvinceIds`, `featureById`, `loadProvinces`, `parseGeoMeta`.
+- Schemas: `data/schemas/provinces_geo.schema.json`, `data/schemas/geo_meta.schema.json`. Docs: `docs/geo.md`. Example config with fake values: `geo/config.example.json`.
+- Dependencies added (exact versions, devDependencies only): topojson-server, topojson-simplify, topojson-client, their `@types` packages, tsx. No runtime dependency.
+- TDD: each test commit precedes its implementation commit. 108 new geo tests.
+- Already in `main` from the previous task (`terrain-bake`, PR #20): the DEM baking tool in `scripts/terrain`, the web loader in `web/src/terrain`, CI job `terrain` and `docs/terrain.md`. Its human step (download and register the DEM, set the boxes, bake, verify, commit the outputs) is in `PENDING.md`.
 
 ## Decisions (for the human)
-- Dependency exception and the local precheck skip.
-- Earth radius 6,371,008.8 m for hillshade ground distances (the brief gave none).
-- The crop snaps outward to whole pixels; the metadata `bbox` is the snapped box.
-- Hillshade borders use neighbours extrapolated linearly (exact for planes).
-- `verify` prints `outside bbox` for points outside the box or within half a pixel of its edge.
-- The Python schema test cannot check `format: uri` (no extra package); the TypeScript parser (ajv-formats) does.
-- Rejected tiles: different CRS, non-EPSG:4326, rotated, different pixel size, misaligned grid.
+- **The manifest check is a TypeScript port** of `scripts/datapipe/manifest.py` (same checks and reasons), because the brief asks for the data-pipeline loader but the tool runs in Node, the CI `web` job has no Python, and `datapipe` has no standalone verify command. Alternative: shell out to Python.
+- `area_km2` is computed from the original geometry (islands included); the area-change gate compares the geometry after the island drop with the simplified one, and dropped islands are reported separately.
+- Reported areas are rounded to 3 decimals, `area_change_pct` to 6, centroid and bbox to `coordinate_decimals`.
+- Simplification weight is the planar triangle area in square degrees (`topojson-simplify`); the parameter in the metadata is in those units.
+- The schema for `provinces.geojson` requires exactly 24 features; `checkProvinceIds` checks which ids.
+- The `format: uri` check is done by ajv-formats in the loader.
+- The three decisions of the brief (source dataset, how the national territory is drawn, budget and tolerance) are left to the human.
 
 ## Next step
-- Human: download and register the DEM, set the bounding boxes, bake, verify, commit the outputs (`docs/terrain.md`), before `andes-integration`.
-- Next in `TASKS.md`: `geo-provinces`.
-- Pushed, CI not checked. rasterio was only run on Windows locally.
+- Human: choose the source, register it, fill `geo/config.json`, run `npm run build:geo`, review the metadata, commit the outputs (`docs/geo.md`).
+- Next in `TASKS.md`: `scene-forecast-map` (needs this merged), `scene-economy`, `scene-sandbox`, `references-page`.
+- Pushed, CI not checked.
