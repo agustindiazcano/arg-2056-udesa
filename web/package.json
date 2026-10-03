@@ -13,6 +13,7 @@
     "data:sync": "node scripts/sync-data.mjs",
     "data:mock": "npm run data:sync",
     "build:geo": "tsx scripts/geo/build-provinces.ts",
+    "check:bundle": "tsx scripts/check-bundle.ts",
     "predev": "npm run data:sync",
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
