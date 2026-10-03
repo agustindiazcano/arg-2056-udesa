@@ -28,7 +28,8 @@
 8. [x] `scene-economy`: growth since 1880s, LATAM ranking (PR open).
    - [ ] **Human task before release**: the real era list with sources in `web/src/content/eras.ts` (today three placeholders; the release gate `scripts/check_no_mock.py --content` fails until they are replaced).
 9. [ ] `scene-ai-revolution`: sourced multiplier range, 10 and 20 year horizons.
-10. [ ] `scene-sandbox`: editable indicators, rule of 70 explainer, HDI and GDP per capita implications.
+10. [x] `scene-sandbox`: editable growth assumptions, rule of 70 explainer, comparison with the model range (PR open).
+   - [ ] (optional, later) plug the sandbox into the reduced TS model (`model-ts-port`) so it uses the model mechanics instead of plain compounding.
 10b. [ ] **Human step before `andes-integration`**: download the DEM, register it with `python -m datapipe register`, set the bounding boxes in `terrain/config.json`, run `python -m terrain bake`, run `python -m terrain verify` against the Andes facts, commit the outputs in `web/public/terrain/`. See `docs/terrain.md`.
 11. [ ] `scene-andes`: terrain map, army particles, animation, speed, battle selection, side panel (uses `web/src/terrain/`; blocked by the human step above).
 12. [ ] `polish`: bloom, easing, palette, transitions, reduced-motion, performance pass.
@@ -42,6 +43,8 @@
 - [ ] 34 entries A01-A34 in `docs/assumptions.md`, all unsourced. Human decides: A10, A13, A15, A16, A24, A26, A31, A32, A33.
 
 ## Visual debt (deliberately left rough until `polish`)
+
+- [ ] Sandbox scene: look and feel against `design.md`, slider layout, the band color (blue token at BAND_ALPHA), the worked-example panel.
 
 - [ ] Economy scene: look and feel against `design.md` (home country in `ink` and peers in `muted`), era band styling, the chips, the year slider, country labels are ISO codes (the dataset has no names).
 
@@ -63,6 +66,7 @@
 
 ## Done
 
+- [x] `scene-sandbox`: sandbox scene (sliders, presets, doubling curve, tiles, table views); illustrative arithmetic, not the model.
 - [x] `scene-economy`: economy scene (long-run chart, rank bars, rank history, tiles, table views, level and index modes) and the placeholder era list with its release gate.
 - [x] `scene-forecast-map`: province map in the forecast scene (Map and Ranking tabs, Level and Change modes, small-province markers, table view). Needs the real geometry for the manual check.
 - [x] `geo-provinces`: build tool (`web/scripts/geo`), schemas, typed loader (`web/src/geo`), `docs/geo.md`. No real geometry committed.

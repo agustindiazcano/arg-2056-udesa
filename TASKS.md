@@ -166,7 +166,7 @@ Rules:
 
 When finished: overwrite LASTCONTEXT.md, update PENDING.md, and write a PR description with (a) what changed, (b) what was verified, (c) what the human must verify.
 
-6. scene-economy.md  [DONE - PR open, waiting for review]
+6. scene-economy.md  [DONE - PR #23 merged]
 
 Before doing anything, read these files in this order:
 1. AGENTS.md
@@ -198,7 +198,7 @@ Rules:
 
 When finished: overwrite LASTCONTEXT.md, update PENDING.md, and write a PR description with (a) what changed, (b) what was verified, (c) what the human must verify.
 
-7. scene-sandbox.md
+7. scene-sandbox.md  [DONE - PR open, waiting for review]
 
 Before doing anything, read these files in this order:
 1. AGENTS.md
