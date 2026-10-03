@@ -34,7 +34,7 @@ function requireDataDir(): string {
 function presentFiles(): string[] {
   return fs
     .readdirSync(requireDataDir())
-    .filter((f) => !f.startsWith('_'))
+    .filter((f) => !f.startsWith('_') && !f.startsWith('.')) // dotfiles such as .gitkeep are not data
     .sort();
 }
 
