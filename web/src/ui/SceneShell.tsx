@@ -8,15 +8,17 @@ interface SceneShellProps {
   sources: readonly string[];
   /** ISO date the data was retrieved. */
   retrievedAt?: string;
+  /** What the date is: "consultado el" (default) for retrieved data, "generado el" for model output. */
+  dateLabel?: string;
   children?: React.ReactNode;
 }
 
 /** The frame every scene shares: the headline, the one-line subtitle, the content and the auditable source line. */
-export function SceneShell({ title, subtitle, sources, retrievedAt, children }: SceneShellProps) {
+export function SceneShell({ title, subtitle, sources, retrievedAt, dateLabel = 'consultado el', children }: SceneShellProps) {
   const source =
     sources.length === 0
       ? null
-      : `Fuente: ${sources.join(', ')}${retrievedAt ? `, consultado el ${formatDate(retrievedAt)}` : ''}`;
+      : `Fuente: ${sources.join(', ')}${retrievedAt ? `, ${dateLabel} ${formatDate(retrievedAt)}` : ''}`;
   return (
     <div className="scene">
       <header className="scene-head">

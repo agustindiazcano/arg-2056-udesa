@@ -6,6 +6,7 @@ import { DataTable } from '../../charts/DataTable.js';
 import { EChart } from '../../charts/EChart.js';
 import { formatValue } from '../../charts/format.js';
 import { ERAS } from '../../content/eras.js';
+import { indicatorLabel } from '../../content/labels.js';
 import { useDataset } from '../../data/useDataset.js';
 import { useStore } from '../../state/store.js';
 import { FilterBar, FilterChip } from '../../ui/FilterBar.js';
@@ -22,15 +23,6 @@ import type { LongRunMode } from './selectors.js';
 const HOME = 'ARG';
 const MAX_COUNTRIES = 8;
 const NO_DATA = 'sin datos';
-
-const INDICATOR_LABEL: Record<EconomyIndicator, string> = {
-  gdp_constant_usd: 'PIB',
-  gdp_per_capita_usd: 'PIB per cápita',
-  population: 'Población',
-  hdi: 'IDH',
-  exports_usd: 'Exportaciones',
-  imports_usd: 'Importaciones'
-};
 
 function unique<T>(items: T[]): T[] {
   return [...new Set(items)];
@@ -72,7 +64,7 @@ export default function Scene() {
     [records, indicator, selected, mode]
   );
   const year = clampYear(yearFloat, view?.years ?? []);
-  const label = indicator ? INDICATOR_LABEL[indicator] : '';
+  const label = indicator ? indicatorLabel(indicator) : '';
   const levelUnit = records.find((r) => r.indicator === indicator)?.unit ?? '';
 
   const rank = useMemo(
@@ -142,7 +134,7 @@ export default function Scene() {
       <FilterBar label="Indicador y vista">
         {indicators.map((i) => (
           <FilterChip key={i} pressed={i === indicator} onClick={() => setIndicatorChoice(i)}>
-            {INDICATOR_LABEL[i]}
+            {indicatorLabel(i)}
           </FilterChip>
         ))}
         <FilterChip pressed={mode === 'level'} onClick={() => setMode('level')}>

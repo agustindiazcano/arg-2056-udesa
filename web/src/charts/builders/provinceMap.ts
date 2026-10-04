@@ -1,3 +1,4 @@
+import { scenarioLabel } from '../../content/labels.js';
 import { MALVINAS_ID } from '../../geo/malvinas.js';
 import type { ProvincesGeo } from '../../geo/provinces.js';
 import { mapSummary } from '../../scenes/forecast/mapSelectors.js';
@@ -5,7 +6,7 @@ import type { MapMetric, MapValues } from '../../scenes/forecast/mapSelectors.js
 import { DIVERGING, NO_DATA, SEQUENTIAL_BLUE, tokens } from '../../styles/tokens.js';
 import { PROVINCES } from '../../types/province.js';
 import type { Scenario } from '../../types/scenario.js';
-import { formatValue } from '../format.js';
+import { formatPercent, formatValue } from '../format.js';
 
 /** Name under which the component registers the GeoJSON with echarts. */
 export const MAP_NAME = 'ar-provinces';
@@ -26,11 +27,6 @@ export interface ProvinceMapOpts {
   year: number;
 }
 
-const SCENARIO_LABEL: Record<Scenario, string> = {
-  pessimistic: 'Pessimistic',
-  expected: 'Expected',
-  optimistic: 'Optimistic'
-};
 
 const nameOf = (id: string) => PROVINCES.find((p) => p.id === id)?.name;
 
@@ -43,7 +39,7 @@ export function buildProvinceMap(input: ProvinceMapInput, opts: ProvinceMapOpts)
   const { geo, values, centroids, smallIds, unit, indicatorLabel } = input;
   const { metric, selectedId, scenario, year } = opts;
 
-  const show = (x: number) => (metric === 'level' ? formatValue(x, unit) : `${x.toFixed(1)}% per year`);
+  const show = (x: number) => (metric === 'level' ? formatValue(x, unit) : `${formatPercent(x)} por año`);
 
   const items = geo.features
     .map((f) => f.properties.id as string)
@@ -68,16 +64,16 @@ export function buildProvinceMap(input: ProvinceMapInput, opts: ProvinceMapOpts)
   const tooltipFormatter = (params: TooltipParams): string => {
     const id = params.data?.provinceId ?? params.name ?? '';
     if (id === MALVINAS_ID) {
-      return 'Malvinas Islands<br/>Territory shown for reference: illustrative outline, no data';
+      return 'Islas Malvinas<br/>Territorio mostrado como referencia: contorno ilustrativo, sin datos';
     }
     const name = nameOf(id) ?? id;
     const v = values.values[id];
-    if (!v) return `${name}<br/>no data`;
+    if (!v) return `${name}<br/>sin datos`;
     const lines = [name, show(v.plotted)];
     if (metric === 'level') {
-      lines.push(`p10 to p90: ${formatValue(v.p10, unit)} to ${formatValue(v.p90, unit)} (80% of simulated outcomes)`);
+      lines.push(`p10 a p90: ${formatValue(v.p10, unit)} a ${formatValue(v.p90, unit)} (80% de los resultados simulados)`);
     }
-    lines.push(`Rank ${v.rank}`, `${SCENARIO_LABEL[scenario]} scenario`);
+    lines.push(`Puesto ${v.rank}`, `Escenario ${scenarioLabel(scenario).toLowerCase()}`);
     return lines.join('<br/>');
   };
 
@@ -109,7 +105,7 @@ export function buildProvinceMap(input: ProvinceMapInput, opts: ProvinceMapOpts)
             bottom: 44,
             children: [
               { type: 'rect', shape: { width: 12, height: 12 }, style: { fill: NO_DATA, stroke: tokens.muted, lineWidth: 1 } },
-              { type: 'text', left: 18, top: -1, style: { text: 'No data', fill: tokens.ink2 } }
+              { type: 'text', left: 18, top: -1, style: { text: 'Sin datos', fill: tokens.ink2 } }
             ]
           }
         ]
