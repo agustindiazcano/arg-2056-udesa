@@ -13,11 +13,13 @@ import {
   Vector3
 } from 'three';
 import { projectFeatures, provinceStyle } from '../charts3d/mapGeometry';
+import type { ProjectionRequest } from '../charts3d/projection';
 import type { Map3DSpec } from '../charts3d/types';
 import { useQualityOptional } from '../runtime/CapabilityProvider';
 import { QUALITY_PRESETS } from '../runtime/capabilities';
 import { useReducedMotion } from '../runtime/useReducedMotion';
 import { SEQUENTIAL_BLUE, tokens } from '../styles/tokens';
+import { addProjection } from './projection';
 import { createStage } from './stage';
 
 const GROW_MS = 600;
@@ -27,7 +29,7 @@ const CLICK_SLOP = 4;
 const easeOutCubic = (t: number) => 1 - (1 - t) ** 3;
 
 /** The provinces extruded: height and color follow the value, the selected province rises, a click selects. */
-export function Map3D({ spec }: { spec: Map3DSpec }) {
+export function Map3D({ spec, projection }: { spec: Map3DSpec; projection?: ProjectionRequest }) {
   const hostRef = useRef<HTMLDivElement>(null);
   const tipRef = useRef<HTMLDivElement>(null);
   const onSelectRef = useRef(spec.onSelect);
@@ -42,8 +44,8 @@ export function Map3D({ spec }: { spec: Map3DSpec }) {
     const map = projectFeatures(spec.geo);
     const stage = createStage(host, {
       pixelRatioCap,
-      target: new Vector3(0, 0.5, 0),
-      radius: Math.max(7, map.bounds.height * 1.55),
+      target: new Vector3(0, 0.5 + (projection ? 0.8 : 0), 0),
+      radius: Math.max(7, map.bounds.height * 1.55) * (projection ? 1.9 : 1),
       theta: 0,
       phi: 0.8
     });
@@ -91,6 +93,20 @@ export function Map3D({ spec }: { spec: Map3DSpec }) {
       cancel = stage.animate(GROW_MS, setGrowth);
     }
 
+    // an optional projected title over the map (the projection test)
+    const stopProjection = projection
+      ? addProjection(stage, {
+          title: projection.title,
+          bounds: {
+            width: map.bounds.width,
+            depth: map.bounds.height,
+            height: Math.max(1, ...all.map((m) => m.userData.base as number))
+          },
+          reduced,
+          animated: quality?.tier !== 'low'
+        })
+      : () => {};
+
     // hover shows the name and the value; a click (not a drag) selects, a second click clears
     const raycaster = new Raycaster();
     const pointer = new Vector2();
@@ -136,13 +152,14 @@ export function Map3D({ spec }: { spec: Map3DSpec }) {
 
     return () => {
       cancel();
+      stopProjection();
       canvas.removeEventListener('pointermove', onMove);
       canvas.removeEventListener('pointerleave', onLeave);
       canvas.removeEventListener('pointerdown', onDown);
       canvas.removeEventListener('pointerup', onUp);
       stage.dispose();
     };
-  }, [spec.geo, spec.values, spec.metric, spec.selectedId, spec.formatValue, pixelRatioCap, reduced]);
+  }, [spec.geo, spec.values, spec.metric, spec.selectedId, spec.formatValue, projection?.title, quality?.tier, pixelRatioCap, reduced]);
 
   return (
     <div ref={hostRef} className="chart3d" role="img" aria-label={spec.summary} data-chart3d="map">

@@ -460,3 +460,65 @@
   margin: auto;
   color: var(--ink-2);
 }
+
+/* ---- Projection test (a modal with the 3D map and bars under a projected title) --------------------------------- */
+
+.projection-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background: color-mix(in srgb, var(--page) 78%, transparent);
+}
+
+.projection-dialog {
+  position: fixed;
+  inset: 3vh 3vw;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  gap: var(--space-sm);
+  padding: var(--space-md);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  color: var(--ink);
+}
+
+.projection-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-md);
+}
+
+.projection-head h2 {
+  margin: 0;
+}
+
+.projection-head p {
+  margin: 0;
+  color: var(--ink-2);
+  font-size: var(--font-sm);
+}
+
+.projection-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-md);
+  min-height: 0;
+}
+
+.projection-panel {
+  position: relative;
+  min-height: 0;
+  overflow: hidden;
+  background: var(--page);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+}
+
+@media (max-width: 960px) {
+  .projection-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr;
+  }
+}

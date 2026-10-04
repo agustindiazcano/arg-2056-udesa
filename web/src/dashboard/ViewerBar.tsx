@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import { Segmented } from '../ui/Segmented';
 import { useStore } from '../state/store';
 import { useDashPrefs } from './prefs';
 import type { Layout } from './prefs';
+import { ProjectionTestDialog } from './ProjectionTestDialog';
 
 const LAYOUTS: ReadonlyArray<{ value: `${Layout}`; label: string }> = [
   { value: '1', label: '1' },
@@ -28,6 +29,12 @@ export function ViewerBar() {
   const setExplore = useDashPrefs((s) => s.setExplore);
   const mode = useStore((s) => s.mode);
   const dispatch = useStore((s) => s.dispatch);
+  const [testOpen, setTestOpen] = useState(false);
+  const testButton = useRef<HTMLButtonElement>(null);
+  const closeTest = () => {
+    setTestOpen(false);
+    testButton.current?.focus();
+  };
 
   return (
     <div className="viewer-bar">
@@ -51,6 +58,12 @@ export function ViewerBar() {
         value={explore ? 'explore' : 'tour'}
         onChange={(value) => setExplore(value === 'explore')}
       />
+      {mode === '3d' && (
+        <button type="button" className="chip" ref={testButton} aria-haspopup="dialog" onClick={() => setTestOpen(true)}>
+          Test proyección
+        </button>
+      )}
+      {testOpen && <ProjectionTestDialog onClose={closeTest} />}
     </div>
   );
 }
