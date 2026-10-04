@@ -22,11 +22,13 @@ Every task below has a brief (`<slug>.md` in the repository root) and a prompt (
    13. [ ] `model-ts-port` (optional): BLOCKED by 5, 8
    14. [ ] `model-provinces`: BLOCKED by 9
 4. [x] `scene-resources`, `scene-forecast`, `scene-economy`, `scene-sandbox`: merged.
+   - [ ] Today the 2D province map draws nothing (no geometry committed) and Economy and Resources ignore the province filter (F3 fixes the filter).
    - [ ] **Human step before `scene-forecast-map` shows a map**: choose the source, register the file, fill `geo/config.json`, run `npm run build:geo`, review the metadata, commit the outputs in `web/public/geo/`. See `docs/geo.md`. When done, remove `MISSING_FOR_NOW` in `web/e2e/csp.spec.ts`.
    - [x] `scene-forecast-map`: province choropleth, level and change modes, markers, table view (with no geometry committed the scene shows the ranking and the fallback message). The `mode` field of the store (2D/3D) is ignored by the map.
-   - [ ] `scene-forecast-map-3d` (optional, draft brief): BLOCKED by `andes-integration`, the real geometry and the human's go.
+   - [x] `scene-forecast-map-3d`: superseded by `presentation-3d` (item 5b).
    - [ ] **Human task before release**: the real era list with sources in `web/src/content/eras.ts` (three placeholders today; the release gate `scripts/check_no_mock.py --content` fails until they are replaced).
    - [ ] (optional) plug the sandbox into the reduced TS model (`model-ts-port`).
+5b. [ ] `presentation-3d` (human decision: 3D is the default presentation, a narrated tour plus a free explore mode; 2D stays as the data view and the accessible alternative). Six PRs: engine, shell, charts A (fan, province bars, province map), story, charts B, Andes and zone map. BLOCKED by F2b (Spanish scenes, `SceneShell`, `TableToggle`, `FilterBar`) and by `D-3d-1` to `D-3d-5`; the map needs the real province geometry. Reference look: `test/dashboard_3d_PoC.html` (CDN, own data model: do not copy those).
 5. [ ] `scene-ai-revolution`: READY. Brief written (works on mock data; wires `ai_estimates.json`).
 6. [ ] **Human step before `andes-integration`**: download the DEM, register it with `python -m datapipe register`, set the bounding boxes in `terrain/config.json`, run `python -m terrain bake`, run `python -m terrain verify` against the Andes facts, commit the outputs in `web/public/terrain/`. See `docs/terrain.md`.
 7. [ ] `andes-integration` (the old `scene-andes`): BLOCKED by the terrain outputs and the renderer decision (`D-andes-1` to `D-andes-4`; the proof of concept in `test/map_test1.html` is Three.js loaded from a CDN, which the CSP forbids, so it must be bundled). Must use `useQuality`, `QUALITY_PRESETS`, `WebGLRequired` and `useReducedMotion` (`web/src/runtime/`).
@@ -79,7 +81,8 @@ Every task below has a brief (`<slug>.md` in the repository root) and a prompt (
 ## Blocked / questions
 
 - [ ] `D-res-3` (blocks `model-params`): ten value-added constants `v_r` (recommended, includes `other`) or nine as the design counts.
-- [ ] `D-andes-1` to `D-andes-4` (block `andes-integration`): renderer (Three.js bundled, MapLibre + deck.gl, or a mix), its dependency, the terrain as geometry source, the language of the scene.
+- [ ] `D-3d-1` to `D-3d-5` (block `presentation-3d`, see its section 5): Three.js bundled as the one 3D stack, first-load budget (poster first, or raise `chunk_max` on purpose), province geometry source and license (the PoC embeds 24 simplified provinces of unknown origin), typeface without Google fonts, tour length and scenes.
+- [ ] `D-andes-1` to `D-andes-4` (block `andes-integration`; `D-andes-1` is answered in practice by `D-3d-1`): renderer (Three.js bundled, MapLibre + deck.gl, or a mix), its dependency, the terrain as geometry source, the language of the scene.
 - [ ] `D-polish-1` to `D-polish-7` (block `polish`): UI language and locale, typeface, the real red arm, focus ring color, `--state-critical` as text, motion library (GSAP), scope of the pass.
 - [ ] `D-gdp-1` (blocks `data-economy-population`): GDP basis (constant USD and its base year, market versus PPP).
 - [ ] Competition deadline and evaluation criteria (block `docs-submission` and `demo-video`).

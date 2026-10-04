@@ -1,0 +1,1415 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Simulador Argentina 2046</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&display=swap">
+<style>
+/* Layout: escenario 3D a la izquierda con dock flotante de vidrio; panel de indicadores a la derecha (apilado en móvil). Un solo tema oscuro elegido a propósito: grafito casi negro, interfaz monocroma y color solo en los datos. */
+:root{
+  color-scheme:dark;
+  --bg:#07080b; --ink:#f5f5f7; --mute:#98989f; --dim:#6e6e76;
+  --surface:rgba(255,255,255,.045); --surface2:rgba(255,255,255,.08);
+  --glass:rgba(24,24,29,.58); --hair:rgba(255,255,255,.09);
+  --accent:#8fc1ff; --accent-ink:#0a0a0c;
+  --gold:#f0cf8a; --cobre:#ff9f68; --litio:#a9a4ff; --oro:#f0cf8a; --otros:#8e8e99; --good:#7ee0b0;
+  --f-ui:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display",Geist,system-ui,"Segoe UI",sans-serif;
+  --f-disp:-apple-system,BlinkMacSystemFont,"SF Pro Display",Geist,system-ui,"Segoe UI",sans-serif;
+  --f-code:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+}
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-ui);font-size:14px;line-height:1.45;overflow:hidden;-webkit-font-smoothing:antialiased;letter-spacing:-.006em}
+*{box-sizing:border-box}
+button{font:inherit;color:inherit;letter-spacing:inherit}
+
+.shell{display:grid;grid-template-rows:auto minmax(0,1fr);height:100%}
+.nav{position:relative;z-index:5;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:10px 20px;min-width:0;background:rgba(10,10,13,.72);-webkit-backdrop-filter:saturate(180%) blur(24px);backdrop-filter:saturate(180%) blur(24px);border-bottom:1px solid var(--hair)}
+.brand{display:flex;align-items:center;gap:10px;font:600 15px/1 var(--f-disp);letter-spacing:-.02em;white-space:nowrap}
+.brand::before{content:"";width:10px;height:10px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff,var(--accent) 55%,#4b7fd0);box-shadow:0 0 16px rgba(143,193,255,.75)}
+.pages{display:flex;gap:2px;padding:3px;background:var(--surface2);border-radius:999px;overflow-x:auto;min-width:0}
+.pbtn{flex:none;background:none;border:0;border-radius:999px;padding:6px 14px;cursor:pointer;font-size:13px;font-weight:500;color:var(--mute);white-space:nowrap;transition:background .2s,color .2s}
+.pbtn b{font-weight:600;font-size:11px;margin-right:7px;opacity:.6}
+.pbtn:hover{color:var(--ink)}
+.pbtn[aria-pressed="true"]{background:#f5f5f7;color:#0a0a0c;box-shadow:0 1px 6px rgba(0,0,0,.4)}
+
+.app{display:grid;grid-template-columns:minmax(0,1fr) 380px;min-height:0}
+.app.wide{grid-template-columns:minmax(0,1fr) 430px}
+.stage{position:relative;min-height:0;min-width:0;overflow:hidden;background:radial-gradient(80% 60% at 50% 16%,#1b1c25 0%,#0e0f14 55%,#07080b 100%)}
+#gl,#gl2{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none;cursor:grab}
+#gl:active,#gl2:active{cursor:grabbing}
+
+.hud-top{position:absolute;left:0;right:0;top:0;padding:22px 22px 0;display:flex;justify-content:space-between;gap:12px;align-items:flex-start;pointer-events:none}
+.cap{max-width:46ch;min-width:0}
+.kicker{font:600 11px/1 var(--f-ui);letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+.cap h1{margin:10px 0 8px;font:600 36px/1.03 var(--f-disp);letter-spacing:-.038em;text-wrap:balance;background:linear-gradient(180deg,#ffffff 25%,#a4a4b0);-webkit-background-clip:text;background-clip:text;color:transparent}
+.cap p{margin:0;color:var(--mute);font-size:14px;line-height:1.5;max-width:42ch}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:14px;font:500 12px var(--f-ui);color:var(--mute)}
+.legend i{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:7px;vertical-align:0}
+.hud-right{display:grid;gap:10px;justify-items:end;pointer-events:auto}
+.seg{display:inline-flex;gap:2px;padding:3px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid var(--hair);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px)}
+.seg button{background:none;border:0;padding:6px 14px;border-radius:999px;cursor:pointer;font-size:13px;font-weight:500;color:var(--mute);transition:background .2s,color .2s}
+.seg button:hover{color:var(--ink)}
+.seg button[aria-pressed="true"]{background:#f5f5f7;color:#0a0a0c}
+.mock{font:500 10.5px/1.35 var(--f-ui);letter-spacing:.03em;color:var(--gold);opacity:.85;text-align:right;max-width:26ch}
+
+.dock{position:absolute;left:16px;right:16px;bottom:16px;padding:12px 16px;display:grid;gap:10px;border-radius:24px;background:var(--glass);border:1px solid var(--hair);-webkit-backdrop-filter:saturate(180%) blur(28px);backdrop-filter:saturate(180%) blur(28px);box-shadow:0 24px 60px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.06)}
+.row1{display:flex;align-items:center;gap:14px;min-width:0}
+.play{flex:none;width:44px;height:44px;border-radius:50%;border:0;background:#f5f5f7;color:#0a0a0c;display:grid;place-items:center;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.45);transition:transform .15s}
+.play:hover{transform:scale(1.06)}
+.play:active{transform:scale(.95)}
+.time{flex:none;font:500 13px var(--f-ui);font-variant-numeric:tabular-nums;color:var(--ink);min-width:9ch;text-align:right}
+.row2{display:flex;gap:10px;align-items:center;justify-content:space-between;min-width:0}
+.chips,.cams2{display:flex;gap:6px;overflow-x:auto;min-width:0;padding-bottom:2px;scrollbar-width:none}
+.chips::-webkit-scrollbar,.cams2::-webkit-scrollbar{display:none}
+.chip{flex:none;background:rgba(255,255,255,.07);border:0;border-radius:999px;padding:6px 13px;font-size:12.5px;font-weight:500;cursor:pointer;color:var(--mute);white-space:nowrap;transition:background .2s,color .2s}
+.chip:hover{background:rgba(255,255,255,.12);color:var(--ink)}
+.chip[aria-pressed="true"]{background:#f5f5f7;color:#0a0a0c}
+.chip.done{color:var(--ink)}
+.speed{flex:none}
+.speed button{padding:5px 10px;font-size:12px;font-variant-numeric:tabular-nums}
+
+input[type=range]{-webkit-appearance:none;appearance:none;height:22px;margin:0;width:100%;min-width:0;background:transparent;cursor:pointer}
+input[type=range]::-webkit-slider-runnable-track{height:4px;border-radius:4px;background:linear-gradient(to right,#f5f5f7 0 var(--f,0%),rgba(255,255,255,.16) var(--f,0%) 100%)}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;margin-top:-7px;border:0;border-radius:50%;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.55)}
+input[type=range]::-moz-range-track{height:4px;border-radius:4px;background:linear-gradient(to right,#f5f5f7 0 var(--f,0%),rgba(255,255,255,.16) var(--f,0%) 100%)}
+input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radius:50%;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.55)}
+#scrub,#m-scrub{flex:1;min-width:0}
+
+.panel{background:rgba(14,14,18,.88);-webkit-backdrop-filter:blur(30px);backdrop-filter:blur(30px);border-left:1px solid var(--hair);overflow-y:auto;padding:22px 20px;display:grid;gap:28px;align-content:start;min-width:0;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.18) transparent}
+.panel h2{margin:0 0 12px;font:600 12px/1 var(--f-ui);letter-spacing:.06em;text-transform:uppercase;color:var(--dim)}
+.narr2{display:none;margin:0;font-size:13.5px;color:var(--mute)}
+.kpis{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.kpi{background:var(--surface);border:1px solid var(--hair);border-radius:18px;padding:14px 16px;min-width:0}
+.kpi span{display:block;font:500 11px/1.2 var(--f-ui);letter-spacing:.02em;color:var(--mute)}
+.kpi b{display:block;margin-top:8px;font:600 22px/1.08 var(--f-disp);letter-spacing:-.03em;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.kpi em{display:block;margin-top:5px;font:400 12px var(--f-ui);color:var(--dim);font-style:normal}
+.kpi.hl b{background:linear-gradient(180deg,#fff 10%,var(--accent));-webkit-background-clip:text;background-clip:text;color:transparent}
+.read{background:var(--surface);border:1px solid var(--hair);border-radius:18px;padding:16px;font-size:13.5px;line-height:1.5;display:grid;gap:10px}
+.read p{margin:0}
+.read strong{color:var(--accent);font-weight:600}
+.presets{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
+.btn{background:rgba(255,255,255,.07);border:0;color:var(--ink);padding:8px 15px;border-radius:999px;cursor:pointer;font-size:13px;font-weight:500;transition:background .2s,color .2s}
+.btn:hover{background:rgba(255,255,255,.12)}
+.btn[aria-pressed="true"]{background:#f5f5f7;color:#0a0a0c}
+.ctl{display:grid;gap:4px;margin-bottom:14px}
+.ctl label{display:flex;justify-content:space-between;gap:8px;font-size:13px}
+.ctl label output{font:500 12px var(--f-ui);font-variant-numeric:tabular-nums;color:var(--accent);white-space:nowrap}
+.ctl small{color:var(--dim);font-size:12px;line-height:1.4}
+.cams{display:flex;flex-wrap:wrap;gap:6px}
+details{background:var(--surface);border:1px solid var(--hair);border-radius:18px;padding:14px 16px;font-size:13px}
+details summary{cursor:pointer;font:600 12px var(--f-ui);letter-spacing:.06em;text-transform:uppercase;color:var(--mute)}
+details ul{margin:12px 0 0;padding-left:18px;display:grid;gap:6px;color:var(--mute)}
+details p{margin:12px 0 0;color:var(--mute);line-height:1.5}
+code{font:400 12px var(--f-code);color:var(--gold);overflow-wrap:anywhere}
+.nogl{position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:24px;color:var(--mute)}
+
+.chart{background:var(--surface);border:1px solid var(--hair);border-radius:18px;padding:14px 14px 10px}
+.chart svg{display:block;width:100%;height:auto;overflow:visible}
+.lg{display:flex;flex-wrap:wrap;gap:4px 14px;margin-top:8px;font:500 11.5px var(--f-ui);color:var(--mute)}
+.lg i{display:inline-block;width:14px;height:0;border-top:2px solid;margin-right:6px;vertical-align:3px}
+.lg i.dash{border-top-style:dashed}
+.lg i.blk{height:8px;border-top:0;width:8px;border-radius:50%;vertical-align:0}
+.note{color:var(--dim);font-size:12px;line-height:1.45;margin:10px 0 0}
+.rank{position:relative;height:208px}
+.rrow{position:absolute;left:0;right:0;top:0;height:22px;display:grid;grid-template-columns:96px minmax(0,1fr) 44px;gap:10px;align-items:center;font-size:12.5px;transition:transform .3s ease,opacity .3s ease}
+.rrow span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rrow .bar{height:8px;border-radius:4px;background:rgba(255,255,255,.08);position:relative}
+.rrow .bar i{position:absolute;left:0;top:0;bottom:0;border-radius:4px;display:block}
+.rrow .v{font:500 12px var(--f-ui);text-align:right;font-variant-numeric:tabular-nums}
+.rrow.sel span:first-child{color:var(--accent);font-weight:600}
+.tip{position:absolute;z-index:2;pointer-events:none;min-width:160px;padding:10px 12px;border-radius:14px;background:rgba(24,24,29,.86);border:1px solid var(--hair);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);box-shadow:0 12px 30px rgba(0,0,0,.5)}
+.tip b{display:block;margin-bottom:4px;font:600 13px var(--f-disp);letter-spacing:-.01em}
+.tip div{font:400 12px/1.5 var(--f-ui);color:var(--mute);font-variant-numeric:tabular-nums}
+.provcard{display:grid;gap:6px}
+.provcard p{margin:0}
+
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+@media (max-width:860px){
+  .app,.app.wide{grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(0,56%) minmax(0,1fr)}
+  .panel{border-left:0;border-top:1px solid var(--hair)}
+  .nav{padding:8px 14px}
+  .cap h1{font-size:23px;margin:8px 0 0}
+  .cap p,.legend{display:none}
+  .narr2{display:block}
+  .mock{display:none}
+  .hud-top{padding:14px 14px 0}
+  .dock{left:10px;right:10px;bottom:10px;padding:10px 12px;gap:8px;border-radius:20px}
+}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto;transition:none!important}}
+</style>
+
+<div class="shell">
+<nav class="nav" aria-label="Páginas">
+  <div class="brand">Argentina 2046</div>
+  <div class="pages" role="group" aria-label="Elegir página">
+    <button class="pbtn" id="pg1" aria-pressed="true"><b>1</b>Recorrido 3D</button>
+    <button class="pbtn" id="pg2" aria-pressed="false"><b>2</b>Mapa y proyecciones</button>
+  </div>
+</nav>
+<div class="app" id="page1">
+  <section class="stage" id="stage">
+    <canvas id="gl" aria-label="Simulación 3D interactiva: arrastrá para girar, rueda o pellizco para acercar"></canvas>
+    <div class="hud-top">
+      <div class="cap">
+        <div class="kicker" id="kicker"></div>
+        <h1 id="stitle"></h1>
+        <p id="narr"></p>
+        <div class="legend" id="legend"></div>
+      </div>
+      <div class="hud-right">
+        <div class="seg" role="group" aria-label="Modo">
+          <button id="mTour" aria-pressed="true">Recorrido</button>
+          <button id="mExp" aria-pressed="false">Explorar</button>
+        </div>
+        <div class="mock">Datos ilustrativos, no son proyecciones oficiales</div>
+      </div>
+    </div>
+    <div class="dock">
+      <div class="row1">
+        <button class="play" id="play" aria-label="Reproducir"></button>
+        <input type="range" id="scrub" min="0" max="1200" step="1" value="130" aria-label="Línea de tiempo">
+        <span class="time" id="time"></span>
+      </div>
+      <div class="row2">
+        <div class="chips" id="chips" role="group" aria-label="Escenas"></div>
+        <div class="seg speed" role="group" aria-label="Velocidad">
+          <button data-sp="0.5" aria-pressed="false">0.5×</button>
+          <button data-sp="1" aria-pressed="true">1×</button>
+          <button data-sp="2" aria-pressed="false">2×</button>
+        </div>
+      </div>
+    </div>
+    <div class="nogl" id="nogl" hidden>Este navegador no pudo iniciar WebGL. El panel de escenarios sigue disponible.</div>
+  </section>
+
+  <aside class="panel">
+    <p class="narr2" id="narr2"></p>
+    <section>
+      <h2>Indicadores</h2>
+      <div class="kpis">
+        <div class="kpi"><span>Año</span><b id="kYear">2026</b><em id="kYearSub">año base</em></div>
+        <div class="kpi"><span>Producción minera</span><b id="kMin">-</b><em id="kMinSub"></em></div>
+        <div class="kpi"><span>PBI</span><b id="kGdp">-</b><em id="kGdpSub"></em></div>
+        <div class="kpi hl"><span>PBI por habitante</span><b id="kPc">-</b><em id="kPcSub"></em></div>
+        <div class="kpi" style="grid-column:1 / -1"><span>Índice de desarrollo (estimado)</span><b id="kHdi">-</b><em id="kHdiSub"></em></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Si seguimos por este camino, en 2046</h2>
+      <div class="read" id="read"></div>
+    </section>
+
+    <section>
+      <h2>Escenario</h2>
+      <div class="presets" id="presets" role="group" aria-label="Escenarios">
+        <button class="btn" data-sc="cons" aria-pressed="false">Conservador</button>
+        <button class="btn" data-sc="base" aria-pressed="true">Base</button>
+        <button class="btn" data-sc="opt" aria-pressed="false">Optimista</button>
+      </div>
+      <div class="ctl">
+        <label for="pR">Expansión minera <output id="oR"></output></label>
+        <input type="range" id="pR" min="0.03" max="0.22" step="0.005">
+        <small>Ritmo inicial de crecimiento de cada proyecto, antes de llegar a su límite de reservas.</small>
+      </div>
+      <div class="ctl">
+        <label for="pG">Resto de la economía <output id="oG"></output></label>
+        <input type="range" id="pG" min="0" max="0.045" step="0.0025">
+        <small>Crecimiento anual de todo lo que no es minería.</small>
+      </div>
+      <div class="ctl">
+        <label for="pM">Efecto multiplicador <output id="oM"></output></label>
+        <input type="range" id="pM" min="1" max="5" step="0.05">
+        <small>Cuánto PBI mueve cada dólar minero entre proveedores, empleo y consumo.</small>
+      </div>
+    </section>
+
+    <section>
+      <h2>Cámara</h2>
+      <div class="cams" id="cams">
+        <button class="btn" data-cam="iso">Isométrica</button>
+        <button class="btn" data-cam="front">Frontal</button>
+        <button class="btn" data-cam="top">Cenital</button>
+        <button class="btn" data-cam="side">Lateral</button>
+        <button class="btn" id="autoRot" aria-pressed="true">Girar solo</button>
+      </div>
+      <p style="margin:10px 0 0;color:var(--mute);font-size:12px">Arrastrá para orbitar, rueda o pellizco para acercar. Tocá una escena pequeña para traerla al frente.</p>
+    </section>
+
+    <details>
+      <summary>Fuentes y método</summary>
+      <p>Los valores de partida (2026) son redondeos propios para ilustrar órdenes de magnitud. Para calibrar el modelo con datos reales:</p>
+      <ul>
+        <li>INDEC: cuentas nacionales, PBI y población (indec.gob.ar)</li>
+        <li>BCRA: series macro y REM (bcra.gob.ar)</li>
+        <li>Secretaría de Minería de la Nación: producción y exportaciones por provincia (argentina.gob.ar/economia/mineria)</li>
+        <li>USGS, Mineral Commodity Summaries: reservas de litio y cobre (usgs.gov)</li>
+        <li>Banco Mundial, WDI: PBI per cápita y umbral de ingreso alto (datos.worldbank.org)</li>
+        <li>FMI, World Economic Outlook: proyecciones por país (imf.org)</li>
+        <li>PNUD, Informe de Desarrollo Humano (hdr.undp.org)</li>
+        <li>CEPAL, CEPALSTAT (cepal.org) y Cochilco para cobre (cochilco.cl)</li>
+        <li>Marco de inversión: RIGI, Ley 27.742</li>
+      </ul>
+      <p>Modelo con pocos parámetros:<br>
+      <code>P = K / (1 + (K/P0 − 1) e^(−r·w·t))</code> por provincia (límite geológico K).<br>
+      <code>PBI = Resto0 (1+g)^t + μ · ΣP</code><br>
+      <code>Per cápita = PBI / población (0,5 % anual)</code><br>
+      <code>Índice = 0,862 + 0,08 · ln(pc / pc0)</code> (relación empírica a reemplazar por un ajuste real).</p>
+    </details>
+  </aside>
+</div>
+<div class="app wide" id="page2" hidden>
+  <section class="stage" id="stage2">
+    <canvas id="gl2" aria-label="Mapa 3D de Argentina: arrastrá para girar, rueda o pellizco para acercar, tocá una provincia para ver su detalle"></canvas>
+    <div class="hud-top">
+      <div class="cap">
+        <div class="kicker">Pantalla 2 · Mapa</div>
+        <h1 id="m-title">Minería y energía por provincia</h1>
+        <p id="m-narr"></p>
+        <div class="legend" id="m-legend"></div>
+      </div>
+      <div class="hud-right">
+        <div class="seg" role="group" aria-label="Capa del mapa">
+          <button data-layer="min" aria-pressed="false">Minería</button>
+          <button data-layer="oil" aria-pressed="false">Petróleo y gas</button>
+          <button data-layer="all" aria-pressed="true">Total</button>
+        </div>
+        <div class="mock">Datos ilustrativos, no son proyecciones oficiales</div>
+      </div>
+    </div>
+    <div class="tip" id="m-tip" hidden></div>
+    <div class="dock">
+      <div class="row1">
+        <button class="play" id="m-play" aria-label="Reproducir"></button>
+        <input type="range" id="m-scrub" min="0" max="200" step="1" value="120" aria-label="Año de la simulación">
+        <span class="time" id="m-time"></span>
+      </div>
+      <div class="row2">
+        <div class="cams2" id="m-cams" role="group" aria-label="Cámara">
+          <button class="chip" data-mcam="top">Cenital</button>
+          <button class="chip" data-mcam="persp">Perspectiva</button>
+          <button class="chip" data-mcam="east">Perfil E-O</button>
+          <button class="chip" data-mcam="south">Perfil N-S</button>
+          <button class="chip" id="m-auto" aria-pressed="false">Girar solo</button>
+        </div>
+        <div class="seg speed" role="group" aria-label="Velocidad">
+          <button data-msp="0.5" aria-pressed="false">0.5×</button>
+          <button data-msp="1" aria-pressed="true">1×</button>
+          <button data-msp="2" aria-pressed="false">2×</button>
+        </div>
+      </div>
+    </div>
+    <div class="nogl" id="m-nogl" hidden>Este navegador no pudo iniciar WebGL. Los gráficos del panel siguen disponibles.</div>
+  </section>
+
+  <aside class="panel">
+    <p class="narr2" id="m-narr2"></p>
+    <section>
+      <h2>Indicadores</h2>
+      <div class="kpis">
+        <div class="kpi"><span>Año</span><b id="m-kYear">2026</b><em id="m-kYearSub"></em></div>
+        <div class="kpi"><span>PBI</span><b id="m-kGdp">-</b><em id="m-kGdpSub"></em></div>
+        <div class="kpi"><span>Minería</span><b id="m-kMin">-</b><em id="m-kMinSub"></em></div>
+        <div class="kpi"><span>Petróleo y gas</span><b id="m-kOil">-</b><em id="m-kOilSub"></em></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>PBI proyectado por escenario</h2>
+      <div class="chart">
+        <div id="chA"></div>
+        <div class="lg">
+          <span><i style="border-color:#98989f"></i>Conservador</span>
+          <span><i style="border-color:#8fc1ff"></i>Base</span>
+          <span><i style="border-color:#7ee0b0"></i>Optimista</span>
+          <span><i style="border-color:#f0cf8a"></i>Tu escenario</span>
+        </div>
+      </div>
+      <p class="note">El PBI es el mismo de la pantalla 1. La energía ya está dentro del "resto de la economía".</p>
+    </section>
+
+    <section>
+      <h2>Producción nacional, US$ mil M por año</h2>
+      <div class="chart">
+        <div id="chB"></div>
+        <div class="lg">
+          <span><i class="blk" style="background:#ff9f68"></i>Minería</span>
+          <span><i class="blk" style="background:#5fd4c6"></i>Petróleo y gas</span>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2 id="m-rankH">Ranking de provincias</h2>
+      <div class="chart"><div class="rank" id="chC"></div></div>
+    </section>
+
+    <section>
+      <h2>Provincia seleccionada</h2>
+      <div class="read provcard" id="m-prov"></div>
+      <div class="chart" style="margin-top:8px">
+        <div id="chD"></div>
+        <div class="lg">
+          <span><i style="border-color:#ff9f68"></i>Minería</span>
+          <span><i style="border-color:#5fd4c6"></i>Petróleo y gas</span>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Escenario</h2>
+      <div class="presets" role="group" aria-label="Escenarios">
+        <button class="btn" data-msc="cons" aria-pressed="false">Conservador</button>
+        <button class="btn" data-msc="base" aria-pressed="true">Base</button>
+        <button class="btn" data-msc="opt" aria-pressed="false">Optimista</button>
+      </div>
+      <div class="ctl">
+        <label for="m-pR">Expansión minera <output id="m-oR"></output></label>
+        <input type="range" id="m-pR" min="0.03" max="0.22" step="0.005">
+      </div>
+      <div class="ctl">
+        <label for="m-pO">Expansión de petróleo y gas <output id="m-oO"></output></label>
+        <input type="range" id="m-pO" min="0.02" max="0.2" step="0.005">
+        <small>Ritmo inicial de crecimiento de cada cuenca. Vaca Muerta pesa más que el resto.</small>
+      </div>
+      <div class="ctl">
+        <label for="m-pG">Resto de la economía <output id="m-oG"></output></label>
+        <input type="range" id="m-pG" min="0" max="0.045" step="0.0025">
+      </div>
+      <div class="ctl">
+        <label for="m-pM">Efecto multiplicador de la minería <output id="m-oM"></output></label>
+        <input type="range" id="m-pM" min="1" max="5" step="0.05">
+      </div>
+      <p class="note">El escenario es el mismo en las dos pantallas.</p>
+    </section>
+
+    <details>
+      <summary>Notas del modelo</summary>
+      <p>Los límites provinciales provienen de Natural Earth (dominio público), simplificados. La producción por provincia es simulada: cada una crece en curva S hacia un techo de reservas, <code>P = K / (1 + (K/P0 − 1) e^(−r·w·t))</code>. Los techos K y los valores iniciales son supuestos propios para ilustrar, no datos oficiales.</p>
+      <p>Para reemplazarlos por datos reales: Secretaría de Minería (producción minera por provincia) y Secretaría de Energía (producción de petróleo y gas por cuenca y provincia), ambas en argentina.gob.ar, más INDEC para el PBI.</p>
+    </details>
+  </aside>
+</div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function(){
+'use strict';
+
+/* ---------- Datos y modelo ---------- */
+var Y0=2026, YEARS=20, SEG=24, NSC=5, TOUR_LEN=SEG*NSC;
+var GDP0=640, POP0=47.9, POPG=0.005;
+var INK='#f5f5f7', MUTE='#98989f', ACC='#8fc1ff';
+
+var MIN={
+  litio:{name:'Litio',color:0xa9a4ff,css:'#a9a4ff'},
+  cobre:{name:'Cobre',color:0xff9f68,css:'#ff9f68'},
+  oro:{name:'Oro y plata',color:0xf0cf8a,css:'#f0cf8a'},
+  otros:{name:'Otros',color:0x8e8e99,css:'#8e8e99'}
+};
+var PROV=[
+  {n:'Catamarca',K:12,P0:1.4,w:1.25,c:'litio'},
+  {n:'Jujuy',K:7,P0:0.9,w:1.1,c:'litio'},
+  {n:'Salta',K:8,P0:0.7,w:1.3,c:'litio'},
+  {n:'San Juan',K:16,P0:1.2,w:1.4,c:'cobre'},
+  {n:'Santa Cruz',K:6,P0:1.8,w:0.6,c:'oro'},
+  {n:'Mendoza',K:5,P0:0.15,w:1.0,c:'cobre'},
+  {n:'Otras',K:4,P0:0.4,w:0.8,c:'otros'}
+];
+var MIX=[
+  {k:'litio',K:14,P0:1.6,w:1.0},
+  {k:'cobre',K:22,P0:0.3,w:1.4},
+  {k:'oro',K:9,P0:2.8,w:0.5},
+  {k:'otros',K:6,P0:1.85,w:0.7}
+];
+var P0S=PROV.reduce(function(a,p){return a+p.P0;},0);
+var COUNTRIES=[
+  {n:'Uruguay',pc:23000,g:0.023},
+  {n:'Chile',pc:18000,g:0.022},
+  {n:'México',pc:14500,g:0.016},
+  {n:'Argentina',pc:GDP0/POP0*1000,g:0,arg:true},
+  {n:'Brasil',pc:10600,g:0.017},
+  {n:'Perú',pc:7600,g:0.027},
+  {n:'Colombia',pc:7500,g:0.026}
+];
+var SCEN={
+  cons:{r:0.07,g0:0.012,mu:3.05,ro:0.06},
+  base:{r:0.12,g0:0.025,mu:3.05,ro:0.10},
+  opt:{r:0.17,g0:0.032,mu:3.05,ro:0.15}
+};
+var params={r:0.12,g0:0.025,mu:3.05,ro:0.10};
+var listeners=[];
+var N0=0, series=[];
+
+function logi(K,P0,r,t){return K/(1+(K/P0-1)*Math.exp(-r*t));}
+function stateAt(t,q){
+  q=q||params;
+  var P=0;
+  var prov=PROV.map(function(p){var v=logi(p.K,p.P0,q.r*p.w,t);P+=v;return v;});
+  var n0=GDP0-q.mu*P0S;
+  var M=q.mu*P, N=n0*Math.pow(1+q.g0,t), gdp=N+M;
+  var pop=POP0*Math.pow(1+POPG,t), pc=gdp/pop*1000;
+  var hdi=Math.min(0.97,0.862+0.08*Math.log(pc/COUNTRIES[3].pc));
+  return {t:t,prov:prov,P:P,M:M,N:N,gdp:gdp,pop:pop,pc:pc,hdi:hdi};
+}
+function mixShares(t){
+  var v=MIX.map(function(m){return logi(m.K,m.P0,params.r*m.w,t);});
+  var s=v.reduce(function(a,b){return a+b;},0);
+  return v.map(function(x){return x/s;});
+}
+function recompute(){
+  N0=GDP0-params.mu*P0S;
+  series=[];
+  for(var y=0;y<=YEARS;y++)series.push(stateAt(y));
+}
+function countryVal(c,t){return c.arg?stateAt(t).pc:c.pc*Math.pow(1+c.g,t);}
+
+var nf=function(v,d){d=d||0;return v.toLocaleString('es-AR',{minimumFractionDigits:d,maximumFractionDigits:d});};
+var fmtGdp=function(bn){return bn>=1000?('US$ '+nf(bn/1000,2)+' billones'):('US$ '+nf(bn,0)+' mil M');};
+var fmtPc=function(v){return 'US$ '+nf(v,0);};
+var clamp=function(v,a,b){return Math.max(a,Math.min(b,v));};
+
+/* ---------- Three.js ---------- */
+var stage=document.getElementById('stage'), cv=document.getElementById('gl');
+var renderer, scene, camera;
+try{
+  renderer=new THREE.WebGLRenderer({canvas:cv,antialias:true,alpha:true});
+}catch(e){
+  document.getElementById('nogl').hidden=false;
+}
+scene=new THREE.Scene();
+camera=new THREE.PerspectiveCamera(42,1,0.1,200);
+scene.add(new THREE.AmbientLight(0xffffff,0.6));
+var sun=new THREE.DirectionalLight(0xffffff,0.85); sun.position.set(6,12,9); scene.add(sun);
+scene.add(new THREE.HemisphereLight(0xaab4d4,0x15151a,0.4)); var rim=new THREE.DirectionalLight(0x8fc1ff,0.4); rim.position.set(-8,6,-9); scene.add(rim);
+
+var allLabels=[];
+function mkLabel(text,opt){
+  opt=opt||{};
+  var c=document.createElement('canvas'); c.width=512; c.height=128;
+  var tex=new THREE.CanvasTexture(c); tex.minFilter=THREE.LinearFilter;
+  var mat=new THREE.SpriteMaterial({map:tex,transparent:true,depthWrite:false});
+  var s=new THREE.Sprite(mat);
+  var w=opt.w||3.2; s.scale.set(w,w/4,1);
+  s.userData={c:c,tex:tex,text:null,opt:opt};
+  allLabels.push(s);
+  setLabel(s,text);
+  return s;
+}
+function drawLabel(s,text){
+  var d=s.userData, x=d.c.getContext('2d');
+  x.clearRect(0,0,d.c.width,d.c.height);
+  x.font=(d.opt.weight||500)+' '+(d.opt.px||48)+'px -apple-system, BlinkMacSystemFont, "SF Pro Display", Geist, system-ui, sans-serif';
+  x.textAlign='center'; x.textBaseline='middle'; x.lineJoin='round';
+  x.lineWidth=9; x.strokeStyle='rgba(7,8,11,0.85)';
+  x.strokeText(text,d.c.width/2,d.c.height/2);
+  x.fillStyle=d.opt.color||INK;
+  x.fillText(text,d.c.width/2,d.c.height/2);
+  d.tex.needsUpdate=true;
+}
+function setLabel(s,text){
+  if(s.userData.text===text)return;
+  s.userData.text=text; drawLabel(s,text);
+}
+if(document.fonts&&document.fonts.ready){
+  document.fonts.ready.then(function(){allLabels.forEach(function(s){drawLabel(s,s.userData.text||'');});});
+}
+
+var H=5.2, PW=13.4;
+var unitBox=new THREE.BoxGeometry(1,1,1);
+function plate(g,d){
+  var m=new THREE.Mesh(new THREE.BoxGeometry(PW,0.2,d),new THREE.MeshStandardMaterial({color:0x17171c,roughness:0.9}));
+  m.position.y=-0.1; g.add(m);
+  var grid=new THREE.GridHelper(PW,Math.round(PW*1.5),0x2c2c34,0x202027);
+  grid.scale.z=d/PW; grid.position.y=0.005; g.add(grid);
+}
+function axisWall(g,ticks,vmax,d,fmt,unit){
+  var pts=[];
+  ticks.forEach(function(v){
+    var y=v/vmax*H;
+    pts.push(-PW/2,y,-d/2, PW/2,y,-d/2);
+    var l=mkLabel(fmt(v),{w:2.4,px:46,color:MUTE});
+    l.position.set(-PW/2-1.05,y,-d/2); g.add(l);
+  });
+  var geo=new THREE.BufferGeometry();
+  geo.setAttribute('position',new THREE.Float32BufferAttribute(pts,3));
+  g.add(new THREE.LineSegments(geo,new THREE.LineBasicMaterial({color:0x3a3a44,transparent:true,opacity:0.75})));
+  var wall=new THREE.Mesh(new THREE.PlaneGeometry(PW,H),new THREE.MeshBasicMaterial({color:0x1d1d24,transparent:true,opacity:0.28,side:THREE.DoubleSide}));
+  wall.position.set(0,H/2,-d/2-0.01); g.add(wall);
+  if(unit){var u=mkLabel(unit,{w:3.6,px:40,color:MUTE}); u.position.set(-PW/2-0.6,H+0.55,-d/2); g.add(u);}
+}
+function std(color,extra){
+  var o={color:color,roughness:0.38,metalness:0.1,clearcoat:0.55,clearcoatRoughness:0.3};
+  if(extra)for(var k in extra)o[k]=extra[k];
+  return new THREE.MeshPhysicalMaterial(o);
+}
+
+/* Escena 0: barras de minería por provincia */
+function sceneMining(){
+  var g=new THREE.Group(), d=7.4; plate(g,d);
+  axisWall(g,[0,4,8,12,16],16,d,function(v){return ''+v;},'US$ mil M por año');
+  var bars=PROV.map(function(p,i){
+    var x=(i-(PROV.length-1)/2)*1.75;
+    var m=new THREE.Mesh(unitBox,std(MIN[p.c].color)); m.position.x=x; g.add(m);
+    var val=mkLabel('',{w:2.6,px:54,weight:500}); g.add(val);
+    var nm=mkLabel(p.n,{w:2.6,px:44,color:MUTE}); nm.position.set(x,0.3,1.55); g.add(nm);
+    return {m:m,val:val,x:x};
+  });
+  return {group:g,update:function(t){
+    PROV.forEach(function(p,i){
+      var v=logi(p.K,p.P0,params.r*p.w,t), h=Math.max(v/16*H,0.03), b=bars[i];
+      b.m.scale.set(1.15,h,1.15); b.m.position.y=h/2;
+      b.val.position.set(b.x,h+0.5,0); setLabel(b.val,nf(v,1));
+    });
+  }};
+}
+
+/* Escena 1: torta del mix minero */
+function scenePie(){
+  var g=new THREE.Group(), d=7.4; plate(g,d);
+  var slices=MIX.map(function(m){
+    var mesh=new THREE.Mesh(new THREE.CylinderGeometry(1,1,1,4),std(MIN[m.k].color)); g.add(mesh);
+    var lb=mkLabel('',{w:3.2,px:50}); g.add(lb);
+    return {mesh:mesh,lb:lb};
+  });
+  var total=mkLabel('',{w:4.4,px:56,color:ACC}); g.add(total);
+  var lastKey='', R=3.1;
+  return {group:g,update:function(t){
+    var sh=mixShares(t), s=stateAt(t), h=0.7+s.P/40*3;
+    var key=sh.map(function(x){return x.toFixed(3);}).join(',')+h.toFixed(2);
+    var start=0;
+    slices.forEach(function(sl,i){
+      var len=sh[i]*Math.PI*2, mid=start+len/2;
+      if(key!==lastKey){
+        sl.mesh.geometry.dispose();
+        sl.mesh.geometry=new THREE.CylinderGeometry(R,R,h,56,1,false,start,Math.max(len,0.001));
+      }
+      var dx=Math.sin(mid), dz=Math.cos(mid);
+      sl.mesh.position.set(dx*0.14,h/2,dz*0.14);
+      sl.lb.position.set(dx*R*0.62,h+0.55,dz*R*0.62);
+      setLabel(sl.lb,MIN[MIX[i].k].name+' '+nf(sh[i]*100,0)+' %');
+      start+=len;
+    });
+    lastKey=key;
+    total.position.set(0,h+1.9,0); setLabel(total,'US$ '+nf(s.P,1)+' mil M');
+  }};
+}
+
+/* Escenas 2 y 3: columnas por año */
+function sceneColumns(kind){
+  var g=new THREE.Group(), d=6.4; plate(g,d);
+  var gdp=kind==='gdp', vmax=gdp?1600:36000;
+  axisWall(g,gdp?[0,400,800,1200,1600]:[0,9000,18000,27000,36000],vmax,d,
+    function(v){return gdp?nf(v,0):(v===0?'0':(v/1000)+'k');},gdp?'US$ mil M':'US$ por habitante');
+  var sp=0.6, cols=[];
+  for(var y=0;y<=YEARS;y++){
+    var x=(y-10)*sp, c={x:x};
+    if(gdp){
+      c.a=new THREE.Mesh(unitBox,std(0x5b6b9a,{transparent:true}));
+      c.b=new THREE.Mesh(unitBox,std(0xf0cf8a,{transparent:true}));
+      c.a.position.x=c.b.position.x=x;
+      c.a.scale.set(0.46,1,0.5); c.b.scale.set(0.46,1,0.5);
+      g.add(c.a); g.add(c.b);
+    }else{
+      c.a=new THREE.Mesh(unitBox,std(0x8fc1ff,{transparent:true}));
+      c.a.position.x=x; c.a.scale.set(0.46,1,0.5); g.add(c.a);
+    }
+    cols.push(c);
+    if(y%5===0){var yl=mkLabel(''+(Y0+y),{w:2,px:44,color:MUTE}); yl.position.set(x,0.28,1.1); g.add(yl);}
+  }
+  var val=mkLabel('',{w:3.6,px:50}); g.add(val);
+  var refs=[];
+  if(!gdp){
+    [{v:14000,t:'Umbral ingreso alto ~14k',c:0xf0cf8a},{v:18000,t:'Chile hoy 18k',c:0xa9a4ff},{v:23000,t:'Uruguay hoy 23k',c:0x7ee0b0}].forEach(function(r){
+      var h=r.v/vmax*H;
+      var ln=new THREE.Mesh(new THREE.BoxGeometry(12.6,0.04,0.04),new THREE.MeshBasicMaterial({color:r.c}));
+      ln.position.set(0,h,0.8); g.add(ln);
+      var lb=mkLabel(r.t,{w:4.2,px:38,color:'#'+('000000'+r.c.toString(16)).slice(-6)});
+      lb.position.set(4.3,h+0.3,0.8); g.add(lb);
+    });
+  }
+  return {group:g,update:function(t){
+    var idx=clamp(Math.round(t),0,YEARS);
+    cols.forEach(function(c,y){
+      var s=series[y], o;
+      if(y<=t)o=1; else if(y-t<1)o=0.22+0.78*(1-(y-t)); else o=0.22;
+      if(gdp){
+        var hN=Math.max(s.N/vmax*H,0.02), hM=Math.max(s.M/vmax*H,0.02);
+        c.a.scale.y=hN; c.a.position.y=hN/2; c.b.scale.y=hM; c.b.position.y=hN+hM/2;
+        c.a.material.opacity=o; c.b.material.opacity=o;
+      }else{
+        var h=Math.max(s.pc/vmax*H,0.02);
+        c.a.scale.y=h; c.a.position.y=h/2; c.a.material.opacity=o;
+      }
+    });
+    var s2=series[idx], top=gdp?(s2.gdp/vmax*H):(s2.pc/vmax*H);
+    val.position.set(cols[idx].x,top+0.7,0);
+    setLabel(val,gdp?(Y0+idx)+'  '+fmtGdp(s2.gdp).replace('US$ ',''):(Y0+idx)+'  '+fmtPc(s2.pc));
+  }};
+}
+
+/* Escena 4: ranking regional */
+function sceneRegion(){
+  var g=new THREE.Group(), d=7.4; plate(g,d);
+  axisWall(g,[0,10000,20000,30000,40000],40000,d,function(v){return v===0?'0':(v/1000)+'k';},'US$ por habitante');
+  var bars=COUNTRIES.map(function(c){
+    var m=new THREE.Mesh(unitBox,std(c.arg?0x8fc1ff:0x5f6675,c.arg?{emissive:0x1f3b66}:null)); g.add(m);
+    var val=mkLabel('',{w:2.6,px:50,color:c.arg?ACC:INK}); g.add(val);
+    var nm=mkLabel(c.n,{w:2.6,px:46,color:c.arg?ACC:MUTE,weight:c.arg?600:500}); g.add(nm);
+    return {c:c,m:m,val:val,nm:nm,x:0,init:false};
+  });
+  return {group:g,update:function(t,dt){
+    var vals=bars.map(function(b){return countryVal(b.c,t);});
+    var order=bars.map(function(b,i){return i;}).sort(function(a,b){return vals[b]-vals[a];});
+    var k=1-Math.exp(-(dt||0.016)*7);
+    order.forEach(function(bi,rank){
+      var b=bars[bi], tx=(rank-(bars.length-1)/2)*1.75;
+      if(!b.init){b.x=tx;b.init=true;} else b.x+=(tx-b.x)*k;
+      var h=Math.max(vals[bi]/40000*H,0.03);
+      b.m.scale.set(1.15,h,1.15); b.m.position.set(b.x,h/2,0);
+      b.val.position.set(b.x,h+0.5,0); setLabel(b.val,nf(vals[bi]/1000,1)+'k');
+      b.nm.position.set(b.x,0.3,1.55);
+    });
+  }};
+}
+
+var scenes=[sceneMining(),scenePie(),sceneColumns('gdp'),sceneColumns('pc'),sceneRegion()];
+scenes.forEach(function(s,i){s.group.userData.idx=i; scene.add(s.group);});
+
+/* ---------- Definición narrativa de cada escena ---------- */
+function mineralLegend(){return Object.keys(MIN).map(function(k){return {c:MIN[k].css,t:MIN[k].name};});}
+var SC=[
+  {chip:'Minería',title:'Minería por provincia',legend:mineralLegend(),
+   narr:function(t){
+     var s=stateAt(t), best=0;
+     s.prov.forEach(function(v,i){if(v>s.prov[best])best=i;});
+     return 'Producción minera de '+nf(s.P,1)+' mil M US$ por año en '+(Y0+Math.floor(t))+' (hoy '+nf(P0S,1)+'). Lidera '+PROV[best].n+' con '+nf(s.prov[best],1)+'.';}},
+  {chip:'Mix',title:'Mix minero',legend:mineralLegend(),
+   narr:function(t){
+     var sh=mixShares(t), s0=mixShares(0);
+     return 'En '+(Y0+Math.floor(t))+', el litio pesa '+nf(sh[0]*100,0)+' %, el cobre '+nf(sh[1]*100,0)+' % (hoy '+nf(s0[1]*100,0)+' %) y el oro y la plata '+nf(sh[2]*100,0)+' %.';}},
+  {chip:'PBI',title:'PBI proyectado',legend:[{c:'#5b6b9a',t:'Resto de la economía'},{c:'#f0cf8a',t:'Minería y su cadena'},{c:'#6b6b78',t:'Columnas tenues: proyección'}],
+   narr:function(t){
+     var s=stateAt(t);
+     return 'PBI de '+fmtGdp(s.gdp)+' en '+(Y0+Math.floor(t))+', '+nf(s.gdp/GDP0,2)+' veces el de hoy. La minería y su cadena explican '+nf(s.M/s.gdp*100,0)+' % (hoy '+nf(series[0].M/GDP0*100,0)+' %).';}},
+  {chip:'Per cápita',title:'PBI por habitante',legend:[{c:'#8fc1ff',t:'Argentina por habitante'},{c:'#f0cf8a',t:'Umbral de ingreso alto'},{c:'#a9a4ff',t:'Chile hoy'},{c:'#7ee0b0',t:'Uruguay hoy'}],
+   narr:function(t){
+     var s=stateAt(t), txt;
+     if(s.pc>=23000)txt='Ya supera el nivel actual de Uruguay.';
+     else if(s.pc>=18000)txt='Ya supera el nivel actual de Chile.';
+     else if(s.pc>=14000)txt='Ya cruzó el umbral de ingreso alto.';
+     else txt='Todavía por debajo del umbral de ingreso alto (~14 mil).';
+     return fmtPc(s.pc)+' por habitante en '+(Y0+Math.floor(t))+'. '+txt+' Índice de desarrollo estimado: '+nf(s.hdi,3)+'.';}},
+  {chip:'Región',title:'Argentina en la región',legend:[{c:'#8fc1ff',t:'Argentina'},{c:'#5f6675',t:'Resto de la región'}],
+   narr:function(t){
+     var vals=COUNTRIES.map(function(c){return countryVal(c,t);}), a=vals[3];
+     var rank=1+vals.filter(function(v){return v>a;}).length;
+     return 'En '+(Y0+Math.floor(t))+' Argentina ocupa el puesto '+rank+' de 7 con '+fmtPc(a)+'. Chile: '+fmtPc(vals[1])+'. Uruguay: '+fmtPc(vals[0])+'.';}}
+];
+
+/* ---------- Cámara ---------- */
+var cam={theta:0.55,phi:1.08,zoom:1,gt:0.55,gp:1.08,gz:1,auto:true,drag:false,last:-10};
+var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+if(reduce)cam.auto=false;
+var radBase=21, target=new THREE.Vector3(0,2.6,0);
+var CAMS={iso:{t:0.55,p:1.08},front:{t:0,p:1.25},top:{t:0,p:0.3},side:{t:1.45,p:1.15}};
+function placeCamera(){
+  var r=radBase*cam.zoom;
+  camera.position.set(target.x+r*Math.sin(cam.phi)*Math.sin(cam.theta),target.y+r*Math.cos(cam.phi),target.z+r*Math.sin(cam.phi)*Math.cos(cam.theta));
+  camera.lookAt(target);
+}
+function resize(){
+  var r=stage.getBoundingClientRect(), w=Math.max(1,r.width), h=Math.max(1,r.height);
+  if(renderer){renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2)); renderer.setSize(w,h,false);}
+  camera.aspect=w/h; camera.updateProjectionMatrix();
+  var a=w/h; radBase=a>=1.3?21:21*Math.pow(1.3/a,0.85);
+}
+if(window.ResizeObserver)new ResizeObserver(resize).observe(stage); else window.addEventListener('resize',resize);
+
+var pts=new Map(), moved=0, pinchD=0, clock0=performance.now();
+function now(){return (performance.now()-clock0)/1000;}
+function pdist(){var a=Array.from(pts.values());return Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y);}
+cv.addEventListener('pointerdown',function(e){
+  try{cv.setPointerCapture(e.pointerId);}catch(_){}
+  pts.set(e.pointerId,{x:e.clientX,y:e.clientY});
+  if(pts.size===1)moved=0;
+  cam.drag=true; cam.last=now();
+  if(pts.size===2)pinchD=pdist();
+});
+cv.addEventListener('pointermove',function(e){
+  var p=pts.get(e.pointerId); if(!p)return;
+  var dx=e.clientX-p.x, dy=e.clientY-p.y; p.x=e.clientX; p.y=e.clientY;
+  moved+=Math.abs(dx)+Math.abs(dy);
+  if(pts.size===1){cam.gt-=dx*0.007; cam.gp=clamp(cam.gp-dy*0.006,0.12,1.5);}
+  else if(pts.size===2){var d=pdist(); if(pinchD>0)cam.gz=clamp(cam.gz*pinchD/d,0.5,1.8); pinchD=d;}
+  cam.last=now();
+});
+function endPtr(e){
+  if(!pts.has(e.pointerId))return;
+  pts.delete(e.pointerId);
+  if(pts.size===0){cam.drag=false; if(moved<6&&e.type==='pointerup')pick(e);}
+  pinchD=0;
+}
+cv.addEventListener('pointerup',endPtr);
+cv.addEventListener('pointercancel',endPtr);
+cv.addEventListener('wheel',function(e){
+  e.preventDefault(); cam.gz=clamp(cam.gz*Math.exp(e.deltaY*0.0012),0.5,1.8); cam.last=now();
+},{passive:false});
+
+var ray=new THREE.Raycaster(), ndc=new THREE.Vector2();
+function pick(e){
+  var r=cv.getBoundingClientRect();
+  ndc.set(((e.clientX-r.left)/r.width)*2-1,-((e.clientY-r.top)/r.height)*2+1);
+  ray.setFromCamera(ndc,camera);
+  var minis=scenes.filter(function(s,i){return i!==focus&&s.group.visible;}).map(function(s){return s.group;});
+  var hits=ray.intersectObjects(minis,true);
+  if(!hits.length)return;
+  var o=hits[0].object;
+  while(o&&o.userData.idx===undefined)o=o.parent;
+  if(o)gotoScene(o.userData.idx);
+}
+
+/* ---------- Estado de reproducción ---------- */
+var mode='tour', playing=false, preview=true, tourT=13, T=0, focus=0, speed=1;
+var scrubBusy=false;
+var el=function(id){return document.getElementById(id);};
+var playBtn=el('play'), scrub=el('scrub');
+var ICON_PLAY='<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>';
+var ICON_PAUSE='<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1" fill="currentColor"/><rect x="14" y="5" width="4" height="14" rx="1" fill="currentColor"/></svg>';
+
+function setPlayUI(){
+  playBtn.innerHTML=playing?ICON_PAUSE:ICON_PLAY;
+  playBtn.setAttribute('aria-label',playing?'Pausar':'Reproducir');
+}
+function togglePlay(){
+  if(!playing){
+    if(preview){tourT=0;preview=false;}
+    else if(mode==='tour'&&tourT>=TOUR_LEN-0.01)tourT=0;
+    else if(mode==='explore'&&T>=YEARS-0.01)T=0;
+  }
+  playing=!playing; setPlayUI();
+}
+function gotoScene(i){
+  preview=false;
+  if(mode==='tour')tourT=i*SEG; else focus=i;
+  if(mode==='explore'&&T>=YEARS-0.01){T=0;}
+}
+function setMode(m){
+  if(m===mode)return;
+  mode=m;
+  if(m==='tour'){tourT=clamp(focus*SEG+2+T,0,TOUR_LEN);}
+  el('mTour').setAttribute('aria-pressed',m==='tour');
+  el('mExp').setAttribute('aria-pressed',m==='explore');
+  scrub.max=m==='tour'?TOUR_LEN*10:YEARS*10;
+  syncScrub(true);
+}
+function syncScrub(force){
+  if(scrubBusy&&!force)return;
+  scrub.value=Math.round((mode==='tour'?tourT:T)*10);
+}
+playBtn.addEventListener('click',togglePlay);
+el('mTour').addEventListener('click',function(){setMode('tour');});
+el('mExp').addEventListener('click',function(){setMode('explore');});
+scrub.addEventListener('pointerdown',function(){scrubBusy=true;});
+scrub.addEventListener('pointerup',function(){scrubBusy=false;});
+scrub.addEventListener('input',function(){
+  preview=false;
+  var v=parseFloat(scrub.value)/10;
+  if(mode==='tour')tourT=v; else T=v;
+});
+document.querySelectorAll('[data-sp]').forEach(function(b){
+  b.addEventListener('click',function(){
+    speed=parseFloat(b.dataset.sp);
+    document.querySelectorAll('[data-sp]').forEach(function(x){x.setAttribute('aria-pressed',x===b);});
+  });
+});
+document.addEventListener('keydown',function(e){
+  if(e.code==='Space'&&!el('page1').hidden&&!/^(INPUT|BUTTON|SUMMARY|SELECT|TEXTAREA)$/.test(e.target.tagName)){e.preventDefault();togglePlay();}
+});
+
+/* Chips de escenas */
+var chipsEl=el('chips');
+SC.forEach(function(s,i){
+  var b=document.createElement('button'); b.className='chip'; b.textContent=s.chip;
+  b.addEventListener('click',function(){gotoScene(i);});
+  chipsEl.appendChild(b);
+});
+
+/* Escenario y cámara */
+function syncParamsUI(){
+  el('pR').value=params.r; el('pG').value=params.g0; el('pM').value=params.mu;
+  el('oR').textContent=nf(params.r*100,1)+' % anual';
+  el('oG').textContent=nf(params.g0*100,2)+' % anual';
+  el('oM').textContent=nf(params.mu,2)+'×';
+  var match=null;
+  Object.keys(SCEN).forEach(function(k){var s=SCEN[k]; if(Math.abs(s.r-params.r)<1e-6&&Math.abs(s.g0-params.g0)<1e-6&&Math.abs(s.mu-params.mu)<1e-6&&Math.abs(s.ro-params.ro)<1e-6)match=k;});
+  document.querySelectorAll('[data-sc]').forEach(function(b){b.setAttribute('aria-pressed',b.dataset.sc===match);});
+}
+function paramsChanged(){recompute();syncParamsUI();renderRead();listeners.forEach(function(f){f();});}
+document.querySelectorAll('[data-sc]').forEach(function(b){
+  b.addEventListener('click',function(){var s=SCEN[b.dataset.sc]; params.r=s.r;params.g0=s.g0;params.mu=s.mu;params.ro=s.ro; paramsChanged();});
+});
+el('pR').addEventListener('input',function(e){params.r=parseFloat(e.target.value);paramsChanged();});
+el('pG').addEventListener('input',function(e){params.g0=parseFloat(e.target.value);paramsChanged();});
+el('pM').addEventListener('input',function(e){params.mu=parseFloat(e.target.value);paramsChanged();});
+document.querySelectorAll('[data-cam]').forEach(function(b){
+  b.addEventListener('click',function(){var c=CAMS[b.dataset.cam]; cam.gt=c.t; cam.gp=c.p; cam.gz=1; cam.last=now();});
+});
+var autoBtn=el('autoRot');
+autoBtn.setAttribute('aria-pressed',cam.auto);
+autoBtn.addEventListener('click',function(){cam.auto=!cam.auto; autoBtn.setAttribute('aria-pressed',cam.auto);});
+
+/* Lectura a 20 años */
+function renderRead(){
+  var s=series[YEARS], s0=series[0];
+  var today=COUNTRIES.filter(function(c){return !c.arg;}).sort(function(a,b){return a.pc-b.pc;});
+  var below=today.filter(function(c){return c.pc<=s.pc;}), above=today.filter(function(c){return c.pc>s.pc;});
+  var top=below.length?below[below.length-1]:null, nxt=above.length?above[0]:null;
+  var vals=COUNTRIES.map(function(c){return countryVal(c,YEARS);}), a=vals[3];
+  var rank=1+vals.filter(function(v){return v>a;}).length;
+  var line2='';
+  if(top&&nxt)line2='Quedaría por encima del nivel actual de <strong>'+top.n+'</strong> ('+fmtPc(top.pc)+') y por debajo del de <strong>'+nxt.n+'</strong> ('+fmtPc(nxt.pc)+').';
+  else if(top)line2='Quedaría por encima del nivel actual de todos los países comparados.';
+  else line2='Seguiría por debajo del nivel actual de todos los países comparados.';
+  el('read').innerHTML=
+    '<p>PBI de <strong>'+fmtGdp(s.gdp)+'</strong> ('+nf(s.gdp/s0.gdp,2)+'× el actual) y <strong>'+fmtPc(s.pc)+'</strong> por habitante ('+nf(s.pc/s0.pc,2)+'×).</p>'+
+    '<p>'+line2+'</p>'+
+    '<p>Puesto <strong>'+rank+' de 7</strong> en la región en 2046 (hoy: 4°). Índice de desarrollo estimado: <strong>'+nf(s.hdi,3)+'</strong>.</p>';
+}
+
+/* HUD */
+var last={};
+function setText(id,v){if(last[id]!==v){last[id]=v;el(id).textContent=v;}}
+function updateHud(){
+  var st=stateAt(T), s0=series[0], yr=Y0+Math.floor(T+1e-6);
+  var sc=SC[focus];
+  setText('kicker','Escena '+(focus+1)+' de '+NSC);
+  setText('stitle',sc.title);
+  var n=sc.narr(T);
+  setText('narr',n); setText('narr2',n);
+  if(last.legend!==focus){
+    last.legend=focus;
+    el('legend').innerHTML=sc.legend.map(function(l){return '<span><i style="background:'+l.c+'"></i>'+l.t+'</span>';}).join('');
+  }
+  setText('kYear',''+yr); setText('kYearSub',yr===Y0?'año base':('+'+(yr-Y0)+' años'));
+  setText('kMin','US$ '+nf(st.P,1)+' mil M'); setText('kMinSub',nf(st.P/s0.P,1)+'× hoy');
+  setText('kGdp',fmtGdp(st.gdp)); setText('kGdpSub',nf(st.gdp/s0.gdp,2)+'× hoy');
+  setText('kPc',fmtPc(st.pc)); setText('kPcSub',nf(st.pc/s0.pc,2)+'× hoy');
+  setText('kHdi',nf(st.hdi,3)); setText('kHdiSub','hoy '+nf(s0.hdi,3));
+  var mm=function(sec){var m=Math.floor(sec/60), s=Math.floor(sec%60);return m+':'+(s<10?'0':'')+s;};
+  setText('time',mode==='tour'?(mm(tourT)+' · '+yr):(''+yr));
+  chipsEl.childNodes.forEach(function(c,i){
+    var p=String(i===focus);
+    if(c.getAttribute('aria-pressed')!==p)c.setAttribute('aria-pressed',p);
+    c.classList.toggle('done',mode==='tour'&&i<focus);
+  });
+}
+
+/* ---------- Bucle ---------- */
+function yearFor(i){
+  if(mode==='tour')return i===focus?T:(i<focus?YEARS:0);
+  return T;
+}
+function layout(dt){
+  var k=1-Math.exp(-dt*5), slot=0, m=NSC-1;
+  scenes.forEach(function(s,i){
+    var g=s.group, tp, ts;
+    if(i===focus){tp=[0,0,0];ts=1;}
+    else{
+      tp=[(slot-(m-1)/2)*4.3,7.6,-2.6]; slot++;
+      ts=(mode==='tour'&&i>focus)?0:0.27;
+    }
+    g.position.x+=(tp[0]-g.position.x)*k;
+    g.position.y+=(tp[1]-g.position.y)*k;
+    g.position.z+=(tp[2]-g.position.z)*k;
+    var sc=g.scale.x+(ts-g.scale.x)*k; g.scale.setScalar(Math.max(sc,0.0001));
+    g.visible=sc>0.02;
+  });
+}
+var prev=performance.now();
+function frame(nowMs){
+  if(el('page1').hidden){prev=nowMs;requestAnimationFrame(frame);return;}
+  var dt=Math.min(0.05,(nowMs-prev)/1000); prev=nowMs;
+  if(playing){
+    if(mode==='tour'){tourT=Math.min(TOUR_LEN,tourT+dt*speed); if(tourT>=TOUR_LEN){playing=false;setPlayUI();}}
+    else{T=Math.min(YEARS,T+dt*speed); if(T>=YEARS){playing=false;setPlayUI();}}
+  }
+  if(mode==='tour'){
+    var seg=Math.min(NSC-1,Math.floor(tourT/SEG));
+    focus=seg;
+    T=clamp((tourT-seg*SEG-2)/20,0,1)*YEARS;
+  }
+  syncScrub(false);
+  layout(dt);
+  scenes.forEach(function(s,i){if(s.group.visible)s.update(yearFor(i),dt);});
+  updateHud();
+  var kk=1-Math.exp(-dt*8);
+  if(cam.auto&&!cam.drag&&now()-cam.last>2.5)cam.gt+=dt*0.07;
+  cam.theta+=(cam.gt-cam.theta)*kk; cam.phi+=(cam.gp-cam.phi)*kk; cam.zoom+=(cam.gz-cam.zoom)*kk;
+  placeCamera();
+  if(renderer&&!document.hidden)renderer.render(scene,camera);
+  requestAnimationFrame(frame);
+}
+
+/* Inicio */
+window.SIM={params:params,SCEN:SCEN,PROV:PROV,MIN:MIN,stateAt:stateAt,nf:nf,fmtGdp:fmtGdp,fmtPc:fmtPc,clamp:clamp,mkLabel:mkLabel,setLabel:setLabel,YEARS:YEARS,Y0:Y0,P0S:P0S,listeners:listeners,apply:function(){paramsChanged();}};
+recompute(); syncParamsUI(); renderRead(); setPlayUI(); resize();
+scrub.max=TOUR_LEN*10; syncScrub(true);
+if(renderer)requestAnimationFrame(function(t){prev=t;frame(t);});
+else{updateHud();}
+})();
+</script>
+<script>(function(){var rs=[].slice.call(document.querySelectorAll("input[type=range]"));function p(){rs.forEach(function(e){var v=((e.value-e.min)/(e.max-e.min)*100).toFixed(1)+"%";if(e._p!==v){e._p=v;e.style.setProperty("--f",v);}});requestAnimationFrame(p);}p();})();</script>
+<script type="application/json" id="geo">{"Entre Ríos":{"c":[-59.21,-32.04],"p":[[[-5820,-3245,-5822,-3253,-5818,-3283,-5814,-3290,-5815,-3305,-5820,-3309,-5838,-3308,-5843,-3310,-5841,-3330,-5851,-3341,-5855,-3368,-5854,-3375,-5846,-3386,-5844,-3398,-5845,-3401,-5864,-3405,-5903,-3383,-5923,-3380,-5927,-3372,-5939,-3374,-5952,-3366,-5960,-3368,-5977,-3361,-5984,-3353,-6012,-3339,-6050,-3312,-6068,-3285,-6071,-3268,-6077,-3258,-6071,-3216,-6066,-3207,-6072,-3192,-6067,-3185,-6065,-3172,-6041,-3167,-6016,-3144,-6006,-3127,-5972,-3083,-5966,-3074,-5962,-3057,-5961,-3046,-5966,-3034,-5939,-3031,-5924,-3034,-5900,-3020,-5888,-3023,-5859,-3015,-5823,-3025,-5807,-3042,-5799,-3060,-5780,-3077,-5781,-3091,-5791,-3095,-5786,-3106,-5791,-3117,-5791,-3124,-5799,-3140,-5808,-3148,-5799,-3155,-5799,-3164,-5806,-3181,-5815,-3184,-5820,-3189,-5815,-3202,-5819,-3215,-5810,-3228]]]},"Salta":{"c":[-64.82,-24.29],"p":[[[-6728,-2383,-6725,-2373,-6708,-2383,-6687,-2405,-6677,-2410,-6668,-2420,-6650,-2424,-6639,-2414,-6635,-2404,-6634,-2372,-6641,-2352,-6638,-2339,-6635,-2337,-6626,-2339,-6599,-2353,-6599,-2372,-6603,-2385,-6600,-2394,-6596,-2399,-6590,-2398,-6576,-2408,-6575,-2418,-6558,-2441,-6528,-2450,-6516,-2445,-6506,-2455,-6492,-2460,-6483,-2446,-6462,-2461,-6450,-2448,-6430,-2440,-6418,-2424,-6418,-2353,-6437,-2351,-6444,-2362,-6456,-2351,-6466,-2345,-6480,-2350,-6487,-2350,-6495,-2331,-6504,-2327,-6501,-2303,-6506,-2299,-6518,-2298,-6523,-2295,-6529,-2273,-6527,-2264,-6535,-2259,-6519,-2210,-6502,-2210,-6459,-2221,-6454,-2228,-6457,-2234,-6443,-2254,-6445,-2264,-6436,-2275,-6433,-2287,-6425,-2254,-6416,-2244,-6393,-2200,-6381,-2200,-6374,-2205,-6364,-2200,-6280,-2200,-6278,-2213,-6262,-2225,-6263,-2231,-6234,-2247,-6233,-2440,-6340,-2566,-6392,-2565,-6419,-2558,-6443,-2603,-6449,-2622,-6477,-2621,-6495,-2627,-6525,-2617,-6531,-2608,-6544,-2612,-6567,-2607,-6572,-2630,-6605,-2625,-6616,-2617,-6621,-2617,-6640,-2639,-6653,-2626,-6682,-2581,-6681,-2573,-6675,-2568,-6657,-2567,-6650,-2561,-6647,-2548,-6656,-2527,-6781,-2528,-6850,-2516,-6837,-2512,-6844,-2502,-6847,-2491,-6855,-2487,-6858,-2481,-6850,-2460,-6845,-2463,-6840,-2450,-6833,-2450,-6824,-2439,-6736,-2403]]]},"Jujuy":{"c":[-65.78,-23.32],"p":[[[-6725,-2373,-6701,-2300,-6719,-2282,-6703,-2264,-6703,-2252,-6679,-2243,-6674,-2223,-6638,-2213,-6631,-2208,-6622,-2179,-6609,-2183,-6605,-2192,-6593,-2194,-6578,-2211,-6519,-2210,-6535,-2259,-6527,-2264,-6529,-2272,-6523,-2295,-6502,-2303,-6504,-2326,-6495,-2331,-6487,-2349,-6480,-2350,-6466,-2345,-6456,-2351,-6444,-2362,-6437,-2351,-6419,-2351,-6416,-2418,-6430,-2440,-6450,-2448,-6461,-2461,-6483,-2446,-6490,-2459,-6494,-2460,-6506,-2455,-6516,-2445,-6528,-2450,-6559,-2440,-6575,-2418,-6576,-2408,-6590,-2398,-6596,-2399,-6600,-2394,-6603,-2385,-6599,-2372,-6599,-2354,-6617,-2342,-6634,-2337,-6638,-2339,-6641,-2352,-6634,-2372,-6635,-2404,-6639,-2414,-6650,-2424,-6668,-2420,-6677,-2410,-6687,-2405,-6708,-2383]]]},"Formosa":{"c":[-59.93,-24.9],"p":[[[-6234,-2247,-6229,-2248,-6224,-2254,-6225,-2260,-6219,-2263,-6219,-2271,-6204,-2288,-6196,-2303,-6177,-2317,-6173,-2324,-6152,-2334,-6150,-2341,-6130,-2348,-6127,-2352,-6111,-2361,-6112,-2367,-6101,-2381,-6084,-2387,-6063,-2389,-6058,-2394,-6034,-2402,-6003,-2401,-5961,-2429,-5947,-2435,-5934,-2449,-5900,-2464,-5881,-2478,-5847,-2485,-5834,-2499,-5822,-2494,-5798,-2507,-5787,-2509,-5775,-2518,-5764,-2537,-5756,-2544,-5758,-2556,-5777,-2570,-5774,-2572,-5782,-2578,-5780,-2583,-5788,-2588,-5785,-2591,-5791,-2597,-5786,-2598,-5787,-2601,-5809,-2613,-5812,-2620,-5815,-2618,-5811,-2624,-5817,-2627,-5817,-2634,-5821,-2642,-5819,-2645,-5822,-2653,-5816,-2659,-5819,-2661,-5818,-2665,-5824,-2665,-5825,-2676,-5829,-2677,-5829,-2681,-5834,-2681,-5832,-2687,-5835,-2689,-5838,-2685,-5846,-2683,-5857,-2669,-5886,-2650,-5898,-2639,-5915,-2630,-5926,-2635,-5935,-2634,-5942,-2618,-5966,-2613,-5967,-2601,-5985,-2587,-5987,-2582,-6004,-2570,-6018,-2567,-6024,-2550,-6034,-2542,-6036,-2536,-6050,-2521,-6065,-2516,-6103,-2490,-6108,-2490,-6115,-2473,-6121,-2467,-6144,-2462,-6157,-2449,-6165,-2448,-6178,-2434,-6190,-2432,-6203,-2422,-6234,-2412]]]},"Misiones":{"c":[-54.66,-26.87],"p":[[[-5460,-2565,-5460,-2557,-5456,-2557,-5447,-2563,-5445,-2569,-5440,-2558,-5430,-2555,-5426,-2560,-5419,-2558,-5421,-2553,-5417,-2553,-5412,-2549,-5410,-2560,-5408,-2555,-5400,-2557,-5397,-2565,-5390,-2564,-5388,-2574,-5384,-2579,-5383,-2596,-5377,-2603,-5367,-2622,-5372,-2638,-5374,-2668,-5377,-2671,-5372,-2681,-5372,-2694,-5380,-2704,-5383,-2716,-5388,-2712,-5391,-2717,-5396,-2715,-5396,-2719,-5401,-2719,-5409,-2729,-5416,-2728,-5418,-2724,-5423,-2738,-5429,-2743,-5435,-2739,-5437,-2745,-5439,-2741,-5444,-2741,-5445,-2746,-5454,-2749,-5459,-2745,-5469,-2755,-5477,-2756,-5481,-2753,-5485,-2761,-5490,-2762,-5491,-2774,-5499,-2779,-5508,-2778,-5503,-2785,-5510,-2784,-5512,-2788,-5518,-2785,-5526,-2792,-5531,-2791,-5544,-2808,-5551,-2808,-5555,-2815,-5560,-2812,-5562,-2814,-5574,-2807,-5583,-2792,-5586,-2775,-5602,-2745,-5601,-2739,-5597,-2733,-5591,-2733,-5585,-2740,-5575,-2744,-5559,-2733,-5557,-2725,-5560,-2717,-5556,-2715,-5553,-2710,-5546,-2710,-5541,-2698,-5528,-2693,-5514,-2695,-5513,-2686,-5506,-2681,-5498,-2679,-5492,-2667,-5479,-2664,-5479,-2653,-5470,-2643,-5464,-2620,-5466,-2615,-5464,-2606,-5466,-2598,-5461,-2595,-5459,-2581,-5464,-2566]]]},"Chaco":{"c":[-60.76,-26.39],"p":[[[-5835,-2689,-5848,-2694,-5851,-2706,-5855,-2704,-5857,-2712,-5865,-2716,-5865,-2720,-5860,-2725,-5860,-2732,-5889,-2748,-5882,-2772,-5886,-2800,-6171,-2800,-6171,-2615,-6172,-2574,-6175,-2566,-6340,-2566,-6233,-2440,-6234,-2412,-6203,-2422,-6190,-2432,-6178,-2434,-6165,-2448,-6157,-2449,-6144,-2462,-6121,-2467,-6115,-2473,-6108,-2490,-6103,-2490,-6065,-2516,-6050,-2521,-6036,-2536,-6034,-2542,-6024,-2550,-6018,-2567,-6004,-2570,-5987,-2582,-5985,-2587,-5967,-2601,-5966,-2613,-5942,-2618,-5935,-2634,-5926,-2635,-5915,-2630,-5895,-2641,-5886,-2650,-5857,-2669,-5846,-2683,-5838,-2685]]]},"Corrientes":{"c":[-57.8,-28.76],"p":[[[-5824,-2726,-5794,-2727,-5751,-2741,-5734,-2741,-5718,-2749,-5708,-2748,-5690,-2742,-5677,-2751,-5661,-2745,-5655,-2746,-5640,-2759,-5630,-2748,-5628,-2739,-5615,-2731,-5597,-2733,-5600,-2736,-5602,-2745,-5587,-2772,-5584,-2791,-5574,-2807,-5562,-2814,-5577,-2823,-5566,-2833,-5569,-2840,-5584,-2835,-5591,-2838,-5590,-2847,-5601,-2850,-5604,-2861,-5618,-2874,-5629,-2878,-5630,-2888,-5639,-2895,-5643,-2907,-5662,-2916,-5669,-2933,-5677,-2938,-5682,-2947,-5702,-2968,-5711,-2977,-5729,-2982,-5733,-2998,-5751,-3014,-5764,-3019,-5762,-3026,-5765,-3033,-5785,-3049,-5789,-3055,-5781,-3075,-5799,-3060,-5807,-3042,-5826,-3023,-5863,-3015,-5888,-3023,-5900,-3020,-5924,-3034,-5939,-3031,-5966,-3034,-5967,-3029,-5960,-3005,-5967,-2985,-5959,-2961,-5958,-2938,-5951,-2921,-5936,-2914,-5920,-2902,-5919,-2892,-5909,-2863,-5907,-2840,-5909,-2818,-5906,-2813,-5895,-2811,-5889,-2807,-5884,-2792,-5882,-2772,-5889,-2748,-5866,-2733,-5851,-2728]]]},"Catamarca":{"c":[-66.98,-27.32],"p":[[[-6834,-2705,-6831,-2690,-6857,-2655,-6860,-2646,-6858,-2630,-6841,-2614,-6850,-2575,-6856,-2566,-6856,-2557,-6861,-2547,-6850,-2516,-6781,-2528,-6656,-2528,-6647,-2548,-6650,-2561,-6657,-2567,-6674,-2567,-6680,-2572,-6680,-2586,-6653,-2626,-6641,-2638,-6636,-2637,-6630,-2625,-6622,-2617,-6616,-2617,-6605,-2625,-6610,-2632,-6615,-2654,-6602,-2660,-6585,-2673,-6588,-2694,-6619,-2732,-6598,-2739,-6593,-2765,-6588,-2770,-6585,-2778,-6570,-2782,-6566,-2795,-6557,-2805,-6550,-2796,-6535,-2786,-6523,-2792,-6517,-2791,-6508,-2827,-6507,-2842,-6518,-2865,-6509,-2872,-6504,-2929,-6488,-2956,-6495,-2958,-6496,-2961,-6494,-2988,-6514,-3006,-6540,-3014,-6573,-2950,-6576,-2931,-6579,-2925,-6612,-2897,-6636,-2885,-6638,-2882,-6634,-2874,-6646,-2863,-6650,-2850,-6658,-2840,-6698,-2827,-6704,-2828,-6710,-2834,-6719,-2836,-6770,-2834,-6782,-2838,-6791,-2825,-6793,-2812,-6809,-2815,-6815,-2811,-6828,-2809,-6835,-2802,-6844,-2800,-6844,-2774,-6885,-2779,-6913,-2777,-6908,-2770,-6909,-2764,-6903,-2755,-6902,-2746,-6893,-2740,-6887,-2720,-6881,-2712,-6872,-2711,-6859,-2716,-6852,-2708]]]},"La Rioja":{"c":[-67.2,-29.67],"p":[[[-6942,-2821,-6930,-2800,-6919,-2795,-6913,-2777,-6885,-2779,-6866,-2775,-6857,-2777,-6850,-2774,-6843,-2776,-6844,-2800,-6835,-2802,-6828,-2809,-6815,-2811,-6809,-2815,-6793,-2812,-6791,-2825,-6782,-2838,-6770,-2834,-6719,-2836,-6710,-2834,-6704,-2828,-6698,-2827,-6658,-2840,-6652,-2847,-6646,-2863,-6634,-2874,-6638,-2882,-6636,-2885,-6612,-2897,-6579,-2925,-6576,-2931,-6573,-2950,-6540,-3014,-6577,-3110,-6576,-3189,-6591,-3190,-6605,-3187,-6622,-3193,-6637,-3193,-6673,-3188,-6678,-3177,-6684,-3175,-6685,-3164,-6694,-3162,-6705,-3152,-6710,-3135,-6706,-3108,-6711,-3104,-6708,-3089,-6719,-3071,-6757,-3038,-6763,-3025,-6791,-3005,-6808,-2988,-6816,-2985,-6834,-2969,-6861,-2965,-6870,-2960,-6882,-2963,-6901,-2962,-6902,-2952,-6898,-2945,-6898,-2934,-6894,-2931,-6900,-2923,-6900,-2915,-6891,-2900,-6910,-2878,-6919,-2859,-6947,-2843,-6954,-2844,-6965,-2840,-6951,-2827,-6949,-2820]]]},"San Juan":{"c":[-68.88,-30.83],"p":[[[-6996,-3009,-6998,-3007,-6993,-2998,-6992,-2981,-6993,-2972,-6997,-2967,-7004,-2930,-6991,-2914,-6980,-2910,-6980,-2894,-6973,-2879,-6975,-2867,-6968,-2857,-6965,-2840,-6954,-2844,-6947,-2843,-6942,-2848,-6934,-2848,-6916,-2862,-6910,-2878,-6891,-2901,-6900,-2912,-6900,-2923,-6894,-2931,-6898,-2936,-6902,-2961,-6882,-2963,-6870,-2960,-6861,-2965,-6834,-2969,-6816,-2985,-6808,-2988,-6791,-3005,-6763,-3025,-6757,-3038,-6719,-3071,-6708,-3089,-6711,-3104,-6706,-3108,-6710,-3135,-6705,-3152,-6694,-3162,-6685,-3164,-6684,-3175,-6678,-3177,-6673,-3188,-6737,-3186,-6739,-3226,-6749,-3221,-6774,-3225,-6783,-3224,-6799,-3209,-6806,-3207,-6825,-3214,-6839,-3215,-6869,-3234,-6889,-3234,-6892,-3208,-6904,-3207,-6917,-3196,-6929,-3205,-6945,-3205,-6961,-3212,-6966,-3226,-6998,-3231,-7026,-3231,-7031,-3229,-7034,-3214,-7039,-3204,-7028,-3205,-7024,-3194,-7031,-3188,-7043,-3187,-7048,-3182,-7049,-3173,-7059,-3157,-7057,-3130,-7054,-3117,-7048,-3110,-7041,-3115,-7034,-3104,-7027,-3104,-7034,-3094,-7022,-3052,-7014,-3044,-7017,-3036,-7003,-3040,-6996,-3037,-6991,-3033,-6989,-3023,-6984,-3016,-6988,-3010]]]},"Mendoza":{"c":[-68.61,-34.61],"p":[[[-7001,-3330,-7011,-3317,-7011,-3304,-7004,-3299,-7000,-3288,-7016,-3274,-7018,-3261,-7014,-3257,-7017,-3246,-7025,-3240,-7026,-3231,-6966,-3226,-6961,-3212,-6945,-3205,-6929,-3205,-6918,-3196,-6914,-3197,-6902,-3208,-6892,-3208,-6889,-3234,-6869,-3234,-6839,-3215,-6802,-3207,-6783,-3224,-6747,-3222,-6739,-3226,-6736,-3240,-6732,-3243,-6726,-3265,-6719,-3276,-6723,-3292,-6715,-3343,-6702,-3362,-6693,-3384,-6684,-3390,-6675,-3406,-6676,-3418,-6682,-3423,-6681,-3438,-6674,-3462,-6655,-3492,-6655,-3500,-6651,-3512,-6652,-3549,-6661,-3583,-6662,-3600,-6825,-3600,-6828,-3602,-6829,-3613,-6826,-3628,-6825,-3756,-6843,-3754,-6851,-3745,-6868,-3743,-6876,-3737,-6899,-3736,-6902,-3734,-6906,-3724,-6915,-3718,-6930,-3715,-6953,-3717,-6970,-3711,-6982,-3700,-6979,-3696,-6979,-3686,-6991,-3680,-6996,-3671,-7007,-3661,-7016,-3658,-7026,-3637,-7034,-3638,-7038,-3633,-7036,-3620,-7043,-3613,-7038,-3605,-7041,-3597,-7038,-3591,-7042,-3590,-7042,-3587,-7036,-3582,-7042,-3566,-7041,-3551,-7047,-3538,-7043,-3536,-7048,-3531,-7056,-3530,-7058,-3526,-7054,-3521,-7039,-3517,-7035,-3495,-7028,-3480,-7032,-3475,-7025,-3470,-7023,-3459,-7007,-3441,-7006,-3429,-6991,-3428,-6983,-3423,-6987,-3414,-6986,-3398,-6991,-3396,-6991,-3377,-6986,-3373,-6990,-3366,-6988,-3356,-6984,-3353,-6979,-3338,-6981,-3329,-6987,-3325,-6994,-3324]]]},"Neuquén":{"c":[-70.12,-38.64],"p":[[[-7050,-3616,-7043,-3613,-7037,-3617,-7038,-3631,-7036,-3637,-7026,-3637,-7016,-3658,-7007,-3661,-6996,-3671,-6991,-3680,-6979,-3686,-6979,-3696,-6982,-3700,-6970,-3711,-6953,-3717,-6930,-3715,-6915,-3718,-6906,-3724,-6902,-3734,-6899,-3736,-6876,-3737,-6868,-3743,-6851,-3745,-6843,-3754,-6825,-3756,-6825,-3866,-6801,-3898,-6826,-3900,-6832,-3896,-6860,-3913,-6867,-3921,-6880,-3929,-6884,-3937,-6896,-3949,-6924,-3959,-6936,-3972,-6952,-3982,-6968,-3982,-6994,-3995,-7010,-4044,-7018,-4047,-7024,-4055,-7044,-4057,-7054,-4051,-7068,-4059,-7081,-4058,-7097,-4064,-7113,-4078,-7103,-4091,-7115,-4105,-7130,-4110,-7155,-4103,-7187,-4101,-7185,-4094,-7196,-4072,-7185,-4062,-7186,-4055,-7180,-4041,-7173,-4042,-7167,-4032,-7169,-4029,-7174,-4030,-7182,-4023,-7181,-4009,-7168,-4010,-7168,-4001,-7162,-3991,-7168,-3983,-7171,-3960,-7169,-3957,-7162,-3962,-7150,-3960,-7150,-3957,-7154,-3953,-7146,-3943,-7148,-3938,-7141,-3932,-7143,-3900,-7140,-3891,-7124,-3881,-7105,-3875,-7095,-3875,-7087,-3869,-7088,-3864,-7083,-3856,-7097,-3842,-7102,-3823,-7101,-3807,-7119,-3771,-7119,-3764,-7113,-3758,-7112,-3747,-7121,-3729,-7115,-3721,-7114,-3713,-7109,-3710,-7121,-3697,-7114,-3695,-7120,-3684,-7115,-3669,-7106,-3669,-7104,-3648,-7093,-3647,-7089,-3640,-7081,-3643,-7072,-3641,-7071,-3627,-7060,-3619,-7058,-3614]]]},"Chubut":{"c":[-68.53,-43.79],"p":[[[-7192,-4218,-7175,-4210,-7174,-4203,-7177,-4200,-6513,-4200,-6505,-4201,-6497,-4213,-6486,-4219,-6460,-4226,-6448,-4225,-6446,-4228,-6460,-4242,-6445,-4245,-6410,-4243,-6405,-4237,-6407,-4227,-6434,-4224,-6416,-4221,-6387,-4208,-6377,-4208,-6360,-4230,-6358,-4259,-6363,-4271,-6362,-4275,-6367,-4280,-6411,-4288,-6425,-4278,-6420,-4264,-6439,-4252,-6461,-4252,-6473,-4256,-6480,-4262,-6495,-4265,-6502,-4275,-6500,-4278,-6465,-4293,-6450,-4294,-6443,-4298,-6432,-4295,-6430,-4298,-6445,-4307,-6477,-4315,-6494,-4324,-6503,-4330,-6504,-4340,-6533,-4366,-6532,-4383,-6527,-4396,-6523,-4398,-6524,-4403,-6519,-4404,-6524,-4408,-6521,-4414,-6528,-4415,-6531,-4420,-6522,-4437,-6533,-4446,-6528,-4452,-6537,-4452,-6536,-4454,-6539,-4455,-6537,-4459,-6546,-4458,-6546,-4460,-6564,-4467,-6573,-4481,-6572,-4487,-6552,-4493,-6561,-4497,-6560,-4503,-6569,-4506,-6575,-4502,-6582,-4504,-6584,-4500,-6594,-4505,-6602,-4500,-6620,-4499,-6628,-4506,-6635,-4504,-6650,-4509,-6653,-4513,-6645,-4515,-6647,-4517,-6659,-4514,-6652,-4522,-6693,-4526,-6706,-4535,-6733,-4561,-6736,-4579,-6746,-4583,-6758,-4600,-7165,-4600,-7161,-4597,-7162,-4593,-7176,-4585,-7175,-4579,-7180,-4574,-7178,-4564,-7174,-4559,-7177,-4557,-7171,-4553,-7149,-4550,-7151,-4541,-7139,-4537,-7131,-4530,-7132,-4527,-7149,-4512,-7159,-4498,-7170,-4497,-7178,-4493,-7189,-4495,-7207,-4490,-7209,-4478,-7205,-4475,-7185,-4479,-7176,-4475,-7163,-4478,-7150,-4474,-7130,-4480,-7124,-4475,-7123,-4464,-7113,-4457,-7112,-4453,-7121,-4443,-7182,-4440,-7186,-4438,-7180,-4431,-7183,-4427,-7181,-4421,-7186,-4411,-7176,-4406,-7166,-4393,-7176,-4383,-7176,-4377,-7182,-4376,-7171,-4368,-7171,-4360,-7180,-4354,-7187,-4354,-7187,-4346,-7196,-4344,-7190,-4332,-7175,-4330,-7174,-4319,-7186,-4313,-7205,-4311,-7215,-4300,-7211,-4286,-7214,-4256,-7204,-4248,-7208,-4243,-7207,-4235,-7213,-4229,-7201,-4212]]]},"Río Negro":{"c":[-67.24,-40.41],"p":[[[-7177,-4200,-7179,-4187,-7193,-4165,-7185,-4157,-7189,-4151,-7190,-4137,-7185,-4108,-7187,-4101,-7155,-4103,-7130,-4110,-7115,-4105,-7103,-4091,-7113,-4078,-7097,-4064,-7081,-4058,-7068,-4059,-7054,-4051,-7044,-4057,-7024,-4055,-7018,-4047,-7010,-4044,-6994,-3995,-6968,-3982,-6952,-3982,-6936,-3972,-6924,-3959,-6896,-3949,-6884,-3937,-6880,-3929,-6867,-3921,-6860,-3913,-6832,-3896,-6826,-3900,-6801,-3898,-6825,-3866,-6825,-3756,-6785,-3760,-6775,-3767,-6771,-3773,-6772,-3782,-6785,-3791,-6787,-3801,-6784,-3806,-6771,-3810,-6759,-3825,-6738,-3826,-6718,-3822,-6714,-3834,-6707,-3841,-6665,-3856,-6659,-3861,-6656,-3870,-6639,-3873,-6622,-3872,-6596,-3874,-6569,-3882,-6556,-3878,-6537,-3884,-6497,-3880,-6447,-3885,-6401,-3900,-6391,-3909,-6378,-3913,-6371,-3920,-6352,-3931,-6339,-3933,-6339,-4071,-6310,-4075,-6286,-4094,-6280,-4104,-6310,-4115,-6378,-4116,-6406,-4104,-6406,-4100,-6417,-4101,-6464,-4085,-6491,-4082,-6487,-4079,-6476,-4080,-6475,-4078,-6480,-4076,-6477,-4074,-6489,-4071,-6498,-4072,-6492,-4073,-6491,-4077,-6501,-4077,-6512,-4083,-6518,-4097,-6510,-4133,-6506,-4145,-6499,-4152,-6504,-4167,-6500,-4179,-6507,-4195,-6505,-4201]]]},"Santa Cruz":{"c":[-69.93,-48.8],"p":[[[-7191,-4723,-7186,-4720,-7187,-4714,-7201,-4706,-7191,-4700,-7197,-4695,-7195,-4681,-7183,-4679,-7168,-4666,-7168,-4654,-7175,-4639,-7176,-4624,-7191,-4614,-7177,-4611,-7165,-4600,-6758,-4600,-6762,-4616,-6754,-4640,-6742,-4657,-6713,-4671,-6703,-4682,-6679,-4701,-6663,-4705,-6651,-4704,-6620,-4709,-6598,-4707,-6588,-4710,-6574,-4720,-6571,-4734,-6574,-4751,-6585,-4774,-6603,-4774,-6627,-4786,-6639,-4786,-6630,-4787,-6602,-4777,-6590,-4777,-6585,-4788,-6576,-4791,-6580,-4794,-6576,-4795,-6593,-4794,-6597,-4805,-6590,-4808,-6592,-4811,-6611,-4812,-6616,-4819,-6632,-4826,-6635,-4832,-6634,-4835,-6645,-4835,-6650,-4841,-6665,-4843,-6686,-4855,-6687,-4859,-6711,-4867,-6720,-4882,-6741,-4890,-6756,-4902,-6763,-4913,-6761,-4918,-6773,-4927,-6771,-4932,-6777,-4937,-6783,-4938,-6773,-4939,-6766,-4927,-6761,-4927,-6770,-4953,-6773,-4978,-6783,-4995,-6808,-5009,-6834,-5012,-6865,-4976,-6874,-4973,-6866,-4977,-6858,-4993,-6867,-4997,-6888,-4996,-6901,-5001,-6858,-4997,-6852,-5002,-6849,-5008,-6835,-5015,-6844,-5020,-6888,-5033,-6908,-5056,-6915,-5074,-6914,-5090,-6941,-5108,-6917,-5098,-6896,-5156,-6905,-5156,-6912,-5160,-6938,-5156,-6962,-5163,-6930,-5159,-6916,-5163,-6920,-5169,-6903,-5161,-6897,-5162,-6869,-5201,-6837,-5231,-6836,-5234,-6842,-5239,-6844,-5238,-6845,-5230,-6882,-5224,-6921,-5214,-6949,-5213,-6995,-5201,-7192,-5199,-7197,-5197,-7195,-5190,-7198,-5184,-7214,-5174,-7230,-5169,-7233,-5160,-7245,-5155,-7235,-5148,-7232,-5131,-7226,-5125,-7238,-5116,-7240,-5111,-7229,-5103,-7227,-5096,-7226,-5084,-7235,-5074,-7230,-5065,-7251,-5060,-7266,-5067,-7276,-5062,-7305,-5076,-7318,-5075,-7319,-5064,-7326,-5056,-7328,-5033,-7335,-5024,-7353,-5014,-7353,-5008,-7348,-5001,-7357,-4992,-7347,-4976,-7320,-4968,-7306,-4955,-7306,-4948,-7312,-4939,-7310,-4927,-7318,-4924,-7317,-4919,-7301,-4899,-7278,-4893,-7262,-4882,-7258,-4872,-7261,-4851,-7258,-4845,-7230,-4833,-7233,-4829,-7231,-4821,-7234,-4807,-7251,-4797,-7254,-4791,-7234,-4760,-7232,-4750,-7237,-4747,-7236,-4745,-7217,-4741,-7204,-4729,-7203,-4720]]]},"Tierra del Fuego":{"c":[-67.5,-54.31],"p":[[[-6864,-5478,-6863,-5264,-6831,-5291,-6823,-5310,-6828,-5302,-6835,-5302,-6852,-5312,-6855,-5317,-6855,-5324,-6845,-5330,-6811,-5334,-6805,-5352,-6798,-5360,-6770,-5377,-6771,-5380,-6756,-5384,-6759,-5387,-6757,-5391,-6714,-5412,-6677,-5425,-6648,-5447,-6584,-5465,-6570,-5466,-6531,-5463,-6514,-5465,-6519,-5469,-6524,-5482,-6536,-5493,-6546,-5488,-6550,-5493,-6562,-5493,-6567,-5497,-6572,-5491,-6597,-5490,-6599,-5491,-6595,-5494,-6599,-5497,-6632,-5499,-6645,-5505,-6663,-5503,-6680,-5494,-6703,-5491,-6793,-5486,-6830,-5479,-6833,-5484,-6852,-5485]],[[-6389,-5473,-6381,-5473,-6397,-5482,-6399,-5481,-6398,-5476,-6424,-5484,-6427,-5482,-6425,-5478,-6431,-5478,-6445,-5484,-6451,-5483,-6462,-5490,-6469,-5490,-6467,-5487,-6476,-5483,-6468,-5477,-6460,-5480,-6452,-5478,-6450,-5477,-6457,-5472,-6454,-5472,-6450,-5475,-6441,-5474,-6438,-5478,-6436,-5471,-6419,-5475,-6416,-5472,-6409,-5472,-6407,-5475]]]},"Buenos Aires":{"c":[-60.56,-36.68],"p":[[[-5667,-3674,-5669,-3693,-5706,-3741,-5749,-3783,-5753,-3791,-5756,-3812,-5816,-3843,-5906,-3869,-5963,-3878,-5980,-3884,-6114,-3900,-6143,-3898,-6152,-3901,-6172,-3897,-6184,-3898,-6206,-3892,-6216,-3881,-6238,-3880,-6237,-3890,-6234,-3890,-6232,-3896,-6227,-3895,-6236,-3910,-6234,-3919,-6226,-3926,-6233,-3925,-6217,-3928,-6202,-3936,-6206,-3941,-6219,-3931,-6228,-3931,-6215,-3943,-6206,-3945,-6211,-3982,-6216,-3986,-6231,-3981,-6228,-3985,-6231,-3987,-6237,-4005,-6234,-4011,-6236,-4019,-6249,-4031,-6241,-4046,-6233,-4050,-6228,-4056,-6226,-4055,-6227,-4063,-6235,-4060,-6233,-4067,-6218,-4063,-6223,-4066,-6234,-4087,-6275,-4104,-6280,-4104,-6286,-4094,-6312,-4075,-6339,-4071,-6338,-3458,-6337,-3441,-6334,-3438,-6171,-3438,-6096,-3368,-6091,-3356,-6067,-3358,-6057,-3364,-6048,-3362,-6041,-3346,-6035,-3341,-6034,-3335,-6028,-3331,-6029,-3326,-6012,-3339,-5964,-3367,-5952,-3366,-5939,-3374,-5927,-3372,-5923,-3380,-5903,-3383,-5864,-3405,-5845,-3401,-5840,-3403,-5838,-3419,-5846,-3427,-5857,-3429,-5845,-3437,-5851,-3444,-5847,-3452,-5854,-3457,-5856,-3465,-5854,-3471,-5844,-3477,-5832,-3466,-5797,-3482,-5787,-3483,-5752,-3501,-5725,-3525,-5713,-3544,-5735,-3573,-5739,-3586,-5737,-3599,-5725,-3617,-5711,-3628,-5694,-3635,-5694,-3638,-5686,-3634,-5677,-3634,-5678,-3631,-5674,-3632,-5670,-3640]]]},"Ciudad de Buenos Aires":{"c":[-58.45,-34.65],"p":[[[-5847,-3452,-5838,-3457,-5832,-3466,-5844,-3477,-5854,-3471,-5856,-3465,-5854,-3457]]]},"Santa Fe":{"c":[-60.95,-30.7],"p":[[[-5960,-2800,-5886,-2800,-5892,-2809,-5906,-2813,-5909,-2818,-5907,-2840,-5909,-2863,-5919,-2892,-5920,-2902,-5936,-2914,-5951,-2921,-5958,-2938,-5959,-2961,-5967,-2985,-5960,-3005,-5967,-3029,-5961,-3046,-5966,-3074,-6016,-3144,-6041,-3167,-6065,-3172,-6067,-3185,-6072,-3192,-6066,-3207,-6071,-3216,-6077,-3258,-6071,-3268,-6068,-3285,-6055,-3306,-6029,-3326,-6028,-3331,-6034,-3335,-6035,-3341,-6041,-3346,-6043,-3355,-6050,-3363,-6058,-3364,-6068,-3358,-6091,-3356,-6096,-3368,-6171,-3438,-6285,-3438,-6192,-3311,-6176,-3300,-6174,-3281,-6183,-3268,-6189,-3266,-6187,-3259,-6191,-3246,-6201,-3239,-6208,-3224,-6222,-3214,-6218,-3196,-6224,-3173,-6212,-3161,-6186,-3073,-6213,-3046,-6213,-3042,-6171,-2800]]]},"Tucumán":{"c":[-65.37,-26.95],"p":[[[-6566,-2607,-6544,-2612,-6531,-2608,-6525,-2617,-6495,-2627,-6477,-2621,-6449,-2622,-6452,-2645,-6450,-2668,-6458,-2668,-6462,-2679,-6467,-2680,-6488,-2731,-6506,-2747,-6497,-2751,-6507,-2760,-6500,-2778,-6509,-2790,-6523,-2792,-6535,-2786,-6550,-2796,-6556,-2805,-6566,-2795,-6570,-2782,-6585,-2778,-6588,-2770,-6593,-2765,-6598,-2739,-6619,-2732,-6588,-2694,-6585,-2675,-6587,-2670,-6615,-2654,-6610,-2632,-6605,-2625,-6571,-2630]]]},"Santiago del Estero":{"c":[-63.29,-27.73],"p":[[[-6340,-2566,-6175,-2566,-6172,-2574,-6171,-2800,-6209,-3016,-6224,-2981,-6229,-2978,-6338,-2977,-6340,-2973,-6346,-2971,-6346,-2966,-6381,-2965,-6403,-2955,-6405,-2947,-6425,-2942,-6488,-2956,-6504,-2929,-6509,-2872,-6518,-2865,-6507,-2842,-6508,-2827,-6517,-2791,-6507,-2789,-6503,-2779,-6500,-2778,-6507,-2760,-6497,-2751,-6506,-2747,-6488,-2731,-6467,-2680,-6462,-2679,-6458,-2668,-6450,-2668,-6452,-2644,-6443,-2603,-6419,-2558,-6392,-2565]]]},"San Luis":{"c":[-66.03,-33.76],"p":[[[-6509,-3500,-6509,-3600,-6662,-3600,-6652,-3549,-6651,-3512,-6657,-3485,-6674,-3462,-6681,-3438,-6682,-3423,-6676,-3418,-6675,-3406,-6684,-3390,-6693,-3384,-6702,-3362,-6715,-3343,-6723,-3292,-6719,-3276,-6739,-3230,-6737,-3186,-6673,-3188,-6637,-3193,-6622,-3193,-6605,-3187,-6591,-3190,-6567,-3189,-6531,-3206,-6525,-3213,-6519,-3233,-6492,-3230,-6488,-3262,-6501,-3295,-6503,-3311,-6509,-3314,-6513,-3321,-6509,-3396]]]},"La Pampa":{"c":[-65.45,-37.13],"p":[[[-6510,-3600,-6509,-3500,-6338,-3500,-6339,-3933,-6352,-3931,-6371,-3920,-6378,-3913,-6391,-3909,-6401,-3900,-6447,-3885,-6497,-3880,-6537,-3884,-6556,-3878,-6569,-3882,-6596,-3874,-6622,-3872,-6639,-3873,-6656,-3870,-6659,-3861,-6665,-3856,-6707,-3841,-6714,-3834,-6718,-3822,-6738,-3826,-6759,-3825,-6771,-3810,-6784,-3806,-6787,-3801,-6785,-3791,-6772,-3782,-6771,-3773,-6775,-3767,-6785,-3760,-6825,-3756,-6826,-3628,-6829,-3613,-6827,-3601]]]},"Córdoba":{"c":[-63.77,-32.09],"p":[[[-6209,-3016,-6213,-3044,-6186,-3073,-6212,-3161,-6224,-3172,-6218,-3196,-6222,-3214,-6208,-3224,-6201,-3239,-6192,-3246,-6187,-3259,-6189,-3266,-6183,-3268,-6174,-3280,-6178,-3303,-6192,-3311,-6285,-3438,-6334,-3438,-6337,-3441,-6338,-3500,-6509,-3500,-6509,-3396,-6513,-3321,-6509,-3314,-6503,-3311,-6501,-3295,-6488,-3262,-6492,-3231,-6519,-3233,-6525,-3213,-6531,-3206,-6564,-3189,-6576,-3189,-6577,-3110,-6540,-3014,-6514,-3006,-6494,-2988,-6495,-2958,-6425,-2942,-6405,-2947,-6403,-2955,-6381,-2965,-6346,-2966,-6346,-2971,-6340,-2973,-6338,-2977,-6229,-2978,-6224,-2981]]]}}</script>
+<script>
+(function(){
+'use strict';
+var S=window.SIM, THREE=window.THREE;
+var $=function(id){return document.getElementById(id);};
+
+/* ---------- Navegación entre páginas (no depende de WebGL) ---------- */
+var pg1=$('page1'), pg2=$('page2'), b1=$('pg1'), b2=$('pg2');
+var resize2=function(){};
+function showPage(n){
+  pg1.hidden=n!==1; pg2.hidden=n!==2;
+  b1.setAttribute('aria-pressed',String(n===1)); b2.setAttribute('aria-pressed',String(n===2));
+  try{history.replaceState(null,'',n===2?'#mapa':'#recorrido');}catch(e){}
+  if(n===2)requestAnimationFrame(function(){resize2();});
+}
+b1.addEventListener('click',function(){showPage(1);});
+b2.addEventListener('click',function(){showPage(2);});
+if(!S||!THREE)return;
+
+var nf=S.nf, fmtGdp=S.fmtGdp, fmtPc=S.fmtPc, clamp=S.clamp, params=S.params, YEARS=S.YEARS, Y0=S.Y0;
+var INK='#f5f5f7', MUTE='#98989f', ACC='#8fc1ff', C_MIN='#ff9f68', C_OIL='#5fd4c6';
+
+/* ---------- Datos simulados por provincia ---------- */
+var GEO=JSON.parse($('geo').textContent);
+var OIL=[
+  {n:'Neuquén',K:34,P0:9.5,w:1.4},
+  {n:'Río Negro',K:12,P0:0.9,w:1.5},
+  {n:'Chubut',K:5,P0:3.0,w:0.3},
+  {n:'Santa Cruz',K:4.5,P0:2.2,w:0.35},
+  {n:'Mendoza',K:2.6,P0:1.5,w:0.4},
+  {n:'Tierra del Fuego',K:2.4,P0:0.9,w:0.5},
+  {n:'Salta',K:1.2,P0:0.5,w:0.5},
+  {n:'La Pampa',K:0.6,P0:0.3,w:0.5}
+];
+var OTHER_SPLIT={'La Rioja':0.3,'Chubut':0.25,'Neuquén':0.15,'Río Negro':0.15,'Córdoba':0.15};
+function logi(K,P0,r,t){return K/(1+(K/P0-1)*Math.exp(-r*t));}
+function miningAt(t,q){
+  var st=S.stateAt(t,q), o={};
+  S.PROV.forEach(function(p,i){
+    if(p.n==='Otras'){for(var k in OTHER_SPLIT)o[k]=(o[k]||0)+st.prov[i]*OTHER_SPLIT[k];}
+    else o[p.n]=(o[p.n]||0)+st.prov[i];
+  });
+  return o;
+}
+function oilAt(t,q){
+  var r=(q||params).ro, o={};
+  OIL.forEach(function(x){o[x.n]=logi(x.K,x.P0,r*x.w,t);});
+  return o;
+}
+function sumOf(o){var s=0;for(var k in o)s+=o[k];return s;}
+var dataNames=Object.keys(Object.assign({},miningAt(0),oilAt(0)));
+
+/* ---------- Estado ---------- */
+var layer='all', T=12, playing=false, preview=true, speed=1, sel='Neuquén', hover=null, scrubBusy=false;
+var VMAX={min:16,oil:40,all:40};
+var TITLES={min:'Minería por provincia',oil:'Petróleo y gas por provincia',all:'Minería y energía por provincia'};
+function valOf(d,n){var m=d.min[n]||0,o=d.oil[n]||0;return layer==='min'?m:(layer==='oil'?o:m+o);}
+
+/* ---------- Three.js: mapa ---------- */
+var stage=$('stage2'), cv=$('gl2'), renderer=null;
+try{renderer=new THREE.WebGLRenderer({canvas:cv,antialias:true,alpha:true});}catch(e){$('m-nogl').hidden=false;}
+var scene=new THREE.Scene(), camera=new THREE.PerspectiveCamera(42,1,0.1,200);
+scene.add(new THREE.AmbientLight(0xffffff,0.62));
+var sun=new THREE.DirectionalLight(0xffffff,0.85); sun.position.set(-6,12,8); scene.add(sun);
+scene.add(new THREE.HemisphereLight(0xaab4d4,0x15151a,0.4)); var rim=new THREE.DirectionalLight(0x8fc1ff,0.4); rim.position.set(-8,6,-9); scene.add(rim);
+var ground=new THREE.Mesh(new THREE.PlaneGeometry(14,16),new THREE.MeshStandardMaterial({color:0x0d0d11,roughness:1}));
+ground.rotation.x=-Math.PI/2; ground.position.y=-0.03; scene.add(ground);
+var grid=new THREE.GridHelper(14,28,0x24242b,0x1b1b21); grid.scale.z=16/14; grid.position.y=-0.02; scene.add(grid);
+
+var LON0=-63.6, LAT0=-38.4, SCL=0.34, COS=Math.cos(LAT0*Math.PI/180);
+function proj(lon,lat){return [(lon-LON0)*COS*SCL,(lat-LAT0)*SCL];}
+var provs={}, meshes=[];
+Object.keys(GEO).forEach(function(name){
+  var shapes=GEO[name].p.map(function(rings){
+    var sh=null, holes=[];
+    rings.forEach(function(flat,ri){
+      var pts=[];
+      for(var i=0;i<flat.length;i+=2){var q=proj(flat[i]/100,flat[i+1]/100); pts.push(new THREE.Vector2(q[0],q[1]));}
+      if(pts.length<3)return;
+      if(ri===0)sh=new THREE.Shape(pts); else holes.push(new THREE.Path(pts));
+    });
+    if(sh)holes.forEach(function(h){sh.holes.push(h);});
+    return sh;
+  }).filter(Boolean);
+  if(!shapes.length)return;
+  var geo=new THREE.ExtrudeGeometry(shapes,{depth:1,bevelEnabled:false});
+  geo.rotateX(-Math.PI/2);
+  var mat=new THREE.MeshPhysicalMaterial({color:0x1e1e24,roughness:0.5,metalness:0.1,clearcoat:0.45,clearcoatRoughness:0.35,emissive:0x000000});
+  var mesh=new THREE.Mesh(geo,mat); mesh.scale.y=0.05; mesh.userData.name=name;
+  mesh.add(new THREE.LineSegments(new THREE.EdgesGeometry(geo,25),new THREE.LineBasicMaterial({color:0x07080b,transparent:true,opacity:0.6})));
+  scene.add(mesh); meshes.push(mesh);
+  var c=proj(GEO[name].c[0],GEO[name].c[1]);
+  provs[name]={mesh:mesh,mat:mat,cx:c[0],cz:-c[1],h:0.05,th:0.05,label:null};
+});
+var NUDGE={'Jujuy':[-0.7,-0.3],'Salta':[0.75,0.05],'Catamarca':[-0.5,0.2],'San Juan':[-0.7,0],'Mendoza':[-0.7,0.1],'La Rioja':[-0.5,0.1],'Tierra del Fuego':[0.2,0.2]};
+dataNames.forEach(function(n){
+  if(!provs[n])return;
+  var l=S.mkLabel('',{w:3.1,px:46}); l.visible=false; scene.add(l); provs[n].label=l;
+});
+var north=S.mkLabel('N ↑',{w:1.6,px:52,color:'#98989f'}); north.position.set(3.4,0.3,-5.9); scene.add(north);
+
+var cBase=new THREE.Color(0x1e1e24), cMin=new THREE.Color(0xff9f68), cOil=new THREE.Color(0x5fd4c6), cTmp=new THREE.Color();
+
+function updateMap(dt,d){
+  var vmax=VMAX[layer], k=1-Math.exp(-dt*8), vals={};
+  Object.keys(provs).forEach(function(n){
+    var p=provs[n], v=valOf(d,n); vals[n]=v;
+    p.th=0.05+(v/vmax)*3.8; p.h+=(p.th-p.h)*k;
+    p.mesh.scale.y=Math.max(p.h,0.02);
+    var f=v>0?Math.min(1,0.22+0.78*Math.sqrt(v/vmax)):0, tc;
+    if(layer==='min')tc=cMin; else if(layer==='oil')tc=cOil;
+    else{var m=d.min[n]||0,o=d.oil[n]||0; tc=cTmp.copy(cMin).lerp(cOil,o/((m+o)||1));}
+    p.mat.color.copy(cBase).lerp(tc,f);
+    p.mat.emissive.setHex(n===sel?0x2c4a7a:(n===hover?0x1f2f4d:0x000000));
+  });
+  var top=Object.keys(provs).filter(function(n){return provs[n].label&&vals[n]>0.05*vmax;})
+    .sort(function(a,b){return vals[b]-vals[a];}).slice(0,6);
+  if(sel&&provs[sel]&&provs[sel].label&&top.indexOf(sel)<0)top.push(sel);
+  Object.keys(provs).forEach(function(n){
+    var p=provs[n]; if(!p.label)return;
+    var on=top.indexOf(n)>=0; p.label.visible=on;
+    if(on){
+      var nu=NUDGE[n]||[0,0];
+      p.label.position.set(p.cx+nu[0],p.h+0.5,p.cz+nu[1]);
+      S.setLabel(p.label,n+' '+nf(vals[n],1));
+    }
+  });
+  return vals;
+}
+
+/* ---------- Cámara ---------- */
+var cam={theta:0.35,phi:0.95,zoom:1,gt:0.35,gp:0.95,gz:1,auto:false,drag:false,last:-10};
+var radBase=17.5, target=new THREE.Vector3(0,1.0,0);
+var CAMS={top:{t:0,p:0.22},persp:{t:0.35,p:0.95},east:{t:1.5,p:1.22},south:{t:0,p:1.3}};
+function placeCamera(){
+  var r=radBase*cam.zoom;
+  camera.position.set(target.x+r*Math.sin(cam.phi)*Math.sin(cam.theta),target.y+r*Math.cos(cam.phi),target.z+r*Math.sin(cam.phi)*Math.cos(cam.theta));
+  camera.lookAt(target);
+}
+resize2=function(){
+  var r=stage.getBoundingClientRect(), w=Math.max(1,r.width), h=Math.max(1,r.height);
+  if(renderer){renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2)); renderer.setSize(w,h,false);}
+  camera.aspect=w/h; camera.updateProjectionMatrix();
+};
+if(window.ResizeObserver)new ResizeObserver(function(){resize2();}).observe(stage); else window.addEventListener('resize',resize2);
+
+var clock0=performance.now(), now=function(){return (performance.now()-clock0)/1000;};
+var pts=new Map(), moved=0, pinchD=0;
+function pdist(){var a=Array.from(pts.values());return Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y);}
+var ray=new THREE.Raycaster(), ndc=new THREE.Vector2();
+function hitAt(e){
+  var r=cv.getBoundingClientRect();
+  ndc.set(((e.clientX-r.left)/r.width)*2-1,-((e.clientY-r.top)/r.height)*2+1);
+  ray.setFromCamera(ndc,camera);
+  var h=ray.intersectObjects(meshes,false);
+  return h.length?h[0].object.userData.name:null;
+}
+var tip=$('m-tip');
+function showTip(e,n){
+  if(!n){tip.hidden=true;return;}
+  var d=dataAt(T), r=stage.getBoundingClientRect();
+  tip.innerHTML='<b>'+n+'</b><div>Minería: US$ '+nf(d.min[n]||0,1)+' mil M</div><div>Petróleo y gas: US$ '+nf(d.oil[n]||0,1)+' mil M</div>';
+  tip.hidden=false;
+  tip.style.left=Math.min(e.clientX-r.left+14,r.width-180)+'px';
+  tip.style.top=Math.max(8,e.clientY-r.top-10)+'px';
+}
+cv.addEventListener('pointerdown',function(e){
+  try{cv.setPointerCapture(e.pointerId);}catch(_){}
+  pts.set(e.pointerId,{x:e.clientX,y:e.clientY});
+  if(pts.size===1)moved=0;
+  cam.drag=true; cam.last=now(); tip.hidden=true;
+  if(pts.size===2)pinchD=pdist();
+});
+cv.addEventListener('pointermove',function(e){
+  var p=pts.get(e.pointerId);
+  if(!p){
+    if(e.pointerType==='mouse'){var n=hitAt(e); if(n!==hover){hover=n;} showTip(e,n);}
+    return;
+  }
+  var dx=e.clientX-p.x, dy=e.clientY-p.y; p.x=e.clientX; p.y=e.clientY;
+  moved+=Math.abs(dx)+Math.abs(dy);
+  if(pts.size===1){cam.gt-=dx*0.007; cam.gp=clamp(cam.gp-dy*0.006,0.12,1.5);}
+  else if(pts.size===2){var d=pdist(); if(pinchD>0)cam.gz=clamp(cam.gz*pinchD/d,0.5,1.8); pinchD=d;}
+  cam.last=now();
+});
+function endPtr(e){
+  if(!pts.has(e.pointerId))return;
+  pts.delete(e.pointerId);
+  if(pts.size===0){
+    cam.drag=false;
+    if(moved<6&&e.type==='pointerup'){var n=hitAt(e); if(n&&provs[n]){sel=n; buildChartD();}}
+  }
+  pinchD=0;
+}
+cv.addEventListener('pointerup',endPtr);
+cv.addEventListener('pointercancel',endPtr);
+cv.addEventListener('pointerleave',function(){hover=null;tip.hidden=true;});
+cv.addEventListener('wheel',function(e){e.preventDefault(); cam.gz=clamp(cam.gz*Math.exp(e.deltaY*0.0012),0.5,1.8); cam.last=now();},{passive:false});
+
+document.querySelectorAll('[data-mcam]').forEach(function(b){
+  b.addEventListener('click',function(){var c=CAMS[b.dataset.mcam]; cam.gt=c.t; cam.gp=c.p; cam.gz=1; cam.last=now();});
+});
+var autoBtn=$('m-auto');
+autoBtn.addEventListener('click',function(){cam.auto=!cam.auto; autoBtn.setAttribute('aria-pressed',String(cam.auto));});
+
+/* ---------- Reproducción y capas ---------- */
+var playBtn=$('m-play'), scrub=$('m-scrub');
+var ICON_PLAY='<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>';
+var ICON_PAUSE='<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1" fill="currentColor"/><rect x="14" y="5" width="4" height="14" rx="1" fill="currentColor"/></svg>';
+function setPlayUI(){playBtn.innerHTML=playing?ICON_PAUSE:ICON_PLAY; playBtn.setAttribute('aria-label',playing?'Pausar':'Reproducir');}
+function togglePlay(){
+  if(!playing){
+    if(preview){T=0;preview=false;}
+    else if(T>=YEARS-0.01)T=0;
+  }
+  playing=!playing; setPlayUI();
+}
+playBtn.addEventListener('click',togglePlay);
+scrub.addEventListener('pointerdown',function(){scrubBusy=true;});
+scrub.addEventListener('pointerup',function(){scrubBusy=false;});
+scrub.addEventListener('input',function(){preview=false;T=parseFloat(scrub.value)/10;});
+document.querySelectorAll('[data-msp]').forEach(function(b){
+  b.addEventListener('click',function(){
+    speed=parseFloat(b.dataset.msp);
+    document.querySelectorAll('[data-msp]').forEach(function(x){x.setAttribute('aria-pressed',String(x===b));});
+  });
+});
+document.addEventListener('keydown',function(e){
+  if(e.code==='Space'&&!pg2.hidden&&!/^(INPUT|BUTTON|SUMMARY|SELECT|TEXTAREA)$/.test(e.target.tagName)){e.preventDefault();togglePlay();}
+});
+function setLayer(l){
+  layer=l;
+  document.querySelectorAll('[data-layer]').forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.layer===l));});
+  var lg={
+    min:[[C_MIN,'Minería']],
+    oil:[[C_OIL,'Petróleo y gas']],
+    all:[[C_MIN,'Predomina minería'],[C_OIL,'Predomina petróleo y gas']]
+  }[l];
+  $('m-legend').innerHTML=lg.map(function(x){return '<span><i style="background:'+x[0]+'"></i>'+x[1]+'</span>';}).join('')+'<span>Altura y color: producción</span>';
+  $('m-title').textContent=TITLES[l];
+  $('m-rankH').textContent='Ranking de provincias · '+({min:'minería',oil:'petróleo y gas',all:'total'}[l]);
+}
+document.querySelectorAll('[data-layer]').forEach(function(b){b.addEventListener('click',function(){setLayer(b.dataset.layer);});});
+
+/* ---------- Gráficos SVG ---------- */
+var CW=320, CH=150, ML=40, MR=10, MT=10, MB=20;
+function X(y){return ML+(CW-ML-MR)*y/YEARS;}
+function niceScale(max,parts){
+  var raw=max/(parts||4), mag=Math.pow(10,Math.floor(Math.log(raw)/Math.LN10)), n=raw/mag;
+  var step=(n<=1?1:n<=2?2:n<=5?5:10)*mag;
+  return {step:step,max:Math.ceil(max/step-1e-9)*step};
+}
+var FONT='font-family="-apple-system, BlinkMacSystemFont, Geist, system-ui, sans-serif" font-size="10"';
+function gridSvg(vmax,step,ys,fmt){
+  var s='';
+  for(var v=0;v<=vmax+1e-9;v+=step){
+    var y=ys(v);
+    s+='<line x1="'+ML+'" x2="'+(CW-MR)+'" y1="'+y.toFixed(1)+'" y2="'+y.toFixed(1)+'" stroke="#2a2a32" stroke-width="1"/>'+
+       '<text x="'+(ML-6)+'" y="'+(y+3.5).toFixed(1)+'" text-anchor="end" fill="'+MUTE+'" '+FONT+'>'+fmt(v)+'</text>';
+  }
+  [0,10,20].forEach(function(yy){s+='<text x="'+X(yy).toFixed(1)+'" y="'+(CH-4)+'" text-anchor="middle" fill="'+MUTE+'" '+FONT+'>'+(Y0+yy)+'</text>';});
+  return s;
+}
+function pathOf(arr,ys){return arr.map(function(v,i){return (i?'L':'M')+X(i).toFixed(1)+' '+ys(v).toFixed(1);}).join('');}
+function areaOf(top,bot,ys){
+  var s=top.map(function(v,i){return (i?'L':'M')+X(i).toFixed(1)+' '+ys(v).toFixed(1);}).join('');
+  for(var i=bot.length-1;i>=0;i--)s+='L'+X(i).toFixed(1)+' '+ys(bot[i]).toFixed(1);
+  return s+'Z';
+}
+var A={}, B={}, D={};
+function series(fn){var a=[];for(var y=0;y<=YEARS;y++)a.push(fn(y));return a;}
+
+function buildChartA(){
+  var keys=['cons','base','opt'];
+  var sers=keys.map(function(k){return series(function(y){return S.stateAt(y,S.SCEN[k]).gdp;});});
+  var cur=series(function(y){return S.stateAt(y).gdp;});
+  var hi=Math.max(sers[2][YEARS],cur[YEARS],sers[0][YEARS]), sc=niceScale(hi,4);
+  var ys=function(v){return CH-MB-(CH-MT-MB)*v/sc.max;};
+  var svg='<svg viewBox="0 0 '+CW+' '+CH+'" role="img" aria-label="PBI proyectado en tres escenarios y en el escenario elegido">'+
+    gridSvg(sc.max,sc.step,ys,function(v){return nf(v,0);})+
+    '<path d="'+areaOf(sers[2],sers[0],ys)+'" fill="#8fc1ff" opacity="0.10"/>'+
+    '<path d="'+pathOf(sers[0],ys)+'" fill="none" stroke="#98989f" stroke-width="1.3"/>'+
+    '<path d="'+pathOf(sers[1],ys)+'" fill="none" stroke="#8fc1ff" stroke-width="1.3"/>'+
+    '<path d="'+pathOf(sers[2],ys)+'" fill="none" stroke="#7ee0b0" stroke-width="1.3"/>'+
+    '<path d="'+pathOf(cur,ys)+'" fill="none" stroke="#f0cf8a" stroke-width="1.6" stroke-dasharray="3 3" opacity="0.8"/>'+
+    '<clipPath id="clipA"><rect id="aClip" x="'+ML+'" y="0" width="0" height="'+CH+'"/></clipPath>'+
+    '<path d="'+pathOf(cur,ys)+'" fill="none" stroke="#f0cf8a" stroke-width="2.6" clip-path="url(#clipA)"/>'+
+    '<line id="aLine" x1="0" x2="0" y1="'+MT+'" y2="'+(CH-MB)+'" stroke="'+INK+'" stroke-width="1" opacity="0.5"/>'+
+    '<circle id="aDot" r="4" cx="0" cy="0" fill="#f0cf8a" stroke="#07080b" stroke-width="1.5"/>'+
+    '<text id="aTxt" x="0" y="0" fill="'+INK+'" '+FONT+'></text></svg>';
+  $('chA').innerHTML=svg;
+  A={ys:ys,cur:cur};
+}
+function updateChartA(){
+  if(!A.ys)return;
+  var x=X(T), st=S.stateAt(T), y=A.ys(st.gdp);
+  $('aClip').setAttribute('width',(x-ML).toFixed(1));
+  $('aLine').setAttribute('x1',x.toFixed(1)); $('aLine').setAttribute('x2',x.toFixed(1));
+  $('aDot').setAttribute('cx',x.toFixed(1)); $('aDot').setAttribute('cy',y.toFixed(1));
+  var t=$('aTxt'); t.textContent=fmtGdp(st.gdp).replace('US$ ','');
+  t.setAttribute('x',(x>CW*0.6?x-8:x+8).toFixed(1)); t.setAttribute('y',(y-8).toFixed(1));
+  t.setAttribute('text-anchor',x>CW*0.6?'end':'start');
+}
+
+function buildChartB(){
+  var mi=series(function(y){return S.stateAt(y).P;}), oi=series(function(y){return sumOf(oilAt(y));});
+  var tot=mi.map(function(v,i){return v+oi[i];});
+  var sc=niceScale(tot[YEARS],4), ys=function(v){return CH-MB-(CH-MT-MB)*v/sc.max;};
+  var zero=mi.map(function(){return 0;});
+  var areaMin=areaOf(mi,zero,ys), areaOil=areaOf(tot,mi,ys);
+  var svg='<svg viewBox="0 0 '+CW+' '+CH+'" role="img" aria-label="Producción nacional de minería y de petróleo y gas">'+
+    gridSvg(sc.max,sc.step,ys,function(v){return nf(v,0);})+
+    '<path d="'+areaMin+'" fill="'+C_MIN+'" opacity="0.22"/><path d="'+areaOil+'" fill="'+C_OIL+'" opacity="0.22"/>'+
+    '<clipPath id="clipB"><rect id="bClip" x="'+ML+'" y="0" width="0" height="'+CH+'"/></clipPath>'+
+    '<g clip-path="url(#clipB)"><path d="'+areaMin+'" fill="'+C_MIN+'" opacity="0.95"/><path d="'+areaOil+'" fill="'+C_OIL+'" opacity="0.95"/></g>'+
+    '<line id="bLine" x1="0" x2="0" y1="'+MT+'" y2="'+(CH-MB)+'" stroke="'+INK+'" stroke-width="1" opacity="0.5"/>'+
+    '<text id="bTxt" x="0" y="0" fill="'+INK+'" '+FONT+'></text></svg>';
+  $('chB').innerHTML=svg;
+  B={ys:ys,tot:tot,mi:mi,oi:oi};
+}
+function lerpAt(arr,t){var i=Math.min(YEARS-1,Math.floor(t)), f=t-i; return arr[i]+(arr[i+1]-arr[i])*f;}
+function updateChartB(){
+  if(!B.ys)return;
+  var x=X(T), tv=lerpAt(B.tot,T);
+  $('bClip').setAttribute('width',(x-ML).toFixed(1));
+  $('bLine').setAttribute('x1',x.toFixed(1)); $('bLine').setAttribute('x2',x.toFixed(1));
+  var t=$('bTxt'); t.textContent='US$ '+nf(tv,1)+' mil M';
+  t.setAttribute('x',(x>CW*0.6?x-8:x+8).toFixed(1)); t.setAttribute('y',(B.ys(tv)-8).toFixed(1));
+  t.setAttribute('text-anchor',x>CW*0.6?'end':'start');
+}
+
+/* Ranking */
+var RH=26, rows={};
+var chC=$('chC');
+dataNames.filter(function(n){return provs[n];}).forEach(function(n){
+  var r=document.createElement('div'); r.className='rrow';
+  r.innerHTML='<span>'+n+'</span><div class="bar"><i></i></div><span class="v"></span>';
+  r.style.opacity='0'; r.style.transform='translateY('+(8*RH)+'px)';
+  r.addEventListener('click',function(){sel=n;buildChartD();});
+  r.style.cursor='pointer';
+  chC.appendChild(r);
+  rows[n]={el:r,bar:r.querySelector('i'),v:r.querySelector('.v'),last:''};
+});
+function updateRank(d){
+  var vmax=VMAX[layer], names=Object.keys(rows), vals={};
+  names.forEach(function(n){vals[n]=valOf(d,n);});
+  names.sort(function(a,b){return vals[b]-vals[a];});
+  names.forEach(function(n,i){
+    var r=rows[n], on=i<8&&vals[n]>0.001;
+    r.el.style.transform='translateY('+(Math.min(i,8)*RH)+'px)';
+    r.el.style.opacity=on?'1':'0';
+    r.el.style.pointerEvents=on?'auto':'none';
+    r.el.classList.toggle('sel',n===sel);
+    var m=d.min[n]||0, o=d.oil[n]||0;
+    r.bar.style.width=Math.min(100,vals[n]/vmax*100).toFixed(1)+'%';
+    r.bar.style.background=layer==='min'?C_MIN:(layer==='oil'?C_OIL:(m>=o?C_MIN:C_OIL));
+    var t=nf(vals[n],1); if(r.last!==t){r.last=t;r.v.textContent=t;}
+  });
+}
+
+/* Provincia seleccionada */
+function buildChartD(){
+  var mi=series(function(y){return miningAt(y)[sel]||0;}), oi=series(function(y){return oilAt(y)[sel]||0;});
+  var max=Math.max(Math.max.apply(null,mi),Math.max.apply(null,oi),0.5), sc=niceScale(max,3);
+  var H2=110, ys=function(v){return H2-MB-(H2-MT-MB)*v/sc.max;};
+  var grid='';
+  for(var v=0;v<=sc.max+1e-9;v+=sc.step){var y=ys(v); grid+='<line x1="'+ML+'" x2="'+(CW-MR)+'" y1="'+y.toFixed(1)+'" y2="'+y.toFixed(1)+'" stroke="#2a2a32"/><text x="'+(ML-6)+'" y="'+(y+3.5).toFixed(1)+'" text-anchor="end" fill="'+MUTE+'" '+FONT+'>'+nf(v,sc.step<1?1:0)+'</text>';}
+  [0,10,20].forEach(function(yy){grid+='<text x="'+X(yy).toFixed(1)+'" y="'+(H2-4)+'" text-anchor="middle" fill="'+MUTE+'" '+FONT+'>'+(Y0+yy)+'</text>';});
+  $('chD').innerHTML='<svg viewBox="0 0 '+CW+' '+H2+'" role="img" aria-label="Producción de la provincia seleccionada">'+grid+
+    '<path d="'+pathOf(mi,ys)+'" fill="none" stroke="'+C_MIN+'" stroke-width="2"/>'+
+    '<path d="'+pathOf(oi,ys)+'" fill="none" stroke="'+C_OIL+'" stroke-width="2"/>'+
+    '<line id="dLine" x1="0" x2="0" y1="'+MT+'" y2="'+(H2-MB)+'" stroke="'+INK+'" stroke-width="1" opacity="0.5"/></svg>';
+  D={mi:mi,oi:oi};
+  lastProv='';
+}
+var lastProv='';
+function updateProv(d){
+  var x=X(T), l=$('dLine'); if(l){l.setAttribute('x1',x.toFixed(1)); l.setAttribute('x2',x.toFixed(1));}
+  var yr=Y0+Math.floor(T+1e-6);
+  var m=d.min[sel]||0, o=d.oil[sel]||0, mE=D.mi?D.mi[YEARS]:0, oE=D.oi?D.oi[YEARS]:0;
+  var html='<p><strong>'+sel+'</strong>, '+yr+'</p>'+
+    '<p>Minería: US$ '+nf(m,1)+' mil M. Petróleo y gas: US$ '+nf(o,1)+' mil M.</p>'+
+    '<p>En '+(Y0+YEARS)+' llegaría a US$ '+nf(mE,1)+' mil M en minería y US$ '+nf(oE,1)+' mil M en petróleo y gas.</p>';
+  if(html!==lastProv){lastProv=html;$('m-prov').innerHTML=html;}
+}
+
+/* ---------- Escenario (compartido con la pantalla 1) ---------- */
+var SL=[['m-pR','r','m-oR',function(v){return nf(v*100,1)+' % anual';}],
+        ['m-pO','ro','m-oO',function(v){return nf(v*100,1)+' % anual';}],
+        ['m-pG','g0','m-oG',function(v){return nf(v*100,2)+' % anual';}],
+        ['m-pM','mu','m-oM',function(v){return nf(v,2)+'×';}]];
+SL.forEach(function(x){$(x[0]).addEventListener('input',function(e){params[x[1]]=parseFloat(e.target.value); S.apply();});});
+document.querySelectorAll('[data-msc]').forEach(function(b){
+  b.addEventListener('click',function(){
+    var s=S.SCEN[b.dataset.msc]; params.r=s.r; params.g0=s.g0; params.mu=s.mu; params.ro=s.ro; S.apply();
+  });
+});
+function syncP2(){
+  SL.forEach(function(x){$(x[0]).value=params[x[1]]; $(x[2]).textContent=x[3](params[x[1]]);});
+  var match=null;
+  Object.keys(S.SCEN).forEach(function(k){var s=S.SCEN[k]; if(Math.abs(s.r-params.r)<1e-6&&Math.abs(s.g0-params.g0)<1e-6&&Math.abs(s.mu-params.mu)<1e-6&&Math.abs(s.ro-params.ro)<1e-6)match=k;});
+  document.querySelectorAll('[data-msc]').forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.msc===match));});
+}
+S.listeners.push(function(){syncP2(); buildChartA(); buildChartB(); buildChartD();});
+
+/* ---------- Texto y KPIs ---------- */
+function dataAt(t){return {min:miningAt(t),oil:oilAt(t)};}
+var lastTxt={};
+function setText(id,v){if(lastTxt[id]!==v){lastTxt[id]=v;$(id).textContent=v;}}
+function narr(d,vals){
+  var yr=Y0+Math.floor(T+1e-6), st=S.stateAt(T), mT=sumOf(d.min), oT=sumOf(d.oil);
+  var names=Object.keys(vals).sort(function(a,b){return vals[b]-vals[a];}), top=names[0];
+  if(layer==='min')return 'Minería: US$ '+nf(mT,1)+' mil M por año en '+yr+'. Lidera '+top+' con '+nf(vals[top],1)+'.';
+  if(layer==='oil')return 'Petróleo y gas: US$ '+nf(oT,1)+' mil M por año en '+yr+'. '+top+' concentra el '+nf(vals[top]/oT*100,0)+' %.';
+  return 'Minería y energía suman US$ '+nf(mT+oT,1)+' mil M por año en '+yr+', con '+nf(oT/(mT+oT)*100,0)+' % de petróleo y gas. PBI: '+fmtGdp(st.gdp)+'.';
+}
+function updateText(d,vals){
+  var st=S.stateAt(T), s0=S.stateAt(0), yr=Y0+Math.floor(T+1e-6), mT=sumOf(d.min), oT=sumOf(d.oil), m0=sumOf(miningAt(0)), o0=sumOf(oilAt(0));
+  var n=narr(d,vals); setText('m-narr',n); setText('m-narr2',n);
+  setText('m-kYear',''+yr); setText('m-kYearSub',yr===Y0?'año base':('+'+(yr-Y0)+' años'));
+  setText('m-kGdp',fmtGdp(st.gdp)); setText('m-kGdpSub',nf(st.gdp/s0.gdp,2)+'× hoy');
+  setText('m-kMin','US$ '+nf(mT,1)+' mil M'); setText('m-kMinSub',nf(mT/m0,1)+'× hoy');
+  setText('m-kOil','US$ '+nf(oT,1)+' mil M'); setText('m-kOilSub',nf(oT/o0,1)+'× hoy');
+  setText('m-time',''+yr);
+}
+
+/* ---------- Bucle ---------- */
+var prev=performance.now();
+function frame(ms){
+  var dt=Math.min(0.05,(ms-prev)/1000); prev=ms;
+  if(!pg2.hidden){
+    if(playing){T=Math.min(YEARS,T+dt*speed); if(T>=YEARS){playing=false;setPlayUI();}}
+    if(!scrubBusy)scrub.value=Math.round(T*10);
+    var d=dataAt(T), vals=updateMap(dt,d);
+    updateChartA(); updateChartB(); updateRank(d); updateProv(d); updateText(d,vals);
+    var kk=1-Math.exp(-dt*8);
+    if(cam.auto&&!cam.drag&&now()-cam.last>2.5)cam.gt+=dt*0.12;
+    cam.theta+=(cam.gt-cam.theta)*kk; cam.phi+=(cam.gp-cam.phi)*kk; cam.zoom+=(cam.gz-cam.zoom)*kk;
+    placeCamera();
+    if(renderer&&!document.hidden)renderer.render(scene,camera);
+  }
+  requestAnimationFrame(frame);
+}
+
+setPlayUI(); setLayer('all'); syncP2(); buildChartA(); buildChartB(); buildChartD(); resize2();
+requestAnimationFrame(function(t){prev=t;frame(t);});
+if(location.hash==='#mapa')showPage(2);
+})();
+</script>
+
+</body></html>

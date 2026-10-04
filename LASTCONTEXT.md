@@ -11,5 +11,8 @@
 - Play/pause is one button whose name changes (no aria-pressed). Speed uses the existing speedUp/speedDown actions; no store or key change.
 - The scenes, the story panel and the references page are still English: F2b (shared `SceneShell`, `TableToggle`, `FilterBar`, Spanish scenes and charts, `APP_LOCALE = es-AR`, `lang="es"`).
 
+- **Direction decided after F2a**: 3D is the default presentation (a narrated tour of scenes with interactive text, plus a free explore mode); 2D stays unchanged as the data view and accessible alternative. Brief `presentation-3d.md` (replaces `scene-forecast-map-3d`) with six parts and decisions `D-3d-1` to `D-3d-5`. Reference look: `test/dashboard_3d_PoC.html`.
+- The 2D province map still draws nothing (no geometry) and Economy and Resources ignore the province filter.
+
 ## Next step
-- F2b, then F3 (unified filters and the province map as the main map mode), F4 (motion with GSAP and the story), F5 (3D map country to zone), F6 (Andes), F7 (live simulation), F8 (polish).
+- F2b, then F3 (unified filters and the province map as the main map mode), F4 (motion with GSAP and the story, built together with `presentation-3d` parts 1 to 4), F5 (3D map country to zone), F6 (Andes), F7 (live simulation), F8 (polish).
