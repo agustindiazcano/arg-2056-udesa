@@ -6,6 +6,7 @@ import Scene from '../../src/scenes/forecast/index.js';
 import { useStore } from '../../src/state/store.js';
 import { useKeyboard } from '../../src/state/useKeyboard.js';
 import { tokens } from '../../src/styles/tokens.js';
+import './reducedMotionStub';
 
 // slow CI machines run the whole suite in parallel: give async queries more time
 configure({ asyncUtilTimeout: 4000 });

@@ -12,10 +12,12 @@
 
 - **F3 done on `task/filters-province-map`**: geometry from Natural Earth admin-1 in `web/public/geo/` (`D-3d-3` decided by the agent; the human can swap it with `npm run build:geo`); Forecast and Sandbox lost their own scenario and AI chips (the control bar owns them); Recursos follows the selected province (bars highlight it, trend uses its series or says it falls back to national); Economía and the Recursos composition are national and say so (`ScopeNote`).
 
+- **F4 done on `task/motion-story`** (stacked on F3): gsap 3.15.0 (exact). `web/src/motion/` has `timings.ts` (design.md section 5), `SceneTransition` (400 ms fade + 24 px on scene change), `CountUp` (value tiles of Economía and Pronóstico count once on mount; later values snap). `EChart` draws series in over 600 ms and updates at once. `StoryCaption` fades the text per step and is a floating glass card; the 18 steps are drafts without figures or sources, still `placeholder: true` (tag "Borrador"). Everything is skipped under `prefers-reduced-motion` (tests import `tests/unit/reducedMotionStub.ts` to read final numbers). Main bundle 133,255 B of 134,144 B.
+
 ## Decisions
 - UI text avoids the second person (infinitives and impersonal forms) to stay neutral between voseo and tuteo. The human may want to change that: it is one pass over the strings.
 - The story steps, the era bands, the page description and the two placeholder scenes (Andes, Revolución IA) are provisional content, now in Spanish ("(provisorio)", "Texto provisorio. Reemplazar antes del lanzamiento."). The release gate still keys on `placeholder: true`, not on the text. Real story text was not touched.
 - 3D is the default presentation (narrated tour plus free explore mode); 2D stays as the data view and the accessible alternative. Brief `presentation-3d.md`, decisions `D-3d-1` to `D-3d-5`.
 
 ## Next step
-- F4 (motion with GSAP and the story, together with `presentation-3d` parts 1 to 4), F5 (3D map country to zone), F6 (Andes), F7 (live simulation), F8 (polish).
+- `presentation-3d` parts 1 to 4 (needs `D-3d-1`, `D-3d-2`, `D-3d-4`, `D-3d-5`; `D-3d-3` is answered), F5 (3D map country to zone), F6 (Andes), F7 (live simulation), F8 (polish).

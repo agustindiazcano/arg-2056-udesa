@@ -8,6 +8,7 @@ import { Header } from './Header';
 import { StoryCaption } from '../story/StoryCaption';
 import { StepRunner } from '../story/StepRunner';
 import { SceneHost } from './SceneHost';
+import { SceneTransition } from '../motion/SceneTransition';
 import { loadForecast } from '../data/load';
 import { versionedUrl } from '../data/version';
 import { CapabilityProvider, QualityDebugLine } from '../runtime/CapabilityProvider';
@@ -50,7 +51,9 @@ export function App() {
         </div>
         
         <main id="main" tabIndex={-1} className="scene-container" data-testid="scene">
-          <SceneHost scene={scene} />
+          <SceneTransition sceneKey={scene}>
+            <SceneHost scene={scene} />
+          </SceneTransition>
         </main>
         
         <StoryCaption />

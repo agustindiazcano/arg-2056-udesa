@@ -3,6 +3,7 @@ import React from 'react';
 import { render, screen, cleanup, configure, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, afterEach } from 'vitest';
 import Scene from '../../src/scenes/economy/index.js';
+import './reducedMotionStub';
 
 // slow CI machines run the whole suite in parallel: give async queries more time
 configure({ asyncUtilTimeout: 4000 });

@@ -1,15 +1,18 @@
-/* Caption panel docked at the bottom of the viewport. Colors and spacing come from tokens.css only. */
+/* Caption panel: a frosted card floating at the bottom centre. Colors and spacing come from tokens.css only. */
 .story {
   position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  left: 50%;
+  bottom: var(--space-md);
+  transform: translateX(-50%);
   z-index: 20;
   box-sizing: border-box;
-  padding: var(--space-md);
-  background: var(--surface);
+  width: min(760px, calc(100vw - 2 * var(--space-md)));
+  padding: var(--space-md) var(--space-lg);
+  background: var(--glass-strong);
+  backdrop-filter: blur(14px);
   color: var(--ink);
-  border-top: 1px solid var(--border);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
   pointer-events: auto;
 }
 
@@ -35,7 +38,7 @@
 
 .story-title {
   margin: var(--space-sm) 0;
-  font-size: var(--font-lg);
+  font-size: var(--font-xl);
 }
 
 .story-tag {
@@ -69,12 +72,21 @@
 }
 
 .story-dot {
+  position: relative;
   width: var(--space-md);
   height: var(--space-md);
   padding: 0;
   border-radius: 50%;
   border: 1px solid var(--muted);
   background: transparent;
+  cursor: pointer;
+}
+
+/* the dot is small, its hit target is 32 px */
+.story-dot::after {
+  content: '';
+  position: absolute;
+  inset: calc(-1 * var(--space-sm));
 }
 
 .story-dot[aria-current='step'] {

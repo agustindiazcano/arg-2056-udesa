@@ -1,5 +1,6 @@
 import React from 'react';
 import { formatPercent, formatValue, ordinal } from '../../charts/format.js';
+import { CountUp } from '../../motion/CountUp.js';
 import type { EconomyIndicator, EconomyRecord } from '../../types/index.js';
 import { gapPct, peerMedian, rankAt } from './selectors.js';
 
@@ -46,7 +47,9 @@ export function StatTiles({ records, indicator, year, home, countries, unit }: S
   return (
     <div style={{ display: 'flex', gap: 'var(--space-md)' }}>
       <Tile id="tile-value" label={`${home} en ${year}`}>
-        <Value text={value === null ? null : formatValue(value, unit)} />
+        <div style={{ fontSize: 'var(--font-xl)', color: value === null ? 'var(--muted)' : 'var(--ink)' }}>
+          <CountUp value={value} format={(n) => formatValue(n, unit)} fallback={NO_DATA} />
+        </div>
       </Tile>
       <Tile id="tile-rank" label="Puesto entre los países seleccionados">
         <Value text={row ? `${row.rank} de ${row.of}` : null} />

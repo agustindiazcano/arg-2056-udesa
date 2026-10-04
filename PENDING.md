@@ -33,9 +33,9 @@ Every task below has a brief (`<slug>.md` in the repository root) and a prompt (
 6. [ ] **Human step before `andes-integration`**: download the DEM, register it with `python -m datapipe register`, set the bounding boxes in `terrain/config.json`, run `python -m terrain bake`, run `python -m terrain verify` against the Andes facts, commit the outputs in `web/public/terrain/`. See `docs/terrain.md`.
 7. [ ] `andes-integration` (the old `scene-andes`): BLOCKED by the terrain outputs and the renderer decision (`D-andes-1` to `D-andes-4`; the proof of concept in `test/map_test1.html` is Three.js loaded from a CDN, which the CSP forbids, so it must be bundled). Must use `useQuality`, `QUALITY_PRESETS`, `WebGLRequired` and `useReducedMotion` (`web/src/runtime/`).
 8. [x] `references-page`, `storytelling-substeps`, `integration`: merged.
-   - [ ] **Human task before release**: write the real story steps with sources in `web/src/content/steps/index.ts` (18 placeholders, now titled "Paso N (provisorio)"; the gate fails until they are replaced). Register real sources in `data/processed/sources.json`.
+   - [ ] **Human task before release**: review and sign the 18 story drafts in `web/src/content/steps/index.ts`, add their sources and set `placeholder: false` (the gate fails until you do). Register real sources in `data/processed/sources.json`.
    - [ ] (later) let steps control scene-local settings; campaign day in `StepFocus` with `andes-integration`; load the references registry in the shell and pass `registryIds` to `StoryCaption`.
-   - [ ] **Human step: confirm or tighten `web/budgets.json`** (main is now about 102,293 B gzip against a 134,144 B budget after the precompiled validators; references 99,986 B against 131,072).
+   - [ ] **Human: the main bundle is 133,255 B gzip against 134,144 B after gsap (F4); raise `budgets.json` on purpose or lazy-load gsap before adding anything to the main chunk.** Also confirm or tighten `web/budgets.json` (main is now about 102,293 B gzip against a 134,144 B budget after the precompiled validators; references 99,986 B against 131,072).
    - [ ] At release: delete the CI step `Release gate fails on mock data` and the mock assertions in `web/e2e/boot.spec.ts` and `web/e2e/references.spec.ts` (release-checklist item 1).
    - [ ] (later) the sandbox shows "(error +0.2%)" in its copy; the e2e text check therefore looks for "error loading", not "error".
 9. [x] `performance-a11y` (PR #29): scene code splitting, tree-shaken ECharts, quality tiers, reduced motion, accessibility and axe in e2e.
@@ -75,7 +75,7 @@ Every task below has a brief (`<slug>.md` in the repository root) and a prompt (
 - [ ] Province map: the PLACEHOLDER red arm of the diverging ramp (`D-polish-3`), the hatch of the no-data fill (design.md asks for a hatched fill; only the baseline color is applied), the selected-province border may be partly covered by neighbours, the illustrative Malvinas outline.
 - [ ] Forecast scene: look and feel against `design.md`, history line and "History | Forecast" divider (mock has no history), plain buttons, layout spacing.
 - [ ] Forecast ranking: rows beyond top 10 are hidden, a selected province outside the top 10 is not shown.
-- [ ] Story caption panel: look and feel against `design.md`, dot hit targets are small, the "Provisorio" tag uses the warning token, no transition on collapse, the panel covers the bottom of the 3D stage.
+- [ ] (F4 redid the panel as a floating card) Story caption panel: look and feel against `design.md`, dot hit targets are small, the "Provisorio" tag uses the warning token, no transition on collapse, the panel covers the bottom of the 3D stage.
 - [ ] Visits section of the References page: plain table, flags are emoji (letters on Windows browsers).
 
 ## Blocked / questions
@@ -98,6 +98,7 @@ Every task below has a brief (`<slug>.md` in the repository root) and a prompt (
 
 ## Done
 
+- [x] `F4` (branch `task/motion-story`): gsap 3.15.0; scene transition, counters, series draw-in, story panel redesigned; the 18 steps are now drafts (no figures, no sources) that keep `placeholder: true`.
 - [x] `F3` (branch `task/filters-province-map`): one filter bar (scenario and AI only in the control bar), province geometry committed (`D-3d-3` decided by the agent: Natural Earth admin-1), Recursos follows the province, Economía shows a national note.
 - [x] `F2b` (branch `task/ui-scenes-es`): scenes, charts, tables, story panel and references page in Spanish on the shared `SceneShell`, `TableToggle`, `FilterBar`; `APP_LOCALE = 'es-AR'` and `lang="es"`. See `docs/ui.md`.
 - [x] `deploy`: header config, strict CSP, precompiled validators (Ajv standalone), data cache busting, metadata, release job, smoke script, `docs/deploy.md`.

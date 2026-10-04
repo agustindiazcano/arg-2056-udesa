@@ -8,6 +8,7 @@ import { useStore } from '../../src/state/store.js';
 import { MAP_NAME } from '../../src/charts/builders/provinceMap.js';
 import { DIVERGING, SEQUENTIAL_BLUE } from '../../src/styles/tokens.js';
 import { validFeature, validGeo, validGeoMeta } from './geo/geoWebFixtures.js';
+import './reducedMotionStub';
 
 // slow CI machines run the whole suite in parallel: give async queries more time
 configure({ asyncUtilTimeout: 4000 });
