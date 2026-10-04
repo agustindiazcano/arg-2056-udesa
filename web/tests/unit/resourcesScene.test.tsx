@@ -25,7 +25,7 @@ describe('Resources Scene', () => {
     vi.spyOn(useDatasetModule, 'useDataset').mockReturnValue({ status: 'loading', data: null, error: null });
 
     const { unmount } = render(<Scene />);
-    expect(screen.getByText('Loading...')).toBeDefined();
+    expect(screen.getByText('Cargando...')).toBeDefined();
     unmount();
   });
 
@@ -34,7 +34,7 @@ describe('Resources Scene', () => {
     vi.spyOn(useDatasetModule, 'useDataset').mockReturnValue({ status: 'error', data: null, error: new Error('Failed') });
 
     const { unmount } = render(<Scene />);
-    expect(screen.getByText('Error loading data.')).toBeDefined();
+    expect(screen.getByText('No se pudieron cargar los datos.')).toBeDefined();
     unmount();
   });
 
@@ -55,15 +55,15 @@ describe('Resources Scene', () => {
     expect(charts.length).toBeGreaterThanOrEqual(0);
     
     // Bottom projects table is always visible
-    expect(screen.getAllByText(/Investment Projects/).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/Proyectos de inversión/).length).toBeGreaterThan(0);
     
     // Toggle table view for Treemap
-    const tableToggleBtns = screen.getAllByText('Table view');
+    const tableToggleBtns = screen.getAllByRole('button', { name: 'Ver tabla' });
     
     fireEvent.click(tableToggleBtns[0] as Element);
     
     // Now there should be one less chart and a new table
-    expect(screen.getByText('Composition Data')).toBeDefined();
+    expect(screen.getByRole('table', { name: 'Composición' })).toBeDefined();
     unmount();
   });
 
@@ -73,7 +73,7 @@ describe('Resources Scene', () => {
 
     const { unmount } = render(<Scene />);
     
-    const copperBtn = screen.getByRole('button', { name: 'copper' });
+    const copperBtn = screen.getByRole('button', { name: 'Cobre' });
     fireEvent.click(copperBtn);
     expect(copperBtn.getAttribute('aria-pressed')).toBe('true');
     unmount();
