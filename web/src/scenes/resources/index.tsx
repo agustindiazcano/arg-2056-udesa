@@ -13,6 +13,9 @@ import { buildTreemap } from '../../charts/builders/treemap.js';
 import { buildProvinceBars } from '../../charts/builders/provinceBars.js';
 import { buildTrend } from '../../charts/builders/trend.js';
 import { selectProjectsForTable, getAvailableYears, clampYear } from './selectors.js';
+import { resourceMapValues } from './mapValues.js';
+import { ProvinceMap, useProvinces } from '../forecast/ProvinceMap.js';
+import { indicatorSentence } from '../../content/labels.js';
 import { EChart } from '../../charts/EChart.js';
 import { DataTable } from '../../charts/DataTable.js';
 import { projectStatusLabel, resourceLabel } from '../../content/labels.js';
@@ -35,6 +38,8 @@ export default function Scene() {
   const [treemapTable, setTreemapTable] = useState(false);
   const [barsTable, setBarsTable] = useState(false);
   const [trendTable, setTrendTable] = useState(false);
+  const provinces = useProvinces();
+  const dispatch = useStore(state => state.dispatch);
 
   const { status: compStatus, data: compData } = useDataset('composition', parseComposition);
   const { status: projStatus, data: projData } = useDataset('projects', parseProjects);
@@ -62,6 +67,14 @@ export default function Scene() {
     const hasSeries = province !== null && rpData?.some(r => r.resource === selectedResource && r.geo === province && r.value !== null);
     return hasSeries ? province : 'AR';
   }, [province, rpData, selectedResource]);
+
+  const mapValues = useMemo(
+    () =>
+      rpData && provinces.status === 'success'
+        ? resourceMapValues(rpData, provinces.geo, { resource: selectedResource, year: rpYear })
+        : null,
+    [rpData, provinces, selectedResource, rpYear]
+  );
 
   const treemapResult = useMemo(() => {
     if (!compData) return null;
@@ -224,6 +237,39 @@ export default function Scene() {
 
           </div>
         </div>
+      </div>
+
+      {/* Province map of the selected resource */}
+      <div style={{ marginTop: 'var(--space-lg)', display: 'flex', flexDirection: 'column' }}>
+        <h2 style={{ margin: '0 0 var(--space-sm)' }}>{`Mapa de producción por provincia (${rpYear})`}</h2>
+        {provinces.status === 'loading' && (
+          <div style={{ color: 'var(--muted)' }}>Cargando la geometría de las provincias...</div>
+        )}
+        {provinces.status === 'error' && (
+          <div style={{ color: 'var(--state-warning)' }}>
+            {`La geometría de las provincias no está disponible: ${provinces.message}`}
+          </div>
+        )}
+        {provinces.status === 'success' && mapValues && (
+          <div style={{ minHeight: '360px', display: 'flex' }}>
+            <ProvinceMap
+              geo={provinces.geo}
+              values={mapValues}
+              unit={resourceUnit ?? ''}
+              indicatorLabel={indicatorSentence('resource_production', selectedResource)}
+              metric="level"
+              selectedId={province}
+              year={rpYear}
+              observed
+              onSelect={(id) => dispatch({ type: 'selectProvince', province: id })}
+            />
+          </div>
+        )}
+        {provinces.status === 'success' && (
+          <div style={{ fontSize: 'var(--font-sm)', color: 'var(--ink-2)', marginTop: 'var(--space-sm)' }}>
+            {`Geometría de las provincias: ${provinces.meta.source}. ${provinces.meta.attribution}`}
+          </div>
+        )}
       </div>
 
       {/* Bottom Projects Table */}

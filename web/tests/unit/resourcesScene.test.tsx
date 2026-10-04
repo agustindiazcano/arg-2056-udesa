@@ -156,7 +156,7 @@ describe('Resources Scene province map', () => {
     { resource: 'lithium', geo: 'AR-A', year: 2026, value: 60, unit: 't', ...src },
     { resource: 'lithium', geo: 'AR-B', year: 2026, value: 40, unit: 't', ...src }
   ];
-  const geo = { type: 'FeatureCollection', features: [] };
+  const geo = { type: 'FeatureCollection', features: [{ properties: { id: 'AR-A' } }, { properties: { id: 'AR-B' } }] };
 
   beforeEach(() => {
     vi.restoreAllMocks();

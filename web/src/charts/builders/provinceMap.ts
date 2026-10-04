@@ -23,8 +23,11 @@ export interface ProvinceMapInput {
 export interface ProvinceMapOpts {
   metric: MapMetric;
   selectedId: string | null;
-  scenario: Scenario;
+  /** Not needed for observed data. */
+  scenario?: Scenario;
   year: number;
+  /** Observed data (no p10-p90 range, no scenario): the tooltip shows the value and the rank only. */
+  observed?: boolean;
 }
 
 
@@ -37,7 +40,7 @@ interface TooltipParams {
 
 export function buildProvinceMap(input: ProvinceMapInput, opts: ProvinceMapOpts) {
   const { geo, values, centroids, smallIds, unit, indicatorLabel } = input;
-  const { metric, selectedId, scenario, year } = opts;
+  const { metric, selectedId, scenario = 'expected', year, observed = false } = opts;
 
   const show = (x: number) => (metric === 'level' ? formatValue(x, unit) : `${formatPercent(x)} por año`);
 
@@ -70,6 +73,7 @@ export function buildProvinceMap(input: ProvinceMapInput, opts: ProvinceMapOpts)
     const v = values.values[id];
     if (!v) return `${name}<br/>sin datos`;
     const lines = [name, show(v.plotted)];
+    if (observed) return [...lines, `Puesto ${v.rank}`].join('<br/>');
     if (metric === 'level') {
       lines.push(`p10 a p90: ${formatValue(v.p10, unit)} a ${formatValue(v.p90, unit)} (80% de los resultados simulados)`);
     }
