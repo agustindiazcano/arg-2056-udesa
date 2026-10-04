@@ -267,6 +267,8 @@ Legend: DONE = merged. READY = can start now. BLOCKED = needs the human input na
 | 22 | andes-integration | BLOCKED | terrain outputs committed (D-andes-1 to D-andes-4 decided) |
 | 23 | scene-forecast-map-3d | SUPERSEDED | replaced by presentation-3d |
 | 23b | presentation-3d (six PRs) | IN PROGRESS | F2b merged, D-3d-1 to D-3d-6 decided (3D first), real province geometry done |
+| 23c | map-navigation | READY | (3D first, D-3d-6) zoom, pan and reset on 2D maps; free orbit, pan, zoom and reset on 3D |
+| 23d | fullscreen-viewer | READY | better after map-navigation: big-view popup with carousel, name, filters and statistics |
 | | **Real data** | | |
 | 24 | data-economy-population | BLOCKED | research files, my verification, population-age-contract merged (D-gdp-1 decided) |
 | 25 | data-resources | BLOCKED | research files (mining, energy, agro) and my verification |
@@ -1880,3 +1882,75 @@ Rules:
 When finished: overwrite LASTCONTEXT.md, update PENDING.md, and write a PR description with (a) what changed, (b) what was verified, (c) what the human must verify.
 ```
  
+
+---
+
+## map-navigation
+
+Prerequisite: dashboard D1 to D6 merged; D-3d-1 to D-3d-6 decided (3D first).
+
+```
+You are working in the repository `argentina-2056`.
+
+Before doing anything, read these files in this order:
+1. AGENTS.md
+2. LASTCONTEXT.md
+3. PENDING.md
+4. map-navigation.md   (the brief, in the repository root)
+Then read docs/dashboard.md, design.md, docs/performance.md, docs/decisions.md (D-3d-6) and the files the brief lists.
+
+Then execute the task described in map-navigation.md exactly.
+
+Rules:
+- Create branch `task/map-navigation`. Never touch `main`, never merge, never push to `main`.
+- Strict TDD: commit each failing test first, then the code that makes it pass. Atomic commits, format `type(scope): summary`.
+- Follow the brief and design.md literally. Copy names, limits and keys from them; do not recall them from memory and do not invent colors. No color literal outside `web/src/styles/tokens.ts` and `tokens.css`.
+- Add no dependency. If one seems necessary, stop and ask me.
+- Do not change the `KeyAction` union, `KEY_MAP` or the store shape.
+- Pure camera and view math in their own modules, tested with exact values; a drag of 4 px or less is a click; the camera survives the year animation.
+- Clean up WebGL contexts, listeners and GSAP timelines on unmount; respect `prefers-reduced-motion`.
+- Do not edit AGENTS.md, CLAUDE.md or GEMINI.md.
+- Before every push run `python scripts/precheck.py`. Never push if it fails.
+- Never silence a checker: no `as unknown as`, `@ts-ignore`, `eslint-disable`, `# noqa`, `--fix`, `--unsafe-fixes`. If a checker complains, fix the cause.
+- Tests must assert exact values, strings and structures, never only "no error". Tests never write inside the real data/ or web/public/data/ directories.
+- Never claim CI is green. Say "pushed, CI not checked" unless you read the run status.
+- If anything in the brief is ambiguous or seems wrong, stop and ask me instead of guessing.
+
+When finished: overwrite LASTCONTEXT.md, update PENDING.md, and write a PR description with (a) what changed, (b) what was verified, (c) what the human must verify.
+```
+
+---
+
+## fullscreen-viewer
+
+Prerequisite: dashboard D1 to D6 merged; `map-navigation` merged, or say in the PR that the popup shows the maps and 3D views as they are.
+
+```
+You are working in the repository `argentina-2056`.
+
+Before doing anything, read these files in this order:
+1. AGENTS.md
+2. LASTCONTEXT.md
+3. PENDING.md
+4. fullscreen-viewer.md   (the brief, in the repository root)
+Then read docs/dashboard.md, design.md, docs/performance.md, docs/decisions.md (D-3d-6) and the files the brief lists.
+
+Then execute the task described in fullscreen-viewer.md exactly.
+
+Rules:
+- Create branch `task/fullscreen-viewer`. Never touch `main`, never merge, never push to `main`.
+- Strict TDD: commit each failing test first, then the code that makes it pass. Atomic commits, format `type(scope): summary`.
+- Follow the brief and design.md literally. Copy names, limits and keys from them; do not recall them from memory and do not invent colors. No color literal outside `web/src/styles/tokens.ts` and `tokens.css`.
+- Add no dependency. If one seems necessary, stop and ask me.
+- Do not change the `KeyAction` union, `KEY_MAP` or the store shape.
+- The popup is a lazy chunk and keeps the main budget; its keys are handled in the capture phase and do not leak to the global handler; only one WebGL context alive at a time; focus is trapped and returned.
+- Clean up WebGL contexts, listeners and GSAP timelines on unmount; respect `prefers-reduced-motion`.
+- Do not edit AGENTS.md, CLAUDE.md or GEMINI.md.
+- Before every push run `python scripts/precheck.py`. Never push if it fails.
+- Never silence a checker: no `as unknown as`, `@ts-ignore`, `eslint-disable`, `# noqa`, `--fix`, `--unsafe-fixes`. If a checker complains, fix the cause.
+- Tests must assert exact values, strings and structures, never only "no error". Tests never write inside the real data/ or web/public/data/ directories.
+- Never claim CI is green. Say "pushed, CI not checked" unless you read the run status.
+- If anything in the brief is ambiguous or seems wrong, stop and ask me instead of guessing.
+
+When finished: overwrite LASTCONTEXT.md, update PENDING.md, and write a PR description with (a) what changed, (b) what was verified, (c) what the human must verify.
+```

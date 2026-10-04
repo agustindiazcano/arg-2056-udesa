@@ -69,6 +69,8 @@ Legend: **core** = needed for the submission; **opt** = optional, cut first if t
 | 39 | `andes-integration` | core | terrain outputs committed (`D-andes-1` to `D-andes-4` decided) |
 | 40 | `scene-forecast-map-3d` | superseded | replaced by `presentation-3d` (3D is now the default presentation, not an optional map variant) |
 | 48 | `presentation-3d` | core | F2b merged; decisions `D-3d-1` to `D-3d-6` taken; real province geometry for part 3 (`presentation-3d-shell` onward). A program of six PRs: engine, shell, charts A, story, charts B, Andes/zone map |
+| 49 | `map-navigation` | core | nothing (dashboard D1 to D6 merged); 3D first (`D-3d-6`) |
+| 50 | `fullscreen-viewer` | core | nothing; better after 49 (the popup reuses the navigable maps and 3D views) |
 
 ### A5. Real data (4, not executed; all need the human's research first)
 
