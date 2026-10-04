@@ -70,7 +70,7 @@ def test_economy_units_are_real_units_not_mock_units(mock):
 
 def test_argentina_today_is_in_a_believable_range(mock):
     rows = load(mock, "economy_series")
-    arg = lambda ind: series(rows, country="ARG", indicator=ind)  # noqa: E731
+    arg = lambda ind: series(rows, country="ARG", indicator=ind)
     assert 38e6 <= arg("population")[2025] <= 52e6
     assert 8000 <= arg("gdp_per_capita_usd")[2025] <= 20000
     assert 0.80 <= arg("hdi")[2025] <= 0.90
@@ -93,7 +93,7 @@ def test_gdp_is_gdp_per_capita_times_population_wherever_the_three_exist(mock):
 
 def test_the_ranking_tells_the_story_argentina_led_in_1913_and_does_not_lead_today(mock):
     rows = load(mock, "economy_series")
-    at = lambda year: {  # noqa: E731
+    at = lambda year: {
         c: series(rows, country=c, indicator="gdp_per_capita_usd").get(year) for c in COUNTRIES
     }
     in_1913 = at(1913)
@@ -161,9 +161,9 @@ def test_resources_have_real_units(mock):
 
 def test_the_national_series_is_the_sum_of_its_provinces(mock):
     rows = load(mock, "resource_production")
-    for resource in RESOURCE_PROVINCES:
+    for resource, allowed in RESOURCE_PROVINCES.items():
         national = series(rows, resource=resource, geo="AR")
-        provinces = [series(rows, resource=resource, geo=p) for p in RESOURCE_PROVINCES[resource]]
+        provinces = [series(rows, resource=resource, geo=p) for p in allowed]
         for year in (2000, 2015, 2025):
             parts = [s.get(year) for s in provinces if year in s]
             if national.get(year) is None or any(v is None for v in parts):
@@ -213,7 +213,7 @@ def test_the_fan_is_asymmetric_and_the_units_are_real(mock):
 
 def test_scenarios_diverge_and_the_ai_overlay_adds_a_visible_but_modest_gain(mock):
     forecast = load(mock, "forecast_output")
-    end = lambda scen, ai: forecast_series(  # noqa: E731
+    end = lambda scen, ai: forecast_series(
         forecast, "gdp_per_capita_usd", "AR", scen, ai)["points"][-1]["p50"]
     assert end("optimistic", "off") > 1.3 * end("pessimistic", "off")
     gain = end("expected", "on") / end("expected", "off") - 1

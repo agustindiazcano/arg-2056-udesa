@@ -1,329 +1,355 @@
 import json
+import math
 import random
 import sys
 from pathlib import Path
 
+from mock_shapes import (
+    COUNTRIES,
+    EXPORT_SHARE,
+    GDP_PC_ANCHORS,
+    HDI_ENDS,
+    IMPORT_SHARE,
+    POPULATION_ANCHORS,
+    PROVINCES,
+    RESOURCE_ANCHORS,
+    RESOURCE_GROWTH,
+    RESOURCE_SHARES,
+    RESOURCE_UNITS,
+    crisis_factor,
+    interp_log,
+    province_income_shares,
+    province_shares,
+    resource_share,
+)
+
 SEED = 2056
 RETRIEVED_AT = "2026-10-02"
-
-PROVINCES = [
-    "AR-A", "AR-B", "AR-C", "AR-D", "AR-E", "AR-F", "AR-G", "AR-H", "AR-J",
-    "AR-K", "AR-L", "AR-M", "AR-N", "AR-P", "AR-Q", "AR-R", "AR-S", "AR-T",
-    "AR-U", "AR-V", "AR-W", "AR-X", "AR-Y", "AR-Z"
-]
+YEARS = range(2026, 2057)
 
 def dump_json(data, path):
     with open(path, "w", encoding="utf-8") as f:
         json.dump(data, f, indent=2, sort_keys=True, ensure_ascii=False)
         f.write("\n")
 
+def dump_json_compact(data, path):
+    """Same content as dump_json without indentation: used for the one file that would pass the per-file budget."""
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(data, f, sort_keys=True, ensure_ascii=False, separators=(",", ":"))
+        f.write("\n")
+
+
 def gen_economy(rng):
-    countries = ["ARG", "BRA", "CHL", "MEX", "COL", "PER", "URY"]
-    indicators = ["gdp_constant_usd", "gdp_per_capita_usd", "population", "hdi"]
-    
+    """Seven countries, six indicators. GDP is gdp per capita times population, so the three always agree."""
+    # a few holes on purpose (the app must show a gap, never a zero); the note says so
+    holes = {
+        ("COL", "gdp_per_capita_usd", 1921), ("PER", "population", 1941),
+        ("MEX", "gdp_constant_usd", 1916), ("BRA", "hdi", 1995),
+    }
+    units = {"gdp_constant_usd": "USD", "gdp_per_capita_usd": "USD", "population": "personas", "hdi": "índice",
+             "exports_usd": "USD", "imports_usd": "USD"}
     data = []
-    nulls_added = 0
-    
-    for country in countries:
-        for ind in indicators:
-            val = rng.uniform(10, 1000)
-            
-            # gap for URY
-            is_gap_series = (country == "URY" and ind == "gdp_constant_usd")
-            
-            for year in range(1880, 2026):
-                if ind == "hdi" and year < 1990:
-                    continue
-                    
-                if is_gap_series and 1900 <= year <= 1905:
-                    continue # multi-year gap
-                    
-                # random walk with crises
-                val *= rng.uniform(0.95, 1.06)
-                if rng.random() < 0.05: # crisis
-                    val *= rng.uniform(0.7, 0.9)
-                
-                record = {
-                    "country": country,
-                    "indicator": ind,
-                    "year": year,
-                    "value": round(val, 2),
-                    "unit": "mock_unit",
-                    "source": "MOCK",
-                    "retrieved_at": RETRIEVED_AT
-                }
-                
-                # Add >= 3 nulls
-                if nulls_added < 4 and rng.random() < 0.01:
+
+    for country in COUNTRIES:
+        gdp_pc, population, gdp = {}, {}, {}
+        for year in range(1880, 2026):
+            noise = math.exp(rng.gauss(0, 0.012))
+            gdp_pc[year] = interp_log(GDP_PC_ANCHORS[country], year) * crisis_factor(country, year) * noise
+            population[year] = interp_log(POPULATION_ANCHORS[country], year)
+            gdp[year] = gdp_pc[year] * population[year]
+
+        values = {"gdp_constant_usd": {}, "gdp_per_capita_usd": {}, "population": {}, "hdi": {},
+                  "exports_usd": {}, "imports_usd": {}}
+        for year in range(1880, 2026):
+            if not (country == "URY" and 1900 <= year <= 1905):  # a multi-year gap
+                values["gdp_constant_usd"][year] = round(gdp[year])
+            values["gdp_per_capita_usd"][year] = round(gdp_pc[year])
+            values["population"][year] = round(population[year])
+        h90, h25 = HDI_ENDS[country]
+        for year in range(1990, 2026):
+            values["hdi"][year] = round(h90 + (h25 - h90) * ((year - 1990) / 35) ** 0.9, 3)
+        for year in range(1960, 2026):
+            t = (year - 1960) / 65
+            for key, shares in (("exports_usd", EXPORT_SHARE), ("imports_usd", IMPORT_SHARE)):
+                lo, hi = shares[country]
+                values[key][year] = round(gdp[year] * (lo + (hi - lo) * t) * math.exp(rng.gauss(0, 0.05)))
+
+        for indicator in ("gdp_constant_usd", "gdp_per_capita_usd", "population", "hdi", "exports_usd", "imports_usd"):
+            for year, value in sorted(values[indicator].items()):
+                record = {"country": country, "indicator": indicator, "year": year, "value": value,
+                          "unit": units[indicator], "source": "MOCK", "retrieved_at": RETRIEVED_AT}
+                if (country, indicator, year) in holes:
                     record["value"] = None
-                    record["note"] = "Mock missing data"
-                    nulls_added += 1
-                    
+                    record["note"] = "Dato faltante (mock ilustrativo)"
                 data.append(record)
-                
-    # ensure at least 3 nulls if rng didn't hit
-    while nulls_added < 3:
-        idx = rng.randint(0, len(data) - 1)
-        if data[idx]["value"] is not None:
-            data[idx]["value"] = None
-            data[idx]["note"] = "Forced missing data"
-            nulls_added += 1
-            
     return data
+
 
 def gen_resource_production(rng):
-    resources = ["lithium", "copper", "gold", "oil", "gas", "soy"]
+    """Production by resource and province, 1990 to 2025, in the units of the sector. The national row is the sum."""
+    holes = {("oil", "AR-M", 1995), ("soy", "AR-T", 2003), ("gold", "AR-K", 1996)}
     data = []
-    nulls_added = 0
-    
     resource_provs = {}
-    for r in resources:
-        num_provs = rng.randint(3, 8)
-        provs = rng.sample(PROVINCES, num_provs)
-        resource_provs[r] = provs
-        
-        # for each geo (AR + provs), generate series
-        geos = ["AR"] + provs
-        for geo in geos:
-            val = rng.uniform(10, 100)
-            shape = rng.choice(["growth", "plateau", "decline"])
-            for year in range(1990, 2026):
-                if shape == "growth":
-                    val *= rng.uniform(1.0, 1.1)
-                elif shape == "plateau":
-                    val *= rng.uniform(0.95, 1.05)
-                else:
-                    val *= rng.uniform(0.9, 1.0)
-                    
-                record = {
-                    "geo": geo,
-                    "resource": r,
-                    "year": year,
-                    "value": round(val, 2),
-                    "unit": "tonnes",
-                    "source": "MOCK",
-                    "retrieved_at": RETRIEVED_AT
-                }
-                
-                if nulls_added < 4 and rng.random() < 0.01:
+    for resource in ("lithium", "copper", "gold", "oil", "gas", "soy"):
+        provinces = list(RESOURCE_SHARES[resource])
+        resource_provs[resource] = provinces
+        unit = RESOURCE_UNITS[resource]
+        for year in range(1990, 2026):
+            national = interp_log(RESOURCE_ANCHORS[resource], year) * math.exp(rng.gauss(0, 0.03))
+            if national < 0:
+                national = 0.0
+            parts = {p: round(national * resource_share(resource, p, year), 2) for p in provinces}
+            data.append({"geo": "AR", "resource": resource, "year": year, "value": round(sum(parts.values()), 2),
+                         "unit": unit, "source": "MOCK", "retrieved_at": RETRIEVED_AT})
+            for p in provinces:
+                record = {"geo": p, "resource": resource, "year": year, "value": parts[p], "unit": unit,
+                          "source": "MOCK", "retrieved_at": RETRIEVED_AT}
+                if (resource, p, year) in holes:
                     record["value"] = None
-                    record["note"] = "Mock missing resource"
-                    nulls_added += 1
-                    
+                    record["note"] = "Dato faltante (mock ilustrativo)"
                 data.append(record)
-                
-    while nulls_added < 3:
-        idx = rng.randint(0, len(data) - 1)
-        if data[idx]["value"] is not None:
-            data[idx]["value"] = None
-            data[idx]["note"] = "Forced missing resource"
-            nulls_added += 1
-            
     return data, resource_provs
 
+
 def gen_population(rng):
+    """The country and its 24 provinces every five years. The provinces add up to the country."""
     data = []
-    geos = ["AR"] + PROVINCES
-    for geo in geos:
-        val = rng.uniform(10000, 1000000)
-        for year in range(1950, 2026, 5):
-            val *= rng.uniform(1.01, 1.2)
-            data.append({
-                "geo": geo,
-                "year": year,
-                "value": int(val),
-                "unit": "people",
-                "source": "MOCK",
-                "retrieved_at": RETRIEVED_AT
-            })
+    for year in range(1950, 2026, 5):
+        national = interp_log(POPULATION_ANCHORS["ARG"], year)
+        data.append({"geo": "AR", "year": year, "value": round(national), "unit": "personas", "source": "MOCK",
+                     "retrieved_at": RETRIEVED_AT})
+        for province, share in province_shares(year).items():
+            data.append({"geo": province, "year": year, "value": round(national * share), "unit": "personas",
+                         "source": "MOCK", "retrieved_at": RETRIEVED_AT})
     return data
+
+
+# an illustrative march from the east of the cordillera to the west: name, day, longitude, latitude, elevation, men
+ANDES_ROUTE = [
+    ("Campamento base (ilustrativo)", 0, -68.90, -32.90, 800, 3600),
+    ("Salida de la columna (ilustrativo)", 2, -69.10, -32.70, 1600, 3500),
+    ("Primer valle (ilustrativo)", 4, -69.30, -32.60, 2400, 3500),
+    ("Ascenso (ilustrativo)", 7, -69.60, -32.55, 3100, 3450),
+    ("Alta cordillera (ilustrativo)", 9, -69.90, -32.65, 3600, 3400),
+    ("Cumbre del paso (ilustrativo)", 11, -70.10, -32.80, 3900, 3300),
+    ("Descenso (ilustrativo)", 13, -70.30, -32.90, 3200, 3250),
+    ("Valle del oeste (ilustrativo)", 16, -70.50, -33.00, 2300, 3200),
+    ("Combate de avanzada (ilustrativo)", 19, -70.60, -32.95, 1400, 3150),
+    ("Encuentro final (ilustrativo)", 21, -70.70, -32.90, 800, 3100),
+]
+
 
 def gen_andes_events(rng):
     data = []
-    day = 0
-    null_elevations = 0
-    null_men = 0
-    
-    for i in range(1, 11):
-        day += rng.randint(0, 4) # non-decreasing
-        
+    for i, (name, day, lon, lat, elevation, men) in enumerate(ANDES_ROUTE, start=1):
         event = {
             "id": f"mock-andes-{i:02d}",
-            "name": f"MOCK event {i}",
+            "name": name,
             "day_of_campaign": day,
-            "date": "1817-01-01",
-            "lat": round(rng.uniform(-34.5, -32.0), 4),
-            "lon": round(rng.uniform(-71.0, -68.0), 4),
-            "date_precision": rng.choice(["day", "month"]),
-            "elevation_m": rng.randint(500, 4000),
+            "date": f"1817-01-{19 + day:02d}" if day <= 12 else f"1817-02-{day - 12:02d}",
+            "date_precision": "approximate",
+            "lat": round(lat + rng.uniform(-0.03, 0.03), 4),
+            "lon": lon,
+            "elevation_m": elevation,
             "forces": [
-                {"side": "MOCK side A", "men": rng.randint(100, 5000)},
-                {"side": "MOCK side B", "men": rng.randint(100, 5000)}
+                {"side": "Columna principal (ilustrativa)", "men": men},
+                {"side": "Fuerzas opuestas (ilustrativas)", "men": 1500 if i >= 9 else 0},
             ],
             "source": "MOCK",
-            "retrieved_at": RETRIEVED_AT
+            "retrieved_at": RETRIEVED_AT,
         }
-        
-        if null_elevations < 2 and rng.random() < 0.3:
+        if i in (3, 7):  # unknown elevations: the app shows a gap with its note
             event["elevation_m"] = None
-            event["note"] = "Unknown elevation"
-            null_elevations += 1
-            
-        if null_men < 1 and rng.random() < 0.3:
-            event["forces"][0]["men"] = None
-            event["forces"][0]["note"] = "Unknown men"
-            null_men += 1
-            
+            event["note"] = "Altitud desconocida (mock ilustrativo)"
+        if i < 9:  # nobody opposes the column on the way: the count is unknown, not zero
+            event["forces"][1]["men"] = None
+            event["forces"][1]["note"] = "Sin fuerzas opuestas registradas en este punto (mock ilustrativo)"
+        if i == 10:
+            event["estimate_range"] = {"min": 2900, "max": 3300}
+            event["note"] = "Cifra en disputa: se muestra un rango (mock ilustrativo)"
         data.append(event)
-        
-    while null_elevations < 2:
-        idx = rng.randint(0, 9)
-        if data[idx].get("elevation_m") is not None:
-            data[idx]["elevation_m"] = None
-            data[idx]["note"] = "Forced unknown elevation"
-            null_elevations += 1
-            
-    while null_men < 1:
-        data[0]["forces"][1]["men"] = None
-        data[0]["forces"][1]["note"] = "Forced unknown men"
-        null_men += 1
-        
     return data
 
-def gen_forecast(rng, resource_provs):
+
+def _finish(p50s, spread, digits, scale=1.0, absolute=False):
+    """Points with a fan that widens every year (strictly, so it still does after rounding) and a longer lower tail."""
+    unit = 10 ** digits
+    points, prev = [], 0
+    for i, (year, p50) in enumerate(zip(YEARS, p50s), start=1):
+        raw = (spread * math.sqrt(i) if absolute else p50 * spread * math.sqrt(i)) * scale
+        mid = round(p50 * unit)
+        width = max(round(raw * unit), prev + 2)
+        prev = width
+        low, high = mid - round(0.58 * width), mid + (width - round(0.58 * width))
+        points.append({"year": year, "p10": low / unit, "p50": mid / unit, "p90": high / unit})
+    return points
+
+
+def _growth_path(base, rate_by_year):
+    out, level = [], base
+    for rate in rate_by_year:
+        level *= math.exp(rate)
+        out.append(level)
+    return out
+
+
+def gen_forecast(rng, economy, resources):
+    """Scenarios, the AI overlay and the provinces, all continuing from the last observed value of 2025."""
+    last = {r["indicator"]: r["value"] for r in economy if r["country"] == "ARG" and r["year"] == 2025}
+    n = len(YEARS)
+    gdp_pc_rate = {"pessimistic": 0.003, "expected": 0.016, "optimistic": 0.028}
+    pop_rate = {"pessimistic": (0.004, -0.002), "expected": (0.006, 0.001), "optimistic": (0.008, 0.003)}
+    hdi_target = {"pessimistic": 0.89, "expected": 0.93, "optimistic": 0.95}
     series = []
-    
-    def make_series(ind, res, geo):
-        for scen in ["pessimistic", "expected", "optimistic"]:
-            for ai in ["off", "on"]:
-                s = {
-                    "indicator": ind,
-                    "geo": geo,
-                    "scenario": scen,
-                    "ai_overlay": ai,
-                    "unit": "mock_unit",
-                    "points": []
-                }
-                if res:
-                    s["resource"] = res
-                    
-                # Base val depends on scenario and AI so we can maintain invariants
-                base = 100.0
-                if scen == "optimistic": base += 50
-                elif scen == "pessimistic": base -= 50
-                if ai == "on": base += 20
-                
-                width = 10.0
-                for year in range(2026, 2057):
-                    # fan width non-decreasing
-                    width += rng.uniform(0.1, 1.0)
-                    # p50 order is maintained because we just grow from separated bases
-                    p50 = base + (year - 2026) * 2.0
-                    p10 = p50 - width/2
-                    p90 = p50 + width/2
-                    
-                    s["points"].append({
-                        "year": year,
-                        "p10": round(p10, 2),
-                        "p50": round(p50, 2),
-                        "p90": round(p90, 2)
-                    })
-                series.append(s)
-                
-    # AR
-    for ind in ["gdp_constant_usd", "gdp_per_capita_usd", "population", "hdi"]:
-        make_series(ind, None, "AR")
-        
-    for r in ["lithium", "copper", "gold", "oil", "gas", "soy"]:
-        make_series("resource_production", r, "AR")
-        # Provinces
-        for p in resource_provs.get(r, []):
-            make_series("resource_production", r, p)
-            
+
+    def add(indicator, geo, scenario, ai, unit, points, resource=None):
+        s = {"indicator": indicator, "geo": geo, "scenario": scenario, "ai_overlay": ai, "unit": unit,
+             "points": points}
+        if resource:
+            s["resource"] = resource
+        series.append(s)
+
+    ar = {}
+    for scenario in ("pessimistic", "expected", "optimistic"):
+        pop_p50 = _growth_path(last["population"], [pop_rate[scenario][0] + (pop_rate[scenario][1] - pop_rate[scenario][0]) * k / n for k in range(1, n + 1)])
+        for ai in ("off", "on"):
+            uplift = [sum(0.004 * min(j, 15) / 15 for j in range(1, k + 1)) for k in range(1, n + 1)] if ai == "on" else [0.0] * n
+            pc_p50 = [last["gdp_per_capita_usd"] * math.exp(gdp_pc_rate[scenario] * k + uplift[k - 1]) for k in range(1, n + 1)]
+            gdp_p50 = [a * b for a, b in zip(pc_p50, pop_p50)]
+            h25 = last["hdi"]
+            hdi_p50 = [h25 + (hdi_target[scenario] - h25) * (1 - math.exp(-0.045 * k)) + (0.004 * min(k, 15) / 15 if ai == "on" else 0.0) for k in range(1, n + 1)]
+            wide = 1.15 if ai == "on" else 1.0
+            ar[(scenario, ai)] = {
+                "gdp_per_capita_usd": _finish(pc_p50, 0.045, 0, wide), "gdp_constant_usd": _finish(gdp_p50, 0.05, 0, wide),
+                "population": _finish(pop_p50, 0.012, 0), "hdi": _finish(hdi_p50, 0.012, 4, wide, absolute=True),
+            }
+            for indicator, unit in (("gdp_constant_usd", "USD"), ("gdp_per_capita_usd", "USD"), ("population", "personas"), ("hdi", "índice")):
+                add(indicator, "AR", scenario, ai, unit, ar[(scenario, ai)][indicator])
+            # the provinces: constant shares of the national population and GDP
+            pop_share = province_shares(2025)
+            gdp_share = province_income_shares()
+            for province in PROVINCES:
+                add("population", province, scenario, ai, "personas", _finish([v * pop_share[province] for v in pop_p50], 0.012, 0))
+                add("gdp_constant_usd", province, scenario, ai, "USD", _finish([v * gdp_share[province] for v in gdp_p50], 0.05, 0, wide))
+                factor = gdp_share[province] / pop_share[province]
+                add("gdp_per_capita_usd", province, scenario, ai, "USD", _finish([v * factor for v in pc_p50], 0.045, 0, wide))
+
+    # resources: the 2025 value of each province and of the country grown at the rate of the scenario
+    for resource, provinces in RESOURCE_SHARES.items():
+        base = {r["geo"]: r["value"] for r in resources if r["resource"] == resource and r["year"] == 2025}
+        for scenario, rate in zip(("pessimistic", "expected", "optimistic"), RESOURCE_GROWTH[resource]):
+            for geo in ["AR", *provinces]:
+                p50 = [max(base[geo], 0.001) * math.exp(rate * k) for k in range(1, n + 1)]
+                points = _finish(p50, 0.06, 3)
+                for ai in ("off", "on"):
+                    add("resource_production", geo, scenario, ai, RESOURCE_UNITS[resource], points, resource)
+
     return {
         "model_version": "1.0.0-mock",
         "generated_at": RETRIEVED_AT,
         "source": "MOCK",
         "horizon": {"start_year": 2026, "end_year": 2056},
-        "series": series
+        "series": series,
     }
 
-def gen_composition(rng):
+
+# (group, category id, label, weight in the economy) and, for GDP, the year the category starts to exist
+GDP_SECTORS = [
+    ("Agro", "agricultura-y-ganaderia", "Agricultura y ganadería", 7.5, 0),
+    ("Agro", "pesca-y-forestal", "Pesca y forestal", 1.0, 0),
+    ("Industria", "alimentos-y-bebidas", "Alimentos y bebidas", 7.5, 0),
+    ("Industria", "quimica-y-plasticos", "Química y plásticos", 3.0, 0),
+    ("Industria", "automotriz", "Industria automotriz", 2.0, 0),
+    ("Industria", "otras-industrias", "Otras industrias", 6.0, 0),
+    ("Industria", "construccion", "Construcción", 4.0, 0),
+    ("Energía y minería", "petroleo-y-gas", "Petróleo y gas", 3.5, 0),
+    ("Energía y minería", "mineria", "Minería", 1.0, 0),
+    ("Energía y minería", "electricidad-y-agua", "Electricidad y agua", 2.5, 0),
+    ("Servicios", "comercio", "Comercio", 13.0, 0),
+    ("Servicios", "transporte-y-comunicaciones", "Transporte y comunicaciones", 8.0, 0),
+    ("Servicios", "finanzas-e-inmobiliario", "Finanzas e inmobiliario", 12.0, 0),
+    ("Servicios", "administracion-publica", "Administración pública", 6.0, 0),
+    ("Servicios", "educacion-y-salud", "Educación y salud", 8.0, 0),
+    ("Servicios", "servicios-del-conocimiento", "Servicios del conocimiento", 5.0, 2005),
+    ("Servicios", "otros-servicios", "Otros servicios", 9.5, 0),
+]
+EXPORT_PRODUCTS = [
+    ("Agro", "complejo-sojero", "Soja y derivados", 27.0),
+    ("Agro", "maiz", "Maíz", 9.0),
+    ("Agro", "trigo", "Trigo", 5.0),
+    ("Agro", "carnes", "Carnes", 5.0),
+    ("Industria", "automotriz", "Vehículos y autopartes", 8.0),
+    ("Industria", "quimica", "Química", 5.0),
+    ("Industria", "alimentos-industriales", "Alimentos industriales", 5.0),
+    ("Energía", "petroleo-y-gas", "Petróleo y gas", 8.0),
+    ("Minería", "litio", "Litio", 3.0),
+    ("Minería", "oro-y-plata", "Oro y plata", 5.0),
+    ("Minería", "cobre", "Cobre", 1.0),
+]
+
+
+def gen_composition(rng, economy):
+    """GDP by sector and exports by product of Argentina, 2000 to 2025, as shares of the totals of the economy file."""
+    by_year = {(r["indicator"], r["year"]): r["value"] for r in economy if r["country"] == "ARG"}
     data = []
     nulls_added = 0
-    groups = ["Primary", "Secondary", "Tertiary", "Quaternary", "Quinary"]
-    
-    for kind in ["gdp_by_sector", "exports_by_product"]:
-        leaves = []
-        for g in groups:
-            num_leaves = rng.randint(3, 5)
-            for i in range(num_leaves):
-                cat_id = f"{kind.replace('_', '-')}-{g.lower()}-{i}"
-                leaves.append({"group": g, "category": cat_id, "share": rng.uniform(5, 20)})
-                
-        total = sum(l["share"] for l in leaves)
-        for l in leaves:
-            l["share"] = (l["share"] / total) * 1000
-            l["drift"] = rng.uniform(0.98, 1.02)
-            
+    for kind, indicator, table in (("gdp_by_sector", "gdp_constant_usd", GDP_SECTORS),
+                                   ("exports_by_product", "exports_usd", EXPORT_PRODUCTS)):
+        rows = [(*t, 0) if len(t) == 4 else t for t in table]
+        weights = {t[1]: t[3] for t in rows}
+        drift = {t[1]: rng.uniform(0.992, 1.008) for t in rows}
         for year in range(2000, 2026):
-            for l in leaves:
-                l["share"] *= l["drift"]
-            
-            for l in leaves:
-                if year < 2005 and l["category"].endswith("-0") and kind == "gdp_by_sector":
-                    continue
-                    
-                record = {
-                    "kind": kind,
-                    "year": year,
-                    "group": l["group"],
-                    "category": l["category"],
-                    "label": f"Mock {l['category']}",
-                    "value_usd": round(l["share"], 2),
-                    "source": "MOCK",
-                    "retrieved_at": RETRIEVED_AT
-                }
-                
-                if nulls_added < 2 and rng.random() < 0.01:
+            for key in weights:
+                weights[key] *= drift[key]
+            present = [t for t in rows if year >= t[4]]
+            total = sum(weights[t[1]] for t in present)
+            for group, category, label, _weight, _start in present:
+                record = {"kind": kind, "year": year, "group": group, "category": category, "label": label,
+                          "value_usd": round(by_year[(indicator, year)] * weights[category] / total),
+                          "source": "MOCK", "retrieved_at": RETRIEVED_AT}
+                if nulls_added < 2 and year == 2012 and category in ("mineria", "cobre"):
                     record["value_usd"] = None
-                    record["note"] = "Mock missing composition data"
+                    record["note"] = "Dato faltante (mock ilustrativo)"
                     nulls_added += 1
-                    
                 data.append(record)
-                
-    while nulls_added < 2:
-        idx = rng.randint(0, len(data) - 1)
-        if data[idx]["value_usd"] is not None:
-            data[idx]["value_usd"] = None
-            data[idx]["note"] = "Forced missing composition data"
-            nulls_added += 1
-            
     return data
+
+
+PROJECT_NAMES = {
+    "lithium": ["Salar del Norte", "Salar Altiplano", "Laguna Verde", "Salinas Grandes", "Cuenca Austral"],
+    "copper": ["Cerro Alto", "Mina del Oeste", "Pórfido Andino", "Cordón Rojo"],
+    "gold": ["Veta Dorada", "Cerro Brillante", "Quebrada Seca", "Mesa Austral"],
+    "oil": ["Bloque Meseta", "Área Cuenca Sur", "Yacimiento Costa", "Formación Profunda"],
+    "gas": ["Campo del Valle", "Bloque Austral", "Planta Cordillera", "Gasoducto Sur"],
+}
+PROJECT_COMPANIES = ["Compañía Andina", "Minera Austral", "Energía del Sur", "Recursos Patagonia", "Grupo Cordillera",
+                     "Explotaciones del Norte"]
+
 
 def gen_projects(rng, resource_provs):
     data = []
     nulls_added = 0
     resources = ["lithium", "copper", "gold", "oil", "gas"]
     statuses = ["operating", "ramp_up", "construction", "approved", "feasibility", "prefeasibility", "exploration", "announced"]
-    
+
     status_pool = statuses * 2 + [rng.choice(statuses) for _ in range(30 - 16)]
     rng.shuffle(status_pool)
-    
+
     for i in range(30):
         r = rng.choice(resources)
-        provs = resource_provs.get(r, [])
-        geo = rng.choice(provs) if provs else "AR-B"
+        geo = rng.choice(resource_provs[r])
         has_capacity = rng.choice([True, False])
-        
+        names = PROJECT_NAMES[r]
+        company = PROJECT_COMPANIES[i % len(PROJECT_COMPANIES)]
+
         record = {
             "id": f"mock-proj-{i}",
-            "name": f"Mock Project {i}",
+            "name": f"{names[i % len(names)]} {i // len(names) + 1}",
             "resource": r,
             "geo": geo,
             "status": status_pool[i],
-            "company": f"Mock Company {i}",
-            "owners": [f"Owner {i}A", f"Owner {i}B"],
+            "company": f"{company} (ilustrativa)",
+            "owners": [f"{company} (ilustrativa)", f"Socio {i % 4 + 1} (ilustrativo)"],
             "capex_usd": round(rng.uniform(1e6, 1e9), 2),
             "start_year": rng.randint(2020, 2035),
             "capacity_per_year": round(rng.uniform(1000, 50000), 2) if has_capacity else None,
@@ -331,27 +357,27 @@ def gen_projects(rng, resource_provs):
             "source": "MOCK",
             "retrieved_at": RETRIEVED_AT
         }
-        
+
         if not has_capacity:
-            record["note"] = "Mock missing capacity"
-            
+            record["note"] = "Capacidad faltante (mock ilustrativo)"
+
         if nulls_added < 3 and rng.random() < 0.2:
             record["capex_usd"] = None
             if "note" in record:
-                record["note"] += "; Mock missing capex"
+                record["note"] += "; capex faltante (mock ilustrativo)"
             else:
-                record["note"] = "Mock missing capex"
+                record["note"] = "Capex faltante (mock ilustrativo)"
             nulls_added += 1
-            
+
         data.append(record)
-        
+
     while nulls_added < 3:
         idx = rng.randint(0, len(data) - 1)
         if data[idx].get("capex_usd") is not None:
             data[idx]["capex_usd"] = None
-            data[idx]["note"] = "Forced missing capex"
+            data[idx]["note"] = "Capex faltante (mock ilustrativo)"
             nulls_added += 1
-            
+
     return data
 
 def gen_projections(rng, projects, resource_provs):
@@ -449,10 +475,11 @@ def gen_projections(rng, projects, resource_provs):
                     break
 
     # Provinces forecast
-    provs_selected = rng.sample(PROVINCES, 3)
     resources_selected = rng.sample(["lithium", "copper", "gold", "oil", "gas"], 3)
-    for p in provs_selected:
-        for r in resources_selected:
+    pairs = []
+    for r in resources_selected:
+        pairs.extend((p, r) for p in rng.sample(sorted(RESOURCE_SHARES[r]), 2))
+    for p, r in pairs:
             ub = get_unit_basis(r)
             for y in range(2026, 2036):
                 val_base = 1000 + (y - 2026) * 50
@@ -833,7 +860,7 @@ def main(out_dir: str):
     
     eco = gen_economy(rng)
     dump_json(eco, out / "economy_series.json")
-    
+
     rp, rprovs = gen_resource_production(rng)
     dump_json(rp, out / "resource_production.json")
     
@@ -843,10 +870,10 @@ def main(out_dir: str):
     andes = gen_andes_events(rng)
     dump_json(andes, out / "andes_events.json")
     
-    fc = gen_forecast(rng, rprovs)
-    dump_json(fc, out / "forecast_output.json")
+    fc = gen_forecast(rng, eco, rp)
+    dump_json_compact(fc, out / "forecast_output.json")
     
-    comp = gen_composition(rng)
+    comp = gen_composition(rng, eco)
     dump_json(comp, out / "composition.json")
     
     proj = gen_projects(rng, rprovs)
