@@ -192,7 +192,7 @@ export default function Scene() {
       {/* Bottom Projects Table */}
       <div style={{ marginTop: 'var(--space-lg)' }}>
         <h3>Major Investment Projects ({selectedResource})</h3>
-        <div style={{ height: '250px', overflowY: 'auto' }}>
+        <div>
           <DataTable
             caption={`Investment Projects for ${selectedResource}`}
             columns={[
