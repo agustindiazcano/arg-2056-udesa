@@ -48,8 +48,8 @@ function press(key: string) {
 describe('App shell with the story layer', () => {
   it('mounts the caption panel', () => {
     render(<App />);
-    expect(screen.getByRole('region', { name: 'Story' })).toBeTruthy();
-    expect(screen.getByText('Step 1 of 3')).toBeTruthy();
+    expect(screen.getByRole('region', { name: 'Historia' })).toBeTruthy();
+    expect(screen.getByText('Paso 1 de 3')).toBeTruthy();
   });
 
   it('PageDown and PageUp move the step in each of the six scenes (assert the store)', () => {
@@ -77,7 +77,7 @@ describe('App shell with the story layer', () => {
     expect(useStore.getState().scene).toBe('economy');
     expect(useStore.getState().stepIndex.economy).toBe(0);
     expect(useStore.getState().yearFloat).toBe(1880);
-    expect(screen.getByText('Step 1 of 3')).toBeTruthy();
+    expect(screen.getByText('Paso 1 de 3')).toBeTruthy();
   });
 
   it('the caption panel is not part of the references entry', () => {

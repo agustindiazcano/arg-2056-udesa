@@ -20,7 +20,7 @@ const fixture: Meta = {
 describe('META', () => {
   it('starts as a clearly fake placeholder the release gate rejects', () => {
     expect(META.placeholder).toBe(true);
-    expect(META.description).toBe('Placeholder description. Replace before release.');
+    expect(META.description).toBe('Descripción provisoria. Reemplazar antes del lanzamiento.');
     expect(META.url).toBe('https://example.invalid/');
     expect(META.ogImage).toBe('/og.png');
   });

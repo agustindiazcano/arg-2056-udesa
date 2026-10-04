@@ -27,7 +27,7 @@ describe('STEPS placeholder content', () => {
         'Step 3 (placeholder)'
       ]);
       for (const s of steps) {
-        expect(s.text).toBe('Placeholder text. Replace before release.');
+        expect(s.text).toBe('Texto provisorio. Reemplazar antes del lanzamiento.');
         expect(s.placeholder).toBe(true);
         expect(s.source_ids).toEqual([]);
       }

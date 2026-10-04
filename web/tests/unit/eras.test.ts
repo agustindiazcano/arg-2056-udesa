@@ -13,7 +13,7 @@ function mockRange(): { min: number; max: number } {
 
 describe('placeholder era list', () => {
   it('has exactly three demonstration entries with placeholder labels and no source', () => {
-    expect(ERAS.map((e) => e.label)).toEqual(['Era A (placeholder)', 'Era B (placeholder)', 'Era C (placeholder)']);
+    expect(ERAS.map((e) => e.label)).toEqual(['Era A (provisoria)', 'Era B (provisoria)', 'Era C (provisoria)']);
     expect(ERAS.map((e) => e.id)).toEqual(['era-a', 'era-b', 'era-c']);
     for (const era of ERAS) {
       expect(era.source_id).toBeNull();
