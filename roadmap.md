@@ -1,88 +1,128 @@
 # Roadmap: single list of tasks and briefs
 
-This file is the one list. `PENDING.md` (the agent's queue) must use these slugs. Brief status says whether `docs/tasks/<slug>.md` exists; it says nothing about whether the task was executed (track that in `PENDING.md`).
+This file is the one list. `PENDING.md` (the agent's queue) must use these slugs. Brief status says whether `<slug>.md` exists in the repository root; it says nothing about whether the task was executed (`PENDING.md` and the status table in `TASKS.md` track that). `TASKS.md` holds the prompt of every task.
 
-Legend: **core** = needed for the submission; **opt** = optional, cut first if time is short.
+Legend: **core** = needed for the submission; **opt** = optional, cut first if time is short. **draft** = the brief exists but is blocked by input only the human has (it lists exactly what).
 
-## A. Briefs written (24)
+## A. Briefs written (48)
 
-| # | Slug | Brief | What it also absorbed |
+### A1. Foundations, data and scenes (21, all executed)
+
+| # | Slug | What it also absorbed |
+|---|---|---|
+| 1 | `contract` | schemas for economy, resources, population, Andes events; CI base |
+| 2 | `forecast-contract` | forecast output schema, checks, TS parser and selectors |
+| 3 | `precheck` | local gate script |
+| 4 | `mock-data` | deterministic mock, `no-mock` gate |
+| 5 | `shell` | state, keyboard, tabs, HUD, MOCK badge, `build:release` |
+| 6 | `composition-contract` | composition and projects schemas |
+| 7 | `projections-contract` | projects migration, production projections, data dictionary |
+| 8 | `scene-resources` | treemap, province bars, trend, projects table, `EChart`, `DataTable`, tokens |
+| 9 | `data-pipeline` | raw manifest, adapters protocol, provenance, sources registry, `sync-data`, data size budget |
+| 10 | `research-contracts` | five research-input schemas, checks, parsers, mocks |
+| 11 | `model-design` | design document, assumptions register, decisions log |
+| 12 | `audit` | reusable independent review (any target) |
+| 13 | `scene-forecast` | fan chart, ranking, tiles, AI overlay toggle |
+| 14 | `terrain-bake` | DEM baking tool, terrain loader and sampling in TS, verify command |
+| 15 | `geo-provinces` | province geometry build, loader, metadata |
+| 16 | `scene-forecast-map` | province choropleth inside the forecast scene |
+| 17 | `scene-economy` | long-run chart, rank bars, rank history, placeholder eras and their release gate |
+| 18 | `scene-sandbox` | rule-of-70 arithmetic, sliders, comparison with the model range |
+| 19 | `references-page` | `build-references`, second Vite entry, release gate for empty references |
+| 20 | `storytelling-substeps` | step state, three new keys, caption panel, placeholder steps and gate |
+| 21 | `integration` | data smoke test, bundle budget, Playwright e2e, expected-failure CI step, release checklist |
+
+### A2. Quality and delivery (3, executed except the optional one)
+
+| # | Slug | Class | What it covers |
 |---|---|---|---|
-| 1 | `contract` | written | schemas for economy, resources, population, Andes events; CI base |
-| 2 | `forecast-contract` | written | forecast output schema, checks, TS parser and selectors |
-| 3 | `precheck` | written | local gate script |
-| 4 | `mock-data` | written | deterministic mock, `no-mock` gate |
-| 5 | `shell` | written | state, keyboard, tabs, HUD, MOCK badge, `build:release` |
-| 6 | `composition-contract` | written | composition and projects schemas |
-| 7 | `projections-contract` | written | projects migration, production projections, data dictionary |
-| 8 | `scene-resources` | written | treemap, province bars, trend, projects table, `EChart`, `DataTable`, tokens |
-| 9 | `data-pipeline` | written | raw manifest, adapters protocol, provenance, sources registry, `sync-data`, data size budget |
-| 10 | `research-contracts` | written | five research-input schemas, checks, parsers, mocks |
-| 11 | `model-design` | written | design document, assumptions register, decisions log, replaces the model task list in `PENDING.md` |
-| 12 | `audit` | written | reusable independent review (any target) |
-| 13 | `scene-forecast` | written | fan chart, ranking, tiles, AI overlay toggle |
-| 14 | `terrain-bake` | written | DEM baking tool, terrain loader and sampling in TS, verify command |
-| 15 | `geo-provinces` | written | province geometry build, loader, metadata |
-| 16 | `scene-forecast-map` | written | province choropleth inside the forecast scene |
-| 17 | `scene-economy` | written | long-run chart, rank bars, rank history, placeholder eras and their release gate |
-| 18 | `scene-sandbox` | written | rule-of-70 arithmetic, sliders, comparison with the model range (no model port needed) |
-| 19 | `references-page` | written | `build-references` command, second Vite entry, release gate for empty references, shell footer link |
-| 20 | `storytelling-substeps` | written | step state, three new keys, caption panel, play-range runner, placeholder steps and gate |
-| 21 | `integration` | written | data smoke test, bundle budget, Playwright e2e, expected-failure CI step, release checklist |
-| 22 | `performance-a11y` | written | scene code splitting, tree-shaken ECharts, quality tiers and WebGL fallback infrastructure, reduced motion, axe checks, contrast test, focus and landmarks |
-| 23 | `deploy` | written | link-preview metadata and its release gates, data cache busting, host-neutral headers and CSP, release job, smoke script for a deployed URL |
-| 24 | `mutation-testing` (opt) | written | mutmut and Stryker with a no-regression gate and a baseline |
+| 22 | `performance-a11y` | core, executed (PR #29) | scene code splitting, tree-shaken ECharts, quality tiers, reduced motion, axe, contrast, focus, landmarks |
+| 23 | `deploy` | core, executed (PR #34) | metadata and its release gates, data cache busting, headers and CSP, precompiled validators, release job, smoke script |
+| 24 | `mutation-testing` | opt | mutmut and Stryker with a no-regression gate |
 
-## B. Briefs still to write (20)
+### A3. Model, from `docs/model-design.md` section 8 (14, not executed)
 
 | # | Slug | Class | Blocked by |
 |---|---|---|---|
-| 25 | `model-params` | core | content of `docs/model-design.md` |
-| 26 | `model-population` | core | design |
-| 27 | `model-growth-core` | core | design |
-| 28 | `model-resources` | core | design |
-| 29 | `model-ai-overlay` | core | design |
-| 30 | `model-montecarlo` | core | design |
-| 31 | `backtest-baselines` | core | design |
-| 32 | `backtest-run` | core | design, verified economy data |
-| 33 | `sensitivity` | core | design |
-| 34 | `model-provinces` | core | design |
-| 35 | `model-ts-port` | opt | design |
-| 36 | `andes-integration` | core | the renderer of the Andes prototype; terrain outputs; `performance-a11y` (uses `useQuality`) |
-| 37 | `data-andes` | core | verified Andes research |
-| 38 | `data-resources` | core | verified mining, energy and agro research |
-| 39 | `data-economy-population` | core | verified economy and population research |
-| 40 | `data-research-inputs` | core | verified research (forecasts, vintages, base rates, AI estimates, dataset catalog) |
-| 41 | `polish` | core | design decisions by the human |
-| 42 | `docs-submission` | core | contest criteria; model results (methodology and limitations pages) |
-| 43 | `scene-forecast-map-3d` | opt | renderer decision |
-| 44 | `demo-video` | opt | contest requirements |
+| 25 | `model-params` | core | answer to `D-res-3` (nine or ten value-added constants) |
+| 26 | `model-population-hardening` | core | nothing (audit F5, F8, F9) |
+| 27 | `population-age-contract` | core | nothing (decision `D-data-1`) |
+| 28 | `model-population-drivers` | core | 25, 26, 27 |
+| 29 | `model-growth-core` | core | 25, 26 |
+| 30 | `model-hdi` | core | 25, 28, 29; the goalposts are `needs_source` |
+| 31 | `model-resources` | core | 25 (mock data) |
+| 32 | `model-ai-overlay` | core | 25 (29 should be merged) |
+| 33 | `model-montecarlo` | core | 28 to 32; real runs need parameter values |
+| 34 | `backtest-baselines` | core | nothing for the code; real runs need the series of 41 |
+| 35 | `backtest-run` | core | 33, 34, verified real series 1990 to 2025 |
+| 36 | `sensitivity` | core | 33; the published result needs real ranges |
+| 37 | `model-provinces` | core | 33 |
+| | `model-ts-port` | opt | 29, 32 (and 28, 30 for the full port) |
 
-Core remaining: 17. Optional: 3 (`model-ts-port`, `scene-forecast-map-3d`, `demo-video`).
+(The old line `model-population` of the first roadmap was split by the design into 26, 27, 28 and 30.)
+
+### A4. Scenes (3)
+
+| # | Slug | Class | Blocked by |
+|---|---|---|---|
+| 38 | `scene-ai-revolution` | core | nothing (works on mock data; the forecast scene keeps its own AI overlay toggle, this is the scene tab) |
+| 39 | `andes-integration` | core | terrain outputs committed; renderer decision `D-andes-1` to `D-andes-4` |
+| 40 | `scene-forecast-map-3d` | opt, draft | `andes-integration`, real province geometry, the human's go |
+
+### A5. Real data (4, not executed; all need the human's research first)
+
+| # | Slug | Class | Blocked by |
+|---|---|---|---|
+| 41 | `data-economy-population` | core | economy and population research verified; `D-gdp-1`; 27 |
+| 42 | `data-resources` | core | mining, energy and agro research verified |
+| 43 | `data-andes` | core | Andes research verified |
+| 44 | `data-research-inputs` | core | research of forecasts, vintages, base rates, AI estimates and catalog verified, with its format documented |
+
+### A6. Delivery (3, not executed)
+
+| # | Slug | Class | Blocked by |
+|---|---|---|---|
+| 45 | `polish` | core | answers to `D-polish-1` to `D-polish-7`; model and data tasks done |
+| 46 | `docs-submission` | core, draft | the contest's rules and criteria; 35 |
+| 47 | `demo-video` | opt, draft | what the contest requires |
+
+## B. Briefs still to write
+
+None. Every task of the roadmap has a brief. The three **draft** briefs (`scene-forecast-map-3d`, `docs-submission`, `demo-video`) are complete in structure and list the human inputs they wait for; rewrite them in place when those inputs arrive.
 
 ## C. Mapping from the coarse tasks in the agent's board to these slugs
 
 | Board entry | Slugs |
 |---|---|
-| Model: Growth Accounting | `model-params`, `model-growth-core` (golden vectors are part of its tests; the TS port is `model-ts-port`, optional) |
+| Model: Growth Accounting | `model-params`, `model-growth-core` (the TS port is `model-ts-port`, optional) |
 | Model: Resources Pipeline | `model-resources` |
 | Model: AI Multiplier | `model-ai-overlay` |
 | Model: Monte Carlo Fan | `model-montecarlo` |
 | Backtest & Calibration | `backtest-baselines`, `backtest-run`, `sensitivity` |
-| Scene: Forecast | `scene-forecast` (done), `scene-forecast-map` |
-| Scene: Economy & Sandbox | `scene-economy`, `scene-sandbox` |
-| Scene: AI & Andes | `andes-integration`; the AI explainer is a toggle on the forecast scene, not a scene |
-| Polish | `performance-a11y` (written), `polish` |
-| (not on the board) | `model-design`, `model-population`, `model-provinces`, `terrain-bake`, `geo-provinces`, `data-*`, `references-page`, `storytelling-substeps`, `integration`, `deploy`, `docs-submission` |
+| Scene: Forecast | `scene-forecast` (done), `scene-forecast-map` (done) |
+| Scene: Economy & Sandbox | `scene-economy`, `scene-sandbox` (done) |
+| Scene: AI & Andes | `scene-ai-revolution`, `andes-integration` |
+| Polish | `performance-a11y` (done), `polish` |
+| (not on the board) | `model-design`, `model-population-*`, `model-hdi`, `model-provinces`, `terrain-bake`, `geo-provinces`, `data-*`, `references-page`, `storytelling-substeps`, `integration`, `deploy`, `docs-submission` |
 
-## D. Human tasks (not briefs)
+## D. Done outside the briefs (each one is a merged PR; no brief was written)
 
-1. Run the six research sessions (`docs/research-prompts.md`), store results in `data/raw/research/<scope>/`, verify 10 URLs and 3 numbers per scope.
-2. Download the DEM, register it, set the bounding boxes, run `terrain-bake`, verify against the passes, commit the outputs.
+| PR | Slug | What |
+|---|---|---|
+| #30, #31 | `vercel-config` | `vercel.json` (install, build, output; the Python venv because the Vercel Python is externally managed) |
+| #32 | `vercel-analytics` | Vercel Web Analytics and Speed Insights, on only in a Vercel build |
+| #33 | `visits-archive` | `scripts/sync_visits.py`, the weekly workflow that opens a PR, the Visits section of the References page (`docs/visits.md`) |
+
+## E. Human tasks (not briefs)
+
+1. Run the six research sessions (`docs/research-prompts.md` does not exist yet), store results in `data/raw/research/<scope>/`, verify 10 URLs and 3 numbers per scope.
+2. Download the DEM, register it, set the bounding boxes, run `terrain-bake`, verify against the Andes facts, commit the outputs.
 3. Choose the province geometry source, register it, fill `id_map`, run `build:geo`, review, commit the outputs.
 4. Write the real era list and the real story steps, with sources.
-5. Decide the open design decisions in `docs/design.md`.
-6. Confirm the contest deadline and criteria.
+5. Decide the open design decisions: `docs/design.md` (locale, typeface), `D-res-3`, `D-gdp-1`, `D-andes-1` to `D-andes-4`, `D-polish-1` to `D-polish-7`, and the assumptions A10, A13, A15, A16, A24, A26, A31, A32, A33.
+6. Confirm the contest deadline and criteria; they unblock `docs-submission` and `demo-video`.
 7. Confirm the budgets in `web/budgets.json` and the data budget.
 8. Run the audit before merging model code and before submission.
-9. Run `docs/release-checklist.md` before submitting.
+9. Deploy: first Vercel deploy, `python scripts/smoke_deployed.py <url>`, the description, final URL, `og.png` and `favicon.svg` (`docs/deploy.md`).
+10. Visits archive: the Vercel token and ids as GitHub secrets, the Actions permission, one manual run (`docs/visits.md`).
+11. Run `docs/release-checklist.md` before submitting.

@@ -156,10 +156,10 @@ describe('gen-validators', () => {
     const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'validators-'));
     const target = path.join(dir, 'generated.js');
     expect(runCli(['--out', target], io)).toBe(0);
-    expect(fs.readFileSync(target, 'utf8')).toBe(fs.readFileSync(path.join(SRC, 'validation', 'generated.js'), 'utf8'));
-    expect(fs.readFileSync(path.join(dir, 'generated.d.ts'), 'utf8')).toBe(
-      fs.readFileSync(path.join(SRC, 'validation', 'generated.d.ts'), 'utf8')
-    );
+    // a Windows checkout turns the committed files into CRLF; the content is what is compared
+    const text = (file: string) => fs.readFileSync(file, 'utf8').replaceAll('\r\n', '\n');
+    expect(text(target)).toBe(text(path.join(SRC, 'validation', 'generated.js')));
+    expect(text(path.join(dir, 'generated.d.ts'))).toBe(text(path.join(SRC, 'validation', 'generated.d.ts')));
     fs.rmSync(dir, { recursive: true });
   });
 
