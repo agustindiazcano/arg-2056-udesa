@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { APP_LOCALE, formatDate, formatValue, ordinal } from '../../src/charts/format.js';
+import { APP_LOCALE, formatDate, formatPercent, formatValue, ordinal } from '../../src/charts/format.js';
 
 describe('APP_LOCALE', () => {
   it('is Argentine Spanish', () => {
@@ -19,8 +19,8 @@ describe('formatValue', () => {
   });
 
   it('formats numbers above 10,000 with compact notation', () => {
-    expect(formatValue(10000, 't')).toBe('10 k t');
-    expect(formatValue(1500000, 't')).toBe('1,5 M t');
+    expect(formatValue(10000, 't').replace(/ /g, ' ')).toBe('10 k t');
+    expect(formatValue(1500000, 't').replace(/ /g, ' ')).toBe('1,5 M t');
   });
 
   it('always includes the unit', () => {
@@ -33,6 +33,19 @@ describe('ordinal', () => {
     expect(ordinal(1)).toBe('1.º');
     expect(ordinal(2)).toBe('2.º');
     expect(ordinal(11)).toBe('11.º');
+  });
+});
+
+describe('formatPercent', () => {
+  it('uses the decimal comma, one decimal and no space before the sign', () => {
+    expect(formatPercent(144.44)).toBe('144,4%');
+    expect(formatPercent(-3.05)).toBe('-3,1%');
+  });
+
+  it('can force the plus sign for gaps', () => {
+    expect(formatPercent(144.44, { signed: true })).toBe('+144,4%');
+    expect(formatPercent(0, { signed: true })).toBe('+0,0%');
+    expect(formatPercent(-2, { signed: true })).toBe('-2,0%');
   });
 });
 

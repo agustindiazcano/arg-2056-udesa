@@ -90,26 +90,26 @@ describe('Economy scene', () => {
   it('shows loading, then the three charts, the tiles and the source line', async () => {
     stubFetch(records());
     render(<Scene />);
-    expect(screen.getByText('Loading...')).toBeDefined();
+    expect(screen.getByText('Cargando...')).toBeDefined();
     await screen.findByRole('heading', { level: 1 });
     expect(names(longRun()).sort()).toEqual(['ARG', 'BOL', 'BRA', 'CHL', 'COL', 'ECU', 'MEX', 'PER']);
     expect(rankBars().yAxis!.data).toEqual(['1. CHL', '2. ARG', '3. MEX', '4. BRA', '5. ECU', '6. COL', '7. PER', '8. BOL']);
     expect(history().series!.find((s) => s.name === 'rank')!.data).toEqual([2, 2, null, 1]); // ARG rank per year
-    expect(screen.getByText('Source: MOCK, retrieved 2026-10-02')).toBeDefined();
-    expect(screen.getByText('Year 1901')).toBeDefined();
+    expect(screen.getByText('Fuente: MOCK, consultado el 2 de octubre de 2026')).toBeDefined();
+    expect(screen.getByText('Año 1901')).toBeDefined();
   });
 
   it('shows an error state when the fetch fails', async () => {
     stubFetch({}, false);
     render(<Scene />);
-    await screen.findByText('Error loading data.');
+    await screen.findByText('No se pudieron cargar los datos.');
     expect(screen.queryAllByTestId('echart')).toHaveLength(0);
   });
 
   it('shows a message instead of empty charts when no country has data for the indicator', async () => {
     stubFetch(records({ ARG: [null, null, null, null], BRA: [null, null, null, null] }, 'gdp_constant_usd'));
     render(<Scene />);
-    await screen.findByText('No country has data for this indicator.');
+    await screen.findByText('Ningún país tiene datos para este indicador.');
     expect(screen.queryAllByTestId('echart')).toHaveLength(0);
   });
 
@@ -117,37 +117,37 @@ describe('Economy scene', () => {
     stubFetch(records());
     await loaded();
     expect(screen.getByTestId('tile-value').textContent).toContain('110 u');
-    expect(screen.getByTestId('tile-rank').textContent).toContain('2 of 8');
+    expect(screen.getByTestId('tile-rank').textContent).toContain('2 de 8');
     // peers: BOL 12, BRA 50, CHL 210, COL 35, ECU 45, MEX 75, PER 25 -> median 45 -> (110 - 45) / 45 = +144.4%
-    expect(screen.getByTestId('tile-gap').textContent).toContain('+144.4%');
+    expect(screen.getByTestId('tile-gap').textContent).toContain('+144,4%');
   });
 
   it('moving yearFloat changes the playhead, the rank bars and the tiles, and clamps out-of-range values', async () => {
     stubFetch(records());
     await loaded();
     useStore.setState({ yearFloat: 1903.9 });
-    await screen.findByText('Year 1903');
+    await screen.findByText('Año 1903');
     await waitFor(() => expect(rankBars().yAxis!.data![0]).toBe('1. ARG'));
     expect(screen.getByTestId('tile-value').textContent).toContain('150 u');
     expect(longRun().series!.find((s) => s.name === 'markers')!.markLine!.data[0]!.xAxis).toBe('1903');
 
     useStore.setState({ yearFloat: 3000 });
-    await screen.findByText('Year 1903');
+    await screen.findByText('Año 1903');
     useStore.setState({ yearFloat: 1700 });
-    await screen.findByText('Year 1900');
+    await screen.findByText('Año 1900');
   });
 
-  it('a year without a value for Argentina reads "no data" in the tiles, never 0', async () => {
+  it('a year without a value for Argentina reads "sin datos" in the tiles, never 0', async () => {
     stubFetch(records());
     await loaded();
     useStore.setState({ yearFloat: 1902 });
-    await screen.findByText('Year 1902');
+    await screen.findByText('Año 1902');
     for (const id of ['tile-value', 'tile-rank', 'tile-gap']) {
-      expect(screen.getByTestId(id).textContent).toContain('no data');
+      expect(screen.getByTestId(id).textContent).toContain('sin datos');
     }
     expect(screen.getByTestId('tile-value').textContent).not.toMatch(/(^|\s)0 u/);
     // and the country is listed as missing in the rank bars summary, not ranked
-    expect(screen.getByRole('img', { name: /no data for ARG/ })).toBeDefined();
+    expect(screen.getByRole('img', { name: /sin datos de ARG/ })).toBeDefined();
   });
 
   it('peer chips add and remove series; Argentina cannot be removed', async () => {
@@ -170,9 +170,9 @@ describe('Economy scene', () => {
     stubFetch(records());
     await loaded();
     expect(screen.getByRole('button', { name: 'URY' }).getAttribute('aria-pressed')).toBe('false'); // 9th by id
-    expect(screen.queryByText(/At most 8 countries/)).toBeNull();
+    expect(screen.queryByText(/Máximo 8 países/)).toBeNull();
     fireEvent.click(screen.getByRole('button', { name: 'URY' }));
-    expect(screen.getByText('At most 8 countries at once.')).toBeDefined();
+    expect(screen.getByText('Máximo 8 países a la vez.')).toBeDefined();
     expect(names(longRun())).not.toContain('URY');
     expect(screen.getByRole('button', { name: 'URY' }).getAttribute('aria-pressed')).toBe('false');
 
@@ -186,38 +186,38 @@ describe('Economy scene', () => {
     stubFetch(records());
     await loaded();
     expect(longRun().yAxis!.name).toBe('u');
-    fireEvent.click(screen.getByRole('button', { name: 'Index' }));
-    expect(screen.getByRole('button', { name: 'Index' }).getAttribute('aria-pressed')).toBe('true');
+    fireEvent.click(screen.getByRole('button', { name: 'Índice' }));
+    expect(screen.getByRole('button', { name: 'Índice' }).getAttribute('aria-pressed')).toBe('true');
     // BRA is null in 1900, so the first year with a positive value for all eight countries is 1901
-    await waitFor(() => expect(longRun().yAxis!.name).toBe('Index (base year = 1901)'));
+    await waitFor(() => expect(longRun().yAxis!.name).toBe('Índice (año base = 1901)'));
     const arg = longRun().series!.find((s) => s.name === 'ARG')!;
     expect(arg.data[1]).toBe(100);
-    fireEvent.click(screen.getByRole('button', { name: 'Level' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Nivel' }));
     await waitFor(() => expect(longRun().yAxis!.name).toBe('u'));
   });
 
   it('says the index is unavailable and shows levels when no year has a value for every country', async () => {
     stubFetch(records({ ARG: [10, null, null, null], BRA: [null, 20, null, null] }));
     await loaded();
-    fireEvent.click(screen.getByRole('button', { name: 'Index' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Índice' }));
     await screen.findByText(
-      'Index view is not available: no year has a positive value for every selected country. Showing levels.'
+      'La vista de índice no está disponible: ningún año tiene un valor positivo para todos los países seleccionados. Se muestran los niveles.'
     );
     expect(longRun().yAxis!.name).toBe('u');
   });
 
-  it('swaps each chart for a table whose missing cells read "no data"', async () => {
+  it('swaps each chart for a table whose missing cells read "sin datos"', async () => {
     stubFetch(records());
     await loaded();
-    const toggles = () => screen.getAllByRole('button', { name: 'Table view' });
+    const toggles = () => screen.getAllByRole('button', { name: 'Ver tabla' });
     expect(toggles()).toHaveLength(3);
 
     fireEvent.click(toggles()[0]!);
-    const longTable = screen.getByRole('table', { name: 'Long run' });
+    const longTable = screen.getByRole('table', { name: 'Largo plazo' });
     const row1902 = within(longTable).getByText('1902').closest('tr')!;
     const cells = Array.from(row1902.querySelectorAll('td')).map((td) => td.textContent);
     expect(cells[0]).toBe('1902');
-    expect(cells).toContain('no data'); // ARG has no value in 1902
+    expect(cells).toContain('sin datos'); // ARG has no value in 1902
     expect(cells).not.toContain('0 u');
 
     fireEvent.click(toggles()[1]!);
@@ -225,11 +225,11 @@ describe('Economy scene', () => {
     expect(Array.from(rankTable.querySelectorAll('tbody tr'))[0]!.textContent).toBe('1CHL210 u');
 
     fireEvent.click(toggles()[2]!);
-    const historyTable = screen.getByRole('table', { name: 'Rank history' });
+    const historyTable = screen.getByRole('table', { name: 'Historia del puesto' });
     const rows = Array.from(historyTable.querySelectorAll('tbody tr')).map((tr) =>
       Array.from(tr.querySelectorAll('td')).map((td) => td.textContent)
     );
-    expect(rows[2]).toEqual(['1902', 'no data', 'no data']);
+    expect(rows[2]).toEqual(['1902', 'sin datos', 'sin datos']);
     expect(rows[1]).toEqual(['1901', '2', '8']);
   });
 
@@ -243,9 +243,9 @@ describe('Economy scene', () => {
   it('lists the indicators of the dataset and switches the data', async () => {
     stubFetch([...records(), ...records({ ARG: [1, 2, 3, 4], BRA: [4, 3, 2, 1] }, 'population')]);
     await loaded();
-    expect(screen.getByRole('button', { name: 'GDP per capita' }).getAttribute('aria-pressed')).toBe('true');
-    fireEvent.click(screen.getByRole('button', { name: 'Population' }));
+    expect(screen.getByRole('button', { name: 'PIB per cápita' }).getAttribute('aria-pressed')).toBe('true');
+    fireEvent.click(screen.getByRole('button', { name: 'Población' }));
     await waitFor(() => expect(names(longRun()).sort()).toEqual(['ARG', 'BRA']));
-    expect(screen.queryByRole('button', { name: 'HDI' })).toBeNull();
+    expect(screen.queryByRole('button', { name: 'IDH' })).toBeNull();
   });
 });
