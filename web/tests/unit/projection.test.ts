@@ -7,7 +7,8 @@ import {
   projectionFrame,
   projectionPose,
   sweepHeight,
-  sweepOpacity
+  sweepOpacity,
+  titleHeight
 } from '../../src/charts3d/projection';
 import { demoBarsSpec, demoLabel, demoMapValues, demoValue } from '../../src/charts3d/projectionDemo';
 import type { ProvinceFeature, ProvincesGeo } from '../../src/geo/provinces';
@@ -28,6 +29,18 @@ describe('projectionPose', () => {
 
   it('opens the beam to half the diagonal of the plane', () => {
     expect(pose.beamRadius).toBeCloseTo(Math.hypot(11.2, 5.2) / 2, 10);
+  });
+});
+
+describe('titleHeight', () => {
+  const bounds = { width: 10, depth: 4, height: 4 };
+
+  it('shrinks the title so its width fits 95% of the longest side of the chart', () => {
+    expect(titleHeight(25, bounds)).toBeCloseTo(9.5 / (25 * 0.55), 10);
+  });
+
+  it('never makes a short title taller than the cap', () => {
+    expect(titleHeight(5, bounds)).toBe(0.8);
   });
 });
 
