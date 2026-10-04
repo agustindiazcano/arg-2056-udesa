@@ -169,14 +169,6 @@ export default function Scene() {
               {resourceLabel(r)}
             </FilterChip>
           ))}
-        <FilterChip pressed={aiOverlay} onClick={() => dispatch({ type: 'setAiOverlay', aiOverlay: aiOverlay ? 'off' : 'on' })}>
-          Efecto de la IA
-        </FilterChip>
-        {SCENARIOS.map((s) => (
-          <FilterChip key={s} pressed={s === scenario} onClick={() => dispatch({ type: 'setScenario', scenario: s })}>
-            {scenarioLabel(s)}
-          </FilterChip>
-        ))}
       </FilterBar>
 
       <div style={{ color: 'var(--muted)', marginBottom: 'var(--space-sm)' }}>Año {year}</div>

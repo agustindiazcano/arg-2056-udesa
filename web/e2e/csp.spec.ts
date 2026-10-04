@@ -22,10 +22,6 @@ test.afterAll(async () => {
   await server.close();
 });
 
-// Files that do not exist yet because they are a human step (see PENDING.md): the province geometry. The forecast scene
-// asks for it and shows a message when it is missing. Delete this list when the geometry is committed in web/public/geo.
-const MISSING_FOR_NOW = ['/geo/provinces.meta.json'];
-
 /** Records what a healthy page under the CSP must never produce. */
 function watch(page: Page) {
   const problems: string[] = [];
@@ -37,7 +33,7 @@ function watch(page: Page) {
   page.on('requestfailed', (request) => problems.push(`request failed: ${request.url()}`));
   page.on('response', (response) => {
     const pathname = new URL(response.url()).pathname;
-    if (response.status() >= 400 && !MISSING_FOR_NOW.includes(pathname)) problems.push(`HTTP ${response.status()}: ${pathname}`);
+    if (response.status() >= 400) problems.push(`HTTP ${response.status()}: ${pathname}`);
   });
   return problems;
 }

@@ -11,6 +11,7 @@ import { useDataset } from '../../data/useDataset.js';
 import { useStore } from '../../state/store.js';
 import { FilterBar, FilterChip } from '../../ui/FilterBar.js';
 import { SceneShell } from '../../ui/SceneShell.js';
+import { ScopeNote } from '../../ui/ScopeNote.js';
 import { SceneError, SceneLoading } from '../../ui/SceneStatus.js';
 import { TableToggle } from '../../ui/TableToggle.js';
 import { parseEconomySeries } from '../../types/index.js';
@@ -34,6 +35,7 @@ function orderedSelection(countries: string[]): string[] {
 
 export default function Scene() {
   const yearFloat = useStore((s) => s.yearFloat);
+  const province = useStore((s) => s.province);
   const dispatch = useStore((s) => s.dispatch);
 
   const { status, data } = useDataset('economy_series', parseEconomySeries);
@@ -131,6 +133,10 @@ export default function Scene() {
       sources={sources}
       retrievedAt={latest}
     >
+      {province !== null && (
+        <ScopeNote>Los datos de esta escena son nacionales: el filtro de provincia no aplica.</ScopeNote>
+      )}
+
       <FilterBar label="Indicador y vista">
         {indicators.map((i) => (
           <FilterChip key={i} pressed={i === indicator} onClick={() => setIndicatorChoice(i)}>

@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import React from 'react';
-import { render, screen, fireEvent, waitFor, cleanup, within, configure } from '@testing-library/react';
+import { act, render, screen, fireEvent, waitFor, cleanup, within, configure } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import Scene from '../../src/scenes/sandbox/index.js';
 import { useKeyboard } from '../../src/state/useKeyboard.js';
@@ -187,12 +187,9 @@ describe('Sandbox scene', () => {
     expect(slider(AI).disabled).toBe(true);
     expect(numberInput(AI).disabled).toBe(true);
     expect(screen.getByText(/Se necesita activar el efecto de la IA para usar su aporte/)).toBeDefined();
-    const toggle = screen.getByRole('button', { name: 'Efecto de la IA' });
-    expect(toggle.getAttribute('aria-pressed')).toBe('false');
+    expect(screen.queryByRole('button', { name: 'Efecto de la IA' })).toBeNull(); // the control bar owns the toggle
 
-    fireEvent.click(toggle);
-    expect(useStore.getState().aiOverlay).toBe('on');
-    expect(screen.getByRole('button', { name: 'Efecto de la IA' }).getAttribute('aria-pressed')).toBe('true');
+    act(() => useStore.getState().dispatch({ type: 'setAiOverlay', aiOverlay: 'on' }));
     await waitFor(() => expect(slider(AI).disabled).toBe(false));
 
     fireEvent.change(slider(AI), { target: { value: '1.5' } });

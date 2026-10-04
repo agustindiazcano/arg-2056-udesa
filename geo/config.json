@@ -1,0 +1,18 @@
+{
+  "dataset_id": "geo_provinces_ne",
+  "input_file": "provinces.geojson",
+  "id_property": "iso_3166_2",
+  "id_map": {
+    "AR-A": "AR-A", "AR-B": "AR-B", "AR-C": "AR-C", "AR-D": "AR-D",
+    "AR-E": "AR-E", "AR-F": "AR-F", "AR-G": "AR-G", "AR-H": "AR-H",
+    "AR-J": "AR-J", "AR-K": "AR-K", "AR-L": "AR-L", "AR-M": "AR-M",
+    "AR-N": "AR-N", "AR-P": "AR-P", "AR-Q": "AR-Q", "AR-R": "AR-R",
+    "AR-S": "AR-S", "AR-T": "AR-T", "AR-U": "AR-U", "AR-V": "AR-V",
+    "AR-W": "AR-W", "AR-X": "AR-X", "AR-Y": "AR-Y", "AR-Z": "AR-Z"
+  },
+  "target_max_bytes": 120000,
+  "max_area_change_pct": 2,
+  "min_island_area_km2": 0,
+  "coordinate_decimals": 3,
+  "sanity_bounds": { "lon": [-74, -53], "lat": [-56, -21] }
+}
