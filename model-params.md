@@ -3,9 +3,9 @@
 Branch: `task/model-params`. One PR. Read `AGENTS.md`, `LASTCONTEXT.md`, `PENDING.md`, `docs/model-design.md` (every parameter table, sections 2, 3, 4 and 7 are binding), `docs/assumptions.md`, `docs/decisions.md`, `scripts/precheck.py`, `pytest.ini` and `model/src/argmodel/population/` (for the code style of the model package) first.
 Prerequisite: `model-design` is merged into `main` (it is).
 
-## Open point (blocking, the human decides before this task starts): `res.va_unit_<r>`
+## Decided point (`D-res-3`, human, 2026-10-04): ten `res.va_unit_<r>` constants
 
-Section 2.3 of the design says "Count: 19 entries" with 9 value-added constants `v_r`, but the row lists **ten** resource names (`lithium copper gold silver oil gas soy wheat corn other`), and the `forecast_output` contract has `resource` = `other` too. With ten constants the totals become 20 resource entries and 35 in all (23 fixed). Recommendation: **ten** (`other` needs a `v_r` for `R_t = sum_r v_r q_r`), and `docs/model-design.md` section 3 is corrected in a separate docs PR. Until the human answers (decision `D-res-3`), do not start; if the answer is nine, say which resource has no constant.
+The design listed ten resource names (`lithium copper gold silver oil gas soy wheat corn other`) but counted nine value-added constants `v_r`. The human decided **ten** (`other` needs a `v_r` for `R_t = sum_r v_r q_r`, and the `forecast_output` contract has `resource` = `other`). The totals are 20 resource entries and 35 in all (23 fixed). `docs/model-design.md` sections 2.3, 3 and 9 and `docs/decisions.md` already say so; the ten ids are `res.va_unit_lithium`, `res.va_unit_copper`, `res.va_unit_gold`, `res.va_unit_silver`, `res.va_unit_oil`, `res.va_unit_gas`, `res.va_unit_soy`, `res.va_unit_wheat`, `res.va_unit_corn` and `res.va_unit_other`. This task is no longer blocked by `D-res-3`.
 
 ## Goal
 
@@ -23,7 +23,7 @@ Strict TDD. Atomic commits. Before every push run `python scripts/precheck.py`.
 ## 1. Files
 
 ```
-model/params/params.json                    the 34 entries
+model/params/params.json                    the 35 entries
 model/params/params.schema.json             JSON Schema, Draft 2020-12, additionalProperties: false
 model/src/argmodel/params/__init__.py       load_params, Param, get, by_component, summary
 model/src/argmodel/params/loader.py
@@ -33,14 +33,14 @@ docs/params.md                              how to read the file, the counts tab
 
 ## 2. The entries
 
-The 34 ids of section 3 of the design, copied from the parameter tables of sections 2.1 to 2.6 (the design is the source, not memory):
+The 35 ids of section 3 of the design, copied from the parameter tables of sections 2.1 to 2.6 (the design is the source, not memory):
 
 | component | ids |
 |---|---|
 | `population` (5) | `pop.tfr_target`, `pop.kappa_f`, `pop.e0_max`, `pop.kappa_e`, `pop.mig_rate` |
 | `growth` (5) | `gro.alpha`, `gro.delta`, `gro.rho`, `gro.s`, `gro.gA` |
 | `hdi` (2) | `hdi.educ_target`, `hdi.kappa_educ` |
-| `resources` (19) | `res.pi_a`, `res.pi_b`, `res.delay`, `res.util`, `res.ramp`, `res.decline_oil`, `res.decline_gas`, `res.yield_g_soy`, `res.yield_g_wheat`, `res.yield_g_corn`, and `res.va_unit_<r>` (see the open point below) |
+| `resources` (20) | `res.pi_a`, `res.pi_b`, `res.delay`, `res.util`, `res.ramp`, `res.decline_oil`, `res.decline_gas`, `res.yield_g_soy`, `res.yield_g_wheat`, `res.yield_g_corn`, and the ten `res.va_unit_<r>` (decision `D-res-3`, see above) |
 | `provinces` (1) | `prov.kappa` |
 | `ai` (2) | `ai.delta`, `ai.lag` |
 
@@ -62,7 +62,7 @@ Rules for the values, to be copied from the design, never chosen:
 
 - The schema accepts one valid entry of each state and rejects each rule violation with the exact message (one test per rule, including the positive case).
 - `params.json` has exactly the ids of section 2 above, no more, no fewer (read the list from this test, not from the file).
-- `summary()` equals the table of section 3 of the design: 34 or 35 entries (per `D-res-3`), 22 or 23 fixed, 1 calibrated, 11 random; per component 5, 5, 2, 19 or 20 (per `D-res-3`), 1, 2.
+- `summary()` equals the table of section 3 of the design: 35 entries, 23 fixed, 1 calibrated, 11 random; per component 5, 5, 2, 20, 1, 2.
 - Every entry with a range in the design has exactly those `low` and `high` (a table in the test, copied from the design).
 - No entry has a `source_id` today (a test that will have to change when sources arrive, with a comment saying so).
 - Every `assumption_id` exists in `docs/assumptions.md`.
@@ -72,7 +72,7 @@ Rules for the values, to be copied from the design, never chosen:
 ## 5. Acceptance checklist
 
 - [ ] Tests committed failing first, then green. `python scripts/precheck.py` passes. CI result read or "pushed, CI not checked".
-- [ ] 34 entries transcribed from the design; no value, range or source invented; counts match the design table.
-- [ ] `D-params-1` recorded in `docs/decisions.md`; the answer to `D-res-3` applied and stated in the PR.
+- [ ] 35 entries transcribed from the design; no value, range or source invented; counts match the design table.
+- [ ] `D-params-1` recorded in `docs/decisions.md`; the answer to `D-res-3` (ten) applied and stated in the PR.
 - [ ] `docs/params.md` written; `LASTCONTEXT.md` overwritten; `PENDING.md` updated (`model-params` done; the human lists A10, A13, A15, A16, A24, A26, A31, A32, A33 still decide).
 - [ ] PR description: what changed, what was verified, what the human must verify (each range against the design, the `triangular` family choice, `D-params-1`).

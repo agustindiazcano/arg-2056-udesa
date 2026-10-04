@@ -135,9 +135,9 @@ Count: 5 entries (3 fixed, 2 random; `g_A` is the scenario driver).
 | res.ramp | `ramp` | years | 1 to 5 | assumption | [F] |
 | res.decline_oil, res.decline_gas | `d_oil`, `d_gas` | 1/year | needs_source | needs_source | [F] x2 |
 | res.yield_g_soy, _wheat, _corn | `g_y` | 1/year | -0.005 to 0.020 | assumption; replace by observed trend per crop | [R] x3 |
-| res.va_unit_{r} | `v_r` | constant USD per unit | needs_source | needs_source; data constant per resource, 9 entries (`lithium copper gold silver oil gas soy wheat corn other`) | [F] x9 |
+| res.va_unit_{r} | `v_r` | constant USD per unit | needs_source | needs_source; data constant per resource, 10 entries (`lithium copper gold silver oil gas soy wheat corn other`; decision D-res-3) | [F] x10 |
 
-Count: 19 entries (14 fixed, of which 9 data constants; 5 random).
+Count: 20 entries (15 fixed, of which 10 data constants; 5 random).
 
 **Calibration.** `a`, `b` from base rates of project advancement by stage (research data, not yet available); `v_r` from the composition and production data; `g_y` from the history in `resource_production`. No quantity is calibrated on the backtest window.
 
@@ -209,12 +209,12 @@ Count: 2 entries. Alternatives rejected: a time trend on `hdi` (no mechanism); o
 | Population | 5 | 1 | 1 | 3 | 0 |
 | Growth accounting | 5 | 3 | 0 | 2 | 1 (`g_A`, counted among random) |
 | HDI | 2 | 2 | 0 | 0 | 0 |
-| Resources | 19 | 14 | 0 | 5 | 0 |
+| Resources | 20 | 15 | 0 | 5 | 0 |
 | Provincial | 1 | 1 | 0 | 0 | 0 |
 | AI overlay | 2 | 1 | 0 | 1 | 0 |
-| **Total** | **34** | **22** | **1** | **11** | **1** |
+| **Total** | **35** | **23** | **1** | **11** | **1** |
 
-Hyperparameter numbers: each random entry carries `low` and `high` (p10 and p90 of its distribution), so the number of fitted or assumed values is `22 + 1 + 2·11 = 45`. Data constants: 9 of the fixed entries are `v_r`; the `shape_*` schedules and `S_std` are data, not parameters. Every parameter is justified in its component section; a parameter with no justification is removed from the design.
+Hyperparameter numbers: each random entry carries `low` and `high` (p10 and p90 of its distribution), so the number of fitted or assumed values is `23 + 1 + 2·11 = 46`. Data constants: 10 of the fixed entries are `v_r`; the `shape_*` schedules and `S_std` are data, not parameters. Every parameter is justified in its component section; a parameter with no justification is removed from the design.
 
 ## 4. Scenarios and uncertainty
 
@@ -315,9 +315,12 @@ Order is dependency order. `can_start_now` means it works with mock data or decl
 | D-ai-1 | Overlay independent of scenario, full range | independent / low gains with pessimistic | independent | correlation needs a sourced link |
 | D-ai-2 | Admissible quantity | TFP growth pp/year only (+ exact compounding) / also productivity | TFP growth | adding labor productivity would mix different quantities |
 | D-prov-1 | Provincial proxy and the 18-of-24 rule | equal core GDPpc / other proxy | equal core GDPpc with the limit stated | another proxy needs a new dataset |
+| D-res-3 | Number of value-added constants `v_r` | nine (without `other`) / ten (with `other`) | ten | DECIDED (human, 2026-10-04): ten. Nine would leave `other` out of `R_t = sum_r v_r q_r` and out of the `forecast_output` resource list |
 | D-gdp-1 | GDP basis (constant USD base year, market vs PPP) | needs the human to choose | market-rate constant USD of the source's base year | affects every level and `v_r` units |
 | D-bt-1 | Success criteria numbers (1.25, 8 of 12) | as written / stricter | as written | stricter lowers the pass probability of a calibrated model (section 5) |
 | D-growth-1 | Human capital omitted in v1 | omitted / included | omitted | included adds 2 parameters and a series |
 | D-pop-1 | Negative cohorts | raise error / clamp at zero and record | raise error | clamping hides inconsistent migration inputs |
 | D-hdi-1 | Provincial HDI | not produced / produced | not produced | needs provincial education and health data |
 | D-data-1 | Age-structured population contract | new task `population-age-contract` | create it | without it the population component cannot be calibrated |
+
+All decisions of this table were answered by the human on 2026-10-04 with the recommendation in the fourth column; see `docs/decisions.md`.

@@ -248,7 +248,7 @@ Legend: DONE = merged. READY = can start now. BLOCKED = needs the human input na
 | 5 | vercel-analytics (PR #32): Vercel Web Analytics and Speed Insights | DONE | enable both in the Vercel project |
 | 6 | visits-archive (PR #33): weekly archive of the analytics and the Visits section | DONE | secrets, Actions permission and one manual run (`docs/visits.md`) |
 | | **Model (order of `docs/model-design.md` section 8)** | | |
-| 7 | model-params | BLOCKED | answer `D-res-3` (nine or ten value-added constants) |
+| 7 | model-params | READY | (`D-res-3` decided: ten value-added constants, 35 entries) |
 | 8 | model-population-hardening | READY | |
 | 9 | population-age-contract | READY | |
 | 10 | model-population-drivers | BLOCKED | model-params, model-population-hardening, population-age-contract merged |
@@ -264,17 +264,19 @@ Legend: DONE = merged. READY = can start now. BLOCKED = needs the human input na
 | 20 | model-ts-port (optional) | BLOCKED | model-growth-core, model-ai-overlay (and drivers, hdi for the full port) |
 | | **Scenes** | | |
 | 21 | scene-ai-revolution | READY | |
-| 22 | andes-integration | BLOCKED | terrain outputs committed, renderer decision D-andes-1 to D-andes-4 |
+| 22 | andes-integration | BLOCKED | terrain outputs committed (D-andes-1 to D-andes-4 decided) |
 | 23 | scene-forecast-map-3d | SUPERSEDED | replaced by presentation-3d |
-| 23b | presentation-3d (six PRs) | BLOCKED | F2b merged, D-3d-1 to D-3d-5, real province geometry for the map |
+| 23b | presentation-3d (six PRs) | IN PROGRESS | F2b merged, D-3d-1 to D-3d-6 decided (3D first), real province geometry done |
+| 23c | map-navigation | READY | (3D first, D-3d-6) zoom, pan and reset on 2D maps; free orbit, pan, zoom and reset on 3D |
+| 23d | fullscreen-viewer | READY | better after map-navigation: big-view popup with carousel, name, filters and statistics |
 | | **Real data** | | |
-| 24 | data-economy-population | BLOCKED | research files, my verification, answer to D-gdp-1, population-age-contract merged |
+| 24 | data-economy-population | BLOCKED | research files, my verification, population-age-contract merged (D-gdp-1 decided) |
 | 25 | data-resources | BLOCKED | research files (mining, energy, agro) and my verification |
 | 26 | data-andes | BLOCKED | research files (Andes) and my verification |
 | 27 | data-research-inputs | BLOCKED | research files, their documented format and my verification |
 | | **Quality and delivery** | | |
 | 28 | mutation-testing (optional) | READY | |
-| 29 | polish | BLOCKED | answers to D-polish-1 to D-polish-7; model and data tasks done |
+| 29 | polish | DECIDED | D-polish-3 color from the human; model and data tasks done, unless the human starts it earlier (3D first, D-3d-6) |
 | 30 | docs-submission | BLOCKED | the contest's rules (table in the brief); backtest-run |
 | 31 | demo-video (optional) | BLOCKED | what the contest requires |
 
@@ -1017,7 +1019,7 @@ When finished: overwrite LASTCONTEXT.md, update PENDING.md, and write a PR descr
  
 ## model-params
  
-Prerequisite: `model-design` merged. The human answers `D-res-3` (nine or ten value-added constants) before it starts.
+Prerequisite: `model-design` merged. `D-res-3` is decided (human, 2026-10-04): ten value-added constants, 35 entries in all.
  
 ```
 You are working in the repository `argentina-2056`.
@@ -1033,7 +1035,7 @@ Then execute the task described in model-params.md exactly.
  
 Rules:
 - Create branch `task/model-params`. Never touch `main`, never merge, never push to `main`.
-- If model-design is not merged into main, stop and tell me. If `D-res-3` is not answered in the brief's open point, stop and ask.
+- If model-design is not merged into main, stop and tell me. `D-res-3` is decided (ten): apply it as the brief says.
 - Strict TDD: commit each failing test first, then the code that makes it pass.
 - Follow the brief literally. Copy ids, ranges, units and roles from docs/model-design.md, not from memory. Never invent a value, a range or a source_id: an entry the design marks needs_source has `value: null`.
 - No new dependency. No model equations, no random draws.
@@ -1536,7 +1538,7 @@ When finished: overwrite LASTCONTEXT.md, update PENDING.md, and write a PR descr
  
 ## andes-integration
  
-Prerequisite: `performance-a11y` and `deploy` merged (they are). Human inputs first: the terrain outputs committed, the renderer decision (D-andes-1 to D-andes-4), the real or mock Andes data.
+Prerequisite: `performance-a11y` and `deploy` merged (they are). Human inputs first: the terrain outputs committed, the real or mock Andes data. The renderer decisions D-andes-1 to D-andes-4 are taken (docs/decisions.md).
  
 ```
 You are working in the repository `argentina-2056`.
@@ -1658,7 +1660,7 @@ Then execute the task described in data-economy-population.md exactly.
  
 Rules:
 - Create branch `task/data-economy-population`. Never touch `main`, never merge, never push to `main`.
-- If the research files, my verification or my answer to D-gdp-1 are missing, stop and tell me what is missing.
+- If the research files or my verification are missing, stop and tell me what is missing. D-gdp-1 is decided (docs/decisions.md).
 - Strict TDD for each adapter. No network access.
 - No invented, interpolated or filled figure. Never splice two series silently and never mix PPP and market values: keep them as separate records and document the overlap. Do not touch observations after 2005: the split belongs to the backtest code.
 - Never hand-edit data/processed/. No schema change. If the age-structured files exceed the data budget, stop and tell me. No new dependency. List every number for the UI under Data to verify in PENDING.md.
@@ -1710,7 +1712,7 @@ When finished: overwrite LASTCONTEXT.md, update PENDING.md, and write a PR descr
  
 ## polish
  
-Prerequisite: the model and data tasks of PENDING.md done (or my explicit go for the scenes that exist). I answer D-polish-1 to D-polish-7 first.
+Prerequisite: the model and data tasks of PENDING.md done (or my explicit go for the scenes that exist). D-polish-1 to D-polish-7 are decided in docs/decisions.md (D-polish-3, the red of the diverging ramp, is the one color I still supply; never invent it); do the 3D items first (D-3d-6).
  
 ```
 You are working in the repository `argentina-2056`.
@@ -1780,7 +1782,7 @@ When finished: overwrite LASTCONTEXT.md, update PENDING.md, and write a PR descr
  
 ## presentation-3d (program of six PRs; run one part at a time)
 
-Prerequisite: F2b merged and I have answered D-3d-1 to D-3d-5 (section 5 of the brief).
+Prerequisite: F2b merged; D-3d-1 to D-3d-6 are decided in docs/decisions.md (3D is the priority).
 
 ```
 You are working in the repository `argentina-2056`.
@@ -1880,3 +1882,75 @@ Rules:
 When finished: overwrite LASTCONTEXT.md, update PENDING.md, and write a PR description with (a) what changed, (b) what was verified, (c) what the human must verify.
 ```
  
+
+---
+
+## map-navigation
+
+Prerequisite: dashboard D1 to D6 merged; D-3d-1 to D-3d-6 decided (3D first).
+
+```
+You are working in the repository `argentina-2056`.
+
+Before doing anything, read these files in this order:
+1. AGENTS.md
+2. LASTCONTEXT.md
+3. PENDING.md
+4. map-navigation.md   (the brief, in the repository root)
+Then read docs/dashboard.md, design.md, docs/performance.md, docs/decisions.md (D-3d-6) and the files the brief lists.
+
+Then execute the task described in map-navigation.md exactly.
+
+Rules:
+- Create branch `task/map-navigation`. Never touch `main`, never merge, never push to `main`.
+- Strict TDD: commit each failing test first, then the code that makes it pass. Atomic commits, format `type(scope): summary`.
+- Follow the brief and design.md literally. Copy names, limits and keys from them; do not recall them from memory and do not invent colors. No color literal outside `web/src/styles/tokens.ts` and `tokens.css`.
+- Add no dependency. If one seems necessary, stop and ask me.
+- Do not change the `KeyAction` union, `KEY_MAP` or the store shape.
+- Pure camera and view math in their own modules, tested with exact values; a drag of 4 px or less is a click; the camera survives the year animation.
+- Clean up WebGL contexts, listeners and GSAP timelines on unmount; respect `prefers-reduced-motion`.
+- Do not edit AGENTS.md, CLAUDE.md or GEMINI.md.
+- Before every push run `python scripts/precheck.py`. Never push if it fails.
+- Never silence a checker: no `as unknown as`, `@ts-ignore`, `eslint-disable`, `# noqa`, `--fix`, `--unsafe-fixes`. If a checker complains, fix the cause.
+- Tests must assert exact values, strings and structures, never only "no error". Tests never write inside the real data/ or web/public/data/ directories.
+- Never claim CI is green. Say "pushed, CI not checked" unless you read the run status.
+- If anything in the brief is ambiguous or seems wrong, stop and ask me instead of guessing.
+
+When finished: overwrite LASTCONTEXT.md, update PENDING.md, and write a PR description with (a) what changed, (b) what was verified, (c) what the human must verify.
+```
+
+---
+
+## fullscreen-viewer
+
+Prerequisite: dashboard D1 to D6 merged; `map-navigation` merged, or say in the PR that the popup shows the maps and 3D views as they are.
+
+```
+You are working in the repository `argentina-2056`.
+
+Before doing anything, read these files in this order:
+1. AGENTS.md
+2. LASTCONTEXT.md
+3. PENDING.md
+4. fullscreen-viewer.md   (the brief, in the repository root)
+Then read docs/dashboard.md, design.md, docs/performance.md, docs/decisions.md (D-3d-6) and the files the brief lists.
+
+Then execute the task described in fullscreen-viewer.md exactly.
+
+Rules:
+- Create branch `task/fullscreen-viewer`. Never touch `main`, never merge, never push to `main`.
+- Strict TDD: commit each failing test first, then the code that makes it pass. Atomic commits, format `type(scope): summary`.
+- Follow the brief and design.md literally. Copy names, limits and keys from them; do not recall them from memory and do not invent colors. No color literal outside `web/src/styles/tokens.ts` and `tokens.css`.
+- Add no dependency. If one seems necessary, stop and ask me.
+- Do not change the `KeyAction` union, `KEY_MAP` or the store shape.
+- The popup is a lazy chunk and keeps the main budget; its keys are handled in the capture phase and do not leak to the global handler; only one WebGL context alive at a time; focus is trapped and returned.
+- Clean up WebGL contexts, listeners and GSAP timelines on unmount; respect `prefers-reduced-motion`.
+- Do not edit AGENTS.md, CLAUDE.md or GEMINI.md.
+- Before every push run `python scripts/precheck.py`. Never push if it fails.
+- Never silence a checker: no `as unknown as`, `@ts-ignore`, `eslint-disable`, `# noqa`, `--fix`, `--unsafe-fixes`. If a checker complains, fix the cause.
+- Tests must assert exact values, strings and structures, never only "no error". Tests never write inside the real data/ or web/public/data/ directories.
+- Never claim CI is green. Say "pushed, CI not checked" unless you read the run status.
+- If anything in the brief is ambiguous or seems wrong, stop and ask me instead of guessing.
+
+When finished: overwrite LASTCONTEXT.md, update PENDING.md, and write a PR description with (a) what changed, (b) what was verified, (c) what the human must verify.
+```

@@ -7,7 +7,7 @@ Every task below has a brief (`<slug>.md` in the repository root) and a prompt (
 1. [x] `data-pipeline`: scripts and processed datasets with `source` + `retrieved_at` (resources, economy, population, provinces).
 2. [x] `shell`: Vite app, tabs, Zustand store, keyboard map, scene state machine, 2D/3D toggle, province filter.
 3. [ ] **Model** (`docs/model-design.md` section 8; the 14 tasks replace the old `model-py`, `backtest` and `model-ts` lines). Briefs written.
-   1. [ ] `model-params`: BLOCKED, the human answers `D-res-3` (nine or ten value-added constants; the design lists ten names and counts nine)
+   1. [ ] `model-params`: READY (`D-res-3` decided: ten value-added constants, 35 entries in all)
    2. [ ] `model-population-hardening`: READY (audit F5, F8, F9)
    3. [ ] `population-age-contract`: READY
    4. [ ] `model-population-drivers`: BLOCKED by 1, 2, 3
@@ -29,10 +29,11 @@ Every task below has a brief (`<slug>.md` in the repository root) and a prompt (
    - [ ] **Human task before release**: the real era list with sources in `web/src/content/eras.ts` (three placeholders today; the release gate `scripts/check_no_mock.py --content` fails until they are replaced).
    - [ ] (optional) plug the sandbox into the reduced TS model (`model-ts-port`).
 5a. [ ] **Dashboard** (`docs/dashboard.md`, phases D1 to D7; D1 to D6 done on `task/dashboard-shell`: 2D dashboard and 3D bars, map and lines; left: 3D treemap and others, polish, D7 Andes): one-screen layout, carousel of views, viewer with 1/2/4 views, right panel, filters in the bottom bar, no scroll; then the 3D renderer on the same dashboard. D1 to D3 are 2D; D4 to D6 are 3D; D7 is Andes.
-5b. [ ] `presentation-3d` (human decision: 3D is the default presentation, a narrated tour plus a free explore mode; 2D stays as the data view and the accessible alternative). Six PRs: engine, shell, charts A (fan, province bars, province map), story, charts B, Andes and zone map. BLOCKED by F2b (Spanish scenes, `SceneShell`, `TableToggle`, `FilterBar`) and by `D-3d-1` to `D-3d-5`; the map needs the real province geometry. Reference look: `test/dashboard_3d_PoC.html` (CDN, own data model: do not copy those).
+5c. [ ] **Navigation and big view of the maps and charts** (human request 2026-10-04; 3D first, `D-3d-6`): `map-navigation` (READY: zoom with wheel and `+`/`-` buttons, pan and reset on the 2D maps, which have `roam: false` today; free orbit, pan, wider zoom, reset and touch on the 3D views) and `fullscreen-viewer` (READY, after `map-navigation` if possible: a "Pantalla grande" button on every view opens a popup with the view large, a carousel over the scene's views, the view name at the top right with the scene's filters and statistics). Briefs `map-navigation.md` and `fullscreen-viewer.md`; phases D8 and D9 of `docs/dashboard.md`.
+5b. [ ] `presentation-3d` (human decision: 3D is the default presentation, a narrated tour plus a free explore mode; 2D stays as the data view and the accessible alternative). Six PRs: engine, shell, charts A (fan, province bars, province map), story, charts B, Andes and zone map. F2b and `D-3d-1` to `D-3d-6` are done or decided; 3D is the priority of the visual work (`D-3d-6`). Reference look: `test/dashboard_3d_PoC.html` (CDN, own data model: do not copy those).
 5. [ ] `scene-ai-revolution`: READY. Brief written (works on mock data; wires `ai_estimates.json`).
 6. [ ] **Human step before `andes-integration`**: download the DEM, register it with `python -m datapipe register`, set the bounding boxes in `terrain/config.json`, run `python -m terrain bake`, run `python -m terrain verify` against the Andes facts, commit the outputs in `web/public/terrain/`. See `docs/terrain.md`.
-7. [ ] `andes-integration` (the old `scene-andes`): BLOCKED by the terrain outputs and the renderer decision (`D-andes-1` to `D-andes-4`; the proof of concept in `test/map_test1.html` is Three.js loaded from a CDN, which the CSP forbids, so it must be bundled). Must use `useQuality`, `QUALITY_PRESETS`, `WebGLRequired` and `useReducedMotion` (`web/src/runtime/`).
+7. [ ] `andes-integration` (the old `scene-andes`): BLOCKED by the terrain outputs (the renderer decisions `D-andes-1` to `D-andes-4` are taken; the proof of concept in `test/map_test1.html` is Three.js loaded from a CDN, which the CSP forbids, so it must be bundled). Must use `useQuality`, `QUALITY_PRESETS`, `WebGLRequired` and `useReducedMotion` (`web/src/runtime/`).
 8. [x] `references-page`, `storytelling-substeps`, `integration`: merged.
    - [ ] **Human task before release**: review and sign the 18 story drafts in `web/src/content/steps/index.ts`, add their sources and set `placeholder: false` (the gate fails until you do). Register real sources in `data/processed/sources.json`.
    - [ ] (later) let steps control scene-local settings; campaign day in `StepFocus` with `andes-integration`; load the references registry in the shell and pass `registryIds` to `StoryCaption`.
@@ -53,12 +54,12 @@ Every task below has a brief (`<slug>.md` in the repository root) and a prompt (
    - [ ] **Human: enable Web Analytics and Speed Insights in the Vercel project.**
    - [ ] **Human setup of the visits archive: Vercel token and ids as GitHub secrets, enable PR creation for Actions, run the workflow once by hand** (`docs/visits.md`). Not verified against the real Vercel API (same-day `since` and `until`, response fields, `limit`, plan).
 12. [ ] **Real data** (all BLOCKED by the human's research and verification of 10 URLs and 3 numbers per scope):
-   1. [ ] `data-economy-population` (also needs `D-gdp-1` and `population-age-contract`)
+   1. [ ] `data-economy-population` (also needs `population-age-contract`; `D-gdp-1` decided)
    2. [ ] `data-resources`
    3. [ ] `data-andes`
    4. [ ] `data-research-inputs` (also needs the research files' format documented)
 13. [ ] `mutation-testing` (optional): READY.
-14. [ ] `polish`: BLOCKED by `D-polish-1` to `D-polish-7` and by the model and data tasks.
+14. [ ] `polish`: decisions taken (`D-polish-3` color still the human's); 3D items first (`D-3d-6`); by `AGENTS.md` section 8 it starts after the model and data tasks unless the human starts it earlier for the scenes that exist.
 15. [ ] `docs-submission` (draft brief) and `demo-video` (optional, draft brief): BLOCKED by the contest's rules.
 
 ## Data to verify (human, against original source)
@@ -67,7 +68,7 @@ Every task below has a brief (`<slug>.md` in the repository root) and a prompt (
 
 ## Model assumptions (record in `docs/assumptions.md`)
 
-- [ ] 34 entries A01-A34 in `docs/assumptions.md`, all unsourced. Human decides: A10, A13, A15, A16, A24, A26, A31, A32, A33. `model-population-drivers` will add one more (the working-age range 15 to 64).
+- [ ] 34 entries A01-A34 in `docs/assumptions.md`, all unsourced. Accepted by the human on 2026-10-04: A10, A13, A15, A16, A24, A26, A31, A32, A33. `model-population-drivers` will add one more (the working-age range 15 to 64).
 
 ## Visual debt (deliberately left rough until `polish`)
 
@@ -81,19 +82,19 @@ Every task below has a brief (`<slug>.md` in the repository root) and a prompt (
 
 ## Blocked / questions
 
-- [ ] **Human: confirm the voice of the Spanish UI text.** F2b avoids the second person (infinitives and impersonal forms); say if voseo ("Elegí") or another register is wanted, it is one pass over the strings. Also read the new wording of the chart summaries and tooltips (`web/src/charts/builders/`, `web/src/content/labels.ts`).
-- [ ] `D-res-3` (blocks `model-params`): ten value-added constants `v_r` (recommended, includes `other`) or nine as the design counts.
-- [ ] `D-3d-1` to `D-3d-5` (block `presentation-3d`, see its section 5): Three.js bundled as the one 3D stack, first-load budget (poster first, or raise `chunk_max` on purpose), province geometry source and license (the PoC embeds 24 simplified provinces of unknown origin), typeface without Google fonts, tour length and scenes.
-- [ ] `D-andes-1` to `D-andes-4` (block `andes-integration`; `D-andes-1` is answered in practice by `D-3d-1`): renderer (Three.js bundled, MapLibre + deck.gl, or a mix), its dependency, the terrain as geometry source, the language of the scene.
-- [ ] `D-polish-1` to `D-polish-7` (block `polish`): UI language and locale, typeface, the real red arm, focus ring color, `--state-critical` as text, motion library (GSAP), scope of the pass.
-- [ ] `D-gdp-1` (blocks `data-economy-population`): GDP basis (constant USD and its base year, market versus PPP).
+- [x] Voice of the Spanish UI text: neutral impersonal forms kept (decided 2026-10-04); voseo is one pass over the strings if wanted later.
+- [x] `D-res-3` (decided by the human, 2026-10-04): ten value-added constants `v_r`, including `other`. Applied in `docs/model-design.md` (20 resource entries, 35 in all) and recorded in `docs/decisions.md`.
+- [x] `D-3d-1` to `D-3d-5` decided with the recommendations (2026-10-04, `docs/decisions.md`): Three.js bundled, poster first with the 3D chunk budget accepted, Natural Earth geometry, system typeface, tour of six views. Added `D-3d-6`: 3D is the priority of the visual work.
+- [x] `D-andes-1` to `D-andes-4` decided (2026-10-04): Three.js bundled, the shared `three` 0.186.1, baked terrain as geometry, Spanish. `andes-integration` still waits for the terrain outputs (human DEM step).
+- [ ] `D-polish-1` to `D-polish-7` decided (2026-10-04) except `D-polish-3`: the real red arm of the diverging ramp is a color the human must supply (never invented). Spanish `es-AR`, system typeface, focus ring #ffc107, no new critical text color (icon plus treatment), GSAP, scope ordered with 3D first.
+- [x] `D-gdp-1` decided (2026-10-04): market-rate constant USD of the source's base year.
 - [ ] Competition deadline and evaluation criteria (block `docs-submission` and `demo-video`).
-- [ ] `storytelling-substeps` decisions (human), default taken in brackets: keys `PageDown`/`PageUp`/`Home` [taken]; entering a scene restarts its story at step 1 [taken]; the story does not cross scenes except the "Next scene" button on the last step [taken]; caption panel at the bottom [taken]. Resolves open decision 5 of `docs/design.md` once confirmed (the file was not edited).
+- [x] `storytelling-substeps` defaults confirmed (2026-10-04, `docs/decisions.md`).
 - [ ] `geo-provinces` decisions (human): source dataset and license; `target_max_bytes` and `max_area_change_pct` after seeing real results. Decided: the territory is the continental provinces plus an imprecise Malvinas outline (`docs/decisions.md` D-geo-1); the registered layer must exclude the Antarctic sector and far islands.
-- [ ] `terrain-bake`: dependency exception (numpy, rasterio, Pillow pinned, only under `scripts/terrain/`) and the local precheck SKIP when they are missing: human decision. Earth radius 6,371,008.8 m for the hillshade was chosen by the tool.
+- [x] `terrain-bake`: dependency exception and the Earth radius accepted (2026-10-04).
 - [ ] Mock `forecast_output` has province series only for `resource_production` (18 provinces, 6 resources); GDP, GDP per capita, population and HDI have national series only, so the province ranking is empty for them. Not extended, per the brief.
-- [ ] Acceptance item "arrows moving the year" conflicts with `KEY_MAP` (left and right arrows change scene); the year moves with play (Space) or the store. `KEY_MAP` was not changed.
-- [ ] Open decisions D-scen-1 to D-data-1 in section 9 of `docs/model-design.md`.
+- [x] Acceptance item "arrows moving the year" dropped: `KEY_MAP` unchanged (2026-10-04).
+- [x] Open decisions D-scen-1 to D-data-1 of `docs/model-design.md` answered with the recommendations (2026-10-04); assumptions A10, A13, A15, A16, A24, A26, A31, A32, A33 accepted (A10, A15, A26 still need a source for their values).
 - [ ] `docs/sources.md` and `docs/research-prompts.md` do not exist; no parameter can have a `source_id` yet. `data-andes`, `data-resources` and `data-economy-population` create or extend `docs/sources.md`.
 - [ ] `data/mock/` has no research mocks (`ai_estimates.json` and the other four are generated only in tests); `scene-ai-revolution` wires `ai_estimates.json`.
 

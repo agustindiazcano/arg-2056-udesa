@@ -44,7 +44,7 @@ Legend: **core** = needed for the submission; **opt** = optional, cut first if t
 
 | # | Slug | Class | Blocked by |
 |---|---|---|---|
-| 25 | `model-params` | core | answer to `D-res-3` (nine or ten value-added constants) |
+| 25 | `model-params` | core | nothing (`D-res-3` decided: ten value-added constants) |
 | 26 | `model-population-hardening` | core | nothing (audit F5, F8, F9) |
 | 27 | `population-age-contract` | core | nothing (decision `D-data-1`) |
 | 28 | `model-population-drivers` | core | 25, 26, 27 |
@@ -66,15 +66,17 @@ Legend: **core** = needed for the submission; **opt** = optional, cut first if t
 | # | Slug | Class | Blocked by |
 |---|---|---|---|
 | 38 | `scene-ai-revolution` | core | nothing (works on mock data; the forecast scene keeps its own AI overlay toggle, this is the scene tab) |
-| 39 | `andes-integration` | core | terrain outputs committed; renderer decision `D-andes-1` to `D-andes-4` |
+| 39 | `andes-integration` | core | terrain outputs committed (`D-andes-1` to `D-andes-4` decided) |
 | 40 | `scene-forecast-map-3d` | superseded | replaced by `presentation-3d` (3D is now the default presentation, not an optional map variant) |
-| 48 | `presentation-3d` | core | F2b merged; decisions `D-3d-1` to `D-3d-5`; real province geometry for part 3 (`presentation-3d-shell` onward). A program of six PRs: engine, shell, charts A, story, charts B, Andes/zone map |
+| 48 | `presentation-3d` | core | F2b merged; decisions `D-3d-1` to `D-3d-6` taken; real province geometry for part 3 (`presentation-3d-shell` onward). A program of six PRs: engine, shell, charts A, story, charts B, Andes/zone map |
+| 49 | `map-navigation` | core | nothing (dashboard D1 to D6 merged); 3D first (`D-3d-6`) |
+| 50 | `fullscreen-viewer` | core | nothing; better after 49 (the popup reuses the navigable maps and 3D views) |
 
 ### A5. Real data (4, not executed; all need the human's research first)
 
 | # | Slug | Class | Blocked by |
 |---|---|---|---|
-| 41 | `data-economy-population` | core | economy and population research verified; `D-gdp-1`; 27 |
+| 41 | `data-economy-population` | core | economy and population research verified; 27 (`D-gdp-1` decided) |
 | 42 | `data-resources` | core | mining, energy and agro research verified |
 | 43 | `data-andes` | core | Andes research verified |
 | 44 | `data-research-inputs` | core | research of forecasts, vintages, base rates, AI estimates and catalog verified, with its format documented |
@@ -83,7 +85,7 @@ Legend: **core** = needed for the submission; **opt** = optional, cut first if t
 
 | # | Slug | Class | Blocked by |
 |---|---|---|---|
-| 45 | `polish` | core | answers to `D-polish-1` to `D-polish-7`; model and data tasks done |
+| 45 | `polish` | core | `D-polish-3` color from the human (the rest decided); model and data tasks done, unless the human starts it earlier |
 | 46 | `docs-submission` | core, draft | the contest's rules and criteria; 35 |
 | 47 | `demo-video` | opt, draft | what the contest requires |
 
@@ -120,7 +122,7 @@ None. Every task of the roadmap has a brief. The UI redesign (F1 to F8 of the ap
 2. Download the DEM, register it, set the bounding boxes, run `terrain-bake`, verify against the Andes facts, commit the outputs.
 3. Choose the province geometry source, register it, fill `id_map`, run `build:geo`, review, commit the outputs.
 4. Write the real era list and the real story steps, with sources.
-5. Decide the open design decisions: `docs/design.md` (locale, typeface), `D-res-3`, `D-gdp-1`, `D-andes-1` to `D-andes-4`, `D-polish-1` to `D-polish-7`, and the assumptions A10, A13, A15, A16, A24, A26, A31, A32, A33.
+5. Decisions: all taken with their recommendations on 2026-10-04 (`docs/decisions.md`); what remains is the red arm of the diverging ramp (`D-polish-3`, a color you supply) and the competition's deadline and criteria.
 6. Confirm the contest deadline and criteria; they unblock `docs-submission` and `demo-video`.
 7. Confirm the budgets in `web/budgets.json` and the data budget.
 8. Run the audit before merging model code and before submission.

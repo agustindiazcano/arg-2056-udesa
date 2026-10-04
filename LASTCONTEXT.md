@@ -22,10 +22,13 @@
 
 - **3D D4 to D6 done** on `task/dashboard-shell`: `three` 0.186.1 and `@types/three` 0.186.0 (exact), `web/src/charts3d/` (specs, pure layouts, `Chart2D3D`) and `web/src/three/` (stage with orbit and on-demand render, `Bars3D`, `Map3D`, `Lines3D`, label sprites). `D-3d-1` (Three.js bundled) and `D-3d-2` (poster first, 3D streamed in, own chunk budget) taken by the agent with the brief defaults; the human can change them. `budgets.json`: main raised to 143,360 on purpose, `chunk_overrides` for the 3D chunk (409,600). Treemap, rank history, doubling curve and the Andes are still flat in 3D mode. Rough spots for the live polish: label sizes and camera angles of the three renderers, wall thickness and lane spacing of the lines, heights of the map.
 
+- **Requests of 2026-10-04 (human), briefed, not built**: `map-navigation.md` (zoom with wheel and `+`/`-` buttons, pan and reset on the 2D maps, today `roam: false`; free orbit, pan, wider zoom, reset and touch on the 3D views, today drag-orbit and wheel only) and `fullscreen-viewer.md` (a "Pantalla grande" button on every view opens a popup with the view large, a carousel over the scene's views, and at the top right the view name with the scene's filters and statistics). Phases D8 and D9 of `docs/dashboard.md`; 3D is the priority (`D-3d-6`). All open decisions were taken with their recommendations in `docs/decisions.md` (the red arm of the diverging ramp and the contest deadline stay open).
+
 ## Decisions
 - UI text avoids the second person (infinitives and impersonal forms) to stay neutral between voseo and tuteo. The human may want to change that: it is one pass over the strings.
 - The story steps, the era bands, the page description and the two placeholder scenes (Andes, Revolución IA) are provisional content, now in Spanish ("(provisorio)", "Texto provisorio. Reemplazar antes del lanzamiento."). The release gate still keys on `placeholder: true`, not on the text. Real story text was not touched.
 - 3D is the default presentation (narrated tour plus free explore mode); 2D stays as the data view and the accessible alternative. Brief `presentation-3d.md`, decisions `D-3d-1` to `D-3d-5`.
 
 ## Next step
+- **First, 3D**: `map-navigation` (D8) and `fullscreen-viewer` (D9), then the flat 3D views (treemap, rank history, doubling curve), the rough spots of the renderers, F5 and F6.
 - `presentation-3d` parts 1 to 4 (needs `D-3d-1`, `D-3d-2`, `D-3d-4`, `D-3d-5`; `D-3d-3` is answered), F5 (3D map country to zone), F6 (Andes), F7 (live simulation), F8 (polish).
