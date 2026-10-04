@@ -22,8 +22,8 @@ Every task below has a brief (`<slug>.md` in the repository root) and a prompt (
    13. [ ] `model-ts-port` (optional): BLOCKED by 5, 8
    14. [ ] `model-provinces`: BLOCKED by 9
 4. [x] `scene-resources`, `scene-forecast`, `scene-economy`, `scene-sandbox`: merged.
-   - [ ] Today the 2D province map draws nothing (no geometry committed) and Economy and Resources ignore the province filter (F3 fixes the filter).
-   - [ ] **Human step before `scene-forecast-map` shows a map**: choose the source, register the file, fill `geo/config.json`, run `npm run build:geo`, review the metadata, commit the outputs in `web/public/geo/`. See `docs/geo.md`. When done, remove `MISSING_FOR_NOW` in `web/e2e/csp.spec.ts`.
+   - [x] F3: the province map draws (Natural Earth geometry) and Recursos follows the province filter; Economía is national and says so.
+   - [x] (done in F3 with Natural Earth admin-1, public domain; swap the source later with the same tool) **Human step before `scene-forecast-map` shows a map**: choose the source, register the file, fill `geo/config.json`, run `npm run build:geo`, review the metadata, commit the outputs in `web/public/geo/`. See `docs/geo.md`. When done, remove `MISSING_FOR_NOW` in `web/e2e/csp.spec.ts`.
    - [x] `scene-forecast-map`: province choropleth, level and change modes, markers, table view (with no geometry committed the scene shows the ranking and the fallback message). The `mode` field of the store (2D/3D) is ignored by the map.
    - [x] `scene-forecast-map-3d`: superseded by `presentation-3d` (item 5b).
    - [ ] **Human task before release**: the real era list with sources in `web/src/content/eras.ts` (three placeholders today; the release gate `scripts/check_no_mock.py --content` fails until they are replaced).
@@ -98,6 +98,7 @@ Every task below has a brief (`<slug>.md` in the repository root) and a prompt (
 
 ## Done
 
+- [x] `F3` (branch `task/filters-province-map`): one filter bar (scenario and AI only in the control bar), province geometry committed (`D-3d-3` decided by the agent: Natural Earth admin-1), Recursos follows the province, Economía shows a national note.
 - [x] `F2b` (branch `task/ui-scenes-es`): scenes, charts, tables, story panel and references page in Spanish on the shared `SceneShell`, `TableToggle`, `FilterBar`; `APP_LOCALE = 'es-AR'` and `lang="es"`. See `docs/ui.md`.
 - [x] `deploy`: header config, strict CSP, precompiled validators (Ajv standalone), data cache busting, metadata, release job, smoke script, `docs/deploy.md`.
 - [x] `visits-archive`, `vercel-analytics`, `vercel-config`: see item 11.

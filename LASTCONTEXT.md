@@ -10,12 +10,12 @@
   - `docs/ui.md` describes the shared pieces and the language rules.
 - Tests: unit and e2e updated to Spanish (headings in `web/e2e/fixtures.ts` too). Compact numbers contain non-breaking spaces (`10 k`): tests normalize them.
 
+- **F3 done on `task/filters-province-map`**: geometry from Natural Earth admin-1 in `web/public/geo/` (`D-3d-3` decided by the agent; the human can swap it with `npm run build:geo`); Forecast and Sandbox lost their own scenario and AI chips (the control bar owns them); Recursos follows the selected province (bars highlight it, trend uses its series or says it falls back to national); Economía and the Recursos composition are national and say so (`ScopeNote`).
+
 ## Decisions
 - UI text avoids the second person (infinitives and impersonal forms) to stay neutral between voseo and tuteo. The human may want to change that: it is one pass over the strings.
 - The story steps, the era bands, the page description and the two placeholder scenes (Andes, Revolución IA) are provisional content, now in Spanish ("(provisorio)", "Texto provisorio. Reemplazar antes del lanzamiento."). The release gate still keys on `placeholder: true`, not on the text. Real story text was not touched.
-- The forecast and sandbox scenes still carry their own scenario and AI chips next to the control bar (same names as the bar): F3 unifies the filters.
-- The 2D province map still draws nothing (no geometry) and Economy and Resources ignore the province filter (F3).
 - 3D is the default presentation (narrated tour plus free explore mode); 2D stays as the data view and the accessible alternative. Brief `presentation-3d.md`, decisions `D-3d-1` to `D-3d-5`.
 
 ## Next step
-- F3: unified filters and the province map as the main map mode (needs `D-3d-3`, the province geometry decision), then F4 (motion with GSAP and the story, together with `presentation-3d` parts 1 to 4), F5 (3D map country to zone), F6 (Andes), F7 (live simulation), F8 (polish).
+- F4 (motion with GSAP and the story, together with `presentation-3d` parts 1 to 4), F5 (3D map country to zone), F6 (Andes), F7 (live simulation), F8 (polish).
