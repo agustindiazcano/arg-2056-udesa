@@ -107,6 +107,34 @@ describe('Dashboard: one, two or four views at once', () => {
   });
 });
 
+describe('Dashboard: 2D and 3D', () => {
+  beforeEach(() => useStore.setState({ mode: '3d' }));
+
+  it('has the same dashboard in two views: flat (2D) or in space (3D), with 3D chosen', () => {
+    renderDash();
+    const group = screen.getByRole('group', { name: 'Vista' });
+    expect(within(group).getAllByRole('button').map((b) => [b.textContent, b.getAttribute('aria-pressed')])).toEqual([
+      ['2D', 'false'],
+      ['3D', 'true']
+    ]);
+  });
+
+  it('switches the mode of the whole app, like the D key', () => {
+    renderDash();
+    fireEvent.click(screen.getByRole('button', { name: '2D' }));
+    expect(useStore.getState().mode).toBe('2d');
+    expect(screen.getByRole('button', { name: '2D' }).getAttribute('aria-pressed')).toBe('true');
+    fireEvent.click(screen.getByRole('button', { name: '3D' }));
+    expect(useStore.getState().mode).toBe('3d');
+  });
+
+  it('follows the D key', () => {
+    renderDash();
+    act(() => useStore.getState().dispatch({ type: 'toggleMode' }));
+    expect(screen.getByRole('button', { name: '2D' }).getAttribute('aria-pressed')).toBe('true');
+  });
+});
+
 describe('Dashboard: Recorrido and Explorar', () => {
   it('starts in Recorrido', () => {
     renderDash();
