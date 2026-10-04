@@ -77,40 +77,40 @@ describe('ReferencesPage: summary and states', () => {
   it('shows the title, the landmarks and the summary line from the stats', () => {
     render(<ReferencesPage references={refs()} />);
     expect(screen.getByRole('main')).toBeDefined();
-    expect(screen.getByRole('heading', { level: 1, name: 'Sources and attributions' })).toBeDefined();
-    expect(screen.getByText('4 sources back 3 published files. Retrieved between 2025-12-01 and 2026-02-03.')).toBeDefined();
+    expect(screen.getByRole('heading', { level: 1, name: 'Fuentes y atribuciones' })).toBeDefined();
+    expect(screen.getByText('4 fuentes respaldan 3 archivos publicados. Consultadas entre 1 de diciembre de 2025 y 3 de febrero de 2026.')).toBeDefined();
   });
 
   it('uses the singular for one source and one file', () => {
     const one = refs({ sources: [src('s:1')], stats: { ...refs().stats, published_files: 1, sources_used: 1 } });
     render(<ReferencesPage references={one} />);
-    expect(screen.getByText('1 source backs 1 published file. Retrieved between 2025-12-01 and 2026-02-03.')).toBeDefined();
+    expect(screen.getByText('1 fuente respalda 1 archivo publicado. Consultadas entre 1 de diciembre de 2025 y 3 de febrero de 2026.')).toBeDefined();
   });
 
   it('shows the empty state and the sample-data message when the data is mock', () => {
     render(<ReferencesPage references={empty(true)} />);
-    expect(screen.getByText('No sources are registered yet.')).toBeDefined();
-    expect(screen.getByText('Sample data: these are not real sources')).toBeDefined();
+    expect(screen.getByText('Todavía no hay fuentes registradas.')).toBeDefined();
+    expect(screen.getByText('Datos de muestra: no son fuentes reales')).toBeDefined();
     expect(screen.queryByRole('searchbox')).toBeNull();
   });
 
   it('shows only the empty message when there is no mock', () => {
     render(<ReferencesPage references={empty(false)} />);
-    expect(screen.getByText('No sources are registered yet.')).toBeDefined();
-    expect(screen.queryByText(/Sample data/)).toBeNull();
+    expect(screen.getByText('Todavía no hay fuentes registradas.')).toBeDefined();
+    expect(screen.queryByText(/Datos de muestra/)).toBeNull();
   });
 
   it('shows the sample-data message next to real entries when mock is true', () => {
     render(<ReferencesPage references={refs({ mock: true })} />);
-    expect(screen.getByText('Sample data: these are not real sources')).toBeDefined();
+    expect(screen.getByText('Datos de muestra: no son fuentes reales')).toBeDefined();
   });
 
   it('shows the records-without-link line only when it is greater than zero', () => {
     const { unmount } = render(<ReferencesPage references={refs()} />);
-    expect(screen.getByText('2 of 10 records have no link to a source page.')).toBeDefined();
+    expect(screen.getByText('2 de 10 registros no tienen enlace a una página de la fuente.')).toBeDefined();
     unmount();
     render(<ReferencesPage references={refs({ stats: { ...refs().stats, records_without_url: 0 } })} />);
-    expect(screen.queryByText(/have no link to a source page/)).toBeNull();
+    expect(screen.queryByText(/no tienen enlace a una página de la fuente/)).toBeNull();
   });
 });
 
@@ -118,7 +118,7 @@ describe('ReferencesPage: list', () => {
   it('groups by publisher type in the enum order with the counts', () => {
     render(<ReferencesPage references={refs()} />);
     const headings = screen.getAllByRole('heading', { level: 2 }).map((h) => h.textContent);
-    expect(headings.slice(0, 3)).toEqual(['Official (2)', 'International (1)', 'Consultancy (1)']);
+    expect(headings.slice(0, 3)).toEqual(['Oficial (2)', 'Internacional (1)', 'Consultora (1)']);
   });
 
   it('gives every entry an anchor id equal to the source id and an external link with target and rel', () => {
@@ -134,15 +134,15 @@ describe('ReferencesPage: list', () => {
     render(<ReferencesPage references={refs()} />);
     const first = document.getElementById('s:1')!;
     expect(within(first).getByText('Secretaría de Minería')).toBeDefined();
-    expect(within(first).getByText('Published 2020-05-01')).toBeDefined();
-    expect(within(first).getByText('Retrieved 2026-01-10')).toBeDefined();
-    expect(within(first).getByText('Language: es')).toBeDefined();
-    expect(within(first).getByText('License: CC BY 4.0')).toBeDefined();
-    expect(within(first).getByText('Used by: economy.json, projects.json')).toBeDefined();
+    expect(within(first).getByText('Publicado el 1 de mayo de 2020')).toBeDefined();
+    expect(within(first).getByText('Consultado el 10 de enero de 2026')).toBeDefined();
+    expect(within(first).getByText('Idioma: es')).toBeDefined();
+    expect(within(first).getByText('Licencia: CC BY 4.0')).toBeDefined();
+    expect(within(first).getByText('Usado por: economy.json, projects.json')).toBeDefined();
     const second = document.getElementById('s:2')!;
-    expect(within(second).getByText('date not stated')).toBeDefined();
-    expect(within(second).queryByText(/Language:/)).toBeNull();
-    expect(within(second).queryByText(/License:/)).toBeNull();
+    expect(within(second).getByText('fecha no indicada')).toBeDefined();
+    expect(within(second).queryByText(/Idioma:/)).toBeNull();
+    expect(within(second).queryByText(/Licencia:/)).toBeNull();
   });
 
   it('links "derived from" to the anchor when the entry is in the list and shows plain text otherwise', () => {
@@ -150,7 +150,7 @@ describe('ReferencesPage: list', () => {
     const derived = within(document.getElementById('s:2')!).getByRole('link', { name: 'Original title' });
     expect(derived.getAttribute('href')).toBe('#s:1');
     const missing = document.getElementById('s:3')!;
-    expect(within(missing).getByText('Derived from s:99')).toBeDefined();
+    expect(within(missing).getByText('Derivado de s:99')).toBeDefined();
     expect(within(missing).queryByRole('link', { name: /s:99/ })).toBeNull();
   });
 });
@@ -160,42 +160,42 @@ describe('ReferencesPage: filters', () => {
     render(<ReferencesPage references={refs()} />);
     const live = screen.getByRole('status');
     expect(live.getAttribute('aria-live')).toBe('polite');
-    expect(live.textContent).toBe('4 sources shown');
-    fireEvent.change(screen.getByLabelText('Search sources'), { target: { value: 'secretaria' } });
-    expect(live.textContent).toBe('1 source shown');
+    expect(live.textContent).toBe('4 fuentes mostradas');
+    fireEvent.change(screen.getByLabelText('Buscar fuentes'), { target: { value: 'secretaria' } });
+    expect(live.textContent).toBe('1 fuente mostrada');
     expect(document.getElementById('s:1')).not.toBeNull();
     expect(document.getElementById('s:2')).toBeNull();
   });
 
   it('filters by publisher type with chips built from the types present', () => {
     render(<ReferencesPage references={refs()} />);
-    expect(screen.queryByRole('button', { name: 'Bank' })).toBeNull();
-    const chip = screen.getByRole('button', { name: 'International' });
+    expect(screen.queryByRole('button', { name: 'Banco' })).toBeNull();
+    const chip = screen.getByRole('button', { name: 'Internacional' });
     expect(chip.getAttribute('aria-pressed')).toBe('false');
     fireEvent.click(chip);
-    expect(screen.getByRole('button', { name: 'International' }).getAttribute('aria-pressed')).toBe('true');
-    expect(screen.getByRole('status').textContent).toBe('1 source shown');
+    expect(screen.getByRole('button', { name: 'Internacional' }).getAttribute('aria-pressed')).toBe('true');
+    expect(screen.getByRole('status').textContent).toBe('1 fuente mostrada');
     expect(document.getElementById('s:3')).not.toBeNull();
     expect(document.getElementById('s:1')).toBeNull();
   });
 
   it('says so when nothing matches and clears the filters', () => {
     render(<ReferencesPage references={refs()} />);
-    fireEvent.change(screen.getByLabelText('Search sources'), { target: { value: 'zzzz' } });
-    expect(screen.getByRole('status').textContent).toBe('0 sources shown');
-    expect(screen.getByText('No source matches the filters.')).toBeDefined();
-    fireEvent.click(screen.getByRole('button', { name: 'International' }));
-    fireEvent.click(screen.getByRole('button', { name: 'Clear filters' }));
-    expect((screen.getByLabelText('Search sources') as HTMLInputElement).value).toBe('');
-    expect(screen.getByRole('status').textContent).toBe('4 sources shown');
-    expect(screen.getByRole('button', { name: 'International' }).getAttribute('aria-pressed')).toBe('false');
+    fireEvent.change(screen.getByLabelText('Buscar fuentes'), { target: { value: 'zzzz' } });
+    expect(screen.getByRole('status').textContent).toBe('0 fuentes mostradas');
+    expect(screen.getByText('Ninguna fuente coincide con los filtros.')).toBeDefined();
+    fireEvent.click(screen.getByRole('button', { name: 'Internacional' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Limpiar filtros' }));
+    expect((screen.getByLabelText('Buscar fuentes') as HTMLInputElement).value).toBe('');
+    expect(screen.getByRole('status').textContent).toBe('4 fuentes mostradas');
+    expect(screen.getByRole('button', { name: 'Internacional' }).getAttribute('aria-pressed')).toBe('false');
   });
 });
 
 describe('ReferencesPage: attributions, leads and links', () => {
   it('lists the attributions with a link when there is a source url', () => {
     render(<ReferencesPage references={refs()} />);
-    expect(screen.getByRole('heading', { level: 2, name: 'Attributions' })).toBeDefined();
+    expect(screen.getByRole('heading', { level: 2, name: 'Atribuciones' })).toBeDefined();
     expect(screen.getByText(/^Terrain:/)).toBeDefined();
     expect(screen.getByRole('link', { name: 'Terrain data by Example DEM' }).getAttribute('href')).toBe('https://dem.example/terrain');
     expect(screen.getByText('Province boundaries: Boundaries by Example Institute')).toBeDefined();
@@ -203,25 +203,25 @@ describe('ReferencesPage: attributions, leads and links', () => {
 
   it('keeps the leads inside a collapsed details element with its sentence', () => {
     render(<ReferencesPage references={refs()} />);
-    const summary = screen.getByText('Not verified leads');
+    const summary = screen.getByText('Pistas sin verificar');
     const details = summary.closest('details')!;
     expect(details).not.toBeNull();
     expect(details.open).toBe(false);
-    expect(within(details).getByText('These pages were not opened; no figure in this app relies on them.')).toBeDefined();
+    expect(within(details).getByText('Estas páginas no se abrieron; ninguna cifra de esta aplicación depende de ellas.')).toBeDefined();
     expect(within(details).getByRole('link', { name: 'Lead one' }).getAttribute('href')).toBe('https://example.com/lead-1');
     // leads are never listed among the sources
     expect(document.getElementById('s:7')).toBeNull();
-    expect(screen.getByRole('status').textContent).toBe('4 sources shown');
+    expect(screen.getByRole('status').textContent).toBe('4 fuentes mostradas');
   });
 
   it('does not render the leads section when there are none', () => {
     render(<ReferencesPage references={refs({ leads: [] })} />);
-    expect(screen.queryByText('Not verified leads')).toBeNull();
+    expect(screen.queryByText('Pistas sin verificar')).toBeNull();
   });
 
   it('links back to the app', () => {
     render(<ReferencesPage references={refs()} />);
-    expect(screen.getByRole('link', { name: 'Back to the app' }).getAttribute('href')).toBe('index.html');
+    expect(screen.getByRole('link', { name: 'Volver a la aplicación' }).getAttribute('href')).toBe('index.html');
   });
 });
 
@@ -231,26 +231,26 @@ describe('ReferencesPage: copy citation', () => {
     setClipboard({ writeText });
     render(<ReferencesPage references={refs()} />);
     const entry = document.getElementById('s:1')!;
-    fireEvent.click(within(entry).getByRole('button', { name: 'Copy citation' }));
+    fireEvent.click(within(entry).getByRole('button', { name: 'Copiar cita' }));
     await waitFor(() => expect(writeText).toHaveBeenCalledTimes(1));
     expect(writeText).toHaveBeenCalledWith(formatCitation(refs().sources[0]!));
-    await within(entry).findByText('Copied');
+    await within(entry).findByText('Copiado');
   });
 
   it('does not fail when the clipboard is unavailable', async () => {
     setClipboard(undefined);
     render(<ReferencesPage references={refs()} />);
     const entry = document.getElementById('s:1')!;
-    fireEvent.click(within(entry).getByRole('button', { name: 'Copy citation' }));
-    await within(entry).findByText('Could not copy');
+    fireEvent.click(within(entry).getByRole('button', { name: 'Copiar cita' }));
+    await within(entry).findByText('No se pudo copiar');
   });
 
   it('does not fail when writing to the clipboard is rejected', async () => {
     setClipboard({ writeText: vi.fn(async () => { throw new Error('denied'); }) });
     render(<ReferencesPage references={refs()} />);
     const entry = document.getElementById('s:1')!;
-    fireEvent.click(within(entry).getByRole('button', { name: 'Copy citation' }));
-    await within(entry).findByText('Could not copy');
+    fireEvent.click(within(entry).getByRole('button', { name: 'Copiar cita' }));
+    await within(entry).findByText('No se pudo copiar');
   });
 });
 
@@ -258,17 +258,17 @@ describe('ReferencesApp', () => {
   it('loads references.json and renders the page', async () => {
     vi.stubGlobal('fetch', vi.fn(async () => ({ ok: true, status: 200, json: async () => refs() })));
     render(<ReferencesApp />);
-    expect(screen.getByText('Loading...')).toBeDefined();
-    await screen.findByRole('heading', { level: 1, name: 'Sources and attributions' });
+    expect(screen.getByText('Cargando...')).toBeDefined();
+    await screen.findByRole('heading', { level: 1, name: 'Fuentes y atribuciones' });
   });
 
   it('shows an error state when the file cannot be loaded or is invalid', async () => {
     vi.stubGlobal('fetch', vi.fn(async () => ({ ok: false, status: 404, json: async () => ({}) })));
     const { unmount } = render(<ReferencesApp />);
-    await screen.findByText('Error loading data.');
+    await screen.findByText('No se pudieron cargar los datos.');
     unmount();
     vi.stubGlobal('fetch', vi.fn(async () => ({ ok: true, status: 200, json: async () => ({ nope: true }) })));
     render(<ReferencesApp />);
-    await screen.findByText('Error loading data.');
+    await screen.findByText('No se pudieron cargar los datos.');
   });
 });

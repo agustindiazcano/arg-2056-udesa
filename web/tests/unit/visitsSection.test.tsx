@@ -31,25 +31,25 @@ describe('VisitsSection', () => {
   it('shows the totals and one row per country with its flag, visitors and page views', async () => {
     stubFetch({ ok: true, json: ARCHIVE });
     render(<VisitsSection />);
-    const section = await screen.findByRole('region', { name: 'Visits' });
-    expect(within(section).getByText('424 visitors and 1,236 page views')).toBeTruthy();
-    expect(within(section).getByText(/from 2026-10-01 to 2026-10-02 \(2 days\)/)).toBeTruthy();
+    const section = await screen.findByRole('region', { name: 'Visitas' });
+    expect(within(section).getByText('424 visitantes y 1.236 vistas de página')).toBeTruthy();
+    expect(within(section).getByText(/del 1 de octubre de 2026 al 2 de octubre de 2026 \(2 días\)/)).toBeTruthy();
 
-    const rows = within(within(section).getByRole('table', { name: 'Visits by country' })).getAllByRole('row');
+    const rows = within(within(section).getByRole('table', { name: 'Visitas por país' })).getAllByRole('row');
     const cells = rows.map((r) => [...r.querySelectorAll('th, td')].map((c) => c.textContent));
     expect(cells).toEqual([
-      ['Country', 'Visitors', 'Page views'],
-      ['\u{1F1E6}\u{1F1F7} Argentina', '403', '1,205'],
-      ['\u{1F1FA}\u{1F1F8} United States', '20', '30'],
-      ['Unknown', '1', '1'],
-      ['Total', '424', '1,236']
+      ['País', 'Visitantes', 'Vistas de página'],
+      ['\u{1F1E6}\u{1F1F7} Argentina', '403', '1.205'],
+      ['\u{1F1FA}\u{1F1F8} Estados Unidos', '20', '30'],
+      ['Desconocido', '1', '1'],
+      ['Total', '424', '1.236']
     ]);
   });
 
   it('hides the flag from screen readers, the country name carries the meaning', async () => {
     stubFetch({ ok: true, json: ARCHIVE });
     render(<VisitsSection />);
-    const section = await screen.findByRole('region', { name: 'Visits' });
+    const section = await screen.findByRole('region', { name: 'Visitas' });
     const flag = within(section).getByText('\u{1F1E6}\u{1F1F7}');
     expect(flag.getAttribute('aria-hidden')).toBe('true');
   });
@@ -63,24 +63,24 @@ describe('VisitsSection', () => {
   it('says so when nothing has been archived yet', async () => {
     stubFetch({ ok: true, json: { source: 's', retrieved_at: null, days: {} } });
     render(<VisitsSection />);
-    expect(await screen.findByText('No visits have been archived yet.')).toBeTruthy();
+    expect(await screen.findByText('Todavía no se archivaron visitas.')).toBeTruthy();
     expect(screen.queryByRole('table')).toBeNull();
   });
 
   it('says the counts are not available when the file cannot be loaded or is invalid', async () => {
     stubFetch({ ok: false, status: 404 });
     render(<VisitsSection />);
-    expect(await screen.findByText('Visit counts are not available.')).toBeTruthy();
+    expect(await screen.findByText('El conteo de visitas no está disponible.')).toBeTruthy();
     cleanup();
     stubFetch({ ok: true, json: { nope: true } });
     render(<VisitsSection />);
-    expect(await screen.findByText('Visit counts are not available.')).toBeTruthy();
+    expect(await screen.findByText('El conteo de visitas no está disponible.')).toBeTruthy();
   });
 
   it('asks for the archive at /analytics/visits.json', async () => {
     stubFetch({ ok: true, json: ARCHIVE });
     render(<VisitsSection />);
-    await screen.findByRole('region', { name: 'Visits' });
+    await screen.findByRole('region', { name: 'Visitas' });
     expect((fetch as unknown as ReturnType<typeof vi.fn>).mock.calls[0]![0]).toBe('/analytics/visits.json');
   });
 });
@@ -98,7 +98,7 @@ describe('ReferencesPage with the visits', () => {
     render(<ReferencesPage references={references} extra={<p>extra block</p>} />);
     const main = screen.getByRole('main');
     const extra = within(main).getByText('extra block');
-    const back = within(main).getByRole('link', { name: 'Back to the app' });
+    const back = within(main).getByRole('link', { name: 'Volver a la aplicación' });
     expect(extra.compareDocumentPosition(back) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
   });
 });

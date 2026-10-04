@@ -86,19 +86,19 @@ describe('resolveDerived', () => {
 describe('formatCitation', () => {
   it('formats a full entry exactly', () => {
     expect(formatCitation(src('s:1', { title: 'A report', authors_or_publisher: 'Ministry' }))).toBe(
-      'Ministry. A report. 2020. Retrieved 2026-01-10. https://example.com/s:1'
+      'Ministry. A report. 2020. Consultado el 2026-01-10. https://example.com/s:1'
     );
   });
 
-  it('uses n.d. when there is no publication date', () => {
+  it('uses s. f. when there is no publication date', () => {
     expect(formatCitation(src('s:1', { publication_date: null }))).toBe(
-      'Publisher. Title s:1. n.d. Retrieved 2026-01-10. https://example.com/s:1'
+      'Publisher. Title s:1. s. f. Consultado el 2026-01-10. https://example.com/s:1'
     );
   });
 
   it('does not double the period when the title already ends with one', () => {
     expect(formatCitation(src('s:1', { title: 'Report v2.' }))).toBe(
-      'Publisher. Report v2. 2020. Retrieved 2026-01-10. https://example.com/s:1'
+      'Publisher. Report v2. 2020. Consultado el 2026-01-10. https://example.com/s:1'
     );
   });
 });
