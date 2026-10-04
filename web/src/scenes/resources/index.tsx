@@ -9,6 +9,8 @@ import {
   CompositionKind
 } from '../../types/index.js';
 import { PROVINCES } from '../../types/province.js';
+import type { ProvinceId } from '../../types/province.js';
+import { mapSummary } from '../forecast/mapSelectors.js';
 import { buildTreemap } from '../../charts/builders/treemap.js';
 import { buildProvinceBars } from '../../charts/builders/provinceBars.js';
 import { buildTrend } from '../../charts/builders/trend.js';
@@ -258,18 +260,32 @@ export default function Scene() {
                 </div>
               )}
               {provinces.status === 'success' && mapValues && (
-                <ProvinceMap
-                  geo={provinces.geo}
-                  values={mapValues}
-                  unit={resourceUnit ?? ''}
-                  indicatorLabel={indicatorSentence('resource_production', selectedResource)}
-                  metric="level"
-                  selectedId={province}
-                  year={rpYear}
-                  observed
-                  hideTitle
-                  onSelect={(id) => dispatch({ type: 'selectProvince', province: id })}
-                />
+                <Chart2D3D
+                  spec={{
+                    kind: 'map',
+                    title: `Mapa de producción por provincia (${rpYear})`,
+                    geo: provinces.geo,
+                    values: mapValues,
+                    metric: 'level',
+                    selectedId: province,
+                    formatValue: (v) => formatValue(v, resourceUnit ?? ''),
+                    onSelect: (id) => dispatch({ type: 'selectProvince', province: id as ProvinceId | null }),
+                    summary: mapSummary(mapValues, 'level', indicatorSentence('resource_production', selectedResource), rpYear, resourceUnit ?? '')
+                  }}
+                >
+                  <ProvinceMap
+                    geo={provinces.geo}
+                    values={mapValues}
+                    unit={resourceUnit ?? ''}
+                    indicatorLabel={indicatorSentence('resource_production', selectedResource)}
+                    metric="level"
+                    selectedId={province}
+                    year={rpYear}
+                    observed
+                    hideTitle
+                    onSelect={(id) => dispatch({ type: 'selectProvince', province: id })}
+                  />
+                </Chart2D3D>
               )}
               {provinces.status === 'success' && (
                 <div style={{ fontSize: 'var(--font-sm)', color: 'var(--ink-2)' }}>

@@ -109,6 +109,16 @@ test.describe('dashboard', () => {
     await expect(page.locator('[data-chart3d="bars"]')).toBeVisible();
   });
 
+  test('the province map is a 3D map by default and the flat map in 2D', async ({ page }) => {
+    await page.goto('/');
+    await page.getByRole('tab', { name: 'Recursos' }).click();
+    await page.getByRole('group', { name: 'Vistas', exact: true }).getByRole('button', { name: 'Mapa' }).click();
+    await expect(page.locator('[data-chart3d="map"] canvas')).toBeVisible();
+    await page.getByRole('group', { name: 'Vista', exact: true }).getByRole('button', { name: '2D' }).click();
+    await expect(page.locator('[data-chart3d]')).toHaveCount(0);
+    await expect(page.getByRole('img', { name: /^Mapa de/ })).toBeVisible();
+  });
+
   test('the story panel is docked in the right panel', async ({ page }) => {
     await page.goto('/');
     await page.getByRole('tab', { name: 'Economía' }).click();

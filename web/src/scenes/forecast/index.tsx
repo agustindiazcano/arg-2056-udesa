@@ -2,10 +2,11 @@ import React, { useMemo, useState } from 'react';
 import { useStore } from '../../state/store.js';
 import { useDataset } from '../../data/useDataset.js';
 import { parseForecastOutput, PROVINCES, SCENARIOS } from '../../types/index.js';
+import type { ProvinceId } from '../../types/index.js';
 import type { Indicator, ResourceId } from '../../types/index.js';
 import { buildFan } from '../../charts/builders/fan.js';
 import { buildRanking } from '../../charts/builders/ranking.js';
-import { formatValue } from '../../charts/format.js';
+import { formatPercent, formatValue } from '../../charts/format.js';
 import { Chart2D3D } from '../../charts3d/Chart2D3D.js';
 import { barsSpec } from '../../charts3d/specs.js';
 import { indicatorLabel, indicatorSentence, resourceLabel, scenarioLabel } from '../../content/labels.js';
@@ -18,7 +19,7 @@ import { EChart } from '../../charts/EChart.js';
 import { DataTable } from '../../charts/DataTable.js';
 import { ProvinceMap, useProvinces } from './ProvinceMap.js';
 import { StatTiles } from './StatTiles.js';
-import { provinceMapValues } from './mapSelectors.js';
+import { mapSummary, provinceMapValues } from './mapSelectors.js';
 import type { MapMetric } from './mapSelectors.js';
 import { clampYear, forecastView, rankProvinces } from './selectors.js';
 import type { ForecastView, RankRow } from './selectors.js';
@@ -181,18 +182,32 @@ export default function Scene() {
                 </div>
               )}
               {provinces.status === 'success' && mapValues && (
-                <ProvinceMap
-                  geo={provinces.geo}
-                  values={mapValues}
-                  unit={unit}
-                  indicatorLabel={indicatorSentence(indicator, resource)}
-                  metric={metric}
-                  selectedId={province}
-                  scenario={scenario}
-                  year={year}
-                  hideTitle
-                  onSelect={(id) => dispatch({ type: 'selectProvince', province: id })}
-                />
+                <Chart2D3D
+                  spec={{
+                    kind: 'map',
+                    title: `Mapa de provincias (${year})`,
+                    geo: provinces.geo,
+                    values: mapValues,
+                    metric,
+                    selectedId: province,
+                    formatValue: (v) => (metric === 'level' ? formatValue(v, unit) : `${formatPercent(v)} por año`),
+                    onSelect: (id) => dispatch({ type: 'selectProvince', province: id as ProvinceId | null }),
+                    summary: mapSummary(mapValues, metric, indicatorSentence(indicator, resource), year, unit)
+                  }}
+                >
+                  <ProvinceMap
+                    geo={provinces.geo}
+                    values={mapValues}
+                    unit={unit}
+                    indicatorLabel={indicatorSentence(indicator, resource)}
+                    metric={metric}
+                    selectedId={province}
+                    scenario={scenario}
+                    year={year}
+                    hideTitle
+                    onSelect={(id) => dispatch({ type: 'selectProvince', province: id })}
+                  />
+                </Chart2D3D>
               )}
               {provinces.status === 'success' && (
                 <div style={{ fontSize: 'var(--font-sm)', color: 'var(--ink-2)' }}>
