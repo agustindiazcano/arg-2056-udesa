@@ -89,3 +89,7 @@ with `R = 6,371,008.8 m`. Since the long side is `max_size` pixels, `pixel_size_
 ## 9. In the web app
 
 `web/src/terrain/` is renderer-agnostic: `loadTerrain(baseUrl, id)` returns `{ meta, heights }`, `sampleElevation(terrain, lon, lat)` returns meters or `null` outside the box (never 0), and the pixel convention is documented in `decode.ts` (pixel (0, 0) has its center at west + 0.5 pixel, north - 0.5 pixel).
+
+## 10. The Andes scene and the made-up terrain
+
+The Andes scene (`web/src/scenes/andes/`) loads `/terrain/andes` (so the region `id` in `terrain/config.json` must be `andes`). While that file does not exist it draws a made-up terrain (`web/src/terrain/synthetic.ts`: a deterministic cordillera around the events, source "Terreno sintético") and says so on the screen. Nothing else changes when the real files are committed. The attribution of the baked terrain is shown in the scene.

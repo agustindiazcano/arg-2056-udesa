@@ -66,7 +66,7 @@ Legend: **core** = needed for the submission; **opt** = optional, cut first if t
 | # | Slug | Class | Blocked by |
 |---|---|---|---|
 | 38 | `scene-ai-revolution` | core | nothing (works on mock data; the forecast scene keeps its own AI overlay toggle, this is the scene tab) |
-| 39 | `andes-integration` | core | terrain outputs committed (`D-andes-1` to `D-andes-4` decided) |
+| 39 | `andes-integration` | core, first cut done (PR open) | terrain outputs committed (`D-andes-1` to `D-andes-4` decided) |
 | 40 | `scene-forecast-map-3d` | superseded | replaced by `presentation-3d` (3D is now the default presentation, not an optional map variant) |
 | 48 | `presentation-3d` | core | F2b merged; decisions `D-3d-1` to `D-3d-6` taken; real province geometry for part 3 (`presentation-3d-shell` onward). A program of six PRs: engine, shell, charts A, story, charts B, Andes/zone map |
 | 49 | `map-navigation` | core, done (PR open) | nothing (dashboard D1 to D6 merged); 3D first (`D-3d-6`) |
