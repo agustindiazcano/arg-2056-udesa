@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { init } from './echarts.js';
 import { useReducedMotion } from '../runtime/useReducedMotion';
+import { SERIES_DRAW_MS } from '../motion/timings';
 import type { ECharts } from './echarts.js';
 
 export interface ChartClickParams {
@@ -21,8 +22,12 @@ interface EChartProps {
 /** The option type of ECharts is too large to build from `unknown`: the builders own its shape. */
 type SetOptionArg = Parameters<ECharts['setOption']>[0];
 
-function withoutAnimation(option: unknown): unknown {
-  return typeof option === 'object' && option !== null ? { ...option, animation: false } : option;
+function withAnimation(option: unknown, animate: boolean): unknown {
+  if (typeof option !== 'object' || option === null) return option;
+  // the series draw in once over 600 ms; later updates (the playhead, a filter) are immediate
+  return animate
+    ? { ...option, animation: true, animationDuration: SERIES_DRAW_MS, animationEasing: 'cubicOut', animationDurationUpdate: 0 }
+    : { ...option, animation: false };
 }
 
 export const EChart: React.FC<EChartProps> = ({ option, onClick, style, 'aria-label': ariaLabel, role = 'img' }) => {
@@ -59,7 +64,7 @@ export const EChart: React.FC<EChartProps> = ({ option, onClick, style, 'aria-la
   useEffect(() => {
     if (instanceRef.current && option) {
       // true = not merge. With reduced motion the chart does not animate; a copy keeps the builder's option intact.
-      instanceRef.current.setOption((reducedMotion ? withoutAnimation(option) : option) as SetOptionArg, true);
+      instanceRef.current.setOption(withAnimation(option, !reducedMotion) as SetOptionArg, true);
     }
   }, [option, reducedMotion]);
 

@@ -34,22 +34,22 @@ describe('StoryCaption', () => {
     render(<StoryCaption />);
     const r = region();
     expect(within(r).getByText('Paso 1 de 3')).toBeTruthy();
-    expect(within(r).getByRole('heading', { name: /Paso 1 \(provisorio\)/ })).toBeTruthy();
-    expect(within(r).getByText('Texto provisorio. Reemplazar antes del lanzamiento.')).toBeTruthy();
+    expect(within(r).getByRole('heading', { name: new RegExp(STEPS.economy[0]!.title) })).toBeTruthy();
+    expect(within(r).getByText(STEPS.economy[0]!.text)).toBeTruthy();
   });
 
-  it('shows the visible Provisorio tag for a placeholder step', () => {
+  it('shows the visible Borrador tag for a placeholder step', () => {
     render(<StoryCaption />);
-    expect(within(region()).getByText('Provisorio')).toBeTruthy();
+    expect(within(region()).getByText('Borrador')).toBeTruthy();
   });
 
-  it('does not show the Provisorio tag for a real step', () => {
+  it('does not show the Borrador tag for a real step', () => {
     const real: StepsByScene = {
       ...STEPS,
       economy: [{ id: 'real', title: 'Real title', text: 'Real text', focus: {}, source_ids: [], placeholder: false }]
     };
     render(<StoryCaption steps={real} />);
-    expect(within(region()).queryByText('Provisorio')).toBeNull();
+    expect(within(region()).queryByText('Borrador')).toBeNull();
     expect(within(region()).getByText('Paso 1 de 1')).toBeTruthy();
   });
 
@@ -61,7 +61,7 @@ describe('StoryCaption', () => {
     expect(within(region()).getByText('Paso 2 de 3')).toBeTruthy();
     const live = region().querySelector('[aria-live="polite"]');
     expect(live).not.toBeNull();
-    expect(live?.textContent).toBe('Paso 2 (provisorio)');
+    expect(live?.textContent).toBe(STEPS.economy[1]!.title);
   });
 
   it('Previous goes back and is disabled at the first step', () => {
@@ -79,9 +79,9 @@ describe('StoryCaption', () => {
     render(<StoryCaption />);
     const dots = screen.getAllByRole('button', { name: /^Ir al paso \d+: / });
     expect(dots.map((d) => d.getAttribute('aria-label'))).toEqual([
-      'Ir al paso 1: Paso 1 (provisorio)',
-      'Ir al paso 2: Paso 2 (provisorio)',
-      'Ir al paso 3: Paso 3 (provisorio)'
+      `Ir al paso 1: ${STEPS.economy[0]!.title}`,
+      `Ir al paso 2: ${STEPS.economy[1]!.title}`,
+      `Ir al paso 3: ${STEPS.economy[2]!.title}`
     ]);
     expect(dots.filter((d) => d.getAttribute('aria-current') === 'step')).toEqual([dots[0]]);
 
@@ -138,12 +138,12 @@ describe('StoryCaption', () => {
     expect(hide.getAttribute('aria-pressed')).toBe('false');
     fireEvent.click(hide);
 
-    expect(screen.queryByText('Texto provisorio. Reemplazar antes del lanzamiento.')).toBeNull();
+    expect(screen.queryByText(STEPS.economy[0]!.text)).toBeNull();
     const show = screen.getByRole('button', { name: 'Mostrar textos' });
     expect(show.getAttribute('aria-pressed')).toBe('true');
     fireEvent.click(show);
 
-    expect(screen.getByText('Texto provisorio. Reemplazar antes del lanzamiento.')).toBeTruthy();
+    expect(screen.getByText(STEPS.economy[0]!.text)).toBeTruthy();
     expect(screen.getByRole('button', { name: 'Ocultar textos' }).getAttribute('aria-pressed')).toBe('false');
   });
 

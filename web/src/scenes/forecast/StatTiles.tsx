@@ -2,6 +2,7 @@ import React from 'react';
 import { cagr, aiDelta, endpoint } from './selectors.js';
 import type { ForecastView } from './selectors.js';
 import { formatPercent, formatValue } from '../../charts/format.js';
+import { CountUp } from '../../motion/CountUp.js';
 import type { Scenario } from '../../types/index.js';
 
 interface StatTilesProps {
@@ -43,7 +44,9 @@ export function StatTiles({ view, scenario, aiOverlay }: StatTilesProps) {
       <Tile id="tile-value" label={last === null ? 'Mediana en el último año' : `Mediana en ${last}`}>
         {end ? (
           <>
-            <div style={{ fontSize: 'var(--font-xl)', color: 'var(--ink)' }}>{formatValue(end.p50, unit)}</div>
+            <div style={{ fontSize: 'var(--font-xl)', color: 'var(--ink)' }}>
+              <CountUp value={end.p50} format={(n) => formatValue(n, unit)} />
+            </div>
             <div style={{ color: 'var(--ink-2)' }}>
               p10-p90: {formatValue(end.p10, unit)} a {formatValue(end.p90, unit)}
             </div>

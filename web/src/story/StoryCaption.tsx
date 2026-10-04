@@ -1,5 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { gsap } from 'gsap';
 import { useStore } from '../state/store';
+import { useReducedMotion } from '../runtime/useReducedMotion';
+import { STORY_STEP } from '../motion/timings';
 import { STEPS } from '../content/steps';
 import { stepDeviates } from './focus';
 import type { StepsByScene } from './types';
@@ -44,7 +47,26 @@ export function StoryCaption({ steps = STEPS, registryIds = null }: StoryCaption
   const dispatch = useStore((s) => s.dispatch);
   const [hidden, setHidden] = useState(false);
   const panelRef = useRef<HTMLDivElement | null>(null);
+  const bodyRef = useRef<HTMLDivElement | null>(null);
+  const reducedMotion = useReducedMotion();
+  const shownIndex = useRef(index);
   usePanelHeightVariable(panelRef);
+
+  // the text fades in each time the step changes (not on mount, not under reduced motion)
+  useEffect(() => {
+    if (shownIndex.current === index) return;
+    shownIndex.current = index;
+    const body = bodyRef.current;
+    if (!body || reducedMotion) return;
+    const tween = gsap.fromTo(
+      body,
+      { opacity: 0, y: STORY_STEP.y },
+      { opacity: 1, y: 0, duration: STORY_STEP.duration, ease: STORY_STEP.ease, clearProps: 'opacity,transform' }
+    );
+    return () => {
+      tween.kill();
+    };
+  }, [index, reducedMotion]);
 
   const list = steps[scene];
   const step = list[index];
@@ -67,6 +89,7 @@ export function StoryCaption({ steps = STEPS, registryIds = null }: StoryCaption
         </button>
       ) : (
         <>
+          <div className="story-body" ref={bodyRef}>
           <div className="story-head">
             <span className="story-count">{`Paso ${index + 1} de ${list.length}`}</span>
             <button type="button" aria-pressed={false} onClick={() => setHidden(true)}>
@@ -76,7 +99,7 @@ export function StoryCaption({ steps = STEPS, registryIds = null }: StoryCaption
 
           <h2 className="story-title">
             {step.title}
-            {step.placeholder ? <span className="story-tag">Provisorio</span> : null}
+            {step.placeholder ? <span className="story-tag">Borrador</span> : null}
           </h2>
           <p className="story-text">{step.text}</p>
 
@@ -91,6 +114,7 @@ export function StoryCaption({ steps = STEPS, registryIds = null }: StoryCaption
               ))}
             </p>
           ) : null}
+          </div>
 
           <div className="story-controls">
             <button type="button" disabled={index <= 0} onClick={() => dispatch({ type: 'stepPrev' })}>

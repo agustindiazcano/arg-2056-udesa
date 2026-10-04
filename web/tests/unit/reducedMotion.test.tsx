@@ -105,18 +105,18 @@ describe('EChart and reduced motion', () => {
     expect(mockSetOption).toHaveBeenCalledWith({ title: { text: 'T' }, animation: false }, true);
   });
 
-  it('passes the builder option unchanged (same object) when reduced motion is off', () => {
+  it('draws the series in over 600 ms when reduced motion is off, on a copy that keeps the builder option intact', () => {
     stubMatchMedia(false);
-    const option = { animation: true, title: { text: 'T' } };
+    const option = { animation: false, title: { text: 'T' } };
     render(<EChart option={option} />);
     expect(mockSetOption).toHaveBeenCalledTimes(1);
-    expect(mockSetOption.mock.calls[0]![0]).toBe(option);
-  });
-
-  it('keeps the builder setting animation: false when reduced motion is off', () => {
-    stubMatchMedia(false);
-    render(<EChart option={{ animation: false }} />);
-    expect(mockSetOption).toHaveBeenCalledWith({ animation: false }, true);
+    expect(mockSetOption.mock.calls[0]![0]).toMatchObject({
+      animation: true,
+      animationDuration: 600,
+      animationDurationUpdate: 0,
+      title: { text: 'T' }
+    });
+    expect(option).toEqual({ animation: false, title: { text: 'T' } });
   });
 
   it('applies the preference when it changes while the chart is shown, without re-creating the chart', () => {
