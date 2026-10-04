@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import {
   AmbientLight,
+  BackSide,
   BufferAttribute,
   BufferGeometry,
   Color,
@@ -10,7 +11,10 @@ import {
   Line,
   LineBasicMaterial,
   Mesh,
+  MeshBasicMaterial,
   MeshStandardMaterial,
+  Points,
+  PointsMaterial,
   Raycaster,
   SphereGeometry,
   Vector2,
@@ -19,7 +23,7 @@ import {
 import { useQualityOptional } from '../../runtime/CapabilityProvider';
 import { QUALITY_PRESETS } from '../../runtime/capabilities';
 import { useReducedMotion } from '../../runtime/useReducedMotion';
-import { SEQUENTIAL_BLUE, TERRAIN_RAMP, tokens } from '../../styles/tokens';
+import { SEQUENTIAL_BLUE, SKY_RAMP, TERRAIN_RAMP, tokens } from '../../styles/tokens';
 import { createStage } from '../../three/stage';
 import type { Stage } from '../../three/stage';
 import { useCameraNav } from '../../three/useCameraNav';
@@ -27,6 +31,7 @@ import { sampleElevation } from '../../terrain/decode';
 import type { Terrain } from '../../types/terrain';
 import { NavControls } from '../../ui/NavControls';
 import { battlePose, followPose, overviewPose } from './camera';
+import { skyColorHex, starPositions } from './sky';
 import { buildTerrainMesh, sceneScale, toScene } from './terrainMesh';
 import { positionAt } from './timeline';
 import type { Route } from './timeline';
@@ -37,6 +42,8 @@ const EXAGGERATION = 6;
 const LIFT = 0.05;
 const ROUTE_SAMPLES = 160;
 const CLICK_SLOP = 4;
+/** the sky dome around the origin: the camera stays within ~100 units of it and the far plane is 300 */
+const SKY_RADIUS = 180;
 
 /** The color of a terrain height from 0 to 1: the natural ramp, green in the valleys and snow on the peaks. */
 function rampColor(t: number, out: Color, next: Color): Color {
@@ -101,8 +108,31 @@ export function AndesRenderer({ terrain, route, day, selectedId, follow, onSelec
     stageRef.current = stage;
     const { scene } = stage;
 
-    // distance fades into the page color, so the edges of the terrain are not a cut
-    scene.fog = new Fog(tokens.page, start.radius * 1.1, start.radius * 3);
+    // distance fades into the horizon color of the sky, so the edges of the terrain are not a cut
+    scene.fog = new Fog(SKY_RAMP[0]!, start.radius * 1.1, start.radius * 3);
+
+    // the sky: a dome around the scene, dawn at the horizon to night overhead, with faint stars in the upper part
+    const dome = new SphereGeometry(SKY_RADIUS, 32, 16);
+    const domeColors = new Float32Array(dome.attributes.position!.count * 3);
+    const sky = new Color();
+    for (let i = 0; i < dome.attributes.position!.count; i += 1) {
+      sky.set(skyColorHex(dome.attributes.position!.getY(i) / SKY_RADIUS));
+      domeColors[i * 3] = sky.r;
+      domeColors[i * 3 + 1] = sky.g;
+      domeColors[i * 3 + 2] = sky.b;
+    }
+    dome.setAttribute('color', new Float32BufferAttribute(domeColors, 3));
+    const domeMesh = new Mesh(dome, new MeshBasicMaterial({ vertexColors: true, side: BackSide, fog: false, depthWrite: false }));
+    domeMesh.renderOrder = -2;
+    scene.add(domeMesh);
+    const starGeometry = new BufferGeometry();
+    starGeometry.setAttribute('position', new BufferAttribute(starPositions(tier === 'low' ? 120 : 400, SKY_RADIUS * 0.98), 3));
+    const stars = new Points(
+      starGeometry,
+      new PointsMaterial({ color: tokens.ink, size: 1.6, sizeAttenuation: false, transparent: true, opacity: 0.55, fog: false, depthWrite: false })
+    );
+    stars.renderOrder = -1;
+    scene.add(stars);
     scene.add(new AmbientLight(tokens.ink, 0.55));
     const sun = new DirectionalLight(tokens.ink, 3.2);
     sun.position.set(-9, 5, 5); // low: the relief throws shadows

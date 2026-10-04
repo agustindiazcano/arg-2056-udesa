@@ -46,6 +46,10 @@
   --terrain-6: #a9a39c;
   --terrain-7: #cbc8c2;
   --terrain-8: #f1f3f6;
+  --sky-1: #d6a77f;
+  --sky-2: #7b8fb0;
+  --sky-3: #2c4a7c;
+  --sky-4: #0b1530;
 
   /* Diverging ramp, red (lowest) to blue (highest); the red arm is a PLACEHOLDER, see tokens.ts */
   --div-1: #e53956;
