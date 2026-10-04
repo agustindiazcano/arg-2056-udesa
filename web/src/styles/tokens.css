@@ -129,7 +129,7 @@ main:focus {
 .scene-container {
   transition: opacity 0.3s ease-in-out;
   /* room for the story caption panel docked at the bottom (set by StoryCaption) */
-  padding-bottom: var(--story-panel-height, 0px);
+  padding-bottom: calc(var(--story-panel-height, 0px) + var(--space-md));
 }
 
 /* The one rule that switches off decorative motion everywhere (design.md section 5); components add no copies of it. */

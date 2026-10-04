@@ -4,6 +4,7 @@ import { render, screen, fireEvent, waitFor, cleanup, within, configure } from '
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import Scene from '../../src/scenes/economy/index.js';
 import { useStore } from '../../src/state/store.js';
+import './reducedMotionStub';
 
 // slow CI machines run the whole suite in parallel: give async queries more time
 configure({ asyncUtilTimeout: 4000 });

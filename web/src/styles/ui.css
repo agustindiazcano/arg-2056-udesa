@@ -421,3 +421,13 @@ main.scene-container {
   font-size: var(--font-sm);
   color: var(--muted);
 }
+
+.scene-transition {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
+.scene-transition > .scene {
+  flex: 1 0 auto;
+}

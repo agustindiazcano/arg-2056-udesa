@@ -138,3 +138,18 @@ describe('CountUp', () => {
     expect(kill).toHaveBeenCalled();
   });
 });
+
+describe('tiles count up on mount', () => {
+  it('the economy value tile counts up and ends on the exact number', async () => {
+    const { StatTiles } = await import('../../src/scenes/economy/StatTiles');
+    const records = [
+      { country: 'ARG', year: 1900, indicator: 'gdp_per_capita_usd', value: 110, unit: 'u', source: 'S', retrieved_at: '2026-10-02' },
+      { country: 'BRA', year: 1900, indicator: 'gdp_per_capita_usd', value: 50, unit: 'u', source: 'S', retrieved_at: '2026-10-02' }
+    ] as unknown as Parameters<typeof StatTiles>[0]['records'];
+    render(<StatTiles records={records} indicator="gdp_per_capita_usd" year={1900} home="ARG" countries={['ARG', 'BRA']} unit="u" />);
+    const call = to.mock.calls[0] as unknown as [unknown, { n: number; onComplete: () => void }];
+    expect(call[1].n).toBe(110);
+    act(() => call[1].onComplete());
+    expect(screen.getByTestId('tile-value').textContent).toContain('110 u');
+  });
+});

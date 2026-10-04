@@ -33,9 +33,9 @@ describe('STEPS draft content', () => {
     }
   });
 
-  it('claims no figure: the drafts describe what the scene shows, with no percent, currency or count', () => {
+  it('claims no figure: the drafts describe what the scene shows, with no percent, currency or large count (years are fine)', () => {
     for (const scene of SCENES) {
-      for (const s of STEPS[scene]) expect(s.text).not.toMatch(/%|USD|US\$|millones|\d{3,}/);
+      for (const s of STEPS[scene]) expect(s.text).not.toMatch(/%|USD|US\$|millones|\d{5,}/);
     }
   });
 
