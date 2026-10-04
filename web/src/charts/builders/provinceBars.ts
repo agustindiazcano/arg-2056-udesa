@@ -46,7 +46,7 @@ export function buildProvinceBars(records: ResourceProductionRecord[], opts: Pro
   if (rest.length > 0) {
     const restSum = rest.reduce((sum, r) => sum + (r.value || 0), 0);
     seriesData.push({
-      name: 'Other',
+      name: 'Otras',
       value: restSum,
       isOther: true
     });
@@ -110,11 +110,11 @@ export function buildProvinceBars(records: ResourceProductionRecord[], opts: Pro
     ]
   };
 
-  let summary = 'No data available for this resource and year.';
+  let summary = 'Sin datos para este recurso y año.';
   if (seriesData.length > 0) {
     // Note: seriesData is reversed, so the largest is at the end (top bar)
     const largest = seriesData[seriesData.length - 1]! || { name: "", value: 0 };
-    summary = `Bar chart of production by province. The largest is ${largest.name} with ${formatValue(largest.value, unit)}.`;
+    summary = `Gráfico de barras de producción por provincia. La mayor es ${largest.name} con ${formatValue(largest.value, unit)}.`;
   }
 
   return { option, excluded, summary };
