@@ -5,7 +5,8 @@ const VIEWPORTS = [
   { width: 1920, height: 1080 }
 ];
 
-const DATA_SCENES = SCENE_TABS.filter((s) => s.heading !== null);
+// the chart scenes: the Andes scene is a 3D map of events and has its own tests below
+const DATA_SCENES = SCENE_TABS.filter((s) => s.heading !== null && s.scene !== 'andes');
 
 test.describe('dashboard', () => {
   for (const viewport of VIEWPORTS) {
