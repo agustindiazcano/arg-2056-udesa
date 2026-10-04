@@ -30,6 +30,10 @@ export interface StageOptions {
   box?: TargetBox;
   /** the pose to keep: a view rebuilt for new data passes the pose of the old one. Changed in place. */
   pose?: CameraState;
+  /** called right before each render, with the camera in its final place: a scene switches its level of detail here */
+  beforeRender?: () => void;
+  /** the closest zoom as a fraction of the start radius (default 0.25) */
+  zoomMin?: number;
   /** the reset glides back over a short time; false (reduced motion, low quality) jumps */
   animateReset?: boolean;
 }
@@ -87,7 +91,8 @@ export function createStage(host: HTMLElement, o: StageOptions): Stage {
   const half = o.radius * 0.5;
   const limits = cameraLimits(
     startPose,
-    o.box ?? { minX: o.target.x - half, maxX: o.target.x + half, minY: 0, maxY: o.target.y + half, minZ: o.target.z - half, maxZ: o.target.z + half }
+    o.box ?? { minX: o.target.x - half, maxX: o.target.x + half, minY: 0, maxY: o.target.y + half, minZ: o.target.z - half, maxZ: o.target.z + half },
+    o.zoomMin
   );
   const pose = o.pose ?? copyCamera(startPose);
   const fov = o.fov ?? 32;
@@ -103,6 +108,7 @@ export function createStage(host: HTMLElement, o: StageOptions): Stage {
   let queued = 0;
   const render = () => {
     queued = 0;
+    o.beforeRender?.();
     renderer.render(scene, camera);
   };
   const requestRender = () => {
@@ -260,6 +266,7 @@ export function createStage(host: HTMLElement, o: StageOptions): Stage {
       running.delete(id);
       const t = Math.min(1, (now - start) / durationMs);
       onFrame(t);
+      o.beforeRender?.();
       renderer.render(scene, camera);
       if (t < 1) {
         id = requestAnimationFrame(step);
@@ -282,6 +289,7 @@ export function createStage(host: HTMLElement, o: StageOptions): Stage {
     const step = (now: number) => {
       if (!active) return;
       onFrame(now - start);
+      o.beforeRender?.();
       renderer.render(scene, camera);
       id = requestAnimationFrame(step);
     };

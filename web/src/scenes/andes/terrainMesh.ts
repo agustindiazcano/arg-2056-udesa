@@ -44,6 +44,14 @@ export function toScene(scale: SceneScale, lon: number, lat: number, elevationM:
   };
 }
 
+/** The longitude and latitude under a point of the ground plane of the scene (the inverse of `toScene` on x and z). */
+export function fromScene(scale: SceneScale, x: number, z: number): { lon: number; lat: number } {
+  return {
+    lon: scale.west + (x / scale.width + 0.5) * (scale.east - scale.west),
+    lat: scale.south + (0.5 - z / scale.depth) * (scale.north - scale.south)
+  };
+}
+
 /** The mesh of the terrain at a fraction of its resolution (1 is a vertex per sample). The corners are always kept. */
 export function buildTerrainMesh(terrain: Terrain, scale: SceneScale, detail: number): TerrainMesh {
   const { meta, heights } = terrain;

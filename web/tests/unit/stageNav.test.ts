@@ -44,6 +44,17 @@ afterEach(() => {
   vi.unstubAllGlobals();
 });
 
+describe('stage beforeRender hook', () => {
+  it('runs before every render, so a scene can switch what it shows by the camera distance', async () => {
+    stage.dispose();
+    let calls = 0;
+    stage = createStage(host, { ...options, target: new Vector3(0, 0.5, 0), beforeRender: () => (calls += 1) });
+    stage.requestRender();
+    await new Promise((r) => setTimeout(r, 10));
+    expect(calls).toBeGreaterThanOrEqual(1);
+  });
+});
+
 describe('stage navigation', () => {
   it('turns with a left drag, with no azimuth limit', () => {
     fire('pointerdown', { clientX: 100, clientY: 100, button: 0 });
