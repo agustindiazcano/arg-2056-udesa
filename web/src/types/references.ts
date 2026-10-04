@@ -1,6 +1,4 @@
-import Ajv from 'ajv/dist/2020.js';
-import addFormats from 'ajv-formats';
-import schema from '../../../data/schemas/references.schema.json' with { type: 'json' };
+import { validator } from '../validation/validators';
 
 /** Publisher types in the order of the schema enum (the order of the sections on the page). */
 export const PUBLISHER_TYPES = [
@@ -65,9 +63,7 @@ export interface References {
   mock: boolean;
 }
 
-const ajv = new Ajv({ allErrors: true });
-addFormats(ajv);
-const validate = ajv.compile<References>(schema);
+const validate = validator<References>('references');
 
 export function parseReferences(json: unknown): References {
   if (!validate(json)) {

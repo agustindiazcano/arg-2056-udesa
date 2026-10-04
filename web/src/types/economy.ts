@@ -1,10 +1,6 @@
-import Ajv from 'ajv/dist/2020.js';
-import addFormats from 'ajv-formats';
-import schema from '../../../data/schemas/economy_series.schema.json' with { type: 'json' };
+import { errorsText, validator } from '../validation/validators';
 
-const ajv = new Ajv();
-addFormats(ajv);
-const validate = ajv.compile<EconomyRecord[]>(schema);
+const validate = validator<EconomyRecord[]>('economy');
 
 export type EconomyIndicator =
   | 'gdp_constant_usd'
@@ -29,5 +25,5 @@ export function parseEconomySeries(json: unknown): EconomyRecord[] {
   if (validate(json)) {
     return json;
   }
-  throw new Error(`Invalid economy data: ${ajv.errorsText(validate.errors)}`);
+  throw new Error(`Invalid economy data: ${errorsText(validate.errors)}`);
 }

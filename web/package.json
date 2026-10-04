@@ -14,6 +14,7 @@
     "data:mock": "npm run data:sync",
     "build:geo": "tsx scripts/geo/build-provinces.ts",
     "check:bundle": "tsx scripts/check-bundle.ts",
+    "gen:validators": "tsx scripts/gen-validators.ts",
     "pretest:e2e": "npm run data:sync && python ../scripts/build_references.py",
     "test:e2e": "playwright test",
     "test:e2e:report": "playwright show-report",

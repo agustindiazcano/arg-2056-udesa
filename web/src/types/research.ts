@@ -1,13 +1,5 @@
-import Ajv from 'ajv/dist/2020';
-import addFormats from 'ajv-formats';
-import externalForecastsSchema from '../../../data/schemas/external_forecasts.schema.json';
-import forecastVintagesSchema from '../../../data/schemas/forecast_vintages.schema.json';
-import baseRatesSchema from '../../../data/schemas/base_rates.schema.json';
-import aiEstimatesSchema from '../../../data/schemas/ai_estimates.schema.json';
-import datasetCatalogSchema from '../../../data/schemas/dataset_catalog.schema.json';
+import { errorsText, validator } from '../validation/validators';
 
-const ajv = new Ajv();
-addFormats(ajv);
 
 export enum ScenarioMapping {
     pessimistic = 'pessimistic',
@@ -173,35 +165,35 @@ export interface DatasetCatalogEntry {
     note?: string;
 }
 
-const validateExternalForecasts = ajv.compile<ExternalForecast[]>(externalForecastsSchema);
-const validateForecastVintages = ajv.compile<ForecastVintage[]>(forecastVintagesSchema);
-const validateBaseRates = ajv.compile<BaseRate[]>(baseRatesSchema);
-const validateAiEstimates = ajv.compile<AiEstimate[]>(aiEstimatesSchema);
-const validateDatasetCatalog = ajv.compile<DatasetCatalogEntry[]>(datasetCatalogSchema);
+const validateExternalForecasts = validator<ExternalForecast[]>('externalForecasts');
+const validateForecastVintages = validator<ForecastVintage[]>('forecastVintages');
+const validateBaseRates = validator<BaseRate[]>('baseRates');
+const validateAiEstimates = validator<AiEstimate[]>('aiEstimates');
+const validateDatasetCatalog = validator<DatasetCatalogEntry[]>('datasetCatalog');
 
 export function parseExternalForecasts(json: unknown): ExternalForecast[] {
     if (validateExternalForecasts(json)) return json;
-    throw new Error(`Invalid external forecasts: ${ajv.errorsText(validateExternalForecasts.errors)}`);
+    throw new Error(`Invalid external forecasts: ${errorsText(validateExternalForecasts.errors)}`);
 }
 
 export function parseForecastVintages(json: unknown): ForecastVintage[] {
     if (validateForecastVintages(json)) return json;
-    throw new Error(`Invalid forecast vintages: ${ajv.errorsText(validateForecastVintages.errors)}`);
+    throw new Error(`Invalid forecast vintages: ${errorsText(validateForecastVintages.errors)}`);
 }
 
 export function parseBaseRates(json: unknown): BaseRate[] {
     if (validateBaseRates(json)) return json;
-    throw new Error(`Invalid base rates: ${ajv.errorsText(validateBaseRates.errors)}`);
+    throw new Error(`Invalid base rates: ${errorsText(validateBaseRates.errors)}`);
 }
 
 export function parseAiEstimates(json: unknown): AiEstimate[] {
     if (validateAiEstimates(json)) return json;
-    throw new Error(`Invalid ai estimates: ${ajv.errorsText(validateAiEstimates.errors)}`);
+    throw new Error(`Invalid ai estimates: ${errorsText(validateAiEstimates.errors)}`);
 }
 
 export function parseDatasetCatalog(json: unknown): DatasetCatalogEntry[] {
     if (validateDatasetCatalog(json)) return json;
-    throw new Error(`Invalid dataset catalog: ${ajv.errorsText(validateDatasetCatalog.errors)}`);
+    throw new Error(`Invalid dataset catalog: ${errorsText(validateDatasetCatalog.errors)}`);
 }
 
 export function selectExternalForecasts(

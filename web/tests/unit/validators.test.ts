@@ -6,10 +6,12 @@ import { SCHEMA_FILES } from '../../src/validation/schemaNames';
 import type { SchemaName } from '../../src/validation/schemaNames';
 import { errorsText, validator } from '../../src/validation/validators';
 import * as generated from '../../src/validation/generated.js';
-import { generateValidators, ucs2length } from '../../scripts/lib/validators';
+import { UCS2LENGTH_SOURCE, generateValidators } from '../../scripts/lib/validators';
 import { runCli } from '../../scripts/gen-validators';
 
 const SRC = path.resolve(__dirname, '../../src');
+// the function exactly as the generated module contains it
+const ucs2length = new Function(`${UCS2LENGTH_SOURCE}; return ucs2length;`)() as (text: string) => number;
 const SCHEMAS = path.resolve(__dirname, '../../../data/schemas');
 
 afterEach(() => vi.unstubAllGlobals());
