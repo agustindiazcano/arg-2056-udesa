@@ -157,7 +157,7 @@ export default function Scene() {
         Los escenarios son proyecciones condicionales, no predicciones.
       </p>
 
-      <FilterBar label="Indicador, escenario y efecto de la IA">
+      <FilterBar label="Filtros del pronóstico">
         {indicators.map((i) => (
           <FilterChip key={i} pressed={i === indicator} onClick={() => setIndicatorChoice(i)}>
             {indicatorLabel(i)}
