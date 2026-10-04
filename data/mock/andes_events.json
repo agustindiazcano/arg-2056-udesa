@@ -1,224 +1,236 @@
 [
   {
-    "date": "1817-01-01",
-    "date_precision": "day",
-    "day_of_campaign": 3,
-    "elevation_m": null,
+    "date": "1817-01-19",
+    "date_precision": "approximate",
+    "day_of_campaign": 0,
+    "elevation_m": 800,
     "forces": [
       {
-        "men": null,
-        "note": "Unknown men",
-        "side": "MOCK side A"
+        "men": 3600,
+        "side": "Columna principal (ilustrativa)"
       },
       {
-        "men": 3365,
-        "side": "MOCK side B"
+        "men": null,
+        "note": "Sin fuerzas opuestas registradas en este punto (mock ilustrativo)",
+        "side": "Fuerzas opuestas (ilustrativas)"
       }
     ],
     "id": "mock-andes-01",
-    "lat": -33.1222,
-    "lon": -69.791,
-    "name": "MOCK event 1",
-    "note": "Unknown elevation",
+    "lat": -32.9182,
+    "lon": -68.9,
+    "name": "Campamento base (ilustrativo)",
     "retrieved_at": "2026-10-02",
     "source": "MOCK"
   },
   {
-    "date": "1817-01-01",
-    "date_precision": "day",
-    "day_of_campaign": 6,
-    "elevation_m": 1258,
+    "date": "1817-01-21",
+    "date_precision": "approximate",
+    "day_of_campaign": 2,
+    "elevation_m": 1600,
     "forces": [
       {
-        "men": 222,
-        "side": "MOCK side A"
+        "men": 3500,
+        "side": "Columna principal (ilustrativa)"
       },
       {
-        "men": 1419,
-        "side": "MOCK side B"
+        "men": null,
+        "note": "Sin fuerzas opuestas registradas en este punto (mock ilustrativo)",
+        "side": "Fuerzas opuestas (ilustrativas)"
       }
     ],
     "id": "mock-andes-02",
-    "lat": -33.7307,
-    "lon": -69.3899,
-    "name": "MOCK event 2",
+    "lat": -32.7137,
+    "lon": -69.1,
+    "name": "Salida de la columna (ilustrativo)",
     "retrieved_at": "2026-10-02",
     "source": "MOCK"
   },
   {
-    "date": "1817-01-01",
-    "date_precision": "month",
-    "day_of_campaign": 8,
-    "elevation_m": 2895,
-    "forces": [
-      {
-        "men": 4813,
-        "side": "MOCK side A"
-      },
-      {
-        "men": 4823,
-        "side": "MOCK side B"
-      }
-    ],
-    "id": "mock-andes-03",
-    "lat": -32.7008,
-    "lon": -69.7977,
-    "name": "MOCK event 3",
-    "retrieved_at": "2026-10-02",
-    "source": "MOCK"
-  },
-  {
-    "date": "1817-01-01",
-    "date_precision": "month",
-    "day_of_campaign": 10,
+    "date": "1817-01-23",
+    "date_precision": "approximate",
+    "day_of_campaign": 4,
     "elevation_m": null,
     "forces": [
       {
-        "men": 4957,
-        "side": "MOCK side A"
+        "men": 3500,
+        "side": "Columna principal (ilustrativa)"
       },
       {
-        "men": 4798,
-        "side": "MOCK side B"
+        "men": null,
+        "note": "Sin fuerzas opuestas registradas en este punto (mock ilustrativo)",
+        "side": "Fuerzas opuestas (ilustrativas)"
+      }
+    ],
+    "id": "mock-andes-03",
+    "lat": -32.599,
+    "lon": -69.3,
+    "name": "Primer valle (ilustrativo)",
+    "note": "Altitud desconocida (mock ilustrativo)",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK"
+  },
+  {
+    "date": "1817-01-26",
+    "date_precision": "approximate",
+    "day_of_campaign": 7,
+    "elevation_m": 3100,
+    "forces": [
+      {
+        "men": 3450,
+        "side": "Columna principal (ilustrativa)"
+      },
+      {
+        "men": null,
+        "note": "Sin fuerzas opuestas registradas en este punto (mock ilustrativo)",
+        "side": "Fuerzas opuestas (ilustrativas)"
       }
     ],
     "id": "mock-andes-04",
-    "lat": -33.9383,
-    "lon": -69.1929,
-    "name": "MOCK event 4",
-    "note": "Unknown elevation",
+    "lat": -32.5558,
+    "lon": -69.6,
+    "name": "Ascenso (ilustrativo)",
     "retrieved_at": "2026-10-02",
     "source": "MOCK"
   },
   {
-    "date": "1817-01-01",
-    "date_precision": "month",
-    "day_of_campaign": 12,
-    "elevation_m": 3742,
+    "date": "1817-01-28",
+    "date_precision": "approximate",
+    "day_of_campaign": 9,
+    "elevation_m": 3600,
     "forces": [
       {
-        "men": 118,
-        "side": "MOCK side A"
+        "men": 3400,
+        "side": "Columna principal (ilustrativa)"
       },
       {
-        "men": 4252,
-        "side": "MOCK side B"
+        "men": null,
+        "note": "Sin fuerzas opuestas registradas en este punto (mock ilustrativo)",
+        "side": "Fuerzas opuestas (ilustrativas)"
       }
     ],
     "id": "mock-andes-05",
-    "lat": -34.0571,
-    "lon": -68.1571,
-    "name": "MOCK event 5",
+    "lat": -32.6366,
+    "lon": -69.9,
+    "name": "Alta cordillera (ilustrativo)",
     "retrieved_at": "2026-10-02",
     "source": "MOCK"
   },
   {
-    "date": "1817-01-01",
-    "date_precision": "day",
-    "day_of_campaign": 15,
-    "elevation_m": 1491,
+    "date": "1817-01-30",
+    "date_precision": "approximate",
+    "day_of_campaign": 11,
+    "elevation_m": 3900,
     "forces": [
       {
-        "men": 4505,
-        "side": "MOCK side A"
+        "men": 3300,
+        "side": "Columna principal (ilustrativa)"
       },
       {
-        "men": 945,
-        "side": "MOCK side B"
+        "men": null,
+        "note": "Sin fuerzas opuestas registradas en este punto (mock ilustrativo)",
+        "side": "Fuerzas opuestas (ilustrativas)"
       }
     ],
     "id": "mock-andes-06",
-    "lat": -32.817,
-    "lon": -68.3963,
-    "name": "MOCK event 6",
+    "lat": -32.7729,
+    "lon": -70.1,
+    "name": "Cumbre del paso (ilustrativo)",
     "retrieved_at": "2026-10-02",
     "source": "MOCK"
   },
   {
-    "date": "1817-01-01",
-    "date_precision": "month",
-    "day_of_campaign": 17,
-    "elevation_m": 1387,
+    "date": "1817-02-01",
+    "date_precision": "approximate",
+    "day_of_campaign": 13,
+    "elevation_m": null,
     "forces": [
       {
-        "men": 815,
-        "side": "MOCK side A"
+        "men": 3250,
+        "side": "Columna principal (ilustrativa)"
       },
       {
-        "men": 1668,
-        "side": "MOCK side B"
+        "men": null,
+        "note": "Sin fuerzas opuestas registradas en este punto (mock ilustrativo)",
+        "side": "Fuerzas opuestas (ilustrativas)"
       }
     ],
     "id": "mock-andes-07",
-    "lat": -32.8013,
-    "lon": -69.5514,
-    "name": "MOCK event 7",
+    "lat": -32.9014,
+    "lon": -70.3,
+    "name": "Descenso (ilustrativo)",
+    "note": "Altitud desconocida (mock ilustrativo)",
     "retrieved_at": "2026-10-02",
     "source": "MOCK"
   },
   {
-    "date": "1817-01-01",
-    "date_precision": "month",
-    "day_of_campaign": 17,
-    "elevation_m": 3944,
+    "date": "1817-02-04",
+    "date_precision": "approximate",
+    "day_of_campaign": 16,
+    "elevation_m": 2300,
     "forces": [
       {
-        "men": 896,
-        "side": "MOCK side A"
+        "men": 3200,
+        "side": "Columna principal (ilustrativa)"
       },
       {
-        "men": 4730,
-        "side": "MOCK side B"
+        "men": null,
+        "note": "Sin fuerzas opuestas registradas en este punto (mock ilustrativo)",
+        "side": "Fuerzas opuestas (ilustrativas)"
       }
     ],
     "id": "mock-andes-08",
-    "lat": -32.6595,
-    "lon": -70.7951,
-    "name": "MOCK event 8",
+    "lat": -33.0196,
+    "lon": -70.5,
+    "name": "Valle del oeste (ilustrativo)",
     "retrieved_at": "2026-10-02",
     "source": "MOCK"
   },
   {
-    "date": "1817-01-01",
-    "date_precision": "day",
-    "day_of_campaign": 17,
-    "elevation_m": 2537,
+    "date": "1817-02-07",
+    "date_precision": "approximate",
+    "day_of_campaign": 19,
+    "elevation_m": 1400,
     "forces": [
       {
-        "men": 654,
-        "side": "MOCK side A"
+        "men": 3150,
+        "side": "Columna principal (ilustrativa)"
       },
       {
-        "men": 1998,
-        "side": "MOCK side B"
+        "men": 1500,
+        "side": "Fuerzas opuestas (ilustrativas)"
       }
     ],
     "id": "mock-andes-09",
-    "lat": -33.3454,
-    "lon": -70.1317,
-    "name": "MOCK event 9",
+    "lat": -32.9497,
+    "lon": -70.6,
+    "name": "Combate de avanzada (ilustrativo)",
     "retrieved_at": "2026-10-02",
     "source": "MOCK"
   },
   {
-    "date": "1817-01-01",
-    "date_precision": "month",
+    "date": "1817-02-09",
+    "date_precision": "approximate",
     "day_of_campaign": 21,
-    "elevation_m": 2227,
+    "elevation_m": 800,
+    "estimate_range": {
+      "max": 3300,
+      "min": 2900
+    },
     "forces": [
       {
-        "men": 3967,
-        "side": "MOCK side A"
+        "men": 3100,
+        "side": "Columna principal (ilustrativa)"
       },
       {
-        "men": 2021,
-        "side": "MOCK side B"
+        "men": 1500,
+        "side": "Fuerzas opuestas (ilustrativas)"
       }
     ],
     "id": "mock-andes-10",
-    "lat": -34.3753,
-    "lon": -69.6467,
-    "name": "MOCK event 10",
+    "lat": -32.8863,
+    "lon": -70.7,
+    "name": "Encuentro final (ilustrativo)",
+    "note": "Cifra en disputa: se muestra un rango (mock ilustrativo)",
     "retrieved_at": "2026-10-02",
     "source": "MOCK"
   }

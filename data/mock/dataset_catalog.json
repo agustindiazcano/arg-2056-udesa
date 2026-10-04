@@ -1,0 +1,138 @@
+[
+  {
+    "access": "opened",
+    "confidence": "high",
+    "dataset_name": "D0",
+    "direct_download_url": null,
+    "format": "csv",
+    "frequency": "f",
+    "geographies": [
+      "g"
+    ],
+    "landing_url": "https://a.com",
+    "license_or_terms": null,
+    "locator": null,
+    "publisher": "P",
+    "recommended_use": "calibration",
+    "retrieved_at": "2026-10-02",
+    "revisions_or_rebasing_notes": null,
+    "snippet": null,
+    "source": "MOCK",
+    "source_id": "mock:M000",
+    "source_url": null,
+    "variables": [
+      "v"
+    ],
+    "version": null,
+    "years_covered": "y"
+  },
+  {
+    "access": "opened",
+    "confidence": "high",
+    "dataset_name": "D1",
+    "direct_download_url": null,
+    "format": "csv",
+    "frequency": "f",
+    "geographies": [
+      "g"
+    ],
+    "landing_url": "https://a.com",
+    "license_or_terms": null,
+    "locator": null,
+    "publisher": "P",
+    "recommended_use": "baseline",
+    "retrieved_at": "2026-10-02",
+    "revisions_or_rebasing_notes": null,
+    "snippet": null,
+    "source": "MOCK",
+    "source_id": "mock:M001",
+    "source_url": null,
+    "variables": [
+      "v"
+    ],
+    "version": null,
+    "years_covered": "y"
+  },
+  {
+    "access": "opened",
+    "confidence": "high",
+    "dataset_name": "D2",
+    "direct_download_url": null,
+    "format": "csv",
+    "frequency": "f",
+    "geographies": [
+      "g"
+    ],
+    "landing_url": "https://a.com",
+    "license_or_terms": null,
+    "locator": null,
+    "publisher": "P",
+    "recommended_use": "scenario_structure",
+    "retrieved_at": "2026-10-02",
+    "revisions_or_rebasing_notes": null,
+    "snippet": null,
+    "source": "MOCK",
+    "source_id": "mock:M002",
+    "source_url": null,
+    "variables": [
+      "v"
+    ],
+    "version": null,
+    "years_covered": "y"
+  },
+  {
+    "access": "opened",
+    "confidence": "high",
+    "dataset_name": "D3",
+    "direct_download_url": null,
+    "format": "csv",
+    "frequency": "f",
+    "geographies": [
+      "g"
+    ],
+    "landing_url": "https://a.com",
+    "license_or_terms": null,
+    "locator": null,
+    "publisher": "P",
+    "recommended_use": "calibration",
+    "retrieved_at": "2026-10-02",
+    "revisions_or_rebasing_notes": null,
+    "snippet": null,
+    "source": "MOCK",
+    "source_id": "mock:M003",
+    "source_url": null,
+    "variables": [
+      "v"
+    ],
+    "version": null,
+    "years_covered": "y"
+  },
+  {
+    "access": "not_opened",
+    "confidence": "high",
+    "dataset_name": "D_not_opened",
+    "direct_download_url": null,
+    "format": "csv",
+    "frequency": "f",
+    "geographies": [
+      "g"
+    ],
+    "landing_url": "https://a.com",
+    "license_or_terms": null,
+    "locator": null,
+    "note": "need request",
+    "publisher": "P",
+    "recommended_use": "calibration",
+    "retrieved_at": "2026-10-02",
+    "revisions_or_rebasing_notes": null,
+    "snippet": null,
+    "source": "MOCK",
+    "source_id": "mock:M_no",
+    "source_url": null,
+    "variables": [
+      "v"
+    ],
+    "version": null,
+    "years_covered": "y"
+  }
+]

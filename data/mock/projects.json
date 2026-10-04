@@ -1,558 +1,557 @@
 [
   {
-    "capacity_per_year": null,
-    "capacity_unit": null,
-    "capex_usd": null,
-    "company": "Mock Company 0",
-    "geo": "AR-C",
+    "capacity_per_year": 32857.72,
+    "capacity_unit": "t_per_year",
+    "capex_usd": 218076626.59,
+    "company": "Compañía Andina (ilustrativa)",
+    "geo": "AR-R",
     "id": "mock-proj-0",
-    "name": "Mock Project 0",
-    "note": "Mock missing capacity; Mock missing capex",
+    "name": "Bloque Meseta 1",
     "owners": [
-      "Owner 0A",
-      "Owner 0B"
+      "Compañía Andina (ilustrativa)",
+      "Socio 1 (ilustrativo)"
     ],
     "resource": "oil",
     "retrieved_at": "2026-10-02",
     "source": "MOCK",
-    "start_year": 2034,
-    "status": "operating"
+    "start_year": 2031,
+    "status": "announced"
+  },
+  {
+    "capacity_per_year": 5502.69,
+    "capacity_unit": "t_per_year",
+    "capex_usd": 577280648.31,
+    "company": "Minera Austral (ilustrativa)",
+    "geo": "AR-R",
+    "id": "mock-proj-1",
+    "name": "Área Cuenca Sur 1",
+    "owners": [
+      "Minera Austral (ilustrativa)",
+      "Socio 2 (ilustrativo)"
+    ],
+    "resource": "oil",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "start_year": 2025,
+    "status": "prefeasibility"
+  },
+  {
+    "capacity_per_year": 32461.5,
+    "capacity_unit": "t_per_year",
+    "capex_usd": 455177814.73,
+    "company": "Energía del Sur (ilustrativa)",
+    "geo": "AR-A",
+    "id": "mock-proj-2",
+    "name": "Planta Cordillera 1",
+    "owners": [
+      "Energía del Sur (ilustrativa)",
+      "Socio 3 (ilustrativo)"
+    ],
+    "resource": "gas",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "start_year": 2035,
+    "status": "prefeasibility"
   },
   {
     "capacity_per_year": null,
     "capacity_unit": null,
-    "capex_usd": 413565545.05,
-    "company": "Mock Company 1",
-    "geo": "AR-B",
-    "id": "mock-proj-1",
-    "name": "Mock Project 1",
-    "note": "Mock missing capacity",
+    "capex_usd": 721868651.08,
+    "company": "Recursos Patagonia (ilustrativa)",
+    "geo": "AR-J",
+    "id": "mock-proj-3",
+    "name": "Cordón Rojo 1",
+    "note": "Capacidad faltante (mock ilustrativo)",
     "owners": [
-      "Owner 1A",
-      "Owner 1B"
+      "Recursos Patagonia (ilustrativa)",
+      "Socio 4 (ilustrativo)"
     ],
     "resource": "copper",
     "retrieved_at": "2026-10-02",
     "source": "MOCK",
-    "start_year": 2021,
-    "status": "operating"
+    "start_year": 2034,
+    "status": "announced"
   },
   {
-    "capacity_per_year": 38995.22,
+    "capacity_per_year": 23353.74,
     "capacity_unit": "t_per_year",
-    "capex_usd": null,
-    "company": "Mock Company 2",
-    "geo": "AR-M",
-    "id": "mock-proj-2",
-    "name": "Mock Project 2",
-    "note": "Mock missing capex",
+    "capex_usd": 607148866.47,
+    "company": "Grupo Cordillera (ilustrativa)",
+    "geo": "AR-A",
+    "id": "mock-proj-4",
+    "name": "Campo del Valle 2",
     "owners": [
-      "Owner 2A",
-      "Owner 2B"
+      "Grupo Cordillera (ilustrativa)",
+      "Socio 1 (ilustrativo)"
+    ],
+    "resource": "gas",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "start_year": 2031,
+    "status": "feasibility"
+  },
+  {
+    "capacity_per_year": null,
+    "capacity_unit": null,
+    "capex_usd": null,
+    "company": "Explotaciones del Norte (ilustrativa)",
+    "geo": "AR-Z",
+    "id": "mock-proj-5",
+    "name": "Cerro Brillante 2",
+    "note": "Capacidad faltante (mock ilustrativo); capex faltante (mock ilustrativo)",
+    "owners": [
+      "Explotaciones del Norte (ilustrativa)",
+      "Socio 2 (ilustrativo)"
+    ],
+    "resource": "gold",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "start_year": 2025,
+    "status": "construction"
+  },
+  {
+    "capacity_per_year": 29753.13,
+    "capacity_unit": "t_per_year",
+    "capex_usd": 846165830.72,
+    "company": "Compañía Andina (ilustrativa)",
+    "geo": "AR-A",
+    "id": "mock-proj-6",
+    "name": "Planta Cordillera 2",
+    "owners": [
+      "Compañía Andina (ilustrativa)",
+      "Socio 3 (ilustrativo)"
     ],
     "resource": "gas",
     "retrieved_at": "2026-10-02",
     "source": "MOCK",
     "start_year": 2020,
+    "status": "exploration"
+  },
+  {
+    "capacity_per_year": 45757.76,
+    "capacity_unit": "t_per_year",
+    "capex_usd": 167582592.26,
+    "company": "Minera Austral (ilustrativa)",
+    "geo": "AR-M",
+    "id": "mock-proj-7",
+    "name": "Formación Profunda 2",
+    "owners": [
+      "Minera Austral (ilustrativa)",
+      "Socio 4 (ilustrativo)"
+    ],
+    "resource": "oil",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "start_year": 2035,
+    "status": "exploration"
+  },
+  {
+    "capacity_per_year": null,
+    "capacity_unit": null,
+    "capex_usd": 10427803.42,
+    "company": "Energía del Sur (ilustrativa)",
+    "geo": "AR-K",
+    "id": "mock-proj-8",
+    "name": "Cerro Alto 3",
+    "note": "Capacidad faltante (mock ilustrativo)",
+    "owners": [
+      "Energía del Sur (ilustrativa)",
+      "Socio 1 (ilustrativo)"
+    ],
+    "resource": "copper",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "start_year": 2020,
+    "status": "feasibility"
+  },
+  {
+    "capacity_per_year": null,
+    "capacity_unit": null,
+    "capex_usd": 148675440.84,
+    "company": "Recursos Patagonia (ilustrativa)",
+    "geo": "AR-A",
+    "id": "mock-proj-9",
+    "name": "Mina del Oeste 3",
+    "note": "Capacidad faltante (mock ilustrativo)",
+    "owners": [
+      "Recursos Patagonia (ilustrativa)",
+      "Socio 2 (ilustrativo)"
+    ],
+    "resource": "copper",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "start_year": 2030,
+    "status": "operating"
+  },
+  {
+    "capacity_per_year": null,
+    "capacity_unit": null,
+    "capex_usd": 862621217.59,
+    "company": "Grupo Cordillera (ilustrativa)",
+    "geo": "AR-A",
+    "id": "mock-proj-10",
+    "name": "Salar del Norte 3",
+    "note": "Capacidad faltante (mock ilustrativo)",
+    "owners": [
+      "Grupo Cordillera (ilustrativa)",
+      "Socio 3 (ilustrativo)"
+    ],
+    "resource": "lithium",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "start_year": 2034,
+    "status": "construction"
+  },
+  {
+    "capacity_per_year": null,
+    "capacity_unit": null,
+    "capex_usd": 610826501.12,
+    "company": "Explotaciones del Norte (ilustrativa)",
+    "geo": "AR-A",
+    "id": "mock-proj-11",
+    "name": "Gasoducto Sur 3",
+    "note": "Capacidad faltante (mock ilustrativo)",
+    "owners": [
+      "Explotaciones del Norte (ilustrativa)",
+      "Socio 4 (ilustrativo)"
+    ],
+    "resource": "gas",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "start_year": 2035,
+    "status": "ramp_up"
+  },
+  {
+    "capacity_per_year": 39986.77,
+    "capacity_unit": "t_per_year",
+    "capex_usd": 807639772.79,
+    "company": "Compañía Andina (ilustrativa)",
+    "geo": "AR-R",
+    "id": "mock-proj-12",
+    "name": "Bloque Meseta 4",
+    "owners": [
+      "Compañía Andina (ilustrativa)",
+      "Socio 1 (ilustrativo)"
+    ],
+    "resource": "oil",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "start_year": 2028,
+    "status": "approved"
+  },
+  {
+    "capacity_per_year": 32338.14,
+    "capacity_unit": "t_per_year",
+    "capex_usd": 113713967.92,
+    "company": "Minera Austral (ilustrativa)",
+    "geo": "AR-Z",
+    "id": "mock-proj-13",
+    "name": "Área Cuenca Sur 4",
+    "owners": [
+      "Minera Austral (ilustrativa)",
+      "Socio 2 (ilustrativo)"
+    ],
+    "resource": "oil",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "start_year": 2029,
+    "status": "announced"
+  },
+  {
+    "capacity_per_year": 22534.82,
+    "capacity_unit": "t_per_year",
+    "capex_usd": null,
+    "company": "Energía del Sur (ilustrativa)",
+    "geo": "AR-Y",
+    "id": "mock-proj-14",
+    "name": "Cuenca Austral 3",
+    "note": "Capex faltante (mock ilustrativo)",
+    "owners": [
+      "Energía del Sur (ilustrativa)",
+      "Socio 3 (ilustrativo)"
+    ],
+    "resource": "lithium",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "start_year": 2029,
+    "status": "operating"
+  },
+  {
+    "capacity_per_year": null,
+    "capacity_unit": null,
+    "capex_usd": 372722765.73,
+    "company": "Recursos Patagonia (ilustrativa)",
+    "geo": "AR-K",
+    "id": "mock-proj-15",
+    "name": "Salar del Norte 4",
+    "note": "Capacidad faltante (mock ilustrativo)",
+    "owners": [
+      "Recursos Patagonia (ilustrativa)",
+      "Socio 4 (ilustrativo)"
+    ],
+    "resource": "lithium",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "start_year": 2023,
+    "status": "exploration"
+  },
+  {
+    "capacity_per_year": 46148.15,
+    "capacity_unit": "t_per_year",
+    "capex_usd": null,
+    "company": "Grupo Cordillera (ilustrativa)",
+    "geo": "AR-A",
+    "id": "mock-proj-16",
+    "name": "Cerro Alto 5",
+    "note": "Capex faltante (mock ilustrativo)",
+    "owners": [
+      "Grupo Cordillera (ilustrativa)",
+      "Socio 1 (ilustrativo)"
+    ],
+    "resource": "copper",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "start_year": 2020,
+    "status": "ramp_up"
+  },
+  {
+    "capacity_per_year": 2099.12,
+    "capacity_unit": "t_per_year",
+    "capex_usd": 545357253.5,
+    "company": "Explotaciones del Norte (ilustrativa)",
+    "geo": "AR-J",
+    "id": "mock-proj-17",
+    "name": "Mina del Oeste 5",
+    "owners": [
+      "Explotaciones del Norte (ilustrativa)",
+      "Socio 2 (ilustrativo)"
+    ],
+    "resource": "copper",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "start_year": 2023,
+    "status": "ramp_up"
+  },
+  {
+    "capacity_per_year": null,
+    "capacity_unit": null,
+    "capex_usd": 211061324.57,
+    "company": "Compañía Andina (ilustrativa)",
+    "geo": "AR-A",
+    "id": "mock-proj-18",
+    "name": "Salinas Grandes 4",
+    "note": "Capacidad faltante (mock ilustrativo)",
+    "owners": [
+      "Compañía Andina (ilustrativa)",
+      "Socio 3 (ilustrativo)"
+    ],
+    "resource": "lithium",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "start_year": 2022,
+    "status": "exploration"
+  },
+  {
+    "capacity_per_year": 39948.9,
+    "capacity_unit": "t_per_year",
+    "capex_usd": 237469688.1,
+    "company": "Minera Austral (ilustrativa)",
+    "geo": "AR-K",
+    "id": "mock-proj-19",
+    "name": "Cuenca Austral 4",
+    "owners": [
+      "Minera Austral (ilustrativa)",
+      "Socio 4 (ilustrativo)"
+    ],
+    "resource": "lithium",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "start_year": 2021,
+    "status": "construction"
+  },
+  {
+    "capacity_per_year": null,
+    "capacity_unit": null,
+    "capex_usd": 705946521.64,
+    "company": "Energía del Sur (ilustrativa)",
+    "geo": "AR-U",
+    "id": "mock-proj-20",
+    "name": "Bloque Meseta 6",
+    "note": "Capacidad faltante (mock ilustrativo)",
+    "owners": [
+      "Energía del Sur (ilustrativa)",
+      "Socio 1 (ilustrativo)"
+    ],
+    "resource": "oil",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "start_year": 2021,
+    "status": "construction"
+  },
+  {
+    "capacity_per_year": 48043.52,
+    "capacity_unit": "t_per_year",
+    "capex_usd": 905912443.85,
+    "company": "Recursos Patagonia (ilustrativa)",
+    "geo": "AR-K",
+    "id": "mock-proj-21",
+    "name": "Salar Altiplano 5",
+    "owners": [
+      "Recursos Patagonia (ilustrativa)",
+      "Socio 2 (ilustrativo)"
+    ],
+    "resource": "lithium",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "start_year": 2034,
+    "status": "feasibility"
+  },
+  {
+    "capacity_per_year": null,
+    "capacity_unit": null,
+    "capex_usd": 483522725.1,
+    "company": "Grupo Cordillera (ilustrativa)",
+    "geo": "AR-V",
+    "id": "mock-proj-22",
+    "name": "Planta Cordillera 6",
+    "note": "Capacidad faltante (mock ilustrativo)",
+    "owners": [
+      "Grupo Cordillera (ilustrativa)",
+      "Socio 3 (ilustrativo)"
+    ],
+    "resource": "gas",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "start_year": 2034,
+    "status": "feasibility"
+  },
+  {
+    "capacity_per_year": 6032.09,
+    "capacity_unit": "t_per_year",
+    "capex_usd": 109024140.51,
+    "company": "Explotaciones del Norte (ilustrativa)",
+    "geo": "AR-A",
+    "id": "mock-proj-23",
+    "name": "Cordón Rojo 6",
+    "owners": [
+      "Explotaciones del Norte (ilustrativa)",
+      "Socio 4 (ilustrativo)"
+    ],
+    "resource": "copper",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "start_year": 2035,
     "status": "approved"
   },
   {
     "capacity_per_year": null,
     "capacity_unit": null,
-    "capex_usd": 600393819.84,
-    "company": "Mock Company 3",
-    "geo": "AR-P",
-    "id": "mock-proj-3",
-    "name": "Mock Project 3",
-    "note": "Mock missing capacity",
+    "capex_usd": 533727044.14,
+    "company": "Compañía Andina (ilustrativa)",
+    "geo": "AR-U",
+    "id": "mock-proj-24",
+    "name": "Bloque Meseta 7",
+    "note": "Capacidad faltante (mock ilustrativo)",
     "owners": [
-      "Owner 3A",
-      "Owner 3B"
+      "Compañía Andina (ilustrativa)",
+      "Socio 1 (ilustrativo)"
     ],
-    "resource": "gold",
+    "resource": "oil",
     "retrieved_at": "2026-10-02",
     "source": "MOCK",
-    "start_year": 2033,
-    "status": "exploration"
+    "start_year": 2021,
+    "status": "feasibility"
   },
   {
-    "capacity_per_year": 17736.24,
+    "capacity_per_year": 42080.28,
     "capacity_unit": "t_per_year",
-    "capex_usd": 450827106.49,
-    "company": "Mock Company 4",
-    "geo": "AR-B",
-    "id": "mock-proj-4",
-    "name": "Mock Project 4",
+    "capex_usd": 22942847.32,
+    "company": "Minera Austral (ilustrativa)",
+    "geo": "AR-K",
+    "id": "mock-proj-25",
+    "name": "Mina del Oeste 7",
     "owners": [
-      "Owner 4A",
-      "Owner 4B"
+      "Minera Austral (ilustrativa)",
+      "Socio 2 (ilustrativo)"
     ],
     "resource": "copper",
     "retrieved_at": "2026-10-02",
     "source": "MOCK",
     "start_year": 2029,
-    "status": "feasibility"
-  },
-  {
-    "capacity_per_year": null,
-    "capacity_unit": null,
-    "capex_usd": 135558287.47,
-    "company": "Mock Company 5",
-    "geo": "AR-T",
-    "id": "mock-proj-5",
-    "name": "Mock Project 5",
-    "note": "Mock missing capacity",
-    "owners": [
-      "Owner 5A",
-      "Owner 5B"
-    ],
-    "resource": "oil",
-    "retrieved_at": "2026-10-02",
-    "source": "MOCK",
-    "start_year": 2033,
-    "status": "approved"
-  },
-  {
-    "capacity_per_year": null,
-    "capacity_unit": null,
-    "capex_usd": 186870151.43,
-    "company": "Mock Company 6",
-    "geo": "AR-A",
-    "id": "mock-proj-6",
-    "name": "Mock Project 6",
-    "note": "Mock missing capacity",
-    "owners": [
-      "Owner 6A",
-      "Owner 6B"
-    ],
-    "resource": "oil",
-    "retrieved_at": "2026-10-02",
-    "source": "MOCK",
-    "start_year": 2033,
-    "status": "exploration"
-  },
-  {
-    "capacity_per_year": 30202.54,
-    "capacity_unit": "t_per_year",
-    "capex_usd": 652354006.9,
-    "company": "Mock Company 7",
-    "geo": "AR-E",
-    "id": "mock-proj-7",
-    "name": "Mock Project 7",
-    "owners": [
-      "Owner 7A",
-      "Owner 7B"
-    ],
-    "resource": "gas",
-    "retrieved_at": "2026-10-02",
-    "source": "MOCK",
-    "start_year": 2020,
-    "status": "announced"
-  },
-  {
-    "capacity_per_year": 28241.63,
-    "capacity_unit": "t_per_year",
-    "capex_usd": 470925921.95,
-    "company": "Mock Company 8",
-    "geo": "AR-C",
-    "id": "mock-proj-8",
-    "name": "Mock Project 8",
-    "owners": [
-      "Owner 8A",
-      "Owner 8B"
-    ],
-    "resource": "oil",
-    "retrieved_at": "2026-10-02",
-    "source": "MOCK",
-    "start_year": 2035,
-    "status": "exploration"
-  },
-  {
-    "capacity_per_year": 19565.65,
-    "capacity_unit": "t_per_year",
-    "capex_usd": 622360615.62,
-    "company": "Mock Company 9",
-    "geo": "AR-S",
-    "id": "mock-proj-9",
-    "name": "Mock Project 9",
-    "owners": [
-      "Owner 9A",
-      "Owner 9B"
-    ],
-    "resource": "copper",
-    "retrieved_at": "2026-10-02",
-    "source": "MOCK",
-    "start_year": 2022,
-    "status": "ramp_up"
-  },
-  {
-    "capacity_per_year": null,
-    "capacity_unit": null,
-    "capex_usd": 876678207.96,
-    "company": "Mock Company 10",
-    "geo": "AR-U",
-    "id": "mock-proj-10",
-    "name": "Mock Project 10",
-    "note": "Mock missing capacity",
-    "owners": [
-      "Owner 10A",
-      "Owner 10B"
-    ],
-    "resource": "oil",
-    "retrieved_at": "2026-10-02",
-    "source": "MOCK",
-    "start_year": 2022,
-    "status": "feasibility"
-  },
-  {
-    "capacity_per_year": 45538.35,
-    "capacity_unit": "t_per_year",
-    "capex_usd": 90173352.35,
-    "company": "Mock Company 11",
-    "geo": "AR-U",
-    "id": "mock-proj-11",
-    "name": "Mock Project 11",
-    "owners": [
-      "Owner 11A",
-      "Owner 11B"
-    ],
-    "resource": "oil",
-    "retrieved_at": "2026-10-02",
-    "source": "MOCK",
-    "start_year": 2021,
     "status": "operating"
   },
   {
-    "capacity_per_year": 14622.68,
+    "capacity_per_year": 45450.24,
     "capacity_unit": "t_per_year",
-    "capex_usd": null,
-    "company": "Mock Company 12",
-    "geo": "AR-K",
-    "id": "mock-proj-12",
-    "name": "Mock Project 12",
-    "note": "Mock missing capex",
-    "owners": [
-      "Owner 12A",
-      "Owner 12B"
-    ],
-    "resource": "gas",
-    "retrieved_at": "2026-10-02",
-    "source": "MOCK",
-    "start_year": 2032,
-    "status": "exploration"
-  },
-  {
-    "capacity_per_year": null,
-    "capacity_unit": null,
-    "capex_usd": 134134347.33,
-    "company": "Mock Company 13",
-    "geo": "AR-R",
-    "id": "mock-proj-13",
-    "name": "Mock Project 13",
-    "note": "Mock missing capacity",
-    "owners": [
-      "Owner 13A",
-      "Owner 13B"
-    ],
-    "resource": "gold",
-    "retrieved_at": "2026-10-02",
-    "source": "MOCK",
-    "start_year": 2020,
-    "status": "ramp_up"
-  },
-  {
-    "capacity_per_year": 37588.96,
-    "capacity_unit": "t_per_year",
-    "capex_usd": 254583245.19,
-    "company": "Mock Company 14",
-    "geo": "AR-R",
-    "id": "mock-proj-14",
-    "name": "Mock Project 14",
-    "owners": [
-      "Owner 14A",
-      "Owner 14B"
-    ],
-    "resource": "lithium",
-    "retrieved_at": "2026-10-02",
-    "source": "MOCK",
-    "start_year": 2035,
-    "status": "approved"
-  },
-  {
-    "capacity_per_year": 22096.17,
-    "capacity_unit": "t_per_year",
-    "capex_usd": 888450417.29,
-    "company": "Mock Company 15",
-    "geo": "AR-Z",
-    "id": "mock-proj-15",
-    "name": "Mock Project 15",
-    "owners": [
-      "Owner 15A",
-      "Owner 15B"
-    ],
-    "resource": "lithium",
-    "retrieved_at": "2026-10-02",
-    "source": "MOCK",
-    "start_year": 2033,
-    "status": "ramp_up"
-  },
-  {
-    "capacity_per_year": null,
-    "capacity_unit": null,
-    "capex_usd": 773683678.47,
-    "company": "Mock Company 16",
-    "geo": "AR-E",
-    "id": "mock-proj-16",
-    "name": "Mock Project 16",
-    "note": "Mock missing capacity",
-    "owners": [
-      "Owner 16A",
-      "Owner 16B"
-    ],
-    "resource": "gas",
-    "retrieved_at": "2026-10-02",
-    "source": "MOCK",
-    "start_year": 2020,
-    "status": "operating"
-  },
-  {
-    "capacity_per_year": null,
-    "capacity_unit": null,
-    "capex_usd": 610817774.25,
-    "company": "Mock Company 17",
-    "geo": "AR-W",
-    "id": "mock-proj-17",
-    "name": "Mock Project 17",
-    "note": "Mock missing capacity",
-    "owners": [
-      "Owner 17A",
-      "Owner 17B"
-    ],
-    "resource": "lithium",
-    "retrieved_at": "2026-10-02",
-    "source": "MOCK",
-    "start_year": 2024,
-    "status": "prefeasibility"
-  },
-  {
-    "capacity_per_year": 14640.59,
-    "capacity_unit": "t_per_year",
-    "capex_usd": 916639965.46,
-    "company": "Mock Company 18",
-    "geo": "AR-R",
-    "id": "mock-proj-18",
-    "name": "Mock Project 18",
-    "owners": [
-      "Owner 18A",
-      "Owner 18B"
-    ],
-    "resource": "copper",
-    "retrieved_at": "2026-10-02",
-    "source": "MOCK",
-    "start_year": 2022,
-    "status": "ramp_up"
-  },
-  {
-    "capacity_per_year": 1194.54,
-    "capacity_unit": "t_per_year",
-    "capex_usd": 107884583.27,
-    "company": "Mock Company 19",
-    "geo": "AR-S",
-    "id": "mock-proj-19",
-    "name": "Mock Project 19",
-    "owners": [
-      "Owner 19A",
-      "Owner 19B"
-    ],
-    "resource": "gold",
-    "retrieved_at": "2026-10-02",
-    "source": "MOCK",
-    "start_year": 2022,
-    "status": "operating"
-  },
-  {
-    "capacity_per_year": null,
-    "capacity_unit": null,
-    "capex_usd": 985711797.88,
-    "company": "Mock Company 20",
+    "capex_usd": 567699004.06,
+    "company": "Energía del Sur (ilustrativa)",
     "geo": "AR-Y",
-    "id": "mock-proj-20",
-    "name": "Mock Project 20",
-    "note": "Mock missing capacity",
-    "owners": [
-      "Owner 20A",
-      "Owner 20B"
-    ],
-    "resource": "gas",
-    "retrieved_at": "2026-10-02",
-    "source": "MOCK",
-    "start_year": 2022,
-    "status": "construction"
-  },
-  {
-    "capacity_per_year": 11684.92,
-    "capacity_unit": "t_per_year",
-    "capex_usd": 952908044.87,
-    "company": "Mock Company 21",
-    "geo": "AR-G",
-    "id": "mock-proj-21",
-    "name": "Mock Project 21",
-    "owners": [
-      "Owner 21A",
-      "Owner 21B"
-    ],
-    "resource": "gold",
-    "retrieved_at": "2026-10-02",
-    "source": "MOCK",
-    "start_year": 2031,
-    "status": "prefeasibility"
-  },
-  {
-    "capacity_per_year": null,
-    "capacity_unit": null,
-    "capex_usd": 435765293.96,
-    "company": "Mock Company 22",
-    "geo": "AR-G",
-    "id": "mock-proj-22",
-    "name": "Mock Project 22",
-    "note": "Mock missing capacity",
-    "owners": [
-      "Owner 22A",
-      "Owner 22B"
-    ],
-    "resource": "gold",
-    "retrieved_at": "2026-10-02",
-    "source": "MOCK",
-    "start_year": 2026,
-    "status": "announced"
-  },
-  {
-    "capacity_per_year": 24332.72,
-    "capacity_unit": "t_per_year",
-    "capex_usd": 72573176.25,
-    "company": "Mock Company 23",
-    "geo": "AR-A",
-    "id": "mock-proj-23",
-    "name": "Mock Project 23",
-    "owners": [
-      "Owner 23A",
-      "Owner 23B"
-    ],
-    "resource": "oil",
-    "retrieved_at": "2026-10-02",
-    "source": "MOCK",
-    "start_year": 2026,
-    "status": "feasibility"
-  },
-  {
-    "capacity_per_year": null,
-    "capacity_unit": null,
-    "capex_usd": 15352858.77,
-    "company": "Mock Company 24",
-    "geo": "AR-P",
-    "id": "mock-proj-24",
-    "name": "Mock Project 24",
-    "note": "Mock missing capacity",
-    "owners": [
-      "Owner 24A",
-      "Owner 24B"
-    ],
-    "resource": "copper",
-    "retrieved_at": "2026-10-02",
-    "source": "MOCK",
-    "start_year": 2030,
-    "status": "ramp_up"
-  },
-  {
-    "capacity_per_year": 49818.22,
-    "capacity_unit": "t_per_year",
-    "capex_usd": 670463626.57,
-    "company": "Mock Company 25",
-    "geo": "AR-V",
-    "id": "mock-proj-25",
-    "name": "Mock Project 25",
-    "owners": [
-      "Owner 25A",
-      "Owner 25B"
-    ],
-    "resource": "gold",
-    "retrieved_at": "2026-10-02",
-    "source": "MOCK",
-    "start_year": 2032,
-    "status": "exploration"
-  },
-  {
-    "capacity_per_year": null,
-    "capacity_unit": null,
-    "capex_usd": 268593162.96,
-    "company": "Mock Company 26",
-    "geo": "AR-S",
     "id": "mock-proj-26",
-    "name": "Mock Project 26",
-    "note": "Mock missing capacity",
+    "name": "Salar Altiplano 6",
     "owners": [
-      "Owner 26A",
-      "Owner 26B"
+      "Energía del Sur (ilustrativa)",
+      "Socio 3 (ilustrativo)"
     ],
-    "resource": "copper",
+    "resource": "lithium",
     "retrieved_at": "2026-10-02",
     "source": "MOCK",
-    "start_year": 2026,
-    "status": "prefeasibility"
+    "start_year": 2034,
+    "status": "approved"
   },
   {
-    "capacity_per_year": 31736.61,
-    "capacity_unit": "t_per_year",
-    "capex_usd": 324531117.77,
-    "company": "Mock Company 27",
+    "capacity_per_year": null,
+    "capacity_unit": null,
+    "capex_usd": 756268759.77,
+    "company": "Recursos Patagonia (ilustrativa)",
     "geo": "AR-K",
     "id": "mock-proj-27",
-    "name": "Mock Project 27",
+    "name": "Mesa Austral 7",
+    "note": "Capacidad faltante (mock ilustrativo)",
     "owners": [
-      "Owner 27A",
-      "Owner 27B"
+      "Recursos Patagonia (ilustrativa)",
+      "Socio 4 (ilustrativo)"
     ],
-    "resource": "gas",
+    "resource": "gold",
     "retrieved_at": "2026-10-02",
     "source": "MOCK",
-    "start_year": 2031,
-    "status": "announced"
+    "start_year": 2023,
+    "status": "operating"
   },
   {
-    "capacity_per_year": null,
-    "capacity_unit": null,
-    "capex_usd": 986088763.31,
-    "company": "Mock Company 28",
-    "geo": "AR-K",
-    "id": "mock-proj-28",
-    "name": "Mock Project 28",
-    "note": "Mock missing capacity",
-    "owners": [
-      "Owner 28A",
-      "Owner 28B"
-    ],
-    "resource": "lithium",
-    "retrieved_at": "2026-10-02",
-    "source": "MOCK",
-    "start_year": 2030,
-    "status": "construction"
-  },
-  {
-    "capacity_per_year": 2742.11,
+    "capacity_per_year": 29864.71,
     "capacity_unit": "t_per_year",
-    "capex_usd": 820799378.11,
-    "company": "Mock Company 29",
-    "geo": "AR-M",
-    "id": "mock-proj-29",
-    "name": "Mock Project 29",
+    "capex_usd": 486503987.55,
+    "company": "Grupo Cordillera (ilustrativa)",
+    "geo": "AR-V",
+    "id": "mock-proj-28",
+    "name": "Campo del Valle 8",
     "owners": [
-      "Owner 29A",
-      "Owner 29B"
+      "Grupo Cordillera (ilustrativa)",
+      "Socio 1 (ilustrativo)"
     ],
     "resource": "gas",
     "retrieved_at": "2026-10-02",
     "source": "MOCK",
     "start_year": 2027,
-    "status": "construction"
+    "status": "ramp_up"
+  },
+  {
+    "capacity_per_year": null,
+    "capacity_unit": null,
+    "capex_usd": 867099992.5,
+    "company": "Explotaciones del Norte (ilustrativa)",
+    "geo": "AR-Q",
+    "id": "mock-proj-29",
+    "name": "Bloque Austral 8",
+    "note": "Capacidad faltante (mock ilustrativo)",
+    "owners": [
+      "Explotaciones del Norte (ilustrativa)",
+      "Socio 2 (ilustrativo)"
+    ],
+    "resource": "gas",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "start_year": 2030,
+    "status": "announced"
   }
 ]

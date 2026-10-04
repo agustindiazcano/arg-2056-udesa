@@ -1,18 +1,16 @@
 # Last Context
 
 ## State
-- Task `briefs` on branch `task/briefs`: documentation only, no code. Every task of the roadmap now has a brief in the repository root and a prompt in `TASKS.md`.
-- Merged on `main` before this: `performance-a11y` (#29), `vercel-config` (#30, #31), `vercel-analytics` (#32), `visits-archive` (#33), `deploy` (#34). The app is deployed on Vercel with mock data.
-- 24 briefs written: the 14 model tasks of `docs/model-design.md` section 8 (`model-params`, `model-population-hardening`, `population-age-contract`, `model-population-drivers`, `model-growth-core`, `model-hdi`, `model-resources`, `model-ai-overlay`, `model-montecarlo`, `backtest-baselines`, `backtest-run`, `sensitivity`, `model-ts-port`, `model-provinces`); `scene-ai-revolution`, `andes-integration`; the four `data-*` tasks; `polish`; and three **draft** briefs blocked by human input (`docs-submission`, `scene-forecast-map-3d`, `demo-video`).
-- `TASKS.md`: new prompt sections for all of them, statuses fixed, and a new "Next Steps" table (DONE, READY, BLOCKED with what each needs). `roadmap.md` rewritten (48 briefs, nothing left to write; section D lists the work done outside the briefs; section E the human tasks). `PENDING.md` rewritten with the same statuses.
+- Plan approved by the human: presentation first (design, 3D map country to zone, transitions, story, filters, Andes) with believable mock data, in Spanish, dark cinematic style. Phases F1 to F8 are in the plan file (`~/.claude/plans/a-ver-falta-armar-moonlit-bunny.md`).
+- **F1 done on branch `task/mock-credible`**: `scripts/gen_mock.py` rewritten with `scripts/mock_shapes.py` (anchors and tables). Economy with six indicators and real units (GDP = GDP per capita x population, Argentina leads in 1913 and shows its crises), provinces that add up to the country, resources by province in sector units, a forecast that continues from 2025 with asymmetric fans, a modest AI overlay and province series for GDP, GDP per capita and population, real sector and product names, a coherent Andes march. All `source: MOCK`.
+- `data/mock/` regenerated (13 files; the five research mocks are now committed and registered as optional in `web/src/data/registry.ts`). `docs/mock-data.md` explains the story and how to regenerate. New tests: `data/tests/test_mock_credible.py` (23); the mock tests now read JSON as UTF-8 (they failed on Windows with accents).
+- Found by the richer data: a nested scroll box in the Resources projects table failed axe (`scrollable-region-focusable`); removed it (the page scrolls).
+- precheck OK, 61 e2e tests pass locally. Pushed, CI not checked.
 
-## Decisions and findings
-- Briefs live in the repository root (`<slug>.md`); the old prompts said `docs/tasks/`.
-- READY now: `model-population-hardening`, `population-age-contract`, `backtest-baselines` (code only), `scene-ai-revolution`, `mutation-testing`.
-- Findings that need the human: `model-design` lists ten resource names for nine value-added constants (`D-res-3`, blocks `model-params`); the Andes proof of concept `test/map_test1.html` loads Three.js from a CDN, which the CSP forbids (it must be bundled, `D-andes-1` to `D-andes-4`); `docs/sources.md` and `docs/research-prompts.md` do not exist; research mocks are not in `data/mock/` (`scene-ai-revolution` wires `ai_estimates.json`); the age contract needs a `female_share` field that the design uses (added to `population-age-contract`).
-- The three draft briefs are complete in structure and list what the human must supply; rewrite them in place when that arrives.
-- Nothing was run (documentation task); no CI result was read. Pushed, CI not checked.
+## Decisions
+- Mock values are illustrative orders of magnitude, not facts; the badge and the release gate stay. Names of real places and companies are avoided in the Andes and project mocks.
+- The fan has no history yet: the forecast chart needs a code change (F2/F3) to draw 1990 to 2025 from `economy_series`; the mock already continues from 2025.
+- Country names are still ISO codes in the UI (the Spanish pass of F2 adds a name table).
 
 ## Next step
-- Human: review the briefs (above all `model-params`, `andes-integration`, `scene-ai-revolution`); answer `D-res-3`, `D-andes-1` to `D-andes-4`, `D-polish-1` to `D-polish-7`, `D-gdp-1`; supply the contest rules.
-- Agent: start from the READY list. The first ones recommended: `scene-ai-revolution` (visible progress, no blocker) and `model-population-hardening` plus `population-age-contract` (unblock the model chain).
+- F2: design system and shell in Spanish (tokens, HUD, filters, shared components). The map approach for F5 (Three.js own, country to zone) awaits the human's confirmation; the DEM and province geometry are human steps.

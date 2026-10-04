@@ -13,7 +13,7 @@ from forecast_checks import check_forecast
 SCHEMAS_DIR = Path("data/schemas")
 
 def load_schema(name):
-    with open(SCHEMAS_DIR / f"{name}.schema.json") as f:
+    with open(SCHEMAS_DIR / f"{name}.schema.json", encoding="utf-8") as f:
         return json.load(f)
 
 def run_gen_mock(out_dir):
@@ -49,7 +49,7 @@ def test_schemas(generated_mock_data):
     for fname in files:
         data_path = generated_mock_data / f"{fname}.json"
         assert data_path.exists(), f"{fname}.json not generated"
-        with open(data_path) as f:
+        with open(data_path, encoding="utf-8") as f:
             data = json.load(f)
         schema = load_schema(fname)
         validator = Draft202012Validator(schema, format_checker=FormatChecker())
@@ -58,7 +58,7 @@ def test_schemas(generated_mock_data):
     # Check forecast separately
     forecast_path = generated_mock_data / "forecast_output.json"
     assert forecast_path.exists()
-    with open(forecast_path) as f:
+    with open(forecast_path, encoding="utf-8") as f:
         forecast_data = json.load(f)
     forecast_schema = load_schema("forecast_output")
     Draft202012Validator(forecast_schema, format_checker=FormatChecker()).validate(forecast_data)
@@ -80,14 +80,14 @@ def _find_numeric_nulls_and_provenance(obj):
 
 def test_provenance_and_nulls(generated_mock_data):
     for p in generated_mock_data.glob("*.json"):
-        with open(p) as f:
+        with open(p, encoding="utf-8") as f:
             data = json.load(f)
         errors = _find_numeric_nulls_and_provenance(data)
         assert not errors, f"Errors in {p.name}: {errors}"
 
 def test_business_rules(generated_mock_data):
     # economy_series
-    with open(generated_mock_data / "economy_series.json") as f:
+    with open(generated_mock_data / "economy_series.json", encoding="utf-8") as f:
         eco = json.load(f)
         # hdi absent before 1990
         for record in eco:
@@ -95,7 +95,7 @@ def test_business_rules(generated_mock_data):
                 pytest.fail(f"HDI present before 1990: {record}")
                 
     # resource_production
-    with open(generated_mock_data / "resource_production.json") as f:
+    with open(generated_mock_data / "resource_production.json", encoding="utf-8") as f:
         rp = json.load(f)
         resource_prov_counts = {}
         for record in rp:
@@ -105,7 +105,7 @@ def test_business_rules(generated_mock_data):
             assert 3 <= len(provs) <= 8, f"Resource {r} in {len(provs)} provinces, expected 3-8"
 
 def test_forecast_invariants(generated_mock_data):
-    with open(generated_mock_data / "forecast_output.json") as f:
+    with open(generated_mock_data / "forecast_output.json", encoding="utf-8") as f:
         forecast = json.load(f)
         
     assert not check_forecast(forecast), "check_forecast returned errors"
@@ -210,7 +210,7 @@ def test_research_mock_files(generated_mock_data):
     for fname in files:
         data_path = generated_mock_data / f"{fname}.json"
         assert data_path.exists(), f"{fname}.json not generated"
-        with open(data_path) as f:
+        with open(data_path, encoding="utf-8") as f:
             data = json.load(f)
             
         schema = load_schema(fname)
@@ -218,7 +218,7 @@ def test_research_mock_files(generated_mock_data):
         validator.validate(data)
 
     # Specific tests for external_forecasts
-    with open(generated_mock_data / "external_forecasts.json") as f:
+    with open(generated_mock_data / "external_forecasts.json", encoding="utf-8") as f:
         ext = json.load(f)
         forecasters = {r["forecaster"] for r in ext}
         assert len(forecasters) >= 3
@@ -245,7 +245,7 @@ def test_research_mock_files(generated_mock_data):
         assert max_year >= 2056
         
     # Specific tests for forecast_vintages
-    with open(generated_mock_data / "forecast_vintages.json") as f:
+    with open(generated_mock_data / "forecast_vintages.json", encoding="utf-8") as f:
         vint = json.load(f)
         forecasters = {r["forecaster"] for r in vint}
         assert len(forecasters) >= 2
@@ -257,14 +257,14 @@ def test_research_mock_files(generated_mock_data):
             assert r["horizon_years"] == r["target_year"] - v_year
 
     # Specific tests for base_rates
-    with open(generated_mock_data / "base_rates.json") as f:
+    with open(generated_mock_data / "base_rates.json", encoding="utf-8") as f:
         base = json.load(f)
         assert len(base) >= 6
         null_value_count = sum(1 for r in base if r.get("value") is None and r.get("note"))
         assert null_value_count >= 1
 
     # Specific tests for ai_estimates
-    with open(generated_mock_data / "ai_estimates.json") as f:
+    with open(generated_mock_data / "ai_estimates.json", encoding="utf-8") as f:
         ai = json.load(f)
         assert len(ai) >= 14
         metrics = {r["outcome_metric"] for r in ai}
@@ -286,7 +286,7 @@ def test_research_mock_files(generated_mock_data):
         assert exp >= 2
         
     # Specific tests for dataset_catalog
-    with open(generated_mock_data / "dataset_catalog.json") as f:
+    with open(generated_mock_data / "dataset_catalog.json", encoding="utf-8") as f:
         cat = json.load(f)
         assert len(cat) >= 5
         not_opened = [r for r in cat if r["access"] == "not_opened" and r.get("note")]
