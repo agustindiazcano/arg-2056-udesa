@@ -1,3 +1,5 @@
+import { APP_LOCALE } from '../charts/format';
+
 /** The archive written by scripts/sync_visits.py: page views and visitors per day and country. */
 export interface VisitCounts {
   pageviews: number;
@@ -67,11 +69,11 @@ export function flagEmoji(code: string): string {
   return [...code.toUpperCase()].map((letter) => String.fromCodePoint(0x1f1e6 + letter.charCodeAt(0) - 65)).join('');
 }
 
-const regionNames = new Intl.DisplayNames(['en'], { type: 'region' });
+const regionNames = new Intl.DisplayNames([APP_LOCALE], { type: 'region' });
 
-/** The English name of the country; "Unknown" for the bucket the archive keeps for visits without a country. */
+/** The Spanish name of the country; "Desconocido" for the bucket the archive keeps for visits without a country. */
 export function countryName(code: string): string {
-  if (code === UNKNOWN) return 'Unknown';
+  if (code === UNKNOWN) return 'Desconocido';
   try {
     return regionNames.of(code.toUpperCase()) ?? code;
   } catch {

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { APP_LOCALE } from '../charts/format';
+import { APP_LOCALE, formatDate } from '../charts/format';
 import { parseVisits, summarize } from './visits';
 import type { VisitsArchive } from './visits';
 
@@ -36,22 +36,22 @@ export function VisitsSection({ url = '/analytics/visits.json' }: { url?: string
 
   return (
     <section aria-labelledby="visits">
-      <h2 id="visits">Visits</h2>
-      {state.status === 'error' && <p>Visit counts are not available.</p>}
-      {summary !== null && summary.days === 0 && <p>No visits have been archived yet.</p>}
+      <h2 id="visits">Visitas</h2>
+      {state.status === 'error' && <p>El conteo de visitas no está disponible.</p>}
+      {summary !== null && summary.days === 0 && <p>Todavía no se archivaron visitas.</p>}
       {state.status === 'ok' && summary !== null && summary.days > 0 && (
         <>
-          <p>{`${number.format(summary.visitors)} ${plural(summary.visitors, 'visitor', 'visitors')} and ${number.format(summary.pageviews)} ${plural(summary.pageviews, 'page view', 'page views')}`}</p>
+          <p>{`${number.format(summary.visitors)} ${plural(summary.visitors, 'visitante', 'visitantes')} y ${number.format(summary.pageviews)} ${plural(summary.pageviews, 'vista de página', 'vistas de página')}`}</p>
           <p style={{ color: 'var(--ink-2)' }}>
-            {`Counted from ${summary.firstDay} to ${summary.lastDay} (${summary.days} ${plural(summary.days, 'day', 'days')}).`}
+            {`Contadas del ${formatDate(summary.firstDay ?? '')} al ${formatDate(summary.lastDay ?? '')} (${summary.days} ${plural(summary.days, 'día', 'días')}).`}
           </p>
           <table style={{ borderCollapse: 'collapse' }}>
-            <caption style={{ textAlign: 'left' }}>Visits by country</caption>
+            <caption style={{ textAlign: 'left' }}>Visitas por país</caption>
             <thead>
               <tr>
-                <th scope="col" style={{ textAlign: 'left', padding: '8px' }}>Country</th>
-                <th scope="col" style={{ textAlign: 'right', padding: '8px' }}>Visitors</th>
-                <th scope="col" style={{ textAlign: 'right', padding: '8px' }}>Page views</th>
+                <th scope="col" style={{ textAlign: 'left', padding: '8px' }}>País</th>
+                <th scope="col" style={{ textAlign: 'right', padding: '8px' }}>Visitantes</th>
+                <th scope="col" style={{ textAlign: 'right', padding: '8px' }}>Vistas de página</th>
               </tr>
             </thead>
             <tbody>
