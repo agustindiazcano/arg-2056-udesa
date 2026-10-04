@@ -43,6 +43,18 @@ Run the commands from the repository root unless a path says otherwise.
 - [ ] Fonts, icons and libraries: nothing is loaded from another origin (the e2e suite fails on any request to
   another origin) and every bundled library license is acceptable.
 
+## 3b. Human deliverables for the deploy
+
+- [ ] Real description and final URL in `web/src/content/meta.ts`, `placeholder: false` (`docs/deploy.md`, section 3).
+- [ ] Preview image `web/public/og.png`: PNG, 1200x630, at most 600 KB.
+- [ ] `web/public/favicon.svg` (the placeholder text must be gone). `python scripts/check_release_assets.py` exits 0.
+- [ ] Host decision confirmed (Vercel today): quota, build minutes, domain, preview deployments (`docs/deploy.md`, section 5).
+- [ ] Tag pushed and the CI job `release` green (read its status), then
+  `python scripts/smoke_deployed.py https://<domain> --expect-real-data` exits 0.
+- [ ] Link previews checked in the social tools.
+- [ ] The first Vercel deploy: browser console clean under the CSP (Analytics and Speed Insights scripts).
+- [ ] When the province geometry is committed, remove `MISSING_FOR_NOW` from `web/e2e/csp.spec.ts`.
+
 ## 4. Budgets and performance
 
 - [ ] **Confirm or tighten `web/budgets.json`.** Its first values were measured, not decided
