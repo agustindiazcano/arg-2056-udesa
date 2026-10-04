@@ -79,7 +79,7 @@ const ok = (body: unknown): FakeResponse => ({ ok: true, status: 200, json: asyn
 
 describe('loadProvinces', () => {
   const routes = (over: Record<string, FakeResponse | Error> = {}): Record<string, FakeResponse | Error> => ({
-    'geo/provinces.geojson': ok(validGeo()),
+    'geo/provinces.geojson?v=aaaaaaaaaaaa': ok(validGeo()),
     'geo/provinces.meta.json': ok(validGeoMeta()),
     ...over
   });
@@ -96,18 +96,18 @@ describe('loadProvinces', () => {
     const { geo, meta } = await loadProvinces('geo', f);
     expect(geo.features).toHaveLength(24);
     expect(meta.provinces_count).toBe(24);
-    expect(f.mock.calls.map((c) => c[0])).toEqual(['geo/provinces.geojson', 'geo/provinces.meta.json']);
+    expect(f.mock.calls.map((c) => c[0])).toEqual(['geo/provinces.meta.json', 'geo/provinces.geojson?v=aaaaaaaaaaaa']);
   });
 
   it('tolerates a trailing slash in the base url', async () => {
     const f = fakeFetch(routes());
     await loadProvinces('geo/', f);
-    expect(f.mock.calls.map((c) => c[0])).toEqual(['geo/provinces.geojson', 'geo/provinces.meta.json']);
+    expect(f.mock.calls.map((c) => c[0])).toEqual(['geo/provinces.meta.json', 'geo/provinces.geojson?v=aaaaaaaaaaaa']);
   });
 
   it('fails on an HTTP error', async () => {
-    const f = fakeFetch(routes({ 'geo/provinces.geojson': { ok: false, status: 404, json: async () => ({}) } }));
-    await expect(loadProvinces('geo', f)).rejects.toThrow('Failed to fetch geo/provinces.geojson: HTTP 404');
+    const f = fakeFetch(routes({ 'geo/provinces.geojson?v=aaaaaaaaaaaa': { ok: false, status: 404, json: async () => ({}) } }));
+    await expect(loadProvinces('geo', f)).rejects.toThrow('Failed to fetch geo/provinces.geojson?v=aaaaaaaaaaaa: HTTP 404');
   });
 
   it('fails when the network fails', async () => {
@@ -123,19 +123,19 @@ describe('loadProvinces', () => {
         throw new SyntaxError('Unexpected token');
       }
     };
-    const f = fakeFetch(routes({ 'geo/provinces.geojson': bad }));
-    await expect(loadProvinces('geo', f)).rejects.toThrow('Invalid JSON in geo/provinces.geojson: Unexpected token');
+    const f = fakeFetch(routes({ 'geo/provinces.geojson?v=aaaaaaaaaaaa': bad }));
+    await expect(loadProvinces('geo', f)).rejects.toThrow('Invalid JSON in geo/provinces.geojson?v=aaaaaaaaaaaa: Unexpected token');
   });
 
   it('fails when the geometry does not match the schema', async () => {
-    const f = fakeFetch(routes({ 'geo/provinces.geojson': ok({ type: 'FeatureCollection', features: [] }) }));
+    const f = fakeFetch(routes({ 'geo/provinces.geojson?v=aaaaaaaaaaaa': ok({ type: 'FeatureCollection', features: [] }) }));
     await expect(loadProvinces('geo', f)).rejects.toThrow('Invalid provinces geometry');
   });
 
   it('fails when the province ids are inconsistent', async () => {
     const geo = validGeo();
     geo.features[1] = validFeature(0); // AR-A twice, AR-B missing
-    const f = fakeFetch(routes({ 'geo/provinces.geojson': ok(geo) }));
+    const f = fakeFetch(routes({ 'geo/provinces.geojson?v=aaaaaaaaaaaa': ok(geo) }));
     await expect(loadProvinces('geo', f)).rejects.toThrow(
       'Province ids are inconsistent: missing province id AR-B; duplicate province id AR-A'
     );
