@@ -1,18 +1,21 @@
 # Last Context
 
 ## State
-- Task `performance-a11y` on branch `task/performance-a11y` (PR to open; pushed state: see below).
-- Bundles: each scene is `React.lazy` (`SceneHost`, "Loading scene"); ECharts only through `web/src/charts/echarts.ts` (registry coverage test); `manualChunks` puts echarts+zrender in the `echarts` chunk; `check:bundle` fails if main/references load it or a scene statically. Initial main 503,824 -> ~117,000 B gzip; references 112,749 -> ~113,600 B. `web/budgets.json` rewritten (134,144 / 131,072 / chunk_max 277,504).
-- Runtime (`web/src/runtime/`): `capabilities.ts` (readCapabilities, qualityTier, nextTier, QUALITY_PRESETS, `?quality=`, `?debug=1`), `CapabilityProvider` (mounted in `App`) with `useQuality`, `WebGLRequired` (not wired into any scene), `useReducedMotion` (EChart animation off; one global CSS rule).
-- A11y: skip link, `main#main`, `nav` "Scenes", title `<scene> | Argentina 2056` (`app/title.ts`), `aria-pressed` on HUD toggles, province filter is a named dialog with focus in/out, links in `--blue`, resources charts labelled, `eslint-plugin-jsx-a11y` (override for eslint 10 peer), `@axe-core/playwright` (e2e `a11y.spec.ts`, `axe-exceptions.ts`: none), contrast tests (`styles/contrast.ts`).
-- Docs: `docs/performance.md`. precheck OK, 50 Playwright tests pass locally.
+- Task `deploy` on branch `task/deploy` (host: Vercel). precheck OK, 61 Playwright tests pass locally. Pushed, CI not checked.
+- Metadata: `web/src/content/meta.ts` (placeholder, fails the release gate), `metaTags.ts` (pure tags + inline vite plugin, dev build warns), `appTitle.ts`. `scripts/check_release_assets.py` (og.png 1200x630 PNG <= 600 KB, favicon.svg not placeholder), wired into `build:release`. `robots.txt`, favicon link in both html files.
+- Data cache busting: `web/src/data/version.ts` (`getDataVersion`, `versionedUrl`), used by `useDataset`, the App forecast load and the references page; terrain (`terrainVersion`) and geometry (`input_sha256`, metadata read first) use their own hashes.
+- Headers: `web/headers.config.json` -> `scripts/gen-headers.ts` -> `dist/_headers` and the headers of the ROOT `vercel.json` (`--check` is a unit test). Strict CSP, no unsafe-eval.
+- Validators are precompiled: `web/src/validation/generated.js` (Ajv standalone, `npm run gen:validators`, `--check` test); no Ajv in `src`. Initial main 117 KB -> 102 KB gzip.
+- CSP e2e: `web/e2e/csp.spec.ts` + `helpers/staticServer.ts` serve `dist` with the real headers; zero violations. Tolerated 404: `/geo/provinces.meta.json` (`MISSING_FOR_NOW`).
+- CI job `release` (tags `v*` and dispatch). `E2E_SKIP_BUILD=1` makes Playwright serve the existing dist.
+- `scripts/smoke_deployed.py <url> [--expect-real-data]`. `docs/deploy.md`, release checklist updated.
 
 ## Decisions
-- No `APP_TITLE` existed: created it equal to the `<title>` of `index.html`. Two e2e title asserts adapted.
-- Link color: human approved option A (`--blue`). `--color-focus` (#ffc107) kept although design.md says #3987e5.
-- Nothing silenced; the `@ts-ignore` in EChart was replaced by a typed cast.
+- Human chose precompiled validators over `unsafe-eval` (the CSP broke the whole app because Ajv compiled schemas with eval). All validators now report every error.
+- Headers go to the root `vercel.json` (the Vercel project builds from the root); the brief said `web/vercel.json`.
+- Vercel Analytics and Speed Insights stay (the brief said no analytics; the human asked for them).
+- `ruff check --fix` was used once to sort imports in a test file.
 
 ## Next step
-- Human: review PR; tier thresholds/presets on real devices; decide `--state-critical` text contrast; confirm budgets; Lighthouse.
-- Next tasks: `scene-ai-revolution`, `scene-andes` (uses `useQuality`, `QUALITY_PRESETS`, `WebGLRequired`).
-- CI not checked unless stated in the PR.
+- Human: merge; review the CSP and header rules; supply description, final URL, og.png, favicon; run the first Vercel deploy and `smoke_deployed.py`; check the Analytics scripts under the CSP.
+- Not verified: Vercel header precedence for overlapping rules, the real deploy, Analytics under the CSP.

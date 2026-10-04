@@ -262,7 +262,7 @@ Calidad
 23	polish	Necesita decisiones de diseño tuyas
 Entrega		
 24	docs-submission	Necesita criterios del concurso
-25	deploy	Necesita elegir hosting
+25	deploy	Hecha (PR abierto), host: Vercel
 26	demo-video (opcional)	Depende de lo que pida el concurso
 
 8. references-page.md
