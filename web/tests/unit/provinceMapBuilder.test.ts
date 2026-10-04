@@ -54,7 +54,7 @@ const values: MapValues = {
   excluded: 2
 };
 
-function build(over: { values?: MapValues; metric?: 'level' | 'change'; selectedId?: string | null; smallIds?: string[] } = {}) {
+function build(over: { values?: MapValues; metric?: 'level' | 'change'; selectedId?: string | null; smallIds?: string[]; observed?: boolean } = {}) {
   const result = buildProvinceMap(
     {
       geo,
@@ -64,10 +64,23 @@ function build(over: { values?: MapValues; metric?: 'level' | 'change'; selected
       unit: 't',
       indicatorLabel: 'producción de oro'
     },
-    { metric: over.metric ?? 'level', selectedId: over.selectedId ?? null, scenario: 'expected', year: 2027 }
+    { metric: over.metric ?? 'level', selectedId: over.selectedId ?? null, scenario: 'expected', year: 2027, observed: over.observed }
   );
   return { ...result, option: result.option as unknown as Option };
 }
+
+describe('buildProvinceMap with observed data', () => {
+  it('shows the value and the rank, with no p10-p90 line and no scenario', () => {
+    const { option } = build({ observed: true });
+    expect(option.tooltip.formatter({ name: 'AR-B' })).toBe('Buenos Aires<br/>25 t<br/>Puesto 1');
+  });
+
+  it('still says "sin datos" for a province without a value', () => {
+    expect(build({ observed: true }).option.tooltip.formatter({ name: 'AR-C' })).toBe(
+      'Ciudad Autónoma de Buenos Aires<br/>sin datos'
+    );
+  });
+});
 
 describe('buildProvinceMap', () => {
   it('registers features by their AR-X id and binds the map series to the geo component', () => {
