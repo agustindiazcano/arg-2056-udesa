@@ -72,9 +72,9 @@ export function buildLongRun(view: LongRunView, opts: LongRunOpts) {
         ? [
             {
               xAxis: String(year),
-              name: `Year ${year}`,
+              name: `Año ${year}`,
               lineStyle: { color: tokens.ink2, width: 1, type: 'solid' },
-              label: { formatter: `Year ${year}`, color: tokens.ink2 }
+              label: { formatter: `Año ${year}`, color: tokens.ink2 }
             }
           ]
         : []
@@ -101,7 +101,7 @@ export function buildLongRun(view: LongRunView, opts: LongRunOpts) {
         if (index === undefined || label === undefined) return '';
         const rows = view.series.map((s) => {
           const value = s.points[index]?.value ?? null;
-          return `${s.country}: ${value === null ? 'No data' : formatValue(value, view.unit)}`;
+          return `${s.country}: ${value === null ? 'Sin datos' : formatValue(value, view.unit)}`;
         });
         return [label, ...rows].join('<br/>');
       }
@@ -117,7 +117,7 @@ export function buildLongRun(view: LongRunView, opts: LongRunOpts) {
     },
     yAxis: {
       type: 'value',
-      name: view.mode === 'index' ? `Index (base year = ${view.baseYear})` : view.unit,
+      name: view.mode === 'index' ? `Índice (año base = ${view.baseYear})` : view.unit,
       nameTextStyle: { color: tokens.muted },
       splitLine: { lineStyle: { color: tokens.grid, width: 1 } },
       axisLabel: { color: tokens.muted }
@@ -127,16 +127,16 @@ export function buildLongRun(view: LongRunView, opts: LongRunOpts) {
 
   const home = view.series.find((s) => s.country === highlight);
   const known = home?.points.filter((p) => p.value !== null) ?? [];
-  let summary = `No ${indicatorLabel} data for ${highlight}.`;
+  let summary = `Sin datos de ${indicatorLabel} para ${highlight}.`;
   if (known.length > 0) {
     const a = known[0]!;
     const b = known[known.length - 1]!;
     const label =
-      view.mode === 'index' ? `${indicatorLabel} (index, base year ${view.baseYear} = 100)` : indicatorLabel;
+      view.mode === 'index' ? `${indicatorLabel} (índice, año base ${view.baseYear} = 100)` : indicatorLabel;
     const peers = view.series.length - 1;
     summary =
-      `${highlight} ${label}: ${formatValue(a.value, view.unit)} in ${a.year} to ` +
-      `${formatValue(b.value, view.unit)} in ${b.year}, compared with ${peers} ${peers === 1 ? 'peer' : 'peers'}`;
+      `${highlight}, ${label}: de ${formatValue(a.value, view.unit)} en ${a.year} a ` +
+      `${formatValue(b.value, view.unit)} en ${b.year}, comparado con ${peers} ${peers === 1 ? 'país' : 'países'}`;
   }
 
   return { option, excluded, summary };

@@ -38,9 +38,9 @@ export function buildRankHistory(history: RankPoint[], opts: RankHistoryOpts) {
         ? [
             {
               xAxis: String(year),
-              name: `Year ${year}`,
+              name: `Año ${year}`,
               lineStyle: { color: tokens.ink2, width: 1, type: 'solid' },
-              label: { formatter: `Year ${year}`, color: tokens.ink2 }
+              label: { formatter: `Año ${year}`, color: tokens.ink2 }
             }
           ]
         : []
@@ -54,7 +54,7 @@ export function buildRankHistory(history: RankPoint[], opts: RankHistoryOpts) {
       formatter: (params: Array<{ dataIndex: number }>) => {
         const point = history[params[0]?.dataIndex ?? -1];
         if (!point) return '';
-        return point.rank === null ? `${point.year}<br/>No data` : `${point.year}<br/>rank ${point.rank} of ${point.of}`;
+        return point.rank === null ? `${point.year}<br/>Sin datos` : `${point.year}<br/>puesto ${point.rank} de ${point.of}`;
       }
     },
     grid: { left: '2%', right: '4%', bottom: '2%', top: '10%', containLabel: true },
@@ -68,7 +68,7 @@ export function buildRankHistory(history: RankPoint[], opts: RankHistoryOpts) {
     },
     yAxis: {
       type: 'value',
-      name: 'Rank',
+      name: 'Puesto',
       inverse: true,
       min: 1,
       max: worst,
@@ -81,16 +81,16 @@ export function buildRankHistory(history: RankPoint[], opts: RankHistoryOpts) {
   };
 
   const known = history.filter((p) => p.rank !== null && p.of !== null);
-  let summary = `No rank data for ${highlight}.`;
+  let summary = `Sin datos de puesto para ${highlight}.`;
   if (known.length === 1) {
     const a = known[0]!;
-    summary = `${highlight} ranks ${ordinal(a.rank!)} of ${a.of} in ${a.year} in ${indicatorLabel}`;
+    summary = `${highlight}: ${ordinal(a.rank!)} de ${a.of} en ${a.year} (${indicatorLabel})`;
   } else if (known.length > 1) {
     const a = known[0]!;
     const b = known[known.length - 1]!;
     summary =
-      `${highlight} ranks ${ordinal(a.rank!)} of ${a.of} in ${a.year} and ` +
-      `${ordinal(b.rank!)} of ${b.of} in ${b.year} in ${indicatorLabel}`;
+      `${highlight}: ${ordinal(a.rank!)} de ${a.of} en ${a.year} y ` +
+      `${ordinal(b.rank!)} de ${b.of} en ${b.year} (${indicatorLabel})`;
   }
 
   return { option, excluded: ranks.filter((r) => r === null).length, summary };

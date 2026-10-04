@@ -411,3 +411,7 @@ main.scene-container {
 .filter-bar .chip {
   white-space: nowrap;
 }
+
+.scene-error {
+  color: var(--state-critical);
+}

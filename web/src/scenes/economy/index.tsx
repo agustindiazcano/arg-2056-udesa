@@ -8,6 +8,10 @@ import { formatValue } from '../../charts/format.js';
 import { ERAS } from '../../content/eras.js';
 import { useDataset } from '../../data/useDataset.js';
 import { useStore } from '../../state/store.js';
+import { FilterBar, FilterChip } from '../../ui/FilterBar.js';
+import { SceneShell } from '../../ui/SceneShell.js';
+import { SceneError, SceneLoading } from '../../ui/SceneStatus.js';
+import { TableToggle } from '../../ui/TableToggle.js';
 import { parseEconomySeries } from '../../types/index.js';
 import type { EconomyIndicator } from '../../types/index.js';
 import { StatTiles } from './StatTiles.js';
@@ -17,15 +21,15 @@ import type { LongRunMode } from './selectors.js';
 /** Country code of the home country in the dataset (ISO 3166-1 alpha-3). */
 const HOME = 'ARG';
 const MAX_COUNTRIES = 8;
-const NO_DATA = 'no data';
+const NO_DATA = 'sin datos';
 
 const INDICATOR_LABEL: Record<EconomyIndicator, string> = {
-  gdp_constant_usd: 'GDP',
-  gdp_per_capita_usd: 'GDP per capita',
-  population: 'Population',
-  hdi: 'HDI',
-  exports_usd: 'Exports',
-  imports_usd: 'Imports'
+  gdp_constant_usd: 'PIB',
+  gdp_per_capita_usd: 'PIB per cápita',
+  population: 'Población',
+  hdi: 'IDH',
+  exports_usd: 'Exportaciones',
+  imports_usd: 'Importaciones'
 };
 
 function unique<T>(items: T[]): T[] {
@@ -106,10 +110,8 @@ export default function Scene() {
     }
   };
 
-  if (status === 'loading') return <div style={{ color: 'var(--ink)' }}>Loading...</div>;
-  if (status === 'error' || !data || !indicator) {
-    return <div style={{ color: 'var(--state-critical)' }}>Error loading data.</div>;
-  }
+  if (status === 'loading') return <SceneLoading />;
+  if (status === 'error' || !data || !indicator) return <SceneError />;
 
   const displayed = records.filter((r) => r.indicator === indicator && selected.includes(r.country));
   const sources = unique(displayed.map((r) => r.source)).sort();
@@ -118,7 +120,7 @@ export default function Scene() {
   const longTable =
     longAsTable && view
       ? {
-          columns: [{ key: 'year', header: 'Year' }, ...view.series.map((s) => ({ key: s.country, header: s.country }))],
+          columns: [{ key: 'year', header: 'Año' }, ...view.series.map((s) => ({ key: s.country, header: s.country }))],
           rows: view.years.map((y, i) => {
             const row: Record<string, string | number> = { year: y };
             for (const s of view.series) {
@@ -131,71 +133,60 @@ export default function Scene() {
       : null;
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        height: '100%',
-        width: '100%',
-        color: 'var(--ink)',
-        padding: 'var(--space-md)',
-        boxSizing: 'border-box',
-        overflowY: 'auto'
-      }}
+    <SceneShell
+      title="Argentina en el largo plazo"
+      subtitle="Desde 1880 hasta hoy, frente a sus pares de América Latina"
+      sources={sources}
+      retrievedAt={latest}
     >
-      <div style={{ marginBottom: 'var(--space-md)' }}>
-        <h1 style={{ margin: 0 }}>Argentina in the long run</h1>
-        <p style={{ margin: 0, color: 'var(--ink-2)' }}>From 1880 to today, compared with its Latin American peers</p>
-      </div>
-
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--space-sm)', marginBottom: 'var(--space-sm)' }}>
+      <FilterBar label="Indicador y vista">
         {indicators.map((i) => (
-          <button key={i} aria-pressed={i === indicator} onClick={() => setIndicatorChoice(i)}>
+          <FilterChip key={i} pressed={i === indicator} onClick={() => setIndicatorChoice(i)}>
             {INDICATOR_LABEL[i]}
-          </button>
+          </FilterChip>
         ))}
-        <button aria-pressed={mode === 'level'} onClick={() => setMode('level')}>
-          Level
-        </button>
-        <button aria-pressed={mode === 'index'} onClick={() => setMode('index')}>
-          Index
-        </button>
-      </div>
+        <FilterChip pressed={mode === 'level'} onClick={() => setMode('level')}>
+          Nivel
+        </FilterChip>
+        <FilterChip pressed={mode === 'index'} onClick={() => setMode('index')}>
+          Índice
+        </FilterChip>
+      </FilterBar>
 
       {available.length === 0 ? (
-        <div style={{ color: 'var(--state-warning)' }}>No country has data for this indicator.</div>
+        <div style={{ color: 'var(--state-warning)' }}>Ningún país tiene datos para este indicador.</div>
       ) : (
         <>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--space-sm)', marginBottom: 'var(--space-sm)' }}>
+          <FilterBar label="Países">
             {available.map((c) => (
-              <button
+              <FilterChip
                 key={c}
-                aria-pressed={selected.includes(c)}
+                pressed={selected.includes(c)}
                 disabled={c === HOME}
                 onClick={() => toggleCountry(c)}
                 onMouseEnter={() => setHovered(c)}
                 onMouseLeave={() => setHovered(null)}
               >
                 {c}
-              </button>
+              </FilterChip>
             ))}
-          </div>
+          </FilterBar>
           {limitReached && (
             <div style={{ color: 'var(--state-warning)', marginBottom: 'var(--space-sm)' }}>
-              {`At most ${MAX_COUNTRIES} countries at once.`}
+              {`Máximo ${MAX_COUNTRIES} países a la vez.`}
             </div>
           )}
           {view && view.indexUnavailable && (
             <div style={{ color: 'var(--state-warning)', marginBottom: 'var(--space-sm)' }}>
-              Index view is not available: no year has a positive value for every selected country. Showing levels.
+              La vista de índice no está disponible: ningún año tiene un valor positivo para todos los países seleccionados. Se muestran los niveles.
             </div>
           )}
 
           <div style={{ color: 'var(--muted)', marginBottom: 'var(--space-sm)', display: 'flex', gap: 'var(--space-md)' }}>
-            <span>Year {year}</span>
+            <span>Año {year}</span>
             <input
               type="range"
-              aria-label="Playhead year"
+              aria-label="Año del cursor"
               min={view?.years[0] ?? year}
               max={view?.years[view.years.length - 1] ?? year}
               value={year}
@@ -206,32 +197,28 @@ export default function Scene() {
           <div style={{ display: 'flex', gap: 'var(--space-lg)', flex: '1 0 auto' }}>
             <div style={{ flex: 2, display: 'flex', flexDirection: 'column', minHeight: '320px' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 'var(--space-sm)' }}>
-                <span>Long run (era bands are placeholders)</span>
-                <button aria-pressed={longAsTable} onClick={() => setLongAsTable(!longAsTable)}>
-                  Table view
-                </button>
+                <span>Largo plazo (las franjas de eras son provisorias)</span>
+                <TableToggle pressed={longAsTable} onToggle={() => setLongAsTable(!longAsTable)} />
               </div>
               <div style={{ flex: 1, minHeight: '280px' }}>
-                {longTable && <DataTable caption="Long run" columns={longTable.columns} data={longTable.rows} />}
+                {longTable && <DataTable caption="Largo plazo" columns={longTable.columns} data={longTable.rows} />}
                 {!longTable && longRun && <EChart option={longRun.option} aria-label={longRun.summary} />}
               </div>
             </div>
 
             <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: '320px' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 'var(--space-sm)' }}>
-                <span>Ranking in {year}</span>
-                <button aria-pressed={barsAsTable} onClick={() => setBarsAsTable(!barsAsTable)}>
-                  Table view
-                </button>
+                <span>Puesto en {year}</span>
+                <TableToggle pressed={barsAsTable} onToggle={() => setBarsAsTable(!barsAsTable)} />
               </div>
               <div style={{ flex: 1, minHeight: '280px' }}>
                 {barsAsTable ? (
                   <DataTable
                     caption="Ranking"
                     columns={[
-                      { key: 'rank', header: 'Rank' },
-                      { key: 'country', header: 'Country' },
-                      { key: 'value', header: 'Value' }
+                      { key: 'rank', header: 'Puesto' },
+                      { key: 'country', header: 'País' },
+                      { key: 'value', header: 'Valor' }
                     ]}
                     data={rank.rows.map((r) => ({ rank: r.rank, country: r.geo, value: formatValue(r.value, levelUnit) }))}
                   />
@@ -244,19 +231,17 @@ export default function Scene() {
 
           <div style={{ display: 'flex', flexDirection: 'column', minHeight: '220px', marginTop: 'var(--space-md)' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 'var(--space-sm)' }}>
-              <span>{`Rank of ${HOME} over time`}</span>
-              <button aria-pressed={historyAsTable} onClick={() => setHistoryAsTable(!historyAsTable)}>
-                Table view
-              </button>
+              <span>{`Puesto de ${HOME} a lo largo del tiempo`}</span>
+              <TableToggle pressed={historyAsTable} onToggle={() => setHistoryAsTable(!historyAsTable)} />
             </div>
             <div style={{ flex: 1, minHeight: '180px' }}>
               {historyAsTable ? (
                 <DataTable
-                  caption="Rank history"
+                  caption="Historia del puesto"
                   columns={[
-                    { key: 'year', header: 'Year' },
-                    { key: 'rank', header: 'Rank' },
-                    { key: 'of', header: 'Of' }
+                    { key: 'year', header: 'Año' },
+                    { key: 'rank', header: 'Puesto' },
+                    { key: 'of', header: 'De' }
                   ]}
                   data={history.map((p) => ({ year: p.year, rank: p.rank ?? NO_DATA, of: p.of ?? NO_DATA }))}
                 />
@@ -269,12 +254,8 @@ export default function Scene() {
           <div style={{ marginTop: 'var(--space-md)' }}>
             <StatTiles records={records} indicator={indicator} year={year} home={HOME} countries={selected} unit={levelUnit} />
           </div>
-
-          <div style={{ marginTop: 'auto', paddingTop: 'var(--space-md)', fontSize: '12px', color: 'var(--ink-2)' }}>
-            {`Source: ${sources.join(', ')}, retrieved ${latest}`}
-          </div>
         </>
       )}
-    </div>
+    </SceneShell>
   );
 }
