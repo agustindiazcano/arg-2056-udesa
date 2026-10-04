@@ -13,12 +13,15 @@ interface SceneShellProps {
   children?: React.ReactNode;
 }
 
+/** "Fuente: A, B, consultado el 2 de octubre de 2026"; null when there is no source. */
+export function sourceLine(sources: readonly string[], retrievedAt?: string, dateLabel = 'consultado el'): string | null {
+  if (sources.length === 0) return null;
+  return `Fuente: ${sources.join(', ')}${retrievedAt ? `, ${dateLabel} ${formatDate(retrievedAt)}` : ''}`;
+}
+
 /** The frame every scene shares: the headline, the one-line subtitle, the content and the auditable source line. */
 export function SceneShell({ title, subtitle, sources, retrievedAt, dateLabel = 'consultado el', children }: SceneShellProps) {
-  const source =
-    sources.length === 0
-      ? null
-      : `Fuente: ${sources.join(', ')}${retrievedAt ? `, ${dateLabel} ${formatDate(retrievedAt)}` : ''}`;
+  const source = sourceLine(sources, retrievedAt, dateLabel);
   return (
     <div className="scene">
       <header className="scene-head">

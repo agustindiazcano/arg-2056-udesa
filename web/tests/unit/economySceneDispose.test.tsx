@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import React from 'react';
-import { render, screen, cleanup, configure, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent, cleanup, configure, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, afterEach } from 'vitest';
 import Scene from '../../src/scenes/economy/index.js';
 import './reducedMotionStub';
@@ -35,14 +35,17 @@ describe('Economy scene and echarts instances', () => {
     vi.unstubAllGlobals();
   });
 
-  it('creates the three chart instances, feeds them options and disposes every one on unmount', async () => {
+  it('creates one chart instance per view shown, disposes it when the view changes and on unmount', async () => {
     vi.stubGlobal('fetch', vi.fn(async () => ({ ok: true, status: 200, json: async () => records })));
     const { unmount } = render(<Scene />);
     await screen.findByRole('heading', { level: 1 });
-    await waitFor(() => expect(mockInit).toHaveBeenCalledTimes(3)); // long run, rank bars, rank history
+    await waitFor(() => expect(mockInit).toHaveBeenCalledTimes(1)); // the long run view
     expect(mockSetOption).toHaveBeenCalled();
     expect(mockDispose).not.toHaveBeenCalled();
+    fireEvent.click(screen.getByRole('button', { name: 'Ranking' }));
+    await waitFor(() => expect(mockInit).toHaveBeenCalledTimes(2));
+    expect(mockDispose).toHaveBeenCalledTimes(1); // the long run chart left with its view
     unmount();
-    expect(mockDispose).toHaveBeenCalledTimes(3);
+    expect(mockDispose).toHaveBeenCalledTimes(2);
   });
 });

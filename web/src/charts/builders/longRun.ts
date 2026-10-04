@@ -1,7 +1,7 @@
 import type { Era } from '../../content/eras.js';
 import type { LongRunView } from '../../scenes/economy/selectors.js';
 import { tokens } from '../../styles/tokens.js';
-import { formatValue } from '../format.js';
+import { formatValue, formatAxisNumber } from '../format.js';
 
 interface LongRunOpts {
   highlight: string;
@@ -120,7 +120,7 @@ export function buildLongRun(view: LongRunView, opts: LongRunOpts) {
       name: view.mode === 'index' ? `Índice (año base = ${view.baseYear})` : view.unit,
       nameTextStyle: { color: tokens.muted },
       splitLine: { lineStyle: { color: tokens.grid, width: 1 } },
-      axisLabel: { color: tokens.muted }
+      axisLabel: { color: tokens.muted, formatter: (v: number) => formatAxisNumber(v) }
     },
     series: [...ordered, markers]
   };

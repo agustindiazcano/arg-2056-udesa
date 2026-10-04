@@ -1,4 +1,5 @@
 import React from 'react';
+import { Tile, TileGrid } from '../../ui/Tile.js';
 import { formatNumber, formatPercent, formatValue } from '../../charts/format.js';
 import { positionLabel } from '../../content/labels.js';
 import { doublingYears, requiredRatePct, rule70, rule70ErrorPct } from './arithmetic.js';
@@ -19,20 +20,6 @@ interface StatTilesProps {
 
 const NO_DATA = 'sin datos';
 
-function Tile({ id, label, children }: { id: string; label: string; children: React.ReactNode }) {
-  return (
-    <div
-      data-testid={id}
-      role="group"
-      aria-label={label}
-      style={{ background: 'var(--surface)', border: '1px solid var(--border)', padding: 'var(--space-md)', flex: 1 }}
-    >
-      <div style={{ color: 'var(--ink-2)', fontSize: '12px' }}>{label}</div>
-      {children}
-    </div>
-  );
-}
-
 function Value({ text }: { text: string | null }) {
   return (
     <div style={{ fontSize: 'var(--font-xl)', color: text === null ? 'var(--muted)' : 'var(--ink)' }}>
@@ -49,7 +36,7 @@ export function StatTiles(p: StatTilesProps) {
   const required = requiredRatePct(p.target, years);
 
   return (
-    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--space-md)' }}>
+    <TileGrid>
       <Tile id="tile-gpc" label={`PIB per cápita en ${p.lastYear}`}>
         <Value text={p.gpcMultiple === null ? null : `${formatNumber(p.gpcMultiple, 2)} veces su nivel de ${p.firstYear}`} />
       </Tile>
@@ -87,6 +74,6 @@ export function StatTiles(p: StatTilesProps) {
           />
         </label>
       </Tile>
-    </div>
+    </TileGrid>
   );
 }

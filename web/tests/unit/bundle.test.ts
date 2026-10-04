@@ -214,6 +214,15 @@ describe('compare', () => {
     ]);
   });
 
+  it('gives a chunk its own budget when budgets.chunk_overrides names it, and chunk_max to the rest', () => {
+    const withOverride: Budgets = { ...budgets, chunk_overrides: { 'src/heavy.ts': 900 } };
+    const rows = compare({ initial: { main: 1, references: 1 }, chunks: { 'src/heavy.ts': 800, 'src/lazy.ts': 201 } }, withOverride);
+    expect(rows.filter((r) => r.kind === 'chunk').map((r) => [r.name, r.budget, r.over])).toEqual([
+      ['src/heavy.ts', 900, false],
+      ['src/lazy.ts', 200, true]
+    ]);
+  });
+
   it('throws when an initial load has no budget', () => {
     expect(() => compare({ initial: { main: 1, other: 1 }, chunks: {} }, budgets)).toThrow(
       'no budget for the initial load "other"'

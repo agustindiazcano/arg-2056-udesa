@@ -1,6 +1,6 @@
 import type { RankRow } from '../../scenes/economy/selectors.js';
 import { tokens } from '../../styles/tokens.js';
-import { formatValue, ordinal } from '../format.js';
+import { formatValue, ordinal, formatAxisNumber } from '../format.js';
 
 interface RankBarsOpts {
   highlight: string;
@@ -28,7 +28,7 @@ export function buildRankBars(rows: RankRow[], opts: RankBarsOpts) {
       name: unit,
       nameTextStyle: { color: tokens.muted },
       splitLine: { lineStyle: { color: tokens.grid, width: 1 } },
-      axisLabel: { color: tokens.muted }
+      axisLabel: { color: tokens.muted, formatter: (v: number) => formatAxisNumber(v) }
     },
     yAxis: {
       type: 'category',

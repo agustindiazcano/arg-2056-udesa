@@ -2,7 +2,7 @@ import { positionLabel } from '../../content/labels.js';
 import { positionVsRange, summaryText } from '../../scenes/sandbox/selectors.js';
 import type { PathView } from '../../scenes/sandbox/selectors.js';
 import { BAND_ALPHA, tokens } from '../../styles/tokens.js';
-import { formatValue } from '../format.js';
+import { formatValue, formatAxisNumber } from '../format.js';
 
 interface SandboxPathOpts {
   year: number;
@@ -121,7 +121,7 @@ export function buildSandboxPath(view: PathView, opts: SandboxPathOpts) {
       name: view.unit,
       nameTextStyle: { color: tokens.muted },
       splitLine: { lineStyle: { color: tokens.grid, width: 1 } },
-      axisLabel: { color: tokens.muted }
+      axisLabel: { color: tokens.muted, formatter: (v: number) => formatAxisNumber(v) }
     },
     series: [bandBase, bandSpan, expected, visitor, markers]
   };

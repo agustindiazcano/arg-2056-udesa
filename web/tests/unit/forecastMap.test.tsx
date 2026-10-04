@@ -109,6 +109,8 @@ function Harness() {
 
 async function loadedWithMap() {
   render(<Harness />);
+  await screen.findByRole('heading', { level: 1 });
+  fireEvent.click(screen.getByRole('button', { name: 'Mapa' }));
   await waitFor(() => expect(mapChart()).toBeDefined());
 }
 
@@ -123,7 +125,7 @@ describe('Forecast scene: province map', () => {
     vi.unstubAllGlobals();
   });
 
-  it('renders the map tab by default once the geometry is loaded and registers the geometry once', async () => {
+  it('renders the map once its view is chosen and registers the geometry once', async () => {
     stubFetch();
     await loadedWithMap();
     expect(screen.getByRole('button', { name: 'Mapa' }).getAttribute('aria-pressed')).toBe('true');
@@ -234,7 +236,7 @@ describe('Forecast scene: province map', () => {
     await waitFor(() => expect(mapOption().visualMap!.inRange.color).toEqual(SEQUENTIAL_BLUE));
   });
 
-  it('hides the metric toggle outside the map tab', async () => {
+  it('hides the metric toggle outside the map view', async () => {
     stubFetch();
     await loadedWithMap();
     expect(screen.getByRole('button', { name: 'Nivel' })).toBeDefined();
@@ -247,7 +249,7 @@ describe('Forecast scene: province map', () => {
     stubFetch();
     await loadedWithMap();
     expect(screen.getByRole('img', { name: /^Mapa de/ })).toBeDefined();
-    fireEvent.click(screen.getAllByRole('button', { name: 'Ver tabla' })[1]!);
+    fireEvent.click(screen.getByRole('button', { name: 'Ver tabla' }));
     expect(screen.queryByRole('img', { name: /^Mapa de/ })).toBeNull();
 
     const table = screen.getByRole('table', { name: 'Mapa de provincias' });
@@ -263,12 +265,10 @@ describe('Forecast scene: province map', () => {
     expect(within(table).queryByText(/(^|\s)0 t$/)).toBeNull();
   });
 
-  it('shows a message and makes the ranking the default when the geometry is not available', async () => {
+  it('shows a message when the geometry is not available, and the other views still work', async () => {
     stubFetch('404');
     render(<Harness />);
     await screen.findByText(/Los escenarios son proyecciones condicionales, no predicciones\./);
-    await waitFor(() => expect(screen.getByRole('button', { name: 'Ranking' }).getAttribute('aria-pressed')).toBe('true'));
-    expect(screen.getByText('Provincias en 2026')).toBeDefined();
     expect(mapChart()).toBeUndefined();
     expect(mockRegisterMap).not.toHaveBeenCalled();
 
@@ -295,6 +295,8 @@ describe('Forecast scene: province map', () => {
   it('disposes every chart instance on unmount', async () => {
     stubFetch();
     const { unmount } = render(<Harness />);
+    await screen.findByRole('heading', { level: 1 });
+    fireEvent.click(screen.getByRole('button', { name: 'Mapa' }));
     await waitFor(() => expect(mapChart()).toBeDefined());
     expect(instances.length).toBeGreaterThanOrEqual(2); // the fan and the map
     unmount();

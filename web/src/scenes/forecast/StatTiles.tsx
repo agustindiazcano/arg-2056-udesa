@@ -3,6 +3,7 @@ import { cagr, aiDelta, endpoint } from './selectors.js';
 import type { ForecastView } from './selectors.js';
 import { formatPercent, formatValue } from '../../charts/format.js';
 import { CountUp } from '../../motion/CountUp.js';
+import { Tile, TileGrid } from '../../ui/Tile.js';
 import type { Scenario } from '../../types/index.js';
 
 interface StatTilesProps {
@@ -12,20 +13,6 @@ interface StatTilesProps {
 }
 
 const NO_DATA = 'sin datos';
-
-function Tile({ id, label, children }: { id: string; label: string; children: React.ReactNode }) {
-  return (
-    <div
-      data-testid={id}
-      role="group"
-      aria-label={label}
-      style={{ background: 'var(--surface)', border: '1px solid var(--border)', padding: 'var(--space-md)', flex: 1 }}
-    >
-      <div style={{ color: 'var(--ink-2)', fontSize: '12px' }}>{label}</div>
-      {children}
-    </div>
-  );
-}
 
 export function StatTiles({ view, scenario, aiOverlay }: StatTilesProps) {
   const selected = view.series[scenario];
@@ -40,7 +27,7 @@ export function StatTiles({ view, scenario, aiOverlay }: StatTilesProps) {
   const unit = selected?.unit ?? '';
 
   return (
-    <div style={{ display: 'flex', gap: 'var(--space-md)' }}>
+    <TileGrid>
       <Tile id="tile-value" label={last === null ? 'Mediana en el último año' : `Mediana en ${last}`}>
         {end ? (
           <>
@@ -67,6 +54,6 @@ export function StatTiles({ view, scenario, aiOverlay }: StatTilesProps) {
           </div>
         </Tile>
       )}
-    </div>
+    </TileGrid>
   );
 }

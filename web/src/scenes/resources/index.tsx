@@ -9,23 +9,30 @@ import {
   CompositionKind
 } from '../../types/index.js';
 import { PROVINCES } from '../../types/province.js';
+import type { ProvinceId } from '../../types/province.js';
+import { mapSummary } from '../forecast/mapSelectors.js';
 import { buildTreemap } from '../../charts/builders/treemap.js';
 import { buildProvinceBars } from '../../charts/builders/provinceBars.js';
 import { buildTrend } from '../../charts/builders/trend.js';
 import { selectProjectsForTable, getAvailableYears, clampYear } from './selectors.js';
 import { resourceMapValues } from './mapValues.js';
 import { ProvinceMap, useProvinces } from '../forecast/ProvinceMap.js';
-import { indicatorSentence } from '../../content/labels.js';
 import { EChart } from '../../charts/EChart.js';
 import { DataTable } from '../../charts/DataTable.js';
-import { projectStatusLabel, resourceLabel } from '../../content/labels.js';
+import { formatValue } from '../../charts/format.js';
+import { Chart2D3D } from '../../charts3d/Chart2D3D.js';
+import { barsSpec, linesSpec } from '../../charts3d/specs.js';
+import { indicatorSentence, projectStatusLabel, resourceLabel } from '../../content/labels.js';
+import { Dashboard } from '../../dashboard/Dashboard.js';
+import type { DashView } from '../../dashboard/types.js';
+import { ChartPanel } from '../../ui/ChartPanel.js';
 import { FilterBar, FilterChip } from '../../ui/FilterBar.js';
-import { SceneShell } from '../../ui/SceneShell.js';
 import { ScopeNote } from '../../ui/ScopeNote.js';
 import { SceneError, SceneLoading } from '../../ui/SceneStatus.js';
-import { TableToggle } from '../../ui/TableToggle.js';
+import { Tile, TileGrid } from '../../ui/Tile.js';
 
 const RESOURCES = ['lithium', 'copper', 'gold', 'oil', 'gas'];
+const NO_DATA = 'sin datos';
 
 export default function Scene() {
   const yearFloat = useStore(state => state.yearFloat);
@@ -35,9 +42,6 @@ export default function Scene() {
   const [kind, setKind] = useState<CompositionKind>('exports_by_product'); // the brief says "exports (or GDP)"; exports by default
   const [selectedResource, setSelectedResource] = useState('lithium');
 
-  const [treemapTable, setTreemapTable] = useState(false);
-  const [barsTable, setBarsTable] = useState(false);
-  const [trendTable, setTrendTable] = useState(false);
   const provinces = useProvinces();
   const dispatch = useStore(state => state.dispatch);
 
@@ -124,26 +128,27 @@ export default function Scene() {
   const resourceUnit = rpData?.find(r => r.resource === selectedResource)?.unit;
   const provinceName = (geo: string) => PROVINCES.find(p => p.id === geo)?.name ?? geo;
   const trendIsProvincial = trendGeo !== 'AR';
+  const shortName = (name: string) => (name.length > 14 ? `${name.slice(0, 13)}…` : name);
+  const trendRows = (rpData ?? []).filter(r => r.resource === selectedResource && r.geo === trendGeo).sort((a, b) => a.year - b.year);
+  const trendTitle = trendIsProvincial ? `Tendencia de ${provinceName(trendGeo)}` : 'Tendencia nacional';
 
-  return (
-    <SceneShell
-      title="Recursos naturales"
-      subtitle="Inversión, producción y composición de la economía"
-      sources={sourcesAndDates.sources}
-      retrievedAt={sourcesAndDates.latestDate}
-    >
-      {province !== null && <ScopeNote>La composición es nacional: el filtro de provincia no aplica.</ScopeNote>}
-      {province !== null && !trendIsProvincial && (
-        <ScopeNote>
-          {`No hay serie provincial de ${resourceName} para ${provinceName(province)}: se muestra el total nacional.`}
-        </ScopeNote>
-      )}
+  // the indicators of the right panel, from the production of the selected resource and year
+  const yearRows = (rpData ?? []).filter(r => r.resource === selectedResource && r.year === rpYear);
+  const national = yearRows.find(r => r.geo === 'AR')?.value ?? null;
+  const byProvince = yearRows
+    .filter(r => r.geo !== 'AR' && r.value !== null)
+    .sort((a, b) => (b.value ?? 0) - (a.value ?? 0));
+  const leader = byProvince[0];
 
-      <div style={{ display: 'flex', gap: 'var(--space-lg)', flex: '1 0 auto' }}>
-
-        {/* Left Column */}
-        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 'var(--space-md)' }}>
-          <div style={{ display: 'flex', gap: 'var(--space-sm)', alignItems: 'center' }}>
+  const views: DashView[] = [
+    {
+      id: 'composition',
+      name: 'Composición',
+      thumb: { kind: 'treemap' },
+      content: (
+        <ChartPanel
+          title={`Composición (${compositionYear})`}
+          actions={
             <FilterBar label="Composición">
               <FilterChip pressed={kind === 'exports_by_product'} onClick={() => setKind('exports_by_product')}>
                 Exportaciones
@@ -152,15 +157,10 @@ export default function Scene() {
                 PIB
               </FilterChip>
             </FilterBar>
-            <span style={{ marginLeft: 'auto', color: 'var(--muted)' }}>Año: {compositionYear}</span>
-            <TableToggle pressed={treemapTable} onToggle={() => setTreemapTable(!treemapTable)} />
-          </div>
-
-          <div style={{ flex: 1, minHeight: '300px' }}>
-            {!treemapTable && treemapResult && (
-              <EChart option={treemapResult.option} aria-label={treemapResult.summary} />
-            )}
-            {treemapTable && compData && (
+          }
+          chart={treemapResult && <EChart option={treemapResult.option} aria-label={treemapResult.summary} />}
+          table={
+            compData && (
               <DataTable
                 caption="Composición"
                 columns={[
@@ -169,127 +169,224 @@ export default function Scene() {
                   { key: 'value_usd', header: 'Valor (USD)', format: 'usd' }
                 ]}
                 data={selectComposition(compData, { kind, year: compositionYear })}
+                pageSize="fit"
               />
-            )}
-          </div>
-        </div>
-
-        {/* Right Column */}
-        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 'var(--space-md)' }}>
-          <FilterBar label="Recurso">
-            {RESOURCES.map(r => (
-              <FilterChip key={r} pressed={selectedResource === r} onClick={() => setSelectedResource(r)}>
-                {resourceLabel(r)}
-              </FilterChip>
-            ))}
-          </FilterBar>
-
-          <div style={{ display: 'flex', gap: 'var(--space-md)', flex: 1 }}>
-
-            {/* Province Bars */}
-            <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 'var(--space-sm)' }}>
-                <span>Producción por provincia ({rpYear})</span>
-                <TableToggle pressed={barsTable} onToggle={() => setBarsTable(!barsTable)} />
-              </div>
-              <div style={{ flex: 1, minHeight: '200px' }}>
-                {!barsTable && provinceBarsResult && (
-                  <EChart option={provinceBarsResult.option} aria-label={provinceBarsResult.summary} />
+            )
+          }
+        />
+      )
+    },
+    {
+      id: 'by-province',
+      name: 'Por provincia',
+      thumb: { kind: 'bars', values: byProvince.slice(0, 8).map(r => r.value ?? 0) },
+      content: (
+        <ChartPanel
+          title={`Producción por provincia (${rpYear})`}
+          chart={
+            provinceBarsResult && (
+              <Chart2D3D
+                spec={barsSpec(
+                  byProvince.slice(0, 10).map(r => ({ label: shortName(provinceName(r.geo)), value: r.value })),
+                  {
+                    title: `Producción por provincia (${rpYear})`,
+                    unit: resourceUnit ?? '',
+                    highlight: province ? shortName(provinceName(province)) : null,
+                    summary: provinceBarsResult.summary
+                  }
                 )}
-                {barsTable && rpData && (
-                  <DataTable
-                    caption={`Producción por provincia (${rpYear})`}
-                    columns={[
-                      { key: 'geo', header: 'Provincia' },
-                      { key: 'value', header: 'Valor', format: 'unit', unit: resourceUnit }
-                    ]}
-                    data={rpData
-                      .filter(r => r.resource === selectedResource && r.year === rpYear && r.geo !== 'AR')
-                      .sort((a, b) => (b.value || 0) - (a.value || 0))
-                      .map(r => ({ ...r, geo: provinceName(r.geo) }))}
+              >
+                <EChart option={provinceBarsResult.option} aria-label={provinceBarsResult.summary} />
+              </Chart2D3D>
+            )
+          }
+          table={
+            rpData && (
+              <DataTable
+                caption={`Producción por provincia (${rpYear})`}
+                columns={[
+                  { key: 'geo', header: 'Provincia' },
+                  { key: 'value', header: 'Valor', format: 'unit', unit: resourceUnit }
+                ]}
+                data={rpData
+                  .filter(r => r.resource === selectedResource && r.year === rpYear && r.geo !== 'AR')
+                  .sort((a, b) => (b.value || 0) - (a.value || 0))
+                  .map(r => ({ ...r, geo: provinceName(r.geo) }))}
+                pageSize="fit"
+              />
+            )
+          }
+        />
+      )
+    },
+    {
+      id: 'trend',
+      name: 'Tendencia',
+      thumb: { kind: 'line', values: (rpData ?? []).filter(r => r.resource === selectedResource && r.geo === trendGeo).sort((a, b) => a.year - b.year).map(r => r.value ?? 0) },
+      content: (
+        <ChartPanel
+          title={trendTitle}
+          chart={
+            trendResult && (
+              <Chart2D3D
+                spec={linesSpec({
+                  title: trendTitle,
+                  unit: resourceUnit ?? '',
+                  xLabels: trendRows.map(r => String(r.year)),
+                  series: [{ name: trendIsProvincial ? provinceName(trendGeo) : 'Nacional', values: trendRows.map(r => r.value), tone: 'accent' }],
+                  marker: trendRows.findIndex(r => r.year === rpYear),
+                  summary: trendResult.summary
+                })}
+              >
+                <EChart option={trendResult.option} aria-label={trendResult.summary} />
+              </Chart2D3D>
+            )
+          }
+          table={
+            rpData && (
+              <DataTable
+                caption={trendTitle}
+                columns={[
+                  { key: 'year', header: 'Año' },
+                  { key: 'value', header: 'Valor', format: 'unit', unit: resourceUnit }
+                ]}
+                data={rpData.filter(r => r.resource === selectedResource && r.geo === trendGeo).sort((a, b) => a.year - b.year)}
+                pageSize="fit"
+              />
+            )
+          }
+        />
+      )
+    },
+    {
+      id: 'map',
+      name: 'Mapa',
+      thumb: { kind: 'map' },
+      content: (
+        <ChartPanel
+          title={`Mapa de producción por provincia (${rpYear})`}
+          chart={
+            <div className="map-view">
+              {provinces.status === 'loading' && (
+                <div style={{ color: 'var(--muted)' }}>Cargando la geometría de las provincias...</div>
+              )}
+              {provinces.status === 'error' && (
+                <div style={{ color: 'var(--state-warning)' }}>
+                  {`La geometría de las provincias no está disponible: ${provinces.message}`}
+                </div>
+              )}
+              {provinces.status === 'success' && mapValues && (
+                <Chart2D3D
+                  spec={{
+                    kind: 'map',
+                    title: `Mapa de producción por provincia (${rpYear})`,
+                    geo: provinces.geo,
+                    values: mapValues,
+                    metric: 'level',
+                    selectedId: province,
+                    formatValue: (v) => formatValue(v, resourceUnit ?? ''),
+                    onSelect: (id) => dispatch({ type: 'selectProvince', province: id as ProvinceId | null }),
+                    summary: mapSummary(mapValues, 'level', indicatorSentence('resource_production', selectedResource), rpYear, resourceUnit ?? '')
+                  }}
+                >
+                  <ProvinceMap
+                    geo={provinces.geo}
+                    values={mapValues}
+                    unit={resourceUnit ?? ''}
+                    indicatorLabel={indicatorSentence('resource_production', selectedResource)}
+                    metric="level"
+                    selectedId={province}
+                    year={rpYear}
+                    observed
+                    hideTitle
+                    onSelect={(id) => dispatch({ type: 'selectProvince', province: id })}
                   />
-                )}
-              </div>
+                </Chart2D3D>
+              )}
+              {provinces.status === 'success' && (
+                <div style={{ fontSize: 'var(--font-sm)', color: 'var(--ink-2)' }}>
+                  {`Geometría de las provincias: ${provinces.meta.source}. ${provinces.meta.attribution}`}
+                </div>
+              )}
             </div>
-
-            {/* National Trend */}
-            <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 'var(--space-sm)' }}>
-                <span>{trendIsProvincial ? `Tendencia de ${provinceName(trendGeo)}` : 'Tendencia nacional'}</span>
-                <TableToggle pressed={trendTable} onToggle={() => setTrendTable(!trendTable)} />
-              </div>
-              <div style={{ flex: 1, minHeight: '200px' }}>
-                {!trendTable && trendResult && (
-                  <EChart option={trendResult.option} aria-label={trendResult.summary} />
-                )}
-                {trendTable && rpData && (
-                  <DataTable
-                    caption={trendIsProvincial ? `Tendencia de ${provinceName(trendGeo)}` : 'Tendencia nacional'}
-                    columns={[
-                      { key: 'year', header: 'Año' },
-                      { key: 'value', header: 'Valor', format: 'unit', unit: resourceUnit }
-                    ]}
-                    data={rpData.filter(r => r.resource === selectedResource && r.geo === trendGeo).sort((a, b) => a.year - b.year)}
-                  />
-                )}
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </div>
-
-      {/* Province map of the selected resource */}
-      <div style={{ marginTop: 'var(--space-lg)', display: 'flex', flexDirection: 'column' }}>
-        <h2 style={{ margin: '0 0 var(--space-sm)' }}>{`Mapa de producción por provincia (${rpYear})`}</h2>
-        {provinces.status === 'loading' && (
-          <div style={{ color: 'var(--muted)' }}>Cargando la geometría de las provincias...</div>
-        )}
-        {provinces.status === 'error' && (
-          <div style={{ color: 'var(--state-warning)' }}>
-            {`La geometría de las provincias no está disponible: ${provinces.message}`}
-          </div>
-        )}
-        {provinces.status === 'success' && mapValues && (
-          <div style={{ minHeight: '360px', display: 'flex' }}>
-            <ProvinceMap
-              geo={provinces.geo}
-              values={mapValues}
-              unit={resourceUnit ?? ''}
-              indicatorLabel={indicatorSentence('resource_production', selectedResource)}
-              metric="level"
-              selectedId={province}
-              year={rpYear}
-              observed
-              onSelect={(id) => dispatch({ type: 'selectProvince', province: id })}
+          }
+        />
+      )
+    },
+    {
+      id: 'projects',
+      name: 'Proyectos',
+      thumb: { kind: 'table' },
+      content: (
+        <ChartPanel
+          title={`Principales proyectos de inversión (${resourceName})`}
+          chart={
+            <DataTable
+              caption={`Proyectos de inversión de ${resourceName}`}
+              columns={[
+                { key: 'name', header: 'Nombre' },
+                { key: 'province', header: 'Provincia' },
+                { key: 'status', header: 'Estado' },
+                { key: 'capex_usd', header: 'CAPEX (USD)', format: 'usd' },
+                { key: 'start_year', header: 'Año de inicio' },
+                { key: 'capacity', header: 'Capacidad' }
+              ]}
+              data={projectsTableData}
+              pageSize="fit"
             />
-          </div>
-        )}
-        {provinces.status === 'success' && (
-          <div style={{ fontSize: 'var(--font-sm)', color: 'var(--ink-2)', marginTop: 'var(--space-sm)' }}>
-            {`Geometría de las provincias: ${provinces.meta.source}. ${provinces.meta.attribution}`}
-          </div>
-        )}
-      </div>
+          }
+        />
+      )
+    }
+  ];
 
-      {/* Bottom Projects Table */}
-      <div style={{ marginTop: 'var(--space-lg)' }}>
-        <h3>Principales proyectos de inversión ({resourceName})</h3>
-        <div>
-          <DataTable
-            caption={`Proyectos de inversión de ${resourceName}`}
-            columns={[
-              { key: 'name', header: 'Nombre' },
-              { key: 'province', header: 'Provincia' },
-              { key: 'status', header: 'Estado' },
-              { key: 'capex_usd', header: 'CAPEX (USD)', format: 'usd' },
-              { key: 'start_year', header: 'Año de inicio' },
-              { key: 'capacity', header: 'Capacidad' }
-            ]}
-            data={projectsTableData}
-          />
-        </div>
-      </div>
-    </SceneShell>
+  return (
+    <Dashboard
+      title="Recursos naturales"
+      subtitle="Inversión, producción y composición de la economía"
+      legend={[
+        { label: 'Provincia elegida', tone: 'blue' },
+        { label: 'Otras provincias', tone: 'muted' }
+      ]}
+      sources={sourcesAndDates.sources}
+      retrievedAt={sourcesAndDates.latestDate}
+      notes={
+        <>
+          {province !== null && <ScopeNote>La composición es nacional: el filtro de provincia no aplica.</ScopeNote>}
+          {province !== null && !trendIsProvincial && (
+            <ScopeNote>
+              {`No hay serie provincial de ${resourceName} para ${provinceName(province)}: se muestra el total nacional.`}
+            </ScopeNote>
+          )}
+        </>
+      }
+      rail={
+        <FilterBar label="Recurso">
+          {RESOURCES.map(r => (
+            <FilterChip key={r} pressed={selectedResource === r} onClick={() => setSelectedResource(r)}>
+              {resourceLabel(r)}
+            </FilterChip>
+          ))}
+        </FilterBar>
+      }
+      tiles={
+        <TileGrid>
+          <Tile id="tile-national" label={`Producción nacional en ${rpYear}`}>
+            <div className="tile-value">{national === null ? NO_DATA : formatValue(national, resourceUnit ?? '')}</div>
+          </Tile>
+          <Tile id="tile-leader" label="Provincia que más produce">
+            <div className="tile-value">{leader ? provinceName(leader.geo) : NO_DATA}</div>
+            {leader && <div className="tile-sub">{formatValue(leader.value, resourceUnit ?? '')}</div>}
+          </Tile>
+          <Tile id="tile-provinces" label="Provincias con datos">
+            <div className="tile-value">{`${byProvince.length} de ${PROVINCES.length}`}</div>
+          </Tile>
+          <Tile id="tile-projects" label="Proyectos listados">
+            <div className="tile-value">{projectsTableData.length}</div>
+          </Tile>
+        </TileGrid>
+      }
+      views={views}
+    />
   );
 }

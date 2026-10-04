@@ -1,6 +1,6 @@
 import { tokens } from '../../styles/tokens.js';
 import { scenarioLabel } from '../../content/labels.js';
-import { formatValue } from '../format.js';
+import { formatValue, formatAxisNumber } from '../format.js';
 import type { ProvinceId, Scenario } from '../../types/index.js';
 import type { RankRow } from '../../scenes/forecast/selectors.js';
 
@@ -77,7 +77,7 @@ export function buildRanking(rows: RankRow[], opts: RankingOpts) {
       name: opts.unit,
       nameTextStyle: { color: tokens.muted },
       splitLine: { lineStyle: { color: tokens.grid, width: 1 } },
-      axisLabel: { color: tokens.muted }
+      axisLabel: { color: tokens.muted, formatter: (v: number) => formatAxisNumber(v) }
     },
     yAxis: {
       type: 'category',

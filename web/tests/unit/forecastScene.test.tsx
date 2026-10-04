@@ -217,6 +217,7 @@ describe('Forecast scene', () => {
     stubFetch(fixture());
     await loaded();
     fireEvent.click(screen.getByRole('button', { name: 'Producción de recursos' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Ranking' }));
     expect(screen.getByText('Año 2026')).toBeDefined();
     // 2026: AR-B (30+1) above AR-A (20+1)
     expect(rankOption().yAxis!.data[0]).toContain('Buenos Aires');
@@ -238,6 +239,7 @@ describe('Forecast scene', () => {
     expect(line(fanOption(), 'expected')!.data).toEqual([1001, 1001, 1001]); // AR
     useStore.setState({ province: 'AR-A' });
     await waitFor(() => expect(line(fanOption(), 'expected')!.data).toEqual([21, 22, 23]));
+    fireEvent.click(screen.getByRole('button', { name: 'Ranking' }));
     const bars = rankOption().series!.find((s) => s.name === 'p50')!;
     const colors = bars.data.map((d) => d.itemStyle.color);
     // rank order at 2026: AR-B first, AR-A second; only AR-A keeps the scenario color
@@ -247,6 +249,7 @@ describe('Forecast scene', () => {
   it('says there is no province ranking for an indicator without province series', async () => {
     stubFetch(fixture());
     await loaded();
+    fireEvent.click(screen.getByRole('button', { name: 'Ranking' }));
     expect(screen.getByText('No hay series provinciales para este indicador en los datos.')).toBeDefined();
   });
 
@@ -280,7 +283,8 @@ describe('Forecast scene', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Producción de recursos' }));
     useStore.setState({ yearFloat: 2028 });
     await screen.findByText('Año 2028');
-    fireEvent.click(screen.getAllByRole('button', { name: 'Ver tabla' })[1]!);
+    fireEvent.click(screen.getByRole('button', { name: 'Ranking' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Ver tabla' }));
     const table = screen.getByRole('table');
     const rows = Array.from(table.querySelectorAll('tbody tr')).map((tr) =>
       Array.from(tr.querySelectorAll('td')).map((td) => td.textContent)

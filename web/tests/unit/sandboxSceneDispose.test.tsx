@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import React from 'react';
-import { render, screen, cleanup, configure, waitFor } from '@testing-library/react';
+import { render, screen, cleanup, configure, waitFor, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi, afterEach } from 'vitest';
 import Scene from '../../src/scenes/sandbox/index.js';
 
@@ -42,13 +42,16 @@ describe('Sandbox scene and echarts instances', () => {
     vi.unstubAllGlobals();
   });
 
-  it('creates the two chart instances, feeds them options and disposes both on unmount', async () => {
+  it('creates one chart instance per view shown, disposes it when the view changes and on unmount', async () => {
     vi.stubGlobal('fetch', vi.fn(async () => ({ ok: true, status: 200, json: async () => doc })));
     const { unmount } = render(<Scene />);
     await screen.findByText('Aritmética ilustrativa sobre los supuestos elegidos. No es el modelo de pronóstico.');
-    await waitFor(() => expect(mockInit).toHaveBeenCalledTimes(2));
+    await waitFor(() => expect(mockInit).toHaveBeenCalledTimes(1)); // the path view
     expect(mockSetOption).toHaveBeenCalled();
     expect(mockDispose).not.toHaveBeenCalled();
+    fireEvent.click(screen.getByRole('button', { name: 'Duplicación' }));
+    await waitFor(() => expect(mockInit).toHaveBeenCalledTimes(2));
+    expect(mockDispose).toHaveBeenCalledTimes(1);
     unmount();
     expect(mockDispose).toHaveBeenCalledTimes(2);
   });

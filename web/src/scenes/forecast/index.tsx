@@ -1,21 +1,26 @@
 import React, { useMemo, useState } from 'react';
 import { useStore } from '../../state/store.js';
 import { useDataset } from '../../data/useDataset.js';
-import { parseForecastOutput, SCENARIOS } from '../../types/index.js';
+import { parseForecastOutput, PROVINCES, SCENARIOS } from '../../types/index.js';
+import type { ProvinceId } from '../../types/index.js';
 import type { Indicator, ResourceId } from '../../types/index.js';
 import { buildFan } from '../../charts/builders/fan.js';
 import { buildRanking } from '../../charts/builders/ranking.js';
-import { formatValue } from '../../charts/format.js';
+import { formatPercent, formatValue } from '../../charts/format.js';
+import { Chart2D3D } from '../../charts3d/Chart2D3D.js';
+import { barsSpec, linesSpec } from '../../charts3d/specs.js';
+import { tokens } from '../../styles/tokens.js';
 import { indicatorLabel, indicatorSentence, resourceLabel, scenarioLabel } from '../../content/labels.js';
+import { Dashboard } from '../../dashboard/Dashboard.js';
+import type { DashView } from '../../dashboard/types.js';
+import { ChartPanel } from '../../ui/ChartPanel.js';
 import { FilterBar, FilterChip } from '../../ui/FilterBar.js';
-import { SceneShell } from '../../ui/SceneShell.js';
 import { SceneError, SceneLoading } from '../../ui/SceneStatus.js';
-import { TableToggle } from '../../ui/TableToggle.js';
 import { EChart } from '../../charts/EChart.js';
 import { DataTable } from '../../charts/DataTable.js';
 import { ProvinceMap, useProvinces } from './ProvinceMap.js';
 import { StatTiles } from './StatTiles.js';
-import { provinceMapValues } from './mapSelectors.js';
+import { mapSummary, provinceMapValues } from './mapSelectors.js';
 import type { MapMetric } from './mapSelectors.js';
 import { clampYear, forecastView, rankProvinces } from './selectors.js';
 import type { ForecastView, RankRow } from './selectors.js';
@@ -72,9 +77,6 @@ export default function Scene() {
 
   const [indicatorChoice, setIndicatorChoice] = useState<Indicator | null>(null);
   const [resourceChoice, setResourceChoice] = useState<ResourceId | null>(null);
-  const [fanAsTable, setFanAsTable] = useState(false);
-  const [rankAsTable, setRankAsTable] = useState(false);
-  const [userTab, setUserTab] = useState<'map' | 'ranking' | null>(null);
   const [metric, setMetric] = useState<MapMetric>('level');
 
   const provinces = useProvinces();
@@ -125,9 +127,6 @@ export default function Scene() {
     return { ...result, unit, built: buildRanking(result.rows, { scenario, unit, highlight: province, excluded: result.excluded }) };
   }, [data, indicator, resource, year, scenario, aiOverlay, province]);
 
-  // The map is the default tab once its geometry is available; until then (and if it never is) the ranking is.
-  const tab = userTab ?? (provinces.status === 'success' ? 'map' : 'ranking');
-
   const mapValues = useMemo(
     () =>
       data && indicator && provinces.status === 'success'
@@ -139,12 +138,184 @@ export default function Scene() {
   if (status === 'loading') return <SceneLoading />;
   if (status === 'error' || !data || !view || !indicator) return <SceneError />;
 
-  const fanRows = fanAsTable ? fanTable(view) : null;
+  const fanRows = fanTable(view);
+  const unit = data.series.find((x) => x.indicator === indicator && x.resource === resource)?.unit ?? '';
+  const selectedSeries = view.series[scenario] ?? SCENARIOS.map((sc) => view.series[sc]).find((x) => x !== undefined);
+
+  const fanYears = [...new Set(SCENARIOS.flatMap((sc) => view.series[sc]?.points.map((pt) => pt.year) ?? []))].sort((a, b) => a - b);
+  const at = (sc: (typeof SCENARIOS)[number], pick: 'p10' | 'p50' | 'p90') =>
+    fanYears.map((y) => view.series[sc]?.points.find((pt) => pt.year === y)?.[pick] ?? null);
+  const fanSpec = linesSpec({
+    title: 'Abanico del pronóstico',
+    unit,
+    xLabels: fanYears.map(String),
+    series: SCENARIOS.filter((sc) => view.series[sc] !== undefined).map((sc) => ({
+      name: scenarioLabel(sc),
+      values: at(sc, 'p50'),
+      tone: sc === scenario ? ('highlight' as const) : ('accent' as const),
+      color: tokens.scenario[sc]
+    })),
+    band: view.series[scenario] ? { lower: at(scenario, 'p10'), upper: at(scenario, 'p90') } : undefined,
+    marker: fanYears.indexOf(year),
+    summary: fan?.summary
+  });
+
+  const views: DashView[] = [
+    {
+      id: 'fan',
+      name: 'Abanico',
+      thumb: { kind: 'fan', values: selectedSeries?.points.map((pt) => pt.p50) },
+      content: (
+        <ChartPanel
+          title="Abanico del pronóstico"
+          chart={
+            fan && (
+              <Chart2D3D spec={fanSpec}>
+                <EChart option={fan.option} aria-label={fan.summary} />
+              </Chart2D3D>
+            )
+          }
+          table={<DataTable caption="Abanico del pronóstico" columns={fanRows.columns} data={fanRows.rows} pageSize="fit" />}
+        />
+      )
+    },
+    {
+      id: 'map',
+      name: 'Mapa',
+      thumb: { kind: 'map' },
+      content: (
+        <ChartPanel
+          title={`Mapa de provincias (${year})`}
+          actions={
+            <FilterBar label="Medida del mapa">
+              <FilterChip pressed={metric === 'level'} onClick={() => setMetric('level')}>
+                Nivel
+              </FilterChip>
+              <FilterChip pressed={metric === 'change'} onClick={() => setMetric('change')}>
+                {`Cambio desde ${data.horizon.start_year}`}
+              </FilterChip>
+            </FilterBar>
+          }
+          chart={
+            <div className="map-view">
+              {provinces.status === 'loading' && (
+                <div style={{ color: 'var(--muted)' }}>Cargando la geometría de las provincias...</div>
+              )}
+              {provinces.status === 'error' && (
+                <div style={{ color: 'var(--state-warning)' }}>
+                  {`La geometría de las provincias no está disponible: ${provinces.message}`}
+                </div>
+              )}
+              {provinces.status === 'success' && mapValues && (
+                <Chart2D3D
+                  spec={{
+                    kind: 'map',
+                    title: `Mapa de provincias (${year})`,
+                    geo: provinces.geo,
+                    values: mapValues,
+                    metric,
+                    selectedId: province,
+                    formatValue: (v) => (metric === 'level' ? formatValue(v, unit) : `${formatPercent(v)} por año`),
+                    onSelect: (id) => dispatch({ type: 'selectProvince', province: id as ProvinceId | null }),
+                    summary: mapSummary(mapValues, metric, indicatorSentence(indicator, resource), year, unit)
+                  }}
+                >
+                  <ProvinceMap
+                    geo={provinces.geo}
+                    values={mapValues}
+                    unit={unit}
+                    indicatorLabel={indicatorSentence(indicator, resource)}
+                    metric={metric}
+                    selectedId={province}
+                    scenario={scenario}
+                    year={year}
+                    hideTitle
+                    onSelect={(id) => dispatch({ type: 'selectProvince', province: id })}
+                  />
+                </Chart2D3D>
+              )}
+              {provinces.status === 'success' && (
+                <div style={{ fontSize: 'var(--font-sm)', color: 'var(--ink-2)' }}>
+                  {`Geometría de las provincias: ${provinces.meta.source}. ${provinces.meta.attribution}`}
+                </div>
+              )}
+            </div>
+          }
+        />
+      )
+    },
+    {
+      id: 'ranking',
+      name: 'Ranking',
+      thumb: { kind: 'bars', values: ranking?.rows.map((r) => r.p50) },
+      content: (
+        <ChartPanel
+          title={`Provincias en ${year}`}
+          chart={
+            ranking && ranking.rows.length > 0 ? (
+              <Chart2D3D
+                spec={barsSpec(
+                  ranking.rows.map((r) => ({ label: r.name.length > 14 ? `${r.name.slice(0, 13)}…` : r.name, value: r.p50 })),
+                  {
+                    title: `Provincias en ${year}`,
+                    unit: ranking.unit,
+                    highlight: province
+                      ? (() => {
+                          const n = PROVINCES.find((p) => p.id === province)?.name ?? '';
+                          return n.length > 14 ? `${n.slice(0, 13)}…` : n;
+                        })()
+                      : null,
+                    summary: ranking.built.summary
+                  }
+                )}
+              >
+                <EChart option={ranking.built.option} aria-label={ranking.built.summary} />
+              </Chart2D3D>
+            ) : (
+              <div style={{ color: 'var(--muted)' }}>
+                {ranking && ranking.excluded > 0
+                  ? `Ninguna provincia tiene un valor para ${year}.`
+                  : 'No hay series provinciales para este indicador en los datos.'}
+              </div>
+            )
+          }
+          table={
+            ranking && ranking.rows.length > 0 ? (
+              <DataTable
+                caption="Ranking de provincias"
+                columns={[
+                  { key: 'rank', header: 'Puesto' },
+                  { key: 'name', header: 'Provincia' },
+                  { key: 'p10', header: 'p10' },
+                  { key: 'p50', header: 'p50' },
+                  { key: 'p90', header: 'p90' },
+                  { key: 'change', header: 'Cambio' }
+                ]}
+                data={ranking.rows.map((r) => ({
+                  rank: r.rank,
+                  name: r.name,
+                  p10: formatValue(r.p10, ranking.unit),
+                  p50: formatValue(r.p50, ranking.unit),
+                  p90: formatValue(r.p90, ranking.unit),
+                  change: changeText(r)
+                }))}
+                pageSize="fit"
+              />
+            ) : undefined
+          }
+        />
+      )
+    }
+  ];
 
   return (
-    <SceneShell
+    <Dashboard
       title="Pronóstico 2056"
       subtitle="Tres escenarios, un rango de resultados simulados"
+      legend={[
+        { label: 'Mediana (p50)', tone: 'blue' },
+        { label: 'Banda p10 a p90', tone: 'muted' }
+      ]}
       sources={[
         data.source,
         `modelo ${data.model_version}`,
@@ -152,140 +323,34 @@ export default function Scene() {
       ]}
       retrievedAt={data.generated_at.slice(0, 10)}
       dateLabel="generado el"
-    >
-      <p style={{ margin: '0 0 var(--space-md)', color: 'var(--ink-2)' }}>
-        Los escenarios son proyecciones condicionales, no predicciones.
-      </p>
-
-      <FilterBar label="Filtros del pronóstico">
-        {indicators.map((i) => (
-          <FilterChip key={i} pressed={i === indicator} onClick={() => setIndicatorChoice(i)}>
-            {indicatorLabel(i)}
-          </FilterChip>
-        ))}
-        {resources.length > 0 &&
-          resources.map((r) => (
-            <FilterChip key={r} pressed={r === resource} onClick={() => setResourceChoice(r)}>
-              {resourceLabel(r)}
+      notes={
+        <>
+          <p className="scope-note">Los escenarios son proyecciones condicionales, no predicciones.</p>
+          <p className="scope-note">Año {year}</p>
+          {view.missing.length > 0 && (
+            <p style={{ color: 'var(--state-warning)', margin: 0, fontSize: 'var(--font-sm)' }}>
+              Faltan series para la selección actual: {view.missing.map(scenarioLabel).join(', ')}
+            </p>
+          )}
+        </>
+      }
+      rail={
+        <FilterBar label="Filtros del pronóstico">
+          {indicators.map((i) => (
+            <FilterChip key={i} pressed={i === indicator} onClick={() => setIndicatorChoice(i)}>
+              {indicatorLabel(i)}
             </FilterChip>
           ))}
-      </FilterBar>
-
-      <div style={{ color: 'var(--muted)', marginBottom: 'var(--space-sm)' }}>Año {year}</div>
-
-      {view.missing.length > 0 && (
-        <div style={{ color: 'var(--state-warning)', marginBottom: 'var(--space-sm)' }}>
-          Faltan series para la selección actual: {view.missing.map(scenarioLabel).join(', ')}
-        </div>
-      )}
-
-      <div style={{ display: 'flex', gap: 'var(--space-lg)', flex: '1 0 auto' }}>
-        <div style={{ flex: 2, display: 'flex', flexDirection: 'column', minHeight: '320px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 'var(--space-sm)' }}>
-            <span>Abanico del pronóstico</span>
-            <TableToggle pressed={fanAsTable} onToggle={() => setFanAsTable(!fanAsTable)} />
-          </div>
-          <div style={{ flex: 1, minHeight: '280px' }}>
-            {fanRows && <DataTable caption="Abanico del pronóstico" columns={fanRows.columns} data={fanRows.rows} />}
-            {!fanRows && fan && <EChart option={fan.option} aria-label={fan.summary} />}
-          </div>
-        </div>
-
-        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: '320px' }}>
-          <FilterBar label="Vista de provincias">
-            <FilterChip pressed={tab === 'map'} onClick={() => setUserTab('map')}>
-              Mapa
-            </FilterChip>
-            <FilterChip pressed={tab === 'ranking'} onClick={() => setUserTab('ranking')}>
-              Ranking
-            </FilterChip>
-            {tab === 'map' && (
-              <>
-                <FilterChip pressed={metric === 'level'} onClick={() => setMetric('level')}>
-                  Nivel
-                </FilterChip>
-                <FilterChip pressed={metric === 'change'} onClick={() => setMetric('change')}>
-                  {`Cambio desde ${data.horizon.start_year}`}
-                </FilterChip>
-              </>
-            )}
-          </FilterBar>
-
-          {tab === 'map' && provinces.status === 'loading' && (
-            <div style={{ color: 'var(--muted)' }}>Cargando la geometría de las provincias...</div>
-          )}
-          {tab === 'map' && provinces.status === 'error' && (
-            <div style={{ color: 'var(--state-warning)' }}>
-              {`La geometría de las provincias no está disponible: ${provinces.message}`}
-            </div>
-          )}
-          {tab === 'map' && provinces.status === 'success' && mapValues && (
-            <ProvinceMap
-              geo={provinces.geo}
-              values={mapValues}
-              unit={data.series.find((s) => s.indicator === indicator && s.resource === resource)?.unit ?? ''}
-              indicatorLabel={indicatorSentence(indicator, resource)}
-              metric={metric}
-              selectedId={province}
-              scenario={scenario}
-              year={year}
-              onSelect={(id) => dispatch({ type: 'selectProvince', province: id })}
-            />
-          )}
-
-          {tab === 'ranking' && (
-            <>
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 'var(--space-sm)' }}>
-                <span>Provincias en {year}</span>
-                <TableToggle pressed={rankAsTable} onToggle={() => setRankAsTable(!rankAsTable)} />
-              </div>
-              <div style={{ flex: 1, minHeight: '280px' }}>
-                {ranking && ranking.rows.length === 0 && (
-                  <div style={{ color: 'var(--muted)' }}>
-                    {ranking.excluded > 0
-                      ? `Ninguna provincia tiene un valor para ${year}.`
-                      : 'No hay series provinciales para este indicador en los datos.'}
-                  </div>
-                )}
-                {ranking && ranking.rows.length > 0 && rankAsTable && (
-                  <DataTable
-                    caption="Ranking de provincias"
-                    columns={[
-                      { key: 'rank', header: 'Puesto' },
-                      { key: 'name', header: 'Provincia' },
-                      { key: 'p10', header: 'p10' },
-                      { key: 'p50', header: 'p50' },
-                      { key: 'p90', header: 'p90' },
-                      { key: 'change', header: 'Cambio' }
-                    ]}
-                    data={ranking.rows.map((r) => ({
-                      rank: r.rank,
-                      name: r.name,
-                      p10: formatValue(r.p10, ranking.unit),
-                      p50: formatValue(r.p50, ranking.unit),
-                      p90: formatValue(r.p90, ranking.unit),
-                      change: changeText(r)
-                    }))}
-                  />
-                )}
-                {ranking && ranking.rows.length > 0 && !rankAsTable && (
-                  <EChart option={ranking.built.option} aria-label={ranking.built.summary} />
-                )}
-              </div>
-            </>
-          )}
-        </div>
-      </div>
-
-      <div style={{ marginTop: 'var(--space-md)' }}>
-        <StatTiles view={view} scenario={scenario} aiOverlay={aiOverlay} />
-      </div>
-
-      {provinces.status === 'success' && (
-        <div style={{ fontSize: 'var(--font-sm)', color: 'var(--ink-2)' }}>
-          {`Geometría de las provincias: ${provinces.meta.source}. ${provinces.meta.attribution}`}
-        </div>
-      )}
-    </SceneShell>
+          {resources.length > 0 &&
+            resources.map((r) => (
+              <FilterChip key={r} pressed={r === resource} onClick={() => setResourceChoice(r)}>
+                {resourceLabel(r)}
+              </FilterChip>
+            ))}
+        </FilterBar>
+      }
+      tiles={<StatTiles view={view} scenario={scenario} aiOverlay={aiOverlay} />}
+      views={views}
+    />
   );
 }

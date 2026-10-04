@@ -1,5 +1,5 @@
 import { tokens } from '../../styles/tokens.js';
-import { formatValue } from '../format.js';
+import { formatValue, formatAxisNumber } from '../format.js';
 import type { ResourceProductionRecord } from '../../types/index.js';
 
 interface TrendOpts {
@@ -53,7 +53,7 @@ export function buildTrend(records: ResourceProductionRecord[], opts: TrendOpts)
       splitLine: {
         lineStyle: { color: tokens.grid, width: 1 }
       },
-      axisLabel: { color: tokens.muted }
+      axisLabel: { color: tokens.muted, formatter: (v: number) => formatAxisNumber(v) }
     },
     series: [
       {

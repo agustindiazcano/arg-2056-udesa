@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { APP_LOCALE, formatDate, formatDecimal, formatNumber, formatPercent, formatValue, ordinal } from '../../src/charts/format.js';
+import { APP_LOCALE, formatAxisNumber, formatDate, formatDecimal, formatNumber, formatPercent, formatValue, ordinal } from '../../src/charts/format.js';
 
 describe('APP_LOCALE', () => {
   it('is Argentine Spanish', () => {
@@ -33,6 +33,16 @@ describe('ordinal', () => {
     expect(ordinal(1)).toBe('1.º');
     expect(ordinal(2)).toBe('2.º');
     expect(ordinal(11)).toBe('11.º');
+  });
+});
+
+describe('formatAxisNumber', () => {
+  const plain = (v: number) => formatAxisNumber(v).replace(/ /g, ' ');
+  it('shortens the ticks of a value axis so they never print every zero', () => {
+    expect(plain(0)).toBe('0');
+    expect(plain(2500000000000)).toBe('2,5 B');
+    expect(plain(1500000)).toBe('1,5 M');
+    expect(plain(900)).toBe('900');
   });
 });
 

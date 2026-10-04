@@ -1,6 +1,7 @@
 import React from 'react';
 import { formatPercent, formatValue, ordinal } from '../../charts/format.js';
 import { CountUp } from '../../motion/CountUp.js';
+import { Tile, TileGrid } from '../../ui/Tile.js';
 import type { EconomyIndicator, EconomyRecord } from '../../types/index.js';
 import { gapPct, peerMedian, rankAt } from './selectors.js';
 
@@ -14,20 +15,6 @@ interface StatTilesProps {
 }
 
 const NO_DATA = 'sin datos';
-
-function Tile({ id, label, children }: { id: string; label: string; children: React.ReactNode }) {
-  return (
-    <div
-      data-testid={id}
-      role="group"
-      aria-label={label}
-      style={{ background: 'var(--surface)', border: '1px solid var(--border)', padding: 'var(--space-md)', flex: 1 }}
-    >
-      <div style={{ color: 'var(--ink-2)', fontSize: '12px' }}>{label}</div>
-      {children}
-    </div>
-  );
-}
 
 function Value({ text }: { text: string | null }) {
   return (
@@ -45,7 +32,7 @@ export function StatTiles({ records, indicator, year, home, countries, unit }: S
   const gap = gapPct(value, median);
 
   return (
-    <div style={{ display: 'flex', gap: 'var(--space-md)' }}>
+    <TileGrid>
       <Tile id="tile-value" label={`${home} en ${year}`}>
         <div style={{ fontSize: 'var(--font-xl)', color: value === null ? 'var(--muted)' : 'var(--ink)' }}>
           <CountUp value={value} format={(n) => formatValue(n, unit)} fallback={NO_DATA} />
@@ -58,6 +45,6 @@ export function StatTiles({ records, indicator, year, home, countries, unit }: S
       <Tile id="tile-gap" label="Brecha frente a la mediana de los pares">
         <Value text={gap === null ? null : formatPercent(gap, { signed: true })} />
       </Tile>
-    </div>
+    </TileGrid>
   );
 }

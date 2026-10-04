@@ -82,6 +82,20 @@
   cursor: pointer;
 }
 
+/* docked in the right panel of the dashboard: part of the layout, not floating */
+.story.story--docked {
+  position: static;
+  transform: none;
+  width: auto;
+  padding: var(--space-md);
+  background: var(--glass);
+  backdrop-filter: none;
+}
+
+.story--docked .story-title {
+  font-size: var(--font-lg);
+}
+
 /* the dot is small, its hit target is 32 px */
 .story-dot::after {
   content: '';
