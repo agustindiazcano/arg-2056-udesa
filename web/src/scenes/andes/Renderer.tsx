@@ -6,6 +6,7 @@ import {
   Color,
   DirectionalLight,
   Float32BufferAttribute,
+  Fog,
   Line,
   LineBasicMaterial,
   Mesh,
@@ -18,14 +19,14 @@ import {
 import { useQualityOptional } from '../../runtime/CapabilityProvider';
 import { QUALITY_PRESETS } from '../../runtime/capabilities';
 import { useReducedMotion } from '../../runtime/useReducedMotion';
-import { SEQUENTIAL_BLUE, tokens } from '../../styles/tokens';
+import { SEQUENTIAL_BLUE, TERRAIN_RAMP, tokens } from '../../styles/tokens';
 import { createStage } from '../../three/stage';
 import type { Stage } from '../../three/stage';
 import { useCameraNav } from '../../three/useCameraNav';
 import { sampleElevation } from '../../terrain/decode';
 import type { Terrain } from '../../types/terrain';
 import { NavControls } from '../../ui/NavControls';
-import { battlePose, overviewPose } from './camera';
+import { battlePose, followPose, overviewPose } from './camera';
 import { buildTerrainMesh, sceneScale, toScene } from './terrainMesh';
 import { positionAt } from './timeline';
 import type { Route } from './timeline';
@@ -37,12 +38,12 @@ const LIFT = 0.05;
 const ROUTE_SAMPLES = 160;
 const CLICK_SLOP = 4;
 
-/** The color of a terrain height from 0 to 1: the sequential blue ramp, dark in the valleys and light on the peaks. */
-function rampColor(t: number, out: Color): Color {
-  const n = SEQUENTIAL_BLUE.length - 1;
+/** The color of a terrain height from 0 to 1: the natural ramp, green in the valleys and snow on the peaks. */
+function rampColor(t: number, out: Color, next: Color): Color {
+  const n = TERRAIN_RAMP.length - 1;
   const x = Math.min(1, Math.max(0, t)) * n;
   const i = Math.min(n - 1, Math.floor(x));
-  return out.set(SEQUENTIAL_BLUE[i]!).lerp(new Color(SEQUENTIAL_BLUE[i + 1]!), x - i);
+  return out.set(TERRAIN_RAMP[i]!).lerp(next.set(TERRAIN_RAMP[i + 1]!), x - i);
 }
 
 export interface AndesRendererProps {
@@ -51,13 +52,15 @@ export interface AndesRendererProps {
   /** the campaign day: the army marker and the travelled part of the route follow it */
   day: number;
   selectedId: string | null;
+  /** the camera follows the army as the days go by */
+  follow: boolean;
   onSelect: (id: string | null) => void;
   /** what the canvas says to a screen reader */
   label: string;
 }
 
 /** The Andes in 3D: the terrain, the route, a marker per event and the army at its place of the day. The only file of the scene that touches WebGL. */
-export function AndesRenderer({ terrain, route, day, selectedId, onSelect, label }: AndesRendererProps) {
+export function AndesRenderer({ terrain, route, day, selectedId, follow, onSelect, label }: AndesRendererProps) {
   const hostRef = useRef<HTMLDivElement>(null);
   const tipRef = useRef<HTMLDivElement>(null);
   const reduced = useReducedMotion();
@@ -74,6 +77,9 @@ export function AndesRenderer({ terrain, route, day, selectedId, onSelect, label
   dayRef.current = day;
   const selectedRef = useRef(selectedId);
   selectedRef.current = selectedId;
+  const setFollowRef = useRef<(on: boolean) => void>(() => {});
+  const followRef = useRef(follow);
+  followRef.current = follow;
 
   useEffect(() => {
     const host = hostRef.current;
@@ -95,9 +101,11 @@ export function AndesRenderer({ terrain, route, day, selectedId, onSelect, label
     stageRef.current = stage;
     const { scene } = stage;
 
-    scene.add(new AmbientLight(tokens.ink, 0.9));
-    const sun = new DirectionalLight(tokens.ink, 2.6);
-    sun.position.set(-8, 10, 6);
+    // distance fades into the page color, so the edges of the terrain are not a cut
+    scene.fog = new Fog(tokens.page, start.radius * 1.1, start.radius * 3);
+    scene.add(new AmbientLight(tokens.ink, 0.55));
+    const sun = new DirectionalLight(tokens.ink, 3.2);
+    sun.position.set(-9, 5, 5); // low: the relief throws shadows
     scene.add(sun);
 
     // the terrain, colored by height
@@ -106,8 +114,9 @@ export function AndesRenderer({ terrain, route, day, selectedId, onSelect, label
     geometry.setAttribute('position', new BufferAttribute(mesh.positions, 3));
     const colors = new Float32Array(mesh.heightT.length * 3);
     const c = new Color();
+    const c2 = new Color();
     mesh.heightT.forEach((t, i) => {
-      rampColor(t, c);
+      rampColor(t, c, c2);
       colors[i * 3] = c.r;
       colors[i * 3 + 1] = c.g;
       colors[i * 3 + 2] = c.b;
@@ -134,7 +143,7 @@ export function AndesRenderer({ terrain, route, day, selectedId, onSelect, label
     scene.add(traveled);
 
     // a marker per event, lit when selected
-    const lit = new Color(SEQUENTIAL_BLUE[9]);
+    const lit = new Color(SEQUENTIAL_BLUE[9]); // the blue of the interface marks what is selected on the terrain
     const markerGeometry = new SphereGeometry(0.14, 16, 12);
     const markers = route.points.map((p) => {
       const material = new MeshStandardMaterial({ color: tokens.ink2, emissive: new Color(tokens.page), roughness: 0.5 });
@@ -157,6 +166,7 @@ export function AndesRenderer({ terrain, route, day, selectedId, onSelect, label
       if (!p) return;
       const at = toScene(scale, p.lon, p.lat, ground(p.lon, p.lat, p.altitudeM));
       army.position.set(at.x, at.y + LIFT + 0.2, at.z);
+      if (followRef.current) stage.nav.setTarget(at.x, at.y, at.z);
       traveled.geometry.setDrawRange(0, Math.max(2, Math.round(((d - route.firstDay) / Math.max(1, route.lastDay - route.firstDay)) * ROUTE_SAMPLES) + 1));
       stage.requestRender();
     };
@@ -177,6 +187,13 @@ export function AndesRenderer({ terrain, route, day, selectedId, onSelect, label
     };
     setSelectedRef.current = setSelected;
     setSelected(selectedRef.current, false);
+
+    // the cinematic camera: on, it flies to the army and then keeps it in the middle as the days go by
+    const setFollow = (on: boolean) => {
+      if (on) stage.nav.flyTo(followPose(scale, army.position, stage.pose));
+    };
+    setFollowRef.current = setFollow;
+    if (followRef.current) setFollow(true);
 
     // pointer: a click (4 px or less) on a marker selects it; moving over one names it
     const canvas = stage.renderer.domElement;
@@ -225,6 +242,7 @@ export function AndesRenderer({ terrain, route, day, selectedId, onSelect, label
     return () => {
       setDayRef.current = () => {};
       setSelectedRef.current = () => {};
+      setFollowRef.current = () => {};
       canvas.removeEventListener('pointermove', onMove);
       canvas.removeEventListener('pointerleave', onLeave);
       canvas.removeEventListener('pointerdown', onDown);
@@ -237,6 +255,7 @@ export function AndesRenderer({ terrain, route, day, selectedId, onSelect, label
 
   useEffect(() => setDayRef.current(day), [day]);
   useEffect(() => setSelectedRef.current(selectedId, true), [selectedId]);
+  useEffect(() => setFollowRef.current(follow), [follow]);
 
   return (
     <div className="chart3d-wrap">

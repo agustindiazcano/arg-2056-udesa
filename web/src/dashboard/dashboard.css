@@ -659,3 +659,131 @@
   margin: var(--space-xs) 0 0;
   color: var(--ink-2);
 }
+
+/* ---- Stage mode: one big view with floating controls --------------------------------------------------------- */
+
+.dash--stage {
+  grid-template-columns: minmax(0, 1fr) minmax(260px, 340px);
+  padding: 0;
+  gap: 0;
+}
+
+.dash-stage {
+  position: relative;
+  overflow: hidden;
+}
+
+.dash--stage .dash-side {
+  padding: var(--space-sm) var(--space-md);
+}
+
+/* ---- Andes scene as a full-area stage ------------------------------------------------------------------------- */
+
+.dash--stage .dash-stage {
+  background: radial-gradient(ellipse at 50% 35%, var(--surface), var(--page) 72%);
+}
+
+.andes-stage,
+.andes-canvas,
+.andes-canvas .chart3d-wrap {
+  position: absolute;
+  inset: 0;
+}
+
+.andes-glass {
+  background: var(--glass-strong);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  backdrop-filter: blur(8px);
+}
+
+.andes-title {
+  position: absolute;
+  top: var(--space-md);
+  left: var(--space-md);
+  z-index: 4;
+  padding: var(--space-sm) var(--space-md);
+}
+
+.andes-title h1 {
+  margin: 0;
+  font-size: var(--font-xl);
+  line-height: 1.15;
+}
+
+.andes-title p {
+  margin: 0;
+  color: var(--ink-2);
+  font-size: var(--font-sm);
+}
+
+.andes-controls {
+  position: absolute;
+  top: var(--space-md);
+  right: var(--space-md);
+  z-index: 4;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--space-xs);
+  padding: var(--space-xs);
+}
+
+.andes-list {
+  position: absolute;
+  top: 5.5rem;
+  left: var(--space-md);
+  max-height: calc(100% - 9rem);
+  z-index: 4;
+  width: min(280px, 38%);
+  padding: var(--space-xs);
+  overflow: hidden;
+}
+
+.andes-table {
+  position: absolute;
+  inset: 5.5rem var(--space-md) 3.5rem;
+  z-index: 3;
+  padding: var(--space-sm);
+  overflow: hidden;
+}
+
+.andes-foot {
+  position: absolute;
+  left: var(--space-md);
+  bottom: var(--space-sm);
+  z-index: 4;
+  max-width: 60%;
+  color: var(--ink-2);
+  font-size: var(--font-sm);
+}
+
+.andes-foot p {
+  margin: 0;
+}
+
+.andes-notice {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.andes-canvas .chart3d {
+  cursor: grab;
+}
+
+.andes-detail {
+  position: absolute;
+  right: var(--space-md);
+  bottom: 4rem;
+  z-index: 4;
+  width: min(380px, 45%);
+  max-height: calc(100% - 9rem);
+  overflow: hidden;
+}
+
+.andes-detail .andes-panel {
+  background: none;
+  border: 0;
+}

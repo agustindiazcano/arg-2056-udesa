@@ -205,6 +205,12 @@ test.describe('andes scene', () => {
     await expect(canvas).toBeVisible();
     await expect(page.getByRole('note')).toContainText('provisorio');
 
+    // one big stage: the map fills the area (no small chart), with floating controls
+    const box = (await canvas.boundingBox())!;
+    expect(box.width).toBeGreaterThan(700);
+    expect(box.height).toBeGreaterThan(450);
+    await page.getByRole('button', { name: 'Seguir al ejército' }).click();
+
     await page.getByRole('button', { name: /Alta cordillera/ }).click();
     const panel = page.getByRole('region', { name: /Evento: Alta cordillera/ });
     await expect(panel).toBeVisible();

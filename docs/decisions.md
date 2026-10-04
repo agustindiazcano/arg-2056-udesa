@@ -131,6 +131,11 @@ A10, A13, A15, A16, A24, A26, A31, A32 and A33 are accepted as written, with the
 - Decision: (1) the renderer is Three.js, bundled (the proof of concept's stack, same as D-3d-1); (2) the dependency is the `three` version already pinned for the 3D views (0.186.1), shared in the same chunk, not a second copy; the human re-checks the look against `test/map_test1.html`; (3) the geometry comes from the baked terrain of `web/src/terrain/` (real DEM), not the prototype's noise; (4) the scene is in Spanish with `APP_LOCALE = 'es-AR'`.
 - Consequences: `andes-integration` still waits for the terrain outputs (the human's DEM step).
 
+## D-andes-5: The Andes scene is a full-area cinematic stage with natural terrain colors
+- Decision (human request, 2026-10-04: "it should fill the whole screen like Google Maps with a few floating buttons, only the right bar and the bottom bar left, with the colors of the terrain, a cinematic interactive experience"): the Andes scene is one 3D map that takes the whole area of the dashboard (`Dashboard` `stage` mode: no title rail, carousel, viewer bar or viewer; the right panel and the bottom bar stay). The title, the floating controls (Mapa 3D, Tabla de eventos, Seguir al ejército, Eventos), the list of events, the detail card of an event and the source line float over the map. The terrain uses a natural ramp (valley green, dry grass, ochre, earth, rock, scree, snow: `TERRAIN_RAMP`, `--terrain-1..8`, luminance growing at every step), low sun for relief, and distance fog into the page color. The camera follows the army on request.
+- Taken by the agent: the exact colors of the ramp, the fog and the sun angle (a first look; the human may change them: they are one token list and a few numbers in `scenes/andes/Renderer.tsx`).
+- Consequences: this is an exception to "no art direction" of `andes-integration.md`, asked for by the human. The blue of the interface still marks what is selected (the marker and the army glow).
+
 ### Polish (`polish.md`)
 ## D-polish-1: UI language and locale
 - Decision: Spanish, `APP_LOCALE = 'es-AR'`, `lang="es"` (already applied in F2b). Resolves open decision 1 of `design.md`.

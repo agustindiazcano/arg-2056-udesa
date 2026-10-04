@@ -25,7 +25,8 @@ export function Dashboard({
   tiles,
   side,
   filters,
-  notes
+  notes,
+  stage
 }: DashScene) {
   const [choice, setChoice] = useState<string[]>([]);
   const narrativeRef = useCallback((el: HTMLDivElement | null) => useSlots.getState().set('narrative', el), []);
@@ -43,6 +44,27 @@ export function Dashboard({
     } else setChoice([...shownIds, id].slice(-layout));
   };
   const source = sourceLine(sources, retrievedAt, dateLabel);
+
+  if (stage) {
+    return (
+      <div className="dash dash--stage">
+        <div className="dash-stage">{stage}</div>
+        <aside className="dash-side">
+          <section aria-label="Indicadores" className="dash-tiles">
+            <h2 className="panel-title">Indicadores</h2>
+            {tiles}
+          </section>
+          <div className="dash-narrative" data-slot="narrative" ref={narrativeRef} />
+          {side}
+        </aside>
+        {filters && (
+          <SlotPortal slot="filters">
+            <div className="dash-filters">{filters}</div>
+          </SlotPortal>
+        )}
+      </div>
+    );
+  }
 
   return (
     <div className="dash">

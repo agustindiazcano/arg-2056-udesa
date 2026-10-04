@@ -3,13 +3,13 @@ import { DataTable } from '../../charts/DataTable.js';
 import { formatNumber } from '../../charts/format.js';
 import { useDataset } from '../../data/useDataset.js';
 import { Dashboard } from '../../dashboard/Dashboard.js';
-import type { DashView } from '../../dashboard/types.js';
 import { useQualityOptional } from '../../runtime/CapabilityProvider.js';
 import { WebGLRequired } from '../../runtime/WebGLRequired.js';
 import { isSyntheticTerrain } from '../../terrain/synthetic.js';
 import { useStore } from '../../state/store.js';
 import { Tile, TileGrid } from '../../ui/Tile.js';
 import { SceneError, SceneLoading } from '../../ui/SceneStatus.js';
+import { sourceLine } from '../../ui/SceneShell.js';
 import { forceText, parseAndesEvents } from './data.js';
 import type { AndesEvent } from './data.js';
 import { EventList, EventPanel } from './Panel.js';
@@ -46,6 +46,9 @@ export default function Scene() {
   const day = campaignDay(yearFloat, route.lastDay);
 
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [view, setView] = useState<'map' | 'table'>('map');
+  const [follow, setFollow] = useState(false);
+  const [listOpen, setListOpen] = useState(true);
   const opener = useRef<HTMLElement | null>(null);
   const selected = route.points.find((p) => p.id === selectedId) ?? null;
 
@@ -79,54 +82,96 @@ export default function Scene() {
     selected ? `; evento elegido: ${selected.name}` : ''
   }.`;
 
-  const map = (
-    <div className="andes-map">
-      {quality?.caps.webgl2 ? (
-        <>
-          <WebGLRequired />
-          {terrain ? (
-            <Suspense fallback={<p role="status" className="poster">Cargando la vista 3D...</p>}>
-              <AndesRenderer terrain={terrain.terrain} route={route} day={day} selectedId={selectedId} onSelect={(id) => (id === null ? close() : select(id))} label={label} />
-            </Suspense>
-          ) : (
-            <p role="status" className="poster">Cargando el terreno...</p>
-          )}
-        </>
+  const map = quality?.caps.webgl2 ? (
+    <>
+      <WebGLRequired />
+      {terrain ? (
+        <Suspense fallback={<p role="status" className="poster">Cargando la vista 3D...</p>}>
+          <AndesRenderer
+            terrain={terrain.terrain}
+            route={route}
+            day={day}
+            selectedId={selectedId}
+            follow={follow}
+            onSelect={(id) => (id === null ? close() : select(id))}
+            label={label}
+          />
+        </Suspense>
       ) : (
-        <p role="status" className="notice">
-          Esta vista necesita WebGL2. La lista y la tabla de eventos muestran los mismos datos.
-        </p>
+        <p role="status" className="poster">Cargando el terreno...</p>
       )}
-    </div>
+    </>
+  ) : (
+    <p role="status" className="notice andes-notice">
+      Esta vista necesita WebGL2. La lista y la tabla de eventos muestran los mismos datos.
+    </p>
   );
 
-  const views: DashView[] = [
-    { id: 'map', name: 'Mapa 3D', thumb: { kind: 'map' }, content: map },
-    {
-      id: 'table',
-      name: 'Tabla de eventos',
-      thumb: { kind: 'table' },
-      content: <DataTable caption="Eventos de la campaña" columns={TABLE_COLUMNS} data={rows(route.points)} pageSize="fit" />
-    }
-  ];
-
   const synthetic = terrain && isSyntheticTerrain(terrain.terrain);
-  return (
-    <Dashboard
-      title="Los Andes"
-      subtitle="El cruce de 1817 sobre el terreno"
-      sources={[...new Set(route.points.map((p) => p.source))]}
-      retrievedAt={route.points[0]?.retrieved_at}
-      views={views}
-      notes={
-        terrain && (
-          <p className="andes-terrain-note" role="note">
+  const source = sourceLine([...new Set(route.points.map((p) => p.source))], route.points[0]?.retrieved_at);
+
+  const stage = (
+    <div className="andes-stage">
+      <div className="andes-canvas">
+        {view === 'map' ? (
+          map
+        ) : (
+          <div className="andes-table andes-glass">
+            <DataTable caption="Eventos de la campaña" columns={TABLE_COLUMNS} data={rows(route.points)} pageSize="fit" />
+          </div>
+        )}
+      </div>
+
+      <header className="andes-title andes-glass">
+        <h1>Los Andes</h1>
+        <p>El cruce de 1817 sobre el terreno</p>
+      </header>
+
+      <div className="andes-controls andes-glass" role="group" aria-label="Controles de la escena">
+        <button type="button" className="chip" aria-pressed={view === 'map'} onClick={() => setView('map')}>
+          Mapa 3D
+        </button>
+        <button type="button" className="chip" aria-pressed={view === 'table'} onClick={() => setView('table')}>
+          Tabla de eventos
+        </button>
+        <button type="button" className="chip" aria-pressed={follow} disabled={view !== 'map'} onClick={() => setFollow(!follow)}>
+          Seguir al ejército
+        </button>
+        <button type="button" className="chip" aria-pressed={listOpen} onClick={() => setListOpen(!listOpen)}>
+          Eventos
+        </button>
+      </div>
+
+      {listOpen && (
+        <div className="andes-list andes-glass">
+          <EventList events={route.points} selectedId={selectedId} onSelect={select} />
+        </div>
+      )}
+
+      {selected && (
+        <div className="andes-detail andes-glass">
+          <EventPanel event={selected} onClose={close} />
+        </div>
+      )}
+
+      <footer className="andes-foot">
+        {terrain && (
+          <p role="note">
             {terrain.terrain.meta.attribution}
             {synthetic && terrain.problem ? ` (${terrain.problem})` : ''}
           </p>
-        )
-      }
-      rail={<EventList events={route.points} selectedId={selectedId} onSelect={select} />}
+        )}
+        {source && <p>{source}</p>}
+      </footer>
+    </div>
+  );
+
+  return (
+    <Dashboard
+      title="Los Andes"
+      sources={[]}
+      views={[]}
+      stage={stage}
       tiles={
         <TileGrid>
           <Tile id="andes-day" label="Día de la campaña">
@@ -145,7 +190,6 @@ export default function Scene() {
           </Tile>
         </TileGrid>
       }
-      side={selected ? <EventPanel event={selected} onClose={close} /> : undefined}
     />
   );
 }

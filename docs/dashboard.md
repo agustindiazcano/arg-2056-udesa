@@ -92,3 +92,7 @@ D8 and D9 were asked for by the human on 2026-10-04 (3D is the priority, `D-3d-6
 ## Projection test
 
 In 3D mode the view bar has a "Test proyección" button. It opens a dialog with the map of Argentina and a bar chart in 3D on made-up values ("datos de prueba"), each with a title floating above it, a beam of light from the title to the chart and a scan plane that travels up and down through it (`charts3d/projection.ts`, `three/projection.ts`, `Stage.loop`). It is a test of the effects layer, not a dashboard view: nothing in it is model data. Under reduced motion the title and the beam are still and there is no scan plane; on the low tier the picture is still. `?quality=high` shows the animation on a machine detected as low.
+
+## Stage mode (the Andes scene)
+
+`Dashboard` takes an optional `stage`: one view that fills the whole area, with its own floating controls. In stage mode there is no title rail, carousel, viewer bar or viewer; the right panel (indicators, story) and the bottom bar stay. The Andes scene uses it (`D-andes-5`): a full-area 3D map with the title, the controls, the list of events and the detail card of the chosen event over it. The other scenes keep the normal layout.
