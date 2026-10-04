@@ -11,7 +11,7 @@ const { mounts, unmounts } = vi.hoisted(() => ({ mounts: { n: 0 }, unmounts: { n
 vi.mock('../../src/scenes/andes/Renderer', async () => {
   const React = await import('react');
   return {
-    default: ({ day, selectedId, label, terrain }: { day: number; selectedId: string | null; label: string; terrain: { meta: { source: string } } }) => {
+    default: ({ day, selectedId, follow, label, terrain }: { day: number; selectedId: string | null; follow: boolean; label: string; terrain: { meta: { source: string } } }) => {
       React.useEffect(() => {
         mounts.n += 1;
         return () => {
@@ -19,7 +19,7 @@ vi.mock('../../src/scenes/andes/Renderer', async () => {
         };
       }, []);
       return (
-        <div data-testid="andes-renderer" data-day={Math.round(day)} data-selected={selectedId ?? ''} data-source={terrain.meta.source}>
+        <div data-testid="andes-renderer" data-day={Math.round(day)} data-selected={selectedId ?? ''} data-follow={String(follow)} data-source={terrain.meta.source}>
           {label}
         </div>
       );
@@ -152,11 +152,45 @@ describe('Andes scene', () => {
     expect(screen.getByRole('region', { name: /Evento: Ascenso/ })).toBeTruthy();
   });
 
+  it('is one big stage with floating controls: the title is a heading and there is no carousel', async () => {
+    stubFetch();
+    renderScene();
+    await screen.findByTestId('andes-renderer');
+    expect(screen.getByRole('heading', { level: 1, name: 'Los Andes' })).toBeTruthy();
+    expect(document.querySelector('.dash--stage')).not.toBeNull();
+    expect(screen.queryByRole('region', { name: 'Visor' })).toBeNull();
+    expect(screen.getByRole('group', { name: 'Controles de la escena' })).toBeTruthy();
+  });
+
+  it('follows the army only when asked, and says so with a pressed button', async () => {
+    stubFetch();
+    renderScene();
+    const renderer = await screen.findByTestId('andes-renderer');
+    expect(renderer.getAttribute('data-follow')).toBe('false');
+    const button = screen.getByRole('button', { name: 'Seguir al ejército' });
+    expect(button.getAttribute('aria-pressed')).toBe('false');
+    fireEvent.click(button);
+    expect(button.getAttribute('aria-pressed')).toBe('true');
+    expect(screen.getByTestId('andes-renderer').getAttribute('data-follow')).toBe('true');
+  });
+
+  it('hides and shows the list of events', async () => {
+    stubFetch();
+    renderScene();
+    await screen.findByTestId('andes-renderer');
+    expect(screen.getByRole('list', { name: 'Eventos de la campaña' })).toBeTruthy();
+    fireEvent.click(screen.getByRole('button', { name: 'Eventos' }));
+    expect(screen.queryByRole('list', { name: 'Eventos de la campaña' })).toBeNull();
+    fireEvent.click(screen.getByRole('button', { name: 'Eventos' }));
+    expect(screen.getByRole('list', { name: 'Eventos de la campaña' })).toBeTruthy();
+  });
+
   it('shows the same events as a table', async () => {
     stubFetch();
     renderScene();
     await screen.findByTestId('andes-renderer');
     fireEvent.click(screen.getByRole('button', { name: 'Tabla de eventos' }));
+    expect(screen.queryByTestId('andes-renderer')).toBeNull();
     const table = await screen.findByRole('table');
     expect(within(table).getByText('Cumbre del paso (ilustrativo)')).toBeTruthy();
   });

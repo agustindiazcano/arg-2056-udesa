@@ -1,10 +1,11 @@
-import { Mesh, PerspectiveCamera, Scene, Vector3, WebGLRenderer } from 'three';
+import { Mesh, PCFSoftShadowMap, PerspectiveCamera, Scene, Vector3, WebGLRenderer } from 'three';
 import type { Material, Object3D, Texture } from 'three';
 import {
   BUTTON_ZOOM,
   WHEEL_ZOOM,
   blendCamera,
   cameraLimits,
+  clampTarget,
   copyCamera,
   orbit,
   pan,
@@ -29,6 +30,12 @@ export interface StageOptions {
   box?: TargetBox;
   /** the pose to keep: a view rebuilt for new data passes the pose of the old one. Changed in place. */
   pose?: CameraState;
+  /** the renderer draws shadows (PCF soft); the scene's lights decide who casts and receives them */
+  shadows?: boolean;
+  /** called right before each render, with the camera in its final place: a scene switches its level of detail here */
+  beforeRender?: () => void;
+  /** the closest zoom as a fraction of the start radius (default 0.25) */
+  zoomMin?: number;
   /** the reset glides back over a short time; false (reduced motion, low quality) jumps */
   animateReset?: boolean;
 }
@@ -41,6 +48,10 @@ export interface StageNav {
   preset: (preset: CameraPreset) => void;
   /** the camera goes to this pose (eased over 600 ms, or at once when the reset does not glide) */
   flyTo: (pose: CameraState) => void;
+  /** moves the camera target at once (the angles and the distance stay), kept inside the box: for a camera that follows something */
+  setTarget: (x: number, y: number, z: number) => void;
+  /** puts the camera at this pose at once, kept inside the limits (target box, polar angle, zoom range): for a camera that is driven every day tick */
+  setPose: (pose: CameraState) => void;
 }
 
 export interface Stage {
@@ -69,6 +80,10 @@ const FLY_MS = 600;
  */
 export function createStage(host: HTMLElement, o: StageOptions): Stage {
   const renderer = new WebGLRenderer({ antialias: true, alpha: true });
+  if (o.shadows) {
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = PCFSoftShadowMap;
+  }
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, o.pixelRatioCap));
   renderer.setClearColor(tokens.page, 0);
   const el = renderer.domElement;
@@ -84,7 +99,8 @@ export function createStage(host: HTMLElement, o: StageOptions): Stage {
   const half = o.radius * 0.5;
   const limits = cameraLimits(
     startPose,
-    o.box ?? { minX: o.target.x - half, maxX: o.target.x + half, minY: 0, maxY: o.target.y + half, minZ: o.target.z - half, maxZ: o.target.z + half }
+    o.box ?? { minX: o.target.x - half, maxX: o.target.x + half, minY: 0, maxY: o.target.y + half, minZ: o.target.z - half, maxZ: o.target.z + half },
+    o.zoomMin
   );
   const pose = o.pose ?? copyCamera(startPose);
   const fov = o.fov ?? 32;
@@ -100,6 +116,7 @@ export function createStage(host: HTMLElement, o: StageOptions): Stage {
   let queued = 0;
   const render = () => {
     queued = 0;
+    o.beforeRender?.();
     renderer.render(scene, camera);
   };
   const requestRender = () => {
@@ -230,7 +247,23 @@ export function createStage(host: HTMLElement, o: StageOptions): Stage {
     zoomOut: () => glideTo((t) => zoomBy(t, 1 / BUTTON_ZOOM, limits)),
     reset: () => glideTo((t) => resetCamera(t, limits)),
     preset: (preset) => glideTo((t) => presetCamera(t, preset, limits)),
-    flyTo: (target) => glideTo((t) => Object.assign(t, target), FLY_MS)
+    flyTo: (target) => glideTo((t) => Object.assign(t, target), FLY_MS),
+    setPose: (target) => {
+      cancelGlide();
+      Object.assign(pose, target);
+      pose.radius = Math.min(limits.maxRadius, Math.max(limits.minRadius, pose.radius));
+      pose.phi = Math.min(limits.maxPhi, Math.max(limits.minPhi, pose.phi));
+      clampTarget(pose, limits.box);
+      changed();
+    },
+    setTarget: (x, y, z) => {
+      cancelGlide();
+      pose.x = x;
+      pose.y = y;
+      pose.z = z;
+      clampTarget(pose, limits.box);
+      changed();
+    }
   };
 
   el.addEventListener('pointerdown', down);
@@ -249,6 +282,7 @@ export function createStage(host: HTMLElement, o: StageOptions): Stage {
       running.delete(id);
       const t = Math.min(1, (now - start) / durationMs);
       onFrame(t);
+      o.beforeRender?.();
       renderer.render(scene, camera);
       if (t < 1) {
         id = requestAnimationFrame(step);
@@ -271,6 +305,7 @@ export function createStage(host: HTMLElement, o: StageOptions): Stage {
     const step = (now: number) => {
       if (!active) return;
       onFrame(now - start);
+      o.beforeRender?.();
       renderer.render(scene, camera);
       id = requestAnimationFrame(step);
     };

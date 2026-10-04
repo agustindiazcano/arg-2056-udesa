@@ -205,6 +205,12 @@ test.describe('andes scene', () => {
     await expect(canvas).toBeVisible();
     await expect(page.getByRole('note')).toContainText('provisorio');
 
+    // one big stage: the map fills the area (no small chart), with floating controls
+    const box = (await canvas.boundingBox())!;
+    expect(box.width).toBeGreaterThan(700);
+    expect(box.height).toBeGreaterThan(450);
+    await page.getByRole('button', { name: 'Seguir al ejército' }).click();
+
     await page.getByRole('button', { name: /Alta cordillera/ }).click();
     const panel = page.getByRole('region', { name: /Evento: Alta cordillera/ });
     await expect(panel).toBeVisible();
@@ -220,6 +226,36 @@ test.describe('andes scene', () => {
     const before = await day.innerText();
     await page.getByRole('slider').first().press('End');
     await expect.poll(async () => day.innerText()).not.toBe(before);
+  });
+
+  test('"Ver de cerca" brings the camera next to the army, where the column of figures shows, and says the figures are schematic', async ({ page }) => {
+    await page.goto('/?quality=high');
+    await page.getByRole('tab', { name: 'Andes' }).click();
+    const canvas = page.locator('[data-chart3d="andes"] canvas');
+    await expect(canvas).toBeVisible();
+    await expect(page.getByText(/Figuras esquemáticas/)).toBeVisible();
+    const radius = async () => Number((await canvas.getAttribute('data-camera'))!.split(',')[2]);
+    const far = await radius();
+    await page.getByRole('button', { name: 'Ver de cerca' }).click();
+    await expect.poll(radius).toBeLessThan(5);
+    expect(far).toBeGreaterThan(10);
+    // the table has no map to get close to
+    await page.getByRole('button', { name: 'Tabla de eventos' }).click();
+    await expect(page.getByRole('button', { name: 'Ver de cerca' })).toBeDisabled();
+  });
+
+  test('"Cine" puts the camera low behind the column, close enough for the figures, and the table has no cinematic camera', async ({ page }) => {
+    await page.goto('/?quality=high');
+    await page.getByRole('tab', { name: 'Andes' }).click();
+    const canvas = page.locator('[data-chart3d="andes"] canvas');
+    await expect(canvas).toBeVisible();
+    const pose = async () => (await canvas.getAttribute('data-camera'))!.split(',').map(Number);
+    await page.getByRole('button', { name: 'Cine' }).click();
+    await expect.poll(async () => (await pose())[2]).toBeLessThan(8); // radius: near the column
+    expect((await pose())[1]).toBeGreaterThan(1); // polar angle: low, toward the horizon
+    await expect(page.getByRole('button', { name: 'Cine' })).toHaveAttribute('aria-pressed', 'true');
+    await page.getByRole('button', { name: 'Tabla de eventos' }).click();
+    await expect(page.getByRole('button', { name: 'Cine' })).toBeDisabled();
   });
 
   test('the table of events is the text version of the scene', async ({ page }) => {

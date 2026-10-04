@@ -41,4 +41,9 @@ export interface DashScene {
   filters?: ReactNode;
   /** a line under the title (scope notes) */
   notes?: ReactNode;
+  /**
+   * One big view that takes the whole area with its own floating controls (the Andes scene): no title rail, carousel, viewer
+   * bar or viewer, only the right panel. The scene draws its own title, names and source line over the stage.
+   */
+  stage?: ReactNode;
 }

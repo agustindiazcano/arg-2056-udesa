@@ -44,6 +44,27 @@ afterEach(() => {
   vi.unstubAllGlobals();
 });
 
+describe('stage setPose', () => {
+  it('puts the camera at the pose at once and keeps it inside the limits', () => {
+    stage.nav.setPose({ x: 1, y: 0.4, z: -1, theta: 2, phi: 3, radius: 0.0001 });
+    expect(stage.pose.theta).toBe(2);
+    expect(stage.pose.phi).toBeLessThanOrEqual(1.55); // the polar angle cannot reach the horizon
+    expect(stage.pose.radius).toBeGreaterThan(1); // nor the zoom pass its floor (0.25 of 10)
+    expect(stage.pose.x).toBeCloseTo(1, 9);
+  });
+});
+
+describe('stage beforeRender hook', () => {
+  it('runs before every render, so a scene can switch what it shows by the camera distance', async () => {
+    stage.dispose();
+    let calls = 0;
+    stage = createStage(host, { ...options, target: new Vector3(0, 0.5, 0), beforeRender: () => (calls += 1) });
+    stage.requestRender();
+    await new Promise((r) => setTimeout(r, 10));
+    expect(calls).toBeGreaterThanOrEqual(1);
+  });
+});
+
 describe('stage navigation', () => {
   it('turns with a left drag, with no azimuth limit', () => {
     fire('pointerdown', { clientX: 100, clientY: 100, button: 0 });
@@ -115,6 +136,19 @@ describe('stage navigation', () => {
   it('flies to a given pose (and jumps there when the reset does not glide)', () => {
     stage.nav.flyTo({ x: 1, y: 2, z: 3, theta: 0.1, phi: 0.7, radius: 4 });
     expect([stage.pose.x, stage.pose.y, stage.pose.z, stage.pose.theta, stage.pose.phi, stage.pose.radius]).toEqual([1, 2, 3, 0.1, 0.7, 4]);
+  });
+
+  it('moves the target at once with setTarget, keeping the angles and the distance', () => {
+    stage.nav.setTarget(1, 2, 3);
+    expect([stage.pose.x, stage.pose.y, stage.pose.z]).toEqual([1, 2, 3]);
+    expect([stage.pose.theta, stage.pose.phi, stage.pose.radius]).toEqual([0.4, 1, 10]);
+  });
+
+  it('keeps the target inside the box when it is moved', () => {
+    stage.nav.setTarget(1e6, 1e6, -1e6);
+    expect(stage.pose.x).toBeLessThanOrEqual(5);
+    expect(stage.pose.y).toBeLessThanOrEqual(10.5);
+    expect(stage.pose.z).toBeGreaterThanOrEqual(-5);
   });
 
   it('publishes the camera in a data attribute at the end of a gesture', () => {

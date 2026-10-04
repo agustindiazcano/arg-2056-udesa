@@ -150,3 +150,26 @@ describe('SlotPortal', () => {
     slot.remove();
   });
 });
+
+describe('Dashboard in stage mode (one big view with floating controls)', () => {
+  it('gives the whole area to the stage: no title rail, no carousel, no viewer bar, no viewer', () => {
+    renderDashboard({ stage: <p>el escenario</p> });
+    expect(screen.getByText('el escenario')).toBeTruthy();
+    expect(screen.queryByText('la lista')).toBeNull();
+    expect(screen.queryByRole('region', { name: 'Visor' })).toBeNull();
+    expect(screen.queryByRole('group', { name: 'Vistas' })).toBeNull();
+    expect(document.querySelector('.dash--stage')).not.toBeNull();
+  });
+
+  it('keeps the indicators and the side controls on the right', () => {
+    renderDashboard({ stage: <p>el escenario</p>, side: <p>el panel</p> });
+    expect(screen.getByText('los indicadores')).toBeTruthy();
+    expect(screen.getByText('el panel')).toBeTruthy();
+  });
+
+  it('is the normal dashboard without a stage', () => {
+    renderDashboard();
+    expect(document.querySelector('.dash--stage')).toBeNull();
+    expect(screen.getByText('la lista')).toBeTruthy();
+  });
+});

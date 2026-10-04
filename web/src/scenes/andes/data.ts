@@ -1,5 +1,6 @@
 import { APP_LOCALE, formatNumber } from '../../charts/format';
 import { errorsText, validator } from '../../validation/validators';
+import { MEN_PER_FIGURE } from './column';
 
 /** One point of the campaign, as `andes_events.json` has it (schema `andes_events.schema.json`). */
 export interface AndesForce {
@@ -63,4 +64,11 @@ export function battleFacts(e: AndesEvent): Array<{ label: string; value: string
     { label: 'Lugar', value: `${coordinate(e.lat, 'N', 'S')}, ${coordinate(e.lon, 'E', 'O')}` },
     { label: 'Altitud', value: e.elevation_m === null ? 'sin dato' : `${int(e.elevation_m)} m` }
   ];
+}
+
+/** The line under the map that says what the figures of the column are: a schematic picture, not a record. */
+export function figuresNote(known: boolean): string {
+  return known
+    ? `Figuras esquemáticas: cada una representa ${MEN_PER_FIGURE} hombres (efectivos del primer punto); la mezcla de infantería, jinetes y mulas es ilustrativa.`
+    : 'Figuras esquemáticas: sin dato de efectivos, la columna tiene un tamaño fijo; la mezcla de infantería, jinetes y mulas es ilustrativa.';
 }
