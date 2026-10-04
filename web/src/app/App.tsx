@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useStore } from '../state/store';
 import { useKeyboard } from '../state/useKeyboard';
 import { useTicker } from '../state/useTicker';
@@ -13,12 +13,14 @@ import { loadForecast } from '../data/load';
 import { versionedUrl } from '../data/version';
 import { CapabilityProvider, QualityDebugLine } from '../runtime/CapabilityProvider';
 import { documentTitle } from './title';
+import { useSlots } from '../dashboard/slots';
 
 export function App() {
   useKeyboard();
   useTicker();
 
   const scene = useStore((s) => s.scene);
+  const filtersRef = useCallback((el: HTMLDivElement | null) => useSlots.getState().set('filters', el), []);
 
   const [forecastSource, setForecastSource] = useState<string | null>(null);
 
@@ -43,10 +45,6 @@ export function App() {
         <div className="chrome">
           <a className="skip-link" href="#main">Saltar al contenido principal</a>
           <Header mockSource={forecastSource} />
-          <div className="controls-wrap">
-            <Hud />
-            <ProvinceFilter />
-          </div>
           <QualityDebugLine />
         </div>
         
@@ -56,6 +54,14 @@ export function App() {
           </SceneTransition>
         </main>
         
+        <footer className="bottom-bar">
+          <div className="controls-wrap">
+            <Hud />
+            <ProvinceFilter />
+          </div>
+          <div className="filters-slot" ref={filtersRef} />
+        </footer>
+
         <StoryCaption />
         <StepRunner />
       </div>

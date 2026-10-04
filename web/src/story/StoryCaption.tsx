@@ -1,4 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
+import { useSlots } from '../dashboard/slots';
 import { gsap } from 'gsap';
 import { useStore } from '../state/store';
 import { useReducedMotion } from '../runtime/useReducedMotion';
@@ -19,9 +21,10 @@ export interface StoryCaptionProps {
 const PANEL_HEIGHT_VAR = '--story-panel-height';
 
 /** Keeps `--story-panel-height` equal to the height of the panel so the scenes can leave room for it. */
-function usePanelHeightVariable(ref: React.RefObject<HTMLElement | null>) {
+function usePanelHeightVariable(ref: React.RefObject<HTMLElement | null>, docked: boolean) {
   useEffect(() => {
     const el = ref.current;
+    if (docked) return;
     const root = document.documentElement;
     if (!el) return;
     const update = () => root.style.setProperty(PANEL_HEIGHT_VAR, `${el.offsetHeight}px`);
@@ -50,7 +53,8 @@ export function StoryCaption({ steps = STEPS, registryIds = null }: StoryCaption
   const bodyRef = useRef<HTMLDivElement | null>(null);
   const reducedMotion = useReducedMotion();
   const shownIndex = useRef(index);
-  usePanelHeightVariable(panelRef);
+  const slot = useSlots((s) => s.narrative);
+  usePanelHeightVariable(panelRef, slot !== null);
 
   // the text fades in each time the step changes (not on mount, not under reduced motion)
   useEffect(() => {
@@ -76,8 +80,8 @@ export function StoryCaption({ steps = STEPS, registryIds = null }: StoryCaption
     ? stepDeviates({ yearFloat, speed, playing, scenario, province, aiOverlay }, step)
     : false;
 
-  return (
-    <div role="region" aria-label="Historia" className="story" ref={panelRef}>
+  const panel = (
+    <div role="region" aria-label="Historia" className={slot ? 'story story--docked' : 'story'} ref={panelRef}>
       {/* announces the title when the step changes; stays mounted while the panel is collapsed */}
       <div aria-live="polite" className="story-live">
         {step?.title ?? ''}
@@ -154,4 +158,6 @@ export function StoryCaption({ steps = STEPS, registryIds = null }: StoryCaption
       )}
     </div>
   );
+
+  return slot ? createPortal(panel, slot) : panel;
 }

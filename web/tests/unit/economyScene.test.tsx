@@ -74,6 +74,8 @@ const rankBars = () => options().find((o) => o.series?.[0]?.type === 'bar')!;
 const history = () => options().find((o) => o.series?.some((s) => s.name === 'rank'))!;
 const names = (o: Opt) => (o.series ?? []).filter((s) => s.name !== 'markers').map((s) => s.name);
 
+const pick = (name: string) => fireEvent.click(screen.getByRole('button', { name }));
+
 async function loaded() {
   render(<Scene />);
   await screen.findByRole('heading', { level: 1 });
@@ -88,13 +90,16 @@ describe('Economy scene', () => {
     vi.unstubAllGlobals();
   });
 
-  it('shows loading, then the three charts, the tiles and the source line', async () => {
+  it('shows loading, then the long-run chart, the tiles and the source line; the other two views come from the carousel', async () => {
     stubFetch(records());
     render(<Scene />);
     expect(screen.getByText('Cargando...')).toBeDefined();
     await screen.findByRole('heading', { level: 1 });
     expect(names(longRun()).sort()).toEqual(['ARG', 'BOL', 'BRA', 'CHL', 'COL', 'ECU', 'MEX', 'PER']);
+    expect(screen.getAllByTestId('echart')).toHaveLength(1); // one view at a time
+    pick('Ranking');
     expect(rankBars().yAxis!.data).toEqual(['1. CHL', '2. ARG', '3. MEX', '4. BRA', '5. ECU', '6. COL', '7. PER', '8. BOL']);
+    pick('Puesto de ARG');
     expect(history().series!.find((s) => s.name === 'rank')!.data).toEqual([2, 2, null, 1]); // ARG rank per year
     expect(screen.getByText('Fuente: MOCK, consultado el 2 de octubre de 2026')).toBeDefined();
     expect(screen.getByText('Año 1901')).toBeDefined();
@@ -128,9 +133,10 @@ describe('Economy scene', () => {
     await loaded();
     useStore.setState({ yearFloat: 1903.9 });
     await screen.findByText('Año 1903');
-    await waitFor(() => expect(rankBars().yAxis!.data![0]).toBe('1. ARG'));
     expect(screen.getByTestId('tile-value').textContent).toContain('150 u');
     expect(longRun().series!.find((s) => s.name === 'markers')!.markLine!.data[0]!.xAxis).toBe('1903');
+    pick('Ranking');
+    await waitFor(() => expect(rankBars().yAxis!.data![0]).toBe('1. ARG'));
 
     useStore.setState({ yearFloat: 3000 });
     await screen.findByText('Año 1903');
@@ -148,6 +154,7 @@ describe('Economy scene', () => {
     }
     expect(screen.getByTestId('tile-value').textContent).not.toMatch(/(^|\s)0 u/);
     // and the country is listed as missing in the rank bars summary, not ranked
+    pick('Ranking');
     expect(screen.getByRole('img', { name: /sin datos de ARG/ })).toBeDefined();
   });
 
@@ -210,10 +217,9 @@ describe('Economy scene', () => {
   it('swaps each chart for a table whose missing cells read "sin datos"', async () => {
     stubFetch(records());
     await loaded();
-    const toggles = () => screen.getAllByRole('button', { name: 'Ver tabla' });
-    expect(toggles()).toHaveLength(3);
+    const toggle = () => screen.getByRole('button', { name: 'Ver tabla' });
 
-    fireEvent.click(toggles()[0]!);
+    fireEvent.click(toggle());
     const longTable = screen.getByRole('table', { name: 'Largo plazo' });
     const row1902 = within(longTable).getByText('1902').closest('tr')!;
     const cells = Array.from(row1902.querySelectorAll('td')).map((td) => td.textContent);
@@ -221,11 +227,13 @@ describe('Economy scene', () => {
     expect(cells).toContain('sin datos'); // ARG has no value in 1902
     expect(cells).not.toContain('0 u');
 
-    fireEvent.click(toggles()[1]!);
+    pick('Ranking');
+    fireEvent.click(toggle());
     const rankTable = screen.getByRole('table', { name: 'Ranking' });
     expect(Array.from(rankTable.querySelectorAll('tbody tr'))[0]!.textContent).toBe('1CHL210 u');
 
-    fireEvent.click(toggles()[2]!);
+    pick('Puesto de ARG');
+    fireEvent.click(toggle());
     const historyTable = screen.getByRole('table', { name: 'Historia del puesto' });
     const rows = Array.from(historyTable.querySelectorAll('tbody tr')).map((tr) =>
       Array.from(tr.querySelectorAll('td')).map((td) => td.textContent)
