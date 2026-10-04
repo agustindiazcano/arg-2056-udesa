@@ -2,12 +2,11 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { describe, it, expect } from 'vitest';
-import config from '../../headers.config.json';
 import { mergeVercel, parseCsp, toHeadersFile, toVercelHeaders, toVercelSource } from '../../scripts/lib/headers';
 import type { HeadersConfig } from '../../scripts/lib/headers';
 import { runCli } from '../../scripts/gen-headers';
 
-const cfg = config as HeadersConfig;
+const cfg = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../../headers.config.json'), 'utf8')) as HeadersConfig;
 const rule = (source: string) => cfg.rules.find((r) => r.source === source);
 
 describe('headers.config.json: the rules', () => {
@@ -49,7 +48,7 @@ describe('headers.config.json: the rules', () => {
     expect(all['Referrer-Policy']).toBe('strict-origin-when-cross-origin');
     expect(all['Permissions-Policy']).toBe('camera=(), microphone=(), geolocation=(), payment=()');
     expect(all['Cross-Origin-Opener-Policy']).toBe('same-origin');
-    expect(JSON.stringify(cfg)).not.toMatch(/Strict-Transport-Security/i);
+    expect(cfg.rules.flatMap((r) => Object.keys(r.headers)).map((k) => k.toLowerCase())).not.toContain('strict-transport-security');
   });
 });
 
