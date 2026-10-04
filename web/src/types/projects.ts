@@ -1,10 +1,6 @@
-import Ajv from 'ajv/dist/2020';
-import addFormats from 'ajv-formats';
-import schema from '../../../data/schemas/projects.schema.json';
+import { errorsText, validator } from '../validation/validators';
 
-const ajv = new Ajv();
-addFormats(ajv);
-const validate = ajv.compile<ProjectRecord[]>(schema);
+const validate = validator<ProjectRecord[]>('projects');
 
 export type ProjectStatus = 'operating' | 'ramp_up' | 'construction' | 'approved' | 'feasibility' | 'prefeasibility' | 'exploration' | 'announced';
 
@@ -29,7 +25,7 @@ export function parseProjects(json: unknown): ProjectRecord[] {
   if (validate(json)) {
     return json;
   }
-  throw new Error(`Invalid projects data: ${ajv.errorsText(validate.errors)}`);
+  throw new Error(`Invalid projects data: ${errorsText(validate.errors)}`);
 }
 
 export function selectProjects(

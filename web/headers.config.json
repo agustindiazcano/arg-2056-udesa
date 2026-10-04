@@ -1,0 +1,22 @@
+{
+  "_note": "Header rules written once; scripts/gen-headers.ts generates dist/_headers (Cloudflare Pages and Netlify) and the headers of vercel.json from it. Patterns use the _headers syntax. Where several patterns match one file the later one wins for the same header, so the specific rules come last (the smoke script checks the real answer of the deployed host). The CSP is as strict as the app allows: style-src 'unsafe-inline' is needed because ECharts writes inline styles on its elements. No Strict-Transport-Security here: the hosts add it, and scripts/smoke_deployed.py checks it on the deployed URL.",
+  "rules": [
+    {
+      "source": "/*",
+      "headers": {
+        "Content-Security-Policy": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self'; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'",
+        "X-Content-Type-Options": "nosniff",
+        "Referrer-Policy": "strict-origin-when-cross-origin",
+        "Permissions-Policy": "camera=(), microphone=(), geolocation=(), payment=()",
+        "Cross-Origin-Opener-Policy": "same-origin"
+      }
+    },
+    { "source": "/", "headers": { "Cache-Control": "public, max-age=0, must-revalidate" } },
+    { "source": "/*.html", "headers": { "Cache-Control": "public, max-age=0, must-revalidate" } },
+    { "source": "/assets/*", "headers": { "Cache-Control": "public, max-age=31536000, immutable" } },
+    { "source": "/data/*", "headers": { "Cache-Control": "public, max-age=31536000, immutable" } },
+    { "source": "/data/_version.json", "headers": { "Cache-Control": "no-cache" } },
+    { "source": "/terrain/*", "headers": { "Cache-Control": "public, max-age=86400" } },
+    { "source": "/geo/*", "headers": { "Cache-Control": "public, max-age=86400" } }
+  ]
+}

@@ -1,6 +1,7 @@
 import { resolve } from 'node:path';
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import { metaPlugin } from './src/content/metaTags';
 
 /** The HTML entries of the build (vite and vitest both run from web/): the app and the standalone References page. */
 export const inputs = {
@@ -17,7 +18,7 @@ export function manualChunks(id: string): string | undefined {
 }
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), metaPlugin()],
   // The analytics scripts exist only on Vercel (see src/runtime/VercelMetrics.tsx)
   define: { 'import.meta.env.VITE_ON_VERCEL': JSON.stringify(process.env.VERCEL === '1') },
   build: {

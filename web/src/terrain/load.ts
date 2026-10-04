@@ -44,6 +44,19 @@ async function request(fetchFn: NonNullable<LoadDeps['fetch']>, url: string): Pr
   return response;
 }
 
+/**
+ * Cache-busting version of a terrain: 12 hex characters mixed from the sha256 of every DEM input (the hex digits are
+ * added position by position, modulo 16), so a change in any input changes it. null when there are no inputs.
+ */
+export function terrainVersion(meta: Pick<Terrain['meta'], 'dem_inputs'>): string | null {
+  if (meta.dem_inputs.length === 0) return null;
+  const digits = Array.from({ length: 12 }, () => 0);
+  for (const input of meta.dem_inputs) {
+    for (let i = 0; i < 12; i += 1) digits[i] = (digits[i]! + parseInt(input.sha256[i]!, 16)) % 16;
+  }
+  return digits.map((d) => d.toString(16)).join('');
+}
+
 export async function loadTerrain(baseUrl: string, id: string, deps: LoadDeps = {}): Promise<Terrain> {
   const fetchFn = deps.fetch ?? ((url: string) => globalThis.fetch(url));
   const decodeImage = deps.decodeImage ?? decodeImageInBrowser;
@@ -57,7 +70,8 @@ export async function loadTerrain(baseUrl: string, id: string, deps: LoadDeps = 
     throw new Error(`Invalid terrain metadata for ${id}: ${err instanceof Error ? err.message : String(err)}`);
   }
 
-  const imageResponse = await request(fetchFn, `${base}/${meta.files.height}`);
+  const version = terrainVersion(meta);
+  const imageResponse = await request(fetchFn, `${base}/${meta.files.height}${version === null ? '' : `?v=${version}`}`);
   let image: DecodedImage;
   try {
     image = await decodeImage(await imageResponse.blob());

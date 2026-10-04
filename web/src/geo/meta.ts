@@ -1,6 +1,4 @@
-import Ajv from 'ajv/dist/2020.js';
-import ajvFormats from 'ajv-formats';
-import schema from '../../../data/schemas/geo_meta.schema.json' with { type: 'json' };
+import { validator } from '../validation/validators';
 
 export interface GeoMeta {
   source: string;
@@ -22,9 +20,7 @@ export interface GeoMeta {
   generated_by: 'web/scripts/geo';
 }
 
-const ajv = new Ajv({ allErrors: true });
-ajvFormats(ajv);
-const validate = ajv.compile<GeoMeta>(schema);
+const validate = validator<GeoMeta>('geoMeta');
 
 export function parseGeoMeta(json: unknown): GeoMeta {
   if (!validate(json)) {

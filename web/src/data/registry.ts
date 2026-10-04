@@ -1,7 +1,5 @@
-import Ajv from 'ajv/dist/2020';
-import addFormats from 'ajv-formats';
-import andesEventsSchema from '../../../data/schemas/andes_events.schema.json';
-import populationSchema from '../../../data/schemas/population.schema.json';
+import { errorsText, validator } from '../validation/validators';
+import type { SchemaName } from '../validation/schemaNames';
 import type { Scene } from '../types/scene';
 import { parseComposition } from '../types/composition';
 import { parseEconomySeries } from '../types/economy';
@@ -20,26 +18,23 @@ export interface Dataset {
   requiredBy: readonly Scene[];
 }
 
-const ajv = new Ajv();
-addFormats(ajv);
-
 /** Parser from an existing JSON Schema, for the files whose scene (or reader) has no typed parser yet. */
-function schemaParser(label: string, schema: object): (json: unknown) => unknown {
-  const validate = ajv.compile(schema);
+function schemaParser(label: string, name: SchemaName): (json: unknown) => unknown {
+  const validate = validator<unknown>(name);
   return (json) => {
     if (validate(json)) return json;
-    throw new Error(`Invalid ${label} data: ${ajv.errorsText(validate.errors)}`);
+    throw new Error(`Invalid ${label} data: ${errorsText(validate.errors)}`);
   };
 }
 
 /** Every data file the app can load, with the parser it uses and the scenes that need it. */
 export const DATASETS: readonly Dataset[] = [
   // The andes and ai-revolution scenes are placeholders and load nothing yet, so their files are optional.
-  { file: 'andes_events.json', parse: schemaParser('andes events', andesEventsSchema), requiredBy: [] },
+  { file: 'andes_events.json', parse: schemaParser('andes events', 'andesEvents'), requiredBy: [] },
   { file: 'composition.json', parse: parseComposition, requiredBy: ['resources'] },
   { file: 'economy_series.json', parse: parseEconomySeries, requiredBy: ['economy'] },
   { file: 'forecast_output.json', parse: parseForecastOutput, requiredBy: ['forecast', 'sandbox'] },
-  { file: 'population.json', parse: schemaParser('population', populationSchema), requiredBy: [] },
+  { file: 'population.json', parse: schemaParser('population', 'population'), requiredBy: [] },
   { file: 'production_projections.json', parse: parseProductionProjections, requiredBy: [] },
   { file: 'projects.json', parse: parseProjects, requiredBy: ['resources'] },
   // written by scripts/build_references.py and read by the standalone References page, not by a scene

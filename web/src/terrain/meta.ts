@@ -1,11 +1,7 @@
-import Ajv from 'ajv/dist/2020.js';
-import ajvFormats from 'ajv-formats';
+import { validator } from '../validation/validators';
 import type { TerrainMeta } from '../types/terrain.js';
-import schema from '../../../data/schemas/terrain_meta.schema.json' with { type: 'json' };
 
-const ajv = new Ajv({ allErrors: true });
-ajvFormats(ajv);
-const validate = ajv.compile<TerrainMeta>(schema);
+const validate = validator<TerrainMeta>('terrainMeta');
 
 export function parseTerrainMeta(json: unknown): TerrainMeta {
   if (!validate(json)) {

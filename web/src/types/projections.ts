@@ -1,9 +1,5 @@
-import Ajv from 'ajv/dist/2020';
-import addFormats from 'ajv-formats';
-import schema from '../../../data/schemas/production_projections.schema.json';
+import { errorsText, validator } from '../validation/validators';
 
-const ajv = new Ajv();
-addFormats(ajv);
 
 export type EntityType = 'project' | 'province' | 'national';
 export type ProjectionMetric = 'capacity_nameplate' | 'production_expected' | 'guidance' | 'forecast';
@@ -35,13 +31,13 @@ export interface ProductionProjection {
   note?: string;
 }
 
-const validate = ajv.compile<ProductionProjection[]>(schema);
+const validate = validator<ProductionProjection[]>('productionProjections');
 
 export function parseProductionProjections(json: unknown): ProductionProjection[] {
   if (validate(json)) {
     return json;
   }
-  throw new Error(`Invalid production projections data: ${ajv.errorsText(validate.errors)}`);
+  throw new Error(`Invalid production projections data: ${errorsText(validate.errors)}`);
 }
 
 export function selectProjections(

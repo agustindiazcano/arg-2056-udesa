@@ -14,13 +14,14 @@
     "data:mock": "npm run data:sync",
     "build:geo": "tsx scripts/geo/build-provinces.ts",
     "check:bundle": "tsx scripts/check-bundle.ts",
+    "gen:validators": "tsx scripts/gen-validators.ts",
     "pretest:e2e": "npm run data:sync && python ../scripts/build_references.py",
     "test:e2e": "playwright test",
     "test:e2e:report": "playwright show-report",
     "predev": "npm run data:sync",
     "dev": "vite",
-    "build": "tsc --noEmit && vite build",
-    "build:release": "python ../scripts/build_references.py && python ../scripts/check_no_mock.py ../data/processed public/data --content src/content --references public/data/references.json && tsc --noEmit && vite build"
+    "build": "tsc --noEmit && vite build && tsx scripts/gen-headers.ts",
+    "build:release": "python ../scripts/build_references.py && python ../scripts/check_no_mock.py ../data/processed public/data --content src/content --references public/data/references.json && python ../scripts/check_release_assets.py --public public && tsc --noEmit && vite build"
   },
   "keywords": [],
   "author": "",

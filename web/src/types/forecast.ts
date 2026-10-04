@@ -1,11 +1,7 @@
-import Ajv from 'ajv/dist/2020.js';
-import ajvFormats from 'ajv-formats';
+import { validator } from '../validation/validators';
 import type { ProvinceId, Scenario } from './index.js';
-import schema from '../../../data/schemas/forecast_output.schema.json' with { type: 'json' };
 
-const ajv = new Ajv({ allErrors: true });
-ajvFormats(ajv);
-const validate = ajv.compile<ForecastOutput>(schema);
+const validate = validator<ForecastOutput>('forecast');
 
 export type Indicator = 'gdp_constant_usd' | 'gdp_per_capita_usd' | 'population' | 'hdi' | 'resource_production';
 export type ResourceId = 'lithium' | 'copper' | 'gold' | 'silver' | 'oil' | 'gas' | 'soy' | 'wheat' | 'corn' | 'other';

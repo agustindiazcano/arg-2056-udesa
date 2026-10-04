@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { versionedUrl } from './version';
 
 export type DatasetStatus = 'loading' | 'success' | 'error';
 
@@ -11,7 +12,8 @@ export function useDataset<T>(name: string, parser?: (data: unknown) => T) {
     let mounted = true;
     setStatus('loading');
     
-    fetch(`/data/${name}.json`)
+    versionedUrl(`/data/${name}.json`)
+      .then(url => fetch(url))
       .then(res => {
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         return res.json();

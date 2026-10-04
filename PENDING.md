@@ -49,6 +49,12 @@
    - [ ] **Human: design.md asks for a 2px #3987e5 focus ring; the code uses `--color-focus` #ffc107 (kept).**
    - [ ] `scene-andes` must use `useQuality`, `QUALITY_PRESETS` and `WebGLRequired` (`web/src/runtime/`).
    - [ ] Lighthouse run on the production build (release checklist, section 4).
+13a. [x] `deploy`: header config, strict CSP, precompiled validators, data cache busting, page metadata, release job, smoke script (PR open, see `docs/deploy.md`).
+   - [ ] **Human deliverables**: description and final URL (`web/src/content/meta.ts`), `web/public/og.png` (1200x630 PNG), `web/public/favicon.svg`.
+   - [ ] **Human: first Vercel deploy, then `python scripts/smoke_deployed.py <url>`**; check the console for CSP violations from Analytics and Speed Insights.
+   - [ ] Not verified on Vercel: precedence of overlapping header rules (`/data/_version.json` must be `no-cache`).
+   - [ ] When the province geometry is committed, remove `MISSING_FOR_NOW` in `web/e2e/csp.spec.ts`.
+   - [ ] After editing a schema in `data/schemas/`, run `npm run gen:validators` in `web/` and commit `src/validation/generated.js`.
 13b. [x] `visits-archive`: weekly archive of Vercel Web Analytics and the Visits section of the references page (PR open, see `docs/visits.md`).
    - [ ] **Human setup: Vercel token and ids as GitHub secrets, enable PR creation for Actions, run the workflow once by hand** (`docs/visits.md`).
    - [ ] **Not verified against the real Vercel API** (same-day `since`/`until`, response fields, `limit`, plan).

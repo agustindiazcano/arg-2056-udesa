@@ -1,10 +1,8 @@
-import Ajv from 'ajv/dist/2020.js';
-import ajvFormats from 'ajv-formats';
+import { validator } from '../validation/validators';
 import { PROVINCES } from '../types/province.js';
 import type { ProvinceId } from '../types/province.js';
 import { parseGeoMeta } from './meta.js';
 import type { GeoMeta } from './meta.js';
-import schema from '../../../data/schemas/provinces_geo.schema.json' with { type: 'json' };
 
 export type Position = [number, number];
 
@@ -30,9 +28,7 @@ export interface ProvincesGeo {
   features: ProvinceFeature[];
 }
 
-const ajv = new Ajv({ allErrors: true });
-ajvFormats(ajv);
-const validate = ajv.compile<ProvincesGeo>(schema);
+const validate = validator<ProvincesGeo>('provincesGeo');
 
 export function parseProvincesGeo(json: unknown): ProvincesGeo {
   if (!validate(json)) {
@@ -88,8 +84,15 @@ export async function loadProvinces(
   fetchFn: (url: string) => Promise<FetchResponse> = (url) => fetch(url)
 ): Promise<{ geo: ProvincesGeo; meta: GeoMeta }> {
   const base = baseUrl.replace(/\/+$/, '');
-  const rawGeo = await getJson(fetchFn, `${base}/provinces.geojson`);
+  // The metadata first: its input hash is the cache-busting version of the geometry file.
   const rawMeta = await getJson(fetchFn, `${base}/provinces.meta.json`);
+  let meta: GeoMeta;
+  try {
+    meta = parseGeoMeta(rawMeta);
+  } catch (err) {
+    throw new Error(`Invalid geo metadata: ${err instanceof Error ? err.message : String(err)}`);
+  }
+  const rawGeo = await getJson(fetchFn, `${base}/provinces.geojson?v=${meta.input_sha256.slice(0, 12)}`);
 
   let geo: ProvincesGeo;
   try {
@@ -100,11 +103,5 @@ export async function loadProvinces(
   const problems = checkProvinceIds(geo);
   if (problems.length > 0) throw new Error(`Province ids are inconsistent: ${problems.join('; ')}`);
 
-  let meta: GeoMeta;
-  try {
-    meta = parseGeoMeta(rawMeta);
-  } catch (err) {
-    throw new Error(`Invalid geo metadata: ${err instanceof Error ? err.message : String(err)}`);
-  }
   return { geo, meta };
 }

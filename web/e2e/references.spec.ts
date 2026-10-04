@@ -3,7 +3,7 @@ import { test, expect } from './fixtures';
 test.describe('references page', () => {
   test('loads with its heading and, on mock data, the sample-data message', async ({ page }) => {
     await page.goto('/references.html');
-    await expect(page).toHaveTitle('Sources and attributions - Argentina 2056');
+    await expect(page).toHaveTitle('Sources and attributions | Argentina 2056');
     await expect(page.getByRole('heading', { name: 'Sources and attributions', level: 1 })).toBeVisible();
     // goes away with the mock (see docs/release-checklist.md)
     await expect(page.getByText('Sample data: these are not real sources')).toBeVisible();
