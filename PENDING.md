@@ -39,11 +39,16 @@
    - [ ] (later) campaign day in `StepFocus`, together with `andes-integration`.
    - [ ] (later) load the references registry in the shell and pass `registryIds` to `StoryCaption`, so source ids become links.
 12c. [x] `integration`: data registry and smoke test, bundle budgets, Playwright e2e suite (CI job `e2e`), `expect_failure.py`, `docs/release-checklist.md` (PR open).
-   - [ ] **Human step: confirm or tighten `web/budgets.json`** (first values were measured: main 503,824 B, references 112,749 B gzip, then x1.15).
+   - [ ] **Human step: confirm or tighten `web/budgets.json`** (rewritten after code splitting: main 116,045 B, references 113,441 B, largest scene chunk 240,444 B gzip, then x1.15; before: main 503,824 B).
    - [ ] **Human: confirm the e2e job passes in CI and review the `e2e-screenshots` artifact.**
    - [ ] At release: delete the CI step `Release gate fails on mock data` and the mock assertions in `web/e2e/boot.spec.ts` and `web/e2e/references.spec.ts` (release-checklist item 1).
    - [ ] (later) the sandbox shows "(error +0.2%)" in its copy; the e2e text check therefore looks for "error loading", not "error".
-13. [ ] `performance-a11y` (next): bundle splitting (the main chunk is ~1.2 MB minified), Lighthouse, accessibility audit.
+13. [x] `performance-a11y`: scene code splitting, tree-shaken ECharts, quality tiers, reduced motion, accessibility fixes and axe in e2e (PR open).
+   - [ ] **Human: tune the tier thresholds and `QUALITY_PRESETS` on real weak devices** (assumptions, see `docs/performance.md`).
+   - [ ] **Human: decide `--state-critical` (#d03b3b) as text color: 4.05:1 on `--page`, 3.62:1 on `--surface`, 3.93:1 on `--color-bg` (below 4.5).** Used by the "Error loading data." messages.
+   - [ ] **Human: design.md asks for a 2px #3987e5 focus ring; the code uses `--color-focus` #ffc107 (kept).**
+   - [ ] `scene-andes` must use `useQuality`, `QUALITY_PRESETS` and `WebGLRequired` (`web/src/runtime/`).
+   - [ ] Lighthouse run on the production build (release checklist, section 4).
 14. [ ] `polish`: bloom, easing, palette, transitions, reduced-motion, performance pass.
 
 ## Data to verify (human, against original source)

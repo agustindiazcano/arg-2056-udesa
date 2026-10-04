@@ -5,7 +5,7 @@ test.describe('boot', () => {
   test('loads with a title, the MOCK badge and the tabs in the order of the Scene union', async ({ page }) => {
     await page.goto('/');
 
-    await expect(page).toHaveTitle('Argentina 2056');
+    await expect(page).toHaveTitle('Andes | Argentina 2056');
     // the build uses mock data today; this assertion goes away with the mock (see docs/release-checklist.md)
     await expect(page.getByText('MOCK DATA')).toBeVisible();
 

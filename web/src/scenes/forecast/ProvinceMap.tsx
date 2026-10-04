@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import * as echarts from 'echarts';
+import { registerMap } from '../../charts/echarts.js';
 import { MAP_NAME, buildProvinceMap } from '../../charts/builders/provinceMap.js';
 import { DataTable } from '../../charts/DataTable.js';
 import { EChart } from '../../charts/EChart.js';
@@ -25,7 +25,7 @@ let registeredGeo: ProvincesGeo | null = null;
 /** Registers the map with echarts once per loaded geometry (the provinces plus the illustrative Malvinas). */
 function registerGeo(geo: ProvincesGeo): void {
   if (registeredGeo === geo) return;
-  echarts.registerMap(MAP_NAME, geoWithMalvinas(geo));
+  registerMap(MAP_NAME, geoWithMalvinas(geo));
   registeredGeo = geo;
 }
 

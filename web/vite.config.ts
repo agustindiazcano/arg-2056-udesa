@@ -8,10 +8,18 @@ export const inputs = {
   references: resolve(process.cwd(), 'references.html')
 };
 
+/**
+ * ECharts and its renderer zrender go to one vendor chunk, named `echarts`, so that it loads only with the first chart
+ * scene and never with the initial load (scripts/check-bundle.ts asserts it by that name). Function form, no plugin.
+ */
+export function manualChunks(id: string): string | undefined {
+  return /[\\/]node_modules[\\/](echarts|zrender)[\\/]/.test(id) ? 'echarts' : undefined;
+}
+
 export default defineConfig({
   plugins: [react()],
   build: {
     manifest: true,
-    rollupOptions: { input: inputs }
+    rollupOptions: { input: inputs, output: { manualChunks } }
   },
 });

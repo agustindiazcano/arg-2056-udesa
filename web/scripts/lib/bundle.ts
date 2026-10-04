@@ -5,6 +5,8 @@ import { gzipSync } from 'node:zlib';
 /** One entry of web/dist/.vite/manifest.json (the fields this tool reads). */
 export interface ManifestChunk {
   file: string;
+  /** chunk name; a vendor chunk made by manualChunks carries it (the ECharts chunk is named `echarts`) */
+  name?: string;
   src?: string;
   isEntry?: boolean;
   isDynamicEntry?: boolean;
@@ -122,4 +124,43 @@ export function compare(sizes: BundleSizes, budgets: Budgets): BudgetRow[] {
 /** The measured value times 1.15, rounded up to the next 1024 bytes: how the first budgets were set. */
 export function suggestedBudget(bytes: number): number {
   return Math.ceil((bytes * 1.15) / 1024) * 1024;
+}
+
+export interface InitialViolation {
+  /** html entry name (main, references) */
+  entry: string;
+  file: string;
+  kind: 'echarts' | 'scene';
+}
+
+/** A scene chunk is the dynamic entry of src/scenes/<scene>/index.tsx. */
+const SCENE_SOURCE = /^src\/scenes\/[^/]+\/index\.tsx?$/;
+
+function violationKind(chunk: ManifestChunk): InitialViolation['kind'] | null {
+  if (chunk.name === 'echarts') return 'echarts';
+  if (chunk.src !== undefined && SCENE_SOURCE.test(chunk.src)) return 'scene';
+  return null;
+}
+
+/**
+ * The files of an initial load that must only ever be dynamic imports: the ECharts chunk (it loads with the first chart
+ * scene) and any scene chunk. Static imports only; one row per entry and file, entries in manifest order.
+ */
+export function initialViolations(manifest: ViteManifest): InitialViolation[] {
+  const violations: InitialViolation[] = [];
+  for (const { name, key } of entryNames(manifest)) {
+    const seen = new Set<string>();
+    const found: InitialViolation[] = [];
+    const visit = (chunkKey: string) => {
+      if (seen.has(chunkKey)) return;
+      seen.add(chunkKey);
+      const chunk = chunkOf(manifest, chunkKey);
+      const kind = violationKind(chunk);
+      if (kind !== null) found.push({ entry: name, file: chunk.file, kind });
+      for (const imported of chunk.imports ?? []) visit(imported);
+    };
+    visit(key);
+    violations.push(...found.sort((a, b) => a.file.localeCompare(b.file)));
+  }
+  return violations;
 }

@@ -4,7 +4,7 @@ import { render } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { EChart } from '../../src/charts/EChart.js';
 
-// Mock echarts
+// Mock the tree-shaken echarts module
 const { mockInit, mockSetOption, mockResize, mockDispose, mockOn } = vi.hoisted(() => {
   const mockSetOption = vi.fn();
   const mockResize = vi.fn();
@@ -19,7 +19,7 @@ const { mockInit, mockSetOption, mockResize, mockDispose, mockOn } = vi.hoisted(
   return { mockInit, mockSetOption, mockResize, mockDispose, mockOn };
 });
 
-vi.mock('echarts', () => ({
+vi.mock('../../src/charts/echarts.js', () => ({
   init: mockInit,
 }));
 

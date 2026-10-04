@@ -257,7 +257,7 @@ Datos reales
 19	references-page	Se puede escribir ya
 Calidad		
 20	integration	Se puede escribir ya
-21	performance-a11y	Se puede escribir ya
+21	performance-a11y	Hecha (PR abierto)
 22	mutation-testing (opcional)	Se puede escribir ya
 23	polish	Necesita decisiones de diseño tuyas
 Entrega		

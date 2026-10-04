@@ -1,7 +1,9 @@
 import ts from 'typescript-eslint';
+import jsxA11y from 'eslint-plugin-jsx-a11y';
 
 export default ts.config(
   ...ts.configs.recommended,
+  jsxA11y.flatConfigs.recommended,
   {
     rules: {
       '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_', varsIgnorePattern: '^_' }],

@@ -14,7 +14,7 @@ const { mockInit, mockSetOption, mockDispose } = vi.hoisted(() => {
   return { mockInit, mockSetOption, mockDispose };
 });
 
-vi.mock('echarts', () => ({ init: mockInit }));
+vi.mock('../../src/charts/echarts.js', () => ({ init: mockInit }));
 
 const series = (['pessimistic', 'expected', 'optimistic'] as const).flatMap((scenario) =>
   (['gdp_per_capita_usd', 'population'] as const).flatMap((indicator) =>
