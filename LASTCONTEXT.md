@@ -1,18 +1,21 @@
 # Last Context
 
 ## State
-- Plan approved by the human (presentation first, in Spanish, dark cinematic). F1 (believable mock) merged in PR #36.
-- **F2a done on branch `task/ui-foundation`**: tokens consolidated (legacy `--color-bg`, `--color-text`, `--color-primary` removed; spacing, radius, type and glass tokens added), `web/src/styles/ui.css` (no color literal, a test guards it), the shell redesigned and translated: `Header` (brand, tabs `Escenas`, badge "Datos ilustrativos", link "Fuentes y métodos"), control bar (play, year slider, speed, scenario segmented, AI toggle, province button), province dialog as a popover, `Segmented` component, Spanish loading and WebGL messages. Scene labels: Andes, Economía, Recursos, Pronóstico 2056, Revolución IA, Simulador.
-- The debug HUD and the no-op 2D/3D button are gone (the `d` key still toggles `mode`; a view will use it in F5).
-- Tables no longer scroll inside boxes (axe `scrollable-region-focusable`; the jsx-a11y rule forbids a focusable region): the scene rows grow with their content and the scene area scrolls.
-- 924 unit tests, e2e adapted (names in Spanish). `docs/ui.md`. Pushed, CI not checked.
+- Plan approved by the human (presentation first, in Spanish, dark cinematic). Merged: F1 believable mock (PR #36), F2a Spanish shell and design tokens (PR #37), docs for the 3D direction (PR #38).
+- **F2b done on branch `task/ui-scenes-es`**: every scene, chart builder, table, the story panel and the references page are in Spanish, on shared components. Pushed state and CI: see the PR (CI not checked unless the PR says so).
+  - Shared components in `web/src/ui/`: `SceneShell` (title, subtitle, source line; `dateLabel` for model output), `TableToggle` ("Ver tabla"), `FilterBar` + `FilterChip`, `SceneLoading` + `SceneError` (both `role="status"`: `liveRegions.test.ts` forbids `role="alert"`). All five data scenes and the references page use them.
+  - `web/src/content/labels.ts`: Spanish names for resources, project statuses, scenarios, indicators, position against the range, and `indicatorSentence` ("producción de recursos (oro)").
+  - `web/src/charts/format.ts`: `APP_LOCALE = 'es-AR'`, `formatValue`, `formatNumber`, `formatDecimal`, `formatPercent`, `formatDate`, `ordinal` (`2.º`). No `toFixed` is left in `src`. `lang="es"` in `index.html` and `references.html`.
+  - Province names in tables and sentences come from `PROVINCES`; country names in the visits table come from `Intl.DisplayNames('es-AR')`.
+  - `docs/ui.md` describes the shared pieces and the language rules.
+- Tests: unit and e2e updated to Spanish (headings in `web/e2e/fixtures.ts` too). Compact numbers contain non-breaking spaces (`10 k`): tests normalize them.
 
 ## Decisions
-- Play/pause is one button whose name changes (no aria-pressed). Speed uses the existing speedUp/speedDown actions; no store or key change.
-- The scenes, the story panel and the references page are still English: F2b (shared `SceneShell`, `TableToggle`, `FilterBar`, Spanish scenes and charts, `APP_LOCALE = es-AR`, `lang="es"`).
-
-- **Direction decided after F2a**: 3D is the default presentation (a narrated tour of scenes with interactive text, plus a free explore mode); 2D stays unchanged as the data view and accessible alternative. Brief `presentation-3d.md` (replaces `scene-forecast-map-3d`) with six parts and decisions `D-3d-1` to `D-3d-5`. Reference look: `test/dashboard_3d_PoC.html`.
-- The 2D province map still draws nothing (no geometry) and Economy and Resources ignore the province filter.
+- UI text avoids the second person (infinitives and impersonal forms) to stay neutral between voseo and tuteo. The human may want to change that: it is one pass over the strings.
+- The story steps, the era bands, the page description and the two placeholder scenes (Andes, Revolución IA) are provisional content, now in Spanish ("(provisorio)", "Texto provisorio. Reemplazar antes del lanzamiento."). The release gate still keys on `placeholder: true`, not on the text. Real story text was not touched.
+- The forecast and sandbox scenes still carry their own scenario and AI chips next to the control bar (same names as the bar): F3 unifies the filters.
+- The 2D province map still draws nothing (no geometry) and Economy and Resources ignore the province filter (F3).
+- 3D is the default presentation (narrated tour plus free explore mode); 2D stays as the data view and the accessible alternative. Brief `presentation-3d.md`, decisions `D-3d-1` to `D-3d-5`.
 
 ## Next step
-- F2b, then F3 (unified filters and the province map as the main map mode), F4 (motion with GSAP and the story, built together with `presentation-3d` parts 1 to 4), F5 (3D map country to zone), F6 (Andes), F7 (live simulation), F8 (polish).
+- F3: unified filters and the province map as the main map mode (needs `D-3d-3`, the province geometry decision), then F4 (motion with GSAP and the story, together with `presentation-3d` parts 1 to 4), F5 (3D map country to zone), F6 (Andes), F7 (live simulation), F8 (polish).

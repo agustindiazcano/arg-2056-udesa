@@ -33,7 +33,7 @@ Every task below has a brief (`<slug>.md` in the repository root) and a prompt (
 6. [ ] **Human step before `andes-integration`**: download the DEM, register it with `python -m datapipe register`, set the bounding boxes in `terrain/config.json`, run `python -m terrain bake`, run `python -m terrain verify` against the Andes facts, commit the outputs in `web/public/terrain/`. See `docs/terrain.md`.
 7. [ ] `andes-integration` (the old `scene-andes`): BLOCKED by the terrain outputs and the renderer decision (`D-andes-1` to `D-andes-4`; the proof of concept in `test/map_test1.html` is Three.js loaded from a CDN, which the CSP forbids, so it must be bundled). Must use `useQuality`, `QUALITY_PRESETS`, `WebGLRequired` and `useReducedMotion` (`web/src/runtime/`).
 8. [x] `references-page`, `storytelling-substeps`, `integration`: merged.
-   - [ ] **Human task before release**: write the real story steps with sources in `web/src/content/steps/index.ts` (18 placeholders; the gate fails until they are replaced). Register real sources in `data/processed/sources.json`.
+   - [ ] **Human task before release**: write the real story steps with sources in `web/src/content/steps/index.ts` (18 placeholders, now titled "Paso N (provisorio)"; the gate fails until they are replaced). Register real sources in `data/processed/sources.json`.
    - [ ] (later) let steps control scene-local settings; campaign day in `StepFocus` with `andes-integration`; load the references registry in the shell and pass `registryIds` to `StoryCaption`.
    - [ ] **Human step: confirm or tighten `web/budgets.json`** (main is now about 102,293 B gzip against a 134,144 B budget after the precompiled validators; references 99,986 B against 131,072).
    - [ ] At release: delete the CI step `Release gate fails on mock data` and the mock assertions in `web/e2e/boot.spec.ts` and `web/e2e/references.spec.ts` (release-checklist item 1).
@@ -75,11 +75,12 @@ Every task below has a brief (`<slug>.md` in the repository root) and a prompt (
 - [ ] Province map: the PLACEHOLDER red arm of the diverging ramp (`D-polish-3`), the hatch of the no-data fill (design.md asks for a hatched fill; only the baseline color is applied), the selected-province border may be partly covered by neighbours, the illustrative Malvinas outline.
 - [ ] Forecast scene: look and feel against `design.md`, history line and "History | Forecast" divider (mock has no history), plain buttons, layout spacing.
 - [ ] Forecast ranking: rows beyond top 10 are hidden, a selected province outside the top 10 is not shown.
-- [ ] Story caption panel: look and feel against `design.md`, dot hit targets are small, the "Placeholder" tag uses the warning token, no transition on collapse, the panel covers the bottom of the 3D stage.
+- [ ] Story caption panel: look and feel against `design.md`, dot hit targets are small, the "Provisorio" tag uses the warning token, no transition on collapse, the panel covers the bottom of the 3D stage.
 - [ ] Visits section of the References page: plain table, flags are emoji (letters on Windows browsers).
 
 ## Blocked / questions
 
+- [ ] **Human: confirm the voice of the Spanish UI text.** F2b avoids the second person (infinitives and impersonal forms); say if voseo ("Elegí") or another register is wanted, it is one pass over the strings. Also read the new wording of the chart summaries and tooltips (`web/src/charts/builders/`, `web/src/content/labels.ts`).
 - [ ] `D-res-3` (blocks `model-params`): ten value-added constants `v_r` (recommended, includes `other`) or nine as the design counts.
 - [ ] `D-3d-1` to `D-3d-5` (block `presentation-3d`, see its section 5): Three.js bundled as the one 3D stack, first-load budget (poster first, or raise `chunk_max` on purpose), province geometry source and license (the PoC embeds 24 simplified provinces of unknown origin), typeface without Google fonts, tour length and scenes.
 - [ ] `D-andes-1` to `D-andes-4` (block `andes-integration`; `D-andes-1` is answered in practice by `D-3d-1`): renderer (Three.js bundled, MapLibre + deck.gl, or a mix), its dependency, the terrain as geometry source, the language of the scene.
@@ -97,6 +98,7 @@ Every task below has a brief (`<slug>.md` in the repository root) and a prompt (
 
 ## Done
 
+- [x] `F2b` (branch `task/ui-scenes-es`): scenes, charts, tables, story panel and references page in Spanish on the shared `SceneShell`, `TableToggle`, `FilterBar`; `APP_LOCALE = 'es-AR'` and `lang="es"`. See `docs/ui.md`.
 - [x] `deploy`: header config, strict CSP, precompiled validators (Ajv standalone), data cache busting, metadata, release job, smoke script, `docs/deploy.md`.
 - [x] `visits-archive`, `vercel-analytics`, `vercel-config`: see item 11.
 - [x] `performance-a11y`: see item 9.
