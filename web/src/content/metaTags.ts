@@ -1,3 +1,5 @@
+import fs from 'node:fs';
+import path from 'node:path';
 import type { Plugin } from 'vite';
 import { META } from './meta';
 import type { Meta } from './meta';
@@ -41,9 +43,17 @@ export function applyMeta(html: string, meta: Meta, page: 'main' | 'references')
 }
 
 /** Vite plugin: writes the metadata into both html entries of the build and of the dev server. */
-export function metaPlugin(meta: Meta = META): Plugin {
+export function metaPlugin(meta: Meta = META, publicDir: string = path.resolve(process.cwd(), 'public')): Plugin {
   return {
     name: 'argentina-2056-meta',
+    // The dev build only warns; scripts/check_release_assets.py and the placeholder gate fail the release build.
+    buildStart() {
+      if (meta.placeholder) this.warn('metadata is still a placeholder (src/content/meta.ts): the release build will fail');
+      const og = path.join(publicDir, 'og.png');
+      if (!fs.existsSync(og)) this.warn(`preview image missing: ${og} (the release build will fail)`);
+      const favicon = path.join(publicDir, 'favicon.svg');
+      if (!fs.existsSync(favicon)) this.warn(`favicon missing: ${favicon} (the release build will fail)`);
+    },
     transformIndexHtml(html, ctx) {
       const file = (ctx as { filename: string }).filename;
       return applyMeta(html, meta, /references\.html$/.test(file) ? 'references' : 'main');
