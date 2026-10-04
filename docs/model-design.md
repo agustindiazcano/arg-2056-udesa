@@ -322,3 +322,5 @@ Order is dependency order. `can_start_now` means it works with mock data or decl
 | D-pop-1 | Negative cohorts | raise error / clamp at zero and record | raise error | clamping hides inconsistent migration inputs |
 | D-hdi-1 | Provincial HDI | not produced / produced | not produced | needs provincial education and health data |
 | D-data-1 | Age-structured population contract | new task `population-age-contract` | create it | without it the population component cannot be calibrated |
+
+All decisions of this table were answered by the human on 2026-10-04 with the recommendation in the fourth column; see `docs/decisions.md`.

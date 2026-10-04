@@ -264,17 +264,17 @@ Legend: DONE = merged. READY = can start now. BLOCKED = needs the human input na
 | 20 | model-ts-port (optional) | BLOCKED | model-growth-core, model-ai-overlay (and drivers, hdi for the full port) |
 | | **Scenes** | | |
 | 21 | scene-ai-revolution | READY | |
-| 22 | andes-integration | BLOCKED | terrain outputs committed, renderer decision D-andes-1 to D-andes-4 |
+| 22 | andes-integration | BLOCKED | terrain outputs committed (D-andes-1 to D-andes-4 decided) |
 | 23 | scene-forecast-map-3d | SUPERSEDED | replaced by presentation-3d |
-| 23b | presentation-3d (six PRs) | BLOCKED | F2b merged, D-3d-1 to D-3d-5, real province geometry for the map |
+| 23b | presentation-3d (six PRs) | IN PROGRESS | F2b merged, D-3d-1 to D-3d-6 decided (3D first), real province geometry done |
 | | **Real data** | | |
-| 24 | data-economy-population | BLOCKED | research files, my verification, answer to D-gdp-1, population-age-contract merged |
+| 24 | data-economy-population | BLOCKED | research files, my verification, population-age-contract merged (D-gdp-1 decided) |
 | 25 | data-resources | BLOCKED | research files (mining, energy, agro) and my verification |
 | 26 | data-andes | BLOCKED | research files (Andes) and my verification |
 | 27 | data-research-inputs | BLOCKED | research files, their documented format and my verification |
 | | **Quality and delivery** | | |
 | 28 | mutation-testing (optional) | READY | |
-| 29 | polish | BLOCKED | answers to D-polish-1 to D-polish-7; model and data tasks done |
+| 29 | polish | DECIDED | D-polish-3 color from the human; model and data tasks done, unless the human starts it earlier (3D first, D-3d-6) |
 | 30 | docs-submission | BLOCKED | the contest's rules (table in the brief); backtest-run |
 | 31 | demo-video (optional) | BLOCKED | what the contest requires |
 
