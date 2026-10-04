@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { DEFAULT_FIGURES, FIGURE_NEAR, MAX_FIGURES, MEN_PER_FIGURE, columnSlots, figureCount, gaitAt, lodFor } from '../../src/scenes/andes/column';
+import { DEFAULT_FIGURES, FIGURE_NEAR, MAX_FIGURES, MEN_PER_FIGURE, columnSlots, figureCount, gaitAt, lodFor, startingMen } from '../../src/scenes/andes/column';
+import { closePose } from '../../src/scenes/andes/camera';
+import { figuresNote } from '../../src/scenes/andes/data';
 import { FIGURE_PARTS, instanceCount } from '../../src/scenes/andes/figureParts';
 import { arcAt, buildPath, sampleAlong, sampleAlongExtended } from '../../src/scenes/andes/pathAlong';
 import { fromScene, sceneScale, toScene } from '../../src/scenes/andes/terrainMesh';
@@ -208,5 +210,44 @@ describe('figure parts', () => {
     const slots = columnSlots(10);
     const total = slots.reduce((n, s) => n + FIGURE_PARTS[s.kind].length, 0);
     expect(instanceCount(slots)).toBe(total);
+  });
+});
+
+describe('startingMen', () => {
+  it('is the count of the first force of the first point of the route', () => {
+    expect(startingMen([{ forces: [{ men: 3600 }, { men: 100 }] }, { forces: [{ men: 3500 }] }])).toBe(3600);
+  });
+
+  it('is null (and never 0) when there is no count, no force or no point', () => {
+    expect(startingMen([{ forces: [{ men: null }] }])).toBeNull();
+    expect(startingMen([{ forces: [] }])).toBeNull();
+    expect(startingMen([])).toBeNull();
+  });
+});
+
+describe('figuresNote', () => {
+  it('says what a figure stands for and that the mix is only illustrative', () => {
+    const t = figuresNote(true);
+    expect(t).toContain(String(MEN_PER_FIGURE));
+    expect(t).toContain('ilustrativa');
+  });
+
+  it('says when the count is not known and the column has a fixed size', () => {
+    const t = figuresNote(false);
+    expect(t).toContain('sin dato');
+    expect(t).not.toContain(String(MEN_PER_FIGURE));
+  });
+});
+
+describe('closePose', () => {
+  const terrain = syntheticTerrain([-71, -34, -69, -32], 40, 40);
+  const scale = sceneScale(terrain, { longSide: 20, exaggeration: 4 });
+
+  it('looks at the army from so close that the figures show, keeping the turn the camera has', () => {
+    const p = closePose(scale, { x: 1, y: 2, z: 3 }, { x: 0, y: 0, z: 0, theta: 1.1, phi: 0.2, radius: 30 });
+    expect([p.x, p.y, p.z]).toEqual([1, 2, 3]);
+    expect(p.theta).toBe(1.1);
+    expect(p.radius).toBeLessThan(FIGURE_NEAR);
+    expect(p.phi).toBeGreaterThan(0.5);
   });
 });

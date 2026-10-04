@@ -10,7 +10,8 @@ import { useStore } from '../../state/store.js';
 import { Tile, TileGrid } from '../../ui/Tile.js';
 import { SceneError, SceneLoading } from '../../ui/SceneStatus.js';
 import { sourceLine } from '../../ui/SceneShell.js';
-import { forceText, parseAndesEvents } from './data.js';
+import { startingMen } from './column.js';
+import { figuresNote, forceText, parseAndesEvents } from './data.js';
 import type { AndesEvent } from './data.js';
 import { EventList, EventPanel } from './Panel.js';
 import { buildRoute, campaignDay, positionAt } from './timeline.js';
@@ -48,6 +49,7 @@ export default function Scene() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [view, setView] = useState<'map' | 'table'>('map');
   const [follow, setFollow] = useState(false);
+  const [closeUp, setCloseUp] = useState(0);
   const [listOpen, setListOpen] = useState(true);
   const opener = useRef<HTMLElement | null>(null);
   const selected = route.points.find((p) => p.id === selectedId) ?? null;
@@ -93,6 +95,7 @@ export default function Scene() {
             day={day}
             selectedId={selectedId}
             follow={follow}
+            closeUp={closeUp}
             onSelect={(id) => (id === null ? close() : select(id))}
             label={label}
           />
@@ -137,6 +140,9 @@ export default function Scene() {
         <button type="button" className="chip" aria-pressed={follow} disabled={view !== 'map'} onClick={() => setFollow(!follow)}>
           Seguir al ejército
         </button>
+        <button type="button" className="chip" disabled={view !== 'map'} onClick={() => setCloseUp(closeUp + 1)}>
+          Ver de cerca
+        </button>
         <button type="button" className="chip" aria-pressed={listOpen} onClick={() => setListOpen(!listOpen)}>
           Eventos
         </button>
@@ -161,6 +167,7 @@ export default function Scene() {
             {synthetic && terrain.problem ? ` (${terrain.problem})` : ''}
           </p>
         )}
+        {terrain && view === 'map' && <p>{figuresNote(startingMen(route.points) !== null)}</p>}
         {source && <p>{source}</p>}
       </footer>
     </div>

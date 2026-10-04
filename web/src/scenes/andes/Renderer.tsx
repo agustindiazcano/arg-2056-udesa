@@ -30,9 +30,12 @@ import { useCameraNav } from '../../three/useCameraNav';
 import { sampleElevation } from '../../terrain/decode';
 import type { Terrain } from '../../types/terrain';
 import { NavControls } from '../../ui/NavControls';
-import { battlePose, followPose, overviewPose } from './camera';
+import { battlePose, closePose, followPose, overviewPose } from './camera';
+import { figureCount, lodFor, startingMen } from './column';
+import { createFigureColumn } from './figures3d';
+import { arcAt, buildPath } from './pathAlong';
 import { skyColorHex, starPositions } from './sky';
-import { buildTerrainMesh, sceneScale, toScene } from './terrainMesh';
+import { buildTerrainMesh, fromScene, sceneScale, toScene } from './terrainMesh';
 import { positionAt } from './timeline';
 import type { Route } from './timeline';
 
@@ -40,8 +43,12 @@ import type { Route } from './timeline';
 const LONG_SIDE = 20;
 const EXAGGERATION = 6;
 const LIFT = 0.05;
+/** the feet rest a little above the sampled ground: the mesh is coarser than the samples */
+const FIGURE_LIFT = 0.02;
 const ROUTE_SAMPLES = 160;
 const CLICK_SLOP = 4;
+/** the closest zoom of this scene, as a fraction of the start radius: close enough to see the column of figures */
+const ZOOM_MIN_ANDES = 0.04;
 /** the sky dome around the origin: the camera stays within ~100 units of it and the far plane is 300 */
 const SKY_RADIUS = 180;
 
@@ -61,13 +68,15 @@ export interface AndesRendererProps {
   selectedId: string | null;
   /** the camera follows the army as the days go by */
   follow: boolean;
+  /** each increase flies the camera right next to the army, where the figures of the column show */
+  closeUp: number;
   onSelect: (id: string | null) => void;
   /** what the canvas says to a screen reader */
   label: string;
 }
 
 /** The Andes in 3D: the terrain, the route, a marker per event and the army at its place of the day. The only file of the scene that touches WebGL. */
-export function AndesRenderer({ terrain, route, day, selectedId, follow, onSelect, label }: AndesRendererProps) {
+export function AndesRenderer({ terrain, route, day, selectedId, follow, closeUp, onSelect, label }: AndesRendererProps) {
   const hostRef = useRef<HTMLDivElement>(null);
   const tipRef = useRef<HTMLDivElement>(null);
   const reduced = useReducedMotion();
@@ -87,6 +96,7 @@ export function AndesRenderer({ terrain, route, day, selectedId, follow, onSelec
   const setFollowRef = useRef<(on: boolean) => void>(() => {});
   const followRef = useRef(follow);
   followRef.current = follow;
+  const closeUpRef = useRef<() => void>(() => {});
 
   useEffect(() => {
     const host = hostRef.current;
@@ -102,11 +112,14 @@ export function AndesRenderer({ terrain, route, day, selectedId, follow, onSelec
       phi: start.phi,
       box: { minX: -scale.width / 2, maxX: scale.width / 2, minY: 0, maxY, minZ: -scale.depth / 2, maxZ: scale.depth / 2 },
       pose: poseRef.current ?? undefined,
-      animateReset: !reduced && tier !== 'low'
+      animateReset: !reduced && tier !== 'low',
+      zoomMin: ZOOM_MIN_ANDES,
+      beforeRender: () => beforeRender()
     });
     poseRef.current = stage.pose;
     stageRef.current = stage;
     const { scene } = stage;
+    let beforeRender = () => {};
 
     // distance fades into the horizon color of the sky, so the edges of the terrain are not a cut
     scene.fog = new Fog(SKY_RAMP[0]!, start.radius * 1.1, start.radius * 3);
@@ -171,6 +184,8 @@ export function AndesRenderer({ terrain, route, day, selectedId, follow, onSelec
     scene.add(new Line(routeGeometry, new LineBasicMaterial({ color: tokens.muted })));
     const traveled = new Line(routeGeometry, new LineBasicMaterial({ color: tokens.ink }));
     scene.add(traveled);
+    const path = buildPath(Float32Array.from(samples));
+    const sampleCount = samples.length / 3;
 
     // a marker per event, lit when selected
     const lit = new Color(SEQUENTIAL_BLUE[9]); // the blue of the interface marks what is selected on the terrain
@@ -191,11 +206,32 @@ export function AndesRenderer({ terrain, route, day, selectedId, follow, onSelec
       new MeshStandardMaterial({ color: tokens.ink, emissive: lit, emissiveIntensity: 0.8, roughness: 0.4 })
     );
     scene.add(army);
+
+    // up close the marker gives way to a column of figures that marches along the route as the days go by
+    const { count } = figureCount(startingMen(route.points), preset.particleScale);
+    const column = createFigureColumn(count, path, (x, z) => {
+      const at = fromScene(scale, x, z);
+      const h = sampleElevation(terrain, at.lon, at.lat);
+      return h === null ? null : toScene(scale, at.lon, at.lat, h).y + FIGURE_LIFT;
+    });
+    column.mesh.visible = false;
+    scene.add(column.mesh);
+    let lod: 'marker' | 'figures' = 'marker';
+    beforeRender = () => {
+      const next = lodFor(stage.camera.position.distanceTo(army.position), lod);
+      if (next === lod) return;
+      lod = next;
+      army.visible = lod === 'marker';
+      column.mesh.visible = lod === 'figures';
+    };
+
     const setDay = (d: number) => {
       const p = positionAt(route, d);
       if (!p) return;
       const at = toScene(scale, p.lon, p.lat, ground(p.lon, p.lat, p.altitudeM));
       army.position.set(at.x, at.y + LIFT + 0.2, at.z);
+      const along = (d - route.firstDay) / Math.max(1, route.lastDay - route.firstDay);
+      column.update(arcAt(path, Math.min(1, Math.max(0, along)) * (sampleCount - 1)));
       if (followRef.current) stage.nav.setTarget(at.x, at.y, at.z);
       traveled.geometry.setDrawRange(0, Math.max(2, Math.round(((d - route.firstDay) / Math.max(1, route.lastDay - route.firstDay)) * ROUTE_SAMPLES) + 1));
       stage.requestRender();
@@ -223,6 +259,7 @@ export function AndesRenderer({ terrain, route, day, selectedId, follow, onSelec
       if (on) stage.nav.flyTo(followPose(scale, army.position, stage.pose));
     };
     setFollowRef.current = setFollow;
+    closeUpRef.current = () => stage.nav.flyTo(closePose(scale, army.position, stage.pose));
     if (followRef.current) setFollow(true);
 
     // pointer: a click (4 px or less) on a marker selects it; moving over one names it
@@ -273,6 +310,7 @@ export function AndesRenderer({ terrain, route, day, selectedId, follow, onSelec
       setDayRef.current = () => {};
       setSelectedRef.current = () => {};
       setFollowRef.current = () => {};
+      closeUpRef.current = () => {};
       canvas.removeEventListener('pointermove', onMove);
       canvas.removeEventListener('pointerleave', onLeave);
       canvas.removeEventListener('pointerdown', onDown);
@@ -286,6 +324,9 @@ export function AndesRenderer({ terrain, route, day, selectedId, follow, onSelec
   useEffect(() => setDayRef.current(day), [day]);
   useEffect(() => setSelectedRef.current(selectedId, true), [selectedId]);
   useEffect(() => setFollowRef.current(follow), [follow]);
+  useEffect(() => {
+    if (closeUp > 0) closeUpRef.current();
+  }, [closeUp]);
 
   return (
     <div className="chart3d-wrap">

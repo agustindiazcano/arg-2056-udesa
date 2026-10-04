@@ -136,6 +136,12 @@ A10, A13, A15, A16, A24, A26, A31, A32 and A33 are accepted as written, with the
 - Taken by the agent: the exact colors of the ramp, the sky colors, the fog and the sun angle (a first look; the human may change them: they are one token list and a few numbers in `scenes/andes/Renderer.tsx`).
 - Consequences: this is an exception to "no art direction" of `andes-integration.md`, asked for by the human. The blue of the interface still marks what is selected (the marker and the army glow).
 
+## D-andes-6: The army is a schematic column of low-poly figures up close
+- Decision (human request, 2026-10-04: soldiers and horses marching when zooming in, like `test/map_test1.html`): below a camera distance of 5 scene units from the army (with a 25 % margin so it does not flicker) the army marker gives way to a column of figures (`scenes/andes/column.ts`, `figureParts.ts`, `figures3d.ts`): a foot soldier, a rider, a mule and a leader with a pennant, built of boxes in ONE `InstancedMesh`. The pose is a function of the place on the route, so the figures march as the days go by and stand still when they stop (on-demand render kept, reduced motion needs no special case). "Ver de cerca" flies the camera next to the army; the closest zoom of this scene is 0.04 of the start radius (`cameraLimits` takes `zoomMin`; `createStage` takes `zoomMin` and `beforeRender`).
+- Data rule: the number of figures is the count of the first force of the first point divided by `MEN_PER_FIGURE` (100), capped by the quality tier (`particleScale`). With no count (`null`) the column has a fixed size and the screen says "sin dato de efectivos". The mix of foot, riders and mules, the spacing and the colors are a schematic picture and are not a historical claim: the screen says so (`figuresNote`). No uniform or flag is claimed.
+- Taken by the agent: figure shapes, colors, spacing, the thresholds. Replacement path: a licensed `.glb` (attached by the human, license and attribution theirs to check) can replace `figures3d.ts` behind the same `createFigureColumn(count, path, ground)` interface; its size would need a new line in `budgets.json`.
+- Not done: the combat animation of a battle (two groups from the forces of the data), attrition by day (the count is fixed at the starting strength), Chile and Peru.
+
 ### Polish (`polish.md`)
 ## D-polish-1: UI language and locale
 - Decision: Spanish, `APP_LOCALE = 'es-AR'`, `lang="es"` (already applied in F2b). Resolves open decision 1 of `design.md`.

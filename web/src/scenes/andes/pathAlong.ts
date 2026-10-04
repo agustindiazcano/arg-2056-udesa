@@ -67,3 +67,12 @@ export function sampleAlong(path: Path, s: number, out: PathSample): void {
   const dz = points[b + 2]! - points[a + 2]!;
   out.heading = dx === 0 && dz === 0 ? 0 : Math.atan2(dx, dz);
 }
+
+/** Like `sampleAlong`, but a negative `s` goes on in a straight line behind the first point (the tail of a column that has not started yet). */
+export function sampleAlongExtended(path: Path, s: number, out: PathSample): void {
+  sampleAlong(path, s, out);
+  if (s >= 0) return;
+  sampleAlong(path, 0, out);
+  out.x += Math.sin(out.heading) * s;
+  out.z += Math.cos(out.heading) * s;
+}

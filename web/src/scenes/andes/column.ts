@@ -70,3 +70,8 @@ export function lodFor(distance: number, current: 'marker' | 'figures'): 'marker
   const limit = current === 'figures' ? FIGURE_NEAR * FIGURE_FAR_MARGIN : FIGURE_NEAR;
   return distance < limit ? 'figures' : 'marker';
 }
+
+/** The count of the first force of the first point of the route, or null when it is not known: the column is drawn with this strength. */
+export function startingMen(points: ReadonlyArray<{ forces: ReadonlyArray<{ men: number | null }> }>): number | null {
+  return points[0]?.forces[0]?.men ?? null;
+}

@@ -34,3 +34,11 @@ export function followPose(scale: SceneScale, army: { x: number; y: number; z: n
     radius: scale.depth * 0.55
   };
 }
+
+/** Distance (scene units) of the close-up on the army: nearer than where the figures replace the marker. */
+const CLOSE_RADIUS = 2;
+
+/** The camera right next to the army, where the column of figures can be seen marching; the turn the camera has is kept. */
+export function closePose(_scale: SceneScale, army: { x: number; y: number; z: number }, current: CameraState): CameraState {
+  return { x: army.x, y: army.y, z: army.z, theta: current.theta, phi: Math.min(1.2, Math.max(0.7, current.phi)), radius: CLOSE_RADIUS };
+}
