@@ -9,6 +9,10 @@ const POINTS = [
   { lon: -69.9, lat: -33.2 }
 ];
 
+// stable arrays: the hook reloads when its inputs change identity
+const NOTHING_BAKED: readonly string[] = [];
+const ANDES_BAKED: readonly string[] = ['andes'];
+
 afterEach(() => {
   vi.unstubAllGlobals();
 });
@@ -25,7 +29,7 @@ describe('useAndesTerrain when the terrain is not baked', () => {
   it('does not ask the server for a file that is not there: it goes straight to the made-up terrain and says why', async () => {
     const fetchSpy = vi.fn(() => Promise.reject(new Error('should not be called')));
     vi.stubGlobal('fetch', fetchSpy);
-    const { result } = renderHook(() => useAndesTerrain(POINTS, []));
+    const { result } = renderHook(() => useAndesTerrain(POINTS, NOTHING_BAKED));
     await waitFor(() => expect(result.current.status).toBe('ready'));
     expect(fetchSpy).not.toHaveBeenCalled();
     if (result.current.status !== 'ready') throw new Error('not ready');
@@ -34,9 +38,9 @@ describe('useAndesTerrain when the terrain is not baked', () => {
   });
 
   it('still asks for the baked file when the build found it, and falls back with the plain reason when it fails', async () => {
-    const fetchSpy = vi.fn(() => Promise.resolve({ ok: false, status: 404, json: () => Promise.resolve({}), blob: () => Promise.resolve(new Blob()) }));
+    const fetchSpy = vi.fn((_url: string) => Promise.resolve({ ok: false, status: 404, json: () => Promise.resolve({}), blob: () => Promise.resolve(new Blob()) }));
     vi.stubGlobal('fetch', fetchSpy);
-    const { result } = renderHook(() => useAndesTerrain(POINTS, ['andes']));
+    const { result } = renderHook(() => useAndesTerrain(POINTS, ANDES_BAKED));
     await waitFor(() => expect(result.current.status).toBe('ready'));
     expect(fetchSpy).toHaveBeenCalledTimes(1);
     expect(String(fetchSpy.mock.calls[0]![0])).toBe('/terrain/andes.json');
