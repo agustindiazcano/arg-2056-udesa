@@ -2,6 +2,8 @@ import React, { useMemo, useState } from 'react';
 import { buildDoublingCurve, DOUBLING_RATES } from '../../charts/builders/doublingCurve.js';
 import { buildSandboxPath } from '../../charts/builders/sandboxPath.js';
 import { DataTable } from '../../charts/DataTable.js';
+import { Chart2D3D } from '../../charts3d/Chart2D3D.js';
+import { linesSpec } from '../../charts3d/specs.js';
 import { EChart } from '../../charts/EChart.js';
 import { formatDecimal, formatNumber, formatValue } from '../../charts/format.js';
 import { positionLabel, scenarioLabel } from '../../content/labels.js';
@@ -137,7 +139,24 @@ export default function Scene() {
       content: (
         <ChartPanel
           title="PIB per cápita: supuestos elegidos y rango del modelo"
-          chart={<EChart option={chart.option} aria-label={chart.summary} />}
+          chart={
+            <Chart2D3D
+              spec={linesSpec({
+                title: 'PIB per cápita: supuestos elegidos y rango del modelo',
+                unit: view.unit,
+                xLabels: view.years.map(String),
+                series: [
+                  { name: 'Supuestos elegidos', values: view.visitor, tone: 'highlight' },
+                  { name: 'Modelo, esperado', values: view.expected, tone: 'muted' }
+                ],
+                band: { lower: view.lower, upper: view.upper },
+                marker: view.years.indexOf(year),
+                summary: chart.summary
+              })}
+            >
+              <EChart option={chart.option} aria-label={chart.summary} />
+            </Chart2D3D>
+          }
           table={
             <DataTable
               caption="Trayectoria con los supuestos y el rango del modelo"

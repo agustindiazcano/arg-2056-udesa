@@ -6,7 +6,7 @@ import { DataTable } from '../../charts/DataTable.js';
 import { EChart } from '../../charts/EChart.js';
 import { formatValue } from '../../charts/format.js';
 import { Chart2D3D } from '../../charts3d/Chart2D3D.js';
-import { barsSpec } from '../../charts3d/specs.js';
+import { barsSpec, linesSpec } from '../../charts3d/specs.js';
 import { ERAS } from '../../content/eras.js';
 import { indicatorLabel } from '../../content/labels.js';
 import { Dashboard } from '../../dashboard/Dashboard.js';
@@ -144,7 +144,26 @@ export default function Scene() {
             content: (
               <ChartPanel
                 title="Largo plazo (las franjas de eras son provisorias)"
-                chart={longRun && <EChart option={longRun.option} aria-label={longRun.summary} />}
+                chart={
+                  longRun && (
+                    <Chart2D3D
+                      spec={linesSpec({
+                        title: 'Largo plazo',
+                        unit: view.unit,
+                        xLabels: view.years.map(String),
+                        series: view.series.map((s) => ({
+                          name: s.country,
+                          values: s.points.map((p) => p.value),
+                          tone: s.country === HOME ? 'highlight' : 'muted'
+                        })),
+                        marker: view.years.indexOf(year),
+                        summary: longRun.summary
+                      })}
+                    >
+                      <EChart option={longRun.option} aria-label={longRun.summary} />
+                    </Chart2D3D>
+                  )
+                }
                 table={longTable && <DataTable caption="Largo plazo" columns={longTable.columns} data={longTable.rows} pageSize="fit" />}
               />
             )

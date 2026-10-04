@@ -8,7 +8,8 @@ import { buildFan } from '../../charts/builders/fan.js';
 import { buildRanking } from '../../charts/builders/ranking.js';
 import { formatPercent, formatValue } from '../../charts/format.js';
 import { Chart2D3D } from '../../charts3d/Chart2D3D.js';
-import { barsSpec } from '../../charts3d/specs.js';
+import { barsSpec, linesSpec } from '../../charts3d/specs.js';
+import { tokens } from '../../styles/tokens.js';
 import { indicatorLabel, indicatorSentence, resourceLabel, scenarioLabel } from '../../content/labels.js';
 import { Dashboard } from '../../dashboard/Dashboard.js';
 import type { DashView } from '../../dashboard/types.js';
@@ -141,6 +142,24 @@ export default function Scene() {
   const unit = data.series.find((x) => x.indicator === indicator && x.resource === resource)?.unit ?? '';
   const selectedSeries = view.series[scenario] ?? SCENARIOS.map((sc) => view.series[sc]).find((x) => x !== undefined);
 
+  const fanYears = [...new Set(SCENARIOS.flatMap((sc) => view.series[sc]?.points.map((pt) => pt.year) ?? []))].sort((a, b) => a - b);
+  const at = (sc: (typeof SCENARIOS)[number], pick: 'p10' | 'p50' | 'p90') =>
+    fanYears.map((y) => view.series[sc]?.points.find((pt) => pt.year === y)?.[pick] ?? null);
+  const fanSpec = linesSpec({
+    title: 'Abanico del pronóstico',
+    unit,
+    xLabels: fanYears.map(String),
+    series: SCENARIOS.filter((sc) => view.series[sc] !== undefined).map((sc) => ({
+      name: scenarioLabel(sc),
+      values: at(sc, 'p50'),
+      tone: sc === scenario ? ('highlight' as const) : ('accent' as const),
+      color: tokens.scenario[sc]
+    })),
+    band: view.series[scenario] ? { lower: at(scenario, 'p10'), upper: at(scenario, 'p90') } : undefined,
+    marker: fanYears.indexOf(year),
+    summary: fan?.summary
+  });
+
   const views: DashView[] = [
     {
       id: 'fan',
@@ -149,7 +168,13 @@ export default function Scene() {
       content: (
         <ChartPanel
           title="Abanico del pronóstico"
-          chart={fan && <EChart option={fan.option} aria-label={fan.summary} />}
+          chart={
+            fan && (
+              <Chart2D3D spec={fanSpec}>
+                <EChart option={fan.option} aria-label={fan.summary} />
+              </Chart2D3D>
+            )
+          }
           table={<DataTable caption="Abanico del pronóstico" columns={fanRows.columns} data={fanRows.rows} pageSize="fit" />}
         />
       )

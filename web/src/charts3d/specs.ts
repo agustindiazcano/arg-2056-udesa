@@ -1,5 +1,5 @@
 import { formatAxisNumber, formatValue } from '../charts/format';
-import type { Bars3DSpec } from './types';
+import type { Bars3DSpec, Line3D, Lines3DSpec } from './types';
 
 interface BarsSpecOpts {
   title: string;
@@ -26,5 +26,31 @@ export function barsSpec(rows: Array<{ label: string; value: number | null }>, o
     unit: opts.unit,
     bars,
     summary: opts.summary ?? `${opts.title}, vista 3D de barras: ${bars.map((b) => `${b.label} ${b.display}`).join(', ')}`
+  };
+}
+
+interface LinesSpecOpts {
+  title: string;
+  unit: string;
+  xLabels: string[];
+  series: Line3D[];
+  band?: Lines3DSpec['band'];
+  marker?: number;
+  summary?: string;
+}
+
+/** The data of a 3D line chart. */
+export function linesSpec(opts: LinesSpecOpts): Lines3DSpec {
+  const { title, unit, xLabels, series, band, marker } = opts;
+  const span = xLabels.length > 1 ? `, de ${xLabels[0]} a ${xLabels[xLabels.length - 1]}` : '';
+  return {
+    kind: 'lines',
+    title,
+    unit,
+    xLabels,
+    series,
+    ...(band ? { band } : {}),
+    ...(marker !== undefined ? { marker } : {}),
+    summary: opts.summary ?? `${title}, vista 3D de líneas${span}: ${series.map((s) => s.name).join(', ')}`
   };
 }

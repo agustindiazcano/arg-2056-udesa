@@ -36,6 +36,10 @@ vez" buttons) and has two modes: Recorrido (the story, docked in the right panel
 is the global shell; the scene filters reach it through a slot (`SlotPortal`). A scene gives `Dashboard` its views, tiles,
 rail, filters and notes; its data hooks do not change.
 
+## 2D and 3D
+
+The "Vista" switch (2D or 3D, same as the D key) changes how the views are drawn, not what they say. `Chart2D3D` (`web/src/charts3d/`) wraps a view: it shows the flat chart (ECharts) or its 3D version (Three.js, in a lazy chunk) from the same data (`barsSpec`, `linesSpec`, the map spec). It stays flat when the view has no 3D version, when the device has no WebGL2 and where there is no capability provider. The 3D layout is pure code with tests (`layoutBars`, `layoutLines`, `projectFeatures`, `provinceStyle`); the renderers only place what those return, read the colors from `tokens.ts` and free every geometry, texture and the WebGL context on unmount.
+
 ## The scenes
 
 Every scene is built on the same pieces, so a new scene or the 3D presentation reuses them:

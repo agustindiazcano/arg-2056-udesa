@@ -21,7 +21,7 @@ import { EChart } from '../../charts/EChart.js';
 import { DataTable } from '../../charts/DataTable.js';
 import { formatValue } from '../../charts/format.js';
 import { Chart2D3D } from '../../charts3d/Chart2D3D.js';
-import { barsSpec } from '../../charts3d/specs.js';
+import { barsSpec, linesSpec } from '../../charts3d/specs.js';
 import { indicatorSentence, projectStatusLabel, resourceLabel } from '../../content/labels.js';
 import { Dashboard } from '../../dashboard/Dashboard.js';
 import type { DashView } from '../../dashboard/types.js';
@@ -129,6 +129,7 @@ export default function Scene() {
   const provinceName = (geo: string) => PROVINCES.find(p => p.id === geo)?.name ?? geo;
   const trendIsProvincial = trendGeo !== 'AR';
   const shortName = (name: string) => (name.length > 14 ? `${name.slice(0, 13)}…` : name);
+  const trendRows = (rpData ?? []).filter(r => r.resource === selectedResource && r.geo === trendGeo).sort((a, b) => a.year - b.year);
   const trendTitle = trendIsProvincial ? `Tendencia de ${provinceName(trendGeo)}` : 'Tendencia nacional';
 
   // the indicators of the right panel, from the production of the selected resource and year
@@ -225,7 +226,22 @@ export default function Scene() {
       content: (
         <ChartPanel
           title={trendTitle}
-          chart={trendResult && <EChart option={trendResult.option} aria-label={trendResult.summary} />}
+          chart={
+            trendResult && (
+              <Chart2D3D
+                spec={linesSpec({
+                  title: trendTitle,
+                  unit: resourceUnit ?? '',
+                  xLabels: trendRows.map(r => String(r.year)),
+                  series: [{ name: trendIsProvincial ? provinceName(trendGeo) : 'Nacional', values: trendRows.map(r => r.value), tone: 'accent' }],
+                  marker: trendRows.findIndex(r => r.year === rpYear),
+                  summary: trendResult.summary
+                })}
+              >
+                <EChart option={trendResult.option} aria-label={trendResult.summary} />
+              </Chart2D3D>
+            )
+          }
           table={
             rpData && (
               <DataTable

@@ -36,7 +36,42 @@ export interface Map3DSpec {
   summary: string;
 }
 
-export type Chart3DSpec = Bars3DSpec | Map3DSpec;
+/** One line of a 3D line chart. `tone` says how it is drawn: the home series bright, the peers quiet. */
+export interface Line3D {
+  name: string;
+  /** one value per x label; null is a gap */
+  values: Array<number | null>;
+  tone: 'highlight' | 'muted' | 'accent';
+  /** a color from the tokens that overrides the tone (the scenario colors) */
+  color?: string;
+}
+
+/** A line chart in space: each series is a wall in its own lane, the band a translucent wall. */
+export interface Lines3DSpec {
+  kind: 'lines';
+  title: string;
+  unit: string;
+  xLabels: string[];
+  series: Line3D[];
+  /** a range drawn behind the lines (the p10 to p90 of the forecast) */
+  band?: { lower: Array<number | null>; upper: Array<number | null> };
+  /** index of the x label to mark (the playhead year) */
+  marker?: number;
+  summary: string;
+}
+
+export interface LinesLayout {
+  xs: number[];
+  series: Array<{ name: string; tone: Line3D['tone']; z: number; segments: Array<Array<{ x: number; y: number }>> }>;
+  bands: Array<{ upper: Array<{ x: number; y: number }>; lower: Array<{ x: number; y: number }> }>;
+  ticks: Tick[];
+  xTicks: Array<{ x: number; label: string }>;
+  markerX: number | null;
+  /** the value at the top of the scale */
+  top: number;
+}
+
+export type Chart3DSpec = Bars3DSpec | Map3DSpec | Lines3DSpec;
 
 export interface BarItem {
   x: number;

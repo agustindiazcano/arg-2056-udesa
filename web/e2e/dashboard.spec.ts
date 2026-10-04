@@ -119,6 +119,16 @@ test.describe('dashboard', () => {
     await expect(page.getByRole('img', { name: /^Mapa de/ })).toBeVisible();
   });
 
+  test('the forecast fan and the long run are 3D line charts by default', async ({ page }) => {
+    await page.goto('/');
+    for (const tab of ['Economía', 'Pronóstico 2056']) {
+      await page.getByRole('tab', { name: tab }).click();
+      await expect(page.locator('[data-chart3d="lines"] canvas')).toBeVisible();
+    }
+    await page.getByRole('tab', { name: 'Simulador' }).click();
+    await expect(page.locator('[data-chart3d="lines"] canvas')).toBeVisible();
+  });
+
   test('the story panel is docked in the right panel', async ({ page }) => {
     await page.goto('/');
     await page.getByRole('tab', { name: 'Economía' }).click();

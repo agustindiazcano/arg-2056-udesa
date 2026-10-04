@@ -55,7 +55,7 @@ controls: only the renderer of the viewer changes.
 
 ## State
 
-D1 to D3 are built (2D): the grid with no scroll, the carousel, the viewer with 1, 2 or 4 views, Recorrido and Explorar,
+D1 to D6 are built. 3D: `three` 0.186.1 in its own lazy chunk (`web/src/three/`, 3D chunk budget in `budgets.json`), a "Vista" 2D/3D switch (same as the D key; 3D by default when the device has WebGL2, flat otherwise), a 3D version of: the rankings (bars, the reference look), the province maps (extruded, click selects, shared with the flat map), and the line charts (long run, trend, fan, simulator path: one wall per series in its own lane, translucent band). Data and selection are the same in 2D and 3D; every 3D view keeps its table. Not 3D yet: the treemap, the rank history, the doubling curve and the Andes (they stay flat in both modes). D1 to D3 (2D): the grid with no scroll, the carousel, the viewer with 1, 2 or 4 views, Recorrido and Explorar,
 the right panel with the story docked, the bottom bar with the scene filters, paged tables, and the five scenes on it
 (Andes and Revolución IA with one placeholder view). D4 onward (3D) is next.
 
