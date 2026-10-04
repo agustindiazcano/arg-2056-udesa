@@ -34,11 +34,19 @@ describe('EChart', () => {
     const { unmount } = render(<EChart option={option} />);
     
     expect(mockInit).toHaveBeenCalledTimes(1);
-    expect(mockSetOption).toHaveBeenCalledWith(option, true);
-    
+    expect(mockSetOption).toHaveBeenCalledWith(expect.objectContaining({ title: { text: 'Test' } }), true);
+
     unmount();
     
     expect(mockDispose).toHaveBeenCalledTimes(1);
+  });
+
+  it('draws the series in over 600 ms and updates without delay, whatever the builder said', () => {
+    render(<EChart option={{ animation: false }} />);
+    expect(mockSetOption).toHaveBeenCalledWith(
+      expect.objectContaining({ animation: true, animationDuration: 600, animationDurationUpdate: 0 }),
+      true
+    );
   });
 
   it('resizes on window resize', () => {
