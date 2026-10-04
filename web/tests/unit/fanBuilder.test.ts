@@ -87,7 +87,7 @@ describe('buildFan', () => {
     const { option } = build(false, 'expected');
     const label = byName(option, 'expected')!.endLabel!;
     expect(label.show).toBe(true);
-    expect(label.formatter).toBe('Expected 220 bn USD');
+    expect(label.formatter).toBe('Esperado 220 bn USD');
   });
 
   it('draws the p10-p90 band only for the selected scenario, as a transparent base plus a stacked span', () => {
@@ -113,8 +113,8 @@ describe('buildFan', () => {
     const markers = byName(option, 'markers')!;
     expect(markers.data).toEqual([]);
     const data = markers.markLine!.data;
-    expect(data[0]).toMatchObject({ xAxis: '2028', name: 'Year 2028' });
-    expect(data[1]).toMatchObject({ xAxis: '2026', lineStyle: { type: 'dashed' }, label: { formatter: 'forecast starts' } });
+    expect(data[0]).toMatchObject({ xAxis: '2028', name: 'Año 2028' });
+    expect(data[1]).toMatchObject({ xAxis: '2026', lineStyle: { type: 'dashed' }, label: { formatter: 'inicio del pronóstico' } });
   });
 
   it('omits the playhead marker when the year is not in the data instead of inventing one', () => {
@@ -126,15 +126,15 @@ describe('buildFan', () => {
 
   it('draws no reference without the overlay', () => {
     const { option } = build(false, 'expected');
-    expect(byName(option, 'without AI')).toBeUndefined();
+    expect(byName(option, 'sin IA')).toBeUndefined();
   });
 
   it('with the overlay draws the off p50 of the selected scenario dashed in muted, labeled "without AI"', () => {
     const { option } = build(true, 'expected');
-    const ref = byName(option, 'without AI')!;
+    const ref = byName(option, 'sin IA')!;
     expect(ref.data).toEqual([200, 210, 220]);
     expect(ref.lineStyle).toMatchObject({ type: 'dashed', color: tokens.muted, width: 1 });
-    expect(ref.endLabel?.formatter).toBe('Without AI');
+    expect(ref.endLabel?.formatter).toBe('Sin IA');
     // main lines carry the on data (x1.1)
     expect(byName(option, 'expected')!.data[0]).toBeCloseTo(220, 10);
   });
@@ -161,33 +161,33 @@ describe('buildFan', () => {
     const { option } = build(false, 'expected');
     const text = option.tooltip.formatter([{ dataIndex: 1 }]);
     expect(text).toContain('2027');
-    expect(text).toContain('p10-p90: 80% of simulated outcomes');
+    expect(text).toContain('p10-p90: 80% de los resultados simulados');
     expect(text).toContain('p10 205 bn USD');
     expect(text).toContain('p50 210 bn USD');
     expect(text).toContain('p90 215 bn USD');
   });
 
-  it('tooltip says "No data" for a gap, never 0', () => {
+  it('tooltip says "Sin datos" for a gap, never 0', () => {
     const gappy = mk('expected', 'off', [2026, 2028]);
     const rest = [mk('pessimistic', 'off', YEARS), mk('optimistic', 'off', YEARS)];
     const { option } = build(false, 'expected', 2027, [gappy, ...rest]);
     const text = option.tooltip.formatter([{ dataIndex: 1 }]);
-    expect(text).toContain('No data');
+    expect(text).toContain('Sin datos');
     expect(text).not.toContain('p50 0');
   });
 
   it('summary contains the numbers of the selected scenario at the last year', () => {
     const { summary } = build(false, 'expected');
-    expect(summary).toBe('Expected scenario, 2028: gdp constant usd median 220 bn USD, p10-p90 215 bn USD to 225 bn USD');
+    expect(summary).toBe('Escenario esperado, 2028: PIB, mediana 220 bn USD, p10-p90 de 215 bn USD a 225 bn USD');
   });
 
   it('summary mentions the AI effect at the median when the overlay is on', () => {
     const { summary } = build(true, 'expected');
-    expect(summary).toContain('AI overlay adds 10.0% at the median');
+    expect(summary).toContain('el efecto de la IA suma 10,0% en la mediana');
   });
 
   it('summary says there is no data when the selected scenario is missing', () => {
     const { summary } = build(false, 'optimistic', 2027, offSeries.filter((s) => s.scenario !== 'optimistic'));
-    expect(summary).toBe('No forecast data for the selected scenario.');
+    expect(summary).toBe('Sin datos de pronóstico para el escenario seleccionado.');
   });
 });

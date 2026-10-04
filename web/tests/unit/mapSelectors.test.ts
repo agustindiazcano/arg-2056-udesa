@@ -174,29 +174,29 @@ describe('mapSummary', () => {
   const values = provinceMapValues(output(base), geo, { ...q, year: 2027, metric: 'level' });
 
   it('names the highest and lowest province and counts the provinces with no data (level)', () => {
-    expect(mapSummary(values, 'level', 'Gold production', 2027, 't')).toBe(
-      'Map of Gold production by province in 2027: highest Buenos Aires at 25 t, lowest Salta at 20 t; 2 provinces with no data'
+    expect(mapSummary(values, 'level', 'producción de oro', 2027, 't')).toBe(
+      'Mapa de producción de oro por provincia en 2027: mayor Buenos Aires con 25 t, menor Salta con 20 t; 2 provincias sin datos'
     );
   });
 
   it('formats a change as percent per year', () => {
     const change = provinceMapValues(output(base), geo, { ...q, year: 2028, metric: 'change' });
-    expect(mapSummary(change, 'change', 'Gold production', 2028, 't')).toBe(
-      'Map of the change in Gold production by province up to 2028: highest Salta at 73.2% per year, lowest Buenos Aires at -18.4% per year; 2 provinces with no data'
+    expect(mapSummary(change, 'change', 'producción de oro', 2028, 't')).toBe(
+      'Mapa del cambio de producción de oro por provincia hasta 2028: mayor Salta con 73,2% por año, menor Buenos Aires con -18,4% por año; 2 provincias sin datos'
     );
   });
 
   it('omits the no-data clause when nothing is missing and uses the singular for one', () => {
     const full = provinceMapValues(output([series('AR-A', [1, 2, 3]), series('AR-B', [3, 2, 1]), series('AR-C', [2, 2, 2]), series('AR-D', [4, 4, 4])]), geo, { ...q, year: 2027, metric: 'level' });
-    expect(mapSummary(full, 'level', 'Gold production', 2027, 't')).toBe(
-      'Map of Gold production by province in 2027: highest San Luis at 4 t, lowest Salta at 2 t'
+    expect(mapSummary(full, 'level', 'producción de oro', 2027, 't')).toBe(
+      'Mapa de producción de oro por provincia en 2027: mayor San Luis con 4 t, menor Salta con 2 t'
     );
     const one = provinceMapValues(output([series('AR-A', [1, 2, 3]), series('AR-B', [3, 2, 1]), series('AR-C', [2, 2, 2])]), geo, { ...q, year: 2027, metric: 'level' });
-    expect(mapSummary(one, 'level', 'Gold production', 2027, 't')).toContain('1 province with no data');
+    expect(mapSummary(one, 'level', 'producción de oro', 2027, 't')).toContain('1 provincia sin datos');
   });
 
   it('says there is no data when no province has a value', () => {
     const none = provinceMapValues(output([]), geo, { ...q, year: 2027, metric: 'level' });
-    expect(mapSummary(none, 'level', 'Gold production', 2027, 't')).toBe('No province data for Gold production in 2027.');
+    expect(mapSummary(none, 'level', 'producción de oro', 2027, 't')).toBe('Sin datos provinciales de producción de oro en 2027.');
   });
 });

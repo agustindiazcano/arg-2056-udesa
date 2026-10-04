@@ -29,6 +29,13 @@ describe('SceneShell', () => {
   });
 });
 
+describe('SceneShell date label', () => {
+  it('can say when the data was generated instead of retrieved', () => {
+    render(<SceneShell title="T" sources={['MOCK', 'modelo 1.0']} retrievedAt="2026-10-02" dateLabel="generado el" />);
+    expect(screen.getByText('Fuente: MOCK, modelo 1.0, generado el 2 de octubre de 2026')).toBeDefined();
+  });
+});
+
 describe('TableToggle', () => {
   it('is a button named "Ver tabla" whose aria-pressed follows the prop and that calls onToggle', () => {
     const onToggle = vi.fn();

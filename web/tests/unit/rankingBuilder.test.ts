@@ -83,13 +83,13 @@ describe('buildRanking', () => {
   });
 
   it('summary names the leader with its numbers', () => {
-    expect(build().summary).toBe('Expected scenario: Buenos Aires leads with median 30 t (p10-p90 27 t to 33 t)');
+    expect(build().summary).toBe('Escenario esperado: Buenos Aires lidera con mediana 30 t (p10-p90 de 27 t a 33 t)');
   });
 
   it('returns an empty chart, excluded passthrough and an honest summary with no rows', () => {
     const r = buildRanking([], { scenario: 'expected', unit: 't', excluded: 5 });
     expect((r.option as unknown as RankOption).series.find((s) => s.name === 'p50')!.data).toEqual([]);
     expect(r.excluded).toBe(5);
-    expect(r.summary).toBe('No province series for this selection.');
+    expect(r.summary).toBe('No hay series provinciales para esta selección.');
   });
 });

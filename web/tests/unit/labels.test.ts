@@ -1,5 +1,11 @@
 import { describe, it, expect } from 'vitest';
-import { projectStatusLabel, resourceLabel } from '../../src/content/labels.js';
+import {
+  indicatorLabel,
+  indicatorSentence,
+  projectStatusLabel,
+  resourceLabel,
+  scenarioLabel
+} from '../../src/content/labels.js';
 
 describe('resourceLabel', () => {
   it('names the resources in Spanish', () => {
@@ -40,5 +46,48 @@ describe('projectStatusLabel', () => {
 
   it('returns an unknown status unchanged', () => {
     expect(projectStatusLabel('paused')).toBe('paused');
+  });
+});
+
+describe('scenarioLabel', () => {
+  it('uses the names of the control bar', () => {
+    expect(['pessimistic', 'expected', 'optimistic'].map(scenarioLabel)).toEqual(['Pesimista', 'Esperado', 'Optimista']);
+  });
+});
+
+describe('indicatorLabel', () => {
+  it('names every indicator in Spanish', () => {
+    expect(
+      [
+        'gdp_constant_usd',
+        'gdp_per_capita_usd',
+        'population',
+        'hdi',
+        'exports_usd',
+        'imports_usd',
+        'resource_production'
+      ].map(indicatorLabel)
+    ).toEqual([
+      'PIB',
+      'PIB per cápita',
+      'Población',
+      'IDH',
+      'Exportaciones',
+      'Importaciones',
+      'Producción de recursos'
+    ]);
+  });
+
+  it('returns an unknown indicator unchanged', () => {
+    expect(indicatorLabel('inflation')).toBe('inflation');
+  });
+});
+
+describe('indicatorSentence', () => {
+  it('lowercases a word but keeps an acronym, and adds the resource in brackets', () => {
+    expect(indicatorSentence('gdp_constant_usd')).toBe('PIB');
+    expect(indicatorSentence('population')).toBe('población');
+    expect(indicatorSentence('resource_production', 'gold')).toBe('producción de recursos (oro)');
+    expect(indicatorSentence('resource_production')).toBe('producción de recursos');
   });
 });
