@@ -81,6 +81,14 @@ describe('Chart Builders', () => {
       expect(summary).toMatch(/^Gráfico de barras de producción por provincia\. La mayor es .+ con 500 t\.$/);
     });
 
+    it('highlights the selected province, keeping it on the chart even when it is outside the top N', () => {
+      const { option } = buildProvinceBars(records, { resource: 'lithium', year: 2020, topN: 2, highlight: 'AR-D' });
+      const series = option.series as Array<{ data: Array<{ value: number; itemStyle: { color: string } }> }>;
+      const data = series[0]!.data;
+      expect(data.map((d) => d.value)).toEqual([50, 10, 100, 500]); // Otras (C only), D, B, A (reversed for the axis)
+      expect(data.map((d) => d.itemStyle.color)).toEqual([tokens.muted, tokens.blue, tokens.muted, tokens.muted]);
+    });
+
     it('says there is no data for an unknown year', () => {
       expect(buildProvinceBars(records, { resource: 'lithium', year: 1990 }).summary).toBe(
         'Sin datos para este recurso y año.'

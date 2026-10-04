@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import React from 'react';
-import { render, screen, fireEvent, waitFor, cleanup, within, configure } from '@testing-library/react';
+import { act, render, screen, fireEvent, waitFor, cleanup, within, configure } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import Scene from '../../src/scenes/forecast/index.js';
 import { useStore } from '../../src/state/store.js';
@@ -188,13 +188,14 @@ describe('Forecast scene', () => {
     await waitFor(() => expect(line(fanOption(), 'pessimistic')!.lineStyle!.width).toBe(3));
   });
 
-  it('scenario buttons are bound to the store', async () => {
+  it('has no scenario or AI chips of its own: the control bar owns them', async () => {
     stubFetch(fixture());
     await loaded();
-    expect(screen.getByRole('button', { name: 'Esperado' }).getAttribute('aria-pressed')).toBe('true');
-    fireEvent.click(screen.getByRole('button', { name: 'Optimista' }));
-    expect(useStore.getState().scenario).toBe('optimistic');
-    expect(screen.getByRole('button', { name: 'Optimista' }).getAttribute('aria-pressed')).toBe('true');
+    for (const name of ['Pesimista', 'Esperado', 'Optimista', 'Efecto de la IA']) {
+      expect(screen.queryByRole('button', { name })).toBeNull();
+    }
+    act(() => useStore.getState().dispatch({ type: 'setScenario', scenario: 'optimistic' }));
+    await waitFor(() => expect(line(fanOption(), 'optimistic')!.lineStyle!.width).toBe(3));
   });
 
   it('the AI overlay toggle switches the series to the on data, adds the reference and the AI tile', async () => {
@@ -202,15 +203,13 @@ describe('Forecast scene', () => {
     await loaded();
     expect(screen.queryByTestId('tile-ai')).toBeNull();
     expect(line(fanOption(), 'expected')!.data).toEqual([200, 210, 220]);
-    fireEvent.click(screen.getByRole('button', { name: 'Efecto de la IA' }));
-    expect(useStore.getState().aiOverlay).toBe('on');
-    expect(screen.getByRole('button', { name: 'Efecto de la IA' }).getAttribute('aria-pressed')).toBe('true');
+    act(() => useStore.getState().dispatch({ type: 'setAiOverlay', aiOverlay: 'on' }));
     await waitFor(() => expect(line(fanOption(), 'sin IA')).toBeDefined());
     expect(line(fanOption(), 'sin IA')!.data).toEqual([200, 210, 220]);
     expect(line(fanOption(), 'expected')!.data[0]).toBeCloseTo(220, 6);
     expect(screen.getByTestId('tile-ai').textContent).toContain('+10,0%');
-    fireEvent.click(screen.getByRole('button', { name: 'Efecto de la IA' }));
-    expect(useStore.getState().aiOverlay).toBe('off');
+    act(() => useStore.getState().dispatch({ type: 'setAiOverlay', aiOverlay: 'off' }));
+    await waitFor(() => expect(line(fanOption(), 'sin IA')).toBeUndefined());
   });
 
   it('moving yearFloat changes the playhead and the ranking year, and out-of-range values clamp', async () => {

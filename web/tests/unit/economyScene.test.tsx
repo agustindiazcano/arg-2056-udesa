@@ -238,6 +238,13 @@ describe('Economy scene', () => {
     useStore.setState({ province: 'AR-A' });
     await loaded();
     expect(names(longRun())).toContain('ARG');
+    expect(screen.getByText('Los datos de esta escena son nacionales: el filtro de provincia no aplica.')).toBeDefined();
+  });
+
+  it('shows no province note when no province is selected', async () => {
+    stubFetch(records());
+    await loaded();
+    expect(screen.queryByText(/el filtro de provincia no aplica/)).toBeNull();
   });
 
   it('lists the indicators of the dataset and switches the data', async () => {
