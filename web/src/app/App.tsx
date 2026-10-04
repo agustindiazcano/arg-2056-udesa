@@ -13,6 +13,7 @@ import { loadForecast } from '../data/load';
 import { versionedUrl } from '../data/version';
 import { CapabilityProvider, QualityDebugLine } from '../runtime/CapabilityProvider';
 import { documentTitle } from './title';
+import { describeError } from './describeError';
 import { useSlots } from '../dashboard/slots';
 
 export function App() {
@@ -32,7 +33,7 @@ export function App() {
     versionedUrl('/data/forecast_output.json')
       .then(loadForecast)
       .then(f => setForecastSource(f.source))
-      .catch(e => console.error(e));
+      .catch((e: unknown) => console.error('No se pudo cargar el pronóstico:', describeError(e)));
   }, []);
 
   return (
