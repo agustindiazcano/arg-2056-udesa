@@ -22,9 +22,9 @@ describe('STEPS placeholder content', () => {
       const steps = STEPS[scene];
       expect(steps.map((s) => s.id)).toEqual(['step-1', 'step-2', 'step-3']);
       expect(steps.map((s) => s.title)).toEqual([
-        'Step 1 (placeholder)',
-        'Step 2 (placeholder)',
-        'Step 3 (placeholder)'
+        'Paso 1 (provisorio)',
+        'Paso 2 (provisorio)',
+        'Paso 3 (provisorio)'
       ]);
       for (const s of steps) {
         expect(s.text).toBe('Texto provisorio. Reemplazar antes del lanzamiento.');

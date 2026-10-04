@@ -40,6 +40,6 @@ describe('placeholder era list', () => {
   });
 
   it('names no real historical period', () => {
-    for (const era of ERAS) expect(era.label).toMatch(/\(placeholder\)$/);
+    for (const era of ERAS) expect(era.label).toMatch(/\(provisoria\)$/);
   });
 });
