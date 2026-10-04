@@ -18,18 +18,18 @@ export const SLIDER_BOUNDS: Record<SandboxField, Bounds> = {
 
 export const FIELD_LABELS: Record<SandboxField, { label: string; unit: string; help: string }> = {
   gpcPct: {
-    label: 'GDP per capita growth',
-    unit: '% per year',
-    help: 'Yearly growth of GDP per person that you assume from the first year on.'
+    label: 'Crecimiento del PIB per cápita',
+    unit: '% por año',
+    help: 'Crecimiento anual del PIB por persona que se supone desde el primer año.'
   },
   popPct: {
-    label: 'Population growth',
-    unit: '% per year',
-    help: 'Yearly growth of the population that you assume from the first year on.'
+    label: 'Crecimiento de la población',
+    unit: '% por año',
+    help: 'Crecimiento anual de la población que se supone desde el primer año.'
   },
   aiPp: {
-    label: 'AI uplift',
-    unit: 'percentage points per year',
-    help: 'It is added to the per-capita growth rate, in percentage points (2% plus 0.5 points is 2.5%), and is not a multiplier.'
+    label: 'Aporte de la IA',
+    unit: 'puntos porcentuales por año',
+    help: 'Se suma a la tasa de crecimiento per cápita, en puntos porcentuales (2% más 0,5 puntos es 2,5%); no es un multiplicador.'
   }
 };

@@ -21,10 +21,19 @@ export function ordinal(n: number): string {
   return `${n}.º`;
 }
 
+/** A number with a fixed count of decimals in es-AR: (1082.4, 1) -> "1.082,4", (14, 1) -> "14,0". */
+export function formatNumber(value: number, digits = 1): string {
+  return new Intl.NumberFormat(APP_LOCALE, { minimumFractionDigits: digits, maximumFractionDigits: digits }).format(value);
+}
+
+/** A number with up to two decimals and none when it is whole: 7 -> "7", 5.5 -> "5,5". */
+export function formatDecimal(value: number): string {
+  return new Intl.NumberFormat(APP_LOCALE, { maximumFractionDigits: 2 }).format(value);
+}
+
 /** 144.44 -> "144,4%"; `signed` forces the plus sign on gaps ("+144,4%"). */
 export function formatPercent(value: number, opts: { signed?: boolean } = {}): string {
-  const text = new Intl.NumberFormat(APP_LOCALE, { minimumFractionDigits: 1, maximumFractionDigits: 1 }).format(value);
-  return `${opts.signed && value >= 0 ? '+' : ''}${text}%`;
+  return `${opts.signed && value >= 0 ? '+' : ''}${formatNumber(value, 1)}%`;
 }
 
 /** An ISO date ("2026-10-04") as "4 de octubre de 2026"; anything that is not a date comes back unchanged. */

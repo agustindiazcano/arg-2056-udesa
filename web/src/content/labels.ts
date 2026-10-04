@@ -48,6 +48,28 @@ const INDICATOR_LABEL: Record<string, string> = {
   resource_production: 'Producción de recursos'
 };
 
+const POSITION_LABEL: Record<'below' | 'inside' | 'above', string> = {
+  below: 'Por debajo del rango',
+  inside: 'Dentro del rango',
+  above: 'Por encima del rango'
+};
+
+const POSITION_PHRASE: Record<'below' | 'inside' | 'above', string> = {
+  below: 'por debajo del rango del modelo',
+  inside: 'dentro del rango del modelo',
+  above: 'por encima del rango del modelo'
+};
+
+/** Where a value sits against the model range, as a label ("Dentro del rango"). */
+export function positionLabel(position: 'below' | 'inside' | 'above'): string {
+  return POSITION_LABEL[position];
+}
+
+/** The same, inside a sentence ("dentro del rango del modelo"). */
+export function positionPhrase(position: 'below' | 'inside' | 'above'): string {
+  return POSITION_PHRASE[position];
+}
+
 /** The name of a scenario, as the control bar spells it. */
 export function scenarioLabel(id: string): string {
   return SCENARIO_LABEL[id] ?? id;
