@@ -5,7 +5,8 @@ const chart = (zoom: number | undefined) => ({
   getOption: vi.fn(() => ({ geo: [{ zoom }] })),
   getWidth: () => 800,
   getHeight: () => 400,
-  dispatchAction: vi.fn()
+  dispatchAction: vi.fn(),
+  setOption: vi.fn()
 });
 
 describe('zoomMap', () => {
@@ -30,6 +31,12 @@ describe('zoomMap', () => {
     expect(bottom.dispatchAction).not.toHaveBeenCalled();
   });
 
+  it('treats a chart with no option yet as zoom 1', () => {
+    const c = { ...chart(1), getOption: vi.fn(() => undefined) };
+    expect(() => zoomMap(c as never, 'in')).not.toThrow();
+    expect(c.dispatchAction).toHaveBeenCalledTimes(1);
+  });
+
   it('treats a map nobody zoomed yet as zoom 1', () => {
     const c = chart(undefined);
     zoomMap(c as never, 'in');
@@ -38,9 +45,9 @@ describe('zoomMap', () => {
 });
 
 describe('resetMap', () => {
-  it('restores the view the option gave', () => {
+  it('shows the whole territory again', () => {
     const c = chart(3);
     resetMap(c as never);
-    expect(c.dispatchAction).toHaveBeenCalledWith({ type: 'restore' });
+    expect(c.setOption).toHaveBeenCalledWith({ geo: { zoom: 1, center: null } });
   });
 });

@@ -113,6 +113,12 @@ describe('EChart', () => {
       );
     });
 
+    it('does not fail when the chart has no option yet (getOption returns undefined on the first draw)', () => {
+      mockGetOption.mockReturnValue(undefined);
+      expect(() => render(<EChart option={{ geo: { a: 1 } }} roam={{ bbox }} />)).not.toThrow();
+      expect(mockSetOption).toHaveBeenCalled();
+    });
+
     it('starts from the option as it is when nothing was zoomed yet', () => {
       mockGetOption.mockReturnValue({ geo: [{ zoom: 1 }] });
       render(<EChart option={{ geo: { a: 1 } }} roam={{ bbox }} />);
@@ -123,7 +129,7 @@ describe('EChart', () => {
 
     it('gives the chart instance to the caller and takes it back on unmount', () => {
       const ref = { current: null as unknown };
-      const { unmount } = render(<EChart option={{}} roam={{ bbox }} instanceRef={ref as never} />);
+      const { unmount } = render(<EChart option={{}} roam={{ bbox }} apiRef={ref as never} />);
       expect(ref.current).not.toBeNull();
       unmount();
       expect(ref.current).toBeNull();

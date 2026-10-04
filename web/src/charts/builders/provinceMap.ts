@@ -7,6 +7,7 @@ import { DIVERGING, NO_DATA, SEQUENTIAL_BLUE, tokens } from '../../styles/tokens
 import { PROVINCES } from '../../types/province.js';
 import type { Scenario } from '../../types/scenario.js';
 import { formatPercent, formatValue } from '../format.js';
+import { ZOOM_MAX, ZOOM_MIN } from '../navState.js';
 
 /** Name under which the component registers the GeoJSON with echarts. */
 export const MAP_NAME = 'ar-provinces';
@@ -123,7 +124,8 @@ export function buildProvinceMap(input: ProvinceMapInput, opts: ProvinceMapOpts)
     geo: {
       map: MAP_NAME,
       nameProperty: 'id',
-      roam: false,
+      roam: true,
+      scaleLimit: { min: ZOOM_MIN, max: ZOOM_MAX },
       label: { show: false },
       itemStyle: { areaColor: NO_DATA, borderColor: tokens.surface, borderWidth: 1 },
       emphasis: { itemStyle: { borderColor: tokens.ink2, borderWidth: 1.5 }, label: { show: false } },

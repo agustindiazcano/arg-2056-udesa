@@ -148,6 +148,31 @@ test.describe('dashboard', () => {
     expect(overflow).toBeLessThanOrEqual(0);
   });
 
+  test('the flat province map zooms and moves, and reset brings the whole territory back', async ({ page }) => {
+    const errors: string[] = [];
+    page.on('pageerror', (e) => errors.push(e.message));
+    await page.goto('/');
+    await page.getByRole('tab', { name: 'Recursos' }).click();
+    await page.getByRole('group', { name: 'Vistas', exact: true }).getByRole('button', { name: 'Mapa' }).click();
+    await page.getByRole('group', { name: 'Vista', exact: true }).getByRole('button', { name: '2D' }).click();
+    const map = page.getByRole('img', { name: /^Mapa de/ });
+    await expect(map).toBeVisible();
+    const before = await map.screenshot();
+    await page.getByRole('button', { name: 'Acercar' }).click();
+    await page.getByRole('button', { name: 'Acercar' }).click();
+    await expect.poll(async () => Buffer.compare(await map.screenshot(), before)).not.toBe(0);
+    const box = (await map.boundingBox())!;
+    await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+    await page.mouse.wheel(0, -300);
+    await page.mouse.down();
+    await page.mouse.move(box.x + box.width / 2 + 120, box.y + box.height / 2 + 80, { steps: 5 });
+    await page.mouse.up();
+    await page.getByRole('button', { name: 'Restablecer vista' }).click();
+    await page.getByRole('heading', { level: 1 }).focus();
+    await expect.poll(async () => Buffer.compare(await map.screenshot(), before)).toBe(0);
+    expect(errors).toEqual([]);
+  });
+
   test('the forecast fan and the long run are 3D line charts by default', async ({ page }) => {
     await page.goto('/');
     for (const tab of ['Economía', 'Pronóstico 2056']) {
