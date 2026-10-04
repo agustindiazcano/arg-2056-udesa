@@ -1536,7 +1536,7 @@ When finished: overwrite LASTCONTEXT.md, update PENDING.md, and write a PR descr
  
 ## andes-integration
  
-Prerequisite: `performance-a11y` and `deploy` merged (they are). Human inputs first: the terrain outputs committed, the renderer decision (D-andes-1 to D-andes-4), the real or mock Andes data.
+Prerequisite: `performance-a11y` and `deploy` merged (they are). Human inputs first: the terrain outputs committed, the real or mock Andes data. The renderer decisions D-andes-1 to D-andes-4 are taken (docs/decisions.md).
  
 ```
 You are working in the repository `argentina-2056`.
@@ -1658,7 +1658,7 @@ Then execute the task described in data-economy-population.md exactly.
  
 Rules:
 - Create branch `task/data-economy-population`. Never touch `main`, never merge, never push to `main`.
-- If the research files, my verification or my answer to D-gdp-1 are missing, stop and tell me what is missing.
+- If the research files or my verification are missing, stop and tell me what is missing. D-gdp-1 is decided (docs/decisions.md).
 - Strict TDD for each adapter. No network access.
 - No invented, interpolated or filled figure. Never splice two series silently and never mix PPP and market values: keep them as separate records and document the overlap. Do not touch observations after 2005: the split belongs to the backtest code.
 - Never hand-edit data/processed/. No schema change. If the age-structured files exceed the data budget, stop and tell me. No new dependency. List every number for the UI under Data to verify in PENDING.md.
@@ -1710,7 +1710,7 @@ When finished: overwrite LASTCONTEXT.md, update PENDING.md, and write a PR descr
  
 ## polish
  
-Prerequisite: the model and data tasks of PENDING.md done (or my explicit go for the scenes that exist). I answer D-polish-1 to D-polish-7 first.
+Prerequisite: the model and data tasks of PENDING.md done (or my explicit go for the scenes that exist). D-polish-1 to D-polish-7 are decided in docs/decisions.md (D-polish-3, the red of the diverging ramp, is the one color I still supply; never invent it); do the 3D items first (D-3d-6).
  
 ```
 You are working in the repository `argentina-2056`.
@@ -1780,7 +1780,7 @@ When finished: overwrite LASTCONTEXT.md, update PENDING.md, and write a PR descr
  
 ## presentation-3d (program of six PRs; run one part at a time)
 
-Prerequisite: F2b merged and I have answered D-3d-1 to D-3d-5 (section 5 of the brief).
+Prerequisite: F2b merged; D-3d-1 to D-3d-6 are decided in docs/decisions.md (3D is the priority).
 
 ```
 You are working in the repository `argentina-2056`.
