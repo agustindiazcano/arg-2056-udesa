@@ -20,5 +20,5 @@ export function battlePose(
 ): CameraState {
   const ground = sampleElevation(terrain, event.lon, event.lat) ?? event.elevation_m ?? terrain.meta.elevation_min_m;
   const at = toScene(scale, event.lon, event.lat, ground);
-  return { x: at.x, y: at.y, z: at.z, theta: 0.5, phi: 0.85, radius: scale.depth * 0.3 };
+  return { x: at.x, y: at.y, z: at.z, theta: 0.5, phi: 0.85, radius: scale.depth * 0.5 };
 }

@@ -169,7 +169,7 @@ export function AndesRenderer({ terrain, route, day, selectedId, onSelect, label
         m.material.color.set(on ? lit : tokens.ink2);
         m.material.emissive.set(on ? lit : tokens.page);
         m.material.emissiveIntensity = on ? 0.6 : 0;
-        m.mesh.scale.setScalar(on ? 1.6 : 1);
+        m.mesh.scale.setScalar(on ? 1.4 : 1);
       }
       const point = route.points.find((p) => p.id === id);
       if (fly && point) stage.nav.flyTo(battlePose(scale, terrain, point));
