@@ -435,3 +435,28 @@ main.scene-container {
 .scene-transition > .dash {
   flex: 1 1 auto;
 }
+
+/* ---- bottom bar --------------------------------------------------------------------------------------------- */
+
+.bottom-bar {
+  pointer-events: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  padding: 0 var(--space-md) var(--space-sm);
+}
+
+.filters-slot:empty {
+  display: none;
+}
+
+.dash-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+.dash-filters .filter-bar {
+  margin: 0;
+}
+

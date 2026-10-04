@@ -1,6 +1,6 @@
 import { tokens, BAND_ALPHA } from '../../styles/tokens.js';
 import { indicatorSentence, scenarioLabel } from '../../content/labels.js';
-import { formatPercent, formatValue } from '../format.js';
+import { formatPercent, formatValue, formatAxisNumber } from '../format.js';
 import { SCENARIOS } from '../../types/index.js';
 import type { ForecastSeries, Scenario } from '../../types/index.js';
 import { aiDelta, endpoint } from '../../scenes/forecast/selectors.js';
@@ -160,7 +160,7 @@ export function buildFan(view: ForecastView, opts: FanOpts) {
       name: unit,
       nameTextStyle: { color: tokens.muted },
       splitLine: { lineStyle: { color: tokens.grid, width: 1 } },
-      axisLabel: { color: tokens.muted }
+      axisLabel: { color: tokens.muted, formatter: (v: number) => formatAxisNumber(v) }
     },
     series: [...band, ...lines, ...referenceLine, markers]
   };

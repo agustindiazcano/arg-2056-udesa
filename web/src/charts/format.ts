@@ -21,6 +21,11 @@ export function ordinal(n: number): string {
   return `${n}.º`;
 }
 
+/** The ticks of a value axis, short: 2500000000000 -> "2,5 B", 1500000 -> "1,5 M". */
+export function formatAxisNumber(value: number): string {
+  return new Intl.NumberFormat(APP_LOCALE, { notation: 'compact', compactDisplay: 'short', maximumFractionDigits: 1 }).format(value);
+}
+
 /** A number with a fixed count of decimals in es-AR: (1082.4, 1) -> "1.082,4", (14, 1) -> "14,0". */
 export function formatNumber(value: number, digits = 1): string {
   return new Intl.NumberFormat(APP_LOCALE, { minimumFractionDigits: digits, maximumFractionDigits: digits }).format(value);

@@ -248,6 +248,7 @@ export default function Scene() {
                   selectedId={province}
                   year={rpYear}
                   observed
+                  hideTitle
                   onSelect={(id) => dispatch({ type: 'selectProvince', province: id })}
                 />
               )}

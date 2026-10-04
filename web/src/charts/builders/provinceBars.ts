@@ -1,5 +1,5 @@
 import { tokens } from '../../styles/tokens.js';
-import { formatValue } from '../format.js';
+import { formatValue, formatAxisNumber } from '../format.js';
 import { PROVINCES } from '../../types/province.js';
 import type { ProvinceId, ResourceProductionRecord } from '../../types/index.js';
 
@@ -87,7 +87,7 @@ export function buildProvinceBars(records: ResourceProductionRecord[], opts: Pro
       splitLine: {
         lineStyle: { color: tokens.grid, width: 1 }
       },
-      axisLabel: { color: tokens.muted }
+      axisLabel: { color: tokens.muted, formatter: (v: number) => formatAxisNumber(v) }
     },
     yAxis: {
       type: 'category',

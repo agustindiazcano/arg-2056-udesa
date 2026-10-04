@@ -6,7 +6,7 @@ const H = 64;
 const PAD = 6;
 
 function scale(values: number[], fallback: number[]): number[] {
-  const v = values.length > 0 ? values : fallback;
+  const v = values.some((x) => x > 0) ? values : fallback;
   const max = Math.max(...v.map((x) => Math.abs(x)), 1e-9);
   return v.map((x) => Math.max(0, x) / max);
 }

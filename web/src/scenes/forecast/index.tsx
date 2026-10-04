@@ -188,6 +188,7 @@ export default function Scene() {
                   selectedId={province}
                   scenario={scenario}
                   year={year}
+                  hideTitle
                   onSelect={(id) => dispatch({ type: 'selectProvince', province: id })}
                 />
               )}

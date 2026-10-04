@@ -65,6 +65,8 @@ interface ProvinceMapProps {
   year: number;
   /** Observed data: no p10-p90 range and no scenario in the tooltip and the table. */
   observed?: boolean;
+  /** Without the heading: the dashboard panel already has the title. */
+  hideTitle?: boolean;
   onSelect: (id: ProvinceId | null) => void;
 }
 
@@ -80,6 +82,7 @@ export function ProvinceMap({
   scenario,
   year,
   observed = false,
+  hideTitle = false,
   onSelect
 }: ProvinceMapProps) {
   const [asTable, setAsTable] = useState(false);
@@ -137,7 +140,7 @@ export function ProvinceMap({
   return (
     <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 'var(--space-sm)' }}>
-        <span>Mapa de provincias, {year}</span>
+        {hideTitle ? <span /> : <span>Mapa de provincias, {year}</span>}
         <TableToggle pressed={asTable} onToggle={() => setAsTable(!asTable)} />
       </div>
       <div style={{ flex: 1, minHeight: '280px' }}>
