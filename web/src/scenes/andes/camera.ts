@@ -22,3 +22,15 @@ export function battlePose(
   const at = toScene(scale, event.lon, event.lat, ground);
   return { x: at.x, y: at.y, z: at.z, theta: 0.5, phi: 0.85, radius: scale.depth * 0.5 };
 }
+
+/** The camera that follows the army: its target is the army, the angle the camera already has around it is kept (within a range that reads well), and it is closer than the overview. */
+export function followPose(scale: SceneScale, army: { x: number; y: number; z: number }, current: CameraState): CameraState {
+  return {
+    x: army.x,
+    y: army.y,
+    z: army.z,
+    theta: current.theta,
+    phi: Math.min(1.2, Math.max(0.5, current.phi)),
+    radius: scale.depth * 0.55
+  };
+}

@@ -5,6 +5,7 @@ import {
   WHEEL_ZOOM,
   blendCamera,
   cameraLimits,
+  clampTarget,
   copyCamera,
   orbit,
   pan,
@@ -41,6 +42,8 @@ export interface StageNav {
   preset: (preset: CameraPreset) => void;
   /** the camera goes to this pose (eased over 600 ms, or at once when the reset does not glide) */
   flyTo: (pose: CameraState) => void;
+  /** moves the camera target at once (the angles and the distance stay), kept inside the box: for a camera that follows something */
+  setTarget: (x: number, y: number, z: number) => void;
 }
 
 export interface Stage {
@@ -230,7 +233,15 @@ export function createStage(host: HTMLElement, o: StageOptions): Stage {
     zoomOut: () => glideTo((t) => zoomBy(t, 1 / BUTTON_ZOOM, limits)),
     reset: () => glideTo((t) => resetCamera(t, limits)),
     preset: (preset) => glideTo((t) => presetCamera(t, preset, limits)),
-    flyTo: (target) => glideTo((t) => Object.assign(t, target), FLY_MS)
+    flyTo: (target) => glideTo((t) => Object.assign(t, target), FLY_MS),
+    setTarget: (x, y, z) => {
+      cancelGlide();
+      pose.x = x;
+      pose.y = y;
+      pose.z = z;
+      clampTarget(pose, limits.box);
+      changed();
+    }
   };
 
   el.addEventListener('pointerdown', down);

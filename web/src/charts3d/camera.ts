@@ -59,7 +59,7 @@ export function cameraLimits(start: CameraState, box: TargetBox): CameraLimits {
 
 const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v));
 
-function clampTarget(s: CameraState, b: TargetBox) {
+export function clampTarget(s: CameraState, b: TargetBox) {
   s.x = clamp(s.x, b.minX, b.maxX);
   s.y = clamp(s.y, b.minY, b.maxY);
   s.z = clamp(s.z, b.minZ, b.maxZ);
