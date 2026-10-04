@@ -117,6 +117,19 @@ describe('stage navigation', () => {
     expect([stage.pose.x, stage.pose.y, stage.pose.z, stage.pose.theta, stage.pose.phi, stage.pose.radius]).toEqual([1, 2, 3, 0.1, 0.7, 4]);
   });
 
+  it('moves the target at once with setTarget, keeping the angles and the distance', () => {
+    stage.nav.setTarget(1, 2, 3);
+    expect([stage.pose.x, stage.pose.y, stage.pose.z]).toEqual([1, 2, 3]);
+    expect([stage.pose.theta, stage.pose.phi, stage.pose.radius]).toEqual([0.4, 1, 10]);
+  });
+
+  it('keeps the target inside the box when it is moved', () => {
+    stage.nav.setTarget(1e6, 1e6, -1e6);
+    expect(stage.pose.x).toBeLessThanOrEqual(5);
+    expect(stage.pose.y).toBeLessThanOrEqual(10.5);
+    expect(stage.pose.z).toBeGreaterThanOrEqual(-5);
+  });
+
   it('publishes the camera in a data attribute at the end of a gesture', () => {
     fire('wheel', { deltaY: -100 });
     const [, , radius] = canvas().dataset.camera!.split(',');
