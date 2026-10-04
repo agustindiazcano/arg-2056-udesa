@@ -264,7 +264,7 @@ Legend: DONE = merged. READY = can start now. BLOCKED = needs the human input na
 | 20 | model-ts-port (optional) | BLOCKED | model-growth-core, model-ai-overlay (and drivers, hdi for the full port) |
 | | **Scenes** | | |
 | 21 | scene-ai-revolution | READY | |
-| 22 | andes-integration | BLOCKED | terrain outputs committed (D-andes-1 to D-andes-4 decided) |
+| 22 | andes-integration | PARTIAL (first cut, PR open) | scene works on a made-up terrain; real terrain outputs committed still needed (D-andes-1 to D-andes-4 decided) |
 | 23 | scene-forecast-map-3d | SUPERSEDED | replaced by presentation-3d |
 | 23b | presentation-3d (six PRs) | IN PROGRESS | F2b merged, D-3d-1 to D-3d-6 decided (3D first), real province geometry done |
 | 23c | map-navigation | DONE (PR open) | (3D first, D-3d-6) zoom, pan and reset on 2D maps; free orbit, pan, zoom and reset on 3D |

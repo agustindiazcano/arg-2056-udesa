@@ -24,7 +24,8 @@ describe('lazy scene loading', () => {
   it('shows the visible text "Loading scene" while the scene module loads, then the scene', async () => {
     render(<SceneHost scene="andes" />);
     expect(screen.getByText('Cargando escena')).toBeTruthy();
-    expect(await screen.findByText('Escena de los Andes en construcción.')).toBeTruthy();
+    // the scene itself (it shows its own loading state while its data loads)
+    expect(await screen.findByText('Cargando...')).toBeTruthy();
     expect(screen.queryByText('Cargando escena')).toBeNull();
   });
 

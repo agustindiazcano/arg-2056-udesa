@@ -39,6 +39,8 @@ export interface StageNav {
   zoomOut: () => void;
   reset: () => void;
   preset: (preset: CameraPreset) => void;
+  /** the camera goes to this pose (eased over 600 ms, or at once when the reset does not glide) */
+  flyTo: (pose: CameraState) => void;
 }
 
 export interface Stage {
@@ -58,6 +60,7 @@ export interface Stage {
 }
 
 const RESET_MS = 350;
+const FLY_MS = 600;
 
 /**
  * A scene on a canvas that fills `host`: it renders on demand and the camera is free: drag turns it, right-drag or
@@ -205,7 +208,7 @@ export function createStage(host: HTMLElement, o: StageOptions): Stage {
   const to = copyCamera(pose);
   let glide = () => {};
   const cancelGlide = () => glide();
-  const glideTo = (apply: (target: CameraState) => void) => {
+  const glideTo = (apply: (target: CameraState) => void, ms = RESET_MS) => {
     cancelGlide();
     Object.assign(from, pose);
     Object.assign(to, pose);
@@ -216,7 +219,7 @@ export function createStage(host: HTMLElement, o: StageOptions): Stage {
       publish();
       return;
     }
-    glide = animate(RESET_MS, (t) => {
+    glide = animate(ms, (t) => {
       blendCamera(pose, from, to, 1 - (1 - t) ** 3);
       place();
       if (t === 1) publish();
@@ -226,7 +229,8 @@ export function createStage(host: HTMLElement, o: StageOptions): Stage {
     zoomIn: () => glideTo((t) => zoomBy(t, BUTTON_ZOOM, limits)),
     zoomOut: () => glideTo((t) => zoomBy(t, 1 / BUTTON_ZOOM, limits)),
     reset: () => glideTo((t) => resetCamera(t, limits)),
-    preset: (preset) => glideTo((t) => presetCamera(t, preset, limits))
+    preset: (preset) => glideTo((t) => presetCamera(t, preset, limits)),
+    flyTo: (target) => glideTo((t) => Object.assign(t, target), FLY_MS)
   };
 
   el.addEventListener('pointerdown', down);

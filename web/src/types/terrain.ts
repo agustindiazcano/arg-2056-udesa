@@ -20,7 +20,7 @@ export interface TerrainMeta {
   retrieved_at: string;
   license_or_terms: string | null;
   attribution: string;
-  generated_by: 'scripts/terrain';
+  generated_by: 'scripts/terrain' | 'synthetic';
 }
 
 /** Baked terrain: metadata plus heights in meters, row-major from the north-west corner. */

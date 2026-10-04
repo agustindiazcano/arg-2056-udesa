@@ -112,6 +112,11 @@ describe('stage navigation', () => {
     expect(stage.pose.radius).toBe(10);
   });
 
+  it('flies to a given pose (and jumps there when the reset does not glide)', () => {
+    stage.nav.flyTo({ x: 1, y: 2, z: 3, theta: 0.1, phi: 0.7, radius: 4 });
+    expect([stage.pose.x, stage.pose.y, stage.pose.z, stage.pose.theta, stage.pose.phi, stage.pose.radius]).toEqual([1, 2, 3, 0.1, 0.7, 4]);
+  });
+
   it('publishes the camera in a data attribute at the end of a gesture', () => {
     fire('wheel', { deltaY: -100 });
     const [, , radius] = canvas().dataset.camera!.split(',');

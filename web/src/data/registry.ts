@@ -9,6 +9,7 @@ import { parseProjects } from '../types/projects';
 import { parseReferences } from '../types/references';
 import { parseAiEstimates, parseBaseRates, parseDatasetCatalog, parseExternalForecasts, parseForecastVintages } from '../types/research';
 import { parseResourceProduction } from '../types/resourceProduction';
+import { parseAndesEvents } from '../scenes/andes/data';
 
 export interface Dataset {
   /** file name inside public/data */
@@ -30,9 +31,9 @@ function schemaParser(label: string, name: SchemaName): (json: unknown) => unkno
 
 /** Every data file the app can load, with the parser it uses and the scenes that need it. */
 export const DATASETS: readonly Dataset[] = [
-  // The andes and ai-revolution scenes are placeholders and load nothing yet, so their files are optional.
+  // The ai-revolution scene is a placeholder and loads nothing yet, so its file is optional.
   { file: 'ai_estimates.json', parse: parseAiEstimates, requiredBy: [] },
-  { file: 'andes_events.json', parse: schemaParser('andes events', 'andesEvents'), requiredBy: [] },
+  { file: 'andes_events.json', parse: parseAndesEvents, requiredBy: ['andes'] },
   { file: 'base_rates.json', parse: parseBaseRates, requiredBy: [] },
   { file: 'composition.json', parse: parseComposition, requiredBy: ['resources'] },
   { file: 'dataset_catalog.json', parse: parseDatasetCatalog, requiredBy: [] },

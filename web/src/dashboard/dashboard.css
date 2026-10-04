@@ -570,3 +570,92 @@
     grid-template-rows: 1fr 1fr;
   }
 }
+
+/* ---- Andes scene ---------------------------------------------------------------------------------------------- */
+
+.andes-map {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+}
+
+.andes-map .chart3d-wrap {
+  flex: 1;
+}
+
+.andes-events {
+  display: grid;
+  gap: var(--space-xs);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.andes-events .chip {
+  width: 100%;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.andes-day {
+  color: var(--ink-2);
+}
+
+.andes-terrain-note {
+  margin: 0;
+  color: var(--ink-2);
+  font-size: var(--font-sm);
+}
+
+.andes-panel {
+  padding: var(--space-sm);
+  background: var(--glass-strong);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  font-size: var(--font-sm);
+}
+
+.andes-panel-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+}
+
+.andes-facts {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 2px var(--space-sm);
+  margin: var(--space-xs) 0;
+}
+
+.andes-facts dt {
+  color: var(--muted);
+}
+
+.andes-facts dd {
+  margin: 0;
+}
+
+.andes-sub {
+  margin: var(--space-xs) 0 2px;
+  font-size: var(--font-sm);
+  color: var(--ink-2);
+}
+
+.andes-forces {
+  margin: 0;
+  padding-left: var(--space-md);
+}
+
+.andes-note,
+.andes-source {
+  margin: var(--space-xs) 0 0;
+  color: var(--ink-2);
+}

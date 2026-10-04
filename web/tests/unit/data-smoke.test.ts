@@ -20,7 +20,6 @@ const NOT_IN_MANIFEST = ['references.json'];
 
 /** Scenes that load no dataset today. Each one is a placeholder scene; remove it from here when it loads data. */
 const NO_DATA: readonly Scene[] = [
-  'andes', // placeholder scene: the campaign events (andes_events.json) are wired in `andes-integration`
   'ai-revolution' // placeholder scene: no dataset yet
 ];
 

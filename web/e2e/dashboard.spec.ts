@@ -5,7 +5,8 @@ const VIEWPORTS = [
   { width: 1920, height: 1080 }
 ];
 
-const DATA_SCENES = SCENE_TABS.filter((s) => s.heading !== null);
+// the chart scenes: the Andes scene is a 3D map of events and has its own tests below
+const DATA_SCENES = SCENE_TABS.filter((s) => s.heading !== null && s.scene !== 'andes');
 
 test.describe('dashboard', () => {
   for (const viewport of VIEWPORTS) {
@@ -193,5 +194,38 @@ test.describe('dashboard', () => {
     const side = await page.getByRole('region', { name: 'Indicadores' }).boundingBox();
     const box = await story.boundingBox();
     expect(box!.x).toBeGreaterThanOrEqual(side!.x - 1);
+  });
+});
+
+test.describe('andes scene', () => {
+  test('shows the campaign on the terrain, a panel per event, and moves the army with the clock', async ({ page }) => {
+    await page.goto('/?quality=high');
+    await page.getByRole('tab', { name: 'Andes' }).click();
+    const canvas = page.locator('[data-chart3d="andes"] canvas');
+    await expect(canvas).toBeVisible();
+    await expect(page.getByRole('note')).toContainText('provisorio');
+
+    await page.getByRole('button', { name: /Alta cordillera/ }).click();
+    const panel = page.getByRole('region', { name: /Evento: Alta cordillera/ });
+    await expect(panel).toBeVisible();
+    await expect(panel).toContainText('sin dato');
+    // the camera flew to the event
+    await expect.poll(async () => Number((await canvas.getAttribute('data-camera'))!.split(',')[2])).toBeLessThan(25);
+
+    await page.keyboard.press('Escape');
+    await expect(panel).toHaveCount(0);
+    await expect(page.getByRole('button', { name: /Alta cordillera/ })).toBeFocused();
+
+    const day = page.getByTestId('andes-day');
+    const before = await day.innerText();
+    await page.getByRole('slider').first().press('End');
+    await expect.poll(async () => day.innerText()).not.toBe(before);
+  });
+
+  test('the table of events is the text version of the scene', async ({ page }) => {
+    await page.goto('/');
+    await page.getByRole('tab', { name: 'Andes' }).click();
+    await page.getByRole('button', { name: 'Tabla de eventos' }).click();
+    await expect(page.getByRole('table')).toContainText('Cumbre del paso');
   });
 });
