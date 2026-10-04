@@ -1,3 +1,6 @@
+import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
 import { describe, it, expect } from 'vitest';
 import { META } from '../../src/content/meta';
 import { applyMeta, buildMetaTags, metaPlugin } from '../../src/content/metaTags';
@@ -94,5 +97,33 @@ describe('metaPlugin', () => {
     const html = '<html><head><title>x</title></head><body></body></html>';
     expect(transform(html, { filename: '/repo/web/index.html' })).toContain('<title>Argentina 2056</title>');
     expect(transform(html, { filename: String.raw`C:\repo\web\references.html` })).toContain('<title>Sources and attributions | Argentina 2056</title>');
+  });
+});
+
+describe('metaPlugin warnings (the dev build only warns, the release check fails)', () => {
+  const warnings = (meta: Meta, publicDir: string) => {
+    const messages: string[] = [];
+    const plugin = metaPlugin(meta, publicDir);
+    (plugin.buildStart as unknown as (this: { warn: (m: string) => void }) => void).call({ warn: (m) => messages.push(m) });
+    return messages;
+  };
+  const tmp = () => fs.mkdtempSync(path.join(os.tmpdir(), 'meta-'));
+
+  it('warns about the placeholder metadata, the missing preview image and the missing favicon', () => {
+    const dir = tmp();
+    expect(warnings(META, dir)).toEqual([
+      'metadata is still a placeholder (src/content/meta.ts): the release build will fail',
+      `preview image missing: ${path.join(dir, 'og.png')} (the release build will fail)`,
+      `favicon missing: ${path.join(dir, 'favicon.svg')} (the release build will fail)`
+    ]);
+    fs.rmSync(dir, { recursive: true });
+  });
+
+  it('warns about nothing when the metadata is real and both files exist', () => {
+    const dir = tmp();
+    fs.writeFileSync(path.join(dir, 'og.png'), 'x');
+    fs.writeFileSync(path.join(dir, 'favicon.svg'), 'x');
+    expect(warnings(fixture, dir)).toEqual([]);
+    fs.rmSync(dir, { recursive: true });
   });
 });
