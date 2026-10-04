@@ -16,6 +16,8 @@
 
 - **Recursos map** (`task/resources-map`, stacked on F4): a province map of the selected resource and year under the charts in Recursos, from observed production (`scenes/resources/mapValues.ts`, no range, `observed` mode of `ProvinceMap`). Clicking a province selects it for the whole app.
 
+- **New direction (human, with `design.png`)**: the app is a one-screen data dashboard with no scroll; 3D and 2D are the same dashboard with a different renderer. Plan and phases D1 to D7 in `docs/dashboard.md` (supersedes the scrolling scene pages and the `presentation-3d` tour layout; its engine decisions still apply). Work in `task/dashboard-shell`, stacked on `task/motion-story` (PR #44 to `main` is still open).
+
 ## Decisions
 - UI text avoids the second person (infinitives and impersonal forms) to stay neutral between voseo and tuteo. The human may want to change that: it is one pass over the strings.
 - The story steps, the era bands, the page description and the two placeholder scenes (Andes, Revolución IA) are provisional content, now in Spanish ("(provisorio)", "Texto provisorio. Reemplazar antes del lanzamiento."). The release gate still keys on `placeholder: true`, not on the text. Real story text was not touched.
