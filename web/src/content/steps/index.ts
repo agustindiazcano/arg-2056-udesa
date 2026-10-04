@@ -7,30 +7,30 @@ import { parseYear } from '../../types/year';
  * (scripts/check_no_mock.py --content) fails while any step has `placeholder: true`.
  * Keep every step a literal object so the gate can print the scene and the id.
  */
-const TEXT = 'Placeholder text. Replace before release.';
+const TEXT = 'Texto provisorio. Reemplazar antes del lanzamiento.';
 
 export const STEPS: StepsByScene = {
   andes: [
-    { id: 'step-1', title: 'Step 1 (placeholder)', text: TEXT, focus: {}, source_ids: [], placeholder: true },
-    { id: 'step-2', title: 'Step 2 (placeholder)', text: TEXT, focus: {}, source_ids: [], placeholder: true },
-    { id: 'step-3', title: 'Step 3 (placeholder)', text: TEXT, focus: {}, source_ids: [], placeholder: true }
+    { id: 'step-1', title: 'Paso 1 (provisorio)', text: TEXT, focus: {}, source_ids: [], placeholder: true },
+    { id: 'step-2', title: 'Paso 2 (provisorio)', text: TEXT, focus: {}, source_ids: [], placeholder: true },
+    { id: 'step-3', title: 'Paso 3 (provisorio)', text: TEXT, focus: {}, source_ids: [], placeholder: true }
   ],
   economy: [
-    { id: 'step-1', title: 'Step 1 (placeholder)', text: TEXT, focus: { year: parseYear(1880) }, source_ids: [], placeholder: true },
-    { id: 'step-2', title: 'Step 2 (placeholder)', text: TEXT, focus: { year: parseYear(1950) }, source_ids: [], placeholder: true },
-    { id: 'step-3', title: 'Step 3 (placeholder)', text: TEXT, focus: { year: parseYear(2025) }, source_ids: [], placeholder: true }
+    { id: 'step-1', title: 'Paso 1 (provisorio)', text: TEXT, focus: { year: parseYear(1880) }, source_ids: [], placeholder: true },
+    { id: 'step-2', title: 'Paso 2 (provisorio)', text: TEXT, focus: { year: parseYear(1950) }, source_ids: [], placeholder: true },
+    { id: 'step-3', title: 'Paso 3 (provisorio)', text: TEXT, focus: { year: parseYear(2025) }, source_ids: [], placeholder: true }
   ],
   resources: [
-    { id: 'step-1', title: 'Step 1 (placeholder)', text: TEXT, focus: {}, source_ids: [], placeholder: true },
-    { id: 'step-2', title: 'Step 2 (placeholder)', text: TEXT, focus: {}, source_ids: [], placeholder: true },
-    { id: 'step-3', title: 'Step 3 (placeholder)', text: TEXT, focus: {}, source_ids: [], placeholder: true }
+    { id: 'step-1', title: 'Paso 1 (provisorio)', text: TEXT, focus: {}, source_ids: [], placeholder: true },
+    { id: 'step-2', title: 'Paso 2 (provisorio)', text: TEXT, focus: {}, source_ids: [], placeholder: true },
+    { id: 'step-3', title: 'Paso 3 (provisorio)', text: TEXT, focus: {}, source_ids: [], placeholder: true }
   ],
   forecast: [
-    { id: 'step-1', title: 'Step 1 (placeholder)', text: TEXT, focus: { scenario: 'pessimistic' }, source_ids: [], placeholder: true },
-    { id: 'step-2', title: 'Step 2 (placeholder)', text: TEXT, focus: { scenario: 'expected' }, source_ids: [], placeholder: true },
+    { id: 'step-1', title: 'Paso 1 (provisorio)', text: TEXT, focus: { scenario: 'pessimistic' }, source_ids: [], placeholder: true },
+    { id: 'step-2', title: 'Paso 2 (provisorio)', text: TEXT, focus: { scenario: 'expected' }, source_ids: [], placeholder: true },
     {
       id: 'step-3',
-      title: 'Step 3 (placeholder)',
+      title: 'Paso 3 (provisorio)',
       text: TEXT,
       focus: { scenario: 'optimistic', play: { fromYear: parseYear(2026), toYear: parseYear(2056) } },
       source_ids: [],
@@ -38,13 +38,13 @@ export const STEPS: StepsByScene = {
     }
   ],
   'ai-revolution': [
-    { id: 'step-1', title: 'Step 1 (placeholder)', text: TEXT, focus: {}, source_ids: [], placeholder: true },
-    { id: 'step-2', title: 'Step 2 (placeholder)', text: TEXT, focus: { aiOverlay: true }, source_ids: [], placeholder: true },
-    { id: 'step-3', title: 'Step 3 (placeholder)', text: TEXT, focus: {}, source_ids: [], placeholder: true }
+    { id: 'step-1', title: 'Paso 1 (provisorio)', text: TEXT, focus: {}, source_ids: [], placeholder: true },
+    { id: 'step-2', title: 'Paso 2 (provisorio)', text: TEXT, focus: { aiOverlay: true }, source_ids: [], placeholder: true },
+    { id: 'step-3', title: 'Paso 3 (provisorio)', text: TEXT, focus: {}, source_ids: [], placeholder: true }
   ],
   sandbox: [
-    { id: 'step-1', title: 'Step 1 (placeholder)', text: TEXT, focus: {}, source_ids: [], placeholder: true },
-    { id: 'step-2', title: 'Step 2 (placeholder)', text: TEXT, focus: {}, source_ids: [], placeholder: true },
-    { id: 'step-3', title: 'Step 3 (placeholder)', text: TEXT, focus: {}, source_ids: [], placeholder: true }
+    { id: 'step-1', title: 'Paso 1 (provisorio)', text: TEXT, focus: {}, source_ids: [], placeholder: true },
+    { id: 'step-2', title: 'Paso 2 (provisorio)', text: TEXT, focus: {}, source_ids: [], placeholder: true },
+    { id: 'step-3', title: 'Paso 3 (provisorio)', text: TEXT, focus: {}, source_ids: [], placeholder: true }
   ]
 };

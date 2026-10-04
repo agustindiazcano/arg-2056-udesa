@@ -19,7 +19,7 @@ export interface Meta {
  */
 export const META: Meta = {
   title: APP_TITLE,
-  description: 'Placeholder description. Replace before release.',
+  description: 'Descripción provisoria. Reemplazar antes del lanzamiento.',
   url: 'https://example.invalid/',
   ogImage: '/og.png',
   themeColor: tokens.page,
