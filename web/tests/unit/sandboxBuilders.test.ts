@@ -42,7 +42,7 @@ describe('buildSandboxPath', () => {
   it('draws the visitor path as a thick ink line labeled "your assumptions", with no legend', () => {
     const { option } = path();
     expect(option.legend).toBeUndefined();
-    const visitor = line(option, 'your assumptions');
+    const visitor = line(option, 'supuestos elegidos');
     expect(visitor.lineStyle).toMatchObject({ color: tokens.ink, width: 3 });
     expect(visitor.data).toEqual([100, 105, 110, 116]);
     expect(visitor.endLabel).toMatchObject({ show: true, formatter: 'supuestos elegidos' });
@@ -87,10 +87,10 @@ describe('buildSandboxPath', () => {
   it('shows the visitor value, the range and the position in the tooltip', () => {
     const { option } = path();
     expect(option.tooltip.formatter([{ dataIndex: 0 }])).toBe(
-      '2026<br/>Your assumptions: 100 USD<br/>Model range: 80 USD to 120 USD<br/>Position: inside'
+      '2026<br/>Supuestos elegidos: 100 USD<br/>Rango del modelo: 80 USD a 120 USD<br/>Posición: dentro del rango'
     );
     expect(option.tooltip.formatter([{ dataIndex: 3 }])).toBe(
-      '2029<br/>Your assumptions: 116 USD<br/>Model range: no data<br/>Position: no data'
+      '2029<br/>Supuestos elegidos: 116 USD<br/>Rango del modelo: sin datos<br/>Posición: sin datos'
     );
     const above: PathView = { ...view, visitor: [100, 150, 110, 116] };
     expect(path({ view: above }).option.tooltip.formatter([{ dataIndex: 1 }])).toContain('Posición: por encima del rango');
@@ -100,11 +100,11 @@ describe('buildSandboxPath', () => {
 
   it('summarises the multiple and the position at the last year', () => {
     expect(path().summary).toBe(
-      'At 2.5% per-capita growth, GDP per capita in 2029 is 1.2 times its 2026 level; the model range is not available for that year'
+      'Con un crecimiento per cápita de 2,5%, el PIB per cápita en 2029 es 1,2 veces su nivel de 2026; el rango del modelo no está disponible para ese año'
     );
     const withRange: PathView = { ...view, lower: [80, 85, 70, 90], upper: [120, 140, 135, 130] };
     expect(path({ view: withRange }).summary).toBe(
-      'At 2.5% per-capita growth, GDP per capita in 2029 is 1.2 times its 2026 level and sits inside the model range'
+      'Con un crecimiento per cápita de 2,5%, el PIB per cápita en 2029 es 1,2 veces su nivel de 2026 y se ubica dentro del rango del modelo'
     );
   });
 

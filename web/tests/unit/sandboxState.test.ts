@@ -19,7 +19,7 @@ describe('slider configuration', () => {
       expect(FIELD_LABELS[field].help.length).toBeGreaterThan(0);
     }
     expect(FIELD_LABELS.aiPp.help).toMatch(/puntos porcentuales/);
-    expect(FIELD_LABELS.aiPp.help).toMatch(/se suma/);
+    expect(FIELD_LABELS.aiPp.help).toMatch(/Se suma/);
   });
 });
 

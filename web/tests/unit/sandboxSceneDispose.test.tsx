@@ -45,7 +45,7 @@ describe('Sandbox scene and echarts instances', () => {
   it('creates the two chart instances, feeds them options and disposes both on unmount', async () => {
     vi.stubGlobal('fetch', vi.fn(async () => ({ ok: true, status: 200, json: async () => doc })));
     const { unmount } = render(<Scene />);
-    await screen.findByText('Illustrative arithmetic on your assumptions. It is not the forecasting model.');
+    await screen.findByText('Aritmética ilustrativa sobre los supuestos elegidos. No es el modelo de pronóstico.');
     await waitFor(() => expect(mockInit).toHaveBeenCalledTimes(2));
     expect(mockSetOption).toHaveBeenCalled();
     expect(mockDispose).not.toHaveBeenCalled();

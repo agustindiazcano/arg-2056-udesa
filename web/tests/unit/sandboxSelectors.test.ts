@@ -63,7 +63,7 @@ describe('basePoint', () => {
 
   it('returns null with a reason when GDP per capita is missing', () => {
     const r = basePoint(output([pop]), { scenario: 'expected' });
-    expect(r).toEqual({ base: null, reason: 'No GDP per capita series for AR in the expected scenario' });
+    expect(r).toEqual({ base: null, reason: 'No hay serie de PIB per cápita para AR en el escenario esperado' });
   });
 });
 
@@ -199,14 +199,14 @@ describe('summaryText', () => {
   const q = { effectivePct: 2.5, firstYear: 2026, lastYear: 2056, multiple: 2.097568 };
   it('states the multiple and the position against the model range', () => {
     expect(summaryText({ ...q, position: 'above' })).toBe(
-      'At 2.5% per-capita growth, GDP per capita in 2056 is 2.1 times its 2026 level and sits above the model range'
+      'Con un crecimiento per cápita de 2,5%, el PIB per cápita en 2056 es 2,1 veces su nivel de 2026 y se ubica por encima del rango del modelo'
     );
     expect(summaryText({ ...q, position: 'inside' })).toContain('y se ubica dentro del rango del modelo');
     expect(summaryText({ ...q, position: 'below' })).toContain('y se ubica por debajo del rango del modelo');
   });
   it('says the range is not available when the position is null', () => {
     expect(summaryText({ ...q, position: null })).toBe(
-      'At 2.5% per-capita growth, GDP per capita in 2056 is 2.1 times its 2026 level; the model range is not available for that year'
+      'Con un crecimiento per cápita de 2,5%, el PIB per cápita en 2056 es 2,1 veces su nivel de 2026; el rango del modelo no está disponible para ese año'
     );
   });
   it('never calls the visitor path a forecast', () => {

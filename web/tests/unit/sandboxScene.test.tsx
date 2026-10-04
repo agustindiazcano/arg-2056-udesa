@@ -67,8 +67,8 @@ interface Opt {
 }
 const options = () =>
   screen.queryAllByTestId('echart').map((el) => JSON.parse(el.getAttribute('data-option') ?? '{}') as Opt);
-const pathOption = () => options().find((o) => o.series?.some((s) => s.name === 'your assumptions'))!;
-const visitor = () => pathOption().series!.find((s) => s.name === 'your assumptions')!.data;
+const pathOption = () => options().find((o) => o.series?.some((s) => s.name === 'supuestos elegidos'))!;
+const visitor = () => pathOption().series!.find((s) => s.name === 'supuestos elegidos')!.data;
 
 const slider = (label: string) => screen.getByLabelText(label) as HTMLInputElement;
 const numberInput = (label: string) => screen.getByLabelText(`${label} (número)`) as HTMLInputElement;
