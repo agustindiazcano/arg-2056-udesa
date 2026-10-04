@@ -14,6 +14,7 @@ interface Option {
     map: string;
     nameProperty: string;
     roam: boolean;
+    scaleLimit: { min: number; max: number };
     itemStyle: { areaColor: string; borderColor: string; borderWidth: number };
     regions: Array<{ name: string; itemStyle?: Record<string, unknown>; label?: { show: boolean; formatter: string } }>;
   };
@@ -89,7 +90,8 @@ describe('buildProvinceMap', () => {
     expect(MAP_NAME).toBe('ar-provinces');
     expect(option.geo.map).toBe(MAP_NAME);
     expect(option.geo.nameProperty).toBe('id');
-    expect(option.geo.roam).toBe(false);
+    expect(option.geo.roam).toBe(true);
+    expect(option.geo.scaleLimit).toEqual({ min: 1, max: 8 });
     const map = option.series.find((s) => s.type === 'map')!;
     expect(map.geoIndex).toBe(0);
     expect(map.nameProperty).toBe('id');
