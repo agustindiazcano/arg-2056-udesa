@@ -18,6 +18,7 @@ import { DataTable } from '../../charts/DataTable.js';
 import { projectStatusLabel, resourceLabel } from '../../content/labels.js';
 import { FilterBar, FilterChip } from '../../ui/FilterBar.js';
 import { SceneShell } from '../../ui/SceneShell.js';
+import { ScopeNote } from '../../ui/ScopeNote.js';
 import { SceneError, SceneLoading } from '../../ui/SceneStatus.js';
 import { TableToggle } from '../../ui/TableToggle.js';
 
@@ -26,6 +27,7 @@ const RESOURCES = ['lithium', 'copper', 'gold', 'oil', 'gas'];
 export default function Scene() {
   const yearFloat = useStore(state => state.yearFloat);
   const currentYear = Math.floor(yearFloat);
+  const province = useStore(state => state.province);
 
   const [kind, setKind] = useState<CompositionKind>('exports_by_product'); // the brief says "exports (or GDP)"; exports by default
   const [selectedResource, setSelectedResource] = useState('lithium');
@@ -55,6 +57,12 @@ export default function Scene() {
     return clampYear(currentYear, available);
   }, [rpData, selectedResource, currentYear]);
 
+  // the trend follows the selected province when the data has a series for it, else it stays national
+  const trendGeo = useMemo(() => {
+    const hasSeries = province !== null && rpData?.some(r => r.resource === selectedResource && r.geo === province && r.value !== null);
+    return hasSeries ? province : 'AR';
+  }, [province, rpData, selectedResource]);
+
   const treemapResult = useMemo(() => {
     if (!compData) return null;
     const records = selectComposition(compData, { kind, year: compositionYear });
@@ -63,13 +71,13 @@ export default function Scene() {
 
   const provinceBarsResult = useMemo(() => {
     if (!rpData) return null;
-    return buildProvinceBars(rpData, { resource: selectedResource, year: rpYear, topN: 10 });
-  }, [rpData, selectedResource, rpYear]);
+    return buildProvinceBars(rpData, { resource: selectedResource, year: rpYear, topN: 10, highlight: province });
+  }, [rpData, selectedResource, rpYear, province]);
 
   const trendResult = useMemo(() => {
     if (!rpData) return null;
-    return buildTrend(rpData, { resource: selectedResource, geo: 'AR' });
-  }, [rpData, selectedResource]);
+    return buildTrend(rpData, { resource: selectedResource, geo: trendGeo });
+  }, [rpData, selectedResource, trendGeo]);
 
   const projectsTableData = useMemo(() => {
     if (!projData) return [];
@@ -102,6 +110,7 @@ export default function Scene() {
   const resourceName = resourceLabel(selectedResource);
   const resourceUnit = rpData?.find(r => r.resource === selectedResource)?.unit;
   const provinceName = (geo: string) => PROVINCES.find(p => p.id === geo)?.name ?? geo;
+  const trendIsProvincial = trendGeo !== 'AR';
 
   return (
     <SceneShell
@@ -110,6 +119,13 @@ export default function Scene() {
       sources={sourcesAndDates.sources}
       retrievedAt={sourcesAndDates.latestDate}
     >
+      {province !== null && <ScopeNote>La composición es nacional: el filtro de provincia no aplica.</ScopeNote>}
+      {province !== null && !trendIsProvincial && (
+        <ScopeNote>
+          {`No hay serie provincial de ${resourceName} para ${provinceName(province)}: se muestra el total nacional.`}
+        </ScopeNote>
+      )}
+
       <div style={{ display: 'flex', gap: 'var(--space-lg)', flex: '1 0 auto' }}>
 
         {/* Left Column */}
@@ -186,7 +202,7 @@ export default function Scene() {
             {/* National Trend */}
             <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 'var(--space-sm)' }}>
-                <span>Tendencia nacional</span>
+                <span>{trendIsProvincial ? `Tendencia de ${provinceName(trendGeo)}` : 'Tendencia nacional'}</span>
                 <TableToggle pressed={trendTable} onToggle={() => setTrendTable(!trendTable)} />
               </div>
               <div style={{ flex: 1, minHeight: '200px' }}>
@@ -195,12 +211,12 @@ export default function Scene() {
                 )}
                 {trendTable && rpData && (
                   <DataTable
-                    caption="Tendencia nacional"
+                    caption={trendIsProvincial ? `Tendencia de ${provinceName(trendGeo)}` : 'Tendencia nacional'}
                     columns={[
                       { key: 'year', header: 'Año' },
                       { key: 'value', header: 'Valor', format: 'unit', unit: resourceUnit }
                     ]}
-                    data={rpData.filter(r => r.resource === selectedResource && r.geo === 'AR').sort((a, b) => a.year - b.year)}
+                    data={rpData.filter(r => r.resource === selectedResource && r.geo === trendGeo).sort((a, b) => a.year - b.year)}
                   />
                 )}
               </div>

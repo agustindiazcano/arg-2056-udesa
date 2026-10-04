@@ -415,3 +415,9 @@ main.scene-container {
 .scene-error {
   color: var(--state-critical);
 }
+
+.scope-note {
+  margin: 0 0 var(--space-sm);
+  font-size: var(--font-sm);
+  color: var(--muted);
+}

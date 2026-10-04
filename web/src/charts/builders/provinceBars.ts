@@ -1,16 +1,18 @@
 import { tokens } from '../../styles/tokens.js';
 import { formatValue } from '../format.js';
 import { PROVINCES } from '../../types/province.js';
-import type { ResourceProductionRecord } from '../../types/index.js';
+import type { ProvinceId, ResourceProductionRecord } from '../../types/index.js';
 
 interface ProvinceBarsOpts {
   resource: string;
   year: number;
   topN?: number;
+  /** The selected province: it keeps the blue, the others turn muted, and it stays on the chart outside the top N. */
+  highlight?: ProvinceId | null;
 }
 
 export function buildProvinceBars(records: ResourceProductionRecord[], opts: ProvinceBarsOpts) {
-  const { resource, year, topN = 10 } = opts;
+  const { resource, year, topN = 10, highlight = null } = opts;
   
   let excluded = 0;
   
@@ -32,14 +34,20 @@ export function buildProvinceBars(records: ResourceProductionRecord[], opts: Pro
 
   // Get top N
   const top = filtered.slice(0, topN);
-  const rest = filtered.slice(topN);
+  let rest = filtered.slice(topN);
+  const picked = highlight ? rest.find((r) => r.geo === highlight) : undefined;
+  if (picked) {
+    top.push(picked);
+    rest = rest.filter((r) => r !== picked);
+  }
 
-  const seriesData: { name: string; value: number; isOther: boolean }[] = top.map(r => {
+  const seriesData: { name: string; value: number; isOther: boolean; geo?: string }[] = top.map(r => {
     const prov = PROVINCES.find(p => p.id === r.geo);
     return {
       name: prov ? prov.name : r.geo,
       value: r.value as number,
-      isOther: false
+      isOther: false,
+      geo: r.geo
     };
   });
 
@@ -94,7 +102,7 @@ export function buildProvinceBars(records: ResourceProductionRecord[], opts: Pro
         data: seriesData.map(d => ({
           value: d.value,
           itemStyle: {
-            color: d.isOther ? tokens.muted : tokens.blue,
+            color: d.isOther || (highlight !== null && d.geo !== highlight) ? tokens.muted : tokens.blue,
             borderRadius: [0, 4, 4, 0] // 4px rounded data end (top-right, bottom-right)
           }
         })),

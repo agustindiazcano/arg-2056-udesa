@@ -5,7 +5,6 @@ import { DataTable } from '../../charts/DataTable.js';
 import { EChart } from '../../charts/EChart.js';
 import { formatDecimal, formatNumber, formatValue } from '../../charts/format.js';
 import { positionLabel, scenarioLabel } from '../../content/labels.js';
-import { FilterChip } from '../../ui/FilterBar.js';
 import { SceneShell } from '../../ui/SceneShell.js';
 import { SceneError, SceneLoading } from '../../ui/SceneStatus.js';
 import { TableToggle } from '../../ui/TableToggle.js';
@@ -34,7 +33,6 @@ const PRESETS: Scenario[] = ['pessimistic', 'expected', 'optimistic'];
 export default function Scene() {
   const aiState = useStore((s) => s.aiOverlay);
   const yearFloat = useStore((s) => s.yearFloat);
-  const dispatch = useStore((s) => s.dispatch);
   const aiOverlay = aiState === 'on';
 
   const { status, data } = useDataset('forecast_output', parseForecastOutput);
@@ -137,9 +135,6 @@ export default function Scene() {
       <div style={{ display: 'flex', gap: 'var(--space-lg)', flex: '1 0 auto' }}>
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 'var(--space-md)', minWidth: '260px' }}>
           <Sliders state={state} aiEnabled={aiOverlay} onChange={(field, value) => update({ type: 'set', field, value })} />
-          <FilterChip pressed={aiOverlay} onClick={() => dispatch({ type: 'setAiOverlay', aiOverlay: aiOverlay ? 'off' : 'on' })}>
-            Efecto de la IA
-          </FilterChip>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--space-sm)' }}>
             {PRESETS.map((scenario) => {
               const preset = scenarioPreset(data, { scenario, aiOverlay });
