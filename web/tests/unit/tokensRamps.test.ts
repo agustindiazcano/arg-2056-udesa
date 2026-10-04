@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, it, expect } from 'vitest';
-import { DIVERGING, NO_DATA, SEQUENTIAL_BLUE, TERRAIN_RAMP, tokens } from '../../src/styles/tokens.js';
+import { DIVERGING, NO_DATA, SEQUENTIAL_BLUE, SKY_RAMP, TERRAIN_RAMP, tokens } from '../../src/styles/tokens.js';
 
 const css = readFileSync(join(process.cwd(), 'src/styles/tokens.css'), 'utf8');
 
@@ -115,6 +115,24 @@ describe('terrain ramp (the natural colors of the Andes scene)', () => {
   it('mirrors tokens.css (drift)', () => {
     TERRAIN_RAMP.forEach((hex, i) => {
       expect(cssVar(`--terrain-${i + 1}`)).toBe(hex);
+    });
+  });
+});
+
+describe('sky ramp (the dome of the Andes scene)', () => {
+  it('has 4 steps from the horizon (warm, light) to the zenith (deep blue, dark)', () => {
+    expect(SKY_RAMP).toEqual(['#d6a77f', '#7b8fb0', '#2c4a7c', '#0b1530']);
+  });
+
+  it('gets darker with every step up, so the sky is lightest at the horizon', () => {
+    for (let i = 1; i < SKY_RAMP.length; i++) {
+      expect(luminance(SKY_RAMP[i]!)).toBeLessThan(luminance(SKY_RAMP[i - 1]!));
+    }
+  });
+
+  it('mirrors tokens.css (drift)', () => {
+    SKY_RAMP.forEach((hex, i) => {
+      expect(cssVar(`--sky-${i + 1}`)).toBe(hex);
     });
   });
 });
