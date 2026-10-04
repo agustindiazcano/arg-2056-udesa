@@ -130,7 +130,7 @@ describe('Dashboard: 2D and 3D', () => {
 
   it('follows the D key', () => {
     renderDash();
-    act(() => useStore.getState().dispatch({ type: 'toggleMode' }));
+    act(() => useStore.getState().dispatch({ type: 'toggle3D' }));
     expect(screen.getByRole('button', { name: '2D' }).getAttribute('aria-pressed')).toBe('true');
   });
 });

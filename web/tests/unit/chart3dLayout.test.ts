@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { layoutBars } from '../../src/charts3d/layout';
 import type { Bar3D } from '../../src/charts3d/types';
 
-const bar = (label: string, value: number, highlight = false): Bar3D => ({ label, value, display: `${value} u`, highlight });
+const bar = (label: string, value: number, highlight = false): Bar3D => ({ label, value, display: `${value} u`, short: `${value}`, highlight });
 
 describe('layoutBars', () => {
   const bars = [bar('A', 100), bar('B', 50, true), bar('C', 25)];
@@ -35,7 +35,7 @@ describe('layoutBars', () => {
   });
 
   it('has no bars and a zero width for an empty list', () => {
-    expect(layoutBars([], { maxHeight: 4, barWidth: 1, gap: 0.5 })).toEqual({ items: [], width: 0, max: 0 });
+    expect(layoutBars([], { maxHeight: 4, barWidth: 1, gap: 0.5 })).toEqual({ items: [], width: 0, max: 0, ticks: [] });
   });
 
   it('reports the maximum value it scaled by', () => {

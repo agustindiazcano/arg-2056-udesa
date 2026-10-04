@@ -14,9 +14,9 @@ describe('barsSpec', () => {
     expect(spec.title).toBe('Ranking');
     expect(spec.unit).toBe('USD');
     expect(spec.bars).toEqual([
-      { label: 'CHL', value: 210, display: '210 USD', highlight: false },
-      { label: 'ARG', value: 150, display: '150 USD', highlight: true },
-      { label: 'BRA', value: 70, display: '70 USD', highlight: false }
+      { label: 'CHL', value: 210, display: '210 USD', short: '210', highlight: false },
+      { label: 'ARG', value: 150, display: '150 USD', short: '150', highlight: true },
+      { label: 'BRA', value: 70, display: '70 USD', short: '70', highlight: false }
     ]);
   });
 

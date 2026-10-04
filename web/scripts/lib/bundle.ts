@@ -23,6 +23,8 @@ export interface Budgets {
   initial: Record<string, number>;
   /** gzip bytes allowed for any one dynamic chunk */
   chunk_max: number;
+  /** a chunk that is heavy on purpose (the 3D engine) has its own budget, by manifest key; every other chunk keeps chunk_max */
+  chunk_overrides?: Record<string, number>;
 }
 
 export interface BundleSizes {
@@ -116,7 +118,8 @@ export function compare(sizes: BundleSizes, budgets: Budgets): BudgetRow[] {
     rows.push({ kind: 'initial', name, bytes, budget, over: bytes > budget });
   }
   for (const [name, bytes] of Object.entries(sizes.chunks)) {
-    rows.push({ kind: 'chunk', name, bytes, budget: budgets.chunk_max, over: bytes > budgets.chunk_max });
+    const budget = budgets.chunk_overrides?.[name] ?? budgets.chunk_max;
+    rows.push({ kind: 'chunk', name, bytes, budget, over: bytes > budget });
   }
   return rows;
 }

@@ -5,6 +5,8 @@ import { buildRankHistory } from '../../charts/builders/rankHistory.js';
 import { DataTable } from '../../charts/DataTable.js';
 import { EChart } from '../../charts/EChart.js';
 import { formatValue } from '../../charts/format.js';
+import { Chart2D3D } from '../../charts3d/Chart2D3D.js';
+import { barsSpec } from '../../charts3d/specs.js';
 import { ERAS } from '../../content/eras.js';
 import { indicatorLabel } from '../../content/labels.js';
 import { Dashboard } from '../../dashboard/Dashboard.js';
@@ -154,7 +156,16 @@ export default function Scene() {
             content: (
               <ChartPanel
                 title={`Puesto en ${year}`}
-                chart={<EChart option={bars.option} aria-label={bars.summary} />}
+                chart={
+                  <Chart2D3D
+                    spec={barsSpec(
+                      rank.rows.map((r) => ({ label: r.geo, value: r.value })),
+                      { title: `Puesto en ${year}`, unit: levelUnit, highlight: HOME, summary: bars.summary }
+                    )}
+                  >
+                    <EChart option={bars.option} aria-label={bars.summary} />
+                  </Chart2D3D>
+                }
                 table={
                   <DataTable
                     caption="Ranking"

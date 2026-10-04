@@ -89,6 +89,26 @@ test.describe('dashboard', () => {
     await expect(page.getByRole('region', { name: 'Historia' })).toBeVisible();
   });
 
+  test('the ranking is a 3D chart by default and the same chart flat in 2D', async ({ page }) => {
+    await page.goto('/');
+    await page.getByRole('tab', { name: 'Economía' }).click();
+    await expectSceneShown(page, DATA_SCENES[0]!);
+    await page.getByRole('group', { name: 'Vistas', exact: true }).getByRole('button', { name: 'Ranking' }).click();
+    const view = page.locator('[data-chart3d="bars"]');
+    await expect(view).toBeVisible();
+    await expect(view.locator('canvas')).toBeVisible();
+    await expect(view).toHaveAttribute('aria-label', /ARG ocupa el/);
+
+    await page.getByRole('group', { name: 'Vista', exact: true }).getByRole('button', { name: '2D' }).click();
+    await expect(page.locator('[data-chart3d]')).toHaveCount(0);
+    await expect(page.getByTestId('scene').getByRole('img', { name: /.+/ }).first()).toBeVisible();
+
+    // the same choice with the D key
+    await page.evaluate(() => (document.activeElement as HTMLElement | null)?.blur());
+    await page.keyboard.press('d');
+    await expect(page.locator('[data-chart3d="bars"]')).toBeVisible();
+  });
+
   test('the story panel is docked in the right panel', async ({ page }) => {
     await page.goto('/');
     await page.getByRole('tab', { name: 'Economía' }).click();

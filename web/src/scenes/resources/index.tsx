@@ -18,6 +18,8 @@ import { ProvinceMap, useProvinces } from '../forecast/ProvinceMap.js';
 import { EChart } from '../../charts/EChart.js';
 import { DataTable } from '../../charts/DataTable.js';
 import { formatValue } from '../../charts/format.js';
+import { Chart2D3D } from '../../charts3d/Chart2D3D.js';
+import { barsSpec } from '../../charts3d/specs.js';
 import { indicatorSentence, projectStatusLabel, resourceLabel } from '../../content/labels.js';
 import { Dashboard } from '../../dashboard/Dashboard.js';
 import type { DashView } from '../../dashboard/types.js';
@@ -124,6 +126,7 @@ export default function Scene() {
   const resourceUnit = rpData?.find(r => r.resource === selectedResource)?.unit;
   const provinceName = (geo: string) => PROVINCES.find(p => p.id === geo)?.name ?? geo;
   const trendIsProvincial = trendGeo !== 'AR';
+  const shortName = (name: string) => (name.length > 14 ? `${name.slice(0, 13)}…` : name);
   const trendTitle = trendIsProvincial ? `Tendencia de ${provinceName(trendGeo)}` : 'Tendencia nacional';
 
   // the indicators of the right panel, from the production of the selected resource and year
@@ -177,7 +180,23 @@ export default function Scene() {
       content: (
         <ChartPanel
           title={`Producción por provincia (${rpYear})`}
-          chart={provinceBarsResult && <EChart option={provinceBarsResult.option} aria-label={provinceBarsResult.summary} />}
+          chart={
+            provinceBarsResult && (
+              <Chart2D3D
+                spec={barsSpec(
+                  byProvince.slice(0, 10).map(r => ({ label: shortName(provinceName(r.geo)), value: r.value })),
+                  {
+                    title: `Producción por provincia (${rpYear})`,
+                    unit: resourceUnit ?? '',
+                    highlight: province ? shortName(provinceName(province)) : null,
+                    summary: provinceBarsResult.summary
+                  }
+                )}
+              >
+                <EChart option={provinceBarsResult.option} aria-label={provinceBarsResult.summary} />
+              </Chart2D3D>
+            )
+          }
           table={
             rpData && (
               <DataTable

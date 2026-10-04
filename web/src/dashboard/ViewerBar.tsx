@@ -1,5 +1,6 @@
 import React from 'react';
 import { Segmented } from '../ui/Segmented';
+import { useStore } from '../state/store';
 import { useDashPrefs } from './prefs';
 import type { Layout } from './prefs';
 
@@ -8,6 +9,11 @@ const LAYOUTS: ReadonlyArray<{ value: `${Layout}`; label: string }> = [
   { value: '2', label: '2' },
   { value: '4', label: '4' }
 ];
+
+const VIEWS = [
+  { value: '2d', label: '2D' },
+  { value: '3d', label: '3D' }
+] as const;
 
 const MODES = [
   { value: 'tour', label: 'Recorrido' },
@@ -20,9 +26,19 @@ export function ViewerBar() {
   const explore = useDashPrefs((s) => s.explore);
   const setLayout = useDashPrefs((s) => s.setLayout);
   const setExplore = useDashPrefs((s) => s.setExplore);
+  const mode = useStore((s) => s.mode);
+  const dispatch = useStore((s) => s.dispatch);
 
   return (
     <div className="viewer-bar">
+      <Segmented
+        label="Vista"
+        options={VIEWS}
+        value={mode}
+        onChange={(value) => {
+          if (value !== mode) dispatch({ type: 'toggle3D' });
+        }}
+      />
       <Segmented
         label="Paneles a la vez"
         options={LAYOUTS}

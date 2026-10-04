@@ -23,9 +23,9 @@ const env = (webgl2: boolean): CapabilityEnv => ({
 beforeEach(() => useStore.setState({ mode: '3d' }));
 afterEach(cleanup);
 
-function renderIt(webgl2: boolean | null, s: Bars3DSpec | undefined = spec) {
+function renderIt(webgl2: boolean | null, s: Bars3DSpec | null = spec) {
   const tree = (
-    <Chart2D3D spec={s}>
+    <Chart2D3D spec={s ?? undefined}>
       <p>el gráfico plano</p>
     </Chart2D3D>
   );
@@ -33,22 +33,19 @@ function renderIt(webgl2: boolean | null, s: Bars3DSpec | undefined = spec) {
 }
 
 describe('Chart2D3D', () => {
+  // the first use of the lazy chunk: the poster shows while it loads (later uses find it already loaded)
+  it('shows the poster while the 3D chunk loads, then the 3D chart instead of the flat one', async () => {
+    renderIt(true);
+    expect(screen.getByRole('status').textContent).toBe('Cargando la vista 3D...');
+    await waitFor(() => expect(screen.getByTestId('chart3d').textContent).toBe('3D Ranking'));
+    expect(screen.queryByText('el gráfico plano')).toBeNull();
+  });
+
   it('shows the flat chart in 2D mode, even with WebGL2', () => {
     useStore.setState({ mode: '2d' });
     renderIt(true);
     expect(screen.getByText('el gráfico plano')).toBeTruthy();
     expect(screen.queryByTestId('chart3d')).toBeNull();
-  });
-
-  it('shows the 3D chart in 3D mode with WebGL2, after a poster while it loads', async () => {
-    renderIt(true);
-    await waitFor(() => expect(screen.getByTestId('chart3d').textContent).toBe('3D Ranking'));
-    expect(screen.queryByText('el gráfico plano')).toBeNull();
-  });
-
-  it('shows the poster while the 3D chunk loads', () => {
-    renderIt(true);
-    expect(screen.getByRole('status').textContent).toBe('Cargando la vista 3D...');
   });
 
   it('falls back to the flat chart without WebGL2', () => {
@@ -63,7 +60,7 @@ describe('Chart2D3D', () => {
   });
 
   it('falls back to the flat chart when the view has no 3D version', () => {
-    renderIt(true, undefined);
+    renderIt(true, null);
     expect(screen.getByText('el gráfico plano')).toBeTruthy();
   });
 

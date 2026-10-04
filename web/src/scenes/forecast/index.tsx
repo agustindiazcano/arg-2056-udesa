@@ -1,11 +1,13 @@
 import React, { useMemo, useState } from 'react';
 import { useStore } from '../../state/store.js';
 import { useDataset } from '../../data/useDataset.js';
-import { parseForecastOutput, SCENARIOS } from '../../types/index.js';
+import { parseForecastOutput, PROVINCES, SCENARIOS } from '../../types/index.js';
 import type { Indicator, ResourceId } from '../../types/index.js';
 import { buildFan } from '../../charts/builders/fan.js';
 import { buildRanking } from '../../charts/builders/ranking.js';
 import { formatValue } from '../../charts/format.js';
+import { Chart2D3D } from '../../charts3d/Chart2D3D.js';
+import { barsSpec } from '../../charts3d/specs.js';
 import { indicatorLabel, indicatorSentence, resourceLabel, scenarioLabel } from '../../content/labels.js';
 import { Dashboard } from '../../dashboard/Dashboard.js';
 import type { DashView } from '../../dashboard/types.js';
@@ -211,7 +213,24 @@ export default function Scene() {
           title={`Provincias en ${year}`}
           chart={
             ranking && ranking.rows.length > 0 ? (
-              <EChart option={ranking.built.option} aria-label={ranking.built.summary} />
+              <Chart2D3D
+                spec={barsSpec(
+                  ranking.rows.map((r) => ({ label: r.name.length > 14 ? `${r.name.slice(0, 13)}…` : r.name, value: r.p50 })),
+                  {
+                    title: `Provincias en ${year}`,
+                    unit: ranking.unit,
+                    highlight: province
+                      ? (() => {
+                          const n = PROVINCES.find((p) => p.id === province)?.name ?? '';
+                          return n.length > 14 ? `${n.slice(0, 13)}…` : n;
+                        })()
+                      : null,
+                    summary: ranking.built.summary
+                  }
+                )}
+              >
+                <EChart option={ranking.built.option} aria-label={ranking.built.summary} />
+              </Chart2D3D>
             ) : (
               <div style={{ color: 'var(--muted)' }}>
                 {ranking && ranking.excluded > 0

@@ -38,6 +38,11 @@ export function CapabilityProvider({ env, search, children }: ProviderProps) {
   return <QualityContext.Provider value={value}>{children}</QualityContext.Provider>;
 }
 
+/** The quality, or null where there is no provider (the references page, the unit tests): a caller then stays on the safe path. */
+export function useQualityOptional(): Quality | null {
+  return useContext(QualityContext);
+}
+
 export function useQuality(): Quality {
   const value = useContext(QualityContext);
   if (value === null) throw new Error('useQuality must be used inside a CapabilityProvider');

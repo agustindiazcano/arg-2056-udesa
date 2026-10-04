@@ -1,8 +1,11 @@
 {
-  "_note": "Measured after code splitting and tree-shaken ECharts, not decided: the human confirms or tightens them. Sizes are gzip level 9 bytes: measured x 1.15 rounded up to the next 1024. Measured: main 116045, references 113441, largest dynamic chunk (the forecast scene with the ECharts chunk it loads) 240444. Before the split: main 503824, references 112749.",
+  "_note": "Measured after code splitting and tree-shaken ECharts, not decided: the human confirms or tightens them. Sizes are gzip level 9 bytes: measured x 1.15 rounded up to the next 1024. Measured: main 116045, references 113441, largest dynamic chunk (the forecast scene with the ECharts chunk it loads) 240444. Before the split: main 503824, references 112749. F4 and the dashboard (gsap, slots, views, 3D switch) raised main to 143360 on purpose (measured 134484); the 3D engine is a lazy chunk with its own budget (measured 364766, Three.js).",
   "initial": {
-    "main": 134144,
+    "main": 143360,
     "references": 131072
   },
-  "chunk_max": 277504
+  "chunk_max": 277504,
+  "chunk_overrides": {
+    "src/three/Chart3D.tsx": 409600
+  }
 }
