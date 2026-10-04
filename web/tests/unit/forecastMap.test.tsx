@@ -85,7 +85,7 @@ function stubFetch(mode: GeoMode = 'ok') {
     'fetch',
     vi.fn(async (url: string) => {
       if (url === '/data/forecast_output.json') return respond(true, 200, forecast());
-      if (url === '/geo/provinces.geojson') {
+      if (url === '/geo/provinces.geojson?v=aaaaaaaaaaaa') {
         if (mode === '404') return respond(false, 404, {});
         const geo = validGeo();
         if (mode === 'bad-ids') geo.features[1] = validFeature(0); // AR-A twice, AR-B missing
@@ -273,7 +273,7 @@ describe('Forecast scene: province map', () => {
 
     fireEvent.click(screen.getByRole('button', { name: 'Map' }));
     expect(screen.getByText(/Province geometry is not available/)).toBeDefined();
-    expect(screen.getByText(/Failed to fetch \/geo\/provinces\.geojson: HTTP 404/)).toBeDefined();
+    expect(screen.getByText(/Failed to fetch \/geo\/provinces\.meta\.json: HTTP 404/)).toBeDefined();
 
     fireEvent.click(screen.getByRole('button', { name: 'Ranking' })); // the ranking still works
     expect(screen.getByText('Provinces in 2026')).toBeDefined();

@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { parseReferences, PUBLISHER_TYPES } from '../types/references.js';
 import type { PublisherType, ReferenceSource, References } from '../types/references.js';
 import { formatCitation } from './citation.js';
+import { versionedUrl } from '../data/version.js';
 import { VisitsSection } from '../analytics/VisitsSection.js';
 import { filterReferences, groupByType, resolveDerived } from './selectors.js';
 
@@ -234,7 +235,8 @@ export function ReferencesApp() {
 
   useEffect(() => {
     let active = true;
-    fetch('/data/references.json')
+    versionedUrl('/data/references.json')
+      .then((url) => fetch(url))
       .then((res) => {
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         return res.json();

@@ -10,6 +10,7 @@ import { StoryCaption } from '../story/StoryCaption';
 import { StepRunner } from '../story/StepRunner';
 import { SceneHost } from './SceneHost';
 import { loadForecast } from '../data/load';
+import { versionedUrl } from '../data/version';
 import { CapabilityProvider, QualityDebugLine } from '../runtime/CapabilityProvider';
 import { documentTitle } from './title';
 
@@ -26,7 +27,8 @@ export function App() {
   }, [scene]);
 
   useEffect(() => {
-    loadForecast('/data/forecast_output.json')
+    versionedUrl('/data/forecast_output.json')
+      .then(loadForecast)
       .then(f => setForecastSource(f.source))
       .catch(e => console.error(e));
   }, []);

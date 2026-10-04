@@ -88,8 +88,15 @@ export async function loadProvinces(
   fetchFn: (url: string) => Promise<FetchResponse> = (url) => fetch(url)
 ): Promise<{ geo: ProvincesGeo; meta: GeoMeta }> {
   const base = baseUrl.replace(/\/+$/, '');
-  const rawGeo = await getJson(fetchFn, `${base}/provinces.geojson`);
+  // The metadata first: its input hash is the cache-busting version of the geometry file.
   const rawMeta = await getJson(fetchFn, `${base}/provinces.meta.json`);
+  let meta: GeoMeta;
+  try {
+    meta = parseGeoMeta(rawMeta);
+  } catch (err) {
+    throw new Error(`Invalid geo metadata: ${err instanceof Error ? err.message : String(err)}`);
+  }
+  const rawGeo = await getJson(fetchFn, `${base}/provinces.geojson?v=${meta.input_sha256.slice(0, 12)}`);
 
   let geo: ProvincesGeo;
   try {
@@ -100,11 +107,5 @@ export async function loadProvinces(
   const problems = checkProvinceIds(geo);
   if (problems.length > 0) throw new Error(`Province ids are inconsistent: ${problems.join('; ')}`);
 
-  let meta: GeoMeta;
-  try {
-    meta = parseGeoMeta(rawMeta);
-  } catch (err) {
-    throw new Error(`Invalid geo metadata: ${err instanceof Error ? err.message : String(err)}`);
-  }
   return { geo, meta };
 }
