@@ -5,6 +5,7 @@ import {
   ZOOM_MAX,
   ZOOM_MIN,
   cameraLimits,
+  blendCamera,
   copyCamera,
   ndcOf,
   orbit,
@@ -182,5 +183,32 @@ describe('resetCamera and presetCamera', () => {
     orbit(s, 100, 100, limits);
     presetCamera(s, 'perspective', limits);
     expect(s).toEqual(start());
+  });
+});
+
+describe('blendCamera', () => {
+  it('goes from one pose to the other by the shortest way around the azimuth', () => {
+    const a: CameraState = { x: 0, y: 0, z: 0, theta: 3, phi: 1, radius: 10 };
+    const b: CameraState = { x: 2, y: 4, z: 0, theta: -3, phi: 0.5, radius: 20 };
+    const out = copyCamera(a);
+    blendCamera(out, a, b, 0.5);
+    // 3 to -3 is 0.283 rad through pi, not 6 rad back through 0
+    expect(Math.cos(out.theta)).toBeCloseTo(Math.cos(Math.PI), 1);
+    expect(out.x).toBeCloseTo(1, 10);
+    expect(out.y).toBeCloseTo(2, 10);
+    expect(out.phi).toBeCloseTo(0.75, 10);
+    expect(out.radius).toBeCloseTo(15, 10);
+  });
+
+  it('is the first pose at 0 and the second at 1', () => {
+    const a = start();
+    const b: CameraState = { x: 1, y: 1, z: 1, theta: -1, phi: 0.7, radius: 5 };
+    const out = copyCamera(a);
+    blendCamera(out, a, b, 0);
+    expect(out).toEqual(a);
+    blendCamera(out, a, b, 1);
+    expect(out.x).toBe(1);
+    expect(out.radius).toBe(5);
+    expect(out.theta).toBeCloseTo(-1, 10);
   });
 });
