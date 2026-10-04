@@ -11,6 +11,9 @@ and `--ink-2`. The language of the interface is Spanish. The look is defined onc
 | Component styles (header, tabs, control bar, buttons, segmented control, chips, popover, badge) | `web/src/styles/ui.css` |
 | The shell | `web/src/app/` (`App`, `Header`, `TabBar`, `Hud` = the control bar, `ProvinceFilter`, `MockBadge`, `SceneHost`) |
 | Shared controls | `web/src/ui/Segmented.tsx` |
+| Shared scene components | `web/src/ui/` (`SceneShell`, `TableToggle`, `FilterBar` and `FilterChip`, `SceneLoading` and `SceneError`) |
+| Spanish names (resources, scenarios, indicators, project statuses, position against the range) | `web/src/content/labels.ts` |
+| Number and date formats | `web/src/charts/format.ts` (`APP_LOCALE = 'es-AR'`, `formatValue`, `formatNumber`, `formatDecimal`, `formatPercent`, `formatDate`, `ordinal`) |
 
 Rules: no color literal outside `tokens.css` / `tokens.ts` (a test fails on one in any other stylesheet); `ui.css` builds
 its surfaces with `color-mix()` from the tokens, so there is no new color to approve. Spacing follows the scale of
@@ -24,7 +27,27 @@ value), scenario (a segmented control: Pesimista, Esperado, Optimista), the AI e
 button that opens a dialog with the 24 provinces). Keys are unchanged (`KEY_MAP`). There is no 2D/3D button until a view
 uses it (the `d` key still toggles `mode`).
 
-## Not done yet (next phases)
+## The scenes
 
-The scenes and the story panel are still in English with plain styling; the shared `SceneShell`, `TableToggle` and the
-unified filter bar, the Spanish pass over the scenes and charts, and `APP_LOCALE = es-AR` come next.
+Every scene is built on the same pieces, so a new scene or the 3D presentation reuses them:
+
+- `SceneShell`: the one `h1`, a one-line subtitle, the content and the auditable source line ("Fuente: A, B, consultado
+  el 2 de octubre de 2026"; `dateLabel="generado el"` for model output). It is the only place that writes that line.
+- `TableToggle`: the "Ver tabla" button (`aria-pressed`) that swaps a chart for the table of the same data.
+- `FilterBar` and `FilterChip`: a labelled group of pressed-state chips (indicator, mode, resource, countries, scenario).
+- `SceneLoading` and `SceneError`: the two states of every scene that loads data. Both are `role="status"` because the
+  project forbids assertive live regions (`liveRegions.test.ts`).
+
+Scene rows grow with their content and `main.scene-container` scrolls; no table has its own scroll box (axe
+`scrollable-region-focusable`).
+
+## Language and formats
+
+The whole interface is Spanish (Argentina): scenes, chart titles, axes, tooltips, `aria-label`s, tables, the story
+panel, the references page and `lang="es"` in both HTML entries. Text avoids the second person (infinitives and
+impersonal forms). Numbers and dates go through `format.ts` only: decimal comma, thousands dot, compact `10 k` and
+`1,5 M`, `ordinal(2)` is `2.º`. The ICU spaces in compact numbers are non-breaking; tests normalize them.
+
+Series and indicator names that the data carries (country codes, province names, source names, mock labels) are shown as
+the data has them. The story steps, the era bands and the page description are provisional content in Spanish; the human
+replaces them before the release (`PENDING.md`).

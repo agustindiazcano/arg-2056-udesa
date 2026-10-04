@@ -43,7 +43,7 @@ describe('Forecast scene and echarts instances', () => {
   it('creates a chart instance, feeds it the fan option and disposes it on unmount', async () => {
     vi.stubGlobal('fetch', vi.fn(async () => ({ ok: true, status: 200, json: async () => doc })));
     const { unmount } = render(<Scene />);
-    await screen.findByText(/Scenarios are conditional projections, not predictions\./);
+    await screen.findByText(/Los escenarios son proyecciones condicionales, no predicciones\./);
     await waitFor(() => expect(mockInit).toHaveBeenCalledTimes(1));
     expect(mockSetOption).toHaveBeenCalled();
     const names = mockSetOption.mock.calls[0]![0].series.map((s: { name: string }) => s.name);

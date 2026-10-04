@@ -4,7 +4,8 @@ import { MAP_NAME, buildProvinceMap } from '../../charts/builders/provinceMap.js
 import { DataTable } from '../../charts/DataTable.js';
 import { EChart } from '../../charts/EChart.js';
 import type { ChartClickParams } from '../../charts/EChart.js';
-import { formatValue } from '../../charts/format.js';
+import { formatPercent, formatValue } from '../../charts/format.js';
+import { TableToggle } from '../../ui/TableToggle.js';
 import { geoWithMalvinas } from '../../geo/malvinas.js';
 import { loadProvinces } from '../../geo/provinces.js';
 import type { ProvincesGeo } from '../../geo/provinces.js';
@@ -65,7 +66,7 @@ interface ProvinceMapProps {
   onSelect: (id: ProvinceId | null) => void;
 }
 
-const NO_DATA_TEXT = 'no data';
+const NO_DATA_TEXT = 'sin datos';
 
 export function ProvinceMap({
   geo,
@@ -102,7 +103,7 @@ export function ProvinceMap({
   };
 
   const rows = useMemo(() => {
-    const show = (x: number) => (metric === 'level' ? formatValue(x, unit) : `${x.toFixed(1)}% per year`);
+    const show = (x: number) => (metric === 'level' ? formatValue(x, unit) : `${formatPercent(x)} por año`);
     const withValue = geo.features
       .filter((f) => values.values[f.properties.id] !== undefined)
       .map((f) => ({ name: f.properties.name, v: values.values[f.properties.id]! }))
@@ -133,22 +134,20 @@ export function ProvinceMap({
   return (
     <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 'var(--space-sm)' }}>
-        <span>Province map, {year}</span>
-        <button aria-pressed={asTable} onClick={() => setAsTable(!asTable)}>
-          Table view
-        </button>
+        <span>Mapa de provincias, {year}</span>
+        <TableToggle pressed={asTable} onToggle={() => setAsTable(!asTable)} />
       </div>
       <div style={{ flex: 1, minHeight: '280px' }}>
         {asTable ? (
           <DataTable
-            caption="Province map"
+            caption="Mapa de provincias"
             columns={[
-              { key: 'rank', header: 'Rank' },
-              { key: 'province', header: 'Province' },
+              { key: 'rank', header: 'Puesto' },
+              { key: 'province', header: 'Provincia' },
               { key: 'p10', header: 'p10' },
               { key: 'p50', header: 'p50' },
               { key: 'p90', header: 'p90' },
-              { key: 'plotted', header: metric === 'level' ? 'Plotted value (p50)' : 'Plotted value (change per year)' }
+              { key: 'plotted', header: metric === 'level' ? 'Valor graficado (p50)' : 'Valor graficado (cambio por año)' }
             ]}
             data={rows}
           />

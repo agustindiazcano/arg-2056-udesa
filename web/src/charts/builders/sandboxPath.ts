@@ -1,3 +1,4 @@
+import { positionLabel } from '../../content/labels.js';
 import { positionVsRange, summaryText } from '../../scenes/sandbox/selectors.js';
 import type { PathView } from '../../scenes/sandbox/selectors.js';
 import { BAND_ALPHA, tokens } from '../../styles/tokens.js';
@@ -8,9 +9,9 @@ interface SandboxPathOpts {
   effectivePct: number;
 }
 
-const RANGE_LABEL = 'model range (all scenarios, p10 to p90)';
-const VISITOR_LABEL = 'your assumptions';
-const EXPECTED_LABEL = 'model, expected';
+const RANGE_LABEL = 'rango del modelo (todos los escenarios, p10 a p90)';
+const VISITOR_LABEL = 'supuestos elegidos';
+const EXPECTED_LABEL = 'modelo, esperado';
 
 export function buildSandboxPath(view: PathView, opts: SandboxPathOpts) {
   const { year, effectivePct } = opts;
@@ -77,9 +78,9 @@ export function buildSandboxPath(view: PathView, opts: SandboxPathOpts) {
         ? [
             {
               xAxis: String(year),
-              name: `Year ${year}`,
+              name: `Año ${year}`,
               lineStyle: { color: tokens.ink2, width: 1, type: 'solid' },
-              label: { formatter: `Year ${year}`, color: tokens.ink2 }
+              label: { formatter: `Año ${year}`, color: tokens.ink2 }
             }
           ]
         : []
@@ -100,9 +101,9 @@ export function buildSandboxPath(view: PathView, opts: SandboxPathOpts) {
         const position = positionVsRange(value, lo, hi);
         return [
           String(y),
-          `Your assumptions: ${value === null ? 'No data' : formatValue(value, view.unit)}`,
-          `Model range: ${lo === null || hi === null ? 'no data' : `${formatValue(lo, view.unit)} to ${formatValue(hi, view.unit)}`}`,
-          `Position: ${position ?? 'no data'}`
+          `Supuestos elegidos: ${value === null ? 'Sin datos' : formatValue(value, view.unit)}`,
+          `Rango del modelo: ${lo === null || hi === null ? 'sin datos' : `${formatValue(lo, view.unit)} a ${formatValue(hi, view.unit)}`}`,
+          `Posición: ${position ? positionLabel(position).toLowerCase() : 'sin datos'}`
         ].join('<br/>');
       }
     },
@@ -125,7 +126,7 @@ export function buildSandboxPath(view: PathView, opts: SandboxPathOpts) {
     series: [bandBase, bandSpan, expected, visitor, markers]
   };
 
-  let summary = 'No path to show.';
+  let summary = 'Sin trayectoria para mostrar.';
   const last = view.years.length - 1;
   const first = view.visitor[0];
   const end = view.visitor[last];

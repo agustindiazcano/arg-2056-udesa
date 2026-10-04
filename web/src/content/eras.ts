@@ -13,7 +13,7 @@ export interface Era {
  * release gate (scripts/check_no_mock.py --content) fails while any entry has `placeholder: true`.
  */
 export const ERAS: readonly Era[] = [
-  { id: 'era-a', startYear: 1880, endYear: 1929, label: 'Era A (placeholder)', source_id: null, placeholder: true },
-  { id: 'era-b', startYear: 1930, endYear: 1979, label: 'Era B (placeholder)', source_id: null, placeholder: true },
-  { id: 'era-c', startYear: 1980, endYear: 2025, label: 'Era C (placeholder)', source_id: null, placeholder: true }
+  { id: 'era-a', startYear: 1880, endYear: 1929, label: 'Era A (provisoria)', source_id: null, placeholder: true },
+  { id: 'era-b', startYear: 1930, endYear: 1979, label: 'Era B (provisoria)', source_id: null, placeholder: true },
+  { id: 'era-c', startYear: 1980, endYear: 2025, label: 'Era C (provisoria)', source_id: null, placeholder: true }
 ];

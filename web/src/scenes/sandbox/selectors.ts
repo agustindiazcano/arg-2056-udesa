@@ -1,3 +1,5 @@
+import { formatNumber, formatPercent } from '../../charts/format.js';
+import { positionPhrase, scenarioLabel } from '../../content/labels.js';
 import { selectSeries } from '../../types/index.js';
 import type { ForecastOutput, ForecastSeries, Scenario } from '../../types/index.js';
 import { cagr } from '../forecast/selectors.js';
@@ -31,17 +33,17 @@ export function basePoint(
 ): { base: BasePoint | null; reason: string | null } {
   const gpc = arSeries(output, 'gdp_per_capita_usd', q.scenario, 'off');
   if (!gpc || gpc.points.length === 0) {
-    return { base: null, reason: `No GDP per capita series for AR in the ${q.scenario} scenario` };
+    return { base: null, reason: `No hay serie de PIB per cápita para AR en el escenario ${scenarioLabel(q.scenario).toLowerCase()}` };
   }
   const pop = arSeries(output, 'population', q.scenario, 'off');
   if (!pop || pop.points.length === 0) {
-    return { base: null, reason: `No population series for AR in the ${q.scenario} scenario` };
+    return { base: null, reason: `No hay serie de población para AR en el escenario ${scenarioLabel(q.scenario).toLowerCase()}` };
   }
   const year = firstYearOf(gpc);
   const gpcPoint = gpc.points.find((p) => p.year === year);
   const popPoint = pop.points.find((p) => p.year === year);
   if (!gpcPoint || !popPoint) {
-    return { base: null, reason: `No population value for AR in ${year} in the ${q.scenario} scenario` };
+    return { base: null, reason: `No hay valor de población para AR en ${year} en el escenario ${scenarioLabel(q.scenario).toLowerCase()}` };
   }
   return { base: { year, gpc: gpcPoint.p50, pop: popPoint.p50 }, reason: null };
 }
@@ -173,9 +175,9 @@ export function summaryText(q: {
   position: Position | null;
 }): string {
   const head =
-    `At ${q.effectivePct.toFixed(1)}% per-capita growth, GDP per capita in ${q.lastYear} is ` +
-    `${q.multiple.toFixed(1)} times its ${q.firstYear} level`;
+    `Con un crecimiento per cápita de ${formatPercent(q.effectivePct)}, el PIB per cápita en ${q.lastYear} es ` +
+    `${formatNumber(q.multiple, 1)} veces su nivel de ${q.firstYear}`;
   return q.position === null
-    ? `${head}; the model range is not available for that year`
-    : `${head} and sits ${q.position} the model range`;
+    ? `${head}; el rango del modelo no está disponible para ese año`
+    : `${head} y se ubica ${positionPhrase(q.position)}`;
 }

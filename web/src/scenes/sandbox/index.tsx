@@ -3,7 +3,12 @@ import { buildDoublingCurve, DOUBLING_RATES } from '../../charts/builders/doubli
 import { buildSandboxPath } from '../../charts/builders/sandboxPath.js';
 import { DataTable } from '../../charts/DataTable.js';
 import { EChart } from '../../charts/EChart.js';
-import { formatValue } from '../../charts/format.js';
+import { formatDecimal, formatNumber, formatValue } from '../../charts/format.js';
+import { positionLabel, scenarioLabel } from '../../content/labels.js';
+import { FilterChip } from '../../ui/FilterBar.js';
+import { SceneShell } from '../../ui/SceneShell.js';
+import { SceneError, SceneLoading } from '../../ui/SceneStatus.js';
+import { TableToggle } from '../../ui/TableToggle.js';
 import { useDataset } from '../../data/useDataset.js';
 import { useStore } from '../../state/store.js';
 import { parseForecastOutput, selectSeries } from '../../types/index.js';
@@ -23,7 +28,7 @@ import {
 import { sandboxReducer, ZERO_STATE } from './state.js';
 import type { SandboxAction, SandboxState } from './state.js';
 
-const NO_DATA = 'no data';
+const NO_DATA = 'sin datos';
 const PRESETS: Scenario[] = ['pessimistic', 'expected', 'optimistic'];
 
 export default function Scene() {
@@ -69,23 +74,27 @@ export default function Scene() {
   );
   const curve = useMemo(() => buildDoublingCurve({ ratePct: effectivePct }), [effectivePct]);
 
-  if (status === 'loading') return <div style={{ color: 'var(--ink)' }}>Loading...</div>;
-  if (status === 'error' || !data) return <div style={{ color: 'var(--state-critical)' }}>Error loading data.</div>;
+  if (status === 'loading') return <SceneLoading />;
+  if (status === 'error' || !data) return <SceneError />;
 
-  const header = (
-    <div style={{ marginBottom: 'var(--space-md)' }}>
-      <h1 style={{ margin: 0 }}>Sandbox</h1>
-      <p style={{ margin: 0, color: 'var(--ink-2)' }}>Change the growth assumptions and see what they imply</p>
-      <p style={{ margin: 0, color: 'var(--ink-2)' }}>Illustrative arithmetic on your assumptions. It is not the forecasting model.</p>
-    </div>
+  const shell = (children: React.ReactNode) => (
+    <SceneShell
+      title="Simulador"
+      subtitle="Cambiar los supuestos de crecimiento y ver qué implican"
+      sources={[data.source, `modelo ${data.model_version}`]}
+      retrievedAt={data.generated_at.slice(0, 10)}
+      dateLabel="generado el"
+    >
+      <p style={{ margin: '0 0 var(--space-md)', color: 'var(--ink-2)' }}>
+        Aritmética ilustrativa sobre los supuestos elegidos. No es el modelo de pronóstico.
+      </p>
+      {children}
+    </SceneShell>
   );
 
   if (!base || !computed || !chart) {
-    return (
-      <div style={{ color: 'var(--ink)', padding: 'var(--space-md)' }}>
-        {header}
-        <div style={{ color: 'var(--state-warning)' }}>{baseResult?.reason ?? 'The starting point is not available.'}</div>
-      </div>
+    return shell(
+      <div style={{ color: 'var(--state-warning)' }}>{baseResult?.reason ?? 'No se dispone del punto de partida.'}</div>
     );
   }
 
@@ -109,73 +118,65 @@ export default function Scene() {
           lower: cell(lo),
           upper: cell(hi),
           expected: cell(view.expected[i] ?? null),
-          position: positionVsRange(view.visitor[i] ?? null, lo, hi) ?? NO_DATA
+          position: (() => {
+            const at = positionVsRange(view.visitor[i] ?? null, lo, hi);
+            return at === null ? NO_DATA : positionLabel(at);
+          })()
         };
       })
     : null;
 
   const curveTable = DOUBLING_RATES.map((r) => ({
-    rate: `${r}%`,
-    exact: `${doublingYears(r)!.toFixed(1)} years`,
-    approximate: `${rule70(r)!.toFixed(1)} years`
+    rate: `${formatDecimal(r)}%`,
+    exact: `${formatNumber(doublingYears(r)!, 1)} años`,
+    approximate: `${formatNumber(rule70(r)!, 1)} años`
   }));
 
-  return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        height: '100%',
-        width: '100%',
-        color: 'var(--ink)',
-        padding: 'var(--space-md)',
-        boxSizing: 'border-box',
-        overflowY: 'auto'
-      }}
-    >
-      {header}
-
+  return shell(
+    <>
       <div style={{ display: 'flex', gap: 'var(--space-lg)', flex: '1 0 auto' }}>
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 'var(--space-md)', minWidth: '260px' }}>
           <Sliders state={state} aiEnabled={aiOverlay} onChange={(field, value) => update({ type: 'set', field, value })} />
-          <button aria-pressed={aiOverlay} onClick={() => dispatch({ type: 'setAiOverlay', aiOverlay: aiOverlay ? 'off' : 'on' })}>
-            AI overlay
-          </button>
+          <FilterChip pressed={aiOverlay} onClick={() => dispatch({ type: 'setAiOverlay', aiOverlay: aiOverlay ? 'off' : 'on' })}>
+            Efecto de la IA
+          </FilterChip>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--space-sm)' }}>
             {PRESETS.map((scenario) => {
               const preset = scenarioPreset(data, { scenario, aiOverlay });
               return (
                 <button
                   key={scenario}
+                  type="button"
+                  className="btn"
                   disabled={preset === null}
                   onClick={() => preset && update({ type: 'applyPreset', preset })}
                 >
-                  {`Match ${scenario}`}
+                  {`Igualar ${scenarioLabel(scenario).toLowerCase()}`}
                 </button>
               );
             })}
-            <button onClick={() => update({ type: 'reset', initial })}>Reset</button>
+            <button type="button" className="btn" onClick={() => update({ type: 'reset', initial })}>
+              Restablecer
+            </button>
           </div>
         </div>
 
         <div style={{ flex: 2, display: 'flex', flexDirection: 'column', minHeight: '320px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 'var(--space-sm)' }}>
-            <span>GDP per capita: your assumptions and the model range</span>
-            <button aria-pressed={pathAsTable} onClick={() => setPathAsTable(!pathAsTable)}>
-              Table view
-            </button>
+            <span>PIB per cápita: supuestos elegidos y rango del modelo</span>
+            <TableToggle pressed={pathAsTable} onToggle={() => setPathAsTable(!pathAsTable)} />
           </div>
           <div style={{ flex: 1, minHeight: '280px' }}>
             {pathTable ? (
               <DataTable
-                caption="Your path and the model range"
+                caption="Trayectoria con los supuestos y el rango del modelo"
                 columns={[
-                  { key: 'year', header: 'Year' },
-                  { key: 'visitor', header: 'Your assumptions' },
-                  { key: 'lower', header: 'Model low (p10)' },
-                  { key: 'upper', header: 'Model high (p90)' },
-                  { key: 'expected', header: 'Model expected (p50)' },
-                  { key: 'position', header: 'Position' }
+                  { key: 'year', header: 'Año' },
+                  { key: 'visitor', header: 'Supuestos elegidos' },
+                  { key: 'lower', header: 'Modelo, piso (p10)' },
+                  { key: 'upper', header: 'Modelo, techo (p90)' },
+                  { key: 'expected', header: 'Modelo, esperado (p50)' },
+                  { key: 'position', header: 'Posición' }
                 ]}
                 data={pathTable}
               />
@@ -187,19 +188,17 @@ export default function Scene() {
 
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: '320px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 'var(--space-sm)' }}>
-            <span>Doubling time</span>
-            <button aria-pressed={curveAsTable} onClick={() => setCurveAsTable(!curveAsTable)}>
-              Table view
-            </button>
+            <span>Tiempo de duplicación</span>
+            <TableToggle pressed={curveAsTable} onToggle={() => setCurveAsTable(!curveAsTable)} />
           </div>
           <div style={{ flex: 1, minHeight: '200px' }}>
             {curveAsTable ? (
               <DataTable
-                caption="Doubling time by growth rate"
+                caption="Tiempo de duplicación según la tasa de crecimiento"
                 columns={[
-                  { key: 'rate', header: 'Growth rate' },
-                  { key: 'exact', header: 'Exact' },
-                  { key: 'approximate', header: 'Rule of 70' }
+                  { key: 'rate', header: 'Tasa de crecimiento' },
+                  { key: 'exact', header: 'Exacto' },
+                  { key: 'approximate', header: 'Regla del 70' }
                 ]}
                 data={curveTable}
               />
@@ -208,9 +207,9 @@ export default function Scene() {
             )}
           </div>
           <div style={{ marginTop: 'var(--space-sm)', color: 'var(--ink-2)' }}>
-            <div>Rule of 70: worked example at 7%</div>
-            <div>{`7% for 10 years multiplies by ${compound(1, 7, 10).toFixed(2)} (exact)`}</div>
-            <div>{`Rule of 70 says ${rule70(7)!.toFixed(1)} years, exact is ${doublingYears(7)!.toFixed(1)} years`}</div>
+            <div>Regla del 70: ejemplo con 7%</div>
+            <div>{`7% durante 10 años multiplica por ${formatNumber(compound(1, 7, 10), 2)} (exacto)`}</div>
+            <div>{`La regla del 70 dice ${formatNumber(rule70(7)!, 1)} años; lo exacto es ${formatNumber(doublingYears(7)!, 1)} años`}</div>
           </div>
         </div>
       </div>
@@ -229,10 +228,6 @@ export default function Scene() {
           onTargetChange={setTarget}
         />
       </div>
-
-      <div style={{ marginTop: 'auto', paddingTop: 'var(--space-md)', fontSize: '12px', color: 'var(--ink-2)' }}>
-        {`Reference range: ${data.source}, model ${data.model_version}, generated ${data.generated_at}`}
-      </div>
-    </div>
+    </>
   );
 }

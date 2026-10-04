@@ -28,7 +28,7 @@ export function buildTrend(records: ResourceProductionRecord[], opts: TrendOpts)
         const pList = params as { name: string; value: number | null }[];
         const p = pList[0];
         if (!p) return "";
-        if (p.value === null || p.value === undefined) return `${p.name}: No data`;
+        if (p.value === null || p.value === undefined) return `${p.name}: Sin datos`;
         return `${p.name}: ${formatValue(p.value, unit)}`;
       }
     },
@@ -68,11 +68,11 @@ export function buildTrend(records: ResourceProductionRecord[], opts: TrendOpts)
     ]
   };
 
-  let summary = 'No trend data available.';
+  let summary = 'Sin datos de tendencia.';
   if (values.length > 0) {
     const validValues = values.filter(v => v !== null) as number[];
     if (validValues.length > 0) {
-      summary = `Line chart of production trend from ${years[0]} to ${years[years.length - 1]}.`;
+      summary = `Gráfico de líneas de la tendencia de producción de ${years[0]} a ${years[years.length - 1]}.`;
     }
   }
 

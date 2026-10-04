@@ -1,27 +1,33 @@
 import React, { useState, useMemo } from 'react';
 import { useStore } from '../../state/store.js';
 import { useDataset } from '../../data/useDataset.js';
-import { 
-  parseComposition, 
-  parseProjects, 
-  parseResourceProduction, 
+import {
+  parseComposition,
+  parseProjects,
+  parseResourceProduction,
   selectComposition,
   CompositionKind
 } from '../../types/index.js';
+import { PROVINCES } from '../../types/province.js';
 import { buildTreemap } from '../../charts/builders/treemap.js';
 import { buildProvinceBars } from '../../charts/builders/provinceBars.js';
 import { buildTrend } from '../../charts/builders/trend.js';
 import { selectProjectsForTable, getAvailableYears, clampYear } from './selectors.js';
 import { EChart } from '../../charts/EChart.js';
 import { DataTable } from '../../charts/DataTable.js';
+import { projectStatusLabel, resourceLabel } from '../../content/labels.js';
+import { FilterBar, FilterChip } from '../../ui/FilterBar.js';
+import { SceneShell } from '../../ui/SceneShell.js';
+import { SceneError, SceneLoading } from '../../ui/SceneStatus.js';
+import { TableToggle } from '../../ui/TableToggle.js';
+
+const RESOURCES = ['lithium', 'copper', 'gold', 'oil', 'gas'];
 
 export default function Scene() {
   const yearFloat = useStore(state => state.yearFloat);
   const currentYear = Math.floor(yearFloat);
 
-  const [kind, setKind] = useState<CompositionKind>('exports_by_product'); // GDP or exports? Spec says "exports (or GDP) treemap", so let's default to exports_by_product
-  // Assuming the available resources for selectors
-  const resources = ['lithium', 'copper', 'gold', 'oil', 'gas'];
+  const [kind, setKind] = useState<CompositionKind>('exports_by_product'); // the brief says "exports (or GDP)"; exports by default
   const [selectedResource, setSelectedResource] = useState('lithium');
 
   const [treemapTable, setTreemapTable] = useState(false);
@@ -67,7 +73,10 @@ export default function Scene() {
 
   const projectsTableData = useMemo(() => {
     if (!projData) return [];
-    return selectProjectsForTable(projData, selectedResource);
+    return selectProjectsForTable(projData, selectedResource).map(row => ({
+      ...row,
+      status: projectStatusLabel(row.status)
+    }));
   }, [projData, selectedResource]);
 
   // Aggregate sources for the footer
@@ -83,45 +92,52 @@ export default function Scene() {
     if (compData) add(compData);
     if (rpData) add(rpData);
     if (projData) add(projData);
-    const sourceStr = Array.from(s).join(', ');
     const dates = Array.from(d).sort();
-    const latestDate = dates.length > 0 ? dates[dates.length - 1] : '';
-    return { sourceStr, latestDate };
+    return { sources: Array.from(s), latestDate: dates.length > 0 ? dates[dates.length - 1] : undefined };
   }, [compData, rpData, projData]);
 
-  if (isLoading) return <div style={{ color: 'var(--ink)' }}>Loading...</div>;
-  if (isError) return <div style={{ color: 'var(--state-critical)' }}>Error loading data.</div>;
+  if (isLoading) return <SceneLoading />;
+  if (isError) return <SceneError />;
+
+  const resourceName = resourceLabel(selectedResource);
+  const resourceUnit = rpData?.find(r => r.resource === selectedResource)?.unit;
+  const provinceName = (geo: string) => PROVINCES.find(p => p.id === geo)?.name ?? geo;
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', width: '100%', color: 'var(--ink)', padding: 'var(--space-md)', boxSizing: 'border-box', overflowY: 'auto' }}>
-      
-      <div style={{ marginBottom: 'var(--space-lg)' }}>
-        <h1 style={{ margin: 0 }}>Natural Resources</h1>
-        <p style={{ margin: 0, color: 'var(--ink-2)' }}>Investment, production and economic composition</p>
-      </div>
-
+    <SceneShell
+      title="Recursos naturales"
+      subtitle="Inversión, producción y composición de la economía"
+      sources={sourcesAndDates.sources}
+      retrievedAt={sourcesAndDates.latestDate}
+    >
       <div style={{ display: 'flex', gap: 'var(--space-lg)', flex: '1 0 auto' }}>
-        
+
         {/* Left Column */}
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 'var(--space-md)' }}>
-          <div style={{ display: 'flex', gap: 'var(--space-sm)' }}>
-            <button aria-pressed={kind === 'exports_by_product'} onClick={() => setKind('exports_by_product')}>Exports</button>
-            <button aria-pressed={kind === 'gdp_by_sector'} onClick={() => setKind('gdp_by_sector')}>GDP</button>
-            <span style={{ marginLeft: 'auto', color: 'var(--muted)' }}>Year: {compositionYear}</span>
-            <button aria-pressed={treemapTable} onClick={() => setTreemapTable(!treemapTable)}>Table view</button>
+          <div style={{ display: 'flex', gap: 'var(--space-sm)', alignItems: 'center' }}>
+            <FilterBar label="Composición">
+              <FilterChip pressed={kind === 'exports_by_product'} onClick={() => setKind('exports_by_product')}>
+                Exportaciones
+              </FilterChip>
+              <FilterChip pressed={kind === 'gdp_by_sector'} onClick={() => setKind('gdp_by_sector')}>
+                PIB
+              </FilterChip>
+            </FilterBar>
+            <span style={{ marginLeft: 'auto', color: 'var(--muted)' }}>Año: {compositionYear}</span>
+            <TableToggle pressed={treemapTable} onToggle={() => setTreemapTable(!treemapTable)} />
           </div>
-          
+
           <div style={{ flex: 1, minHeight: '300px' }}>
             {!treemapTable && treemapResult && (
               <EChart option={treemapResult.option} aria-label={treemapResult.summary} />
             )}
             {treemapTable && compData && (
-              <DataTable 
-                caption="Composition Data"
+              <DataTable
+                caption="Composición"
                 columns={[
-                  { key: 'group', header: 'Group' },
-                  { key: 'label', header: 'Category' },
-                  { key: 'value_usd', header: 'Value (USD)', format: 'usd' }
+                  { key: 'group', header: 'Grupo' },
+                  { key: 'label', header: 'Categoría' },
+                  { key: 'value_usd', header: 'Valor (USD)', format: 'usd' }
                 ]}
                 data={selectComposition(compData, { kind, year: compositionYear })}
               />
@@ -131,32 +147,37 @@ export default function Scene() {
 
         {/* Right Column */}
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 'var(--space-md)' }}>
-          <div style={{ display: 'flex', gap: 'var(--space-sm)' }}>
-            {resources.map(r => (
-              <button key={r} aria-pressed={selectedResource === r} onClick={() => setSelectedResource(r)}>{r}</button>
+          <FilterBar label="Recurso">
+            {RESOURCES.map(r => (
+              <FilterChip key={r} pressed={selectedResource === r} onClick={() => setSelectedResource(r)}>
+                {resourceLabel(r)}
+              </FilterChip>
             ))}
-          </div>
-          
+          </FilterBar>
+
           <div style={{ display: 'flex', gap: 'var(--space-md)', flex: 1 }}>
-            
+
             {/* Province Bars */}
             <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 'var(--space-sm)' }}>
-                <span>Production by Province ({rpYear})</span>
-                <button aria-pressed={barsTable} onClick={() => setBarsTable(!barsTable)}>Table view</button>
+                <span>Producción por provincia ({rpYear})</span>
+                <TableToggle pressed={barsTable} onToggle={() => setBarsTable(!barsTable)} />
               </div>
               <div style={{ flex: 1, minHeight: '200px' }}>
                 {!barsTable && provinceBarsResult && (
                   <EChart option={provinceBarsResult.option} aria-label={provinceBarsResult.summary} />
                 )}
                 {barsTable && rpData && (
-                  <DataTable 
-                    caption={`Production by Province (${rpYear})`}
+                  <DataTable
+                    caption={`Producción por provincia (${rpYear})`}
                     columns={[
-                      { key: 'geo', header: 'Province' },
-                      { key: 'value', header: 'Value', format: 'unit', unit: rpData.find(r=>r.resource===selectedResource)?.unit }
+                      { key: 'geo', header: 'Provincia' },
+                      { key: 'value', header: 'Valor', format: 'unit', unit: resourceUnit }
                     ]}
-                    data={rpData.filter(r => r.resource === selectedResource && r.year === rpYear && r.geo !== 'AR').sort((a,b)=>((b.value||0)-(a.value||0)))}
+                    data={rpData
+                      .filter(r => r.resource === selectedResource && r.year === rpYear && r.geo !== 'AR')
+                      .sort((a, b) => (b.value || 0) - (a.value || 0))
+                      .map(r => ({ ...r, geo: provinceName(r.geo) }))}
                   />
                 )}
               </div>
@@ -165,21 +186,21 @@ export default function Scene() {
             {/* National Trend */}
             <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 'var(--space-sm)' }}>
-                <span>National Trend</span>
-                <button aria-pressed={trendTable} onClick={() => setTrendTable(!trendTable)}>Table view</button>
+                <span>Tendencia nacional</span>
+                <TableToggle pressed={trendTable} onToggle={() => setTrendTable(!trendTable)} />
               </div>
               <div style={{ flex: 1, minHeight: '200px' }}>
                 {!trendTable && trendResult && (
                   <EChart option={trendResult.option} aria-label={trendResult.summary} />
                 )}
                 {trendTable && rpData && (
-                  <DataTable 
-                    caption="National Trend"
+                  <DataTable
+                    caption="Tendencia nacional"
                     columns={[
-                      { key: 'year', header: 'Year' },
-                      { key: 'value', header: 'Value', format: 'unit', unit: rpData.find(r=>r.resource===selectedResource)?.unit }
+                      { key: 'year', header: 'Año' },
+                      { key: 'value', header: 'Valor', format: 'unit', unit: resourceUnit }
                     ]}
-                    data={rpData.filter(r => r.resource === selectedResource && r.geo === 'AR').sort((a,b)=>a.year-b.year)}
+                    data={rpData.filter(r => r.resource === selectedResource && r.geo === 'AR').sort((a, b) => a.year - b.year)}
                   />
                 )}
               </div>
@@ -191,27 +212,22 @@ export default function Scene() {
 
       {/* Bottom Projects Table */}
       <div style={{ marginTop: 'var(--space-lg)' }}>
-        <h3>Major Investment Projects ({selectedResource})</h3>
+        <h3>Principales proyectos de inversión ({resourceName})</h3>
         <div>
           <DataTable
-            caption={`Investment Projects for ${selectedResource}`}
+            caption={`Proyectos de inversión de ${resourceName}`}
             columns={[
-              { key: 'name', header: 'Name' },
-              { key: 'province', header: 'Province' },
-              { key: 'status', header: 'Status' },
+              { key: 'name', header: 'Nombre' },
+              { key: 'province', header: 'Provincia' },
+              { key: 'status', header: 'Estado' },
               { key: 'capex_usd', header: 'CAPEX (USD)', format: 'usd' },
-              { key: 'start_year', header: 'Start Year' },
-              { key: 'capacity', header: 'Capacity' }
+              { key: 'start_year', header: 'Año de inicio' },
+              { key: 'capacity', header: 'Capacidad' }
             ]}
             data={projectsTableData}
           />
         </div>
       </div>
-
-      <div style={{ marginTop: 'auto', paddingTop: 'var(--space-md)', fontSize: '12px', color: 'var(--ink-2)' }}>
-        Source: {sourcesAndDates.sourceStr}, retrieved {sourcesAndDates.latestDate}
-      </div>
-
-    </div>
+    </SceneShell>
   );
 }

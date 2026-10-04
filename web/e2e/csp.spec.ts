@@ -77,7 +77,7 @@ test.describe('under the Content-Security-Policy', () => {
   test('the references page loads with no violation and no error', async ({ page }) => {
     const problems = watch(page);
     await page.goto(`${server.url}/references.html`);
-    await expect(page.getByRole('heading', { name: 'Sources and attributions', level: 1 })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Fuentes y atribuciones', level: 1 })).toBeVisible();
     expect(await violations(page)).toEqual([]);
     expect(problems).toEqual([]);
   });
@@ -86,7 +86,7 @@ test.describe('under the Content-Security-Policy', () => {
     const problems = watch(page);
     await page.goto(server.url);
     await page.getByRole('tab', { name: 'Economía' }).click();
-    await page.getByTestId('scene').getByRole('button', { name: 'Table view' }).first().click();
+    await page.getByTestId('scene').getByRole('button', { name: 'Ver tabla' }).first().click();
     await expect(page.getByTestId('scene').getByRole('table').first()).toBeVisible();
     await page.getByRole('button', { name: /^Provincia:/ }).click();
     await expect(page.getByRole('dialog', { name: 'Filtrar por provincia' })).toBeVisible();

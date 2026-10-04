@@ -6,7 +6,7 @@ import type { Meta } from './meta';
 
 export const OG_WIDTH = 1200;
 export const OG_HEIGHT = 630;
-const REFERENCES_TITLE = 'Sources and attributions';
+const REFERENCES_TITLE = 'Fuentes y atribuciones';
 
 const escapeAttribute = (value: string): string =>
   value.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/</g, '&lt;').replace(/>/g, '&gt;');

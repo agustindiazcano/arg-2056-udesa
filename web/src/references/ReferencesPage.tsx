@@ -2,23 +2,25 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { parseReferences, PUBLISHER_TYPES } from '../types/references.js';
 import type { PublisherType, ReferenceSource, References } from '../types/references.js';
 import { formatCitation } from './citation.js';
+import { formatDate } from '../charts/format.js';
 import { versionedUrl } from '../data/version.js';
+import { SceneError, SceneLoading } from '../ui/SceneStatus.js';
 import { VisitsSection } from '../analytics/VisitsSection.js';
 import { filterReferences, groupByType, resolveDerived } from './selectors.js';
 
 const TYPE_LABEL: Record<PublisherType, string> = {
-  official: 'Official',
-  international: 'International',
-  peer_reviewed: 'Peer reviewed',
-  working_paper: 'Working paper',
-  technical_report: 'Technical report',
-  company: 'Company',
-  association: 'Association',
-  bank: 'Bank',
-  consultancy: 'Consultancy',
-  think_tank: 'Think tank',
-  archive: 'Archive',
-  press: 'Press'
+  official: 'Oficial',
+  international: 'Internacional',
+  peer_reviewed: 'Revisada por pares',
+  working_paper: 'Documento de trabajo',
+  technical_report: 'Informe técnico',
+  company: 'Empresa',
+  association: 'Asociación',
+  bank: 'Banco',
+  consultancy: 'Consultora',
+  think_tank: 'Centro de estudios',
+  archive: 'Archivo',
+  press: 'Prensa'
 };
 
 const plural = (n: number, one: string, many: string) => (n === 1 ? one : many);
@@ -47,25 +49,25 @@ function Entry({
       </h3>
       <div>{source.authors_or_publisher}</div>
       <div style={{ color: 'var(--ink-2)' }}>
-        {source.publication_date ? `Published ${source.publication_date}` : 'date not stated'}
+        {source.publication_date ? `Publicado el ${formatDate(source.publication_date)}` : 'fecha no indicada'}
       </div>
-      <div style={{ color: 'var(--ink-2)' }}>{`Retrieved ${source.retrieved_at}`}</div>
-      {source.language !== null && <div style={{ color: 'var(--ink-2)' }}>{`Language: ${source.language}`}</div>}
+      <div style={{ color: 'var(--ink-2)' }}>{`Consultado el ${formatDate(source.retrieved_at)}`}</div>
+      {source.language !== null && <div style={{ color: 'var(--ink-2)' }}>{`Idioma: ${source.language}`}</div>}
       {source.license_or_terms !== null && (
-        <div style={{ color: 'var(--ink-2)' }}>{`License: ${source.license_or_terms}`}</div>
+        <div style={{ color: 'var(--ink-2)' }}>{`Licencia: ${source.license_or_terms}`}</div>
       )}
       {source.derived_from !== null &&
         (derivedTitle !== null && anchorsInList ? (
           <div style={{ color: 'var(--ink-2)' }}>
-            Derived from <a href={`#${source.derived_from}`}>{derivedTitle}</a>
+            Derivado de <a href={`#${source.derived_from}`}>{derivedTitle}</a>
           </div>
         ) : (
-          <div style={{ color: 'var(--ink-2)' }}>{`Derived from ${source.derived_from}`}</div>
+          <div style={{ color: 'var(--ink-2)' }}>{`Derivado de ${source.derived_from}`}</div>
         ))}
-      <div style={{ color: 'var(--ink-2)' }}>{`Used by: ${source.used_by.join(', ')}`}</div>
+      <div style={{ color: 'var(--ink-2)' }}>{`Usado por: ${source.used_by.join(', ')}`}</div>
       <div data-print="hide">
-        <button onClick={() => onCopy(source)}>Copy citation</button>{' '}
-        <span aria-live="polite">{copy === 'copied' ? 'Copied' : copy === 'failed' ? 'Could not copy' : ''}</span>
+        <button onClick={() => onCopy(source)}>Copiar cita</button>{' '}
+        <span aria-live="polite">{copy === 'copied' ? 'Copiado' : copy === 'failed' ? 'No se pudo copiar' : ''}</span>
       </div>
     </article>
   );
@@ -115,31 +117,31 @@ export function ReferencesPage({ references, extra }: { references: References; 
   const n = stats.sources_used;
   const range =
     stats.retrieved_min !== null && stats.retrieved_max !== null
-      ? ` Retrieved between ${stats.retrieved_min} and ${stats.retrieved_max}.`
+      ? ` Consultadas entre ${formatDate(stats.retrieved_min)} y ${formatDate(stats.retrieved_max)}.`
       : '';
 
   return (
     <main style={{ maxWidth: '60rem', margin: '0 auto', padding: 'var(--space-lg) var(--space-md)', color: 'var(--ink)' }}>
       <header>
-        <h1>Sources and attributions</h1>
+        <h1>Fuentes y atribuciones</h1>
         {sources.length === 0 ? (
-          <p>No sources are registered yet.</p>
+          <p>Todavía no hay fuentes registradas.</p>
         ) : (
-          <p>{`${n} ${plural(n, 'source backs', 'sources back')} ${stats.published_files} published ${plural(stats.published_files, 'file', 'files')}.${range}`}</p>
+          <p>{`${n} ${plural(n, 'fuente respalda', 'fuentes respaldan')} ${stats.published_files} ${plural(stats.published_files, 'archivo publicado', 'archivos publicados')}.${range}`}</p>
         )}
-        {mock && <p style={{ color: 'var(--state-warning)' }}>Sample data: these are not real sources</p>}
+        {mock && <p style={{ color: 'var(--state-warning)' }}>Datos de muestra: no son fuentes reales</p>}
         {stats.records_without_url > 0 && (
           <p style={{ color: 'var(--ink-2)' }}>
-            {`${stats.records_without_url} of ${stats.records_total} records have no link to a source page.`}
+            {`${stats.records_without_url} de ${stats.records_total} registros no tienen enlace a una página de la fuente.`}
           </p>
         )}
       </header>
 
       {sources.length > 0 && (
         <>
-          <section aria-label="Filters" data-print="hide" style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--space-sm)', alignItems: 'center' }}>
+          <section aria-label="Filtros" data-print="hide" style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--space-sm)', alignItems: 'center' }}>
             <label>
-              Search sources{' '}
+              Buscar fuentes{' '}
               <input type="search" value={query} onChange={(e) => setQuery(e.target.value)} />
             </label>
             {presentTypes.map((t) => (
@@ -153,13 +155,13 @@ export function ReferencesPage({ references, extra }: { references: References; 
                 setTypes([]);
               }}
             >
-              Clear filters
+              Limpiar filtros
             </button>
           </section>
           <div role="status" aria-live="polite" style={{ color: 'var(--ink-2)' }}>
-            {`${filtered.length} ${plural(filtered.length, 'source', 'sources')} shown`}
+            {`${filtered.length} ${plural(filtered.length, 'fuente mostrada', 'fuentes mostradas')}`}
           </div>
-          {filtered.length === 0 && <p>No source matches the filters.</p>}
+          {filtered.length === 0 && <p>Ninguna fuente coincide con los filtros.</p>}
 
           {groups.map((group) => (
             <section key={group.type} aria-labelledby={`group-${group.type}`}>
@@ -181,7 +183,7 @@ export function ReferencesPage({ references, extra }: { references: References; 
 
       {attributions.length > 0 && (
         <section aria-labelledby="attributions">
-          <h2 id="attributions">Attributions</h2>
+          <h2 id="attributions">Atribuciones</h2>
           <ul>
             {attributions.map((a) => (
               <li key={`${a.label}:${a.text}`}>
@@ -203,8 +205,8 @@ export function ReferencesPage({ references, extra }: { references: References; 
 
       {leads.length > 0 && (
         <details>
-          <summary>Not verified leads</summary>
-          <p>These pages were not opened; no figure in this app relies on them.</p>
+          <summary>Pistas sin verificar</summary>
+          <p>Estas páginas no se abrieron; ninguna cifra de esta aplicación depende de ellas.</p>
           <ul>
             {leads.map((lead) => (
               <li key={lead.id}>
@@ -221,7 +223,7 @@ export function ReferencesPage({ references, extra }: { references: References; 
       {extra}
 
       <footer data-print="hide" style={{ marginTop: 'var(--space-lg)' }}>
-        <a href="index.html">Back to the app</a>
+        <a href="index.html">Volver a la aplicación</a>
       </footer>
     </main>
   );
@@ -252,7 +254,7 @@ export function ReferencesApp() {
     };
   }, []);
 
-  if (state.status === 'loading') return <div style={{ color: 'var(--ink)' }}>Loading...</div>;
-  if (state.status === 'error') return <div style={{ color: 'var(--state-critical)' }}>Error loading data.</div>;
+  if (state.status === 'loading') return <SceneLoading />;
+  if (state.status === 'error') return <SceneError />;
   return <ReferencesPage references={state.references} extra={<VisitsSection />} />;
 }

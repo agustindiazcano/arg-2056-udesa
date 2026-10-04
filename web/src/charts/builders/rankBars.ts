@@ -19,7 +19,7 @@ export function buildRankBars(rows: RankRow[], opts: RankBarsOpts) {
       trigger: 'item',
       formatter: (p: { dataIndex: number }) => {
         const row = rows[p.dataIndex];
-        return row ? `${row.geo}<br/>${formatValue(row.value, unit)}<br/>rank ${row.rank} of ${row.of}` : '';
+        return row ? `${row.geo}<br/>${formatValue(row.value, unit)}<br/>puesto ${row.rank} de ${row.of}` : '';
       }
     },
     grid: { left: '2%', right: '14%', bottom: '2%', top: '4%', containLabel: true },
@@ -54,13 +54,13 @@ export function buildRankBars(rows: RankRow[], opts: RankBarsOpts) {
 
   const leader = rows[0];
   const home = rows.find((r) => r.geo === highlight);
-  const noData = missing.length > 0 ? `no data for ${missing.join(', ')}` : '';
+  const noData = missing.length > 0 ? `sin datos de ${missing.join(', ')}` : '';
   let summary: string;
   if (!leader) {
-    summary = `No ${indicatorLabel} data in ${year}${noData ? `; ${noData}` : '.'}`;
+    summary = `Sin datos de ${indicatorLabel} en ${year}${noData ? `; ${noData}` : '.'}`;
   } else {
-    const parts = [`${indicatorLabel} in ${year}: ${leader.geo} leads with ${formatValue(leader.value, unit)}`];
-    if (home) parts.push(`${highlight} ranks ${ordinal(home.rank)} of ${home.of}`);
+    const parts = [`${indicatorLabel} en ${year}: ${leader.geo} lidera con ${formatValue(leader.value, unit)}`];
+    if (home) parts.push(`${highlight} ocupa el ${ordinal(home.rank)} puesto de ${home.of}`);
     if (noData) parts.push(noData);
     summary = parts.join('; ');
   }

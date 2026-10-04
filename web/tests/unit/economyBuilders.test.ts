@@ -2,7 +2,6 @@ import { describe, it, expect } from 'vitest';
 import { buildLongRun } from '../../src/charts/builders/longRun.js';
 import { buildRankBars } from '../../src/charts/builders/rankBars.js';
 import { buildRankHistory } from '../../src/charts/builders/rankHistory.js';
-import { ordinal } from '../../src/charts/format.js';
 import type { Era } from '../../src/content/eras.js';
 import type { LongRunView, RankPoint, RankRow } from '../../src/scenes/economy/selectors.js';
 import { tokens } from '../../src/styles/tokens.js';
@@ -65,19 +64,11 @@ function longRun(over: { view?: LongRunView; hovered?: string | null; year?: num
     year: over.year ?? 1901,
     eras: over.eras ?? [],
     hovered: over.hovered ?? null,
-    indicatorLabel: 'GDP per capita'
+    indicatorLabel: 'PIB per cápita'
   });
   return { ...r, option: r.option as unknown as LineOption };
 }
 const line = (o: LineOption, name: string) => o.series.find((s) => s.name === name)!;
-
-describe('ordinal', () => {
-  it('formats 1st, 2nd, 3rd, 4th, 11th, 12th, 13th, 21st, 22nd, 101st, 111th', () => {
-    expect([1, 2, 3, 4, 11, 12, 13, 21, 22, 23, 101, 111].map(ordinal)).toEqual([
-      '1st', '2nd', '3rd', '4th', '11th', '12th', '13th', '21st', '22nd', '23rd', '101st', '111th'
-    ]);
-  });
-});
 
 describe('buildLongRun', () => {
   it('draws the home country in ink and thick, peers in muted and thin, with no legend', () => {
@@ -115,7 +106,7 @@ describe('buildLongRun', () => {
 
   it('marks the playhead year, and omits the marker when the year is not in the data', () => {
     const marker = (o: LineOption) => line(o, 'markers').markLine?.data ?? [];
-    expect(marker(longRun({ year: 1902 }).option)).toEqual([expect.objectContaining({ xAxis: '1902', name: 'Year 1902' })]);
+    expect(marker(longRun({ year: 1902 }).option)).toEqual([expect.objectContaining({ xAxis: '1902', name: 'Año 1902' })]);
     expect(marker(longRun({ year: 1800 }).option)).toEqual([]);
   });
 
@@ -143,28 +134,28 @@ describe('buildLongRun', () => {
       unit: 'index',
       series: level.series.map((s) => ({ ...s, points: s.points.map((p) => ({ ...p, value: p.value === null ? null : p.value / 2 })) }))
     };
-    expect(longRun({ view: index }).option.yAxis.name).toBe('Index (base year = 1901)');
+    expect(longRun({ view: index }).option.yAxis.name).toBe('Índice (año base = 1901)');
   });
 
-  it('formats the tooltip for all series at the hovered year, "No data" for null', () => {
+  it('formats the tooltip for all series at the hovered year, "Sin datos" for null', () => {
     const text = longRun().option.tooltip.formatter([{ dataIndex: 1 }]);
-    expect(text).toBe('1901<br/>ARG: No data<br/>BRA: 60 USD<br/>CHL: 200 USD');
+    expect(text).toBe('1901<br/>ARG: Sin datos<br/>BRA: 60 USD<br/>CHL: 200 USD');
   });
 
   it('summarises the home country from the numbers in the view', () => {
-    expect(longRun().summary).toBe('ARG GDP per capita: 100 USD in 1900 to 150 USD in 1902, compared with 2 peers');
+    expect(longRun().summary).toBe('ARG, PIB per cápita: de 100 USD en 1900 a 150 USD en 1902, comparado con 2 países');
   });
 
   it('summarises an index view with its base year', () => {
     const index: LongRunView = { ...level, mode: 'index', baseYear: 1901, unit: 'index' };
     expect(longRun({ view: index }).summary).toBe(
-      'ARG GDP per capita (index, base year 1901 = 100): 100 index in 1900 to 150 index in 1902, compared with 2 peers'
+      'ARG, PIB per cápita (índice, año base 1901 = 100): de 100 index en 1900 a 150 index en 1902, comparado con 2 países'
     );
   });
 
   it('says there is no data when the home country has none', () => {
     const empty: LongRunView = { ...level, series: [{ country: 'ARG', points: [point(1900, null)] }] };
-    expect(longRun({ view: empty }).summary).toBe('No GDP per capita data for ARG.');
+    expect(longRun({ view: empty }).summary).toBe('Sin datos de PIB per cápita para ARG.');
   });
 });
 
@@ -175,7 +166,7 @@ describe('buildRankBars', () => {
     { geo: 'BRA', value: 70, rank: 3, of: 3 }
   ];
   const bars = (missing: string[] = [], rowsIn = rows) => {
-    const r = buildRankBars(rowsIn, { highlight: 'ARG', missing, unit: 'USD', year: 1902, indicatorLabel: 'GDP per capita' });
+    const r = buildRankBars(rowsIn, { highlight: 'ARG', missing, unit: 'USD', year: 1902, indicatorLabel: 'PIB per cápita' });
     return { ...r, option: r.option as unknown as BarOption };
   };
 
@@ -196,20 +187,20 @@ describe('buildRankBars', () => {
     const { option, summary, excluded } = bars(['COL', 'PER']);
     expect(option.yAxis.data).toHaveLength(3);
     expect(excluded).toBe(2);
-    expect(summary).toBe('GDP per capita in 1902: CHL leads with 210 USD; ARG ranks 2nd of 3; no data for COL, PER');
+    expect(summary).toBe('PIB per cápita en 1902: CHL lidera con 210 USD; ARG ocupa el 2.º puesto de 3; sin datos de COL, PER');
   });
 
   it('summarises without the missing clause when none is missing', () => {
-    expect(bars().summary).toBe('GDP per capita in 1902: CHL leads with 210 USD; ARG ranks 2nd of 3');
+    expect(bars().summary).toBe('PIB per cápita en 1902: CHL lidera con 210 USD; ARG ocupa el 2.º puesto de 3');
   });
 
   it('says so when no country has a value', () => {
-    expect(bars(['ARG'], []).summary).toBe('No GDP per capita data in 1902; no data for ARG');
+    expect(bars(['ARG'], []).summary).toBe('Sin datos de PIB per cápita en 1902; sin datos de ARG');
   });
 
   it('copes with the home country being missing', () => {
     const noHome = rows.filter((r) => r.geo !== 'ARG').map((r, i) => ({ ...r, rank: i + 1, of: 2 }));
-    expect(bars(['ARG'], noHome).summary).toBe('GDP per capita in 1902: CHL leads with 210 USD; no data for ARG');
+    expect(bars(['ARG'], noHome).summary).toBe('PIB per cápita en 1902: CHL lidera con 210 USD; sin datos de ARG');
   });
 });
 
@@ -220,7 +211,7 @@ describe('buildRankHistory', () => {
     { year: 1902, rank: 8, of: 10 }
   ];
   const hist = (h = history, year = 1901) => {
-    const r = buildRankHistory(h, { year, highlight: 'ARG', indicatorLabel: 'GDP per capita' });
+    const r = buildRankHistory(h, { year, highlight: 'ARG', indicatorLabel: 'PIB per cápita' });
     return { ...r, option: r.option as unknown as LineOption };
   };
 
@@ -243,22 +234,22 @@ describe('buildRankHistory', () => {
   });
 
   it('marks the playhead year', () => {
-    expect(line(hist().option, 'markers').markLine!.data[0]).toMatchObject({ xAxis: '1901', name: 'Year 1901' });
+    expect(line(hist().option, 'markers').markLine!.data[0]).toMatchObject({ xAxis: '1901', name: 'Año 1901' });
     expect(line(hist(history, 1800).option, 'markers').markLine?.data ?? []).toEqual([]);
   });
 
-  it('shows "rank n of N" in the tooltip and "No data" for a gap', () => {
+  it('shows "puesto n de N" in the tooltip and "Sin datos" for a gap', () => {
     const { option } = hist();
-    expect(option.tooltip.formatter([{ dataIndex: 0 }])).toBe('1900<br/>rank 3 of 10');
-    expect(option.tooltip.formatter([{ dataIndex: 1 }])).toBe('1901<br/>No data');
+    expect(option.tooltip.formatter([{ dataIndex: 0 }])).toBe('1900<br/>puesto 3 de 10');
+    expect(option.tooltip.formatter([{ dataIndex: 1 }])).toBe('1901<br/>Sin datos');
   });
 
   it('summarises the first and last known ranks', () => {
-    expect(hist().summary).toBe('ARG ranks 3rd of 10 in 1900 and 8th of 10 in 1902 in GDP per capita');
+    expect(hist().summary).toBe('ARG: 3.º de 10 en 1900 y 8.º de 10 en 1902 (PIB per cápita)');
   });
 
   it('summarises a single known rank and the case with none', () => {
-    expect(hist([{ year: 1900, rank: 1, of: 4 }]).summary).toBe('ARG ranks 1st of 4 in 1900 in GDP per capita');
-    expect(hist([{ year: 1900, rank: null, of: null }]).summary).toBe('No rank data for ARG.');
+    expect(hist([{ year: 1900, rank: 1, of: 4 }]).summary).toBe('ARG: 1.º de 4 en 1900 (PIB per cápita)');
+    expect(hist([{ year: 1900, rank: null, of: null }]).summary).toBe('Sin datos de puesto para ARG.');
   });
 });

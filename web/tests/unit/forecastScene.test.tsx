@@ -109,7 +109,7 @@ const line = (o: FanOpt, name: string) => o.series?.find((s) => s.name === name)
 
 async function loaded() {
   render(<Harness />);
-  await screen.findByText(/Scenarios are conditional projections, not predictions\./);
+  await screen.findByText(/Los escenarios son proyecciones condicionales, no predicciones\./);
 }
 
 describe('Forecast scene', () => {
@@ -124,45 +124,45 @@ describe('Forecast scene', () => {
   it('shows loading, then the fan, the caveat, the tiles and the source line', async () => {
     stubFetch(fixture());
     render(<Harness />);
-    expect(screen.getByText('Loading...')).toBeDefined();
-    await screen.findByText(/Scenarios are conditional projections, not predictions\./);
+    expect(screen.getByText('Cargando...')).toBeDefined();
+    await screen.findByText(/Los escenarios son proyecciones condicionales, no predicciones\./);
     const fan = fanOption();
     expect(fan.series!.map((s) => s.name)).toEqual(
       expect.arrayContaining(['pessimistic', 'expected', 'optimistic', 'markers'])
     );
-    expect(screen.getByText('Source: MOCK, model mock-1, generated 2026-01-01, horizon 2026-2028')).toBeDefined();
+    expect(screen.getByText('Fuente: MOCK, modelo mock-1, horizonte 2026-2028, generado el 1 de enero de 2026')).toBeDefined();
     expect(screen.getByTestId('tile-value').textContent).toContain('220 bn USD');
   });
 
   it('shows an error state when fetch fails', async () => {
     stubFetch({}, false);
     render(<Harness />);
-    await screen.findByText('Error loading data.');
+    await screen.findByText('No se pudieron cargar los datos.');
     expect(screen.queryAllByTestId('echart')).toHaveLength(0);
   });
 
   it('shows an error state when the file is not a valid forecast_output', async () => {
     stubFetch({ nope: true });
     render(<Harness />);
-    await screen.findByText('Error loading data.');
+    await screen.findByText('No se pudieron cargar los datos.');
   });
 
   it('lists indicators from the file, with a resource selector only for resource_production', async () => {
     stubFetch(fixture());
     await loaded();
-    expect(screen.getByRole('button', { name: 'GDP' })).toBeDefined();
-    expect(screen.getByRole('button', { name: 'Resource production' })).toBeDefined();
-    expect(screen.queryByRole('button', { name: 'Population' })).toBeNull();
-    expect(screen.queryByRole('button', { name: 'gold' })).toBeNull();
-    fireEvent.click(screen.getByRole('button', { name: 'Resource production' }));
-    expect(screen.getByRole('button', { name: 'gold' }).getAttribute('aria-pressed')).toBe('true');
-    expect(screen.getByRole('button', { name: 'Resource production' }).getAttribute('aria-pressed')).toBe('true');
+    expect(screen.getByRole('button', { name: 'PIB' })).toBeDefined();
+    expect(screen.getByRole('button', { name: 'Producción de recursos' })).toBeDefined();
+    expect(screen.queryByRole('button', { name: 'Población' })).toBeNull();
+    expect(screen.queryByRole('button', { name: 'Oro' })).toBeNull();
+    fireEvent.click(screen.getByRole('button', { name: 'Producción de recursos' }));
+    expect(screen.getByRole('button', { name: 'Oro' }).getAttribute('aria-pressed')).toBe('true');
+    expect(screen.getByRole('button', { name: 'Producción de recursos' }).getAttribute('aria-pressed')).toBe('true');
   });
 
   it('reports a missing scenario series in text and does not fabricate it', async () => {
     stubFetch(fixture({ dropOptimisticGdp: true }));
     await loaded();
-    expect(screen.getByText('Missing series for the current selection: optimistic')).toBeDefined();
+    expect(screen.getByText('Faltan series para la selección actual: Optimista')).toBeDefined();
     const names = fanOption().series!.map((s) => s.name);
     expect(names).not.toContain('optimistic');
     expect(names).toContain('expected');
@@ -172,7 +172,7 @@ describe('Forecast scene', () => {
     stubFetch(fixture());
     useStore.setState({ province: 'AR-C' });
     await loaded();
-    expect(screen.getByText('Missing series for the current selection: pessimistic, expected, optimistic')).toBeDefined();
+    expect(screen.getByText('Faltan series para la selección actual: Pesimista, Esperado, Optimista')).toBeDefined();
     expect(fanOptions()).toHaveLength(0);
   });
 
@@ -191,10 +191,10 @@ describe('Forecast scene', () => {
   it('scenario buttons are bound to the store', async () => {
     stubFetch(fixture());
     await loaded();
-    expect(screen.getByRole('button', { name: 'Expected' }).getAttribute('aria-pressed')).toBe('true');
-    fireEvent.click(screen.getByRole('button', { name: 'Optimistic' }));
+    expect(screen.getByRole('button', { name: 'Esperado' }).getAttribute('aria-pressed')).toBe('true');
+    fireEvent.click(screen.getByRole('button', { name: 'Optimista' }));
     expect(useStore.getState().scenario).toBe('optimistic');
-    expect(screen.getByRole('button', { name: 'Optimistic' }).getAttribute('aria-pressed')).toBe('true');
+    expect(screen.getByRole('button', { name: 'Optimista' }).getAttribute('aria-pressed')).toBe('true');
   });
 
   it('the AI overlay toggle switches the series to the on data, adds the reference and the AI tile', async () => {
@@ -202,39 +202,39 @@ describe('Forecast scene', () => {
     await loaded();
     expect(screen.queryByTestId('tile-ai')).toBeNull();
     expect(line(fanOption(), 'expected')!.data).toEqual([200, 210, 220]);
-    fireEvent.click(screen.getByRole('button', { name: 'AI overlay' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Efecto de la IA' }));
     expect(useStore.getState().aiOverlay).toBe('on');
-    expect(screen.getByRole('button', { name: 'AI overlay' }).getAttribute('aria-pressed')).toBe('true');
-    await waitFor(() => expect(line(fanOption(), 'without AI')).toBeDefined());
-    expect(line(fanOption(), 'without AI')!.data).toEqual([200, 210, 220]);
+    expect(screen.getByRole('button', { name: 'Efecto de la IA' }).getAttribute('aria-pressed')).toBe('true');
+    await waitFor(() => expect(line(fanOption(), 'sin IA')).toBeDefined());
+    expect(line(fanOption(), 'sin IA')!.data).toEqual([200, 210, 220]);
     expect(line(fanOption(), 'expected')!.data[0]).toBeCloseTo(220, 6);
-    expect(screen.getByTestId('tile-ai').textContent).toContain('+10.0%');
-    fireEvent.click(screen.getByRole('button', { name: 'AI overlay' }));
+    expect(screen.getByTestId('tile-ai').textContent).toContain('+10,0%');
+    fireEvent.click(screen.getByRole('button', { name: 'Efecto de la IA' }));
     expect(useStore.getState().aiOverlay).toBe('off');
   });
 
   it('moving yearFloat changes the playhead and the ranking year, and out-of-range values clamp', async () => {
     stubFetch(fixture());
     await loaded();
-    fireEvent.click(screen.getByRole('button', { name: 'Resource production' }));
-    expect(screen.getByText('Year 2026')).toBeDefined();
+    fireEvent.click(screen.getByRole('button', { name: 'Producción de recursos' }));
+    expect(screen.getByText('Año 2026')).toBeDefined();
     // 2026: AR-B (30+1) above AR-A (20+1)
     expect(rankOption().yAxis!.data[0]).toContain('Buenos Aires');
     useStore.setState({ yearFloat: 2028.7 });
-    await screen.findByText('Year 2028');
+    await screen.findByText('Año 2028');
     // 2028: AR-A (22+1) above AR-B (20+1), AR-A climbed 1 place
-    await waitFor(() => expect(rankOption().yAxis!.data[0]).toBe('Salta (up 1)'));
-    expect(rankOption().yAxis!.data[1]).toBe('Buenos Aires (down 1)');
+    await waitFor(() => expect(rankOption().yAxis!.data[0]).toBe('Salta (sube 1)'));
+    expect(rankOption().yAxis!.data[1]).toBe('Buenos Aires (baja 1)');
     useStore.setState({ yearFloat: 3000 });
-    await screen.findByText('Year 2028');
+    await screen.findByText('Año 2028');
     useStore.setState({ yearFloat: 1900 });
-    await screen.findByText('Year 2026');
+    await screen.findByText('Año 2026');
   });
 
   it('a selected province switches the fan to that geo and highlights its ranking row', async () => {
     stubFetch(fixture());
     await loaded();
-    fireEvent.click(screen.getByRole('button', { name: 'Resource production' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Producción de recursos' }));
     expect(line(fanOption(), 'expected')!.data).toEqual([1001, 1001, 1001]); // AR
     useStore.setState({ province: 'AR-A' });
     await waitFor(() => expect(line(fanOption(), 'expected')!.data).toEqual([21, 22, 23]));
@@ -247,26 +247,26 @@ describe('Forecast scene', () => {
   it('says there is no province ranking for an indicator without province series', async () => {
     stubFetch(fixture());
     await loaded();
-    expect(screen.getByText('No province series for this indicator in the data.')).toBeDefined();
+    expect(screen.getByText('No hay series provinciales para este indicador en los datos.')).toBeDefined();
   });
 
   it('the table toggle swaps the fan for a table and null cells read "no data"', async () => {
     stubFetch(fixture({ gdpGap: true }));
     await loaded();
-    const toggles = screen.getAllByRole('button', { name: 'Table view' });
+    const toggles = screen.getAllByRole('button', { name: 'Ver tabla' });
     expect(toggles[0]!.getAttribute('aria-pressed')).toBe('false');
     fireEvent.click(toggles[0]!);
-    expect(screen.getAllByRole('button', { name: 'Table view' })[0]!.getAttribute('aria-pressed')).toBe('true');
+    expect(screen.getAllByRole('button', { name: 'Ver tabla' })[0]!.getAttribute('aria-pressed')).toBe('true');
     const table = screen.getByRole('table');
-    expect(within(table).getByText('Forecast fan')).toBeDefined();
+    expect(within(table).getByText('Abanico del pronóstico')).toBeDefined();
     expect(within(table).getByText('2027')).toBeDefined();
-    // expected has no point in 2027: its cells say "no data", never 0
+    // expected has no point in 2027: its cells say "sin datos", never 0
     const row2027 = within(table).getByText('2027').closest('tr')!;
     const cells = Array.from(row2027.querySelectorAll('td')).map((td) => td.textContent);
     expect(cells).toEqual([
       '2027',
       '109 bn USD', '110 bn USD', '111 bn USD', // pessimistic p10 p50 p90
-      'no data', 'no data', 'no data', // expected
+      'sin datos', 'sin datos', 'sin datos', // expected
       '309 bn USD', '310 bn USD', '311 bn USD' // optimistic
     ]);
     expect(row2027.textContent).not.toMatch(/(^|\s)0 bn USD/);
@@ -277,17 +277,17 @@ describe('Forecast scene', () => {
   it('the ranking table lists rank, province, p10, p50, p90 and change', async () => {
     stubFetch(fixture());
     await loaded();
-    fireEvent.click(screen.getByRole('button', { name: 'Resource production' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Producción de recursos' }));
     useStore.setState({ yearFloat: 2028 });
-    await screen.findByText('Year 2028');
-    fireEvent.click(screen.getAllByRole('button', { name: 'Table view' })[1]!);
+    await screen.findByText('Año 2028');
+    fireEvent.click(screen.getAllByRole('button', { name: 'Ver tabla' })[1]!);
     const table = screen.getByRole('table');
     const rows = Array.from(table.querySelectorAll('tbody tr')).map((tr) =>
       Array.from(tr.querySelectorAll('td')).map((td) => td.textContent)
     );
     expect(rows).toEqual([
-      ['1', 'Salta', '22 t', '23 t', '24 t', 'up 1'],
-      ['2', 'Buenos Aires', '20 t', '21 t', '22 t', 'down 1']
+      ['1', 'Salta', '22 t', '23 t', '24 t', 'sube 1'],
+      ['2', 'Buenos Aires', '20 t', '21 t', '22 t', 'baja 1']
     ]);
   });
 
@@ -298,8 +298,8 @@ describe('Forecast scene', () => {
     target.points = [target.points[2]!];
     stubFetch(doc);
     await loaded();
-    expect(screen.getByTestId('tile-growth').textContent).toContain('no data');
-    expect(screen.getByTestId('tile-growth').textContent).not.toMatch(/0(\.0)?%/);
+    expect(screen.getByTestId('tile-growth').textContent).toContain('sin datos');
+    expect(screen.getByTestId('tile-growth').textContent).not.toMatch(/0(,0)?%/);
     expect(screen.getByTestId('tile-value').textContent).toContain('220 bn USD');
   });
 
@@ -307,6 +307,6 @@ describe('Forecast scene', () => {
     stubFetch(fixture());
     await loaded();
     // 200 -> 220 in 2 years: (220/200)^(1/2) - 1 = 4.8808...%
-    expect(screen.getByTestId('tile-growth').textContent).toContain('4.9% per year');
+    expect(screen.getByTestId('tile-growth').textContent).toContain('4,9% por año');
   });
 });

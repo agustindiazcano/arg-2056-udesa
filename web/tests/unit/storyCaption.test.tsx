@@ -23,7 +23,7 @@ function reset(over: Partial<AppStore> = {}) {
 }
 
 function region() {
-  return screen.getByRole('region', { name: 'Story' });
+  return screen.getByRole('region', { name: 'Historia' });
 }
 
 beforeEach(() => reset());
@@ -33,42 +33,42 @@ describe('StoryCaption', () => {
   it('is a labelled region showing the step counter, title and text', () => {
     render(<StoryCaption />);
     const r = region();
-    expect(within(r).getByText('Step 1 of 3')).toBeTruthy();
-    expect(within(r).getByRole('heading', { name: /Step 1 \(placeholder\)/ })).toBeTruthy();
-    expect(within(r).getByText('Placeholder text. Replace before release.')).toBeTruthy();
+    expect(within(r).getByText('Paso 1 de 3')).toBeTruthy();
+    expect(within(r).getByRole('heading', { name: /Paso 1 \(provisorio\)/ })).toBeTruthy();
+    expect(within(r).getByText('Texto provisorio. Reemplazar antes del lanzamiento.')).toBeTruthy();
   });
 
-  it('shows the visible Placeholder tag for a placeholder step', () => {
+  it('shows the visible Provisorio tag for a placeholder step', () => {
     render(<StoryCaption />);
-    expect(within(region()).getByText('Placeholder')).toBeTruthy();
+    expect(within(region()).getByText('Provisorio')).toBeTruthy();
   });
 
-  it('does not show the Placeholder tag for a real step', () => {
+  it('does not show the Provisorio tag for a real step', () => {
     const real: StepsByScene = {
       ...STEPS,
       economy: [{ id: 'real', title: 'Real title', text: 'Real text', focus: {}, source_ids: [], placeholder: false }]
     };
     render(<StoryCaption steps={real} />);
-    expect(within(region()).queryByText('Placeholder')).toBeNull();
-    expect(within(region()).getByText('Step 1 of 1')).toBeTruthy();
+    expect(within(region()).queryByText('Provisorio')).toBeNull();
+    expect(within(region()).getByText('Paso 1 de 1')).toBeTruthy();
   });
 
   it('Next advances the step through the store and the live region announces the new title', () => {
     render(<StoryCaption />);
-    fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Siguiente' }));
     expect(useStore.getState().stepIndex.economy).toBe(1);
     expect(useStore.getState().yearFloat).toBe(1950);
-    expect(within(region()).getByText('Step 2 of 3')).toBeTruthy();
+    expect(within(region()).getByText('Paso 2 de 3')).toBeTruthy();
     const live = region().querySelector('[aria-live="polite"]');
     expect(live).not.toBeNull();
-    expect(live?.textContent).toBe('Step 2 (placeholder)');
+    expect(live?.textContent).toBe('Paso 2 (provisorio)');
   });
 
   it('Previous goes back and is disabled at the first step', () => {
     render(<StoryCaption />);
-    const prev = screen.getByRole('button', { name: 'Previous' }) as HTMLButtonElement;
+    const prev = screen.getByRole('button', { name: 'Anterior' }) as HTMLButtonElement;
     expect(prev.disabled).toBe(true);
-    fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Siguiente' }));
     expect(prev.disabled).toBe(false);
     fireEvent.click(prev);
     expect(useStore.getState().stepIndex.economy).toBe(0);
@@ -77,80 +77,80 @@ describe('StoryCaption', () => {
 
   it('has one dot per step; clicking a dot sets the step; aria-current is on exactly one', () => {
     render(<StoryCaption />);
-    const dots = screen.getAllByRole('button', { name: /^Go to step \d+: / });
+    const dots = screen.getAllByRole('button', { name: /^Ir al paso \d+: / });
     expect(dots.map((d) => d.getAttribute('aria-label'))).toEqual([
-      'Go to step 1: Step 1 (placeholder)',
-      'Go to step 2: Step 2 (placeholder)',
-      'Go to step 3: Step 3 (placeholder)'
+      'Ir al paso 1: Paso 1 (provisorio)',
+      'Ir al paso 2: Paso 2 (provisorio)',
+      'Ir al paso 3: Paso 3 (provisorio)'
     ]);
     expect(dots.filter((d) => d.getAttribute('aria-current') === 'step')).toEqual([dots[0]]);
 
     fireEvent.click(dots[2]!);
     expect(useStore.getState().stepIndex.economy).toBe(2);
     expect(useStore.getState().yearFloat).toBe(2025);
-    const after = screen.getAllByRole('button', { name: /^Go to step \d+: / });
+    const after = screen.getAllByRole('button', { name: /^Ir al paso \d+: / });
     expect(after.filter((d) => d.getAttribute('aria-current') === 'step')).toEqual([after[2]]);
   });
 
   it('on the last step Next reads "Next scene" and moves to the next scene at its step 1', () => {
     reset({ stepIndex: { ...INITIAL_STEP_INDEX, economy: 2, resources: 2 }, yearFloat: 2025 });
     render(<StoryCaption />);
-    expect(screen.queryByRole('button', { name: 'Next' })).toBeNull();
-    fireEvent.click(screen.getByRole('button', { name: 'Next scene' }));
+    expect(screen.queryByRole('button', { name: 'Siguiente' })).toBeNull();
+    fireEvent.click(screen.getByRole('button', { name: 'Escena siguiente' }));
     expect(useStore.getState().scene).toBe('resources');
     expect(useStore.getState().stepIndex.resources).toBe(0);
-    expect(within(region()).getByText('Step 1 of 3')).toBeTruthy();
+    expect(within(region()).getByText('Paso 1 de 3')).toBeTruthy();
   });
 
   it('on the last step of the last scene Next scene is disabled', () => {
     reset({ scene: 'sandbox', stepIndex: { ...INITIAL_STEP_INDEX, sandbox: 2 } });
     render(<StoryCaption />);
-    expect((screen.getByRole('button', { name: 'Next scene' }) as HTMLButtonElement).disabled).toBe(true);
+    expect((screen.getByRole('button', { name: 'Escena siguiente' }) as HTMLButtonElement).disabled).toBe(true);
   });
 
   it('Return to step appears only after a manual change, and restores the focus', () => {
     reset({ scene: 'forecast', scenario: 'pessimistic', stepIndex: { ...INITIAL_STEP_INDEX } });
     render(<StoryCaption />);
-    expect(screen.queryByRole('button', { name: 'Return to step' })).toBeNull();
+    expect(screen.queryByRole('button', { name: 'Volver al paso' })).toBeNull();
 
-    fireEvent.click(screen.getByRole('button', { name: 'Next' })); // step 2: expected
+    fireEvent.click(screen.getByRole('button', { name: 'Siguiente' })); // step 2: expected
     expect(useStore.getState().scenario).toBe('expected');
-    expect(screen.queryByRole('button', { name: 'Return to step' })).toBeNull();
+    expect(screen.queryByRole('button', { name: 'Volver al paso' })).toBeNull();
 
     act(() => useStore.getState().dispatch({ type: 'setScenario', scenario: 'optimistic' }));
-    const back = screen.getByRole('button', { name: 'Return to step' });
+    const back = screen.getByRole('button', { name: 'Volver al paso' });
     fireEvent.click(back);
     expect(useStore.getState().scenario).toBe('expected');
     expect(useStore.getState().stepIndex.forecast).toBe(1);
-    expect(screen.queryByRole('button', { name: 'Return to step' })).toBeNull();
+    expect(screen.queryByRole('button', { name: 'Volver al paso' })).toBeNull();
   });
 
   it('never shows Return to step for a step with an empty focus', () => {
     reset({ scene: 'sandbox' });
     render(<StoryCaption />);
     act(() => useStore.getState().dispatch({ type: 'setScenario', scenario: 'optimistic' }));
-    expect(screen.queryByRole('button', { name: 'Return to step' })).toBeNull();
+    expect(screen.queryByRole('button', { name: 'Volver al paso' })).toBeNull();
   });
 
   it('Hide captions collapses the panel to a Show captions button, and back', () => {
     render(<StoryCaption />);
-    const hide = screen.getByRole('button', { name: 'Hide captions' });
+    const hide = screen.getByRole('button', { name: 'Ocultar textos' });
     expect(hide.getAttribute('aria-pressed')).toBe('false');
     fireEvent.click(hide);
 
-    expect(screen.queryByText('Placeholder text. Replace before release.')).toBeNull();
-    const show = screen.getByRole('button', { name: 'Show captions' });
+    expect(screen.queryByText('Texto provisorio. Reemplazar antes del lanzamiento.')).toBeNull();
+    const show = screen.getByRole('button', { name: 'Mostrar textos' });
     expect(show.getAttribute('aria-pressed')).toBe('true');
     fireEvent.click(show);
 
-    expect(screen.getByText('Placeholder text. Replace before release.')).toBeTruthy();
-    expect(screen.getByRole('button', { name: 'Hide captions' }).getAttribute('aria-pressed')).toBe('false');
+    expect(screen.getByText('Texto provisorio. Reemplazar antes del lanzamiento.')).toBeTruthy();
+    expect(screen.getByRole('button', { name: 'Ocultar textos' }).getAttribute('aria-pressed')).toBe('false');
   });
 
   it('never takes the focus by itself', () => {
     const before = document.activeElement;
     render(<StoryCaption />);
-    fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Siguiente' }));
     // clicking in jsdom does not move focus; the point is that the component never calls focus() on its own
     expect(document.activeElement).toBe(before);
   });

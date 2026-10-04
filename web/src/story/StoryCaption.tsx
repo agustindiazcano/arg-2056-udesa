@@ -55,7 +55,7 @@ export function StoryCaption({ steps = STEPS, registryIds = null }: StoryCaption
     : false;
 
   return (
-    <div role="region" aria-label="Story" className="story" ref={panelRef}>
+    <div role="region" aria-label="Historia" className="story" ref={panelRef}>
       {/* announces the title when the step changes; stays mounted while the panel is collapsed */}
       <div aria-live="polite" className="story-live">
         {step?.title ?? ''}
@@ -63,26 +63,26 @@ export function StoryCaption({ steps = STEPS, registryIds = null }: StoryCaption
 
       {hidden || !step ? (
         <button type="button" aria-pressed={true} onClick={() => setHidden(false)}>
-          Show captions
+          Mostrar textos
         </button>
       ) : (
         <>
           <div className="story-head">
-            <span className="story-count">{`Step ${index + 1} of ${list.length}`}</span>
+            <span className="story-count">{`Paso ${index + 1} de ${list.length}`}</span>
             <button type="button" aria-pressed={false} onClick={() => setHidden(true)}>
-              Hide captions
+              Ocultar textos
             </button>
           </div>
 
           <h2 className="story-title">
             {step.title}
-            {step.placeholder ? <span className="story-tag">Placeholder</span> : null}
+            {step.placeholder ? <span className="story-tag">Provisorio</span> : null}
           </h2>
           <p className="story-text">{step.text}</p>
 
           {step.source_ids.length > 0 ? (
             <p className="story-sources">
-              <span>Sources: </span>
+              <span>Fuentes: </span>
               {step.source_ids.map((id, i) => (
                 <React.Fragment key={id}>
                   {i > 0 ? ', ' : null}
@@ -94,7 +94,7 @@ export function StoryCaption({ steps = STEPS, registryIds = null }: StoryCaption
 
           <div className="story-controls">
             <button type="button" disabled={index <= 0} onClick={() => dispatch({ type: 'stepPrev' })}>
-              Previous
+              Anterior
             </button>
 
             <div className="story-dots">
@@ -103,7 +103,7 @@ export function StoryCaption({ steps = STEPS, registryIds = null }: StoryCaption
                   key={s.id}
                   type="button"
                   className="story-dot"
-                  aria-label={`Go to step ${i + 1}: ${s.title}`}
+                  aria-label={`Ir al paso ${i + 1}: ${s.title}`}
                   aria-current={i === index ? 'step' : undefined}
                   onClick={() => dispatch({ type: 'stepSet', index: i })}
                 />
@@ -112,17 +112,17 @@ export function StoryCaption({ steps = STEPS, registryIds = null }: StoryCaption
 
             {isLast ? (
               <button type="button" disabled={!hasNextScene} onClick={() => dispatch({ type: 'nextScene' })}>
-                Next scene
+                Escena siguiente
               </button>
             ) : (
               <button type="button" onClick={() => dispatch({ type: 'stepNext' })}>
-                Next
+                Siguiente
               </button>
             )}
 
             {deviates ? (
               <button type="button" onClick={() => dispatch({ type: 'stepSet', index })}>
-                Return to step
+                Volver al paso
               </button>
             ) : null}
           </div>

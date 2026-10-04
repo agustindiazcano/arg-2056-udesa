@@ -1,5 +1,5 @@
 import React from 'react';
-import { formatValue, ordinal } from '../../charts/format.js';
+import { formatPercent, formatValue, ordinal } from '../../charts/format.js';
 import type { EconomyIndicator, EconomyRecord } from '../../types/index.js';
 import { gapPct, peerMedian, rankAt } from './selectors.js';
 
@@ -12,7 +12,7 @@ interface StatTilesProps {
   unit: string;
 }
 
-const NO_DATA = 'no data';
+const NO_DATA = 'sin datos';
 
 function Tile({ id, label, children }: { id: string; label: string; children: React.ReactNode }) {
   return (
@@ -45,15 +45,15 @@ export function StatTiles({ records, indicator, year, home, countries, unit }: S
 
   return (
     <div style={{ display: 'flex', gap: 'var(--space-md)' }}>
-      <Tile id="tile-value" label={`${home} in ${year}`}>
+      <Tile id="tile-value" label={`${home} en ${year}`}>
         <Value text={value === null ? null : formatValue(value, unit)} />
       </Tile>
-      <Tile id="tile-rank" label="Rank among the selected countries">
-        <Value text={row ? `${row.rank} of ${row.of}` : null} />
+      <Tile id="tile-rank" label="Puesto entre los países seleccionados">
+        <Value text={row ? `${row.rank} de ${row.of}` : null} />
         {row && <div style={{ color: 'var(--ink-2)' }}>{ordinal(row.rank)}</div>}
       </Tile>
-      <Tile id="tile-gap" label="Gap to the peer median">
-        <Value text={gap === null ? null : `${gap >= 0 ? '+' : ''}${gap.toFixed(1)}%`} />
+      <Tile id="tile-gap" label="Brecha frente a la mediana de los pares">
+        <Value text={gap === null ? null : formatPercent(gap, { signed: true })} />
       </Tile>
     </div>
   );

@@ -20,7 +20,7 @@ const fixture: Meta = {
 describe('META', () => {
   it('starts as a clearly fake placeholder the release gate rejects', () => {
     expect(META.placeholder).toBe(true);
-    expect(META.description).toBe('Placeholder description. Replace before release.');
+    expect(META.description).toBe('Descripción provisoria. Reemplazar antes del lanzamiento.');
     expect(META.url).toBe('https://example.invalid/');
     expect(META.ogImage).toBe('/og.png');
   });
@@ -67,9 +67,9 @@ describe('buildMetaTags', () => {
   });
 
   it('uses the page title for <title> and og:title, not the app title', () => {
-    const tags = buildMetaTags(fixture, 'Sources and attributions | Argentina 2056');
-    expect(tags).toContain('<title>Sources and attributions | Argentina 2056</title>');
-    expect(tags).toContain('<meta property="og:title" content="Sources and attributions | Argentina 2056" />');
+    const tags = buildMetaTags(fixture, 'Fuentes y atribuciones | Argentina 2056');
+    expect(tags).toContain('<title>Fuentes y atribuciones | Argentina 2056</title>');
+    expect(tags).toContain('<meta property="og:title" content="Fuentes y atribuciones | Argentina 2056" />');
   });
 });
 
@@ -86,7 +86,7 @@ describe('applyMeta', () => {
   });
 
   it('gives the references page its own title', () => {
-    expect(applyMeta(html, fixture, 'references')).toContain('<title>Sources and attributions | Argentina 2056</title>');
+    expect(applyMeta(html, fixture, 'references')).toContain('<title>Fuentes y atribuciones | Argentina 2056</title>');
   });
 });
 
@@ -96,7 +96,7 @@ describe('metaPlugin', () => {
     const transform = plugin.transformIndexHtml as (html: string, ctx: { filename: string }) => string;
     const html = '<html><head><title>x</title></head><body></body></html>';
     expect(transform(html, { filename: '/repo/web/index.html' })).toContain('<title>Argentina 2056</title>');
-    expect(transform(html, { filename: String.raw`C:\repo\web\references.html` })).toContain('<title>Sources and attributions | Argentina 2056</title>');
+    expect(transform(html, { filename: String.raw`C:\repo\web\references.html` })).toContain('<title>Fuentes y atribuciones | Argentina 2056</title>');
   });
 });
 

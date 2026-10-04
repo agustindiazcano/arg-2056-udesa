@@ -67,18 +67,18 @@ interface Opt {
 }
 const options = () =>
   screen.queryAllByTestId('echart').map((el) => JSON.parse(el.getAttribute('data-option') ?? '{}') as Opt);
-const pathOption = () => options().find((o) => o.series?.some((s) => s.name === 'your assumptions'))!;
-const visitor = () => pathOption().series!.find((s) => s.name === 'your assumptions')!.data;
+const pathOption = () => options().find((o) => o.series?.some((s) => s.name === 'supuestos elegidos'))!;
+const visitor = () => pathOption().series!.find((s) => s.name === 'supuestos elegidos')!.data;
 
 const slider = (label: string) => screen.getByLabelText(label) as HTMLInputElement;
-const numberInput = (label: string) => screen.getByLabelText(`${label} (number)`) as HTMLInputElement;
-const GPC = 'GDP per capita growth';
-const POP = 'Population growth';
-const AI = 'AI uplift';
+const numberInput = (label: string) => screen.getByLabelText(`${label} (número)`) as HTMLInputElement;
+const GPC = 'Crecimiento del PIB per cápita';
+const POP = 'Crecimiento de la población';
+const AI = 'Aporte de la IA';
 
 async function loaded() {
   render(<Scene />);
-  await screen.findByText('Illustrative arithmetic on your assumptions. It is not the forecasting model.');
+  await screen.findByText('Aritmética ilustrativa sobre los supuestos elegidos. No es el modelo de pronóstico.');
 }
 
 describe('Sandbox scene', () => {
@@ -94,23 +94,23 @@ describe('Sandbox scene', () => {
   it('shows loading, then the caveat, the charts, the tiles and the source line', async () => {
     stubFetch(forecast());
     render(<Scene />);
-    expect(screen.getByText('Loading...')).toBeDefined();
-    await screen.findByText('Illustrative arithmetic on your assumptions. It is not the forecasting model.');
+    expect(screen.getByText('Cargando...')).toBeDefined();
+    await screen.findByText('Aritmética ilustrativa sobre los supuestos elegidos. No es el modelo de pronóstico.');
     expect(options()).toHaveLength(2); // the path chart and the doubling curve
-    expect(screen.getByText('Reference range: MOCK, model mock-1, generated 2026-01-01')).toBeDefined();
+    expect(screen.getByText('Fuente: MOCK, modelo mock-1, generado el 1 de enero de 2026')).toBeDefined();
     expect(screen.getByTestId('tile-gpc')).toBeDefined();
   });
 
   it('shows an error state when the fetch fails', async () => {
     stubFetch({}, false);
     render(<Scene />);
-    await screen.findByText('Error loading data.');
+    await screen.findByText('No se pudieron cargar los datos.');
   });
 
   it('shows why the starting point cannot be built', async () => {
     stubFetch(forecast({ noPopulation: true }));
     render(<Scene />);
-    await screen.findByText('No population series for AR in the expected scenario');
+    await screen.findByText('No hay serie de población para AR en el escenario esperado');
     expect(screen.queryAllByTestId('echart')).toHaveLength(0);
   });
 
@@ -130,15 +130,15 @@ describe('Sandbox scene', () => {
     fireEvent.change(slider(GPC), { target: { value: '5' } });
     expect(numberInput(GPC).value).toBe('5');
     await waitFor(() => expect(visitor()[4]).toBeCloseTo(121.550625, 6));
-    expect(screen.getByTestId('tile-gpc').textContent).toContain('1.22 times');
-    expect(screen.getByTestId('tile-gdp').textContent).toContain('1.26 times'); // 1.05^4 * 1.01^4
-    expect(screen.getByTestId('tile-doubling').textContent).toContain('14.2 years');
-    expect(screen.getByTestId('tile-doubling').textContent).toContain('rule of 70: 14.0 years');
-    expect(screen.getByTestId('tile-doubling').textContent).toContain('-1.5%');
+    expect(screen.getByTestId('tile-gpc').textContent).toContain('1,22 veces');
+    expect(screen.getByTestId('tile-gdp').textContent).toContain('1,26 veces'); // 1.05^4 * 1.01^4
+    expect(screen.getByTestId('tile-doubling').textContent).toContain('14,2 años');
+    expect(screen.getByTestId('tile-doubling').textContent).toContain('regla del 70: 14,0 años');
+    expect(screen.getByTestId('tile-doubling').textContent).toContain('-1,5%');
 
     fireEvent.change(numberInput(POP), { target: { value: '2' } });
     expect(slider(POP).value).toBe('2');
-    await waitFor(() => expect(screen.getByTestId('tile-pop').textContent).toContain('1,082.4 people'));
+    await waitFor(() => expect(screen.getByTestId('tile-pop').textContent).toContain('1.082,4 people'));
   });
 
   it('clamps typed values to the slider bounds', async () => {
@@ -163,11 +163,11 @@ describe('Sandbox scene', () => {
   it('preset buttons set the three fields to the model central paths', async () => {
     stubFetch(forecast());
     await loaded();
-    fireEvent.click(screen.getByRole('button', { name: 'Match optimistic' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Igualar optimista' }));
     expect([slider(GPC).value, slider(POP).value, slider(AI).value]).toEqual(['5', '1', '0']);
-    fireEvent.click(screen.getByRole('button', { name: 'Match pessimistic' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Igualar pesimista' }));
     expect([slider(GPC).value, slider(POP).value]).toEqual(['1', '1']);
-    fireEvent.click(screen.getByRole('button', { name: 'Match expected' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Igualar esperado' }));
     expect([slider(GPC).value, slider(POP).value]).toEqual(['3', '1']);
   });
 
@@ -177,7 +177,7 @@ describe('Sandbox scene', () => {
     fireEvent.change(slider(GPC), { target: { value: '6.5' } });
     fireEvent.change(slider(POP), { target: { value: '-0.5' } });
     expect(slider(GPC).value).toBe('6.5');
-    fireEvent.click(screen.getByRole('button', { name: 'Reset' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Restablecer' }));
     expect([slider(GPC).value, slider(POP).value, slider(AI).value]).toEqual(['3', '1', '0']);
   });
 
@@ -186,13 +186,13 @@ describe('Sandbox scene', () => {
     await loaded();
     expect(slider(AI).disabled).toBe(true);
     expect(numberInput(AI).disabled).toBe(true);
-    expect(screen.getByText(/Turn on the AI overlay to use the AI uplift/)).toBeDefined();
-    const toggle = screen.getByRole('button', { name: 'AI overlay' });
+    expect(screen.getByText(/Se necesita activar el efecto de la IA para usar su aporte/)).toBeDefined();
+    const toggle = screen.getByRole('button', { name: 'Efecto de la IA' });
     expect(toggle.getAttribute('aria-pressed')).toBe('false');
 
     fireEvent.click(toggle);
     expect(useStore.getState().aiOverlay).toBe('on');
-    expect(screen.getByRole('button', { name: 'AI overlay' }).getAttribute('aria-pressed')).toBe('true');
+    expect(screen.getByRole('button', { name: 'Efecto de la IA' }).getAttribute('aria-pressed')).toBe('true');
     await waitFor(() => expect(slider(AI).disabled).toBe(false));
 
     fireEvent.change(slider(AI), { target: { value: '1.5' } });
@@ -218,38 +218,38 @@ describe('Sandbox scene', () => {
     stubFetch(forecast());
     await loaded();
     // model range at 2030 (off): p10 of pessimistic 100*1.01^4*0.9 = 93.65, p90 of optimistic 100*1.05^4*1.1 = 133.7
-    expect(screen.getByTestId('tile-position').textContent).toContain('inside');
+    expect(screen.getByTestId('tile-position').textContent).toContain('Dentro del rango');
     fireEvent.change(slider(GPC), { target: { value: '8' } });
-    await waitFor(() => expect(screen.getByTestId('tile-position').textContent).toContain('above'));
+    await waitFor(() => expect(screen.getByTestId('tile-position').textContent).toContain('Por encima del rango'));
     fireEvent.change(slider(GPC), { target: { value: '-2' } });
-    await waitFor(() => expect(screen.getByTestId('tile-position').textContent).toContain('below'));
+    await waitFor(() => expect(screen.getByTestId('tile-position').textContent).toContain('Por debajo del rango'));
   });
 
-  it('shows "never" for the doubling time when the rate is not positive, never a number', async () => {
+  it('shows "nunca" for the doubling time when the rate is not positive, never a number', async () => {
     stubFetch(forecast());
     await loaded();
     fireEvent.change(slider(GPC), { target: { value: '0' } });
-    await waitFor(() => expect(screen.getByTestId('tile-doubling').textContent).toContain('never'));
-    expect(screen.getByTestId('tile-doubling').textContent).not.toMatch(/\d+(\.\d)? years/);
+    await waitFor(() => expect(screen.getByTestId('tile-doubling').textContent).toContain('nunca'));
+    expect(screen.getByTestId('tile-doubling').textContent).not.toMatch(/\d+(,\d)? años/);
   });
 
-  it('computes the required per-capita rate for a chosen multiple, "no data" for an invalid target', async () => {
+  it('computes the required per-capita rate for a chosen multiple, "sin datos" for an invalid target', async () => {
     stubFetch(forecast());
     await loaded();
-    const target = screen.getByLabelText("Target multiple of today's GDP per capita by 2030") as HTMLInputElement;
+    const target = screen.getByLabelText('Meta: múltiplo del PIB per cápita actual en 2030') as HTMLInputElement;
     expect(target.value).toBe('2');
-    expect(screen.getByTestId('tile-required').textContent).toContain('18.9% per year'); // 2^(1/4) - 1
+    expect(screen.getByTestId('tile-required').textContent).toContain('18,9% por año'); // 2^(1/4) - 1
     fireEvent.change(target, { target: { value: '4' } });
-    await waitFor(() => expect(screen.getByTestId('tile-required').textContent).toContain('41.4% per year'));
+    await waitFor(() => expect(screen.getByTestId('tile-required').textContent).toContain('41,4% por año'));
     fireEvent.change(target, { target: { value: '0' } });
-    await waitFor(() => expect(screen.getByTestId('tile-required').textContent).toContain('no data'));
+    await waitFor(() => expect(screen.getByTestId('tile-required').textContent).toContain('sin datos'));
   });
 
   it('shows the worked example of the rule of 70 computed with the same functions', async () => {
     stubFetch(forecast());
     await loaded();
-    expect(screen.getByText('7% for 10 years multiplies by 1.97 (exact)')).toBeDefined();
-    expect(screen.getByText('Rule of 70 says 10.0 years, exact is 10.2 years')).toBeDefined();
+    expect(screen.getByText('7% durante 10 años multiplica por 1,97 (exacto)')).toBeDefined();
+    expect(screen.getByText('La regla del 70 dice 10,0 años; lo exacto es 10,2 años')).toBeDefined();
   });
 
   it('does not react to the global keys while a slider or a number input has the focus', async () => {
@@ -259,7 +259,7 @@ describe('Sandbox scene', () => {
       return <Scene />;
     }
     render(<Harness />);
-    await screen.findByText('Illustrative arithmetic on your assumptions. It is not the forecasting model.');
+    await screen.findByText('Aritmética ilustrativa sobre los supuestos elegidos. No es el modelo de pronóstico.');
     const snapshot = () => {
       const { scene, scenario, provinceFilterOpen, mode, playing, speed } = useStore.getState();
       return { scene, scenario, provinceFilterOpen, mode, playing, speed };
@@ -279,25 +279,25 @@ describe('Sandbox scene', () => {
     expect(useStore.getState().scenario).toBe('optimistic');
   });
 
-  it('swaps each chart for a table whose missing cells read "no data"', async () => {
+  it('swaps each chart for a table whose missing cells read "sin datos"', async () => {
     stubFetch(forecast({ dropPoint: { scenario: 'optimistic', year: 2028 } }));
     await loaded();
-    const toggles = screen.getAllByRole('button', { name: 'Table view' });
+    const toggles = screen.getAllByRole('button', { name: 'Ver tabla' });
     expect(toggles).toHaveLength(2);
 
     fireEvent.click(toggles[0]!);
-    const table = screen.getByRole('table', { name: 'Your path and the model range' });
+    const table = screen.getByRole('table', { name: 'Trayectoria con los supuestos y el rango del modelo' });
     const row2028 = within(table).getByText('2028').closest('tr')!;
     const cells = Array.from(row2028.querySelectorAll('td')).map((td) => td.textContent);
     expect(cells[0]).toBe('2028');
-    expect(cells[2]).toBe('no data'); // model low needs all three scenarios
-    expect(cells[3]).toBe('no data'); // model high too
-    expect(cells[4]).not.toBe('no data'); // the expected scenario has its point
-    expect(cells[5]).toBe('no data'); // no range, no position
+    expect(cells[2]).toBe('sin datos'); // model low needs all three scenarios
+    expect(cells[3]).toBe('sin datos'); // model high too
+    expect(cells[4]).not.toBe('sin datos'); // the expected scenario has its point
+    expect(cells[5]).toBe('sin datos'); // no range, no position
     expect(row2028.textContent).not.toMatch(/(^|\s)0 USD/);
 
     fireEvent.click(toggles[1]!);
-    const doubling = screen.getByRole('table', { name: 'Doubling time by growth rate' });
+    const doubling = screen.getByRole('table', { name: 'Tiempo de duplicación según la tasa de crecimiento' });
     expect(doubling.querySelectorAll('tbody tr')).toHaveLength(24);
   });
 

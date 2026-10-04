@@ -1,5 +1,6 @@
 import { tokens, BAND_ALPHA } from '../../styles/tokens.js';
-import { formatValue } from '../format.js';
+import { indicatorSentence, scenarioLabel } from '../../content/labels.js';
+import { formatPercent, formatValue } from '../format.js';
 import { SCENARIOS } from '../../types/index.js';
 import type { ForecastSeries, Scenario } from '../../types/index.js';
 import { aiDelta, endpoint } from '../../scenes/forecast/selectors.js';
@@ -9,12 +10,6 @@ interface FanOpts {
   scenario: Scenario;
   year: number;
 }
-
-const SCENARIO_LABEL: Record<Scenario, string> = {
-  pessimistic: 'Pessimistic',
-  expected: 'Expected',
-  optimistic: 'Optimistic'
-};
 
 const SELECTED_WIDTH = 3;
 const NORMAL_WIDTH = 2;
@@ -59,8 +54,8 @@ export function buildFan(view: ForecastView, opts: FanOpts) {
         show: true,
         color,
         formatter: lastPoint
-          ? `${SCENARIO_LABEL[s]} ${formatValue(lastPoint.p50, series.unit)}`
-          : `${SCENARIO_LABEL[s]} no data`
+          ? `${scenarioLabel(s)} ${formatValue(lastPoint.p50, series.unit)}`
+          : `${scenarioLabel(s)} sin datos`
       }
     };
   });
@@ -94,14 +89,14 @@ export function buildFan(view: ForecastView, opts: FanOpts) {
   const referenceLine = reference
     ? [
         {
-          name: 'without AI',
+          name: 'sin IA',
           type: 'line',
           data: valuesByYear(reference, years, (p) => p.p50),
           connectNulls: false,
           symbol: 'none',
           lineStyle: { type: 'dashed', color: tokens.muted, width: 1 },
           itemStyle: { color: tokens.muted },
-          endLabel: { show: true, color: tokens.muted, formatter: 'Without AI' }
+          endLabel: { show: true, color: tokens.muted, formatter: 'Sin IA' }
         }
       ]
     : [];
@@ -110,17 +105,17 @@ export function buildFan(view: ForecastView, opts: FanOpts) {
   if (years.includes(opts.year)) {
     markerData.push({
       xAxis: String(opts.year),
-      name: `Year ${opts.year}`,
+      name: `Año ${opts.year}`,
       lineStyle: { color: tokens.ink, width: 1, type: 'solid' },
-      label: { formatter: `Year ${opts.year}`, color: tokens.ink2 }
+      label: { formatter: `Año ${opts.year}`, color: tokens.ink2 }
     });
   }
   if (years.length > 0) {
     markerData.push({
       xAxis: String(years[0]),
-      name: 'forecast starts',
+      name: 'inicio del pronóstico',
       lineStyle: { color: tokens.muted, width: 1, type: 'dashed' },
-      label: { formatter: 'forecast starts', color: tokens.muted }
+      label: { formatter: 'inicio del pronóstico', color: tokens.muted }
     });
   }
 
@@ -138,10 +133,10 @@ export function buildFan(view: ForecastView, opts: FanOpts) {
     if (!first || !selected) return '';
     const year = years[first.dataIndex];
     const e = year === undefined ? null : endpoint(selected, year);
-    if (!e) return `${year ?? ''}<br/>No data`;
+    if (!e) return `${year ?? ''}<br/>Sin datos`;
     return [
       String(year),
-      'p10-p90: 80% of simulated outcomes',
+      'p10-p90: 80% de los resultados simulados',
       `p10 ${formatValue(e.p10, selected.unit)}`,
       `p50 ${formatValue(e.p50, selected.unit)}`,
       `p90 ${formatValue(e.p90, selected.unit)}`
@@ -170,19 +165,17 @@ export function buildFan(view: ForecastView, opts: FanOpts) {
     series: [...band, ...lines, ...referenceLine, markers]
   };
 
-  let summary = 'No forecast data for the selected scenario.';
+  let summary = 'Sin datos de pronóstico para el escenario seleccionado.';
   if (selected) {
     const last = [...selected.points].sort((a, b) => a.year - b.year).at(-1);
     if (last) {
-      const label = selected.resource
-        ? `${selected.indicator.replace(/_/g, ' ')} (${selected.resource})`
-        : selected.indicator.replace(/_/g, ' ');
+      const label = indicatorSentence(selected.indicator, selected.resource);
       summary =
-        `${SCENARIO_LABEL[opts.scenario]} scenario, ${last.year}: ${label} median ` +
-        `${formatValue(last.p50, selected.unit)}, p10-p90 ${formatValue(last.p10, selected.unit)} ` +
-        `to ${formatValue(last.p90, selected.unit)}`;
+        `Escenario ${scenarioLabel(opts.scenario).toLowerCase()}, ${last.year}: ${label}, mediana ` +
+        `${formatValue(last.p50, selected.unit)}, p10-p90 de ${formatValue(last.p10, selected.unit)} ` +
+        `a ${formatValue(last.p90, selected.unit)}`;
       const delta = reference ? aiDelta(selected, reference, last.year) : null;
-      if (delta !== null) summary += `; AI overlay adds ${delta.toFixed(1)}% at the median`;
+      if (delta !== null) summary += `; el efecto de la IA suma ${formatPercent(delta)} en la mediana`;
     }
   }
 

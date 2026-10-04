@@ -62,7 +62,7 @@ function build(over: { values?: MapValues; metric?: 'level' | 'change'; selected
       centroids,
       smallIds: over.smallIds ?? ['AR-A', 'AR-B', 'AR-C'],
       unit: 't',
-      indicatorLabel: 'Gold production'
+      indicatorLabel: 'producción de oro'
     },
     { metric: over.metric ?? 'level', selectedId: over.selectedId ?? null, scenario: 'expected', year: 2027 }
   );
@@ -115,7 +115,7 @@ describe('buildProvinceMap', () => {
   it('labels the ends of the scale with formatted values', () => {
     expect(build().option.visualMap!.text).toEqual(['30 t', '5 t']);
     const change: MapValues = { ...values, domain: [-60, 60] };
-    expect(build({ values: change, metric: 'change' }).option.visualMap!.text).toEqual(['60.0% per year', '-60.0% per year']);
+    expect(build({ values: change, metric: 'change' }).option.visualMap!.text).toEqual(['60,0% por año', '-60,0% por año']);
   });
 
   it('paints provinces without data with the NO_DATA token, never with a ramp color', () => {
@@ -125,11 +125,11 @@ describe('buildProvinceMap', () => {
     expect(DIVERGING.slice(0, 5)).not.toContain(option.geo.itemStyle.areaColor);
   });
 
-  it('shows a "No data" swatch in the legend only when some province is missing', () => {
+  it('shows a "Sin datos" swatch in the legend only when some province is missing', () => {
     const withMissing = build().option.graphic!;
     const children = withMissing[0]!.children;
     expect(children.find((c) => c.type === 'rect')!.style!.fill).toBe(NO_DATA);
-    expect(children.find((c) => c.type === 'text')!.style!.text).toBe('No data');
+    expect(children.find((c) => c.type === 'text')!.style!.text).toBe('Sin datos');
 
     const complete: MapValues = {
       values: {
@@ -182,7 +182,7 @@ describe('buildProvinceMap', () => {
 
   it('formats the tooltip for a province with data (level)', () => {
     expect(build().option.tooltip.formatter({ name: 'AR-B' })).toBe(
-      'Buenos Aires<br/>25 t<br/>p10 to p90: 24 t to 26 t (80% of simulated outcomes)<br/>Rank 1<br/>Expected scenario'
+      'Buenos Aires<br/>25 t<br/>p10 a p90: 24 t a 26 t (80% de los resultados simulados)<br/>Puesto 1<br/>Escenario esperado'
     );
   });
 
@@ -194,12 +194,12 @@ describe('buildProvinceMap', () => {
       domain: [-5, 5]
     };
     expect(build({ values: change, metric: 'change' }).option.tooltip.formatter({ name: 'AR-A' })).toBe(
-      'Salta<br/>4.3% per year<br/>Rank 2<br/>Expected scenario'
+      'Salta<br/>4,3% por año<br/>Puesto 2<br/>Escenario esperado'
     );
   });
 
-  it('shows only "no data" for a province without a value', () => {
-    expect(build().option.tooltip.formatter({ name: 'AR-C' })).toBe('Ciudad Autónoma de Buenos Aires<br/>no data');
+  it('shows only "sin datos" for a province without a value', () => {
+    expect(build().option.tooltip.formatter({ name: 'AR-C' })).toBe('Ciudad Autónoma de Buenos Aires<br/>sin datos');
   });
 
   it('formats the tooltip of a marker by its provinceId', () => {
@@ -208,14 +208,14 @@ describe('buildProvinceMap', () => {
 
   it('describes the Malvinas as an illustrative territory outline', () => {
     expect(build().option.tooltip.formatter({ name: MALVINAS_ID })).toBe(
-      'Malvinas Islands<br/>Territory shown for reference: illustrative outline, no data'
+      'Islas Malvinas<br/>Territorio mostrado como referencia: contorno ilustrativo, sin datos'
     );
   });
 
   it('counts excluded provinces and builds the summary with mapSummary', () => {
     const { excluded, summary } = build();
     expect(excluded).toBe(2);
-    expect(summary).toBe(mapSummary(values, 'level', 'Gold production', 2027, 't'));
+    expect(summary).toBe(mapSummary(values, 'level', 'producción de oro', 2027, 't'));
   });
 
   it('with no domain has no color scale, no data items and every province as no data', () => {
@@ -223,7 +223,7 @@ describe('buildProvinceMap', () => {
     const { option, summary } = build({ values: empty });
     expect(option.visualMap).toBeUndefined();
     expect(option.series.find((s) => s.type === 'map')!.data).toEqual([]);
-    expect(summary).toBe('No province data for Gold production in 2027.');
+    expect(summary).toBe('Sin datos provinciales de producción de oro en 2027.');
   });
 
   it('does not animate data changes', () => {

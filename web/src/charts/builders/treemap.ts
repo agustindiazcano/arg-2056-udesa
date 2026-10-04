@@ -1,5 +1,5 @@
 import { tokens } from '../../styles/tokens.js';
-import { formatValue } from '../format.js';
+import { formatPercent, formatValue } from '../format.js';
 import type { CompositionRecord } from '../../types/index.js';
 
 interface TreemapOpts {
@@ -30,7 +30,7 @@ export function buildTreemap(records: CompositionRecord[], opts: TreemapOpts = {
     const total = grouped[group]!.reduce((sum, r) => sum + (r.value_usd || 0), 0);
     // Sort leaves inside group
     const children = grouped[group]!.sort((a, b) => (b.value_usd || 0) - (a.value_usd || 0)).map(r => {
-      const share = totalValue ? ((r.value_usd || 0) / totalValue * 100).toFixed(1) : '0.0';
+      const share = formatPercent(totalValue ? ((r.value_usd || 0) / totalValue) * 100 : 0);
       const isHighlighted = !opts.highlightGroup || opts.highlightGroup === r.group;
       return {
         name: r.label || r.category,
@@ -43,7 +43,7 @@ export function buildTreemap(records: CompositionRecord[], opts: TreemapOpts = {
         },
         label: {
           show: true,
-          formatter: `{b}\n${share}%`
+          formatter: `{b}\n${share}`
         }
       };
     });
@@ -88,11 +88,11 @@ export function buildTreemap(records: CompositionRecord[], opts: TreemapOpts = {
     ]
   };
 
-  let summary = 'No data available.';
+  let summary = 'Sin datos disponibles.';
   if (groups.length > 0) {
     const largest = groups[0] || { name: "", value: 0 };
-    const share = totalValue ? ((largest.value / totalValue) * 100).toFixed(1) : '0';
-    summary = `Treemap showing ${groups.length} groups. The largest is ${largest.name} with ${share}% of the total.`;
+    const share = formatPercent(totalValue ? (largest.value / totalValue) * 100 : 0);
+    summary = `Mapa de árbol con ${groups.length} grupos. El mayor es ${largest.name} con ${share} del total.`;
   }
 
   return { option, excluded, summary };

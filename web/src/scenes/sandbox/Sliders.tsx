@@ -45,7 +45,7 @@ export function Sliders({ state, aiEnabled, onChange }: SlidersProps) {
               />
               <input
                 type="number"
-                aria-label={`${label} (number)`}
+                aria-label={`${label} (número)`}
                 min={min}
                 max={max}
                 step={step}
@@ -58,7 +58,7 @@ export function Sliders({ state, aiEnabled, onChange }: SlidersProps) {
             <div style={{ color: 'var(--muted)', fontSize: '12px' }}>{help}</div>
             {disabled && (
               <div style={{ color: 'var(--state-warning)', fontSize: '12px' }}>
-                Turn on the AI overlay to use the AI uplift.
+                Se necesita activar el efecto de la IA para usar su aporte.
               </div>
             )}
           </div>

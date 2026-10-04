@@ -1,4 +1,4 @@
-import { formatValue } from '../../charts/format.js';
+import { formatPercent, formatValue } from '../../charts/format.js';
 import type { ProvincesGeo } from '../../geo/provinces.js';
 import { PROVINCES, selectSeries } from '../../types/index.js';
 import type { ForecastOutput, ForecastSeries, Indicator, ResourceId, Scenario } from '../../types/index.js';
@@ -129,19 +129,19 @@ export function mapSummary(
   unit = ''
 ): string {
   const entries = Object.entries(values.values).map(([id, v]) => ({ id, plotted: v.plotted }));
-  if (entries.length === 0) return `No province data for ${indicatorLabel} in ${year}.`;
+  if (entries.length === 0) return `Sin datos provinciales de ${indicatorLabel} en ${year}.`;
 
   const byId = (a: { id: string }, b: { id: string }) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0);
   const highest = [...entries].sort((a, b) => b.plotted - a.plotted || byId(a, b))[0]!;
   const lowest = [...entries].sort((a, b) => a.plotted - b.plotted || byId(a, b))[0]!;
-  const show = (x: number) => (metric === 'level' ? formatValue(x, unit) : `${x.toFixed(1)}% per year`);
+  const show = (x: number) => (metric === 'level' ? formatValue(x, unit) : `${formatPercent(x)} por año`);
 
   const head =
     metric === 'level'
-      ? `Map of ${indicatorLabel} by province in ${year}`
-      : `Map of the change in ${indicatorLabel} by province up to ${year}`;
-  let text = `${head}: highest ${nameOf(highest.id)} at ${show(highest.plotted)}, lowest ${nameOf(lowest.id)} at ${show(lowest.plotted)}`;
+      ? `Mapa de ${indicatorLabel} por provincia en ${year}`
+      : `Mapa del cambio de ${indicatorLabel} por provincia hasta ${year}`;
+  let text = `${head}: mayor ${nameOf(highest.id)} con ${show(highest.plotted)}, menor ${nameOf(lowest.id)} con ${show(lowest.plotted)}`;
   const n = values.missing.length;
-  if (n > 0) text += `; ${n} ${n === 1 ? 'province' : 'provinces'} with no data`;
+  if (n > 0) text += `; ${n} ${n === 1 ? 'provincia' : 'provincias'} sin datos`;
   return text;
 }

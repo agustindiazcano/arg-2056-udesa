@@ -368,3 +368,50 @@ main.scene-container {
 .notice a {
   color: var(--blue);
 }
+
+/* ---- shared scene frame -------------------------------------------------------------------------------------- */
+
+.scene {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  width: 100%;
+  padding: var(--space-md);
+  box-sizing: border-box;
+  color: var(--ink);
+}
+
+.scene-head {
+  margin-bottom: var(--space-md);
+}
+
+.scene-head h1,
+.scene-head p {
+  margin: 0;
+}
+
+.scene-head p {
+  color: var(--ink-2);
+}
+
+.scene-source {
+  margin-top: auto;
+  padding-top: var(--space-md);
+  font-size: var(--font-sm);
+  color: var(--ink-2);
+}
+
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-sm);
+}
+
+.filter-bar .chip {
+  white-space: nowrap;
+}
+
+.scene-error {
+  color: var(--state-critical);
+}

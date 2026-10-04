@@ -1,4 +1,5 @@
 import { tokens } from '../../styles/tokens.js';
+import { scenarioLabel } from '../../content/labels.js';
 import { formatValue } from '../format.js';
 import type { ProvinceId, Scenario } from '../../types/index.js';
 import type { RankRow } from '../../scenes/forecast/selectors.js';
@@ -10,15 +11,9 @@ interface RankingOpts {
   excluded?: number;
 }
 
-const SCENARIO_LABEL: Record<Scenario, string> = {
-  pessimistic: 'Pessimistic',
-  expected: 'Expected',
-  optimistic: 'Optimistic'
-};
-
 function categoryLabel(row: RankRow): string {
   if (row.rankChange === null || row.rankChange === 0) return row.name;
-  const direction = row.rankChange > 0 ? 'up' : 'down';
+  const direction = row.rankChange > 0 ? 'sube' : 'baja';
   return `${row.name} (${direction} ${Math.abs(row.rankChange)})`;
 }
 
@@ -69,7 +64,7 @@ export function buildRanking(rows: RankRow[], opts: RankingOpts) {
         if (!row) return '';
         return [
           row.name,
-          'p10-p90: 80% of simulated outcomes',
+          'p10-p90: 80% de los resultados simulados',
           `p10 ${formatValue(row.p10, opts.unit)}`,
           `p50 ${formatValue(row.p50, opts.unit)}`,
           `p90 ${formatValue(row.p90, opts.unit)}`
@@ -114,10 +109,10 @@ export function buildRanking(rows: RankRow[], opts: RankingOpts) {
 
   const leader = rows[0];
   const summary = leader
-    ? `${SCENARIO_LABEL[opts.scenario]} scenario: ${leader.name} leads with median ` +
-      `${formatValue(leader.p50, opts.unit)} (p10-p90 ${formatValue(leader.p10, opts.unit)} ` +
-      `to ${formatValue(leader.p90, opts.unit)})`
-    : 'No province series for this selection.';
+    ? `Escenario ${scenarioLabel(opts.scenario).toLowerCase()}: ${leader.name} lidera con mediana ` +
+      `${formatValue(leader.p50, opts.unit)} (p10-p90 de ${formatValue(leader.p10, opts.unit)} ` +
+      `a ${formatValue(leader.p90, opts.unit)})`
+    : 'No hay series provinciales para esta selección.';
 
   return { option, excluded: opts.excluded ?? 0, summary };
 }

@@ -125,7 +125,7 @@ describe('Forecast scene: province map', () => {
   it('renders the map tab by default once the geometry is loaded and registers the geometry once', async () => {
     stubFetch();
     await loadedWithMap();
-    expect(screen.getByRole('button', { name: 'Map' }).getAttribute('aria-pressed')).toBe('true');
+    expect(screen.getByRole('button', { name: 'Mapa' }).getAttribute('aria-pressed')).toBe('true');
     expect(screen.getByRole('button', { name: 'Ranking' }).getAttribute('aria-pressed')).toBe('false');
 
     expect(mockRegisterMap).toHaveBeenCalledTimes(1);
@@ -147,8 +147,8 @@ describe('Forecast scene: province map', () => {
   it('shows the geometry source and attribution next to the forecast source line', async () => {
     stubFetch();
     await loadedWithMap();
-    expect(screen.getByText('Source: MOCK, model mock-1, generated 2026-01-01, horizon 2026-2028')).toBeDefined();
-    expect(screen.getByText('Province geometry: Example source. Example attribution')).toBeDefined();
+    expect(screen.getByText('Fuente: MOCK, modelo mock-1, horizonte 2026-2028, generado el 1 de enero de 2026')).toBeDefined();
+    expect(screen.getByText('Geometría de las provincias: Example source. Example attribution')).toBeDefined();
   });
 
   it('changes the plotted values with scenario, overlay and year but keeps the domain stable across years', async () => {
@@ -220,8 +220,8 @@ describe('Forecast scene: province map', () => {
     stubFetch();
     await loadedWithMap();
     act(() => useStore.setState({ yearFloat: 2028 }));
-    fireEvent.click(screen.getByRole('button', { name: 'Change since 2026' }));
-    expect(screen.getByRole('button', { name: 'Change since 2026' }).getAttribute('aria-pressed')).toBe('true');
+    fireEvent.click(screen.getByRole('button', { name: 'Cambio desde 2026' }));
+    expect(screen.getByRole('button', { name: 'Cambio desde 2026' }).getAttribute('aria-pressed')).toBe('true');
     await waitFor(() => expect(mapOption().visualMap!.inRange.color).toEqual(DIVERGING));
     const { min, max } = mapOption().visualMap!;
     expect(min).toBe(-max); // symmetric around 0
@@ -229,27 +229,27 @@ describe('Forecast scene: province map', () => {
     expect(byName['AR-A']).toBeCloseTo((Math.sqrt(22 / 20) - 1) * 100, 10);
     expect(byName['AR-B']).toBeCloseTo((Math.sqrt(20 / 30) - 1) * 100, 10);
 
-    fireEvent.click(screen.getByRole('button', { name: 'Level' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Nivel' }));
     await waitFor(() => expect(mapOption().visualMap!.inRange.color).toEqual(SEQUENTIAL_BLUE));
   });
 
   it('hides the metric toggle outside the map tab', async () => {
     stubFetch();
     await loadedWithMap();
-    expect(screen.getByRole('button', { name: 'Level' })).toBeDefined();
+    expect(screen.getByRole('button', { name: 'Nivel' })).toBeDefined();
     fireEvent.click(screen.getByRole('button', { name: 'Ranking' }));
-    expect(screen.queryByRole('button', { name: 'Level' })).toBeNull();
-    expect(screen.getByText('Provinces in 2026')).toBeDefined();
+    expect(screen.queryByRole('button', { name: 'Nivel' })).toBeNull();
+    expect(screen.getByText('Provincias en 2026')).toBeDefined();
   });
 
-  it('swaps the chart for a table whose missing cells read "no data"', async () => {
+  it('swaps the chart for a table whose missing cells read "sin datos"', async () => {
     stubFetch();
     await loadedWithMap();
-    expect(screen.getByRole('img', { name: /^Map of/ })).toBeDefined();
-    fireEvent.click(screen.getAllByRole('button', { name: 'Table view' })[1]!);
-    expect(screen.queryByRole('img', { name: /^Map of/ })).toBeNull();
+    expect(screen.getByRole('img', { name: /^Mapa de/ })).toBeDefined();
+    fireEvent.click(screen.getAllByRole('button', { name: 'Ver tabla' })[1]!);
+    expect(screen.queryByRole('img', { name: /^Mapa de/ })).toBeNull();
 
-    const table = screen.getByRole('table', { name: 'Province map' });
+    const table = screen.getByRole('table', { name: 'Mapa de provincias' });
     const rows = Array.from(table.querySelectorAll('tbody tr')).map((tr) =>
       Array.from(tr.querySelectorAll('td')).map((td) => td.textContent)
     );
@@ -258,34 +258,34 @@ describe('Forecast scene: province map', () => {
     expect(rows[2]).toEqual(['3', 'Ciudad Autónoma de Buenos Aires', '7 t', '8 t', '9 t', '8 t']);
     expect(rows).toHaveLength(24);
     const catamarca = rows.find((r) => r[1] === 'Catamarca')!;
-    expect(catamarca).toEqual(['no data', 'Catamarca', 'no data', 'no data', 'no data', 'no data']);
+    expect(catamarca).toEqual(['sin datos', 'Catamarca', 'sin datos', 'sin datos', 'sin datos', 'sin datos']);
     expect(within(table).queryByText(/(^|\s)0 t$/)).toBeNull();
   });
 
   it('shows a message and makes the ranking the default when the geometry is not available', async () => {
     stubFetch('404');
     render(<Harness />);
-    await screen.findByText(/Scenarios are conditional projections, not predictions\./);
+    await screen.findByText(/Los escenarios son proyecciones condicionales, no predicciones\./);
     await waitFor(() => expect(screen.getByRole('button', { name: 'Ranking' }).getAttribute('aria-pressed')).toBe('true'));
-    expect(screen.getByText('Provinces in 2026')).toBeDefined();
+    expect(screen.getByText('Provincias en 2026')).toBeDefined();
     expect(mapChart()).toBeUndefined();
     expect(mockRegisterMap).not.toHaveBeenCalled();
 
-    fireEvent.click(screen.getByRole('button', { name: 'Map' }));
-    expect(screen.getByText(/Province geometry is not available/)).toBeDefined();
+    fireEvent.click(screen.getByRole('button', { name: 'Mapa' }));
+    expect(screen.getByText(/La geometría de las provincias no está disponible/)).toBeDefined();
     expect(screen.getByText(/Failed to fetch \/geo\/provinces\.meta\.json: HTTP 404/)).toBeDefined();
 
     fireEvent.click(screen.getByRole('button', { name: 'Ranking' })); // the ranking still works
-    expect(screen.getByText('Provinces in 2026')).toBeDefined();
+    expect(screen.getByText('Provincias en 2026')).toBeDefined();
     expect(screen.queryByText(/^Province geometry:/)).toBeNull();
   });
 
   it('shows the message with the first problem when the province ids are inconsistent', async () => {
     stubFetch('bad-ids');
     render(<Harness />);
-    await screen.findByText(/Scenarios are conditional projections, not predictions\./);
-    fireEvent.click(screen.getByRole('button', { name: 'Map' }));
-    await screen.findByText(/Province geometry is not available/);
+    await screen.findByText(/Los escenarios son proyecciones condicionales, no predicciones\./);
+    fireEvent.click(screen.getByRole('button', { name: 'Mapa' }));
+    await screen.findByText(/La geometría de las provincias no está disponible/);
     expect(screen.getByText(/Province ids are inconsistent: missing province id AR-B/)).toBeDefined();
     expect(mockRegisterMap).not.toHaveBeenCalled();
     expect(screen.getByRole('button', { name: 'Ranking' })).toBeDefined();

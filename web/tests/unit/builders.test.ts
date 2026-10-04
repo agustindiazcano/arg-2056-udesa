@@ -27,7 +27,14 @@ describe('Chart Builders', () => {
       expect(groups[1]?.children[0]?.name).toBe('a1'); // 100 > 50
       expect(groups[1]?.children[0]?.itemStyle.color).toBe(tokens.blue);
       
-      expect(summary).toMatch(/largest is B/);
+      expect(summary).toBe('Mapa de árbol con 2 grupos. El mayor es B con 57,1% del total.');
+    });
+
+    it('labels tiles with the share in es-AR and says so when there is nothing to draw', () => {
+      const { option } = buildTreemap(records);
+      const series = option.series as Array<{ data: Array<{ children: Array<{ label: { formatter: string } }> }> }>;
+      expect(series[0]?.data[0]?.children[0]?.label.formatter).toBe('{b}\n57,1%');
+      expect(buildTreemap([]).summary).toBe('Sin datos disponibles.');
     });
 
     it('highlights group correctly', () => {
@@ -68,6 +75,18 @@ describe('Chart Builders', () => {
       expect(seriesData[0]?.itemStyle.color).toBe(tokens.muted);
     });
 
+    it('names the remainder "Otras" and summarises in Spanish', () => {
+      const { option, summary } = buildProvinceBars(records, { resource: 'lithium', year: 2020, topN: 2 });
+      expect((option.yAxis as { data: string[] }).data[0]).toBe('Otras');
+      expect(summary).toMatch(/^Gráfico de barras de producción por provincia\. La mayor es .+ con 500 t\.$/);
+    });
+
+    it('says there is no data for an unknown year', () => {
+      expect(buildProvinceBars(records, { resource: 'lithium', year: 1990 }).summary).toBe(
+        'Sin datos para este recurso y año.'
+      );
+    });
+
     it('unknown year gives empty chart and 0 excluded without throwing', () => {
       const { option, excluded } = buildProvinceBars(records, { resource: 'lithium', year: 1990 });
       expect(excluded).toBe(0);
@@ -90,6 +109,14 @@ describe('Chart Builders', () => {
       const series = option.series as Array<{ data: (number|null)[]; connectNulls: boolean }>;
       expect(series[0]?.data).toEqual([100, null, 200]);
       expect(series[0]?.connectNulls).toBe(false);
+    });
+
+    it('summarises in Spanish and says "Sin datos" in the tooltip for a gap', () => {
+      const { option, summary } = buildTrend(records, { resource: 'lithium', geo: 'AR' });
+      expect(summary).toBe('Gráfico de líneas de la tendencia de producción de 2020 a 2022.');
+      const formatter = (option.tooltip as { formatter: (p: unknown[]) => string }).formatter;
+      expect(formatter([{ name: '2021', value: null }])).toBe('2021: Sin datos');
+      expect(buildTrend([], { resource: 'lithium' }).summary).toBe('Sin datos de tendencia.');
     });
   });
 });

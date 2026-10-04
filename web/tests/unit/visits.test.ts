@@ -27,13 +27,13 @@ describe('flagEmoji', () => {
 });
 
 describe('countryName', () => {
-  it('gives the English name of the region', () => {
+  it('gives the Spanish name of the region', () => {
     expect(countryName('AR')).toBe('Argentina');
-    expect(countryName('US')).toBe('United States');
+    expect(countryName('US')).toBe('Estados Unidos');
   });
-  it('says Unknown for the unknown bucket and keeps an unrecognised code as it is', () => {
-    expect(countryName('unknown')).toBe('Unknown');
-    expect(countryName('ZZ')).toBe('Unknown Region');
+  it('says Desconocido for the unknown bucket and keeps an unrecognised code as it is', () => {
+    expect(countryName('unknown')).toBe('Desconocido');
+    expect(countryName('ZZ')).toBe('Región desconocida');
   });
 });
 
@@ -48,8 +48,8 @@ describe('summarize', () => {
   it('lists one row per country, the one with most visitors first', () => {
     expect(s.countries).toEqual([
       { code: 'AR', name: 'Argentina', flag: '\u{1F1E6}\u{1F1F7}', visitors: 7, pageviews: 15 },
-      { code: 'US', name: 'United States', flag: '\u{1F1FA}\u{1F1F8}', visitors: 2, pageviews: 3 },
-      { code: 'unknown', name: 'Unknown', flag: '', visitors: 1, pageviews: 1 }
+      { code: 'US', name: 'Estados Unidos', flag: '\u{1F1FA}\u{1F1F8}', visitors: 2, pageviews: 3 },
+      { code: 'unknown', name: 'Desconocido', flag: '', visitors: 1, pageviews: 1 }
     ]);
   });
 

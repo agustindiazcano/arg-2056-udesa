@@ -13,9 +13,9 @@ test.describe('document title', () => {
 
   test('the page declares its language', async ({ page }) => {
     await page.goto('/');
-    await expect(page.locator('html')).toHaveAttribute('lang', 'en');
+    await expect(page.locator('html')).toHaveAttribute('lang', 'es');
     await page.goto('/references.html');
-    await expect(page.locator('html')).toHaveAttribute('lang', 'en');
+    await expect(page.locator('html')).toHaveAttribute('lang', 'es');
   });
 });
 
