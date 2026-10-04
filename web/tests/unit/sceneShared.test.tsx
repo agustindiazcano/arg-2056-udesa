@@ -1,10 +1,12 @@
 // @vitest-environment jsdom
-import { describe, it, expect, vi } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { afterEach, describe, it, expect, vi } from 'vitest';
+import { cleanup, render, screen, fireEvent } from '@testing-library/react';
 import React from 'react';
 import { SceneShell } from '../../src/ui/SceneShell';
 import { TableToggle } from '../../src/ui/TableToggle';
 import { FilterBar, FilterChip } from '../../src/ui/FilterBar';
+
+afterEach(cleanup);
 
 describe('SceneShell', () => {
   it('renders the title as the one h1, the subtitle, the children and the source line in Spanish', () => {
