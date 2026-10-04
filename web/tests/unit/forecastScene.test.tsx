@@ -205,8 +205,8 @@ describe('Forecast scene', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Efecto de la IA' }));
     expect(useStore.getState().aiOverlay).toBe('on');
     expect(screen.getByRole('button', { name: 'Efecto de la IA' }).getAttribute('aria-pressed')).toBe('true');
-    await waitFor(() => expect(line(fanOption(), 'without AI')).toBeDefined());
-    expect(line(fanOption(), 'without AI')!.data).toEqual([200, 210, 220]);
+    await waitFor(() => expect(line(fanOption(), 'sin IA')).toBeDefined());
+    expect(line(fanOption(), 'sin IA')!.data).toEqual([200, 210, 220]);
     expect(line(fanOption(), 'expected')!.data[0]).toBeCloseTo(220, 6);
     expect(screen.getByTestId('tile-ai').textContent).toContain('+10,0%');
     fireEvent.click(screen.getByRole('button', { name: 'Efecto de la IA' }));

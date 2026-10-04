@@ -272,7 +272,7 @@ describe('Forecast scene: province map', () => {
     expect(mockRegisterMap).not.toHaveBeenCalled();
 
     fireEvent.click(screen.getByRole('button', { name: 'Mapa' }));
-    expect(screen.getByText(/Province geometry is not available/)).toBeDefined();
+    expect(screen.getByText(/La geometría de las provincias no está disponible/)).toBeDefined();
     expect(screen.getByText(/Failed to fetch \/geo\/provinces\.meta\.json: HTTP 404/)).toBeDefined();
 
     fireEvent.click(screen.getByRole('button', { name: 'Ranking' })); // the ranking still works
@@ -285,7 +285,7 @@ describe('Forecast scene: province map', () => {
     render(<Harness />);
     await screen.findByText(/Los escenarios son proyecciones condicionales, no predicciones\./);
     fireEvent.click(screen.getByRole('button', { name: 'Mapa' }));
-    await screen.findByText(/Province geometry is not available/);
+    await screen.findByText(/La geometría de las provincias no está disponible/);
     expect(screen.getByText(/Province ids are inconsistent: missing province id AR-B/)).toBeDefined();
     expect(mockRegisterMap).not.toHaveBeenCalled();
     expect(screen.getByRole('button', { name: 'Ranking' })).toBeDefined();

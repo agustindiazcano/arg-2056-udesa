@@ -68,7 +68,7 @@ describe('buildRanking', () => {
 
   it('marks rank changes in the category label with text, never color alone', () => {
     const { option } = build();
-    expect(option.yAxis.data).toEqual(['Buenos Aires (up 3)', 'CABA (down 1)', 'Salta', 'San Luis']);
+    expect(option.yAxis.data).toEqual(['Buenos Aires (sube 3)', 'CABA (baja 1)', 'Salta', 'San Luis']);
   });
 
   it('highlights one province and mutes the others', () => {
