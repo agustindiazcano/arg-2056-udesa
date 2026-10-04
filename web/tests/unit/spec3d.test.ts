@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { barsSpec } from '../../src/charts3d/specs';
+import { barsSpec, linesSpec } from '../../src/charts3d/specs';
 
 describe('barsSpec', () => {
   const rows = [
@@ -36,5 +36,29 @@ describe('barsSpec', () => {
   it('writes a default text alternative from the numbers', () => {
     const spec = barsSpec(rows, { title: 'Ranking', unit: 'USD' });
     expect(spec.summary).toBe('Ranking, vista 3D de barras: CHL 210 USD, ARG 150 USD, BRA 70 USD');
+  });
+});
+
+describe('linesSpec', () => {
+  const series = [
+    { name: 'ARG', values: [1, 2, null], tone: 'highlight' as const },
+    { name: 'BRA', values: [2, 3, 4], tone: 'muted' as const }
+  ];
+
+  it('carries the series, the labels, the band and the marker as they are', () => {
+    const spec = linesSpec({ title: 'Largo plazo', unit: 'USD', xLabels: ['1', '2', '3'], series, marker: 1, band: { lower: [1, 1, 1], upper: [2, 2, 2] } });
+    expect(spec).toMatchObject({ kind: 'lines', title: 'Largo plazo', unit: 'USD', xLabels: ['1', '2', '3'], marker: 1 });
+    expect(spec.series).toEqual(series);
+    expect(spec.band).toEqual({ lower: [1, 1, 1], upper: [2, 2, 2] });
+  });
+
+  it('writes a default text alternative with the series names and the span', () => {
+    expect(linesSpec({ title: 'Largo plazo', unit: 'USD', xLabels: ['1880', '1890', '1900'], series }).summary).toBe(
+      'Largo plazo, vista 3D de líneas, de 1880 a 1900: ARG, BRA'
+    );
+  });
+
+  it('keeps the summary it is given', () => {
+    expect(linesSpec({ title: 'T', unit: 'u', xLabels: ['1'], series, summary: 'resumen' }).summary).toBe('resumen');
   });
 });
