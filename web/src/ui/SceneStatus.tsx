@@ -10,7 +10,7 @@ export function SceneLoading() {
 
 export function SceneError() {
   return (
-    <p role="alert" className="fallback scene-error">
+    <p role="status" className="fallback scene-error">
       No se pudieron cargar los datos.
     </p>
   );

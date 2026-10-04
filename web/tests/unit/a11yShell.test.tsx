@@ -81,10 +81,10 @@ describe('document title', () => {
     expect(documentTitle('sandbox')).toBe('Simulador | Argentina 2056');
   });
 
-  it('the html entries declare lang="en" and index.html carries the same app title', () => {
+  it('the html entries declare lang="es" and index.html carries the same app title', () => {
     const root = path.resolve(__dirname, '../..');
     for (const file of ['index.html', 'references.html']) {
-      expect(fs.readFileSync(path.join(root, file), 'utf8'), file).toMatch(/<html lang="en">/);
+      expect(fs.readFileSync(path.join(root, file), 'utf8'), file).toMatch(/<html lang="es">/);
     }
     expect(fs.readFileSync(path.join(root, 'index.html'), 'utf8')).toContain(`<title>${APP_TITLE}</title>`);
   });
