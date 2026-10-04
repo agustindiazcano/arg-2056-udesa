@@ -110,7 +110,7 @@ test.describe('keyboard operability', () => {
     await page.goto('/');
     await page.getByRole('tab', { name: 'Recursos' }).click();
     const scene = page.getByTestId('scene');
-    const toggle = scene.getByRole('button', { name: 'Table view' }).first();
+    const toggle = scene.getByRole('button', { name: 'Ver tabla' }).first();
     await expect(toggle).toHaveAttribute('aria-pressed', 'false');
     const tablesBefore = await scene.getByRole('table').count();
     await toggle.focus();

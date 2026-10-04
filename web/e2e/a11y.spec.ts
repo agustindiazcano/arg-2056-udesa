@@ -40,7 +40,7 @@ test.describe('axe', () => {
   test('the scene with the table view on has no serious or critical violation', async ({ page }) => {
     await page.goto('/');
     await page.getByRole('tab', { name: 'Economía' }).click();
-    await page.getByTestId('scene').getByRole('button', { name: 'Table view' }).first().click();
+    await page.getByTestId('scene').getByRole('button', { name: 'Ver tabla' }).first().click();
     await expect(page.getByTestId('scene').getByRole('table').first()).toBeVisible();
     expect(await seriousViolations(new AxeBuilder({ page }))).toEqual([]);
   });
@@ -54,7 +54,7 @@ test.describe('axe', () => {
 
   test('references.html has no serious or critical violation', async ({ page }) => {
     await page.goto('/references.html');
-    await expect(page.getByRole('heading', { name: 'Sources and attributions', level: 1 })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Fuentes y atribuciones', level: 1 })).toBeVisible();
     expect(await seriousViolations(new AxeBuilder({ page }))).toEqual([]);
   });
 });

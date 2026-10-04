@@ -42,7 +42,7 @@ test.describe('keyboard', () => {
   test('in the forecast scene 1, 2 and 3 set the scenario shown in the HUD', async ({ page }) => {
     const forecastIndex = SCENE_TABS.findIndex((t) => t.scene === 'forecast');
     for (let i = 0; i < forecastIndex; i += 1) await page.keyboard.press('ArrowRight');
-    await expect(page.getByRole('heading', { name: 'Forecast 2056', level: 1 })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Pronóstico 2056', level: 1 })).toBeVisible();
 
     await page.keyboard.press('2');
     await expect(page.getByRole('group', { name: 'Escenario' }).getByRole('button', { name: 'Esperado' })).toHaveAttribute('aria-pressed', 'true');
@@ -61,23 +61,23 @@ test.describe('keyboard', () => {
   });
 
   test('PageDown and PageUp move the caption between steps and Home returns to step 1', async ({ page }) => {
-    const story = page.getByRole('region', { name: 'Story' });
-    await expect(story.getByText('Step 1 of 3')).toBeVisible();
+    const story = page.getByRole('region', { name: 'Historia' });
+    await expect(story.getByText('Paso 1 de 3')).toBeVisible();
     await page.keyboard.press('PageDown');
-    await expect(story.getByText('Step 2 of 3')).toBeVisible();
+    await expect(story.getByText('Paso 2 de 3')).toBeVisible();
     await page.keyboard.press('PageUp');
-    await expect(story.getByText('Step 1 of 3')).toBeVisible();
+    await expect(story.getByText('Paso 1 de 3')).toBeVisible();
 
     await page.keyboard.press('PageDown');
     await page.keyboard.press('PageDown');
-    await expect(story.getByText('Step 3 of 3')).toBeVisible();
+    await expect(story.getByText('Paso 3 de 3')).toBeVisible();
     await page.keyboard.press('Home');
-    await expect(story.getByText('Step 1 of 3')).toBeVisible();
+    await expect(story.getByText('Paso 1 de 3')).toBeVisible();
   });
 
   test('a slider keeps the arrow keys: the value changes and the scene does not', async ({ page }) => {
     await page.getByRole('tab', { name: 'Simulador' }).click();
-    await expect(page.getByRole('heading', { name: 'Sandbox', level: 1 })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Simulador', level: 1 })).toBeVisible();
 
     const year = page.getByTestId('hud-year');
     const yearBefore = await year.getAttribute('data-value');

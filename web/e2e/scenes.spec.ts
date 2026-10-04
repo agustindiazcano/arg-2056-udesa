@@ -25,7 +25,7 @@ test.describe('scenes', () => {
 
       const scene = page.getByTestId('scene');
       // "error" alone is legitimate copy (the sandbox shows the rule-of-70 "error +0.2%"), so the app's own message is used
-      await expect(scene).not.toContainText(/failed|error loading|undefined/i);
+      await expect(scene).not.toContainText(/failed|no se pudieron cargar|undefined/i);
       // case-sensitive on purpose: /nan/i would match "finance"
       await expect(scene).not.toContainText(/\bNaN\b/);
 
@@ -34,7 +34,7 @@ test.describe('scenes', () => {
         await expect(chart).toBeVisible();
         expect(((await chart.getAttribute('aria-label')) ?? '').trim()).not.toBe('');
 
-        const toggle = scene.getByRole('button', { name: 'Table view' }).first();
+        const toggle = scene.getByRole('button', { name: 'Ver tabla' }).first();
         await expect(toggle).toHaveAttribute('aria-pressed', 'false');
         await toggle.click();
         await expect(toggle).toHaveAttribute('aria-pressed', 'true');
