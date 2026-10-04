@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
+import { useDashPrefs } from '../dashboard/prefs';
 import { useSlots } from '../dashboard/slots';
 import { gsap } from 'gsap';
 import { useStore } from '../state/store';
@@ -54,6 +55,7 @@ export function StoryCaption({ steps = STEPS, registryIds = null }: StoryCaption
   const reducedMotion = useReducedMotion();
   const shownIndex = useRef(index);
   const slot = useSlots((s) => s.narrative);
+  const explore = useDashPrefs((s) => s.explore);
   usePanelHeightVariable(panelRef, slot !== null);
 
   // the text fades in each time the step changes (not on mount, not under reduced motion)
@@ -159,5 +161,6 @@ export function StoryCaption({ steps = STEPS, registryIds = null }: StoryCaption
     </div>
   );
 
+  if (explore) return null; // Explorar: no story, only the data
   return slot ? createPortal(panel, slot) : panel;
 }

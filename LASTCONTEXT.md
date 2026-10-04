@@ -18,6 +18,8 @@
 
 - **New direction (human, with `design.png`)**: the app is a one-screen data dashboard with no scroll; 3D and 2D are the same dashboard with a different renderer. Plan and phases D1 to D7 in `docs/dashboard.md` (supersedes the scrolling scene pages and the `presentation-3d` tour layout; its engine decisions still apply). Work in `task/dashboard-shell`, stacked on `task/motion-story` (PR #44 to `main` is still open).
 
+- **Dashboard D1 to D3 done on `task/dashboard-shell`** (stacked on `task/motion-story`): `web/src/dashboard/` (`Dashboard`, `ViewCarousel`, `Viewer`, `ViewerBar`, `Thumb`, `slots`, `prefs`), shared `ui/ChartPanel`, `ui/Tile`, paged `DataTable` (`pageSize` number or `fit`). The five scenes are `DashView` lists; the control bar is at the bottom with a slot for the scene filters; the story docks in the right panel; layouts 1/2/4 and Recorrido/Explorar are preferences (`useDashPrefs`). Below 960 px the grid becomes a column and may scroll. e2e: nothing scrolls at 1280x720 and 1920x1080. Next: D4 3D engine (see `docs/dashboard.md`).
+
 ## Decisions
 - UI text avoids the second person (infinitives and impersonal forms) to stay neutral between voseo and tuteo. The human may want to change that: it is one pass over the strings.
 - The story steps, the era bands, the page description and the two placeholder scenes (Andes, Revolución IA) are provisional content, now in Spanish ("(provisorio)", "Texto provisorio. Reemplazar antes del lanzamiento."). The release gate still keys on `placeholder: true`, not on the text. Real story text was not touched.

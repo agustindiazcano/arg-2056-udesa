@@ -4,6 +4,7 @@
  */
 
 .dash {
+  overflow: hidden;
   display: grid;
   grid-template-columns: minmax(180px, 240px) minmax(0, 1fr) minmax(260px, 340px);
   gap: var(--space-md);
@@ -211,6 +212,7 @@
 }
 
 .viewer-pane {
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   min-height: 0;
@@ -415,4 +417,11 @@
 
 .dash-sliders {
   min-height: 0;
+}
+
+.viewer-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
 }

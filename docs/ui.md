@@ -27,6 +27,15 @@ value), scenario (a segmented control: Pesimista, Esperado, Optimista), the AI e
 button that opens a dialog with the 24 provinces). Keys are unchanged (`KEY_MAP`). There is no 2D/3D button until a view
 uses it (the `d` key still toggles `mode`).
 
+## The dashboard (docs/dashboard.md)
+
+Every scene is a one-screen dashboard (`web/src/dashboard/`): names on the left, a carousel of views and the viewer in the
+middle, indicators and the story on the right, the controls and the scene filters in a bottom bar. Nothing scrolls on
+screens wider than 960 px (tables page to the room they have). The viewer shows 1, 2 or 4 views at once (the "Paneles a la
+vez" buttons) and has two modes: Recorrido (the story, docked in the right panel) and Explorar (no story). The bottom bar
+is the global shell; the scene filters reach it through a slot (`SlotPortal`). A scene gives `Dashboard` its views, tiles,
+rail, filters and notes; its data hooks do not change.
+
 ## The scenes
 
 Every scene is built on the same pieces, so a new scene or the 3D presentation reuses them:

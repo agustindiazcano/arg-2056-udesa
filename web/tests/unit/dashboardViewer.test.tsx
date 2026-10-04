@@ -30,13 +30,13 @@ const VIEWS = [view('a', 'Uno'), view('b', 'Dos'), view('c', 'Tres'), view('d', 
 const renderDash = () => render(<Dashboard title="T" sources={[]} views={VIEWS} />);
 const viewer = () => screen.getByRole('region', { name: 'Visor' });
 const shown = () => within(viewer()).queryAllByText(/^contenido /).map((p) => p.textContent);
-const layout = (n: number) => fireEvent.click(within(screen.getByRole('group', { name: 'Vistas simultáneas' })).getByRole('button', { name: String(n) }));
+const layout = (n: number) => fireEvent.click(within(screen.getByRole('group', { name: 'Paneles a la vez' })).getByRole('button', { name: String(n) }));
 const pick = (name: string) => fireEvent.click(screen.getByRole('button', { name }));
 
 describe('Dashboard: one, two or four views at once', () => {
   it('offers 1, 2 and 4 views, with 1 chosen', () => {
     renderDash();
-    const group = screen.getByRole('group', { name: 'Vistas simultáneas' });
+    const group = screen.getByRole('group', { name: 'Paneles a la vez' });
     expect(within(group).getAllByRole('button').map((b) => [b.textContent, b.getAttribute('aria-pressed')])).toEqual([
       ['1', 'true'],
       ['2', 'false'],

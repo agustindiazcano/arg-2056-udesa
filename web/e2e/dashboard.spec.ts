@@ -53,7 +53,7 @@ test.describe('dashboard', () => {
     for (const entry of DATA_SCENES) {
       await page.getByRole('tab', { name: entry.tab }).click();
       await expectSceneShown(page, entry);
-      const carousel = page.getByRole('group', { name: 'Vistas' });
+      const carousel = page.getByRole('group', { name: 'Vistas', exact: true });
       await expect(carousel).toBeVisible();
       const items = carousel.locator('.carousel-item');
       expect(await items.count(), entry.scene).toBeGreaterThanOrEqual(2);
@@ -63,6 +63,30 @@ test.describe('dashboard', () => {
       await expect(items.first()).toHaveAttribute('aria-pressed', 'false');
       await expect(page.getByRole('region', { name: 'Visor' })).toBeVisible();
     }
+  });
+
+  test('two or four views at once, still with no scroll, and Explorar hides the story', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 720 });
+    await page.goto('/');
+    await page.getByRole('tab', { name: 'Economía' }).click();
+    await expectSceneShown(page, DATA_SCENES[0]!);
+    const layout = page.getByRole('group', { name: 'Paneles a la vez' });
+    await layout.getByRole('button', { name: '4' }).click();
+    const items = page.getByRole('group', { name: 'Vistas', exact: true }).locator('.carousel-item');
+    await items.nth(1).click();
+    await items.nth(2).click();
+    await expect(page.locator('.viewer-pane')).toHaveCount(3);
+    const overflow = await page.evaluate(() => {
+      const main = document.getElementById('main') as HTMLElement;
+      return { page: document.documentElement.scrollHeight - window.innerHeight, main: main.scrollHeight - main.clientHeight };
+    });
+    expect(overflow.page).toBeLessThanOrEqual(0);
+    expect(overflow.main).toBeLessThanOrEqual(1);
+
+    await page.getByRole('group', { name: 'Modo' }).getByRole('button', { name: 'Explorar' }).click();
+    await expect(page.getByRole('region', { name: 'Historia' })).toHaveCount(0);
+    await page.getByRole('group', { name: 'Modo' }).getByRole('button', { name: 'Recorrido' }).click();
+    await expect(page.getByRole('region', { name: 'Historia' })).toBeVisible();
   });
 
   test('the story panel is docked in the right panel', async ({ page }) => {

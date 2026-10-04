@@ -53,6 +53,12 @@ controls: only the renderer of the viewer changes.
   Renderers: bars (the reference image), province map extruded, lines and fan as ribbons, treemap as blocks. The 3D
   viewer has a text alternative: the same table as the 2D view.
 
+## State
+
+D1 to D3 are built (2D): the grid with no scroll, the carousel, the viewer with 1, 2 or 4 views, Recorrido and Explorar,
+the right panel with the story docked, the bottom bar with the scene filters, paged tables, and the five scenes on it
+(Andes and Revolución IA with one placeholder view). D4 onward (3D) is next.
+
 ## Phases (one PR each, red then green)
 
 | # | PR | Content |

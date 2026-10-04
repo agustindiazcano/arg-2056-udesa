@@ -2,7 +2,9 @@ import React, { useCallback, useState } from 'react';
 import { sourceLine } from '../ui/SceneShell';
 import { SlotPortal } from './SlotPortal';
 import { useSlots } from './slots';
+import { useDashPrefs } from './prefs';
 import { ViewCarousel } from './ViewCarousel';
+import { ViewerBar } from './ViewerBar';
 import { Viewer } from './Viewer';
 import type { DashScene } from './types';
 import './dashboard.css';
@@ -27,9 +29,19 @@ export function Dashboard({
 }: DashScene) {
   const [choice, setChoice] = useState<string[]>([]);
   const narrativeRef = useCallback((el: HTMLDivElement | null) => useSlots.getState().set('narrative', el), []);
+  const layout = useDashPrefs((s) => s.layout);
   const selected = choice.filter((id) => views.some((v) => v.id === id));
-  const shownIds = selected.length > 0 ? selected : views[0] ? [views[0].id] : [];
-  const shown = views.filter((v) => shownIds.includes(v.id));
+  const base = selected.length > 0 ? selected : views[0] ? [views[0].id] : [];
+  // the layout is how many views fit at once; a smaller layout keeps the most recently chosen ones
+  const shownIds = base.slice(-layout);
+  const shown = shownIds.map((id) => views.find((v) => v.id === id)!);
+
+  const select = (id: string) => {
+    if (layout === 1) setChoice([id]);
+    else if (shownIds.includes(id)) {
+      if (shownIds.length > 1) setChoice(shownIds.filter((x) => x !== id));
+    } else setChoice([...shownIds, id].slice(-layout));
+  };
   const source = sourceLine(sources, retrievedAt, dateLabel);
 
   return (
@@ -54,7 +66,8 @@ export function Dashboard({
       </aside>
 
       <div className="dash-main">
-        <ViewCarousel views={views} selected={shownIds} onSelect={(id) => setChoice([id])} />
+        <ViewCarousel views={views} selected={shownIds} onSelect={select} />
+        <ViewerBar />
         <Viewer views={shown} />
       </div>
 
