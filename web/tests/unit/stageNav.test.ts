@@ -23,11 +23,9 @@ const options = { pixelRatioCap: 1, target: new Vector3(0, 0.5, 0), radius: 10, 
 let host: HTMLDivElement;
 let stage: Stage;
 
-const pointer = (type: string, init: Partial<PointerEventInit> & { pointerId?: number } = {}) =>
-  new MouseEvent(type, { bubbles: true, clientX: 0, clientY: 0, ...init }) as unknown as PointerEvent;
 const canvas = () => stage.renderer.domElement;
 const fire = (type: string, init: Record<string, unknown> = {}) => {
-  const e = new MouseEvent(type, { bubbles: true, cancelable: true, ...init });
+  const e = type === 'wheel' ? new WheelEvent(type, { bubbles: true, cancelable: true, ...init }) : new MouseEvent(type, { bubbles: true, cancelable: true, ...init });
   Object.assign(e, { pointerId: init.pointerId ?? 1 });
   canvas().dispatchEvent(e);
   return e;
@@ -51,7 +49,9 @@ describe('stage navigation', () => {
     fire('pointerdown', { clientX: 100, clientY: 100, button: 0 });
     fire('pointermove', { clientX: 600, clientY: 100 });
     fire('pointerup', { clientX: 600, clientY: 100 });
-    expect(stage.pose.theta).toBeCloseTo(0.4 - 500 * 0.008 + 2 * Math.PI * Math.round((500 * 0.008 - 0.4) / (2 * Math.PI) + 0), 6);
+    const turned = 0.4 - 500 * 0.008; // -3.6 rad: past -pi, so it wraps instead of stopping
+    expect(Math.cos(stage.pose.theta)).toBeCloseTo(Math.cos(turned), 8);
+    expect(Math.sin(stage.pose.theta)).toBeCloseTo(Math.sin(turned), 8);
     expect(stage.pose.phi).toBeCloseTo(1, 10);
   });
 
@@ -119,9 +119,6 @@ describe('stage navigation', () => {
   });
 
   it('removes every listener it added on dispose', () => {
-    const el = canvas();
-    const added = vi.spyOn(el, 'addEventListener');
-    const removed = vi.spyOn(el, 'removeEventListener');
     const other = createStage(host, { ...options, target: new Vector3(0, 0.5, 0) });
     const oel = other.renderer.domElement;
     const a = vi.spyOn(oel, 'addEventListener');
@@ -131,8 +128,5 @@ describe('stage navigation', () => {
       ['contextmenu', 'dblclick', 'pointercancel', 'pointerdown', 'pointermove', 'pointerup', 'wheel']
     );
     expect(a.mock.calls.length).toBe(0);
-    void added;
-    void removed;
-    void pointer;
   });
 });

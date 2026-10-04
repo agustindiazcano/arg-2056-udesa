@@ -119,6 +119,35 @@ test.describe('dashboard', () => {
     await expect(page.getByRole('img', { name: /^Mapa de/ })).toBeVisible();
   });
 
+  test('the 3D map zooms with the wheel and the buttons, turns freely and resets', async ({ page }) => {
+    await page.goto('/');
+    await page.getByRole('tab', { name: 'Recursos' }).click();
+    await page.getByRole('group', { name: 'Vistas', exact: true }).getByRole('button', { name: 'Mapa' }).click();
+    const canvas = page.locator('[data-chart3d="map"] canvas');
+    await expect(canvas).toBeVisible();
+    const camera = async () => (await canvas.getAttribute('data-camera'))!.split(',').map(Number);
+    const start = await camera();
+
+    const box = (await canvas.boundingBox())!;
+    await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+    await page.mouse.wheel(0, -300);
+    await expect.poll(async () => (await camera())[2]).toBeLessThan(start[2]!);
+
+    await page.getByRole('button', { name: 'Alejar' }).click();
+    await page.getByRole('button', { name: 'Acercar' }).click();
+
+    await page.mouse.move(box.x + 100, box.y + 100);
+    await page.mouse.down();
+    await page.mouse.move(box.x + 500, box.y + 100, { steps: 5 });
+    await page.mouse.up();
+    await expect.poll(async () => (await camera())[0]).not.toBe(start[0]);
+
+    await page.getByRole('button', { name: 'Restablecer vista' }).click();
+    await expect.poll(async () => (await camera()).join(',')).toBe(start.join(','));
+    const overflow = await page.evaluate(() => document.documentElement.scrollHeight - window.innerHeight);
+    expect(overflow).toBeLessThanOrEqual(0);
+  });
+
   test('the forecast fan and the long run are 3D line charts by default', async ({ page }) => {
     await page.goto('/');
     for (const tab of ['Economía', 'Pronóstico 2056']) {
