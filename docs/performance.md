@@ -106,3 +106,13 @@ None.
 | `--state-critical` (`#d03b3b`) is used as text color ("Error loading data." in the economy scene and on the references page) and is below 4.5:1 | 4.05:1 on `--page`, 3.62:1 on `--surface`, 3.93:1 on the body background `--color-bg` |
 | `design.md` section 6 asks for a focus ring of 2px `#3987e5`; the stylesheet already used `--color-focus` (`#ffc107`) and it was kept (11.9:1 on the page) | design decision |
 | `--page` (`#0d0d0d`) is not used by the stylesheet; the body background is `--color-bg` (`#111111`) | the text pairs were checked against both |
+
+## 5. Vercel Web Analytics and Speed Insights
+
+`web/src/runtime/VercelMetrics.tsx` renders `<Analytics />` (visit counter) and `<SpeedInsights />` in both entries
+(app and references page). They load from `/_vercel/insights/` on the same origin, so they exist only in a Vercel build:
+`vite.config.ts` sets `import.meta.env.VITE_ON_VERCEL` from the `VERCEL` build variable. Local runs and the e2e suite
+render nothing and request nothing (the e2e fixture fails on any failed or foreign request).
+
+To see data: in the Vercel project enable **Web Analytics** and **Speed Insights** (tabs of the project), then redeploy.
+A Vercel build adds about 1.6 KB gzip to each initial load (main 118,798 B, references 115,173 B), inside the budgets.

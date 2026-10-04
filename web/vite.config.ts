@@ -18,6 +18,8 @@ export function manualChunks(id: string): string | undefined {
 
 export default defineConfig({
   plugins: [react()],
+  // The analytics scripts exist only on Vercel (see src/runtime/VercelMetrics.tsx)
+  define: { 'import.meta.env.VITE_ON_VERCEL': JSON.stringify(process.env.VERCEL === '1') },
   build: {
     manifest: true,
     rollupOptions: { input: inputs, output: { manualChunks } }
