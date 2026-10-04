@@ -70,7 +70,7 @@ the right panel with the story docked, the bottom bar with the scene filters, pa
 | D5 | `view-3d-map` | Extruded province map in 3D, same selection as 2D |
 | D6 | `view-3d-rest` | Ribbons for lines and fan, blocks for the treemap, text alternative |
 | D7 | `andes` | Andes scene on the same dashboard (needs the terrain and `D-andes-1` to `D-andes-4`) |
-| D8 | `map-navigation` | Zoom (wheel, `+` and `-` buttons), pan and reset on the 2D maps; free orbit, pan, wider zoom and reset on every 3D view; brief `map-navigation.md` |
+| D8 (done) | `map-navigation` | Zoom (wheel, `+` and `-` buttons), pan and reset on the 2D maps; free orbit, pan, wider zoom and reset on every 3D view; brief `map-navigation.md` |
 | D9 | `fullscreen-viewer` | A "Pantalla grande" button on every view that opens a popup with the view large, a carousel over the scene's views, and at the top right the view name with the scene's filters and statistics; brief `fullscreen-viewer.md` |
 
 D8 and D9 were asked for by the human on 2026-10-04 (3D is the priority, `D-3d-6`): today the 2D maps have no zoom or pan (`roam: false`), the 3D views orbit and zoom with the wheel only, and there is no big view. They come before the 3D polish.

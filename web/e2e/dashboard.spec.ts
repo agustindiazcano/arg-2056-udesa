@@ -168,7 +168,9 @@ test.describe('dashboard', () => {
     await page.mouse.move(box.x + box.width / 2 + 120, box.y + box.height / 2 + 80, { steps: 5 });
     await page.mouse.up();
     await page.getByRole('button', { name: 'Restablecer vista' }).click();
+    // out of the way: no hover highlight, no focus ring
     await page.getByRole('heading', { level: 1 }).focus();
+    await page.mouse.move(2, 2);
     await expect.poll(async () => Buffer.compare(await map.screenshot(), before)).toBe(0);
     expect(errors).toEqual([]);
   });
