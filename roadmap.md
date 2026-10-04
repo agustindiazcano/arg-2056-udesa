@@ -44,7 +44,7 @@ Legend: **core** = needed for the submission; **opt** = optional, cut first if t
 
 | # | Slug | Class | Blocked by |
 |---|---|---|---|
-| 25 | `model-params` | core | answer to `D-res-3` (nine or ten value-added constants) |
+| 25 | `model-params` | core | nothing (`D-res-3` decided: ten value-added constants) |
 | 26 | `model-population-hardening` | core | nothing (audit F5, F8, F9) |
 | 27 | `population-age-contract` | core | nothing (decision `D-data-1`) |
 | 28 | `model-population-drivers` | core | 25, 26, 27 |
@@ -120,7 +120,7 @@ None. Every task of the roadmap has a brief. The UI redesign (F1 to F8 of the ap
 2. Download the DEM, register it, set the bounding boxes, run `terrain-bake`, verify against the Andes facts, commit the outputs.
 3. Choose the province geometry source, register it, fill `id_map`, run `build:geo`, review, commit the outputs.
 4. Write the real era list and the real story steps, with sources.
-5. Decide the open design decisions: `docs/design.md` (locale, typeface), `D-res-3`, `D-gdp-1`, `D-andes-1` to `D-andes-4`, `D-polish-1` to `D-polish-7`, and the assumptions A10, A13, A15, A16, A24, A26, A31, A32, A33.
+5. Decide the open design decisions: `docs/design.md` (locale, typeface), `D-gdp-1`, `D-andes-1` to `D-andes-4`, `D-polish-1` to `D-polish-7`, and the assumptions A10, A13, A15, A16, A24, A26, A31, A32, A33.
 6. Confirm the contest deadline and criteria; they unblock `docs-submission` and `demo-video`.
 7. Confirm the budgets in `web/budgets.json` and the data budget.
 8. Run the audit before merging model code and before submission.

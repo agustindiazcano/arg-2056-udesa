@@ -44,6 +44,12 @@ One entry per major design decision. Each entry: context, options, decision, con
 - Decision: omit it and fold it into TFP; adopt it only after a backtest shows an error that a mechanism change explains.
 - Consequences: two fewer parameters and no schooling series needed now.
 
+## D-res-3: Number of value-added constants `v_r`
+- Context: section 2.3 of `docs/model-design.md` said 9 constants but listed ten resource names (`lithium copper gold silver oil gas soy wheat corn other`), and the `forecast_output` contract has `resource = other` too.
+- Options: nine (leave `other` without a constant); ten (one per listed name, including `other`).
+- Decision (human, 2026-10-04): ten. `other` needs its own `v_r` for `R_t = sum_r v_r q_r` to cover every resource in the contract.
+- Consequences: resources have 20 entries (15 fixed, of which 10 data constants; 5 random) and the model 35 in all (23 fixed, 1 calibrated, 11 random); `2·11 + 23 + 1 = 46` fitted or assumed values. `model-params` transcribes 35 entries. The units of every `v_r` still depend on `D-gdp-1`.
+
 ## D-geo-1: National territory on the map
 - Context: the province build (`docs/geo.md`) needs a human decision on how the national territory is drawn; the source layer may include the Antarctic sector and the southern islands.
 - Options: continental provinces only; continental provinces plus the southern islands and the Antarctic sector in the same layer; continental provinces plus the Malvinas as a separate illustration.

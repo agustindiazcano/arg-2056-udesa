@@ -7,7 +7,7 @@ Every task below has a brief (`<slug>.md` in the repository root) and a prompt (
 1. [x] `data-pipeline`: scripts and processed datasets with `source` + `retrieved_at` (resources, economy, population, provinces).
 2. [x] `shell`: Vite app, tabs, Zustand store, keyboard map, scene state machine, 2D/3D toggle, province filter.
 3. [ ] **Model** (`docs/model-design.md` section 8; the 14 tasks replace the old `model-py`, `backtest` and `model-ts` lines). Briefs written.
-   1. [ ] `model-params`: BLOCKED, the human answers `D-res-3` (nine or ten value-added constants; the design lists ten names and counts nine)
+   1. [ ] `model-params`: READY (`D-res-3` decided: ten value-added constants, 35 entries in all)
    2. [ ] `model-population-hardening`: READY (audit F5, F8, F9)
    3. [ ] `population-age-contract`: READY
    4. [ ] `model-population-drivers`: BLOCKED by 1, 2, 3
@@ -82,7 +82,7 @@ Every task below has a brief (`<slug>.md` in the repository root) and a prompt (
 ## Blocked / questions
 
 - [ ] **Human: confirm the voice of the Spanish UI text.** F2b avoids the second person (infinitives and impersonal forms); say if voseo ("Elegí") or another register is wanted, it is one pass over the strings. Also read the new wording of the chart summaries and tooltips (`web/src/charts/builders/`, `web/src/content/labels.ts`).
-- [ ] `D-res-3` (blocks `model-params`): ten value-added constants `v_r` (recommended, includes `other`) or nine as the design counts.
+- [x] `D-res-3` (decided by the human, 2026-10-04): ten value-added constants `v_r`, including `other`. Applied in `docs/model-design.md` (20 resource entries, 35 in all) and recorded in `docs/decisions.md`.
 - [ ] `D-3d-1` to `D-3d-5` (block `presentation-3d`, see its section 5): Three.js bundled as the one 3D stack, first-load budget (poster first, or raise `chunk_max` on purpose), province geometry source and license (the PoC embeds 24 simplified provinces of unknown origin), typeface without Google fonts, tour length and scenes.
 - [ ] `D-andes-1` to `D-andes-4` (block `andes-integration`; `D-andes-1` is answered in practice by `D-3d-1`): renderer (Three.js bundled, MapLibre + deck.gl, or a mix), its dependency, the terrain as geometry source, the language of the scene.
 - [ ] `D-polish-1` to `D-polish-7` (block `polish`): UI language and locale, typeface, the real red arm, focus ring color, `--state-critical` as text, motion library (GSAP), scope of the pass.

@@ -248,7 +248,7 @@ Legend: DONE = merged. READY = can start now. BLOCKED = needs the human input na
 | 5 | vercel-analytics (PR #32): Vercel Web Analytics and Speed Insights | DONE | enable both in the Vercel project |
 | 6 | visits-archive (PR #33): weekly archive of the analytics and the Visits section | DONE | secrets, Actions permission and one manual run (`docs/visits.md`) |
 | | **Model (order of `docs/model-design.md` section 8)** | | |
-| 7 | model-params | BLOCKED | answer `D-res-3` (nine or ten value-added constants) |
+| 7 | model-params | READY | (`D-res-3` decided: ten value-added constants, 35 entries) |
 | 8 | model-population-hardening | READY | |
 | 9 | population-age-contract | READY | |
 | 10 | model-population-drivers | BLOCKED | model-params, model-population-hardening, population-age-contract merged |
@@ -1017,7 +1017,7 @@ When finished: overwrite LASTCONTEXT.md, update PENDING.md, and write a PR descr
  
 ## model-params
  
-Prerequisite: `model-design` merged. The human answers `D-res-3` (nine or ten value-added constants) before it starts.
+Prerequisite: `model-design` merged. `D-res-3` is decided (human, 2026-10-04): ten value-added constants, 35 entries in all.
  
 ```
 You are working in the repository `argentina-2056`.
@@ -1033,7 +1033,7 @@ Then execute the task described in model-params.md exactly.
  
 Rules:
 - Create branch `task/model-params`. Never touch `main`, never merge, never push to `main`.
-- If model-design is not merged into main, stop and tell me. If `D-res-3` is not answered in the brief's open point, stop and ask.
+- If model-design is not merged into main, stop and tell me. `D-res-3` is decided (ten): apply it as the brief says.
 - Strict TDD: commit each failing test first, then the code that makes it pass.
 - Follow the brief literally. Copy ids, ranges, units and roles from docs/model-design.md, not from memory. Never invent a value, a range or a source_id: an entry the design marks needs_source has `value: null`.
 - No new dependency. No model equations, no random draws.
