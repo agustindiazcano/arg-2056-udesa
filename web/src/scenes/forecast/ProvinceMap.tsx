@@ -61,8 +61,10 @@ interface ProvinceMapProps {
   indicatorLabel: string;
   metric: MapMetric;
   selectedId: ProvinceId | null;
-  scenario: Scenario;
+  scenario?: Scenario;
   year: number;
+  /** Observed data: no p10-p90 range and no scenario in the tooltip and the table. */
+  observed?: boolean;
   onSelect: (id: ProvinceId | null) => void;
 }
 
@@ -77,6 +79,7 @@ export function ProvinceMap({
   selectedId,
   scenario,
   year,
+  observed = false,
   onSelect
 }: ProvinceMapProps) {
   const [asTable, setAsTable] = useState(false);
@@ -91,9 +94,9 @@ export function ProvinceMap({
     () =>
       buildProvinceMap(
         { geo, values, centroids, smallIds, unit, indicatorLabel },
-        { metric, selectedId, scenario, year }
+        { metric, selectedId, scenario, year, observed }
       ),
-    [geo, values, centroids, smallIds, unit, indicatorLabel, metric, selectedId, scenario, year]
+    [geo, values, centroids, smallIds, unit, indicatorLabel, metric, selectedId, scenario, year, observed]
   );
 
   const handleClick = (params: ChartClickParams) => {
@@ -141,14 +144,22 @@ export function ProvinceMap({
         {asTable ? (
           <DataTable
             caption="Mapa de provincias"
-            columns={[
-              { key: 'rank', header: 'Puesto' },
-              { key: 'province', header: 'Provincia' },
-              { key: 'p10', header: 'p10' },
-              { key: 'p50', header: 'p50' },
-              { key: 'p90', header: 'p90' },
-              { key: 'plotted', header: metric === 'level' ? 'Valor graficado (p50)' : 'Valor graficado (cambio por año)' }
-            ]}
+            columns={
+              observed
+                ? [
+                    { key: 'rank', header: 'Puesto' },
+                    { key: 'province', header: 'Provincia' },
+                    { key: 'plotted', header: 'Valor' }
+                  ]
+                : [
+                    { key: 'rank', header: 'Puesto' },
+                    { key: 'province', header: 'Provincia' },
+                    { key: 'p10', header: 'p10' },
+                    { key: 'p50', header: 'p50' },
+                    { key: 'p90', header: 'p90' },
+                    { key: 'plotted', header: metric === 'level' ? 'Valor graficado (p50)' : 'Valor graficado (cambio por año)' }
+                  ]
+            }
             data={rows}
           />
         ) : (
