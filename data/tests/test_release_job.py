@@ -7,7 +7,7 @@ CI = (ROOT / ".github" / "workflows" / "ci.yml").read_text(encoding="utf-8")
 
 def job(name):
     """The text of one top-level job of ci.yml (from its key to the next job or the end of the file)."""
-    match = re.search(rf"^  {re.escape(name)}:\n(.*?)(?=^  [A-Za-z0-9_-]+:\n|^  # |\Z)", CI, re.S | re.M)
+    match = re.search(rf"^  {re.escape(name)}:\n(.*?)(?=^  [A-Za-z0-9_-]+:\n|^  # |\Z)", CI, re.DOTALL | re.MULTILINE)
     assert match, f"job {name} not found in ci.yml"
     return match.group(1)
 

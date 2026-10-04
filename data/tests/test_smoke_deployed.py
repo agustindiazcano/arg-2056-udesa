@@ -1,4 +1,5 @@
 import gzip
+import io
 import json
 import subprocess
 import sys
@@ -8,6 +9,10 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 SCRIPT = ROOT / "scripts" / "smoke_deployed.py"
+sys.path.insert(0, str(ROOT / "scripts"))
+
+import smoke_deployed  # the scripts folder is added to the path above
+
 CONFIG = json.loads((ROOT / "web" / "headers.config.json").read_text(encoding="utf-8"))
 
 SECURITY = CONFIG["rules"][0]["headers"]  # the rule for /*
@@ -29,8 +34,8 @@ HTML = (
     "<meta name='twitter:card' content='summary_large_image' />"
     "<script type='module' src='/assets/app-1.js'></script>"
     "<link rel='stylesheet' href='/assets/app-1.css' />"
-    "</head><body></body></html>"
-).encode()
+    "</head><body><!-- " + "padding " * 150 + "--></body></html>"
+).encode("ascii")
 
 
 def good_site():
@@ -68,7 +73,7 @@ class Site:
         site = self
 
         class Handler(BaseHTTPRequestHandler):
-            def do_GET(self):  # noqa: N802 (the name is fixed by http.server)
+            def do_GET(self):
                 path = self.path.split("?")[0]
                 site.requests.append(self.path)
                 entry = site.table.get(path)
@@ -111,10 +116,16 @@ class Site:
         self.server.server_close()
 
 
+class Result:
+    def __init__(self, returncode, stdout, stderr):
+        self.returncode, self.stdout, self.stderr = returncode, stdout, stderr
+
+
 def run(url, *extra):
-    return subprocess.run(
-        [sys.executable, str(SCRIPT), url, "--og-from-base", *extra], capture_output=True, text=True, check=False
-    )
+    """Runs the script in this process (it is the same code, and 17 subprocesses would be slow)."""
+    out, err = io.StringIO(), io.StringIO()
+    code = smoke_deployed.main([url, "--og-from-base", *extra], out=out.write, err=err.write)
+    return Result(code, out.getvalue(), err.getvalue())
 
 
 def lines(result):
@@ -257,10 +268,15 @@ def test_expect_real_data_passes_on_real_data():
     assert "PASS real-data references.json" in lines(result)
 
 
-def test_a_http_url_that_is_not_localhost_fails_the_scheme_check():
+def test_plain_http_on_a_host_that_is_not_localhost_fails_the_scheme_check_before_anything_is_fetched():
+    result = run("http://smoke-test.invalid")
+    assert "FAIL scheme must be https unless the host is localhost, got http" in lines(result)
+    assert result.returncode == 2  # and the host does not exist
+
+
+def test_plain_http_is_allowed_on_localhost():
     with Site(good_site()) as site:
-        result = run(site.url.replace("127.0.0.1", "localhost"))
-    assert result.returncode == 0  # localhost is allowed over http
+        result = run(site.url)
     assert "PASS scheme" in lines(result)
 
 
