@@ -5,7 +5,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "scripts"))
 
-import sync_visits  # noqa: E402  (the scripts folder is added to the path above)
+import sync_visits  # the scripts folder is added to the path above
 
 TODAY = "2026-10-10"
 ENV = {"VERCEL_TOKEN": "tok_secret_123", "VERCEL_PROJECT_ID": "prj_1", "VERCEL_TEAM_ID": "team_1"}
@@ -163,7 +163,7 @@ def test_a_second_run_keeps_old_days_and_overwrites_the_window(tmp_path):
 def test_a_gap_between_the_archive_and_the_window_is_reported_and_still_exits_0(tmp_path):
     archive = tmp_path / "visits.json"
     archive.write_text(json.dumps({"source": "x", "retrieved_at": "2026-01-01", "days": {"2026-08-01": {}}}), encoding="utf-8")
-    code, _, out, err = run(tmp_path, FakeHttp())
+    code, _, _out, err = run(tmp_path, FakeHttp())
     assert code == 0
     assert "gap" in err
     assert "2026-08-02" in err  # first missing day
@@ -228,7 +228,7 @@ def test_a_failure_halfway_leaves_an_existing_archive_untouched(tmp_path):
     archive = tmp_path / "visits.json"
     original = json.dumps({"source": "x", "retrieved_at": "2026-10-03", "days": {"2026-08-01": {}}})
     archive.write_text(original, encoding="utf-8")
-    code, _, _, err = run(tmp_path, FakeHttp(status=500))
+    code, _, _, _err = run(tmp_path, FakeHttp(status=500))
     assert code == 1
     assert archive.read_text(encoding="utf-8") == original
 
