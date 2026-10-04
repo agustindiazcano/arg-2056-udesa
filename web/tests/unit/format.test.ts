@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { APP_LOCALE, formatDate, formatPercent, formatValue, ordinal } from '../../src/charts/format.js';
+import { APP_LOCALE, formatDate, formatDecimal, formatNumber, formatPercent, formatValue, ordinal } from '../../src/charts/format.js';
 
 describe('APP_LOCALE', () => {
   it('is Argentine Spanish', () => {
@@ -33,6 +33,23 @@ describe('ordinal', () => {
     expect(ordinal(1)).toBe('1.º');
     expect(ordinal(2)).toBe('2.º');
     expect(ordinal(11)).toBe('11.º');
+  });
+});
+
+describe('formatNumber', () => {
+  it('fixes the number of decimals and uses the decimal comma and the thousands dot', () => {
+    expect(formatNumber(1.2249)).toBe('1,2');
+    expect(formatNumber(1.2249, 2)).toBe('1,22');
+    expect(formatNumber(1082.4, 1)).toBe('1.082,4');
+    expect(formatNumber(14, 1)).toBe('14,0');
+  });
+});
+
+describe('formatDecimal', () => {
+  it('shows up to two decimals and none when the number is whole', () => {
+    expect(formatDecimal(7)).toBe('7');
+    expect(formatDecimal(5.5)).toBe('5,5');
+    expect(formatDecimal(0.125)).toBe('0,13');
   });
 });
 

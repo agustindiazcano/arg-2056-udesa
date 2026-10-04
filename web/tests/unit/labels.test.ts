@@ -2,6 +2,8 @@ import { describe, it, expect } from 'vitest';
 import {
   indicatorLabel,
   indicatorSentence,
+  positionLabel,
+  positionPhrase,
   projectStatusLabel,
   resourceLabel,
   scenarioLabel
@@ -89,5 +91,20 @@ describe('indicatorSentence', () => {
     expect(indicatorSentence('population')).toBe('población');
     expect(indicatorSentence('resource_production', 'gold')).toBe('producción de recursos (oro)');
     expect(indicatorSentence('resource_production')).toBe('producción de recursos');
+  });
+});
+
+describe('positionLabel and positionPhrase', () => {
+  it('say where a value sits against the model range, as a label and inside a sentence', () => {
+    expect((['below', 'inside', 'above'] as const).map(positionLabel)).toEqual([
+      'Por debajo del rango',
+      'Dentro del rango',
+      'Por encima del rango'
+    ]);
+    expect((['below', 'inside', 'above'] as const).map(positionPhrase)).toEqual([
+      'por debajo del rango del modelo',
+      'dentro del rango del modelo',
+      'por encima del rango del modelo'
+    ]);
   });
 });

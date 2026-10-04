@@ -58,7 +58,7 @@ describe('basePoint', () => {
   it('uses the series of the requested scenario', () => {
     const r = basePoint(full, { scenario: 'optimistic' });
     expect(r.base).toBeNull(); // no optimistic population series in the fixture
-    expect(r.reason).toBe('No population series for AR in the optimistic scenario');
+    expect(r.reason).toBe('No hay serie de población para AR en el escenario optimista');
   });
 
   it('returns null with a reason when GDP per capita is missing', () => {
@@ -201,8 +201,8 @@ describe('summaryText', () => {
     expect(summaryText({ ...q, position: 'above' })).toBe(
       'At 2.5% per-capita growth, GDP per capita in 2056 is 2.1 times its 2026 level and sits above the model range'
     );
-    expect(summaryText({ ...q, position: 'inside' })).toContain('and sits inside the model range');
-    expect(summaryText({ ...q, position: 'below' })).toContain('and sits below the model range');
+    expect(summaryText({ ...q, position: 'inside' })).toContain('y se ubica dentro del rango del modelo');
+    expect(summaryText({ ...q, position: 'below' })).toContain('y se ubica por debajo del rango del modelo');
   });
   it('says the range is not available when the position is null', () => {
     expect(summaryText({ ...q, position: null })).toBe(
@@ -210,6 +210,6 @@ describe('summaryText', () => {
     );
   });
   it('never calls the visitor path a forecast', () => {
-    expect(summaryText({ ...q, position: 'above' }).toLowerCase()).not.toContain('forecast');
+    expect(summaryText({ ...q, position: 'above' }).toLowerCase()).not.toContain('pronóstico');
   });
 });

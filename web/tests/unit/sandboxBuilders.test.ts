@@ -45,7 +45,7 @@ describe('buildSandboxPath', () => {
     const visitor = line(option, 'your assumptions');
     expect(visitor.lineStyle).toMatchObject({ color: tokens.ink, width: 3 });
     expect(visitor.data).toEqual([100, 105, 110, 116]);
-    expect(visitor.endLabel).toMatchObject({ show: true, formatter: 'your assumptions' });
+    expect(visitor.endLabel).toMatchObject({ show: true, formatter: 'supuestos elegidos' });
   });
 
   it('draws the model range as a transparent base plus a stacked span with BAND_ALPHA, labeled directly', () => {
@@ -55,17 +55,17 @@ describe('buildSandboxPath', () => {
     expect(stacked[0]!.data).toEqual([80, 85, 70, null]);
     expect(stacked[0]!.lineStyle!.opacity).toBe(0);
     expect(stacked[0]!.areaStyle).toBeUndefined();
-    expect(stacked[1]!.name).toBe('model range (all scenarios, p10 to p90)');
+    expect(stacked[1]!.name).toBe('rango del modelo (todos los escenarios, p10 a p90)');
     expect(stacked[1]!.data).toEqual([40, 55, 65, null]); // upper - lower
     expect(stacked[1]!.areaStyle).toEqual({ color: tokens.blue, opacity: BAND_ALPHA });
-    expect(stacked[1]!.endLabel!.formatter).toBe('model range (all scenarios, p10 to p90)');
+    expect(stacked[1]!.endLabel!.formatter).toBe('rango del modelo (todos los escenarios, p10 a p90)');
   });
 
   it('draws the model central path as a dashed muted line labeled "model, expected"', () => {
-    const expected = line(path().option, 'model, expected');
+    const expected = line(path().option, 'modelo, esperado');
     expect(expected.lineStyle).toMatchObject({ color: tokens.muted, type: 'dashed' });
     expect(expected.data).toEqual([100, 110, 121, null]);
-    expect(expected.endLabel!.formatter).toBe('model, expected');
+    expect(expected.endLabel!.formatter).toBe('modelo, esperado');
   });
 
   it('keeps null bounds as gaps with connectNulls false and counts them as excluded', () => {
@@ -76,7 +76,7 @@ describe('buildSandboxPath', () => {
 
   it('marks the playhead year and omits the marker when the year is not in the data', () => {
     const marker = (o: Option) => line(o, 'markers').markLine?.data ?? [];
-    expect(marker(path({ year: 2028 }).option)).toEqual([expect.objectContaining({ xAxis: '2028', name: 'Year 2028' })]);
+    expect(marker(path({ year: 2028 }).option)).toEqual([expect.objectContaining({ xAxis: '2028', name: 'Año 2028' })]);
     expect(marker(path({ year: 1900 }).option)).toEqual([]);
   });
 
@@ -93,9 +93,9 @@ describe('buildSandboxPath', () => {
       '2029<br/>Your assumptions: 116 USD<br/>Model range: no data<br/>Position: no data'
     );
     const above: PathView = { ...view, visitor: [100, 150, 110, 116] };
-    expect(path({ view: above }).option.tooltip.formatter([{ dataIndex: 1 }])).toContain('Position: above');
+    expect(path({ view: above }).option.tooltip.formatter([{ dataIndex: 1 }])).toContain('Posición: por encima del rango');
     const below: PathView = { ...view, visitor: [100, 105, 60, 116] };
-    expect(path({ view: below }).option.tooltip.formatter([{ dataIndex: 2 }])).toContain('Position: below');
+    expect(path({ view: below }).option.tooltip.formatter([{ dataIndex: 2 }])).toContain('Posición: por debajo del rango');
   });
 
   it('summarises the multiple and the position at the last year', () => {
@@ -110,12 +110,12 @@ describe('buildSandboxPath', () => {
 
   it('does not call the visitor path a forecast anywhere', () => {
     const text = JSON.stringify(path().option) + path().summary;
-    expect(text.toLowerCase()).not.toContain('forecast');
+    expect(text.toLowerCase()).not.toContain('pronóstico');
   });
 
   it('copes with an empty view', () => {
     const empty: PathView = { years: [], visitor: [], lower: [], upper: [], expected: [], unit: '' };
-    expect(path({ view: empty }).summary).toBe('No path to show.');
+    expect(path({ view: empty }).summary).toBe('Sin trayectoria para mostrar.');
   });
 });
 
@@ -125,8 +125,8 @@ function curve(ratePct: number) {
 }
 
 describe('buildDoublingCurve', () => {
-  const exact = (o: Option) => line(o, 'exact').data as Array<[number, number]>;
-  const approx = (o: Option) => line(o, 'rule of 70').data as Array<[number, number]>;
+  const exact = (o: Option) => line(o, 'exacto').data as Array<[number, number]>;
+  const approx = (o: Option) => line(o, 'regla del 70').data as Array<[number, number]>;
   const at = (data: Array<[number, number]>, rate: number) => data.find((p) => p[0] === rate)![1];
 
   it('plots rates from 0.5 to 12 in steps of 0.5 for both lines', () => {
@@ -148,13 +148,13 @@ describe('buildDoublingCurve', () => {
   it('draws the exact line in ink and the rule of 70 dashed in muted, with direct labels and no legend', () => {
     const { option } = curve(7);
     expect(option.legend).toBeUndefined();
-    expect(line(option, 'exact').lineStyle).toMatchObject({ color: tokens.ink });
-    expect(line(option, 'rule of 70').lineStyle).toMatchObject({ color: tokens.muted, type: 'dashed' });
-    expect(line(option, 'exact').endLabel!.formatter).toBe('exact');
-    expect(line(option, 'rule of 70').endLabel!.formatter).toBe('rule of 70');
+    expect(line(option, 'exacto').lineStyle).toMatchObject({ color: tokens.ink });
+    expect(line(option, 'regla del 70').lineStyle).toMatchObject({ color: tokens.muted, type: 'dashed' });
+    expect(line(option, 'exacto').endLabel!.formatter).toBe('exacto');
+    expect(line(option, 'regla del 70').endLabel!.formatter).toBe('regla del 70');
     expect(option.xAxis.type).toBe('value');
-    expect(option.xAxis.name).toBe('Growth rate (% per year)');
-    expect(option.yAxis.name).toBe('Years to double');
+    expect(option.xAxis.name).toBe('Tasa de crecimiento (% por año)');
+    expect(option.yAxis.name).toBe('Años para duplicar');
   });
 
   it('marks the rate only when it is inside the plotted range', () => {
@@ -167,18 +167,18 @@ describe('buildDoublingCurve', () => {
 
   it('shows both values in the tooltip', () => {
     const text = curve(7).option.tooltip.formatter([{ value: [7, 10.244768] }]);
-    expect(text).toBe('7% per year<br/>exact: 10.2 years<br/>rule of 70: 10.0 years');
+    expect(text).toBe('7% por año<br/>exacto: 10,2 años<br/>regla del 70: 10,0 años');
   });
 
   it('summarises the exact time, the rule of 70 and their difference', () => {
     expect(curve(7).summary).toBe(
-      'At 7.0% growth the exact doubling time is 10.2 years and the rule of 70 gives 10.0 years (error -2.4%)'
+      'A 7,0% de crecimiento el tiempo de duplicación exacto es 10,2 años y la regla del 70 da 10,0 años (error -2,4%)'
     );
-    expect(curve(1).summary).toContain('(error +0.5%)');
+    expect(curve(1).summary).toContain('(error +0,5%)');
   });
 
   it('says the level never doubles when the rate is not positive', () => {
-    expect(curve(0).summary).toBe('With a growth rate of 0.0% the level never doubles');
-    expect(curve(-2).summary).toBe('With a growth rate of -2.0% the level never doubles');
+    expect(curve(0).summary).toBe('Con una tasa de crecimiento de 0,0% el nivel nunca se duplica');
+    expect(curve(-2).summary).toBe('Con una tasa de crecimiento de -2,0% el nivel nunca se duplica');
   });
 });
