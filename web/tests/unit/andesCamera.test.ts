@@ -21,22 +21,22 @@ describe('overviewPose', () => {
 describe('battlePose', () => {
   const event = { lon: -69.6, lat: -32.5558, elevation_m: 3100 };
 
-  it('looks at the event, at its altitude, closer than the overview', () => {
+  it('looks at the event on the terrain (not in the air or under it), closer than the overview', () => {
     const p = battlePose(scale, terrain, event);
-    const at = toScene(scale, -69.6, -32.5558, 3100);
+    const ground = sampleElevation(terrain, -69.6, -32.5558)!;
+    const at = toScene(scale, -69.6, -32.5558, ground);
     expect([p.x, p.y, p.z]).toEqual([at.x, at.y, at.z]);
     expect(p.radius).toBeLessThan(overviewPose(scale).radius);
   });
 
-  it('takes the altitude from the terrain when the event has none, never 0', () => {
-    const p = battlePose(scale, terrain, { ...event, elevation_m: null });
-    const ground = sampleElevation(terrain, -69.6, -32.5558)!;
-    expect(p.y).toBeCloseTo(toScene(scale, -69.6, -32.5558, ground).y, 6);
-    expect(p.y).toBeGreaterThan(0);
+  it('uses the altitude of the event when the point is outside the terrain', () => {
+    const p = battlePose(scale, terrain, { lon: 10, lat: 10, elevation_m: 3100 });
+    expect(p.y).toBeCloseTo(toScene(scale, 10, 10, 3100).y, 6);
   });
 
-  it('uses the ground level of the terrain minimum when the point is outside the terrain', () => {
+  it('falls back to the lowest point of the terrain, never 0, with no altitude anywhere', () => {
     const p = battlePose(scale, terrain, { lon: 10, lat: 10, elevation_m: null });
-    expect(Number.isFinite(p.y)).toBe(true);
+    expect(p.y).toBeCloseTo(toScene(scale, 10, 10, terrain.meta.elevation_min_m).y, 6);
+    expect(p.y).toBeGreaterThan(0);
   });
 });
