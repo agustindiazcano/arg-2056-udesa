@@ -23,15 +23,15 @@ describe('lazy scene loading', () => {
 
   it('shows the visible text "Loading scene" while the scene module loads, then the scene', async () => {
     render(<SceneHost scene="andes" />);
-    expect(screen.getByText('Loading scene')).toBeTruthy();
+    expect(screen.getByText('Cargando escena')).toBeTruthy();
     expect(await screen.findByText('andes placeholder')).toBeTruthy();
-    expect(screen.queryByText('Loading scene')).toBeNull();
+    expect(screen.queryByText('Cargando escena')).toBeNull();
   });
 
   it('announces the fallback as a polite status', () => {
     render(<SceneHost scene="ai-revolution" />);
     const status = screen.getByRole('status');
-    expect(status.textContent).toBe('Loading scene');
+    expect(status.textContent).toBe('Cargando escena');
     expect(status.getAttribute('aria-live')).toBe('polite');
   });
 });

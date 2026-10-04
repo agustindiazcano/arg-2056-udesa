@@ -10,7 +10,7 @@ test.describe('keyboard', () => {
 
   test('ArrowRight and ArrowLeft change the scene', async ({ page }) => {
     await page.keyboard.press('ArrowRight');
-    await expect(page.getByRole('tab', { name: 'Economy' })).toHaveAttribute('aria-selected', 'true');
+    await expect(page.getByRole('tab', { name: 'Economía' })).toHaveAttribute('aria-selected', 'true');
     await page.keyboard.press('ArrowLeft');
     await expect(page.getByRole('tab', { name: 'Andes' })).toHaveAttribute('aria-selected', 'true');
     // clamped at the first scene
@@ -19,7 +19,8 @@ test.describe('keyboard', () => {
   });
 
   test('+ and - move the speed to the neighbor value in SPEEDS', async ({ page }) => {
-    const speed = (value: number) => page.getByText(`Speed: ${value}x`, { exact: true });
+    const format = new Intl.NumberFormat('es-AR', { maximumFractionDigits: 2 });
+    const speed = (value: number) => page.getByRole('group', { name: 'Velocidad' }).getByText(`${format.format(value)}×`, { exact: true });
     const start = SPEEDS.indexOf(1);
     await expect(speed(1)).toBeVisible();
     await page.keyboard.press('+');
@@ -31,12 +32,11 @@ test.describe('keyboard', () => {
   });
 
   test('Space toggles the playing indicator', async ({ page }) => {
-    const toggle = page.getByRole('button', { name: 'Play or Pause' });
-    await expect(toggle).toHaveText('Play');
+    await expect(page.getByRole('button', { name: 'Reproducir' })).toBeVisible();
     await page.keyboard.press('Space');
-    await expect(toggle).toHaveText('Pause');
+    await expect(page.getByRole('button', { name: 'Pausar' })).toBeVisible();
     await page.keyboard.press('Space');
-    await expect(toggle).toHaveText('Play');
+    await expect(page.getByRole('button', { name: 'Reproducir' })).toBeVisible();
   });
 
   test('in the forecast scene 1, 2 and 3 set the scenario shown in the HUD', async ({ page }) => {
@@ -45,11 +45,11 @@ test.describe('keyboard', () => {
     await expect(page.getByRole('heading', { name: 'Forecast 2056', level: 1 })).toBeVisible();
 
     await page.keyboard.press('2');
-    await expect(page.getByText('Scenario: expected', { exact: true })).toBeVisible();
+    await expect(page.getByRole('group', { name: 'Escenario' }).getByRole('button', { name: 'Esperado' })).toHaveAttribute('aria-pressed', 'true');
     await page.keyboard.press('1');
-    await expect(page.getByText('Scenario: pessimistic', { exact: true })).toBeVisible();
+    await expect(page.getByRole('group', { name: 'Escenario' }).getByRole('button', { name: 'Pesimista' })).toHaveAttribute('aria-pressed', 'true');
     await page.keyboard.press('3');
-    await expect(page.getByText('Scenario: optimistic', { exact: true })).toBeVisible();
+    await expect(page.getByRole('group', { name: 'Escenario' }).getByRole('button', { name: 'Optimista' })).toHaveAttribute('aria-pressed', 'true');
   });
 
   test('p opens the province filter and Escape closes it', async ({ page }) => {
@@ -76,19 +76,19 @@ test.describe('keyboard', () => {
   });
 
   test('a slider keeps the arrow keys: the value changes and the scene does not', async ({ page }) => {
-    await page.getByRole('tab', { name: 'Sandbox' }).click();
+    await page.getByRole('tab', { name: 'Simulador' }).click();
     await expect(page.getByRole('heading', { name: 'Sandbox', level: 1 })).toBeVisible();
 
     const year = page.getByTestId('hud-year');
     const yearBefore = await year.getAttribute('data-value');
 
-    const slider = page.getByRole('slider').first();
+    const slider = page.getByTestId('scene').getByRole('slider').first();
     await slider.focus();
     const before = await slider.inputValue();
     await page.keyboard.press('ArrowRight');
 
     await expect.poll(() => slider.inputValue()).not.toBe(before);
-    await expect(page.getByRole('tab', { name: 'Sandbox' })).toHaveAttribute('aria-selected', 'true');
+    await expect(page.getByRole('tab', { name: 'Simulador' })).toHaveAttribute('aria-selected', 'true');
     await expect(year).toHaveAttribute('data-value', yearBefore ?? '');
   });
 });

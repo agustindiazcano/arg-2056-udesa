@@ -203,7 +203,7 @@ export default function Scene() {
             />
           </div>
 
-          <div style={{ display: 'flex', gap: 'var(--space-lg)', flex: 1, minHeight: 0 }}>
+          <div style={{ display: 'flex', gap: 'var(--space-lg)', flex: '1 0 auto' }}>
             <div style={{ flex: 2, display: 'flex', flexDirection: 'column', minHeight: '320px' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 'var(--space-sm)' }}>
                 <span>Long run (era bands are placeholders)</span>

@@ -39,7 +39,7 @@ test.describe('axe', () => {
 
   test('the scene with the table view on has no serious or critical violation', async ({ page }) => {
     await page.goto('/');
-    await page.getByRole('tab', { name: 'Economy' }).click();
+    await page.getByRole('tab', { name: 'Economía' }).click();
     await page.getByTestId('scene').getByRole('button', { name: 'Table view' }).first().click();
     await expect(page.getByTestId('scene').getByRole('table').first()).toBeVisible();
     expect(await seriousViolations(new AxeBuilder({ page }))).toEqual([]);
@@ -47,8 +47,8 @@ test.describe('axe', () => {
 
   test('the province filter open has no serious or critical violation', async ({ page }) => {
     await page.goto('/');
-    await page.getByRole('button', { name: 'Filter by Province' }).click();
-    await expect(page.getByRole('dialog', { name: 'Filter by province' })).toBeVisible();
+    await page.getByRole('button', { name: /^Provincia:/ }).click();
+    await expect(page.getByRole('dialog', { name: 'Filtrar por provincia' })).toBeVisible();
     expect(await seriousViolations(new AxeBuilder({ page }))).toEqual([]);
   });
 

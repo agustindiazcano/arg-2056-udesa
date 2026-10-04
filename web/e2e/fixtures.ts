@@ -46,11 +46,11 @@ export { expect };
 /** The scenes in tab order with the visible tab label, and what proves the scene is shown. */
 export const SCENE_TABS = [
   { scene: 'andes', tab: 'Andes', heading: null, placeholder: 'andes placeholder' },
-  { scene: 'economy', tab: 'Economy', heading: 'Argentina in the long run', placeholder: null },
-  { scene: 'resources', tab: 'Resources', heading: 'Natural Resources', placeholder: null },
-  { scene: 'forecast', tab: 'Forecast 2056', heading: 'Forecast 2056', placeholder: null },
-  { scene: 'ai-revolution', tab: 'AI Revolution', heading: null, placeholder: 'ai-revolution placeholder' },
-  { scene: 'sandbox', tab: 'Sandbox', heading: 'Sandbox', placeholder: null }
+  { scene: 'economy', tab: 'Economía', heading: 'Argentina in the long run', placeholder: null },
+  { scene: 'resources', tab: 'Recursos', heading: 'Natural Resources', placeholder: null },
+  { scene: 'forecast', tab: 'Pronóstico 2056', heading: 'Forecast 2056', placeholder: null },
+  { scene: 'ai-revolution', tab: 'Revolución IA', heading: null, placeholder: 'ai-revolution placeholder' },
+  { scene: 'sandbox', tab: 'Simulador', heading: 'Sandbox', placeholder: null }
 ] as const;
 
 export type SceneTab = (typeof SCENE_TABS)[number];

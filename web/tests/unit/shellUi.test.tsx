@@ -162,11 +162,14 @@ describe('control bar', () => {
   });
 });
 
-describe('badge and fallbacks', () => {
-  it('the loading text is in Spanish', async () => {
-    const { SceneHost } = await import('../../src/app/SceneHost');
-    render(<SceneHost scene="andes" />);
-    expect(screen.getByRole('status').textContent).toBe('Cargando escena');
+describe('badge', () => {
+  it('says the data are illustrative, in Spanish, once the data are loaded as mock', async () => {
+    const { MockBadge } = await import('../../src/app/MockBadge');
+    render(<MockBadge source="MOCK" />);
+    expect(screen.getByText('Datos ilustrativos')).toBeTruthy();
+    cleanup();
+    const { container } = render(<MockBadge source="Secretaría de Energía" />);
+    expect(container.textContent).toBe('');
   });
 });
 

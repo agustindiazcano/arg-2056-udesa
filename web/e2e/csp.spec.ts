@@ -85,11 +85,11 @@ test.describe('under the Content-Security-Policy', () => {
   test('a table view and the province filter work under the policy too', async ({ page }) => {
     const problems = watch(page);
     await page.goto(server.url);
-    await page.getByRole('tab', { name: 'Economy' }).click();
+    await page.getByRole('tab', { name: 'Economía' }).click();
     await page.getByTestId('scene').getByRole('button', { name: 'Table view' }).first().click();
     await expect(page.getByTestId('scene').getByRole('table').first()).toBeVisible();
-    await page.getByRole('button', { name: 'Filter by Province' }).click();
-    await expect(page.getByRole('dialog', { name: 'Filter by province' })).toBeVisible();
+    await page.getByRole('button', { name: /^Provincia:/ }).click();
+    await expect(page.getByRole('dialog', { name: 'Filtrar por provincia' })).toBeVisible();
     expect(await violations(page)).toEqual([]);
     expect(problems).toEqual([]);
   });

@@ -18,7 +18,7 @@ test.describe('references page', () => {
 
   test('the shell footer link opens it', async ({ page }) => {
     await page.goto('/');
-    await page.getByRole('link', { name: 'Sources and methods' }).click();
+    await page.getByRole('link', { name: 'Fuentes y métodos' }).click();
     await expect(page).toHaveURL(/\/references\.html$/);
     await expect(page.getByRole('heading', { name: 'Sources and attributions', level: 1 })).toBeVisible();
   });

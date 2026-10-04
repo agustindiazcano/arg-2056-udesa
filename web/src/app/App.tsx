@@ -2,10 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { useStore } from '../state/store';
 import { useKeyboard } from '../state/useKeyboard';
 import { useTicker } from '../state/useTicker';
-import { TabBar } from './TabBar';
 import { Hud } from './Hud';
 import { ProvinceFilter } from './ProvinceFilter';
-import { MockBadge } from './MockBadge';
+import { Header } from './Header';
 import { StoryCaption } from '../story/StoryCaption';
 import { StepRunner } from '../story/StepRunner';
 import { SceneHost } from './SceneHost';
@@ -40,11 +39,13 @@ export function App() {
       </div>
       
       <div id="overlay" style={{ pointerEvents: 'none' }}>
-        <div style={{ pointerEvents: 'auto' }}>
-          <a className="skip-link" href="#main">Skip to main content</a>
-          <TabBar />
-          <Hud />
-          <ProvinceFilter />
+        <div className="chrome">
+          <a className="skip-link" href="#main">Saltar al contenido principal</a>
+          <Header mockSource={forecastSource} />
+          <div className="controls-wrap">
+            <Hud />
+            <ProvinceFilter />
+          </div>
           <QualityDebugLine />
         </div>
         
@@ -52,8 +53,6 @@ export function App() {
           <SceneHost scene={scene} />
         </main>
         
-        {forecastSource && <MockBadge source={forecastSource} />}
-
         <StoryCaption />
         <StepRunner />
       </div>

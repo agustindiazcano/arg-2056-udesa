@@ -4,15 +4,15 @@ import path from 'node:path';
 import React from 'react';
 import { render, screen, cleanup } from '@testing-library/react';
 import { describe, it, expect, afterEach } from 'vitest';
-import { Hud } from '../../src/app/Hud.js';
+import { Header } from '../../src/app/Header.js';
 import { inputs } from '../../vite.config.js';
 
 afterEach(cleanup);
 
-describe('shell footer link to the References page', () => {
+describe('shell link to the References page', () => {
   it('is present, points to references.html and is keyboard focusable', () => {
-    render(<Hud />);
-    const link = screen.getByRole('link', { name: 'Sources and methods' });
+    render(<Header mockSource={null} />);
+    const link = screen.getByRole('link', { name: 'Fuentes y métodos' });
     expect(link.getAttribute('href')).toBe('references.html');
     expect(link.getAttribute('tabindex')).not.toBe('-1');
     link.focus();
@@ -20,8 +20,8 @@ describe('shell footer link to the References page', () => {
   });
 
   it('opens in the same tab', () => {
-    render(<Hud />);
-    expect(screen.getByRole('link', { name: 'Sources and methods' }).getAttribute('target')).toBeNull();
+    render(<Header mockSource={null} />);
+    expect(screen.getByRole('link', { name: 'Fuentes y métodos' }).getAttribute('target')).toBeNull();
   });
 });
 

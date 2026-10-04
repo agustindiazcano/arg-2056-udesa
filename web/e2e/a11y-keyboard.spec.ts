@@ -34,7 +34,7 @@ async function tabThroughEveryControl(page: Page): Promise<{ total: number; visi
 test.describe('keyboard operability', () => {
   test('the skip link is the first Tab stop, appears on focus and moves the focus to the main landmark', async ({ page }) => {
     await page.goto('/');
-    const skip = page.getByRole('link', { name: 'Skip to main content' });
+    const skip = page.getByRole('link', { name: 'Saltar al contenido principal' });
     await page.keyboard.press('Tab');
     await expect(skip).toBeFocused();
     await expect(skip).toBeVisible();
@@ -50,7 +50,7 @@ test.describe('keyboard operability', () => {
 
   test('the tab bar is a navigation landmark named Scenes', async ({ page }) => {
     await page.goto('/');
-    await expect(page.getByRole('navigation', { name: 'Scenes' }).getByRole('tab')).toHaveCount(SCENE_TABS.length);
+    await expect(page.getByRole('navigation', { name: 'Escenas' }).getByRole('tab')).toHaveCount(SCENE_TABS.length);
   });
 
   for (const entry of SCENE_TABS) {
@@ -70,7 +70,7 @@ test.describe('keyboard operability', () => {
 
   test('Enter and Space activate a button and a tab', async ({ page }) => {
     await page.goto('/');
-    const ai = page.getByRole('button', { name: 'Toggle AI Overlay' });
+    const ai = page.getByRole('button', { name: 'Efecto de la IA' });
     await ai.focus();
     await expect(ai).toHaveAttribute('aria-pressed', 'false');
     await page.keyboard.press('Enter');
@@ -78,36 +78,37 @@ test.describe('keyboard operability', () => {
     await page.keyboard.press('Space');
     await expect(ai).toHaveAttribute('aria-pressed', 'false');
 
-    const economy = page.getByRole('tab', { name: 'Economy' });
+    const economy = page.getByRole('tab', { name: 'Economía' });
     await economy.focus();
     await page.keyboard.press('Enter');
     await expect(economy).toHaveAttribute('aria-selected', 'true');
-    const resources = page.getByRole('tab', { name: 'Resources' });
+    const resources = page.getByRole('tab', { name: 'Recursos' });
     await resources.focus();
     await page.keyboard.press('Space');
     await expect(resources).toHaveAttribute('aria-selected', 'true');
   });
 
-  test('the toggles of the HUD expose aria-pressed with the right state after activation', async ({ page }) => {
+  test('the AI toggle exposes aria-pressed with the right state after activation', async ({ page }) => {
     await page.goto('/');
-    // [name, state at start]: not playing, 3D on, AI overlay off
-    for (const [name, start, flipped] of [
-      ['Play or Pause', 'false', 'true'],
-      ['Toggle 2D/3D Mode', 'true', 'false'],
-      ['Toggle AI Overlay', 'false', 'true']
-    ] as const) {
-      const button = page.getByRole('button', { name });
-      await expect(button).toHaveAttribute('aria-pressed', start);
-      await button.click();
-      await expect(button).toHaveAttribute('aria-pressed', flipped);
-      await button.click();
-      await expect(button).toHaveAttribute('aria-pressed', start);
-    }
+    const button = page.getByRole('button', { name: 'Efecto de la IA' });
+    await expect(button).toHaveAttribute('aria-pressed', 'false');
+    await button.click();
+    await expect(button).toHaveAttribute('aria-pressed', 'true');
+    await button.click();
+    await expect(button).toHaveAttribute('aria-pressed', 'false');
+  });
+
+  test('play and pause is one button whose name says what it will do', async ({ page }) => {
+    await page.goto('/');
+    await page.getByRole('button', { name: 'Reproducir' }).click();
+    await expect(page.getByRole('button', { name: 'Pausar' })).toBeVisible();
+    await page.getByRole('button', { name: 'Pausar' }).click();
+    await expect(page.getByRole('button', { name: 'Reproducir' })).toBeVisible();
   });
 
   test('the table view toggle exposes aria-pressed in step with what is shown', async ({ page }) => {
     await page.goto('/');
-    await page.getByRole('tab', { name: 'Resources' }).click();
+    await page.getByRole('tab', { name: 'Recursos' }).click();
     const scene = page.getByTestId('scene');
     const toggle = scene.getByRole('button', { name: 'Table view' }).first();
     await expect(toggle).toHaveAttribute('aria-pressed', 'false');
@@ -120,11 +121,11 @@ test.describe('keyboard operability', () => {
 
   test('the province filter traps no focus and Escape returns the focus to the control that opened it', async ({ page }) => {
     await page.goto('/');
-    const opener = page.getByRole('button', { name: 'Filter by Province' });
+    const opener = page.getByRole('button', { name: /^Provincia:/ });
     await opener.focus();
     await page.keyboard.press('Enter');
 
-    const dialog = page.getByRole('dialog', { name: 'Filter by province' });
+    const dialog = page.getByRole('dialog', { name: 'Filtrar por provincia' });
     await expect(dialog).toBeVisible();
     const inside = () => page.evaluate(() => document.activeElement?.closest('[role="dialog"]') !== null);
     expect(await inside()).toBe(true); // the focus moved into the dialog

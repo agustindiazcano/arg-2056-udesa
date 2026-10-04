@@ -135,7 +135,7 @@ export default function Scene() {
     >
       {header}
 
-      <div style={{ display: 'flex', gap: 'var(--space-lg)', flex: 1, minHeight: 0 }}>
+      <div style={{ display: 'flex', gap: 'var(--space-lg)', flex: '1 0 auto' }}>
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 'var(--space-md)', minWidth: '260px' }}>
           <Sliders state={state} aiEnabled={aiOverlay} onChange={(field, value) => update({ type: 'set', field, value })} />
           <button aria-pressed={aiOverlay} onClick={() => dispatch({ type: 'setAiOverlay', aiOverlay: aiOverlay ? 'off' : 'on' })}>

@@ -1,0 +1,370 @@
+/*
+ * The visual language of the shell and the shared controls: dark, frosted glass over the stage, one accent.
+ * Colors, spacing, radius and type come from tokens.css only: this file has no color literal.
+ */
+
+#stage {
+  background:
+    radial-gradient(ellipse 80% 60% at 15% 0%, color-mix(in srgb, var(--blue) 16%, transparent), transparent 60%),
+    radial-gradient(ellipse 60% 50% at 100% 100%, color-mix(in srgb, var(--scenario-optimistic) 9%, transparent), transparent 60%),
+    var(--page);
+}
+
+/* ---- header ------------------------------------------------------------------------------------------------- */
+
+.chrome {
+  pointer-events: auto;
+  position: relative;
+  z-index: 15;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  padding: var(--space-2) var(--space-md) 0;
+}
+
+.app-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-md);
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-size: var(--font-sm);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+.brand::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--blue);
+  box-shadow: 0 0 12px var(--glow);
+}
+
+.header-end {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  margin-left: auto;
+  font-size: var(--font-sm);
+}
+
+.header-end a {
+  color: var(--ink-2);
+  text-decoration: none;
+  border-bottom: 1px solid var(--border);
+}
+
+.header-end a:hover {
+  color: var(--ink);
+  border-bottom-color: var(--blue);
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-xs) var(--space-2);
+  border: 1px solid var(--state-warning);
+  border-radius: var(--radius-pill);
+  color: var(--state-warning);
+  font-size: var(--font-sm);
+  white-space: nowrap;
+}
+
+.badge::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--state-warning);
+}
+
+/* ---- tabs --------------------------------------------------------------------------------------------------- */
+
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+  padding: var(--space-xs);
+  background: var(--glass);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  backdrop-filter: blur(12px);
+}
+
+.tab {
+  padding: var(--space-xs) var(--space-3) var(--space-xs) var(--space-3);
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--ink-2);
+  font: inherit;
+  font-size: var(--font-sm);
+  cursor: pointer;
+  transition:
+    background 0.2s ease-out,
+    color 0.2s ease-out;
+}
+
+.tab:hover {
+  color: var(--ink);
+  background: var(--hover);
+}
+
+.tab[aria-selected='true'] {
+  color: var(--ink);
+  background: var(--selected);
+  box-shadow: inset 0 0 0 1px var(--blue);
+}
+
+/* ---- controls ----------------------------------------------------------------------------------------------- */
+
+.controls-wrap {
+  position: relative;
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-3);
+  padding: var(--space-2) var(--space-md);
+  background: var(--glass);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(14px);
+}
+
+.control-group {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.control-label {
+  color: var(--muted);
+  font-size: var(--font-sm);
+}
+
+.year-block {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.year {
+  min-width: 4.5ch;
+  font-size: var(--font-2xl);
+  font-weight: 600;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+}
+
+.slider {
+  width: clamp(140px, 24vw, 360px);
+  accent-color: var(--blue);
+  cursor: pointer;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: var(--space-xs) var(--space-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--hover);
+  color: var(--ink);
+  font: inherit;
+  font-size: var(--font-sm);
+  line-height: 1.4;
+  cursor: pointer;
+  transition:
+    background 0.15s ease-out,
+    border-color 0.15s ease-out;
+}
+
+.btn:hover {
+  background: color-mix(in srgb, var(--ink) 14%, transparent);
+}
+
+.btn:active {
+  background: color-mix(in srgb, var(--ink) 20%, transparent);
+}
+
+.btn[aria-pressed='true'],
+.btn[aria-expanded='true'] {
+  background: var(--selected);
+  border-color: var(--blue);
+}
+
+.btn:disabled {
+  color: var(--muted);
+  cursor: default;
+}
+
+.btn--icon {
+  padding: var(--space-xs) var(--space-sm);
+}
+
+.btn--primary {
+  background: var(--blue);
+  border-color: var(--blue);
+  color: var(--page);
+  font-weight: 600;
+}
+
+.btn--primary:hover {
+  background: color-mix(in srgb, var(--blue) 85%, var(--ink));
+}
+
+.btn svg {
+  width: 14px;
+  height: 14px;
+  fill: currentColor;
+}
+
+.segmented {
+  display: inline-flex;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.segmented .seg {
+  padding: var(--space-xs) var(--space-2);
+  border: 0;
+  border-right: 1px solid var(--border);
+  border-radius: 0;
+  background: transparent;
+  color: var(--ink-2);
+  font: inherit;
+  font-size: var(--font-sm);
+  cursor: pointer;
+}
+
+.segmented .seg:last-child {
+  border-right: 0;
+}
+
+.segmented .seg:hover {
+  color: var(--ink);
+  background: var(--hover);
+}
+
+.segmented .seg[aria-pressed='true'] {
+  color: var(--ink);
+  background: var(--selected);
+  box-shadow: inset 0 -2px 0 var(--blue);
+}
+
+.speed {
+  min-width: 3.5ch;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+}
+
+.province-name {
+  max-width: 16ch;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ---- province popover --------------------------------------------------------------------------------------- */
+
+.popover {
+  position: absolute;
+  top: calc(100% + var(--space-sm));
+  right: 0;
+  z-index: 30;
+  box-sizing: border-box;
+  width: min(620px, calc(100vw - 2 * var(--space-md)));
+  max-height: 60vh;
+  overflow-y: auto;
+  padding: var(--space-md);
+  background: var(--glass-strong);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(16px);
+}
+
+.popover-title {
+  margin: 0 0 var(--space-2);
+  font-size: var(--font-sm);
+  font-weight: 600;
+  color: var(--ink-2);
+}
+
+.chips {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: var(--space-sm);
+}
+
+.chip {
+  padding: var(--space-xs) var(--space-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--ink-2);
+  font: inherit;
+  font-size: var(--font-sm);
+  text-align: left;
+  cursor: pointer;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.chip:hover {
+  color: var(--ink);
+  background: var(--hover);
+}
+
+.chip[aria-pressed='true'] {
+  color: var(--ink);
+  background: var(--selected);
+  border-color: var(--blue);
+}
+
+/* ---- scene area and fallbacks ------------------------------------------------------------------------------- */
+
+main.scene-container {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.fallback {
+  margin: var(--space-3);
+  color: var(--ink-2);
+}
+
+.notice {
+  margin: var(--space-3);
+  padding: var(--space-md);
+  background: var(--glass);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  color: var(--ink-2);
+}
+
+.notice a {
+  color: var(--blue);
+}

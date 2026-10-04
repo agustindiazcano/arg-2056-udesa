@@ -8,12 +8,14 @@ export function TabBar() {
   const dispatch = useStore((s) => s.dispatch);
 
   return (
-    <nav aria-label="Scenes">
-      <div role="tablist">
+    <nav aria-label="Escenas">
+      <div role="tablist" className="tabs">
         {SCENES.map((s) => (
           <button
             key={s}
+            type="button"
             role="tab"
+            className="tab"
             aria-selected={scene === s}
             onClick={() => dispatch({ type: 'setScene', scene: s })}
           >

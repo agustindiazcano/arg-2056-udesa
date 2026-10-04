@@ -137,21 +137,21 @@ describe('WebGLRequired', () => {
 
   it('says the view needs WebGL2 and links to the references page when WebGL2 is missing', () => {
     mount(NO_GL);
-    expect(screen.getByText('This view needs WebGL2. Your browser or device does not provide it.')).toBeTruthy();
-    const link = screen.getByRole('link', { name: 'Sources and methods' });
+    expect(screen.getByText('Esta vista necesita WebGL2. Tu navegador o dispositivo no lo ofrece.')).toBeTruthy();
+    const link = screen.getByRole('link', { name: 'Fuentes y métodos' });
     expect(link.getAttribute('href')).toBe('references.html');
   });
 
   it('says the view runs in reduced quality when WebGL2 exists but the tier is low (few cores)', () => {
     mount(WEAK);
-    expect(screen.getByText('This view runs in reduced quality on this device.')).toBeTruthy();
+    expect(screen.getByText('Esta vista funciona con calidad reducida en este dispositivo.')).toBeTruthy();
     expect(screen.queryByText(/needs WebGL2/)).toBeNull();
     expect(screen.queryByRole('link')).toBeNull();
   });
 
   it('says the view runs in reduced quality when the tier is forced low with ?quality=low', () => {
     mount(HIGH, '?quality=low');
-    expect(screen.getByText('This view runs in reduced quality on this device.')).toBeTruthy();
+    expect(screen.getByText('Esta vista funciona con calidad reducida en este dispositivo.')).toBeTruthy();
   });
 
   it('shows nothing on a capable device', () => {

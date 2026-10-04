@@ -16,7 +16,7 @@ interface DataTableProps<T = Record<string, unknown>> {
 
 export function DataTable<T>({ columns, data, caption }: DataTableProps<T>) {
   return (
-    <div style={{ overflowX: 'auto', width: '100%', height: '100%' }}>
+    <div style={{ overflowX: 'auto', width: '100%' }}>
       <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
         <caption style={{ padding: '8px', fontWeight: 'bold' }}>{caption}</caption>
         <thead>
