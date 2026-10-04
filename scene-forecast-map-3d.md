@@ -1,6 +1,6 @@
 # Task: `scene-forecast-map-3d` (optional)
 
-Status: **draft brief, blocked by the renderer decision** (`D-andes-1` in `andes-integration.md`). It is optional and the first to cut if time is short. Do not start until `andes-integration` has chosen and shipped a renderer, so the app has one 3D stack, not two.
+Status: **SUPERSEDED by `presentation-3d.md`** (3D is now the default presentation of the whole story, not an optional variant of one map). Kept for its height-scale and fallback rules, which `presentation-3d` part 3 reuses. Original status: draft brief, blocked by the renderer decision (`D-andes-1` in `andes-integration.md`). It is optional and the first to cut if time is short. Do not start until `andes-integration` has chosen and shipped a renderer, so the app has one 3D stack, not two.
 
 Branch: `task/scene-forecast-map-3d`. One PR. Read `AGENTS.md`, `LASTCONTEXT.md`, `PENDING.md`, `design.md` (choropleth and magnitude conventions), `docs/geo.md`, `docs/performance.md`, `scene-forecast-map.md`, `andes-integration.md` and the code they produced (`web/src/scenes/forecast/ProvinceMap.tsx`, `mapSelectors.ts`, `web/src/charts/builders/provinceMap.ts`, `web/src/geo/`, `web/src/runtime/`, the store's `mode` field and the Andes renderer) first.
 Prerequisites: `scene-forecast-map` and `andes-integration` are merged, the real province geometry is committed in `web/public/geo/` (the human step of `PENDING.md`), and the human has confirmed the 3D variant is wanted.

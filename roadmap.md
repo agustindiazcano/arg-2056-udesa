@@ -4,7 +4,7 @@ This file is the one list. `PENDING.md` (the agent's queue) must use these slugs
 
 Legend: **core** = needed for the submission; **opt** = optional, cut first if time is short. **draft** = the brief exists but is blocked by input only the human has (it lists exactly what).
 
-## A. Briefs written (48)
+## A. Briefs written (49)
 
 ### A1. Foundations, data and scenes (21, all executed)
 
@@ -61,13 +61,14 @@ Legend: **core** = needed for the submission; **opt** = optional, cut first if t
 
 (The old line `model-population` of the first roadmap was split by the design into 26, 27, 28 and 30.)
 
-### A4. Scenes (3)
+### A4. Scenes (4)
 
 | # | Slug | Class | Blocked by |
 |---|---|---|---|
 | 38 | `scene-ai-revolution` | core | nothing (works on mock data; the forecast scene keeps its own AI overlay toggle, this is the scene tab) |
 | 39 | `andes-integration` | core | terrain outputs committed; renderer decision `D-andes-1` to `D-andes-4` |
-| 40 | `scene-forecast-map-3d` | opt, draft | `andes-integration`, real province geometry, the human's go |
+| 40 | `scene-forecast-map-3d` | superseded | replaced by `presentation-3d` (3D is now the default presentation, not an optional map variant) |
+| 48 | `presentation-3d` | core | F2b merged; decisions `D-3d-1` to `D-3d-5`; real province geometry for part 3 (`presentation-3d-shell` onward). A program of six PRs: engine, shell, charts A, story, charts B, Andes/zone map |
 
 ### A5. Real data (4, not executed; all need the human's research first)
 
@@ -88,7 +89,7 @@ Legend: **core** = needed for the submission; **opt** = optional, cut first if t
 
 ## B. Briefs still to write
 
-None. Every task of the roadmap has a brief. The three **draft** briefs (`scene-forecast-map-3d`, `docs-submission`, `demo-video`) are complete in structure and list the human inputs they wait for; rewrite them in place when those inputs arrive.
+None. Every task of the roadmap has a brief. The UI redesign (F1 to F8 of the approved plan: believable mock, Spanish shell, filters, motion and story, 3D, Andes, live simulation, polish) is tracked in `LASTCONTEXT.md`; F1 (PR #36) and F2a (PR #37) are merged, F2b is next. The two **draft** briefs (`docs-submission`, `demo-video`) are complete in structure and list the human inputs they wait for; rewrite them in place when those inputs arrive.
 
 ## C. Mapping from the coarse tasks in the agent's board to these slugs
 
@@ -101,7 +102,7 @@ None. Every task of the roadmap has a brief. The three **draft** briefs (`scene-
 | Backtest & Calibration | `backtest-baselines`, `backtest-run`, `sensitivity` |
 | Scene: Forecast | `scene-forecast` (done), `scene-forecast-map` (done) |
 | Scene: Economy & Sandbox | `scene-economy`, `scene-sandbox` (done) |
-| Scene: AI & Andes | `scene-ai-revolution`, `andes-integration` |
+| Scene: AI & Andes | `scene-ai-revolution`, `andes-integration`, `presentation-3d` |
 | Polish | `performance-a11y` (done), `polish` |
 | (not on the board) | `model-design`, `model-population-*`, `model-hdi`, `model-provinces`, `terrain-bake`, `geo-provinces`, `data-*`, `references-page`, `storytelling-substeps`, `integration`, `deploy`, `docs-submission` |
 

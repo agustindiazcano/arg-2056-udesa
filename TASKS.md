@@ -265,7 +265,8 @@ Legend: DONE = merged. READY = can start now. BLOCKED = needs the human input na
 | | **Scenes** | | |
 | 21 | scene-ai-revolution | READY | |
 | 22 | andes-integration | BLOCKED | terrain outputs committed, renderer decision D-andes-1 to D-andes-4 |
-| 23 | scene-forecast-map-3d (optional) | BLOCKED | andes-integration, real province geometry, my confirmation |
+| 23 | scene-forecast-map-3d | SUPERSEDED | replaced by presentation-3d |
+| 23b | presentation-3d (six PRs) | BLOCKED | F2b merged, D-3d-1 to D-3d-5, real province geometry for the map |
 | | **Real data** | | |
 | 24 | data-economy-population | BLOCKED | research files, my verification, answer to D-gdp-1, population-age-contract merged |
 | 25 | data-resources | BLOCKED | research files (mining, energy, agro) and my verification |
@@ -1777,7 +1778,42 @@ When finished: overwrite LASTCONTEXT.md, update PENDING.md, and write a PR descr
  
 ---
  
-## scene-forecast-map-3d (optional, draft brief)
+## presentation-3d (program of six PRs; run one part at a time)
+
+Prerequisite: F2b merged and I have answered D-3d-1 to D-3d-5 (section 5 of the brief).
+
+```
+You are working in the repository `argentina-2056`.
+
+Before doing anything, read these files in this order:
+1. AGENTS.md
+2. LASTCONTEXT.md
+3. PENDING.md
+4. presentation-3d.md   (the brief, in the repository root)
+Then read design.md, docs/ui.md, docs/performance.md, docs/geo.md, storytelling-substeps.md, andes-integration.md, test/dashboard_3d_PoC.html (look and mechanics only), and the code under web/src/{app,scenes,story,charts,runtime,state}/.
+
+Then execute ONLY the part I name (<part>: engine, shell, charts-a, story or charts-b) of presentation-3d.md exactly.
+
+Rules:
+- Create branch `task/presentation-3d-<part>`. Never touch `main`, never merge, never push to `main`.
+- If a prerequisite or a D-3d decision is missing, stop and tell me.
+- Strict TDD for the logic (camera, easing, heights, scaling). The 2D charts stay unchanged.
+- No new data, indicator or selector; null is never a height. One 3D library (Three.js, exact version, bundled). Nothing from another origin, no looser CSP, no color literal outside the token files.
+- Use useQuality, QUALITY_PRESETS, WebGLRequired and useReducedMotion. Dispose everything on unmount. Do not change KeyAction, KEY_MAP or the store shape beyond what the brief lists.
+- Story text is a draft from the mock data, marked for my sign-off.
+- Do not edit AGENTS.md, CLAUDE.md or GEMINI.md.
+- Before every push run `python scripts/precheck.py`. Never push if it fails.
+- Never silence a checker: no `as unknown as`, `@ts-ignore`, `eslint-disable`, `# noqa`, `--unsafe-fixes`. If a checker complains, fix the cause.
+- Tests must assert exact values, strings, exit codes and messages, never only "no error". Tests never write inside the real data/ or web/public/ directories.
+- Never claim CI is green. Say "pushed, CI not checked" unless you read the run status.
+- If anything in the brief is ambiguous or seems wrong, stop and ask me instead of guessing.
+
+When finished: overwrite LASTCONTEXT.md, update PENDING.md, and write a PR description with (a) what changed, (b) what was verified, (c) what the human must verify.
+```
+
+---
+
+## scene-forecast-map-3d (SUPERSEDED by presentation-3d: do not run)
  
 Prerequisite: `scene-forecast-map` and `andes-integration` merged, the real province geometry committed, and I confirm the 3D variant is wanted.
  
