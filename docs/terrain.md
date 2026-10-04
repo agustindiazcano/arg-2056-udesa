@@ -93,3 +93,7 @@ with `R = 6,371,008.8 m`. Since the long side is `max_size` pixels, `pixel_size_
 ## 10. The Andes scene and the made-up terrain
 
 The Andes scene (`web/src/scenes/andes/`) loads `/terrain/andes` (so the region `id` in `terrain/config.json` must be `andes`). While that file does not exist it draws a made-up terrain (`web/src/terrain/synthetic.ts`: a deterministic cordillera around the events, source "Terreno sintético") and says so on the screen. Nothing else changes when the real files are committed. The attribution of the baked terrain is shown in the scene.
+
+### The app asks only for terrains the build found
+`web/vite.config.ts` lists the `<id>.json` files of `web/public/terrain/` at build time (`__BAKED_TERRAINS__`, read through `src/terrain/baked.ts`). The Andes scene asks the server for `/terrain/andes.json` only when `andes` is in that list; otherwise it goes straight to the made-up terrain and says so ("el relieve real todavía no está generado"). Before this, every page load answered 404 for the missing file and the CSP e2e (which counts any HTTP error) failed on all scenes. After baking the real terrain, restart the dev server: the list is fixed when vite starts.
+
