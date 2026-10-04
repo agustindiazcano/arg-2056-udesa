@@ -12,6 +12,8 @@ const PHASE_STEP = 0.37;
 
 export interface FigureColumn {
   mesh: InstancedMesh;
+  /** scene units from the head of the column to the last figure */
+  length: number;
   /** puts every figure at its place with the head of the column at arc length `leaderArc` of the path */
   update: (leaderArc: number) => void;
 }
@@ -21,7 +23,7 @@ export interface FigureColumn {
  * height of the terrain under a point, or null outside it (the figure then keeps the height of the route). Nothing is allocated
  * in `update`: the pose of a figure is a function of where it is on the route, so it marches as the days go by and stands still when they stop.
  */
-export function createFigureColumn(count: number, path: Path, ground: (x: number, z: number) => number | null): FigureColumn {
+export function createFigureColumn(count: number, path: Path, ground: (x: number, z: number) => number | null, figureScale = 1): FigureColumn {
   const slots: Slot[] = columnSlots(count);
   const mesh = new InstancedMesh(new BoxGeometry(1, 1, 1), new MeshStandardMaterial({ roughness: 0.9, metalness: 0 }), Math.max(1, instanceCount(slots)));
   mesh.frustumCulled = false;
@@ -39,7 +41,7 @@ export function createFigureColumn(count: number, path: Path, ground: (x: number
   const position = new Vector3();
   const partAt = new Vector3();
   const scale = new Vector3();
-  const one = new Vector3(1, 1, 1);
+  const one = new Vector3(figureScale, figureScale, figureScale);
   const up = new Vector3(0, 1, 0);
   const across = new Vector3(1, 0, 0);
 
@@ -72,5 +74,5 @@ export function createFigureColumn(count: number, path: Path, ground: (x: number
     });
     mesh.instanceMatrix.needsUpdate = true;
   };
-  return { mesh, update };
+  return { mesh, update, length: slots.length > 0 ? slots[slots.length - 1]!.along : 0 };
 }

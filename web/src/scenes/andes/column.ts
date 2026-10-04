@@ -20,7 +20,7 @@ export const DEFAULT_FIGURES = 24;
 /** The most figures on a `high` tier; the other tiers scale it (`particleScale`). */
 export const MAX_FIGURES = 150;
 /** Camera distance (scene units) to the army below which the figures replace the marker. */
-export const FIGURE_NEAR = 5;
+export const FIGURE_NEAR = 8;
 const FIGURE_FAR_MARGIN = 1.25;
 
 const ROW_SPACING = 0.22;

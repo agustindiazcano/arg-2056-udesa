@@ -50,6 +50,7 @@ export default function Scene() {
   const [view, setView] = useState<'map' | 'table'>('map');
   const [follow, setFollow] = useState(false);
   const [closeUp, setCloseUp] = useState(0);
+  const [cine, setCine] = useState(false);
   const [listOpen, setListOpen] = useState(true);
   const opener = useRef<HTMLElement | null>(null);
   const selected = route.points.find((p) => p.id === selectedId) ?? null;
@@ -96,6 +97,7 @@ export default function Scene() {
             selectedId={selectedId}
             follow={follow}
             closeUp={closeUp}
+            cine={cine}
             onSelect={(id) => (id === null ? close() : select(id))}
             label={label}
           />
@@ -139,6 +141,9 @@ export default function Scene() {
         </button>
         <button type="button" className="chip" aria-pressed={follow} disabled={view !== 'map'} onClick={() => setFollow(!follow)}>
           Seguir al ejército
+        </button>
+        <button type="button" className="chip" aria-pressed={cine} disabled={view !== 'map'} onClick={() => setCine(!cine)}>
+          Cine
         </button>
         <button type="button" className="chip" disabled={view !== 'map'} onClick={() => setCloseUp(closeUp + 1)}>
           Ver de cerca

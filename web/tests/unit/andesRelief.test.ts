@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { cinePose } from '../../src/scenes/andes/camera';
+import { cinePose, clearEye } from '../../src/scenes/andes/camera';
 import { FIGURE_NEAR } from '../../src/scenes/andes/column';
 import { buildPath } from '../../src/scenes/andes/pathAlong';
 import { corridorFactor, hash2, noise2, reliefOffset, ridged, terrainColor } from '../../src/scenes/andes/relief';
@@ -123,7 +123,7 @@ describe('relief field', () => {
 
   it('adds relief away from the route, and is deterministic', () => {
     const x = routePoints[0]! + 3;
-    const z = routePoints[2]! - 3;
+    const z = routePoints[2]! + 3;
     expect(field.distanceToRoute(x, z)).toBeGreaterThan(1.5);
     expect(Math.abs(field.height(x, z) - field.baseHeight(x, z))).toBeGreaterThan(0.01);
     expect(field.height(x, z)).toBe(field.height(x, z));
@@ -132,6 +132,32 @@ describe('relief field', () => {
   it('measures the distance to the route on the ground plane', () => {
     expect(field.distanceToRoute(routePoints[0]!, routePoints[2]!)).toBeCloseTo(0, 6);
     expect(field.distanceToRoute(routePoints[0]! - 2, routePoints[2]!)).toBeGreaterThanOrEqual(1.9);
+  });
+});
+
+describe('relief field at the edge of the terrain', () => {
+  it('goes on flat beyond the edge instead of falling to the lowest point (no cliff at the border)', () => {
+    const edge = scale.width / 2;
+    const z = routePoints[2]!;
+    expect(Number.isFinite(field.baseHeight(edge + 5, z))).toBe(true);
+    expect(field.baseHeight(edge + 0.2, z)).toBeCloseTo(field.baseHeight(edge + 5, z), 9);
+    expect(Math.abs(field.baseHeight(edge - 0.01, z) - field.baseHeight(edge + 0.2, z))).toBeLessThan(0.3);
+  });
+
+  it('does not fall to the lowest point on any side, in a scan across each edge', () => {
+    for (const [x0, z0, dx, dz] of [
+      [scale.width / 2 - 1, 0, 0.02, 0],
+      [-scale.width / 2 + 1, 0, -0.02, 0],
+      [0, scale.depth / 2 - 1, 0, 0.02],
+      [0, -scale.depth / 2 + 1, 0, -0.02]
+    ] as const) {
+      let last = field.baseHeight(x0, z0);
+      for (let i = 1; i <= 100; i += 1) {
+        const h = field.baseHeight(x0 + dx * i, z0 + dz * i);
+        expect(Math.abs(h - last)).toBeLessThan(0.1); // a smooth slope, not a cliff down to the lowest point
+        last = h;
+      }
+    }
   });
 });
 
@@ -201,30 +227,58 @@ describe('treePlacements', () => {
     }
   });
 
-  it('has no trees above the tree line', () => {
+  it('has a bare chunk with a density of 0', () => {
     const high = treePlacements(field, 6, -6, 2, 0.0);
     expect(high.length).toBe(0);
   });
 });
 
 describe('cinePose', () => {
-  const head = { x: 1, y: 2, z: 3 };
+  const target = { x: 1, y: 2, z: 3 };
   const current = { x: 0, y: 0, z: 0, theta: 0.2, phi: 0.5, radius: 20 };
 
-  it('looks a little ahead of the head of the column, from behind and low, close enough for the figures', () => {
-    const p = cinePose(head, Math.PI / 2, current, 1); // heading east
-    expect(p.x).toBeGreaterThan(head.x);
-    expect(p.z).toBeCloseTo(head.z, 5);
-    expect(Math.cos(p.theta)).toBeCloseTo(Math.cos(Math.PI / 2 + Math.PI), 6); // the camera is west of the target
-    expect(p.phi).toBeGreaterThan(1);
-    expect(p.phi).toBeLessThan(1.5);
-    expect(p.radius).toBeLessThan(FIGURE_NEAR);
+  it('looks at the target from the place given, with the angles and the distance that put the camera there', () => {
+    const cam = { x: 1 - 3, y: 2 + 0.5, z: 3 }; // 3 to the west and a bit above
+    const p = cinePose(target, cam, current, 1);
+    expect([p.x, p.y, p.z]).toEqual([1, 2, 3]);
+    expect(p.radius).toBeCloseTo(Math.hypot(3, 0.5), 9);
+    // the camera position of the orbit: target + radius * (sin phi sin theta, cos phi, sin phi cos theta)
+    expect(target.x + p.radius * Math.sin(p.phi) * Math.sin(p.theta)).toBeCloseTo(cam.x, 6);
+    expect(target.y + p.radius * Math.cos(p.phi)).toBeCloseTo(cam.y, 6);
+    expect(target.z + p.radius * Math.sin(p.phi) * Math.cos(p.theta)).toBeCloseTo(cam.z, 6);
   });
 
-  it('turns smoothly: k = 0 keeps the turn and it takes the short way around the circle', () => {
-    expect(cinePose(head, 0, current, 0).theta).toBeCloseTo(current.theta, 9);
-    const near = { ...current, theta: Math.PI - 0.1 };
-    const p = cinePose(head, 0, near, 0.5); // behind a heading of 0 is theta = pi (+ 0.0)
-    expect(Math.abs(p.theta - near.theta)).toBeLessThan(0.2);
+  it('is close enough for the figures and low enough to see the mountains', () => {
+    const p = cinePose(target, { x: -2, y: 2.5, z: 3 }, current, 1);
+    expect(p.radius).toBeLessThan(FIGURE_NEAR);
+    expect(p.phi).toBeGreaterThan(1);
+  });
+
+  it('turns smoothly: k = 0 keeps the angles and the distance, and the angle goes the short way around the circle', () => {
+    const cam = { x: 1, y: 2.5, z: 0 }; // south of... theta = pi
+    const kept = cinePose(target, cam, current, 0);
+    expect(kept.theta).toBeCloseTo(current.theta, 9);
+    expect(kept.phi).toBeCloseTo(current.phi, 9);
+    expect(kept.radius).toBeCloseTo(current.radius, 9);
+    // from theta = pi - 0.1 to theta = -pi + 0.1: the short way crosses pi (cos = -1), the long way would cross 0 (cos = 1)
+    const p = cinePose(target, { x: 1 - 0.3, y: 2.5, z: 0 }, { ...current, theta: Math.PI - 0.1 }, 0.5);
+    expect(Math.cos(p.theta)).toBeLessThan(-0.9);
+  });
+});
+
+describe('clearEye', () => {
+  const target = { x: 10, y: 0.1, z: 0 };
+
+  it('keeps the camera where it is when nothing is in the way', () => {
+    expect(clearEye({ x: 0, y: 0.25, z: 0 }, target, () => 0, 0.1)).toBeCloseTo(0.25, 9);
+  });
+
+  it('raises it just enough for the line of sight to clear a hill in between, and never lowers it', () => {
+    const hill = (x: number) => (Math.abs(x - 5) < 1 ? 2 : 0);
+    const y = clearEye({ x: 0, y: 0.25, z: 0 }, target, hill, 0.1);
+    expect(y).toBeGreaterThan(2);
+    // the line from the raised eye to the target passes above the hill
+    expect(y + (target.y - y) * 0.5).toBeGreaterThanOrEqual(2.1 - 1e-6);
+    expect(clearEye({ x: 0, y: 50, z: 0 }, target, hill, 0.1)).toBe(50);
   });
 });

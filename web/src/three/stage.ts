@@ -1,4 +1,4 @@
-import { Mesh, PerspectiveCamera, Scene, Vector3, WebGLRenderer } from 'three';
+import { Mesh, PCFSoftShadowMap, PerspectiveCamera, Scene, Vector3, WebGLRenderer } from 'three';
 import type { Material, Object3D, Texture } from 'three';
 import {
   BUTTON_ZOOM,
@@ -30,6 +30,8 @@ export interface StageOptions {
   box?: TargetBox;
   /** the pose to keep: a view rebuilt for new data passes the pose of the old one. Changed in place. */
   pose?: CameraState;
+  /** the renderer draws shadows (PCF soft); the scene's lights decide who casts and receives them */
+  shadows?: boolean;
   /** called right before each render, with the camera in its final place: a scene switches its level of detail here */
   beforeRender?: () => void;
   /** the closest zoom as a fraction of the start radius (default 0.25) */
@@ -48,6 +50,8 @@ export interface StageNav {
   flyTo: (pose: CameraState) => void;
   /** moves the camera target at once (the angles and the distance stay), kept inside the box: for a camera that follows something */
   setTarget: (x: number, y: number, z: number) => void;
+  /** puts the camera at this pose at once, kept inside the limits (target box, polar angle, zoom range): for a camera that is driven every day tick */
+  setPose: (pose: CameraState) => void;
 }
 
 export interface Stage {
@@ -76,6 +80,10 @@ const FLY_MS = 600;
  */
 export function createStage(host: HTMLElement, o: StageOptions): Stage {
   const renderer = new WebGLRenderer({ antialias: true, alpha: true });
+  if (o.shadows) {
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = PCFSoftShadowMap;
+  }
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, o.pixelRatioCap));
   renderer.setClearColor(tokens.page, 0);
   const el = renderer.domElement;
@@ -240,6 +248,14 @@ export function createStage(host: HTMLElement, o: StageOptions): Stage {
     reset: () => glideTo((t) => resetCamera(t, limits)),
     preset: (preset) => glideTo((t) => presetCamera(t, preset, limits)),
     flyTo: (target) => glideTo((t) => Object.assign(t, target), FLY_MS),
+    setPose: (target) => {
+      cancelGlide();
+      Object.assign(pose, target);
+      pose.radius = Math.min(limits.maxRadius, Math.max(limits.minRadius, pose.radius));
+      pose.phi = Math.min(limits.maxPhi, Math.max(limits.minPhi, pose.phi));
+      clampTarget(pose, limits.box);
+      changed();
+    },
     setTarget: (x, y, z) => {
       cancelGlide();
       pose.x = x;

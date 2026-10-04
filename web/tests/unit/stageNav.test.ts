@@ -44,6 +44,16 @@ afterEach(() => {
   vi.unstubAllGlobals();
 });
 
+describe('stage setPose', () => {
+  it('puts the camera at the pose at once and keeps it inside the limits', () => {
+    stage.nav.setPose({ x: 1, y: 0.4, z: -1, theta: 2, phi: 3, radius: 0.0001 });
+    expect(stage.pose.theta).toBe(2);
+    expect(stage.pose.phi).toBeLessThanOrEqual(1.55); // the polar angle cannot reach the horizon
+    expect(stage.pose.radius).toBeGreaterThan(1); // nor the zoom pass its floor (0.25 of 10)
+    expect(stage.pose.x).toBeCloseTo(1, 9);
+  });
+});
+
 describe('stage beforeRender hook', () => {
   it('runs before every render, so a scene can switch what it shows by the camera distance', async () => {
     stage.dispose();

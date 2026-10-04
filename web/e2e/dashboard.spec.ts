@@ -244,6 +244,20 @@ test.describe('andes scene', () => {
     await expect(page.getByRole('button', { name: 'Ver de cerca' })).toBeDisabled();
   });
 
+  test('"Cine" puts the camera low behind the column, close enough for the figures, and the table has no cinematic camera', async ({ page }) => {
+    await page.goto('/?quality=high');
+    await page.getByRole('tab', { name: 'Andes' }).click();
+    const canvas = page.locator('[data-chart3d="andes"] canvas');
+    await expect(canvas).toBeVisible();
+    const pose = async () => (await canvas.getAttribute('data-camera'))!.split(',').map(Number);
+    await page.getByRole('button', { name: 'Cine' }).click();
+    await expect.poll(async () => (await pose())[2]).toBeLessThan(8); // radius: near the column
+    expect((await pose())[1]).toBeGreaterThan(1); // polar angle: low, toward the horizon
+    await expect(page.getByRole('button', { name: 'Cine' })).toHaveAttribute('aria-pressed', 'true');
+    await page.getByRole('button', { name: 'Tabla de eventos' }).click();
+    await expect(page.getByRole('button', { name: 'Cine' })).toBeDisabled();
+  });
+
   test('the table of events is the text version of the scene', async ({ page }) => {
     await page.goto('/');
     await page.getByRole('tab', { name: 'Andes' }).click();
