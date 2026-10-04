@@ -49,6 +49,9 @@
    - [ ] **Human: design.md asks for a 2px #3987e5 focus ring; the code uses `--color-focus` #ffc107 (kept).**
    - [ ] `scene-andes` must use `useQuality`, `QUALITY_PRESETS` and `WebGLRequired` (`web/src/runtime/`).
    - [ ] Lighthouse run on the production build (release checklist, section 4).
+13b. [x] `visits-archive`: weekly archive of Vercel Web Analytics and the Visits section of the references page (PR open, see `docs/visits.md`).
+   - [ ] **Human setup: Vercel token and ids as GitHub secrets, enable PR creation for Actions, run the workflow once by hand** (`docs/visits.md`).
+   - [ ] **Not verified against the real Vercel API** (same-day `since`/`until`, response fields, `limit`, plan).
 14. [ ] `polish`: bloom, easing, palette, transitions, reduced-motion, performance pass.
 
 ## Data to verify (human, against original source)

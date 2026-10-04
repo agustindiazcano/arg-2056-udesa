@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { parseReferences, PUBLISHER_TYPES } from '../types/references.js';
 import type { PublisherType, ReferenceSource, References } from '../types/references.js';
 import { formatCitation } from './citation.js';
+import { VisitsSection } from '../analytics/VisitsSection.js';
 import { filterReferences, groupByType, resolveDerived } from './selectors.js';
 
 const TYPE_LABEL: Record<PublisherType, string> = {
@@ -69,7 +70,8 @@ function Entry({
   );
 }
 
-export function ReferencesPage({ references }: { references: References }) {
+/** `extra` is shown after the sources, before the link back to the app (the visits section). */
+export function ReferencesPage({ references, extra }: { references: References; extra?: React.ReactNode }) {
   const { sources, leads, attributions, stats, mock } = references;
   const [query, setQuery] = useState('');
   const [types, setTypes] = useState<PublisherType[]>([]);
@@ -215,6 +217,8 @@ export function ReferencesPage({ references }: { references: References }) {
         </details>
       )}
 
+      {extra}
+
       <footer data-print="hide" style={{ marginTop: 'var(--space-lg)' }}>
         <a href="index.html">Back to the app</a>
       </footer>
@@ -248,5 +252,5 @@ export function ReferencesApp() {
 
   if (state.status === 'loading') return <div style={{ color: 'var(--ink)' }}>Loading...</div>;
   if (state.status === 'error') return <div style={{ color: 'var(--state-critical)' }}>Error loading data.</div>;
-  return <ReferencesPage references={state.references} />;
+  return <ReferencesPage references={state.references} extra={<VisitsSection />} />;
 }

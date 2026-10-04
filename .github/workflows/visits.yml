@@ -1,0 +1,49 @@
+name: Archive visits
+
+# Once a week, copies the last days of Vercel Web Analytics into web/public/analytics/visits.json (the dashboard keeps
+# only 30 days) and opens a pull request with the change. A human merges it; nothing is pushed to main.
+#
+# Needs the repository secrets VERCEL_TOKEN, VERCEL_PROJECT_ID and (for a team project) VERCEL_TEAM_ID, and the
+# setting Settings > Actions > General > "Allow GitHub Actions to create and approve pull requests".
+
+on:
+  schedule:
+    - cron: '17 6 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  archive:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Fetch the last days and merge them into the archive
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+          VERCEL_TEAM_ID: ${{ secrets.VERCEL_TEAM_ID }}
+        run: python scripts/sync_visits.py
+      - name: Open a pull request when the archive changed
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if [ -z "$(git status --porcelain -- web/public/analytics/visits.json)" ]; then
+            echo "The archive did not change"
+            exit 0
+          fi
+          branch="visits/$(date -u +%Y-%m-%d)"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$branch"
+          git add web/public/analytics/visits.json
+          git commit -m "data(visits): weekly archive of Vercel Web Analytics"
+          git push origin "$branch"
+          gh pr create --base main --head "$branch" \
+            --title "data(visits): weekly archive $(date -u +%Y-%m-%d)" \
+            --body "Automatic weekly copy of Vercel Web Analytics (by day and country) into web/public/analytics/visits.json. Merge to publish the new totals."

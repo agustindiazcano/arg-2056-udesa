@@ -1,0 +1,6 @@
+{
+  "source": "Vercel Web Analytics API (visits/aggregate by country, one request per day)",
+  "retrieved_at": null,
+  "note": "Empty until the first weekly run of .github/workflows/visits.yml is merged.",
+  "days": {}
+}
