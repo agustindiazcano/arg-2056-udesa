@@ -12,7 +12,7 @@ def test_it_runs_once_a_week_and_by_hand():
     content = text()
     crons = re.findall(r"cron:\s*'([^']+)'", content)
     assert len(crons) == 1
-    minute, hour, day_of_month, month, weekday = crons[0].split()
+    _minute, _hour, day_of_month, month, weekday = crons[0].split()
     assert day_of_month == "*" and month == "*" and weekday.isdigit(), "a weekly cron names one weekday"
     assert "workflow_dispatch:" in content
 
