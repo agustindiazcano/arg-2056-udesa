@@ -7,6 +7,7 @@ import { parseForecastOutput } from '../types/forecast';
 import { parseProductionProjections } from '../types/projections';
 import { parseProjects } from '../types/projects';
 import { parseReferences } from '../types/references';
+import { parseAiEstimates, parseBaseRates, parseDatasetCatalog, parseExternalForecasts, parseForecastVintages } from '../types/research';
 import { parseResourceProduction } from '../types/resourceProduction';
 
 export interface Dataset {
@@ -30,10 +31,15 @@ function schemaParser(label: string, name: SchemaName): (json: unknown) => unkno
 /** Every data file the app can load, with the parser it uses and the scenes that need it. */
 export const DATASETS: readonly Dataset[] = [
   // The andes and ai-revolution scenes are placeholders and load nothing yet, so their files are optional.
+  { file: 'ai_estimates.json', parse: parseAiEstimates, requiredBy: [] },
   { file: 'andes_events.json', parse: schemaParser('andes events', 'andesEvents'), requiredBy: [] },
+  { file: 'base_rates.json', parse: parseBaseRates, requiredBy: [] },
   { file: 'composition.json', parse: parseComposition, requiredBy: ['resources'] },
+  { file: 'dataset_catalog.json', parse: parseDatasetCatalog, requiredBy: [] },
   { file: 'economy_series.json', parse: parseEconomySeries, requiredBy: ['economy'] },
+  { file: 'external_forecasts.json', parse: parseExternalForecasts, requiredBy: [] },
   { file: 'forecast_output.json', parse: parseForecastOutput, requiredBy: ['forecast', 'sandbox'] },
+  { file: 'forecast_vintages.json', parse: parseForecastVintages, requiredBy: [] },
   { file: 'population.json', parse: schemaParser('population', 'population'), requiredBy: [] },
   { file: 'production_projections.json', parse: parseProductionProjections, requiredBy: [] },
   { file: 'projects.json', parse: parseProjects, requiredBy: ['resources'] },
