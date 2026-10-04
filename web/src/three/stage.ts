@@ -21,6 +21,8 @@ export interface Stage {
   requestRender: () => void;
   /** calls `onFrame(t)` with t from 0 to 1 over `durationMs` and renders each frame; returns a cancel function */
   animate: (durationMs: number, onFrame: (t: number) => void) => () => void;
+  /** calls `onFrame(elapsedMs)` and renders on every animation frame until the returned cancel is called (or on dispose) */
+  loop: (onFrame: (elapsedMs: number) => void) => () => void;
   dispose: () => void;
 }
 
@@ -138,10 +140,32 @@ export function createStage(host: HTMLElement, o: StageOptions): Stage {
     };
   };
 
+  const loops = new Set<() => void>();
+  const loop = (onFrame: (elapsedMs: number) => void) => {
+    const start = performance.now();
+    let id = 0;
+    let active = true;
+    const step = (now: number) => {
+      if (!active) return;
+      onFrame(now - start);
+      renderer.render(scene, camera);
+      id = requestAnimationFrame(step);
+    };
+    id = requestAnimationFrame(step);
+    const cancel = () => {
+      active = false;
+      cancelAnimationFrame(id);
+      loops.delete(cancel);
+    };
+    loops.add(cancel);
+    return cancel;
+  };
+
   const dispose = () => {
     if (queued !== 0) cancelAnimationFrame(queued);
     running.forEach((r) => cancelAnimationFrame(r));
     running.clear();
+    [...loops].forEach((cancel) => cancel());
     observer?.disconnect();
     el.removeEventListener('pointerdown', down);
     el.removeEventListener('pointermove', move);
@@ -161,5 +185,5 @@ export function createStage(host: HTMLElement, o: StageOptions): Stage {
     el.remove();
   };
 
-  return { scene, camera, renderer, requestRender, animate, dispose };
+  return { scene, camera, renderer, requestRender, animate, loop, dispose };
 }

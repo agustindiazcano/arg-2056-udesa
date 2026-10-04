@@ -17,12 +17,14 @@ import {
 } from 'three';
 import { formatAxisNumber } from '../charts/format';
 import { layoutBars } from '../charts3d/layout';
+import type { ProjectionRequest } from '../charts3d/projection';
 import type { Bars3DSpec } from '../charts3d/types';
 import { useQualityOptional } from '../runtime/CapabilityProvider';
 import { QUALITY_PRESETS } from '../runtime/capabilities';
 import { useReducedMotion } from '../runtime/useReducedMotion';
 import { SEQUENTIAL_BLUE, tokens } from '../styles/tokens';
 import { textSprite } from './labels';
+import { addProjection } from './projection';
 import { createStage } from './stage';
 
 const MAX_HEIGHT = 4;
@@ -34,7 +36,7 @@ const GROW_MS = 600;
 const easeOutCubic = (t: number) => 1 - (1 - t) ** 3;
 
 /** The reference look: bars standing on a dark plate with a grid, the highlighted one lit, the value over each bar. */
-export function Bars3D({ spec }: { spec: Bars3DSpec }) {
+export function Bars3D({ spec, projection }: { spec: Bars3DSpec; projection?: ProjectionRequest }) {
   const hostRef = useRef<HTMLDivElement>(null);
   const tipRef = useRef<HTMLDivElement>(null);
   const reduced = useReducedMotion();
@@ -47,8 +49,8 @@ export function Bars3D({ spec }: { spec: Bars3DSpec }) {
     const layout = layoutBars(spec.bars, { maxHeight: MAX_HEIGHT, barWidth: BAR_WIDTH, gap: GAP, depth: DEPTH });
     const stage = createStage(host, {
       pixelRatioCap,
-      target: new Vector3(0, MAX_HEIGHT * 0.34, 0),
-      radius: Math.max(13, layout.width * 1.05 + 8),
+      target: new Vector3(0, MAX_HEIGHT * 0.34 + (projection ? 0.9 : 0), 0),
+      radius: Math.max(13, layout.width * 1.05 + 8) * (projection ? 1.2 : 1),
       theta: 0.22,
       phi: 1.15
     });
@@ -124,6 +126,16 @@ export function Bars3D({ spec }: { spec: Bars3DSpec }) {
       cancel = stage.animate(GROW_MS, setGrowth);
     }
 
+    // an optional projected title over the chart (the projection test)
+    const stopProjection = projection
+      ? addProjection(stage, {
+          title: projection.title,
+          bounds: { width: plateWidth, depth: plateDepth, height: MAX_HEIGHT },
+          reduced,
+          animated: quality?.tier !== 'low'
+        })
+      : () => {};
+
     // hover: the bar under the pointer lights up and a tooltip names it
     const raycaster = new Raycaster();
     const pointer = new Vector2();
@@ -167,11 +179,12 @@ export function Bars3D({ spec }: { spec: Bars3DSpec }) {
 
     return () => {
       cancel();
+      stopProjection();
       canvas.removeEventListener('pointermove', onMove);
       canvas.removeEventListener('pointerleave', onLeave);
       stage.dispose();
     };
-  }, [spec, pixelRatioCap, reduced]);
+  }, [spec, projection?.title, quality?.tier, pixelRatioCap, reduced]);
 
   return (
     <div ref={hostRef} className="chart3d" role="img" aria-label={spec.summary} data-chart3d={spec.kind}>

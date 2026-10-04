@@ -6,6 +6,7 @@
   },
   "chunk_max": 277504,
   "chunk_overrides": {
-    "src/three/Chart3D.tsx": 409600
+    "src/three/Chart3D.tsx": 409600,
+    "src/three/ProjectionScenes.tsx": 409600
   }
 }
