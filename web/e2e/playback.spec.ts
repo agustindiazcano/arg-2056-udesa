@@ -16,7 +16,7 @@ test('playback follows the clock: it advances while playing and stops when pause
   const start = await read();
 
   await page.keyboard.press('Space');
-  await expect(page.getByRole('button', { name: 'Play or Pause' })).toHaveText('Pause');
+  await expect(page.getByRole('button', { name: 'Pausar' })).toBeVisible();
   await page.clock.runFor(1000);
 
   // the HUD renders a moment after the store changes, so wait until it shows the final value
@@ -24,7 +24,7 @@ test('playback follows the clock: it advances while playing and stops when pause
   await expect.poll(async () => Math.abs((await read()) - (start + YEARS_PER_SECOND * SPEED))).toBeLessThan(0.1);
 
   await page.keyboard.press('Space');
-  await expect(page.getByRole('button', { name: 'Play or Pause' })).toHaveText('Play');
+  await expect(page.getByRole('button', { name: 'Reproducir' })).toBeVisible();
   const paused = await read();
   await page.clock.runFor(1000);
   await expect.poll(read).toBe(paused);

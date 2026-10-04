@@ -57,10 +57,10 @@ describe('UI Components', () => {
   describe('MockBadge', () => {
     it('visible for source: MOCK, absent for argmodel@0.1.0', () => {
       const { rerender } = render(<MockBadge source="MOCK" />);
-      expect(screen.queryByText('MOCK DATA')).not.toBeNull();
+      expect(screen.queryByText('Datos ilustrativos')).not.toBeNull();
       
       rerender(<MockBadge source="argmodel@0.1.0" />);
-      expect(screen.queryByText('MOCK DATA')).toBeNull();
+      expect(screen.queryByText('Datos ilustrativos')).toBeNull();
     });
   });
 });

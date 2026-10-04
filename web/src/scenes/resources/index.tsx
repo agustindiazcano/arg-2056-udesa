@@ -100,7 +100,7 @@ export default function Scene() {
         <p style={{ margin: 0, color: 'var(--ink-2)' }}>Investment, production and economic composition</p>
       </div>
 
-      <div style={{ display: 'flex', gap: 'var(--space-lg)', flex: 1, minHeight: 0 }}>
+      <div style={{ display: 'flex', gap: 'var(--space-lg)', flex: '1 0 auto' }}>
         
         {/* Left Column */}
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 'var(--space-md)' }}>

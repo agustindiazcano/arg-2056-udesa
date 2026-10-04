@@ -37,7 +37,7 @@ describe('skip link and landmarks', () => {
   it('"Skip to main content" is the first focusable element and points at the main landmark', () => {
     render(<App />);
     const first = document.body.querySelector('a[href], button, input, select, textarea, [tabindex]:not([tabindex="-1"])');
-    expect(first?.textContent).toBe('Skip to main content');
+    expect(first?.textContent).toBe('Saltar al contenido principal');
     expect(first?.getAttribute('href')).toBe('#main');
     expect(first?.className).toBe('skip-link');
   });
@@ -58,9 +58,9 @@ describe('skip link and landmarks', () => {
     expect(document.activeElement).toBe(main);
   });
 
-  it('puts the tab bar in a navigation landmark named "Scenes"', () => {
+  it('puts the tab bar in a navigation landmark named "Escenas"', () => {
     render(<App />);
-    const nav = screen.getByRole('navigation', { name: 'Scenes' });
+    const nav = screen.getByRole('navigation', { name: 'Escenas' });
     expect(within(nav).getByRole('tablist')).toBeTruthy();
     expect(within(nav).getAllByRole('tab')).toHaveLength(6);
   });
@@ -72,13 +72,13 @@ describe('document title', () => {
     expect(APP_TITLE).toBe('Argentina 2056');
     expect(document.title).toBe('Andes | Argentina 2056');
     setScene('economy');
-    expect(document.title).toBe('Economy | Argentina 2056');
+    expect(document.title).toBe('Economía | Argentina 2056');
     setScene('forecast');
-    expect(document.title).toBe('Forecast 2056 | Argentina 2056');
+    expect(document.title).toBe('Pronóstico 2056 | Argentina 2056');
   });
 
   it('documentTitle formats the label and the app title', () => {
-    expect(documentTitle('sandbox')).toBe('Sandbox | Argentina 2056');
+    expect(documentTitle('sandbox')).toBe('Simulador | Argentina 2056');
   });
 
   it('the html entries declare lang="en" and index.html carries the same app title', () => {
@@ -91,29 +91,32 @@ describe('document title', () => {
 });
 
 describe('toggle buttons expose aria-pressed', () => {
-  // [accessible name, aria-pressed at start]: not playing, 3D mode on (the store starts in 3d), AI overlay off
-  it.each([
-    ['Play or Pause', 'false', 'true'],
-    ['Toggle 2D/3D Mode', 'true', 'false'],
-    ['Toggle AI Overlay', 'false', 'true']
-  ])('"%s" starts aria-pressed %s, becomes %s after activation and returns after a second one', (name, start, flipped) => {
+  it('"Efecto de la IA" starts aria-pressed false, becomes true after activation and returns after a second one', () => {
     render(<App />);
-    expect(screen.getByRole('button', { name }).getAttribute('aria-pressed')).toBe(start);
+    const name = 'Efecto de la IA';
+    expect(screen.getByRole('button', { name }).getAttribute('aria-pressed')).toBe('false');
     fireEvent.click(screen.getByRole('button', { name }));
-    expect(screen.getByRole('button', { name }).getAttribute('aria-pressed')).toBe(flipped);
+    expect(screen.getByRole('button', { name }).getAttribute('aria-pressed')).toBe('true');
     fireEvent.click(screen.getByRole('button', { name }));
-    expect(screen.getByRole('button', { name }).getAttribute('aria-pressed')).toBe(start);
+    expect(screen.getByRole('button', { name }).getAttribute('aria-pressed')).toBe('false');
+  });
+
+  it('play and pause is one button whose name says what it will do, so it needs no aria-pressed', () => {
+    render(<App />);
+    expect(screen.getByRole('button', { name: 'Reproducir' }).hasAttribute('aria-pressed')).toBe(false);
+    fireEvent.click(screen.getByRole('button', { name: 'Reproducir' }));
+    expect(screen.getByRole('button', { name: 'Pausar' })).toBeTruthy();
   });
 });
 
 describe('province filter focus', () => {
-  const opener = () => screen.getByRole('button', { name: 'Filter by Province' });
+  const opener = () => screen.getByRole('button', { name: /^Provincia:/ });
 
   it('is a dialog with an accessible name, and the focus moves into it when it opens', () => {
     render(<App />);
     opener().focus();
     fireEvent.click(opener());
-    const dialog = screen.getByRole('dialog', { name: 'Filter by province' });
+    const dialog = screen.getByRole('dialog', { name: 'Filtrar por provincia' });
     expect(dialog.contains(document.activeElement)).toBe(true);
   });
 
@@ -131,7 +134,7 @@ describe('province filter focus', () => {
     render(<App />);
     opener().focus();
     fireEvent.click(opener());
-    fireEvent.click(screen.getByRole('button', { name: 'All provinces' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Todas las provincias' }));
     expect(screen.queryByRole('dialog')).toBeNull();
     expect(document.activeElement).toBe(opener());
   });

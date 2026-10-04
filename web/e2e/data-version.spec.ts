@@ -8,9 +8,9 @@ test('every data request carries ?v=<data_version>, and _version.json is read on
   });
 
   await page.goto('/');
-  await page.getByRole('tab', { name: 'Economy' }).click();
+  await page.getByRole('tab', { name: 'Economía' }).click();
   await expect(page.getByRole('heading', { name: 'Argentina in the long run', level: 1 })).toBeVisible();
-  await page.getByRole('tab', { name: 'Resources' }).click();
+  await page.getByRole('tab', { name: 'Recursos' }).click();
   await expect(page.getByRole('heading', { name: 'Natural Resources', level: 1 })).toBeVisible();
 
   const version = dataRequests.filter((u) => u.startsWith('/data/_version.json'));

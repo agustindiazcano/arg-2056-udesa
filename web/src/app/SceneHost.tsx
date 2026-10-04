@@ -6,7 +6,7 @@ import type { Scene } from '../types/scene';
 export function SceneHost({ scene }: { scene: Scene }) {
   const CurrentScene = SCENE_COMPONENTS[scene];
   return (
-    <Suspense fallback={<p role="status" aria-live="polite">Loading scene</p>}>
+    <Suspense fallback={<p role="status" aria-live="polite" className="fallback">Cargando escena</p>}>
       <CurrentScene />
     </Suspense>
   );

@@ -14,9 +14,9 @@ export const SCENE_COMPONENTS: Record<Scene, ComponentType> = {
 
 export const SCENE_LABELS: Record<Scene, string> = {
   'andes': 'Andes',
-  'economy': 'Economy',
-  'resources': 'Resources',
-  'forecast': 'Forecast 2056',
-  'ai-revolution': 'AI Revolution',
-  'sandbox': 'Sandbox',
+  'economy': 'Economía',
+  'resources': 'Recursos',
+  'forecast': 'Pronóstico 2056',
+  'ai-revolution': 'Revolución IA',
+  'sandbox': 'Simulador',
 };

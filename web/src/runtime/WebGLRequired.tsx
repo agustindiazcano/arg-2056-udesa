@@ -11,16 +11,16 @@ export function WebGLRequired() {
 
   if (!caps.webgl2) {
     return (
-      <div role="status" aria-live="polite">
-        <p>This view needs WebGL2. Your browser or device does not provide it.</p>
-        <a href="references.html">Sources and methods</a>
+      <div role="status" aria-live="polite" className="notice">
+        <p>Esta vista necesita WebGL2. Tu navegador o dispositivo no lo ofrece.</p>
+        <a href="references.html">Fuentes y métodos</a>
       </div>
     );
   }
   if (tier === 'low') {
     return (
-      <p role="status" aria-live="polite">
-        This view runs in reduced quality on this device.
+      <p role="status" aria-live="polite" className="notice">
+        Esta vista funciona con calidad reducida en este dispositivo.
       </p>
     );
   }

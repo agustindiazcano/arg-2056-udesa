@@ -88,17 +88,17 @@ describe('stylesheet colors that the pages really use', () => {
     return match[1]!;
   };
 
-  it('the body text (--color-text) on the body background (--color-bg) is at least 4.5:1', () => {
-    expect(contrastRatio(color('color-text'), color('color-bg'))).toBeGreaterThanOrEqual(4.5);
+  it('the body text (--ink) on the body background (--page) is at least 4.5:1', () => {
+    expect(contrastRatio(color('ink'), color('page'))).toBeGreaterThanOrEqual(4.5);
   });
 
-  it('the focus ring (--color-focus) is at least 3:1 against the body, the page and the surface backgrounds', () => {
-    for (const bg of [color('color-bg'), color('page'), color('surface')]) {
+  it('the focus ring (--color-focus) is at least 3:1 against the page and the surface backgrounds', () => {
+    for (const bg of [color('page'), color('surface')]) {
       expect(contrastRatio(color('color-focus'), bg), `focus on ${bg}`).toBeGreaterThanOrEqual(3);
     }
   });
 
-  it('the button border (--color-primary) is at least 3:1 against the body background', () => {
-    expect(contrastRatio(color('color-primary'), color('color-bg'))).toBeGreaterThanOrEqual(3);
+  it('the accent (--blue), used for the selected tab, the borders of pressed controls and links, is at least 3:1 against the page', () => {
+    expect(contrastRatio(color('blue'), color('page'))).toBeGreaterThanOrEqual(3);
   });
 });

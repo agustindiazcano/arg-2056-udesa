@@ -7,7 +7,7 @@ test.describe('boot', () => {
 
     await expect(page).toHaveTitle('Andes | Argentina 2056');
     // the build uses mock data today; this assertion goes away with the mock (see docs/release-checklist.md)
-    await expect(page.getByText('MOCK DATA')).toBeVisible();
+    await expect(page.getByText('Datos ilustrativos')).toBeVisible();
 
     const tabs = page.getByRole('tab');
     await expect(tabs).toHaveCount(SCENES.length);

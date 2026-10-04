@@ -4,6 +4,7 @@ import { PROVINCES } from '../types/province';
 
 export function ProvinceFilter() {
   const open = useStore((s) => s.provinceFilterOpen);
+  const selected = useStore((s) => s.province);
   const dispatch = useStore((s) => s.dispatch);
   const dialogRef = useRef<HTMLDivElement>(null);
 
@@ -21,18 +22,30 @@ export function ProvinceFilter() {
   if (!open) return null;
 
   return (
-    <div role="dialog" aria-label="Filter by province" ref={dialogRef}>
-      <button onClick={() => dispatch({ type: 'selectProvince', province: null })}>
-        All provinces
-      </button>
-      {PROVINCES.map((p) => (
+    <div role="dialog" aria-label="Filtrar por provincia" className="popover" ref={dialogRef}>
+      <p className="popover-title">Elegí una provincia (Esc para cerrar)</p>
+      <div className="chips">
         <button
-          key={p.id}
-          onClick={() => dispatch({ type: 'selectProvince', province: p.id })}
+          type="button"
+          className="chip"
+          aria-pressed={selected === null}
+          onClick={() => dispatch({ type: 'selectProvince', province: null })}
         >
-          {p.name}
+          Todas las provincias
         </button>
-      ))}
+        {PROVINCES.map((p) => (
+          <button
+            key={p.id}
+            type="button"
+            className="chip"
+            aria-pressed={selected === p.id}
+            title={p.name}
+            onClick={() => dispatch({ type: 'selectProvince', province: p.id })}
+          >
+            {p.name}
+          </button>
+        ))}
+      </div>
     </div>
   );
 }
