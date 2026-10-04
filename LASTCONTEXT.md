@@ -14,6 +14,8 @@
 
 - **F4 done on `task/motion-story`** (stacked on F3): gsap 3.15.0 (exact). `web/src/motion/` has `timings.ts` (design.md section 5), `SceneTransition` (400 ms fade + 24 px on scene change), `CountUp` (value tiles of Economía and Pronóstico count once on mount; later values snap). `EChart` draws series in over 600 ms and updates at once. `StoryCaption` fades the text per step and is a floating glass card; the 18 steps are drafts without figures or sources, still `placeholder: true` (tag "Borrador"). Everything is skipped under `prefers-reduced-motion` (tests import `tests/unit/reducedMotionStub.ts` to read final numbers). Main bundle 133,255 B of 134,144 B.
 
+- **Recursos map** (`task/resources-map`, stacked on F4): a province map of the selected resource and year under the charts in Recursos, from observed production (`scenes/resources/mapValues.ts`, no range, `observed` mode of `ProvinceMap`). Clicking a province selects it for the whole app.
+
 ## Decisions
 - UI text avoids the second person (infinitives and impersonal forms) to stay neutral between voseo and tuteo. The human may want to change that: it is one pass over the strings.
 - The story steps, the era bands, the page description and the two placeholder scenes (Andes, Revolución IA) are provisional content, now in Spanish ("(provisorio)", "Texto provisorio. Reemplazar antes del lanzamiento."). The release gate still keys on `placeholder: true`, not on the text. Real story text was not touched.
