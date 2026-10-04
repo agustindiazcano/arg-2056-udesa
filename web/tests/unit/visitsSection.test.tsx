@@ -36,7 +36,7 @@ describe('VisitsSection', () => {
     expect(within(section).getByText(/from 2026-10-01 to 2026-10-02 \(2 days\)/)).toBeTruthy();
 
     const rows = within(within(section).getByRole('table', { name: 'Visits by country' })).getAllByRole('row');
-    const cells = rows.map((r) => within(r).getAllByRole(/cell|columnheader/).map((c) => c.textContent));
+    const cells = rows.map((r) => [...r.querySelectorAll('th, td')].map((c) => c.textContent));
     expect(cells).toEqual([
       ['Country', 'Visitors', 'Page views'],
       ['\u{1F1E6}\u{1F1F7} Argentina', '403', '1,205'],

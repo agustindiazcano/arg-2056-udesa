@@ -22,4 +22,10 @@ test.describe('references page', () => {
     await expect(page).toHaveURL(/\/references\.html$/);
     await expect(page.getByRole('heading', { name: 'Sources and attributions', level: 1 })).toBeVisible();
   });
+  test('has a Visits section (empty until the first weekly archive is merged)', async ({ page }) => {
+    await page.goto('/references.html');
+    const visits = page.getByRole('region', { name: 'Visits' });
+    await expect(visits).toBeVisible();
+    await expect(visits.getByText('No visits have been archived yet.')).toBeVisible();
+  });
 });
