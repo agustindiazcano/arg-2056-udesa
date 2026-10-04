@@ -93,6 +93,6 @@ describe('metaPlugin', () => {
     const transform = plugin.transformIndexHtml as (html: string, ctx: { filename: string }) => string;
     const html = '<html><head><title>x</title></head><body></body></html>';
     expect(transform(html, { filename: '/repo/web/index.html' })).toContain('<title>Argentina 2056</title>');
-    expect(transform(html, { filename: 'C:\repo\web\references.html' })).toContain('<title>Sources and attributions | Argentina 2056</title>');
+    expect(transform(html, { filename: String.raw`C:\repo\web\references.html` })).toContain('<title>Sources and attributions | Argentina 2056</title>');
   });
 });
