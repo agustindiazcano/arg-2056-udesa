@@ -267,7 +267,7 @@ Legend: DONE = merged. READY = can start now. BLOCKED = needs the human input na
 | 22 | andes-integration | BLOCKED | terrain outputs committed (D-andes-1 to D-andes-4 decided) |
 | 23 | scene-forecast-map-3d | SUPERSEDED | replaced by presentation-3d |
 | 23b | presentation-3d (six PRs) | IN PROGRESS | F2b merged, D-3d-1 to D-3d-6 decided (3D first), real province geometry done |
-| 23c | map-navigation | READY | (3D first, D-3d-6) zoom, pan and reset on 2D maps; free orbit, pan, zoom and reset on 3D |
+| 23c | map-navigation | DONE (PR open) | (3D first, D-3d-6) zoom, pan and reset on 2D maps; free orbit, pan, zoom and reset on 3D |
 | 23d | fullscreen-viewer | READY | better after map-navigation: big-view popup with carousel, name, filters and statistics |
 | | **Real data** | | |
 | 24 | data-economy-population | BLOCKED | research files, my verification, population-age-contract merged (D-gdp-1 decided) |

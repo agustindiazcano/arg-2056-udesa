@@ -15,6 +15,7 @@ configure({ asyncUtilTimeout: 4000 });
 
 interface FakeChart {
   setOption: ReturnType<typeof vi.fn>;
+  dispatchAction: ReturnType<typeof vi.fn>;
   dispose: ReturnType<typeof vi.fn>;
   handlers: Record<string, (params: unknown) => void>;
 }
@@ -26,10 +27,14 @@ const { instances, mockRegisterMap } = vi.hoisted(() => ({
 
 vi.mock('../../src/charts/echarts.js', () => ({
   init: vi.fn(() => {
-    const chart: FakeChart = { setOption: vi.fn(), dispose: vi.fn(), handlers: {} };
+    const chart: FakeChart = { setOption: vi.fn(), dispatchAction: vi.fn(), dispose: vi.fn(), handlers: {} };
     instances.push(chart);
     return {
       setOption: chart.setOption,
+      dispatchAction: chart.dispatchAction,
+      getOption: () => ({ geo: [{ zoom: 2 }] }),
+      getWidth: () => 800,
+      getHeight: () => 400,
       resize: vi.fn(),
       dispose: chart.dispose,
       on: (event: string, fn: (params: unknown) => void) => {
@@ -145,6 +150,22 @@ describe('Forecast scene: province map', () => {
     act(() => useStore.setState({ scenario: 'optimistic' }));
     await waitFor(() => expect(mapData()).toEqual([['AR-A', 25], ['AR-B', 35], ['AR-C', 13]]));
     expect(mockRegisterMap).toHaveBeenCalledTimes(1); // not registered again after re-renders
+  });
+
+  it('lets the map be zoomed and moved: roam on, the three buttons, and reset shows the whole territory', async () => {
+    stubFetch();
+    await loadedWithMap();
+    const option = mapOption() as unknown as { geo: { roam: boolean; scaleLimit: { min: number; max: number } } };
+    expect(option.geo.roam).toBe(true);
+    expect(option.geo.scaleLimit).toEqual({ min: 1, max: 8 });
+
+    const chart = mapChart()!;
+    fireEvent.click(screen.getByRole('button', { name: 'Acercar' }));
+    expect(chart.dispatchAction).toHaveBeenLastCalledWith(expect.objectContaining({ type: 'geoRoam', zoom: 1.25 }));
+    fireEvent.click(screen.getByRole('button', { name: 'Alejar' }));
+    expect((chart.dispatchAction.mock.calls.at(-1)![0] as { zoom: number }).zoom).toBeCloseTo(0.8, 10);
+    fireEvent.click(screen.getByRole('button', { name: 'Restablecer vista' }));
+    expect(chart.setOption).toHaveBeenLastCalledWith({ geo: { zoom: 1, center: null } });
   });
 
   it('shows the geometry source and attribution next to the forecast source line', async () => {

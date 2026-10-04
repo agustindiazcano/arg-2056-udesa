@@ -15,12 +15,14 @@ import {
 import { projectFeatures, provinceStyle } from '../charts3d/mapGeometry';
 import type { ProjectionRequest } from '../charts3d/projection';
 import type { Map3DSpec } from '../charts3d/types';
+import { NavControls } from '../ui/NavControls';
 import { useQualityOptional } from '../runtime/CapabilityProvider';
 import { QUALITY_PRESETS } from '../runtime/capabilities';
 import { useReducedMotion } from '../runtime/useReducedMotion';
 import { SEQUENTIAL_BLUE, tokens } from '../styles/tokens';
 import { addProjection } from './projection';
 import { createStage } from './stage';
+import { useCameraNav } from './useCameraNav';
 
 const GROW_MS = 600;
 const SELECTED_LIFT = 0.35;
@@ -37,6 +39,7 @@ export function Map3D({ spec, projection }: { spec: Map3DSpec; projection?: Proj
   const reduced = useReducedMotion();
   const quality = useQualityOptional();
   const pixelRatioCap = QUALITY_PRESETS[quality?.tier ?? 'medium'].pixelRatioCap;
+  const { stageRef, poseRef, controls } = useCameraNav();
 
   useEffect(() => {
     const host = hostRef.current;
@@ -47,8 +50,13 @@ export function Map3D({ spec, projection }: { spec: Map3DSpec; projection?: Proj
       target: new Vector3(0, 0.5 + (projection ? 0.8 : 0), 0),
       radius: Math.max(7, map.bounds.height * 1.55) * (projection ? 1.9 : 1),
       theta: 0,
-      phi: 0.8
+      phi: 0.8,
+      box: { minX: -map.bounds.width / 2, maxX: map.bounds.width / 2, minY: 0, maxY: 3, minZ: -map.bounds.height / 2, maxZ: map.bounds.height / 2 },
+      pose: poseRef.current ?? undefined,
+      animateReset: !reduced && quality?.tier !== 'low'
     });
+    poseRef.current = stage.pose;
+    stageRef.current = stage;
     const { scene } = stage;
     scene.add(new AmbientLight(tokens.ink, 1.2));
     const sun = new DirectionalLight(tokens.ink, 2.4);
@@ -157,13 +165,17 @@ export function Map3D({ spec, projection }: { spec: Map3DSpec; projection?: Proj
       canvas.removeEventListener('pointerleave', onLeave);
       canvas.removeEventListener('pointerdown', onDown);
       canvas.removeEventListener('pointerup', onUp);
+      stageRef.current = null;
       stage.dispose();
     };
   }, [spec.geo, spec.values, spec.metric, spec.selectedId, spec.formatValue, projection?.title, quality?.tier, pixelRatioCap, reduced]);
 
   return (
-    <div ref={hostRef} className="chart3d" role="img" aria-label={spec.summary} data-chart3d="map">
-      <div ref={tipRef} className="chart3d-tip" hidden />
+    <div className="chart3d-wrap">
+      <div ref={hostRef} className="chart3d" role="img" aria-label={spec.summary} data-chart3d="map">
+        <div ref={tipRef} className="chart3d-tip" hidden />
+      </div>
+      <NavControls {...controls} />
     </div>
   );
 }

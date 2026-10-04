@@ -19,6 +19,7 @@ import { formatAxisNumber } from '../charts/format';
 import { layoutBars } from '../charts3d/layout';
 import type { ProjectionRequest } from '../charts3d/projection';
 import type { Bars3DSpec } from '../charts3d/types';
+import { NavControls } from '../ui/NavControls';
 import { useQualityOptional } from '../runtime/CapabilityProvider';
 import { QUALITY_PRESETS } from '../runtime/capabilities';
 import { useReducedMotion } from '../runtime/useReducedMotion';
@@ -26,6 +27,7 @@ import { SEQUENTIAL_BLUE, tokens } from '../styles/tokens';
 import { textSprite } from './labels';
 import { addProjection } from './projection';
 import { createStage } from './stage';
+import { useCameraNav } from './useCameraNav';
 
 const MAX_HEIGHT = 4;
 const BAR_WIDTH = 0.9;
@@ -42,18 +44,26 @@ export function Bars3D({ spec, projection }: { spec: Bars3DSpec; projection?: Pr
   const reduced = useReducedMotion();
   const quality = useQualityOptional();
   const pixelRatioCap = QUALITY_PRESETS[quality?.tier ?? 'medium'].pixelRatioCap;
+  const { stageRef, poseRef, controls } = useCameraNav();
 
   useEffect(() => {
     const host = hostRef.current;
     if (!host) return;
     const layout = layoutBars(spec.bars, { maxHeight: MAX_HEIGHT, barWidth: BAR_WIDTH, gap: GAP, depth: DEPTH });
+    const plateWidthBox = layout.width + 3.2;
+    const plateDepthBox = DEPTH + 3;
     const stage = createStage(host, {
       pixelRatioCap,
       target: new Vector3(0, MAX_HEIGHT * 0.34 + (projection ? 0.9 : 0), 0),
       radius: Math.max(13, layout.width * 1.05 + 8) * (projection ? 1.2 : 1),
       theta: 0.22,
-      phi: 1.15
+      phi: 1.15,
+      box: { minX: -plateWidthBox / 2, maxX: plateWidthBox / 2, minY: 0, maxY: MAX_HEIGHT, minZ: -plateDepthBox / 2, maxZ: plateDepthBox / 2 },
+      pose: poseRef.current ?? undefined,
+      animateReset: !reduced && quality?.tier !== 'low'
     });
+    poseRef.current = stage.pose;
+    stageRef.current = stage;
     const { scene } = stage;
 
     scene.add(new AmbientLight(tokens.ink, 1.1));
@@ -182,13 +192,17 @@ export function Bars3D({ spec, projection }: { spec: Bars3DSpec; projection?: Pr
       stopProjection();
       canvas.removeEventListener('pointermove', onMove);
       canvas.removeEventListener('pointerleave', onLeave);
+      stageRef.current = null;
       stage.dispose();
     };
   }, [spec, projection?.title, quality?.tier, pixelRatioCap, reduced]);
 
   return (
-    <div ref={hostRef} className="chart3d" role="img" aria-label={spec.summary} data-chart3d={spec.kind}>
-      <div ref={tipRef} className="chart3d-tip" hidden />
+    <div className="chart3d-wrap">
+      <div ref={hostRef} className="chart3d" role="img" aria-label={spec.summary} data-chart3d={spec.kind}>
+        <div ref={tipRef} className="chart3d-tip" hidden />
+      </div>
+      <NavControls {...controls} />
     </div>
   );
 }

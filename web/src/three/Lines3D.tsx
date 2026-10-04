@@ -19,12 +19,14 @@ import {
 import { formatAxisNumber } from '../charts/format';
 import { layoutLines } from '../charts3d/linesLayout';
 import type { Lines3DSpec } from '../charts3d/types';
+import { NavControls } from '../ui/NavControls';
 import { useQualityOptional } from '../runtime/CapabilityProvider';
 import { QUALITY_PRESETS } from '../runtime/capabilities';
 import { useReducedMotion } from '../runtime/useReducedMotion';
 import { SEQUENTIAL_BLUE, tokens } from '../styles/tokens';
 import { textSprite } from './labels';
 import { createStage } from './stage';
+import { useCameraNav } from './useCameraNav';
 
 const WIDTH = 11;
 const MAX_HEIGHT = 4.2;
@@ -45,6 +47,7 @@ export function Lines3D({ spec }: { spec: Lines3DSpec }) {
   const reduced = useReducedMotion();
   const quality = useQualityOptional();
   const pixelRatioCap = QUALITY_PRESETS[quality?.tier ?? 'medium'].pixelRatioCap;
+  const { stageRef, poseRef, controls } = useCameraNav();
 
   useEffect(() => {
     const host = hostRef.current;
@@ -56,8 +59,13 @@ export function Lines3D({ spec }: { spec: Lines3DSpec }) {
       target: new Vector3(0, MAX_HEIGHT * 0.4, 0),
       radius: WIDTH * 1.25 + lanesDepth * 0.5 + 5,
       theta: 0.3,
-      phi: 1.0
+      phi: 1.0,
+      box: { minX: -(WIDTH + 3) / 2, maxX: (WIDTH + 3) / 2, minY: 0, maxY: MAX_HEIGHT, minZ: -(lanesDepth + 3.4) / 2, maxZ: (lanesDepth + 3.4) / 2 },
+      pose: poseRef.current ?? undefined,
+      animateReset: !reduced && quality?.tier !== 'low'
     });
+    poseRef.current = stage.pose;
+    stageRef.current = stage;
     const { scene } = stage;
     scene.add(new AmbientLight(tokens.ink, 1.15));
     const sun = new DirectionalLight(tokens.ink, 2.2);
@@ -174,9 +182,15 @@ export function Lines3D({ spec }: { spec: Lines3DSpec }) {
 
     return () => {
       cancel();
+      stageRef.current = null;
       stage.dispose();
     };
-  }, [spec, pixelRatioCap, reduced]);
+  }, [spec, quality?.tier, pixelRatioCap, reduced]);
 
-  return <div ref={hostRef} className="chart3d" role="img" aria-label={spec.summary} data-chart3d="lines" />;
+  return (
+    <div className="chart3d-wrap">
+      <div ref={hostRef} className="chart3d" role="img" aria-label={spec.summary} data-chart3d="lines" />
+      <NavControls {...controls} />
+    </div>
+  );
 }

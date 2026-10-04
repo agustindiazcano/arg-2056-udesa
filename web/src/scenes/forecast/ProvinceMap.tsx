@@ -1,5 +1,9 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { registerMap } from '../../charts/echarts.js';
+import type { ECharts } from '../../charts/echarts.js';
+import { resetMap, zoomMap } from '../../charts/mapNav.js';
+import { geoBbox } from '../../charts/navState.js';
+import { NavControls } from '../../ui/NavControls.js';
 import { MAP_NAME, buildProvinceMap } from '../../charts/builders/provinceMap.js';
 import { DataTable } from '../../charts/DataTable.js';
 import { EChart } from '../../charts/EChart.js';
@@ -86,6 +90,8 @@ export function ProvinceMap({
   onSelect
 }: ProvinceMapProps) {
   const [asTable, setAsTable] = useState(false);
+  const apiRef = useRef<ECharts | null>(null);
+  const bbox = useMemo(() => geoBbox(geo), [geo]);
 
   const centroids = useMemo(
     () => Object.fromEntries(geo.features.map((f) => [f.properties.id, f.properties.centroid])),
@@ -143,7 +149,7 @@ export function ProvinceMap({
         {hideTitle ? <span /> : <span>Mapa de provincias, {year}</span>}
         <TableToggle pressed={asTable} onToggle={() => setAsTable(!asTable)} />
       </div>
-      <div style={{ flex: 1, minHeight: '280px' }}>
+      <div style={{ flex: 1, minHeight: '280px', position: 'relative' }}>
         {asTable ? (
           <DataTable
             caption="Mapa de provincias"
@@ -166,7 +172,14 @@ export function ProvinceMap({
             data={rows}
           />
         ) : (
-          <EChart option={built.option} aria-label={built.summary} onClick={handleClick} />
+          <>
+            <EChart option={built.option} aria-label={built.summary} onClick={handleClick} roam={{ bbox }} apiRef={apiRef} />
+            <NavControls
+              onZoomIn={() => apiRef.current && zoomMap(apiRef.current, 'in')}
+              onZoomOut={() => apiRef.current && zoomMap(apiRef.current, 'out')}
+              onReset={() => apiRef.current && resetMap(apiRef.current)}
+            />
+          </>
         )}
       </div>
     </div>

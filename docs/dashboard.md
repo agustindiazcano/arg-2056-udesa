@@ -70,10 +70,10 @@ the right panel with the story docked, the bottom bar with the scene filters, pa
 | D5 | `view-3d-map` | Extruded province map in 3D, same selection as 2D |
 | D6 | `view-3d-rest` | Ribbons for lines and fan, blocks for the treemap, text alternative |
 | D7 | `andes` | Andes scene on the same dashboard (needs the terrain and `D-andes-1` to `D-andes-4`) |
-| D8 | `map-navigation` | Zoom (wheel, `+` and `-` buttons), pan and reset on the 2D maps; free orbit, pan, wider zoom and reset on every 3D view; brief `map-navigation.md` |
+| D8 (done) | `map-navigation` | Zoom (wheel, `+` and `-` buttons), pan and reset on the 2D maps; free orbit, pan, wider zoom and reset on every 3D view; brief `map-navigation.md` |
 | D9 | `fullscreen-viewer` | A "Pantalla grande" button on every view that opens a popup with the view large, a carousel over the scene's views, and at the top right the view name with the scene's filters and statistics; brief `fullscreen-viewer.md` |
 
-D8 and D9 were asked for by the human on 2026-10-04 (3D is the priority, `D-3d-6`): today the 2D maps have no zoom or pan (`roam: false`), the 3D views orbit and zoom with the wheel only, and there is no big view. They come before the 3D polish.
+D8 and D9 were asked for by the human on 2026-10-04 (3D is the priority, `D-3d-6`). D8 is done (see "Navigation" below); D9 (the big view) is next. They come before the 3D polish.
 
 ## Rules
 
@@ -81,3 +81,14 @@ D8 and D9 were asked for by the human on 2026-10-04 (3D is the priority, `D-3d-6
 - No new scroll box, no `tabIndex` on non-interactive elements. Reduced motion: no tweens, no auto-rotate.
 - Colors only from `tokens.css` / `tokens.ts`; the 3D materials read the same tokens.
 - The main bundle stays under `web/budgets.json`; everything 3D loads on demand.
+
+## Navigation of the maps and the 3D views (D8, done)
+
+- **3D** (`web/src/charts3d/camera.ts`, applied by `web/src/three/stage.ts`): drag turns the view with no azimuth limit (polar angle 0.05 to 1.55 rad); right-drag, Shift-drag or two fingers move the camera target, kept inside the box of the chart; the wheel and a pinch zoom toward the pointer between 0.25 and 3 times the start radius; a double click or the reset button restores the start pose (350 ms glide, a jump under reduced motion or on the low tier); "Cenital" and "Perspectiva" are presets. The camera is written in `data-camera` of the canvas at the end of a gesture (the e2e tests read it).
+- **2D maps** (`web/src/charts/navState.ts`, `mapNav.ts`, `EChart` with `roam`): wheel and button zoom from 1 to 8 times, pan that keeps the territory in the frame, reset.
+- **Buttons**: `ui/NavControls` (`+`, `-`, reset; the 3D views add the presets) in the corner of the chart. `+` and `-` of the keyboard stay the playback speed; zoom by keyboard is Tab to the buttons.
+- **State**: the zoom and the camera live in the view, not in the store. They survive year, scenario and filter changes and reset when the mode or the scene changes.
+
+## Projection test
+
+In 3D mode the view bar has a "Test proyección" button. It opens a dialog with the map of Argentina and a bar chart in 3D on made-up values ("datos de prueba"), each with a title floating above it, a beam of light from the title to the chart and a scan plane that travels up and down through it (`charts3d/projection.ts`, `three/projection.ts`, `Stage.loop`). It is a test of the effects layer, not a dashboard view: nothing in it is model data. Under reduced motion the title and the beam are still and there is no scan plane; on the low tier the picture is still. `?quality=high` shows the animation on a machine detected as low.
