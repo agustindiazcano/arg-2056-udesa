@@ -11,7 +11,7 @@ and `--ink-2`. The language of the interface is Spanish. The look is defined onc
 | Component styles (header, tabs, control bar, buttons, segmented control, chips, popover, badge) | `web/src/styles/ui.css` |
 | The shell | `web/src/app/` (`App`, `Header`, `TabBar`, `Hud` = the control bar, `ProvinceFilter`, `MockBadge`, `SceneHost`) |
 | Shared controls | `web/src/ui/Segmented.tsx` |
-| Shared scene components | `web/src/ui/` (`SceneShell`, `TableToggle`, `FilterBar` and `FilterChip`, `SceneLoading` and `SceneError`) |
+| Shared scene components | `web/src/ui/` (`SceneShell`, `TableToggle`, `NavControls`, `FilterBar` and `FilterChip`, `SceneLoading` and `SceneError`) |
 | Spanish names (resources, scenarios, indicators, project statuses, position against the range) | `web/src/content/labels.ts` |
 | Number and date formats | `web/src/charts/format.ts` (`APP_LOCALE = 'es-AR'`, `formatValue`, `formatNumber`, `formatDecimal`, `formatPercent`, `formatDate`, `ordinal`) |
 
@@ -46,6 +46,7 @@ Every scene is built on the same pieces, so a new scene or the 3D presentation r
 
 - `SceneShell`: the one `h1`, a one-line subtitle, the content and the auditable source line ("Fuente: A, B, consultado
   el 2 de octubre de 2026"; `dateLabel="generado el"` for model output). It is the only place that writes that line.
+- `NavControls`: the `+` ("Acercar"), `-` ("Alejar") and reset ("Restablecer vista") buttons in the corner of a map or 3D view; the 3D views add "Cenital" and "Perspectiva". Native buttons, tokens only, 44 px on touch; see `docs/dashboard.md`.
 - `TableToggle`: the "Ver tabla" button (`aria-pressed`) that swaps a chart for the table of the same data.
 - `FilterBar` and `FilterChip`: a labelled group of pressed-state chips (indicator, mode, resource, countries, scenario).
 - `SceneLoading` and `SceneError`: the two states of every scene that loads data. Both are `role="status"` because the
