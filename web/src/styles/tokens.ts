@@ -66,6 +66,13 @@ export const DIVERGING = [
   '#3987e5'
 ];
 
+/**
+ * The natural colors of the terrain in the Andes scene, from the lowest ground (valley green) to the highest (snow),
+ * with the luminance growing at every step. A first choice by the agent (the human asked for "colors of the terrain"),
+ * open to the human's art direction. Mirrors --terrain-1..8.
+ */
+export const TERRAIN_RAMP = ['#2f4a26', '#4c6a2f', '#7a8a3c', '#a08f4a', '#b0916a', '#a9a39c', '#cbc8c2', '#f1f3f6'];
+
 /** Fill of a province without data: the baseline color (design.md), never a step of the ramps. Mirrors --no-data. */
 export const NO_DATA = '#383835';
 
