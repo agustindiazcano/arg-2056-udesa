@@ -1,5 +1,19 @@
 import { Mesh, PerspectiveCamera, Scene, Vector3, WebGLRenderer } from 'three';
 import type { Material, Object3D, Texture } from 'three';
+import {
+  BUTTON_ZOOM,
+  WHEEL_ZOOM,
+  blendCamera,
+  cameraLimits,
+  copyCamera,
+  orbit,
+  pan,
+  presetCamera,
+  resetCamera,
+  zoomAt,
+  zoomBy
+} from '../charts3d/camera';
+import type { CameraPreset, CameraState, TargetBox } from '../charts3d/camera';
 import { tokens } from '../styles/tokens';
 
 export interface StageOptions {
@@ -11,6 +25,20 @@ export interface StageOptions {
   theta: number;
   phi: number;
   fov?: number;
+  /** where the camera target may move; default: around the start target, half the start radius to each side */
+  box?: TargetBox;
+  /** the pose to keep: a view rebuilt for new data passes the pose of the old one. Changed in place. */
+  pose?: CameraState;
+  /** the reset glides back over a short time; false (reduced motion, low quality) jumps */
+  animateReset?: boolean;
+}
+
+/** What the `+`, `-` and reset buttons call. */
+export interface StageNav {
+  zoomIn: () => void;
+  zoomOut: () => void;
+  reset: () => void;
+  preset: (preset: CameraPreset) => void;
 }
 
 export interface Stage {
@@ -23,15 +51,18 @@ export interface Stage {
   animate: (durationMs: number, onFrame: (t: number) => void) => () => void;
   /** calls `onFrame(elapsedMs)` and renders on every animation frame until the returned cancel is called (or on dispose) */
   loop: (onFrame: (elapsedMs: number) => void) => () => void;
+  /** the live camera pose: keep it to hand to the next stage of the same view */
+  pose: CameraState;
+  nav: StageNav;
   dispose: () => void;
 }
 
-const PHI_MIN = 0.3;
-const PHI_MAX = 1.5;
+const RESET_MS = 350;
 
 /**
- * A scene on a canvas that fills `host`: it renders on demand, orbits with the pointer (drag) and zooms with the wheel,
- * resizes with the host and frees everything on `dispose` (geometries, materials, textures and the WebGL context).
+ * A scene on a canvas that fills `host`: it renders on demand and the camera is free: drag turns it, right-drag or
+ * Shift-drag or two fingers move it, the wheel and a pinch zoom toward the pointer, a double click restores the start
+ * pose. The math is in `charts3d/camera`. It resizes with the host and frees everything on `dispose` (geometries, materials, textures and the WebGL context).
  */
 export function createStage(host: HTMLElement, o: StageOptions): Stage {
   const renderer = new WebGLRenderer({ antialias: true, alpha: true });
@@ -46,19 +77,20 @@ export function createStage(host: HTMLElement, o: StageOptions): Stage {
 
   const scene = new Scene();
   const camera = new PerspectiveCamera(o.fov ?? 32, 1, 0.1, 300);
-  let theta = o.theta;
-  let phi = o.phi;
-  let radius = o.radius;
-  const minRadius = o.radius * 0.45;
-  const maxRadius = o.radius * 1.8;
+  const startPose: CameraState = { x: o.target.x, y: o.target.y, z: o.target.z, theta: o.theta, phi: o.phi, radius: o.radius };
+  const half = o.radius * 0.5;
+  const limits = cameraLimits(
+    startPose,
+    o.box ?? { minX: o.target.x - half, maxX: o.target.x + half, minY: 0, maxY: o.target.y + half, minZ: o.target.z - half, maxZ: o.target.z + half }
+  );
+  const pose = o.pose ?? copyCamera(startPose);
+  const fov = o.fov ?? 32;
+  const look = new Vector3();
 
   const place = () => {
-    camera.position.set(
-      o.target.x + radius * Math.sin(phi) * Math.sin(theta),
-      o.target.y + radius * Math.cos(phi),
-      o.target.z + radius * Math.sin(phi) * Math.cos(theta)
-    );
-    camera.lookAt(o.target);
+    const sinP = Math.sin(pose.phi);
+    camera.position.set(pose.x + pose.radius * sinP * Math.sin(pose.theta), pose.y + pose.radius * Math.cos(pose.phi), pose.z + pose.radius * sinP * Math.cos(pose.theta));
+    camera.lookAt(look.set(pose.x, pose.y, pose.z));
   };
   place();
 
@@ -70,6 +102,15 @@ export function createStage(host: HTMLElement, o: StageOptions): Stage {
   const requestRender = () => {
     if (queued === 0) queued = requestAnimationFrame(render);
   };
+  /** the pose in a data attribute (end of a gesture only): the e2e tests read it */
+  const publish = () => {
+    el.dataset.camera = [pose.theta, pose.phi, pose.radius, pose.x, pose.y, pose.z].map((n) => n.toFixed(3)).join(',');
+  };
+  const changed = () => {
+    place();
+    requestRender();
+  };
+  publish();
 
   const size = () => {
     const w = host.clientWidth;
@@ -84,39 +125,117 @@ export function createStage(host: HTMLElement, o: StageOptions): Stage {
   observer?.observe(host);
   size();
 
-  let dragging = false;
-  let lastX = 0;
-  let lastY = 0;
+  // pointers down (at most two matter): one turns, one with Shift or the right button moves, two zoom and move
+  const ids: number[] = [];
+  const xs: number[] = [];
+  const ys: number[] = [];
+  let panning = false;
+  let lastDist = 0;
+  const viewHeight = () => Math.max(1, el.clientHeight || host.clientHeight);
+  const ndc = (clientX: number, clientY: number, out: { x: number; y: number }) => {
+    const r = el.getBoundingClientRect();
+    out.x = r.width > 0 ? ((clientX - r.left) / r.width) * 2 - 1 : 0;
+    out.y = r.height > 0 ? -(((clientY - r.top) / r.height) * 2 - 1) : 0;
+  };
+  const cursor = { x: 0, y: 0 };
+  const aspect = () => (el.clientHeight > 0 ? el.clientWidth / el.clientHeight : 1);
+
   const down = (e: PointerEvent) => {
-    dragging = true;
-    lastX = e.clientX;
-    lastY = e.clientY;
+    if (ids.length >= 2) return;
+    cancelGlide();
+    ids.push(e.pointerId);
+    xs.push(e.clientX);
+    ys.push(e.clientY);
+    panning = e.button === 2 || e.shiftKey;
+    if (ids.length === 2) lastDist = Math.hypot(xs[0]! - xs[1]!, ys[0]! - ys[1]!);
     el.setPointerCapture?.(e.pointerId);
   };
   const move = (e: PointerEvent) => {
-    if (!dragging) return;
-    theta -= (e.clientX - lastX) * 0.008;
-    phi = Math.min(PHI_MAX, Math.max(PHI_MIN, phi - (e.clientY - lastY) * 0.006));
-    lastX = e.clientX;
-    lastY = e.clientY;
-    place();
-    requestRender();
+    const i = ids.indexOf(e.pointerId);
+    if (i < 0) return;
+    if (ids.length === 1) {
+      const dx = e.clientX - xs[0]!;
+      const dy = e.clientY - ys[0]!;
+      if (panning) pan(pose, dx, dy, viewHeight(), fov, limits);
+      else orbit(pose, dx, dy, limits);
+    } else {
+      const oldMidX = (xs[0]! + xs[1]!) / 2;
+      const oldMidY = (ys[0]! + ys[1]!) / 2;
+      xs[i] = e.clientX;
+      ys[i] = e.clientY;
+      const dist = Math.hypot(xs[0]! - xs[1]!, ys[0]! - ys[1]!);
+      const midX = (xs[0]! + xs[1]!) / 2;
+      const midY = (ys[0]! + ys[1]!) / 2;
+      pan(pose, midX - oldMidX, midY - oldMidY, viewHeight(), fov, limits);
+      if (dist > 0 && lastDist > 0) {
+        ndc(midX, midY, cursor);
+        zoomAt(pose, lastDist / dist, cursor.x, cursor.y, aspect(), fov, limits);
+      }
+      lastDist = dist;
+      changed();
+      return;
+    }
+    xs[i] = e.clientX;
+    ys[i] = e.clientY;
+    changed();
   };
   const up = (e: PointerEvent) => {
-    dragging = false;
+    const i = ids.indexOf(e.pointerId);
+    if (i < 0) return;
+    ids.splice(i, 1);
+    xs.splice(i, 1);
+    ys.splice(i, 1);
     el.releasePointerCapture?.(e.pointerId);
+    lastDist = 0;
+    publish();
   };
   const wheel = (e: WheelEvent) => {
     e.preventDefault();
-    radius = Math.min(maxRadius, Math.max(minRadius, radius * (1 + Math.sign(e.deltaY) * 0.08)));
-    place();
-    requestRender();
+    cancelGlide();
+    ndc(e.clientX, e.clientY, cursor);
+    zoomAt(pose, 1 + Math.sign(e.deltaY) * WHEEL_ZOOM, cursor.x, cursor.y, aspect(), fov, limits);
+    changed();
+    publish();
   };
+  const noMenu = (e: Event) => e.preventDefault();
+  const dbl = () => nav.reset();
+
+  // reset and presets glide to the pose (or jump)
+  const from = copyCamera(pose);
+  const to = copyCamera(pose);
+  let glide = () => {};
+  const cancelGlide = () => glide();
+  const glideTo = (apply: (target: CameraState) => void) => {
+    cancelGlide();
+    Object.assign(from, pose);
+    Object.assign(to, pose);
+    apply(to);
+    if (o.animateReset === false) {
+      Object.assign(pose, to);
+      changed();
+      publish();
+      return;
+    }
+    glide = animate(RESET_MS, (t) => {
+      blendCamera(pose, from, to, 1 - (1 - t) ** 3);
+      place();
+      if (t === 1) publish();
+    });
+  };
+  const nav: StageNav = {
+    zoomIn: () => glideTo((t) => zoomBy(t, BUTTON_ZOOM, limits)),
+    zoomOut: () => glideTo((t) => zoomBy(t, 1 / BUTTON_ZOOM, limits)),
+    reset: () => glideTo((t) => resetCamera(t, limits)),
+    preset: (preset) => glideTo((t) => presetCamera(t, preset, limits))
+  };
+
   el.addEventListener('pointerdown', down);
   el.addEventListener('pointermove', move);
   el.addEventListener('pointerup', up);
   el.addEventListener('pointercancel', up);
   el.addEventListener('wheel', wheel, { passive: false });
+  el.addEventListener('contextmenu', noMenu);
+  el.addEventListener('dblclick', dbl);
 
   const running = new Set<number>();
   const animate = (durationMs: number, onFrame: (t: number) => void) => {
@@ -172,6 +291,9 @@ export function createStage(host: HTMLElement, o: StageOptions): Stage {
     el.removeEventListener('pointerup', up);
     el.removeEventListener('pointercancel', up);
     el.removeEventListener('wheel', wheel);
+    el.removeEventListener('contextmenu', noMenu);
+    el.removeEventListener('dblclick', dbl);
+    cancelGlide();
     scene.traverse((object: Object3D) => {
       if (object instanceof Mesh || 'geometry' in object) (object as Mesh).geometry?.dispose();
       const material = (object as Mesh).material as Material | Material[] | undefined;
@@ -185,5 +307,5 @@ export function createStage(host: HTMLElement, o: StageOptions): Stage {
     el.remove();
   };
 
-  return { scene, camera, renderer, requestRender, animate, loop, dispose };
+  return { scene, camera, renderer, requestRender, animate, loop, pose, nav, dispose };
 }

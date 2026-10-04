@@ -150,3 +150,15 @@ export function ndcOf(s: CameraState, p: { x: number; y: number; z: number }, as
   const t = Math.tan((fovDeg * Math.PI) / 360);
   return { x: px / (depth * t * aspect), y: py / (depth * t) };
 }
+
+/** `out` = the pose between `a` and `b` at `t` (0 to 1); the azimuth goes the short way round. */
+export function blendCamera(out: CameraState, a: CameraState, b: CameraState, t: number): void {
+  let d = b.theta - a.theta;
+  d -= TWO_PI * Math.round(d / TWO_PI);
+  out.x = a.x + (b.x - a.x) * t;
+  out.y = a.y + (b.y - a.y) * t;
+  out.z = a.z + (b.z - a.z) * t;
+  out.theta = a.theta + d * t;
+  out.phi = a.phi + (b.phi - a.phi) * t;
+  out.radius = a.radius + (b.radius - a.radius) * t;
+}
