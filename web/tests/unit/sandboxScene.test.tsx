@@ -96,7 +96,7 @@ describe('Sandbox scene', () => {
     render(<Scene />);
     expect(screen.getByText('Cargando...')).toBeDefined();
     await screen.findByText('Aritmética ilustrativa sobre los supuestos elegidos. No es el modelo de pronóstico.');
-    expect(options()).toHaveLength(2); // the path chart and the doubling curve
+    expect(options()).toHaveLength(1); // the path chart; the doubling curve is the second view
     expect(screen.getByText('Fuente: MOCK, modelo mock-1, generado el 1 de enero de 2026')).toBeDefined();
     expect(screen.getByTestId('tile-gpc')).toBeDefined();
   });
@@ -245,6 +245,7 @@ describe('Sandbox scene', () => {
   it('shows the worked example of the rule of 70 computed with the same functions', async () => {
     stubFetch(forecast());
     await loaded();
+    fireEvent.click(screen.getByRole('button', { name: 'Duplicación' }));
     expect(screen.getByText('7% durante 10 años multiplica por 1,97 (exacto)')).toBeDefined();
     expect(screen.getByText('La regla del 70 dice 10,0 años; lo exacto es 10,2 años')).toBeDefined();
   });
@@ -279,10 +280,7 @@ describe('Sandbox scene', () => {
   it('swaps each chart for a table whose missing cells read "sin datos"', async () => {
     stubFetch(forecast({ dropPoint: { scenario: 'optimistic', year: 2028 } }));
     await loaded();
-    const toggles = screen.getAllByRole('button', { name: 'Ver tabla' });
-    expect(toggles).toHaveLength(2);
-
-    fireEvent.click(toggles[0]!);
+    fireEvent.click(screen.getByRole('button', { name: 'Ver tabla' }));
     const table = screen.getByRole('table', { name: 'Trayectoria con los supuestos y el rango del modelo' });
     const row2028 = within(table).getByText('2028').closest('tr')!;
     const cells = Array.from(row2028.querySelectorAll('td')).map((td) => td.textContent);
@@ -293,7 +291,8 @@ describe('Sandbox scene', () => {
     expect(cells[5]).toBe('sin datos'); // no range, no position
     expect(row2028.textContent).not.toMatch(/(^|\s)0 USD/);
 
-    fireEvent.click(toggles[1]!);
+    fireEvent.click(screen.getByRole('button', { name: 'Duplicación' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Ver tabla' }));
     const doubling = screen.getByRole('table', { name: 'Tiempo de duplicación según la tasa de crecimiento' });
     expect(doubling.querySelectorAll('tbody tr')).toHaveLength(24);
   });
@@ -302,6 +301,6 @@ describe('Sandbox scene', () => {
     stubFetch(forecast());
     useStore.setState({ province: 'AR-A' });
     await loaded();
-    expect(options()).toHaveLength(2);
+    expect(options()).toHaveLength(1);
   });
 });

@@ -412,3 +412,31 @@
 .map-view > :first-child {
   flex: 1 1 auto;
 }
+
+.preset-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.doubling-view {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  height: 100%;
+  min-height: 0;
+}
+
+.doubling-chart {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.doubling-example {
+  color: var(--ink-2);
+  font-size: var(--font-sm);
+}
+
+.dash-sliders {
+  min-height: 0;
+}
