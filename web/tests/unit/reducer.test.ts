@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { reduce, tick, INITIAL_STEP_INDEX, State } from '../../src/state/reducer';
-import { YEAR_MAX } from '../../src/types/year';
+import { YEAR_MAX, YEAR_MIN } from '../../src/types/year';
 
 describe('Reducer', () => {
   const initialState: State = Object.freeze({
@@ -202,6 +202,31 @@ describe('Reducer', () => {
     it('sets a speed of the SPEEDS list and ignores any other value', () => {
       expect(reduce(initialState, { type: 'setSpeed', speed: 2 }).speed).toBe(2);
       expect(reduce(initialState, { type: 'setSpeed', speed: 3 })).toBe(initialState);
+    });
+  });
+
+  describe('the crossing of the Andes starts at 0 %', () => {
+    const later: State = { ...initialState, scene: 'economy', section: 'dashboard', yearFloat: 2026, playing: true };
+
+    it('entering the Andes by tab, section or arrow key goes back to the first year and pauses', () => {
+      for (const action of [
+        { type: 'setScene', scene: 'andes' } as const,
+        { type: 'setSection', section: 'andes' } as const,
+        { type: 'prevScene' } as const
+      ]) {
+        expect(reduce(later, action)).toMatchObject({ scene: 'andes', yearFloat: YEAR_MIN, playing: false });
+      }
+    });
+
+    it('does not move the year when the Andes is already the scene', () => {
+      const inAndes: State = { ...initialState, yearFloat: 1900, playing: true };
+      expect(reduce(inAndes, { type: 'setSection', section: 'andes' })).toMatchObject({ yearFloat: 1900, playing: true });
+      expect(reduce(inAndes, { type: 'setScene', scene: 'andes' })).toMatchObject({ yearFloat: 1900, playing: true });
+    });
+
+    it('the store itself opens at the first year, as the Andes is its first scene', async () => {
+      const { useStore } = await import('../../src/state/store');
+      expect(useStore.getState()).toMatchObject({ scene: 'andes', yearFloat: YEAR_MIN });
     });
   });
 });

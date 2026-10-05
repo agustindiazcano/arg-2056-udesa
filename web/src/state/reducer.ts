@@ -3,7 +3,7 @@ import { nextScene, prevScene } from '../types/scene';
 import type { Scene, Section } from '../types/scene';
 import type { Scenario } from '../types/scenario';
 import type { ProvinceId } from '../types/province';
-import { YEAR_MAX } from '../types/year';
+import { YEAR_MAX, YEAR_MIN } from '../types/year';
 import { STEPS } from '../content/steps';
 import { applyFocus } from '../story/focus';
 import type { StepsByScene } from '../story/types';
@@ -50,7 +50,9 @@ const YEARS_PER_SECOND = 2;
 /** Shows the scene, restarts its story at step 1 and applies that step's focus, all in one state. */
 function enterScene(state: State, scene: Scene, steps: StepsByScene): State {
   const section: Section = scene === 'andes' ? 'andes' : state.section === 'andes' ? 'dashboard' : state.section;
-  const entered: State = { ...state, scene, section, stepIndex: { ...state.stepIndex, [scene]: 0 } };
+  // the crossing always opens at 0 %: the clock goes back to the first year, paused
+  const clock = scene === 'andes' ? { yearFloat: YEAR_MIN, playing: false } : {};
+  const entered: State = { ...state, ...clock, scene, section, stepIndex: { ...state.stepIndex, [scene]: 0 } };
   const first = steps[scene][0];
   return first ? applyFocus(entered, first.focus) : entered;
 }

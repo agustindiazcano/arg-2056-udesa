@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { YEAR_MIN } from '../types/year';
 import { reduce, INITIAL_STEP_INDEX, State, Action } from './reducer';
 
 export interface AppStore extends State {
@@ -11,7 +12,7 @@ export interface AppStore extends State {
 const initialState: State = {
   scene: 'andes',
   section: 'andes',
-  yearFloat: 2026,
+  yearFloat: YEAR_MIN, // the app opens in the Andes, which starts at 0 %
   scenario: 'expected',
   speed: 1,
   playing: false,
