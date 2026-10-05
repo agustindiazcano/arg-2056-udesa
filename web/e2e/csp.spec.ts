@@ -44,6 +44,8 @@ async function violations(page: Page): Promise<string[]> {
 
 test.describe('under the Content-Security-Policy', () => {
   test.beforeEach(async ({ page }) => {
+    // the intro screen has its own test below; the other tests start in the app (key of src/app/Root.tsx)
+    await page.addInitScript(() => window.localStorage.setItem('arg2056.skipIntro', '1'));
     await page.addInitScript(() => {
       const list: string[] = [];
       Object.assign(window, { __csp: list });
@@ -69,6 +71,16 @@ test.describe('under the Content-Security-Policy', () => {
       expect(problems).toEqual([]);
     });
   }
+
+  test('the intro screen loads under the policy and Comenzar opens the app', async ({ page }) => {
+    await page.addInitScript(() => window.localStorage.removeItem('arg2056.skipIntro'));
+    const problems = watch(page);
+    await page.goto(server.url);
+    await page.getByRole('button', { name: 'Comenzar' }).click();
+    await expect(page.getByRole('tab').first()).toBeVisible();
+    expect(await violations(page)).toEqual([]);
+    expect(problems).toEqual([]);
+  });
 
   test('the references page loads with no violation and no error', async ({ page }) => {
     const problems = watch(page);
