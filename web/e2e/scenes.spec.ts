@@ -20,8 +20,10 @@ test.describe('scenes', () => {
       await expect(page.getByRole('tab', { name: entry.tab })).toHaveAttribute('aria-selected', 'true');
       await expectSceneShown(page, entry);
 
-      // only the active tab is selected
-      await expect(page.getByRole('tab', { selected: true })).toHaveCount(1);
+      // only the active tab of each tab list is selected (the sections and, in the Data Dashboard, the scenes)
+      const tabLists = await page.getByRole('tablist').all();
+      expect(tabLists.length).toBeGreaterThan(0);
+      for (const tabList of tabLists) await expect(tabList.getByRole('tab', { selected: true })).toHaveCount(1);
 
       const scene = page.getByTestId('scene');
       // "error" alone is legitimate copy (the sandbox shows the rule-of-70 "error +0.2%"), so the app's own message is used
