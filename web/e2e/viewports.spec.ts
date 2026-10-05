@@ -1,4 +1,4 @@
-import { test, expect, SCENE_TABS, expectSceneShown } from './fixtures';
+import { test, expect, SCENE_TABS, expectSceneShown, openTab } from './fixtures';
 
 const VIEWPORTS = [
   { width: 1280, height: 720 },
@@ -12,7 +12,7 @@ test.describe('viewports', () => {
       await page.goto('/');
 
       for (const entry of SCENE_TABS) {
-        await page.getByRole('tab', { name: entry.tab }).click();
+        await openTab(page, entry.tab);
         await expectSceneShown(page, entry);
         const { scrollWidth, innerWidth } = await page.evaluate(() => ({
           scrollWidth: document.documentElement.scrollWidth,

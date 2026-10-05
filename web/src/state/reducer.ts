@@ -1,6 +1,6 @@
 import type { KeyAction } from '../types/keys';
 import { nextScene, prevScene } from '../types/scene';
-import type { Scene } from '../types/scene';
+import type { Scene, Section } from '../types/scene';
 import type { Scenario } from '../types/scenario';
 import type { ProvinceId } from '../types/province';
 import { YEAR_MAX } from '../types/year';
@@ -10,6 +10,8 @@ import type { StepsByScene } from '../story/types';
 
 export interface State {
   scene: Scene;
+  /** where the viewer is: the Andes, the data dashboard or the tour; the Andes scene and the Andes section go together */
+  section: Section;
   yearFloat: number;
   scenario: Scenario;
   speed: number;
@@ -33,6 +35,7 @@ export const INITIAL_STEP_INDEX: Readonly<Record<Scene, number>> = {
 
 export type UiAction =
   | { type: 'setScene'; scene: Scene }
+  | { type: 'setSection'; section: Section }
   | { type: 'selectProvince'; province: ProvinceId | null }
   | { type: 'setYear'; year: number }
   | { type: 'setAiOverlay'; aiOverlay: 'off' | 'on' }
@@ -45,7 +48,8 @@ const YEARS_PER_SECOND = 2;
 
 /** Shows the scene, restarts its story at step 1 and applies that step's focus, all in one state. */
 function enterScene(state: State, scene: Scene, steps: StepsByScene): State {
-  const entered: State = { ...state, scene, stepIndex: { ...state.stepIndex, [scene]: 0 } };
+  const section: Section = scene === 'andes' ? 'andes' : state.section === 'andes' ? 'dashboard' : state.section;
+  const entered: State = { ...state, scene, section, stepIndex: { ...state.stepIndex, [scene]: 0 } };
   const first = steps[scene][0];
   return first ? applyFocus(entered, first.focus) : entered;
 }
@@ -118,6 +122,12 @@ export function reduce(state: State, action: Action, steps: StepsByScene = STEPS
     // UiActions
     case 'setScene':
       return action.scene === state.scene ? { ...state, scene: action.scene } : enterScene(state, action.scene, steps);
+    case 'setSection': {
+      if (action.section === 'andes') return state.scene === 'andes' ? { ...state, section: 'andes' } : enterScene(state, 'andes', steps);
+      // the dashboard and the tour show the data scenes: from the Andes they start at the first one
+      const entered = state.scene === 'andes' ? enterScene(state, 'economy', steps) : state;
+      return { ...entered, section: action.section };
+    }
     case 'selectProvince':
       return { ...state, province: action.province, provinceFilterOpen: false };
     case 'setYear':

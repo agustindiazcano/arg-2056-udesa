@@ -1,5 +1,5 @@
 import type { Page } from '@playwright/test';
-import { test, expect, SCENE_TABS, expectSceneShown } from './fixtures';
+import { test, expect, SCENE_TABS, expectSceneShown, openTab } from './fixtures';
 
 const INTERACTIVE =
   'a[href], button:not([disabled]), input:not([disabled]):not([type="hidden"]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
@@ -50,13 +50,13 @@ test.describe('keyboard operability', () => {
 
   test('the tab bar is a navigation landmark named Scenes', async ({ page }) => {
     await page.goto('/');
-    await expect(page.getByRole('navigation', { name: 'Escenas' }).getByRole('tab')).toHaveCount(SCENE_TABS.length);
+    await expect(page.getByRole('navigation', { name: 'Escenas' }).getByRole('tab')).toHaveCount(3);
   });
 
   for (const entry of SCENE_TABS) {
     test(`${entry.scene}: Tab reaches every control, in document order`, async ({ page }) => {
       await page.goto('/');
-      await page.getByRole('tab', { name: entry.tab }).click();
+      await openTab(page, entry.tab);
       await expectSceneShown(page, entry);
 
       const { total, visited } = await tabThroughEveryControl(page);
@@ -78,6 +78,7 @@ test.describe('keyboard operability', () => {
     await page.keyboard.press('Space');
     await expect(ai).toHaveAttribute('aria-pressed', 'false');
 
+    await page.getByRole('tab', { name: 'Data Dashboard' }).click();
     const economy = page.getByRole('tab', { name: 'Economía' });
     await economy.focus();
     await page.keyboard.press('Enter');
@@ -108,7 +109,7 @@ test.describe('keyboard operability', () => {
 
   test('the table view toggle exposes aria-pressed in step with what is shown', async ({ page }) => {
     await page.goto('/');
-    await page.getByRole('tab', { name: 'Recursos' }).click();
+    await openTab(page, 'Recursos');
     const scene = page.getByTestId('scene');
     const toggle = scene.getByRole('button', { name: 'Ver tabla' }).first();
     await expect(toggle).toHaveAttribute('aria-pressed', 'false');

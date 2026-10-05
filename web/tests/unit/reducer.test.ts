@@ -5,6 +5,7 @@ import { YEAR_MAX } from '../../src/types/year';
 describe('Reducer', () => {
   const initialState: State = Object.freeze({
     scene: 'andes',
+    section: 'andes',
     yearFloat: 2026,
     scenario: 'expected',
     speed: 1,
@@ -155,6 +156,45 @@ describe('Reducer', () => {
 
       const nextNaN = tick(state, NaN);
       expect(nextNaN).toBe(state);
+    });
+  });
+
+  describe('sections', () => {
+    it('setSection dashboard leaves the Andes for the first data scene', () => {
+      const state = reduce(initialState, { type: 'setSection', section: 'dashboard' });
+      expect(state.section).toBe('dashboard');
+      expect(state.scene).toBe('economy');
+    });
+
+    it('setSection keeps the data scene when it already is one, and does not restart its story', () => {
+      const from: State = { ...initialState, scene: 'forecast', section: 'dashboard', stepIndex: { ...INITIAL_STEP_INDEX, forecast: 2 } };
+      const state = reduce(from, { type: 'setSection', section: 'tour' });
+      expect(state.section).toBe('tour');
+      expect(state.scene).toBe('forecast');
+      expect(state.stepIndex.forecast).toBe(2);
+    });
+
+    it('setSection andes shows the Andes scene', () => {
+      const from: State = { ...initialState, scene: 'resources', section: 'tour' };
+      const state = reduce(from, { type: 'setSection', section: 'andes' });
+      expect(state).toMatchObject({ section: 'andes', scene: 'andes' });
+    });
+
+    it('setScene to a data scene from the Andes goes to the dashboard; to the Andes goes to the Andes section', () => {
+      expect(reduce(initialState, { type: 'setScene', scene: 'sandbox' })).toMatchObject({ section: 'dashboard', scene: 'sandbox' });
+      const from: State = { ...initialState, scene: 'sandbox', section: 'dashboard' };
+      expect(reduce(from, { type: 'setScene', scene: 'andes' })).toMatchObject({ section: 'andes', scene: 'andes' });
+    });
+
+    it('setScene inside the tour stays in the tour', () => {
+      const from: State = { ...initialState, scene: 'economy', section: 'tour' };
+      expect(reduce(from, { type: 'setScene', scene: 'resources' })).toMatchObject({ section: 'tour', scene: 'resources' });
+    });
+
+    it('the arrow keys keep the section consistent with the scene', () => {
+      const state = reduce(initialState, { type: 'nextScene' });
+      expect(state).toMatchObject({ scene: 'economy', section: 'dashboard' });
+      expect(reduce(state, { type: 'prevScene' })).toMatchObject({ scene: 'andes', section: 'andes' });
     });
   });
 });

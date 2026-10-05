@@ -1,4 +1,4 @@
-import { test, expect, SCENE_TABS, expectSceneShown, releaseFocus } from './fixtures';
+import { test, expect, SCENE_TABS, expectSceneShown, releaseFocus, openTab } from './fixtures';
 
 const CHART_SCENES = ['resources', 'economy', 'forecast', 'sandbox'];
 
@@ -9,12 +9,12 @@ test.describe('scenes', () => {
       await releaseFocus(page);
 
       // by tab click
-      await page.getByRole('tab', { name: entry.tab }).click();
+      await openTab(page, entry.tab);
       await expect(page.getByRole('tab', { name: entry.tab })).toHaveAttribute('aria-selected', 'true');
       await expectSceneShown(page, entry);
 
       // by keyboard: go back to the first scene, then step right to this one with ArrowRight
-      await page.getByRole('tab', { name: SCENE_TABS[0].tab }).click();
+      await openTab(page, SCENE_TABS[0].tab);
       await releaseFocus(page);
       for (let i = 0; i < index; i += 1) await page.keyboard.press('ArrowRight');
       await expect(page.getByRole('tab', { name: entry.tab })).toHaveAttribute('aria-selected', 'true');

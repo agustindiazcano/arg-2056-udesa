@@ -10,6 +10,7 @@ export interface AppStore extends State {
 
 const initialState: State = {
   scene: 'andes',
+  section: 'andes',
   yearFloat: 2026,
   scenario: 'expected',
   speed: 1,

@@ -1,5 +1,5 @@
 import AxeBuilder from '@axe-core/playwright';
-import { test, expect, SCENE_TABS, expectSceneShown } from './fixtures';
+import { test, expect, SCENE_TABS, expectSceneShown, openTab } from './fixtures';
 import { AXE_EXCEPTIONS, isExcepted } from './axe-exceptions';
 
 const TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'];
@@ -29,7 +29,7 @@ test.describe('axe', () => {
   for (const entry of SCENE_TABS) {
     test(`${entry.scene} scene has no serious or critical violation`, async ({ page }) => {
       await page.goto('/');
-      await page.getByRole('tab', { name: entry.tab }).click();
+      await openTab(page, entry.tab);
       await expectSceneShown(page, entry);
       // a chart scene is rendered once its chart has a name
       if (entry.heading) await expect(page.getByTestId('scene').getByRole('img', { name: /.+/ }).first()).toBeVisible();
@@ -39,7 +39,7 @@ test.describe('axe', () => {
 
   test('the scene with the table view on has no serious or critical violation', async ({ page }) => {
     await page.goto('/');
-    await page.getByRole('tab', { name: 'Economía' }).click();
+    await openTab(page, 'Economía');
     await page.getByTestId('scene').getByRole('button', { name: 'Ver tabla' }).first().click();
     await expect(page.getByTestId('scene').getByRole('table').first()).toBeVisible();
     expect(await seriousViolations(new AxeBuilder({ page }))).toEqual([]);

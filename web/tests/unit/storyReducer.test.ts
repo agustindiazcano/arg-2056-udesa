@@ -39,6 +39,7 @@ const ZEROS: Record<Scene, number> = {
 
 const base: State = Object.freeze({
   scene: 'economy',
+  section: 'dashboard',
   yearFloat: 2026,
   scenario: 'expected',
   speed: 1,

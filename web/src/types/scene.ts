@@ -12,3 +12,10 @@ export function prevScene(s: Scene): Scene {
   if (idx > 0) return SCENES[idx - 1] as Scene;
   return s;
 }
+
+/** The three ways to see the story: the crossing of the Andes, the data dashboard (the five data scenes) and the guided tour. */
+export const SECTIONS = ['andes', 'dashboard', 'tour'] as const;
+export type Section = typeof SECTIONS[number];
+
+/** The data scenes: the ones the dashboard and the tour show. The Andes is a scene of its own. */
+export const DATA_SCENES = SCENES.filter((s): s is Exclude<Scene, 'andes'> => s !== 'andes');

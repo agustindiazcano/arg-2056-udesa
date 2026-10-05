@@ -1,4 +1,4 @@
-import { test, expect, SCENE_TABS, expectSceneShown } from './fixtures';
+import { test, expect, SCENE_TABS, expectSceneShown, openTab } from './fixtures';
 
 const VIEWPORTS = [
   { width: 1280, height: 720 },
@@ -15,7 +15,7 @@ test.describe('dashboard', () => {
       await page.goto('/');
 
       for (const entry of SCENE_TABS) {
-        await page.getByRole('tab', { name: entry.tab }).click();
+        await openTab(page, entry.tab);
         await expectSceneShown(page, entry);
         const overflow = await page.evaluate(() => {
           const doc = document.documentElement;
@@ -37,7 +37,7 @@ test.describe('dashboard', () => {
 
   test('the controls are in the bottom bar, below the scene', async ({ page }) => {
     await page.goto('/');
-    await page.getByRole('tab', { name: 'Economía' }).click();
+    await openTab(page, 'Economía');
     await expectSceneShown(page, DATA_SCENES[0]!);
     const play = await page.getByRole('button', { name: /Reproducir|Pausar/ }).boundingBox();
     const viewer = await page.getByRole('region', { name: 'Visor' }).boundingBox();
@@ -52,7 +52,7 @@ test.describe('dashboard', () => {
   test('every data scene has a carousel of views and the viewer shows the chosen one', async ({ page }) => {
     await page.goto('/');
     for (const entry of DATA_SCENES) {
-      await page.getByRole('tab', { name: entry.tab }).click();
+      await openTab(page, entry.tab);
       await expectSceneShown(page, entry);
       const carousel = page.getByRole('group', { name: 'Vistas', exact: true });
       await expect(carousel).toBeVisible();
@@ -69,7 +69,7 @@ test.describe('dashboard', () => {
   test('two or four views at once, still with no scroll, and Explorar hides the story', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 720 });
     await page.goto('/');
-    await page.getByRole('tab', { name: 'Economía' }).click();
+    await openTab(page, 'Economía');
     await expectSceneShown(page, DATA_SCENES[0]!);
     const layout = page.getByRole('group', { name: 'Paneles a la vez' });
     await layout.getByRole('button', { name: '4' }).click();
@@ -92,7 +92,7 @@ test.describe('dashboard', () => {
 
   test('the ranking is a 3D chart by default and the same chart flat in 2D', async ({ page }) => {
     await page.goto('/');
-    await page.getByRole('tab', { name: 'Economía' }).click();
+    await openTab(page, 'Economía');
     await expectSceneShown(page, DATA_SCENES[0]!);
     await page.getByRole('group', { name: 'Vistas', exact: true }).getByRole('button', { name: 'Ranking' }).click();
     const view = page.locator('[data-chart3d="bars"]');
@@ -112,7 +112,7 @@ test.describe('dashboard', () => {
 
   test('the province map is a 3D map by default and the flat map in 2D', async ({ page }) => {
     await page.goto('/');
-    await page.getByRole('tab', { name: 'Recursos' }).click();
+    await openTab(page, 'Recursos');
     await page.getByRole('group', { name: 'Vistas', exact: true }).getByRole('button', { name: 'Mapa' }).click();
     await expect(page.locator('[data-chart3d="map"] canvas')).toBeVisible();
     await page.getByRole('group', { name: 'Vista', exact: true }).getByRole('button', { name: '2D' }).click();
@@ -122,7 +122,7 @@ test.describe('dashboard', () => {
 
   test('the 3D map zooms with the wheel and the buttons, turns freely and resets', async ({ page }) => {
     await page.goto('/');
-    await page.getByRole('tab', { name: 'Recursos' }).click();
+    await openTab(page, 'Recursos');
     await page.getByRole('group', { name: 'Vistas', exact: true }).getByRole('button', { name: 'Mapa' }).click();
     const canvas = page.locator('[data-chart3d="map"] canvas');
     await expect(canvas).toBeVisible();
@@ -153,7 +153,7 @@ test.describe('dashboard', () => {
     const errors: string[] = [];
     page.on('pageerror', (e) => errors.push(e.message));
     await page.goto('/');
-    await page.getByRole('tab', { name: 'Recursos' }).click();
+    await openTab(page, 'Recursos');
     await page.getByRole('group', { name: 'Vistas', exact: true }).getByRole('button', { name: 'Mapa' }).click();
     await page.getByRole('group', { name: 'Vista', exact: true }).getByRole('button', { name: '2D' }).click();
     const map = page.getByRole('img', { name: /^Mapa de/ });
@@ -179,16 +179,16 @@ test.describe('dashboard', () => {
   test('the forecast fan and the long run are 3D line charts by default', async ({ page }) => {
     await page.goto('/');
     for (const tab of ['Economía', 'Pronóstico 2056']) {
-      await page.getByRole('tab', { name: tab }).click();
+      await openTab(page, tab);
       await expect(page.locator('[data-chart3d="lines"] canvas')).toBeVisible();
     }
-    await page.getByRole('tab', { name: 'Simulador' }).click();
+    await openTab(page, 'Simulador');
     await expect(page.locator('[data-chart3d="lines"] canvas')).toBeVisible();
   });
 
   test('the story panel is docked in the right panel', async ({ page }) => {
     await page.goto('/');
-    await page.getByRole('tab', { name: 'Economía' }).click();
+    await openTab(page, 'Economía');
     const story = page.getByRole('region', { name: 'Historia' });
     await expect(story).toBeVisible();
     const side = await page.getByRole('region', { name: 'Indicadores' }).boundingBox();
@@ -200,7 +200,7 @@ test.describe('dashboard', () => {
 test.describe('andes scene', () => {
   test('shows the campaign on the terrain, a panel per event, and moves the army with the clock', async ({ page }) => {
     await page.goto('/?quality=high');
-    await page.getByRole('tab', { name: 'Andes' }).click();
+    await openTab(page, 'Andes');
     const canvas = page.locator('[data-chart3d="andes"] canvas');
     await expect(canvas).toBeVisible();
     await expect(page.getByRole('note')).toContainText('provisorio');
@@ -230,7 +230,7 @@ test.describe('andes scene', () => {
 
   test('"Ver de cerca" brings the camera next to the army, where the column of figures shows, and says the figures are schematic', async ({ page }) => {
     await page.goto('/?quality=high');
-    await page.getByRole('tab', { name: 'Andes' }).click();
+    await openTab(page, 'Andes');
     const canvas = page.locator('[data-chart3d="andes"] canvas');
     await expect(canvas).toBeVisible();
     await expect(page.getByText(/Figuras esquemáticas/)).toBeVisible();
@@ -246,7 +246,7 @@ test.describe('andes scene', () => {
 
   test('"Cine" puts the camera low behind the column, close enough for the figures, and the table has no cinematic camera', async ({ page }) => {
     await page.goto('/?quality=high');
-    await page.getByRole('tab', { name: 'Andes' }).click();
+    await openTab(page, 'Andes');
     const canvas = page.locator('[data-chart3d="andes"] canvas');
     await expect(canvas).toBeVisible();
     const pose = async () => (await canvas.getAttribute('data-camera'))!.split(',').map(Number);
@@ -260,7 +260,7 @@ test.describe('andes scene', () => {
 
   test('the table of events is the text version of the scene', async ({ page }) => {
     await page.goto('/');
-    await page.getByRole('tab', { name: 'Andes' }).click();
+    await openTab(page, 'Andes');
     await page.getByRole('button', { name: 'Tabla de eventos' }).click();
     await expect(page.getByRole('table')).toContainText('Cumbre del paso');
   });
