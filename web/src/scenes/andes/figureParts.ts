@@ -14,11 +14,17 @@ export interface Part {
   color: string;
   leg?: 1 | -1;
   arm?: 1 | -1;
+  /** for a swinging part that does not hang from its own top (a boot): the point it turns about, and `at` is its centre at rest */
+  pivot?: readonly [number, number, number];
   tilt?: number;
 }
 
-const COAT = '#6b6f5a';
-const LEADER_COAT = '#2f3f66';
+/** the blue coat of the whole army, the leader included */
+const COAT = '#2f4a80';
+const TROUSERS = '#cfc9b6';
+const BOOT = '#1a1614';
+const EPAULETTE = '#e8b923';
+const VISOR = '#0b0b0b';
 const SKIN = '#c9a58a';
 const HAT = '#2b2b2b';
 const IRON = '#3a3a3a';
@@ -34,13 +40,17 @@ const PACK = '#8a7355';
 const PENNANT = '#eef3fb';
 
 const walker: Part[] = [
-  // legs, and the left arm swinging against the left leg
-  { size: [0.016, 0.05, 0.016], at: [-0.012, 0.05, 0], color: HAT, leg: 1 },
-  { size: [0.016, 0.05, 0.016], at: [0.012, 0.05, 0], color: HAT, leg: -1 },
+  // legs, with a boot on each that turns about the hip with it, and the left arm swinging against the left leg
+  { size: [0.016, 0.05, 0.016], at: [-0.012, 0.05, 0], color: TROUSERS, leg: 1 },
+  { size: [0.016, 0.05, 0.016], at: [0.012, 0.05, 0], color: TROUSERS, leg: -1 },
+  { size: [0.018, 0.012, 0.032], at: [-0.012, 0.006, 0.006], color: BOOT, leg: 1, pivot: [-0.012, 0.05, 0] },
+  { size: [0.018, 0.012, 0.032], at: [0.012, 0.006, 0.006], color: BOOT, leg: -1, pivot: [0.012, 0.05, 0] },
   { size: [0.012, 0.045, 0.012], at: [0.027, 0.097, 0], color: COAT, arm: 1 },
   { size: [0.04, 0.05, 0.024], at: [0, 0.075, 0], color: COAT },
   { size: [0.02, 0.02, 0.02], at: [0, 0.11, 0], color: SKIN },
-  { size: [0.026, 0.022, 0.026], at: [0, 0.131, 0], color: HAT },
+  // the shako: a tall blue crown and a black visor in front
+  { size: [0.026, 0.04, 0.026], at: [0, 0.14, 0], color: COAT },
+  { size: [0.024, 0.005, 0.014], at: [0, 0.123, 0.018], color: VISOR },
   // the right arm holds the rifle against the shoulder (it does not swing): forearm, barrel and stock
   { size: [0.012, 0.03, 0.012], at: [-0.027, 0.082, 0.012], color: COAT, tilt: -0.6 },
   { size: [0.008, 0.008, 0.12], at: [-0.03, 0.11, -0.005], color: IRON, tilt: 0.9 },
@@ -61,23 +71,34 @@ function horseOf(coat: string, dark: string): Part[] {
   ];
 }
 
-/** a rider seated on the horse, both arms forward to the reins; `headgear` is on top of the head */
+/** a rider seated on the horse: both arms forward to the reins, and a leg down each side of the horse with a boot; `headgear` is on the head */
 function riderOf(coat: string, headgear: Part[]): Part[] {
   return [
     { size: [0.036, 0.05, 0.022], at: [0, 0.155, -0.01], color: coat },
     { size: [0.012, 0.04, 0.012], at: [0.024, 0.165, 0.005], color: coat, tilt: -0.9 },
     { size: [0.012, 0.04, 0.012], at: [-0.024, 0.165, 0.005], color: coat, tilt: -0.9 },
+    { size: [0.014, 0.065, 0.016], at: [0.037, 0.107, -0.01], color: TROUSERS },
+    { size: [0.014, 0.065, 0.016], at: [-0.037, 0.107, -0.01], color: TROUSERS },
+    { size: [0.016, 0.02, 0.03], at: [0.037, 0.078, -0.004], color: BOOT },
+    { size: [0.016, 0.02, 0.03], at: [-0.037, 0.078, -0.004], color: BOOT },
     { size: [0.02, 0.02, 0.02], at: [0, 0.19, -0.01], color: SKIN },
     ...headgear
   ];
 }
 
-/** the shako of a soldier */
-const shako: Part[] = [{ size: [0.026, 0.022, 0.026], at: [0, 0.211, -0.01], color: HAT }];
-/** the bicorn of the leader, worn front to back: long along the direction of travel, with a plume */
+/** the shako of a rider: the same tall blue crown and black visor as on foot */
+const shako: Part[] = [
+  { size: [0.026, 0.04, 0.026], at: [0, 0.22, -0.01], color: COAT },
+  { size: [0.024, 0.005, 0.014], at: [0, 0.203, 0.008], color: VISOR }
+];
+/** the bicorn of the leader, worn front to back: long along the direction of travel, with a plume; and his yellow epaulettes */
 const bicorn: Part[] = [
-  { size: [0.014, 0.03, 0.058], at: [0, 0.212, -0.01], color: HAT },
+  { size: [0.014, 0.03, 0.058], at: [0, 0.212, -0.01], color: '#2b2b2b' },
   { size: [0.006, 0.018, 0.006], at: [0, 0.236, -0.01], color: PENNANT }
+];
+const epaulettes: Part[] = [
+  { size: [0.014, 0.008, 0.022], at: [0.021, 0.182, -0.01], color: EPAULETTE },
+  { size: [0.014, 0.008, 0.022], at: [-0.021, 0.182, -0.01], color: EPAULETTE }
 ];
 
 const mule: Part[] = [
@@ -102,7 +123,7 @@ export const FIGURE_PARTS: Record<FigureKind, readonly Part[]> = {
   rider: [...horseOf(BAY, BAY_DARK), ...riderOf(COAT, shako)],
   rider_black: [...horseOf(BLACK, BLACK_DARK), ...riderOf(COAT, shako)],
   mule,
-  leader: [...horseOf(WHITE, WHITE_DARK), ...riderOf(LEADER_COAT, bicorn), ...pennant]
+  leader: [...horseOf(WHITE, WHITE_DARK), ...riderOf(COAT, [...bicorn, ...epaulettes]), ...pennant]
 };
 
 /** The boxes a column needs: the parts of every figure added up. */

@@ -59,10 +59,16 @@ export function createFigureColumn(count: number, path: Path, ground: (x: number
       for (const part of FIGURE_PARTS[slot.kind]) {
         const swings = part.leg ?? part.arm;
         if (swings) {
-          // hangs from its pivot: the centre of the box swings with the leg or the arm
+          // turns about its pivot (the top of the box unless it has its own): the centre of the box swings with the leg or the arm
           const angle = g.swing * swings;
-          const half = part.size[1] / 2;
-          partAt.set(part.at[0], part.at[1] - half * Math.cos(angle), part.at[2] - half * Math.sin(angle));
+          const cos = Math.cos(angle);
+          const sin = Math.sin(angle);
+          const px = part.pivot ? part.pivot[0] : part.at[0];
+          const py = part.pivot ? part.pivot[1] : part.at[1];
+          const pz = part.pivot ? part.pivot[2] : part.at[2];
+          const oy = part.pivot ? part.at[1] - py : -part.size[1] / 2;
+          const oz = part.pivot ? part.at[2] - pz : 0;
+          partAt.set(px, py + oy * cos - oz * sin, pz + oy * sin + oz * cos);
           qPart.setFromAxisAngle(across, angle);
         } else {
           partAt.set(part.at[0], part.at[1], part.at[2]);

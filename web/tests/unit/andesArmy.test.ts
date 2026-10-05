@@ -182,7 +182,8 @@ describe('figure parts', () => {
 
   it('stands on the ground: the lowest point of every kind is at 0 and nothing is below it', () => {
     for (const kind of kinds) {
-      const bottoms = FIGURE_PARTS[kind].map((p) => (p.leg ? p.at[1] - p.size[1] : p.at[1] - p.size[1] / 2));
+      // a swinging part hangs from its top, unless it has its own pivot (a boot: `at` is its centre)
+      const bottoms = FIGURE_PARTS[kind].map((p) => (p.leg && !p.pivot ? p.at[1] - p.size[1] : p.at[1] - p.size[1] / 2));
       expect(Math.min(...bottoms)).toBeCloseTo(0, 6);
     }
   });
@@ -280,8 +281,94 @@ describe('the foot soldier', () => {
 
   it('keeps the arm out of the legs rule: legs stay balanced', () => {
     const legs = foot.filter((p) => p.leg);
-    expect(legs.filter((p) => p.leg === 1)).toHaveLength(1);
-    expect(legs.filter((p) => p.leg === -1)).toHaveLength(1);
+    expect(legs.filter((p) => p.leg === 1).length).toBeGreaterThan(0);
+    expect(legs.filter((p) => p.leg === 1)).toHaveLength(legs.filter((p) => p.leg === -1).length);
+  });
+});
+
+const BOOT = '#1a1614';
+const isBlue = (hex: string) => {
+  const n = parseInt(hex.slice(1), 16);
+  const r = (n >> 16) & 255;
+  const g = (n >> 8) & 255;
+  const b = n & 255;
+  return b > r + 30 && b > g + 10;
+};
+const isYellow = (hex: string) => {
+  const n = parseInt(hex.slice(1), 16);
+  const r = (n >> 16) & 255;
+  const g = (n >> 8) & 255;
+  const b = n & 255;
+  return r > 180 && g > 150 && b < 90;
+};
+const bodyPart = (kind: 'foot' | 'rider' | 'rider_black' | 'leader') => FIGURE_PARTS[kind].find((p) => p.size[0] >= 0.035 && p.size[1] >= 0.045 && p.size[2] <= 0.025 && !p.leg)!;
+
+describe('riders legs and boots', () => {
+  for (const kind of ['rider', 'rider_black', 'leader'] as const) {
+    it(`${kind}: a leg on each side of the horse, hanging down with a boot at the end`, () => {
+      const horseHalfWidth = 0.03;
+      const rider = FIGURE_PARTS[kind].filter((p) => p.at[1] > 0.1 && p.at[1] < 0.2 && !p.leg && !p.arm && p.size[1] >= 0.05 && p.size[0] <= 0.02);
+      const left = rider.filter((p) => p.at[0] >= horseHalfWidth);
+      const right = rider.filter((p) => p.at[0] <= -horseHalfWidth);
+      expect(left.length).toBeGreaterThan(0);
+      expect(right.length).toBeGreaterThan(0);
+      const boots = FIGURE_PARTS[kind].filter((p) => p.color === BOOT && !p.leg && Math.abs(p.at[0]) >= horseHalfWidth);
+      expect(boots.length).toBeGreaterThanOrEqual(2);
+      for (const b of boots) expect(b.at[1]).toBeLessThan(0.12);
+    });
+  }
+
+  it('the legs are the color of the uniform trousers, not floating: they touch the side of the saddle', () => {
+    for (const p of FIGURE_PARTS.rider.filter((q) => q.color === BOOT)) expect(Math.abs(p.at[0])).toBeLessThan(0.06);
+  });
+});
+
+describe('uniforms', () => {
+  it('has blue coats on the foot soldiers, the riders and the leader (the same blue)', () => {
+    for (const kind of ['foot', 'rider', 'rider_black', 'leader'] as const) expect(isBlue(bodyPart(kind).color)).toBe(true);
+    expect(new Set(['foot', 'rider', 'rider_black', 'leader'].map((k) => bodyPart(k as 'foot').color)).size).toBe(1);
+  });
+
+  it('gives the leader yellow epaulettes on both shoulders', () => {
+    const body = bodyPart('leader');
+    const epaulettes = FIGURE_PARTS.leader.filter((p) => isYellow(p.color));
+    expect(epaulettes.length).toBeGreaterThanOrEqual(2);
+    expect(epaulettes.some((p) => p.at[0] > 0)).toBe(true);
+    expect(epaulettes.some((p) => p.at[0] < 0)).toBe(true);
+    for (const e of epaulettes) {
+      expect(Math.abs(e.at[0])).toBeGreaterThanOrEqual(body.size[0] / 2 - 0.004);
+      expect(e.at[1]).toBeGreaterThan(body.at[1] + body.size[1] / 2 - 0.02);
+    }
+    for (const kind of ['foot', 'rider', 'rider_black'] as const) expect(FIGURE_PARTS[kind].some((p) => isYellow(p.color))).toBe(false);
+  });
+});
+
+describe('the foot soldier: feet and shako', () => {
+  const foot = FIGURE_PARTS.foot;
+  const head = foot.find((p) => p.size[0] === 0.02 && p.size[1] === 0.02)!;
+
+  it('has a boot at the end of each leg, longer than it is wide, sticking out in front', () => {
+    const boots = foot.filter((p) => p.color === BOOT && p.at[1] < 0.03);
+    expect(boots.length).toBeGreaterThanOrEqual(2);
+    for (const b of boots) expect(b.size[2]).toBeGreaterThan(b.size[0]);
+    expect(boots.some((b) => b.at[0] > 0)).toBe(true);
+    expect(boots.some((b) => b.at[0] < 0)).toBe(true);
+  });
+
+  it('walks with the boots: they are parts that swing with the legs', () => {
+    const swingingBoots = foot.filter((p) => p.color === BOOT && p.leg);
+    expect(swingingBoots.length).toBeGreaterThanOrEqual(2);
+  });
+
+  it('wears a tall blue shako with a black visor in front', () => {
+    const shakoParts = foot.filter((p) => p.at[1] > head.at[1] && !p.arm && !p.leg && p.size[2] <= 0.04 && Math.abs(p.at[0]) < 0.02);
+    const crown = shakoParts.find((p) => isBlue(p.color))!;
+    expect(crown).toBeDefined();
+    expect(crown.size[1]).toBeGreaterThanOrEqual(0.034); // was 0.022
+    const visor = foot.find((p) => p.color === '#0b0b0b');
+    expect(visor).toBeDefined();
+    expect(visor!.at[2]).toBeGreaterThan(crown.at[2]);
+    expect(visor!.at[1]).toBeLessThan(crown.at[1]);
   });
 });
 
