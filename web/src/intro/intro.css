@@ -29,7 +29,7 @@
 }
 .intro[data-tilted='true'] {
   --lift: calc(var(--mh) * 0.04);
-  --step: calc(var(--mh) * 0.007);
+  --step: calc(var(--mh) * 0.0175); /* 2 side layers: the same thickness as 5 thinner ones */
 }
 .intro-frame {
   position: absolute;
@@ -84,7 +84,7 @@
   transition: opacity 1.6s, transform 1.8s cubic-bezier(0.22, 0.8, 0.24, 1);
   transform: translate3d(-50%, -50%, -3px) scale(0.5);
   background-image: linear-gradient(var(--intro-grid) 1px, transparent 1px), linear-gradient(90deg, var(--intro-grid) 1px, transparent 1px);
-  background-size: calc(var(--mh) * 0.07) calc(var(--mh) * 0.07);
+  background-size: calc(var(--mh) * 0.035) calc(var(--mh) * 0.035);
   mask-image: radial-gradient(closest-side, #000 45%, transparent 100%);
 }
 .intro[data-tilted='true'] .intro-floor {
@@ -151,11 +151,10 @@
   stroke-linejoin: round;
   stroke-linecap: round;
 }
-.intro-layer.glow .g1 { stroke-width: 38; stroke-opacity: 0.035; }
-.intro-layer.glow .g2 { stroke-width: 28; stroke-opacity: 0.05; }
-.intro-layer.glow .g3 { stroke-width: 19; stroke-opacity: 0.08; }
-.intro-layer.glow .g4 { stroke-width: 11; stroke-opacity: 0.13; }
-.intro-layer.glow .g5 { stroke-width: 5; stroke-opacity: 0.24; }
+/* the glow: three strokes of the province outline, wide and faint to narrow and strong */
+.intro-layer.glow .g1 { stroke-width: 44; stroke-opacity: 0.14; }
+.intro-layer.glow .g2 { stroke-width: 24; stroke-opacity: 0.28; }
+.intro-layer.glow .g3 { stroke-width: 9; stroke-opacity: 0.6; }
 .intro-prov.lit .intro-layer.glow {
   opacity: 1;
 }

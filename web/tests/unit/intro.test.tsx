@@ -28,6 +28,14 @@ describe('Intro', () => {
     expect(container.querySelector('.intro-stage')?.getAttribute('aria-hidden')).toBe('true');
   });
 
+  it('stacks 3 layers per province (2 sides and the top) and a glow of 3 strokes', () => {
+    const { container } = render(<Intro onStart={() => undefined} />);
+    const prov = container.querySelector('.intro-prov')!;
+    expect(prov.querySelectorAll('.intro-layer.side')).toHaveLength(2);
+    expect(prov.querySelectorAll('.intro-layer.top')).toHaveLength(1);
+    expect(prov.querySelectorAll('.intro-layer.glow use')).toHaveLength(3);
+  });
+
   it('lists the four institutions as placeholders for their logos', () => {
     render(<Intro onStart={() => undefined} />);
     const list = screen.getByRole('list', { name: 'Instituciones' });

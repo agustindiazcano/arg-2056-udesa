@@ -3,7 +3,7 @@ import data from './provinces.json';
 import { boxStyle, lightStep, pathBox, type Box } from './layout';
 import './intro.css';
 
-const LAYERS = 6;
+const LAYERS = 3; // 2 sides and the top: fewer composited layers per province
 // speed of the lights (0.8): the prototype waits (350 to 1050 ms) / speed between changes
 const LIGHT_SPEED = 0.8;
 const APPEAR_MS = 2300; // the provinces appear upright and centered, then the view tilts
@@ -33,7 +33,7 @@ export function Intro({ onStart }: Props) {
     () =>
       provinces.map((p) => {
         const top = pathBox(p.d, 3);
-        const glow = pathBox(p.d, 22);
+        const glow = pathBox(p.d, 28);
         return {
           id: p.id,
           top: boxStyle(top, data.w, data.h),
@@ -111,7 +111,7 @@ export function Intro({ onStart }: Props) {
                   </svg>
                 ))}
                 <svg className="intro-layer glow" style={{ '--i': LAYERS - 1.15, ...s.glow } as React.CSSProperties} viewBox={s.glowView}>
-                  {[1, 2, 3, 4, 5].map((k) => (
+                  {[1, 2, 3].map((k) => (
                     <use key={k} className={`g${k}`} href={`#intro-pr${s.id}`} />
                   ))}
                 </svg>
