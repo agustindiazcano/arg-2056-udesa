@@ -1,0 +1,288 @@
+/* Intro screen. Adapted from test/argentina-2056-intro.html; system fonts only (the CSP forbids web fonts). */
+.intro {
+  --intro-ink-dim: color-mix(in srgb, var(--intro-ink) 62%, var(--intro-bg));
+  --intro-prov: color-mix(in srgb, var(--intro-bg), var(--intro-white) 7%);
+  --intro-line: color-mix(in srgb, var(--intro-bg), var(--intro-line-tint) 52%);
+  --intro-side-top: color-mix(in srgb, var(--intro-bg), var(--intro-white) 6%);
+  --intro-side-bot: color-mix(in srgb, var(--intro-bg), var(--intro-black) 38%);
+  --ar: 0.4895;
+  /* the whole composition lives in a frame with the proportions of the reference (1398 x 842), centered; everything is sized from it, so a laptop and a large monitor look the same */
+  --fw: min(94vw, calc(94vh * 1.66));
+  --fh: calc(var(--fw) / 1.66);
+  --u: calc(var(--fw) / 100);
+  --dur: 1250ms; /* 1000 ms at speed 0.8 */
+  --mh: min(calc(var(--fh) * 0.86), calc((var(--fw) - 32px) / var(--ar))); /* height of the map */
+  --zoom: 2; /* the map fills the screen once tilted */
+  --lift: calc(var(--mh) * 0.003);
+  --step: 0px;
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  overflow: hidden;
+  background: var(--intro-bg);
+  color: var(--intro-ink);
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+.intro[data-tilted='true'] {
+  --lift: calc(var(--mh) * 0.04);
+  --step: calc(var(--mh) * 0.0175); /* 2 side layers: the same thickness as 5 thinner ones */
+}
+.intro-frame {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: var(--fw);
+  height: var(--fh);
+  transform: translate(-50%, -50%);
+}
+.intro-defs {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+.intro-stage {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  perspective: calc(var(--mh) * 9);
+  transition: perspective 0.95s cubic-bezier(0.22, 0.8, 0.24, 1);
+}
+.intro[data-tilted='true'] .intro-stage {
+  perspective: calc(var(--mh) * 2.3);
+}
+.intro-cam {
+  position: relative;
+  width: calc(var(--mh) * var(--ar));
+  height: var(--mh);
+  transform-style: preserve-3d;
+  transform: scale(1) rotateX(0deg) rotateZ(0deg);
+  transition: transform 0.95s cubic-bezier(0.22, 0.8, 0.24, 1);
+}
+.intro[data-tilted='true'] .intro-cam {
+  transform: translateX(calc(var(--fw) * 0.12)) scale(var(--zoom)) rotateX(54deg) rotateZ(36deg);
+}
+.intro-map {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+}
+.intro-floor {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 360%;
+  height: 240%;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 1.6s, transform 1.8s cubic-bezier(0.22, 0.8, 0.24, 1);
+  transform: translate3d(-50%, -50%, -3px) scale(0.5);
+  background-image: linear-gradient(var(--intro-grid) 1px, transparent 1px), linear-gradient(90deg, var(--intro-grid) 1px, transparent 1px);
+  background-size: calc(var(--mh) * 0.035) calc(var(--mh) * 0.035);
+  mask-image: radial-gradient(closest-side, var(--intro-black) 45%, transparent 100%);
+}
+.intro[data-tilted='true'] .intro-floor {
+  opacity: 1;
+  transform: translate3d(-50%, -50%, -3px) scale(1); /* the grid draws outward from the map */
+}
+
+.intro-prov {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  width: var(--w);
+  height: var(--h);
+  transform-style: preserve-3d;
+  transform: translateZ(0);
+  transition: transform var(--dur) cubic-bezier(0.3, 0.7, 0.2, 1);
+  animation: intro-appear 1.1s var(--d, 0ms) cubic-bezier(0.2, 0.8, 0.2, 1) backwards;
+}
+.intro-prov.lit {
+  transform: translateZ(var(--lift));
+}
+.intro-layer {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+  transform: translateZ(calc(var(--i) * var(--step)));
+  transition: transform 0.8s cubic-bezier(0.22, 0.8, 0.24, 1), opacity 0.6s ease;
+}
+.intro-layer use {
+  stroke-linejoin: round;
+  transition: fill var(--dur) ease, stroke var(--dur) ease;
+}
+.intro-layer.side {
+  --sf: color-mix(in srgb, var(--intro-side-top) calc(var(--t) * 100%), var(--intro-side-bot));
+}
+.intro-layer.side use {
+  fill: var(--sf);
+  stroke: var(--sf);
+  stroke-width: 3.4;
+}
+.intro:not([data-tilted='true']) .intro-layer.side {
+  opacity: 0;
+}
+.intro-layer.top use {
+  fill: var(--intro-prov);
+  stroke: var(--intro-line);
+  stroke-width: 1.7;
+}
+.intro-layer.glow {
+  left: var(--x);
+  top: var(--y);
+  width: var(--w);
+  height: var(--h);
+  opacity: 0;
+  transition: transform 0.8s cubic-bezier(0.22, 0.8, 0.24, 1), opacity var(--dur) ease;
+}
+.intro-layer.glow use {
+  fill: none;
+  stroke: var(--intro-light);
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+/* the glow: three strokes of the province outline, wide and faint to narrow and strong */
+.intro-layer.glow .g1 { stroke-width: 44; stroke-opacity: 0.14; }
+.intro-layer.glow .g2 { stroke-width: 24; stroke-opacity: 0.28; }
+.intro-layer.glow .g3 { stroke-width: 9; stroke-opacity: 0.6; }
+.intro-prov.lit .intro-layer.glow {
+  opacity: 1;
+}
+.intro-prov.lit .intro-layer.top use {
+  fill: var(--intro-light);
+  stroke: color-mix(in srgb, var(--intro-light) 55%, var(--intro-white));
+}
+.intro-prov.lit .intro-layer.side {
+  --sf: color-mix(in srgb, var(--intro-light) calc(8% + var(--t) * 42%), var(--intro-side-bot));
+}
+
+.intro-vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse at 50% 48%, transparent 45%, var(--intro-edge) 100%);
+}
+
+.intro-copy {
+  position: absolute;
+  z-index: 5;
+  left: 0;
+  top: 0;
+  max-width: calc(var(--u) * 40);
+  opacity: 0;
+  transition: opacity 0.9s 0.5s;
+}
+.intro[data-tilted='true'] .intro-copy {
+  opacity: 1;
+}
+.intro-title {
+  margin: 0;
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: 0.98;
+}
+.intro-title .a {
+  display: block;
+  font-size: calc(var(--u) * 4.4);
+  letter-spacing: 0.14em;
+}
+.intro-title .n {
+  display: block;
+  font-size: calc(var(--u) * 9);
+  letter-spacing: 0.06em;
+  color: var(--intro-light);
+  text-shadow: 0 0 14px var(--intro-light), 0 0 46px color-mix(in srgb, var(--intro-light) 55%, transparent);
+}
+.intro-sub {
+  margin: calc(var(--u) * 1.4) 0 calc(var(--u) * 2);
+  max-width: 34ch;
+  font-size: calc(var(--u) * 1.3);
+  line-height: 1.5;
+  color: var(--intro-ink-dim);
+}
+.intro-start {
+  cursor: pointer;
+  padding: calc(var(--u) * 1) calc(var(--u) * 2.8);
+  font: inherit;
+  font-size: calc(var(--u) * 1.05);
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--intro-on-light);
+  background: var(--intro-light);
+  border: 0;
+  border-radius: 999px;
+  box-shadow: 0 0 24px color-mix(in srgb, var(--intro-light) 50%, transparent);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.intro-start:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 36px color-mix(in srgb, var(--intro-light) 70%, transparent);
+}
+.intro-start:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 4px;
+}
+
+@keyframes intro-appear { from { opacity: 0; translate: 0 0 140px; } to { opacity: 1; translate: 0 0 0; } }
+
+@media (max-aspect-ratio: 3/2) {
+  .intro { --zoom: 1.5; }
+}
+@media (max-width: 700px) {
+  .intro-copy { top: 14vh; transform: none; text-align: center; left: 0; right: 0; margin-inline: auto; }
+  .intro-cam { transform: scale(0.9) rotateX(0deg) rotateZ(0deg); }
+  .intro[data-tilted='true'] .intro-cam { transform: translateY(18vh) scale(0.95) rotateX(54deg) rotateZ(36deg); animation: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .intro *, .intro *::before { animation: none !important; transition: none !important; }
+}
+
+.intro-title::after {
+  content: '';
+  display: block;
+  height: 2px;
+  margin-top: calc(var(--u) * 1);
+  width: calc(var(--u) * 36);
+  max-width: 100%;
+  background: linear-gradient(90deg, var(--intro-light), transparent);
+}
+
+/* Institutions, bottom right. Rectangles with the name stand in for the logos. */
+.intro-logos {
+  position: absolute;
+  z-index: 5;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--u) * 0.8);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  opacity: 0;
+  transition: opacity 0.9s 0.9s;
+}
+.intro[data-tilted='true'] .intro-logos {
+  opacity: 1;
+}
+.intro-logos li {
+  display: grid;
+  place-items: center;
+  width: calc(var(--u) * 17);
+  height: calc(var(--u) * 5);
+  padding: 0 calc(var(--u) * 1);
+  text-align: center;
+  font-size: calc(var(--u) * 1.05);
+  letter-spacing: 0.06em;
+  color: var(--intro-ink-dim);
+  background: color-mix(in srgb, var(--intro-bg) 70%, transparent);
+  border: 1px solid color-mix(in srgb, var(--intro-ink) 22%, transparent);
+  border-radius: calc(var(--u) * 0.4);
+}
