@@ -14,6 +14,9 @@ interface Props {
 
 const provinces = data.provinces;
 
+/** Text stands in for the logos until the images are provided. */
+const INSTITUTIONS = ['Universidad de San Andrés', 'Data Lab UdeSA', 'Contar con Datos', 'Secretaría de Innovación'];
+
 function viewBox(b: Box): string {
   return [b.x, b.y, b.w, b.h].map((v) => v.toFixed(1)).join(' ');
 }
@@ -127,6 +130,12 @@ export function Intro({ onStart }: Props) {
           Comenzar
         </button>
       </main>
+
+      <ul className="intro-logos" aria-label="Instituciones">
+        {INSTITUTIONS.map((name) => (
+          <li key={name}>{name}</li>
+        ))}
+      </ul>
       </div>
       <div className="intro-vignette" aria-hidden="true" />
     </div>

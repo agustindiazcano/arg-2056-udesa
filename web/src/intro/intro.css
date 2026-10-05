@@ -1,7 +1,7 @@
 /* Intro screen. Adapted from test/argentina-2056-intro.html; system fonts only (the CSP forbids web fonts). */
 .intro {
   --intro-bg: #05060b;
-  --intro-light: #fa8072;
+  --intro-light: #9a9679; /* rgb(154, 150, 121) */
   --intro-ink: #e8ebf7;
   --intro-ink-dim: color-mix(in srgb, var(--intro-ink) 62%, var(--intro-bg));
   --intro-prov: color-mix(in srgb, var(--intro-bg), #fff 7%);
@@ -257,4 +257,37 @@
   width: calc(var(--u) * 36);
   max-width: 100%;
   background: linear-gradient(90deg, var(--intro-light), transparent);
+}
+
+/* Institutions, bottom right. Rectangles with the name stand in for the logos. */
+.intro-logos {
+  position: absolute;
+  z-index: 5;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--u) * 0.8);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  opacity: 0;
+  transition: opacity 0.9s 0.9s;
+}
+.intro[data-tilted='true'] .intro-logos {
+  opacity: 1;
+}
+.intro-logos li {
+  display: grid;
+  place-items: center;
+  width: calc(var(--u) * 17);
+  height: calc(var(--u) * 5);
+  padding: 0 calc(var(--u) * 1);
+  text-align: center;
+  font-size: calc(var(--u) * 1.05);
+  letter-spacing: 0.06em;
+  color: var(--intro-ink-dim);
+  background: color-mix(in srgb, var(--intro-bg) 70%, transparent);
+  border: 1px solid color-mix(in srgb, var(--intro-ink) 22%, transparent);
+  border-radius: calc(var(--u) * 0.4);
 }

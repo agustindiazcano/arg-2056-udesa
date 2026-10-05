@@ -28,6 +28,13 @@ describe('Intro', () => {
     expect(container.querySelector('.intro-stage')?.getAttribute('aria-hidden')).toBe('true');
   });
 
+  it('lists the four institutions as placeholders for their logos', () => {
+    render(<Intro onStart={() => undefined} />);
+    const list = screen.getByRole('list', { name: 'Instituciones' });
+    const names = Array.from(list.querySelectorAll('li')).map((li) => li.textContent);
+    expect(names).toEqual(['Universidad de San Andrés', 'Data Lab UdeSA', 'Contar con Datos', 'Secretaría de Innovación']);
+  });
+
   it('starts when Enter is pressed anywhere', () => {
     const onStart = vi.fn();
     render(<Intro onStart={onStart} />);
