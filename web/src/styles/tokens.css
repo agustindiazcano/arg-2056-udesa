@@ -3,7 +3,7 @@
   --color-focus: #ffc107;
 
   /* Intro screen (src/intro/intro.css) */
-  --intro-bg: #05060b;
+  --intro-bg: #1c1c1c; /* rgb(28, 28, 28) */
   --intro-light: #9a9679; /* rgb(154, 150, 121): lit provinces, title, button */
   --intro-ink: #e8ebf7;
   --intro-on-light: #14080a;
