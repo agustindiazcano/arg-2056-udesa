@@ -42,6 +42,15 @@ describe('header', () => {
     expect(SCENE_LABELS.economy).toBe('Economía');
   });
 
+  it('the brand is a button that goes back to the intro', () => {
+    const onHome = vi.fn();
+    render(<App onHome={onHome} />);
+    const brand = screen.getByRole('button', { name: 'Argentina 2056' });
+    expect(brand.className).toContain('brand');
+    fireEvent.click(brand);
+    expect(onHome).toHaveBeenCalledTimes(1);
+  });
+
   it('shows the five data scenes only in the Data Dashboard section', () => {
     render(<App />);
     const names = ['Economía', 'Recursos', 'Pronóstico 2056', 'Revolución IA', 'Simulador'];

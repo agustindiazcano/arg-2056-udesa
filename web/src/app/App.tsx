@@ -17,7 +17,8 @@ import { documentTitle } from './title';
 import { describeError } from './describeError';
 import { useSlots } from '../dashboard/slots';
 
-export function App() {
+/** `onHome` is the way back to the intro: the brand in the header calls it. */
+export function App({ onHome }: { onHome?: () => void }) {
   useKeyboard();
   useTicker();
 
@@ -69,7 +70,7 @@ export function App() {
       <div id="overlay" ref={overlayRef} data-scene={scene} data-section={section} style={{ pointerEvents: 'none' }}>
         <div className="chrome">
           <a className="skip-link" href="#main">Saltar al contenido principal</a>
-          <Header mockSource={forecastSource} />
+          <Header mockSource={forecastSource} onHome={onHome} />
           <QualityDebugLine />
         </div>
         

@@ -3,12 +3,18 @@ import { useSlots } from '../dashboard/slots';
 import { TabBar } from './TabBar';
 import { MockBadge } from './MockBadge';
 
-/** The brand, the sections (and the controls of the scene, to the right of them), the badge that says the data are illustrative and the link to the sources. */
-export function Header({ mockSource }: { mockSource: string | null }) {
+/** The brand (a way back to the intro), the sections (and the controls of the scene, to the right of them), the badge that says the data are illustrative and the link to the sources. */
+export function Header({ mockSource, onHome }: { mockSource: string | null; onHome?: () => void }) {
   const navRef = useCallback((el: HTMLDivElement | null) => useSlots.getState().set('nav', el), []);
   return (
     <header className="app-header">
-      <span className="brand">Argentina 2056</span>
+      {onHome ? (
+        <button type="button" className="brand" title="Volver a la intro" onClick={onHome}>
+          Argentina 2056
+        </button>
+      ) : (
+        <span className="brand">Argentina 2056</span>
+      )}
       <TabBar />
       <div className="nav-slot" ref={navRef} />
       <div className="header-end">

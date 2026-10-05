@@ -36,4 +36,12 @@ test.describe('intro screen', () => {
     await page.getByRole('button', { name: 'Cruce de los Andes' }).click();
     await expect(page.getByRole('tab', { name: 'Andes' })).toHaveAttribute('aria-selected', 'true');
   });
+
+  test('Argentina 2056 in the header goes back to the intro', async ({ page }) => {
+    await page.goto('/');
+    await page.getByRole('button', { name: 'Comenzar' }).click();
+    await page.getByRole('button', { name: 'Argentina 2056' }).click();
+    await expect(page.getByRole('button', { name: 'Comenzar' })).toBeVisible();
+    await expect(page.getByRole('tab')).toHaveCount(0);
+  });
 });

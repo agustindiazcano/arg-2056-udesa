@@ -6,7 +6,16 @@ import { Intro } from '../../src/intro/Intro';
 import { Root } from '../../src/app/Root';
 import { useStore } from '../../src/state/store';
 
-vi.mock('../../src/app/App', () => ({ App: () => <div>app view</div> }));
+vi.mock('../../src/app/App', () => ({
+  App: ({ onHome }: { onHome?: () => void }) => (
+    <div>
+      app view
+      <button type="button" onClick={onHome}>
+        volver
+      </button>
+    </div>
+  )
+}));
 
 afterEach(() => {
   cleanup();
@@ -77,9 +86,9 @@ describe('Intro', () => {
 describe('Root', () => {
   it('shows the intro first and the app after Comenzar', async () => {
     render(<Root />);
-    expect(screen.queryByText('app view')).toBeNull();
+    expect(screen.queryByText(/app view/)).toBeNull();
     fireEvent.click(await screen.findByRole('button', { name: 'Comenzar' }));
-    expect(screen.getByText('app view')).toBeTruthy();
+    expect(screen.getByText(/app view/)).toBeTruthy();
     expect(screen.queryByRole('button', { name: 'Comenzar' })).toBeNull();
   });
 
@@ -87,7 +96,7 @@ describe('Root', () => {
     useStore.setState({ section: 'andes', scene: 'andes' });
     render(<Root />);
     fireEvent.click(await screen.findByRole('button', { name: 'Recorrido al 2056' }));
-    expect(screen.getByText('app view')).toBeTruthy();
+    expect(screen.getByText(/app view/)).toBeTruthy();
     expect(useStore.getState()).toMatchObject({ section: 'tour', scene: 'economy' });
   });
 
@@ -98,15 +107,27 @@ describe('Root', () => {
     expect(useStore.getState()).toMatchObject({ section: 'andes', scene: 'andes' });
   });
 
+  it('goes back to the intro from the app, and the crossing starts again at 0 % with Comenzar', async () => {
+    useStore.setState({ scene: 'andes', section: 'andes', yearFloat: 1900, playing: true });
+    render(<Root />);
+    fireEvent.click(await screen.findByRole('button', { name: 'Comenzar' }));
+    fireEvent.click(screen.getByRole('button', { name: 'volver' }));
+    expect(useStore.getState().playing).toBe(false);
+    expect(screen.queryByText(/app view/)).toBeNull();
+    fireEvent.click(await screen.findByRole('button', { name: 'Comenzar' }));
+    expect(screen.getByText(/app view/)).toBeTruthy();
+    expect(useStore.getState()).toMatchObject({ scene: 'andes', yearFloat: 1810, playing: false });
+  });
+
   it('goes straight to the app with ?intro=0', () => {
     window.history.pushState({}, '', '/?intro=0');
     render(<Root />);
-    expect(screen.getByText('app view')).toBeTruthy();
+    expect(screen.getByText(/app view/)).toBeTruthy();
   });
 
   it('goes straight to the app when the skip key is set in localStorage', () => {
     window.localStorage.setItem('arg2056.skipIntro', '1');
     render(<Root />);
-    expect(screen.getByText('app view')).toBeTruthy();
+    expect(screen.getByText(/app view/)).toBeTruthy();
   });
 });

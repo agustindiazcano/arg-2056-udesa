@@ -41,6 +41,18 @@
   white-space: nowrap;
 }
 
+button.brand {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+button.brand:hover {
+  color: var(--blue);
+}
+
 .brand::before {
   content: '';
   width: 8px;
