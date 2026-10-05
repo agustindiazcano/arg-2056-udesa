@@ -47,7 +47,7 @@
 }
 
 .brand-n {
-  font-weight: 400;
+  font-weight: 800;
   color: var(--intro-light);
   text-shadow: 0 0 10px color-mix(in srgb, var(--intro-light) 55%, transparent);
   transition: text-shadow 0.2s ease-out;
@@ -130,9 +130,8 @@ button.brand:hover .brand-n {
   background: color-mix(in srgb, var(--intro-bg) 78%, transparent);
   color: color-mix(in srgb, var(--intro-ink) 62%, var(--intro-bg));
   font: inherit;
-  font-size: 0.72rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  font-size: var(--font-sm);
+  letter-spacing: 0.01em;
   white-space: nowrap;
   cursor: pointer;
   backdrop-filter: blur(8px);

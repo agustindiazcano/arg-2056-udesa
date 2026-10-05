@@ -57,10 +57,16 @@ describe('intro title weights', () => {
 describe('navbar with the look of the intro', () => {
   const ui = read('src/styles/ui.css');
 
-  it('the brand is "Argentina" in weight 200 and "2056" in weight 400, in the accent of the intro, on one line', () => {
+  it('the brand is "Argentina" in weight 200 and "2056" in weight 800, in the accent of the intro, on one line', () => {
     expect(ui).toMatch(/\.brand-a\s*\{[^}]*font-weight:\s*200/);
-    expect(ui).toMatch(/\.brand-n\s*\{[^}]*font-weight:\s*400[^}]*var\(--intro-light\)/);
+    expect(ui).toMatch(/\.brand-n\s*\{[^}]*font-weight:\s*800[^}]*var\(--intro-light\)/);
     expect(ui).toMatch(/\.brand\s*\{[^}]*white-space:\s*nowrap/);
+  });
+
+  it('the navbar buttons are not uppercase', () => {
+    const start = ui.indexOf(".tour-steps .chip {");
+    expect(start).toBeGreaterThan(-1);
+    expect(ui.slice(start, ui.indexOf('}', start))).not.toContain('uppercase');
   });
 
   it('the navbar buttons take the palette of the intro: accent fill when selected, accent border on hover', () => {
