@@ -197,4 +197,11 @@ describe('Reducer', () => {
       expect(reduce(state, { type: 'prevScene' })).toMatchObject({ scene: 'andes', section: 'andes' });
     });
   });
+
+  describe('setSpeed', () => {
+    it('sets a speed of the SPEEDS list and ignores any other value', () => {
+      expect(reduce(initialState, { type: 'setSpeed', speed: 2 }).speed).toBe(2);
+      expect(reduce(initialState, { type: 'setSpeed', speed: 3 })).toBe(initialState);
+    });
+  });
 });

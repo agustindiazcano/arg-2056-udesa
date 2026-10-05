@@ -36,6 +36,7 @@ export const INITIAL_STEP_INDEX: Readonly<Record<Scene, number>> = {
 export type UiAction =
   | { type: 'setScene'; scene: Scene }
   | { type: 'setSection'; section: Section }
+  | { type: 'setSpeed'; speed: number }
   | { type: 'selectProvince'; province: ProvinceId | null }
   | { type: 'setYear'; year: number }
   | { type: 'setAiOverlay'; aiOverlay: 'off' | 'on' }
@@ -122,6 +123,8 @@ export function reduce(state: State, action: Action, steps: StepsByScene = STEPS
     // UiActions
     case 'setScene':
       return action.scene === state.scene ? { ...state, scene: action.scene } : enterScene(state, action.scene, steps);
+    case 'setSpeed':
+      return SPEEDS.includes(action.speed) ? { ...state, speed: action.speed } : state;
     case 'setSection': {
       if (action.section === 'andes') return state.scene === 'andes' ? { ...state, section: 'andes' } : enterScene(state, 'andes', steps);
       // the dashboard and the tour show the data scenes: from the Andes they start at the first one

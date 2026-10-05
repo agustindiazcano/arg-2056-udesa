@@ -493,3 +493,80 @@ main.scene-container {
   line-height: 1.25;
   color: var(--muted);
 }
+
+/* ---- the Recorrido: a clean page with a long play bar -------------------------------------------------------------- */
+
+.tour-bar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-md);
+  background: var(--glass);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(14px);
+}
+
+.tour-line,
+.tour-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.tour-row {
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.tour-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+.tour-play {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--ink);
+  color: var(--page);
+  cursor: pointer;
+}
+
+.tour-play svg {
+  width: 1.1rem;
+  height: 1.1rem;
+  fill: currentColor;
+}
+
+.tour-slider {
+  flex: 1;
+  width: auto;
+  min-width: 0;
+}
+
+.tour-year {
+  font-size: var(--font-lg);
+}
+
+/* in the tour the page is the title, the subtitle and the view: no carousel, no view buttons, no side panel, no story panel */
+#overlay[data-section='tour'] .carousel,
+#overlay[data-section='tour'] .viewer-bar,
+#overlay[data-section='tour'] .dash-side,
+#overlay[data-section='tour'] .dash-names,
+#overlay[data-section='tour'] .filters-slot,
+#overlay[data-section='tour'] .story {
+  display: none;
+}
+
+#overlay[data-section='tour'] .dash {
+  grid-template-columns: minmax(200px, 340px) minmax(0, 1fr);
+}
