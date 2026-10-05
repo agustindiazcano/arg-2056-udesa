@@ -18,10 +18,12 @@ import { figuresNote, forceText, parseAndesEvents } from './data.js';
 import type { AndesEvent } from './data.js';
 import { EventList, EventPanel } from './Panel.js';
 import type { CameraMode } from './camera.js';
+import { AltitudeProfile } from './AltitudeProfile.js';
 import { GraphicsMenu } from './GraphicsMenu.js';
 import { loadToggles, resolveGraphics, saveToggles } from './graphics.js';
 import type { GraphicsToggles } from './graphics.js';
 import { spo2Estimate } from './physiology.js';
+import { altitudeProfile } from './profile.js';
 import { AndesProgress } from './Progress.js';
 import { buildRoute, paceClock, paceProgress, positionAt } from './timeline.js';
 import { useAndesTerrain } from './useAndesTerrain.js';
@@ -64,8 +66,10 @@ export default function Scene() {
   // the high pass, the most epic part, gets more of the clock than the valleys (the whole campaign still takes the whole clock)
   const clock = useMemo(() => paceClock(route), [route]);
   const pace = useMemo(() => paceProgress(route), [route]);
+  const profile = useMemo(() => altitudeProfile(route), [route]);
   const day = clock(yearFloat);
-  const percent = Math.round(pace.progress(yearFloat) * 100);
+  const crossed = pace.progress(yearFloat);
+  const percent = Math.round(crossed * 100);
   const dispatch = useStore((s) => s.dispatch);
 
   const [selectedId, setSelectedId] = useState<string | null>(null);
@@ -233,6 +237,13 @@ export default function Scene() {
       sources={[]}
       views={[]}
       stage={stage}
+      side={
+        <AltitudeProfile
+          points={profile}
+          progress={crossed}
+          events={route.points.map((p) => ({ progress: route.totalKm > 0 ? p.distanceKm / route.totalKm : 0, name: p.name }))}
+        />
+      }
       tiles={
         <TileGrid>
           <Tile id="andes-day" label="Día de la campaña">

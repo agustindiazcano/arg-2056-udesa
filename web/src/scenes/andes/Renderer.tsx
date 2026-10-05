@@ -44,13 +44,14 @@ import { createDetailTerrain } from './detail3d';
 import { createFigureColumn } from './figures3d';
 import type { Graphics } from './graphics';
 import { labelOpacity, toScreen } from './labels';
+import { minimapFrame, toMinimap, viewCone } from './minimap';
 import { arcAt, buildPath, sampleAlong, sampleAlongExtended } from './pathAlong';
 import type { PathSample } from './pathAlong';
 import { tileableNoise } from './relief';
 import { buildPatch, createField } from './reliefField';
 import { skyColorHex } from './sky';
 import { snowAmount, snowCount, snowField, stepSnow } from './snow';
-import { buildTerrainMesh, sceneScale, toScene } from './terrainMesh';
+import { buildTerrainMesh, fromScene, sceneScale, toScene } from './terrainMesh';
 import { positionAt } from './timeline';
 import type { Route } from './timeline';
 
@@ -99,6 +100,10 @@ const FAR_STEP = 0.2;
 const FAR_LOWER = 0.06;
 /** the grain of the ground: a tiling texture of this many texels a side */
 const GROUND_TEXTURE_SIZE = 128;
+/** the minimap of the close view: its side in pixels, and how far and how wide the cone of what the camera looks at is drawn */
+const MINIMAP_SIZE = 160;
+const MINIMAP_CONE = 26;
+const MINIMAP_SPREAD = 0.45;
 /** the sky dome around the origin: the camera stays within ~100 units of it and the far plane is 300 */
 const SKY_RADIUS = 180;
 
@@ -154,6 +159,7 @@ export function AndesRenderer({ terrain, route, day, selectedId, camera, graphic
   const tipRef = useRef<HTMLDivElement>(null);
   const reduced = useReducedMotion();
   const tagsRef = useRef<HTMLDivElement>(null);
+  const minimapRef = useRef<HTMLCanvasElement>(null);
   const { tier, shadows, trees, textures, flakeMax, shadowMapSize, treeDensity } = graphics;
   const preset = QUALITY_PRESETS[tier];
   const { stageRef, poseRef, controls } = useCameraNav();
@@ -420,6 +426,7 @@ export function AndesRenderer({ terrain, route, day, selectedId, camera, graphic
       column.mesh.visible = near;
       baseMesh.visible = !near;
       farMesh.visible = near;
+      if (mini) mini.hidden = !near;
       detail.group.visible = near;
       sun.castShadow = near && shadows;
       syncSnow();
@@ -430,6 +437,84 @@ export function AndesRenderer({ terrain, route, day, selectedId, camera, graphic
         sun.target.position.set(0, 0, 0);
         sun.position.set(-9, 5, 5);
       }
+    };
+    // the minimap, only in the close view: the terrain by height (drawn once), the route and how far it is walked, the places, the army and what the camera looks at
+    const mini = minimapRef.current;
+    const miniContext = mini?.getContext('2d') ?? null;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const miniFrame = minimapFrame(scale.width, scale.depth, MINIMAP_SIZE, 6);
+    let backdrop: HTMLCanvasElement | null = null;
+    if (mini && miniContext) {
+      mini.width = MINIMAP_SIZE * dpr;
+      mini.height = MINIMAP_SIZE * dpr;
+      backdrop = document.createElement('canvas');
+      backdrop.width = MINIMAP_SIZE;
+      backdrop.height = MINIMAP_SIZE;
+      const back = backdrop.getContext('2d');
+      if (back) {
+        const cell = 3;
+        const lo = terrain.meta.elevation_min_m;
+        const span = Math.max(1, terrain.meta.elevation_max_m - lo);
+        const colorOut = new Color();
+        const colorNext = new Color();
+        for (let py = 0; py < MINIMAP_SIZE; py += cell) {
+          for (let px = 0; px < MINIMAP_SIZE; px += cell) {
+            const sx = (px + cell / 2 - miniFrame.offsetX) / miniFrame.scale - scale.width / 2;
+            const sz = (py + cell / 2 - miniFrame.offsetY) / miniFrame.scale - scale.depth / 2;
+            if (Math.abs(sx) > scale.width / 2 || Math.abs(sz) > scale.depth / 2) continue;
+            const at = fromScene(scale, sx, sz);
+            const h = sampleElevation(terrain, at.lon, at.lat);
+            if (h === null) continue;
+            rampColor((h - lo) / span, colorOut, colorNext);
+            back.fillStyle = `#${colorOut.getHexString()}`;
+            back.fillRect(px, py, cell, cell);
+          }
+        }
+      }
+    }
+    let walked = 0;
+    const drawMinimap = () => {
+      if (!mini || !miniContext || !backdrop) return;
+      const ctx = miniContext;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.clearRect(0, 0, MINIMAP_SIZE, MINIMAP_SIZE);
+      ctx.drawImage(backdrop, 0, 0);
+      const line = (to: number, color: string, width: number) => {
+        ctx.beginPath();
+        for (let i = 0; i < to; i += 1) {
+          const p = toMinimap(miniFrame, samples[i * 3]!, samples[i * 3 + 2]!);
+          if (i === 0) ctx.moveTo(p.x, p.y);
+          else ctx.lineTo(p.x, p.y);
+        }
+        ctx.strokeStyle = color;
+        ctx.lineWidth = width;
+        ctx.stroke();
+      };
+      line(sampleCount, tokens.muted, 1.5);
+      line(Math.max(2, Math.min(sampleCount, walked)), tokens.ink, 2);
+      for (const m of markers) {
+        const p = toMinimap(miniFrame, m.mesh.position.x, m.mesh.position.z);
+        ctx.fillStyle = tokens.ink2;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, 2, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      const cone = viewCone(miniFrame, { x: stage.camera.position.x, z: stage.camera.position.z }, { x: stage.pose.x, z: stage.pose.z }, MINIMAP_CONE, MINIMAP_SPREAD);
+      ctx.beginPath();
+      ctx.moveTo(cone[0].x, cone[0].y);
+      ctx.lineTo(cone[1].x, cone[1].y);
+      ctx.lineTo(cone[2].x, cone[2].y);
+      ctx.closePath();
+      ctx.fillStyle = 'rgba(255,255,255,0.28)';
+      ctx.fill();
+      const a = toMinimap(miniFrame, army.position.x, army.position.z);
+      ctx.fillStyle = '#' + lit.getHexString();
+      ctx.strokeStyle = tokens.ink;
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.arc(a.x, a.y, 4, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
     };
     // the names of the places float over their markers: they fade with the distance and hide with the marker
     const tagEls = tagsRef.current ? (Array.from(tagsRef.current.children) as HTMLElement[]) : [];
@@ -454,6 +539,7 @@ export function AndesRenderer({ terrain, route, day, selectedId, camera, graphic
       updateTags();
       const next = lodFor(stage.camera.position.distanceTo(army.position), lod);
       if (next !== lod) enterLod(next);
+      if (lod === 'figures') drawMinimap();
       if (lod !== 'figures') {
         // far from the army the camera stays above the horizon: below it only the sky would show
         if (stage.pose.phi > PHI_MAX) stage.nav.setPose({ ...stage.pose, phi: PHI_MAX });
@@ -510,7 +596,8 @@ export function AndesRenderer({ terrain, route, day, selectedId, camera, graphic
         stage.nav.setPose(steered(cineBase, steer, PHI_MAX_ANDES));
         left = copyCamera(stage.pose);
       } else if (modeRef.current === 'follow') stage.nav.setTarget(at.x, at.y, at.z);
-      traveled.geometry.setDrawRange(0, Math.max(2, Math.round(((d - route.firstDay) / Math.max(1, route.lastDay - route.firstDay)) * ROUTE_SAMPLES) + 1));
+      walked = Math.max(2, Math.round(((d - route.firstDay) / Math.max(1, route.lastDay - route.firstDay)) * ROUTE_SAMPLES) + 1);
+      traveled.geometry.setDrawRange(0, walked);
       stage.requestRender();
     };
     setDayRef.current = setDay;
@@ -622,6 +709,7 @@ export function AndesRenderer({ terrain, route, day, selectedId, camera, graphic
       <div ref={hostRef} className="chart3d" role="img" aria-label={label} data-chart3d="andes">
         <div ref={tipRef} className="chart3d-tip" hidden />
       </div>
+      <canvas ref={minimapRef} className="andes-minimap" aria-hidden="true" hidden />
       <div ref={tagsRef} className="andes-tags" aria-hidden="true">
         {route.points.map((p) => (
           <span key={p.id} className="andes-tag">

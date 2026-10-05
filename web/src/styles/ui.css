@@ -489,6 +489,7 @@ main.scene-container {
 
 .tile-note {
   margin-top: var(--space-xs);
-  font-size: var(--font-sm);
+  font-size: 0.72rem;
+  line-height: 1.25;
   color: var(--muted);
 }

@@ -269,6 +269,40 @@ describe('Andes scene', () => {
     expect(screen.queryByText(/VO₂/)).toBeNull();
   });
 
+  it('shows the altitude profile of the crossing on the right, says its numbers in words, and its marker follows the army', async () => {
+    stubFetch();
+    renderScene();
+    await screen.findByTestId('andes-renderer');
+    const side = document.querySelector('.dash-side')!;
+    const chart = within(side as HTMLElement).getByTestId('andes-profile');
+    expect(chart.getAttribute('role')).toBe('img');
+    expect(chart.getAttribute('aria-label')).toMatch(/Perfil de altitud del cruce/);
+    expect(chart.getAttribute('aria-label')).toMatch(/máximo de 3\.900 m/);
+    expect(chart.getAttribute('data-progress')).toBe('0.000');
+    const at = (year: number) => {
+      act(() => useStore.setState({ yearFloat: year }));
+      return Number(screen.getByTestId('andes-profile').getAttribute('data-progress'));
+    };
+    const early = at(1850);
+    const mid = at(1950);
+    const late = at(2030);
+    expect(early).toBeGreaterThan(0);
+    expect(mid).toBeGreaterThan(early);
+    expect(late).toBeGreaterThan(mid);
+    expect(screen.getByTestId('andes-profile').getAttribute('aria-label')).toMatch(/va por [\d.]+ m/);
+  });
+
+  it('says there is no profile when the data has no altitude', async () => {
+    // the schema asks for a note where the altitude is missing
+    const noAltitude = (events as Array<Record<string, unknown>>).map((e) => ({ ...e, elevation_m: null, note: 'sin dato de altitud' }));
+    stubFetch(noAltitude);
+    renderScene();
+    await screen.findByTestId('andes-renderer');
+    expect(screen.queryByTestId('andes-profile')).toBeNull();
+    const empty = document.querySelector('.dash-side .andes-profile .andes-profile-empty');
+    expect(empty?.textContent).toBe('sin dato');
+  });
+
   it('has graphics options: the effects can be switched off, the choice is kept, and a low quality turns off what it cannot afford', async () => {
     stubFetch();
     renderScene();

@@ -918,3 +918,87 @@
 #overlay[data-scene='andes'] .progress-block .slider {
   width: clamp(110px, 15vw, 240px);
 }
+
+/* ---- minimap of the close view, and the altitude profile of the crossing ---------------------------------------- */
+
+.andes-minimap {
+  position: absolute;
+  left: var(--space-md);
+  bottom: calc(var(--bar-h, 0px) + 5.5rem);
+  z-index: 3;
+  width: 160px;
+  height: 160px;
+  background: var(--glass-strong);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+}
+
+.andes-minimap[hidden] {
+  display: none;
+}
+
+.andes-profile {
+  margin-top: var(--space-sm);
+}
+
+.profile-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.profile-grid {
+  stroke: var(--border);
+  stroke-dasharray: 2 3;
+}
+
+.profile-tick {
+  fill: var(--muted);
+  font-size: 9px;
+}
+
+.profile-area {
+  fill: color-mix(in srgb, var(--blue) 14%, transparent);
+}
+
+.profile-done {
+  fill: color-mix(in srgb, var(--blue) 38%, transparent);
+}
+
+.profile-line {
+  fill: none;
+  stroke: var(--blue);
+  stroke-width: 1.6;
+}
+
+.profile-event {
+  fill: var(--ink-2);
+}
+
+.profile-cursor {
+  stroke: var(--ink);
+  stroke-opacity: 0.6;
+}
+
+.profile-marker {
+  fill: var(--ink);
+  stroke: var(--blue);
+  stroke-width: 2;
+}
+
+.profile-now {
+  margin: var(--space-xs) 0 0;
+  font-size: var(--font-sm);
+  color: var(--ink-2);
+}
+
+.profile-now b {
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.andes-profile-empty {
+  margin: 0;
+  color: var(--muted);
+  font-size: var(--font-sm);
+}
