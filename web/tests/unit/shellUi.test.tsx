@@ -36,7 +36,11 @@ const controls = () => screen.getByRole('region', { name: 'Controles' });
 describe('header', () => {
   it('names the app and has the three sections in a navigation named Escenas', () => {
     render(<App />);
-    expect(screen.getByText('Argentina 2056', { selector: '.brand' })).toBeTruthy();
+    const brand = document.querySelector('.brand')!;
+    expect(brand.textContent).toBe('Argentina 2056');
+    // like the intro title, in one line: "Argentina" light and "2056" in the accent
+    expect(brand.querySelector('.brand-a')?.textContent).toBe('Argentina');
+    expect(brand.querySelector('.brand-n')?.textContent).toBe('2056');
     const nav = screen.getByRole('navigation', { name: 'Escenas' });
     expect(within(nav).getAllByRole('tab').map((t) => t.textContent)).toEqual(['Andes', 'Data Dashboard', 'Recorrido']);
     expect(SCENE_LABELS.economy).toBe('Economía');

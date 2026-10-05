@@ -33,14 +33,24 @@
   font-family: var(--font-title);
   font-variant-numeric: lining-nums;
   display: inline-flex;
-  align-items: center;
-  gap: var(--space-sm);
-  font-size: var(--font-sm);
-  font-weight: 700;
+  align-items: baseline;
+  gap: 0.45em;
+  font-size: 1.1rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--ink);
+  color: var(--intro-ink);
   white-space: nowrap;
+}
+
+.brand-a {
+  font-weight: 200;
+}
+
+.brand-n {
+  font-weight: 400;
+  color: var(--intro-light);
+  text-shadow: 0 0 10px color-mix(in srgb, var(--intro-light) 55%, transparent);
+  transition: text-shadow 0.2s ease-out;
 }
 
 button.brand {
@@ -51,17 +61,8 @@ button.brand {
   cursor: pointer;
 }
 
-button.brand:hover {
-  color: var(--blue);
-}
-
-.brand::before {
-  content: '';
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--blue);
-  box-shadow: 0 0 12px var(--glow);
+button.brand:hover .brand-n {
+  text-shadow: 0 0 16px var(--intro-light);
 }
 
 .header-end {
@@ -73,14 +74,14 @@ button.brand:hover {
 }
 
 .header-end a {
-  color: var(--ink-2);
+  color: color-mix(in srgb, var(--intro-ink) 62%, var(--intro-bg));
   text-decoration: none;
   border-bottom: 1px solid var(--border);
 }
 
 .header-end a:hover {
-  color: var(--ink);
-  border-bottom-color: var(--blue);
+  color: var(--intro-light);
+  border-bottom-color: var(--intro-light);
 }
 
 .badge {
@@ -121,15 +122,17 @@ button.brand:hover {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 2.25rem;
-  min-height: 2.25rem;
-  padding: var(--space-xs) var(--space-2);
+  min-width: 2rem;
+  min-height: 2rem;
+  padding: var(--space-xs) var(--space-sm);
   border: 1px solid transparent;
   border-radius: var(--radius-md);
-  background: color-mix(in srgb, var(--page) 62%, transparent);
-  color: var(--ink-2);
+  background: color-mix(in srgb, var(--intro-bg) 78%, transparent);
+  color: color-mix(in srgb, var(--intro-ink) 62%, var(--intro-bg));
   font: inherit;
-  font-size: var(--font-sm);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
   white-space: nowrap;
   cursor: pointer;
   backdrop-filter: blur(8px);
@@ -143,28 +146,28 @@ button.brand:hover {
 .tab:hover,
 .andes-nav .chip:hover:not(:disabled),
 .tour-steps .chip:hover {
-  color: var(--ink);
-  background: color-mix(in srgb, var(--ink) 16%, transparent);
-  border-color: color-mix(in srgb, var(--ink) 30%, transparent);
+  color: var(--intro-light);
+  background: color-mix(in srgb, var(--intro-light) 16%, transparent);
+  border-color: color-mix(in srgb, var(--intro-light) 55%, transparent);
   box-shadow:
-    inset 0 1px 0 color-mix(in srgb, var(--ink) 28%, transparent),
-    0 4px 14px color-mix(in srgb, var(--page) 45%, transparent);
+    inset 0 1px 0 color-mix(in srgb, var(--intro-ink) 24%, transparent),
+    0 4px 14px color-mix(in srgb, var(--intro-black) 45%, transparent);
   backdrop-filter: blur(14px) saturate(1.4);
 }
 
 .tab[aria-selected='true'],
 .andes-nav .chip[aria-pressed='true'],
 .tour-steps .chip[aria-pressed='true'] {
-  color: var(--ink);
-  background: var(--blue);
+  color: var(--intro-on-light);
+  background: var(--intro-light);
   border-color: transparent;
-  box-shadow: none;
+  box-shadow: 0 0 18px color-mix(in srgb, var(--intro-light) 40%, transparent);
 }
 
 .tab[aria-selected='true']:hover,
 .andes-nav .chip[aria-pressed='true']:hover,
 .tour-steps .chip[aria-pressed='true']:hover {
-  background: color-mix(in srgb, var(--blue) 82%, var(--ink));
+  background: color-mix(in srgb, var(--intro-light) 82%, var(--intro-white));
 }
 
 .andes-nav .chip:disabled {

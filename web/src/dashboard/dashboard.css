@@ -920,8 +920,8 @@
 
 /* the header sits over a bright sky: a soft scrim keeps its text readable without a bar */
 #overlay[data-scene='andes'] .chrome {
-  background: linear-gradient(to bottom, color-mix(in srgb, var(--page) 72%, transparent), transparent);
-  padding-bottom: var(--space-sm);
+  background: linear-gradient(to bottom, color-mix(in srgb, var(--intro-bg) 94%, transparent) 55%, transparent);
+  padding-bottom: var(--space-md);
 }
 
 #overlay[data-scene='andes'] .progress-block .slider {

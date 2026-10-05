@@ -53,3 +53,24 @@ describe('intro title weights', () => {
     expect(css).toMatch(/\.intro-title \.n\s*\{[^}]*font-weight:\s*400/);
   });
 });
+
+describe('navbar with the look of the intro', () => {
+  const ui = read('src/styles/ui.css');
+
+  it('the brand is "Argentina" in weight 200 and "2056" in weight 400, in the accent of the intro, on one line', () => {
+    expect(ui).toMatch(/\.brand-a\s*\{[^}]*font-weight:\s*200/);
+    expect(ui).toMatch(/\.brand-n\s*\{[^}]*font-weight:\s*400[^}]*var\(--intro-light\)/);
+    expect(ui).toMatch(/\.brand\s*\{[^}]*white-space:\s*nowrap/);
+  });
+
+  it('the navbar buttons take the palette of the intro: accent fill when selected, accent border on hover', () => {
+    const rule = (selector: string) => {
+      const start = ui.indexOf(`${selector} {`);
+      return start < 0 ? '' : ui.slice(start, ui.indexOf('}', start));
+    };
+    const selected = rule(".tour-steps .chip[aria-pressed='true']");
+    expect(selected).toContain('background: var(--intro-light)');
+    expect(selected).toContain('color: var(--intro-on-light)');
+    expect(rule('.tour-steps .chip:hover')).toContain('var(--intro-light)');
+  });
+});

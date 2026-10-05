@@ -1,6 +1,7 @@
 # Last Context
 
 ## State
+- **Navbar look of the intro**: the brand is "Argentina" (weight 200) and "2056" (weight 400, `--intro-light` with a soft glow) on one line; the navbar buttons, links and the Andes header scrim use the intro palette (`--intro-bg`, `--intro-light`, `--intro-on-light`, `--intro-ink`) in small uppercase letters.
 - **Typefaces**: Clarity City is the font of the whole app (`--font-sans` in `tokens.css`); Raleway is the font of the title "Argentina 2056" only (`--font-title`: the brand in the navbar and the intro heading, with lining figures). Both are bundled as variable woff2 in `web/public/fonts/` with their OFL files (the CSP allows `font-src 'self'` only) and credited in a "Tipografía" section of the References page. The navbar buttons also got the small rounded-square glass style.
 - **Recorrido steps**: in the Recorrido the navbar shows buttons 1 to 15 (`TourSteps.tsx`, `tourStep` and `TOUR_STEPS` in the reducer). They only select a step, nothing else changes yet. In that section the left and right arrow keys move the step instead of the scene.
 - **Also on `task/micro-fixes`**: entering the Andes (store start, tab, section, arrow key, intro) puts the clock at the first year, paused (0 %). The controls of the Andes scene render into a `nav` slot of the header (`Header.tsx`), right of the section tabs. The brand "Argentina 2056" is a button that returns to the intro (`App` takes `onHome`; `Root` handles it).
