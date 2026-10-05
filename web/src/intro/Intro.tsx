@@ -23,8 +23,16 @@ const SHORTCUTS: ReadonlyArray<{ section: Section; label: string }> = [
   { section: 'dashboard', label: 'Data Dashboard' }
 ];
 
-/** Text stands in for the logos until the images are provided. */
-const INSTITUTIONS = ['Universidad de San Andrés', 'Data Lab UdeSA', 'Contar con Datos', 'Secretaría de Innovación'];
+/** The institutions behind the project; the logos live in public/images. */
+const INSTITUTIONS: ReadonlyArray<{ name: string; src: string; href: string }> = [
+  { name: 'Data Science Lab, Universidad de San Andrés', src: '/images/data-science-lab-udesa.png', href: 'https://www.udesa.edu.ar/data-science-lab' },
+  { name: 'Contar con Datos', src: '/images/contar-con-datos-logo-udesa.webp', href: 'https://www.udesa.edu.ar/contar-con-datos' },
+  {
+    name: 'Secretaría de Innovación, Ciencia y Tecnología',
+    src: '/images/secretaria-innovacion-ciencia-tecnologia-recortado.png',
+    href: 'https://www.argentina.gob.ar/jefatura/innovacion-ciencia-y-tecnologia'
+  }
+];
 
 function viewBox(b: Box): string {
   return [b.x, b.y, b.w, b.h].map((v) => v.toFixed(1)).join(' ');
@@ -135,7 +143,7 @@ export function Intro({ onStart }: Props) {
         <h1 className="intro-title">
           <span className="a">Argentina</span> <span className="n">2056</span>
         </h1>
-        <p className="intro-sub">De 1810 a 2056: los datos, los recursos y los escenarios de un país.</p>
+        <p className="intro-sub">Del Cruce de los Andes a la Cuarta Revolución Industrial: El desafío estratégico de 1817 como faro para el presente. Un análisis de nuestros recursos en 2026 y una proyección de nuestro desarrollo a 30 años frente al impacto de la Inteligencia Artificial en la economía.</p>
         <button type="button" className="intro-start" onClick={() => onStart('andes')}>
           Comenzar
         </button>
@@ -147,14 +155,20 @@ export function Intro({ onStart }: Props) {
           ))}
         </div>
       </main>
-
-      <ul className="intro-logos" aria-label="Instituciones">
-        {INSTITUTIONS.map((name) => (
-          <li key={name}>{name}</li>
-        ))}
-      </ul>
       </div>
       <div className="intro-vignette" aria-hidden="true" />
+
+      <footer className="intro-footer">
+        <ul className="intro-logos" aria-label="Instituciones">
+          {INSTITUTIONS.map(({ name, src, href }) => (
+            <li key={name}>
+              <a href={href} target="_blank" rel="noopener noreferrer">
+                <img src={src} alt={name} />
+              </a>
+            </li>
+          ))}
+        </ul>
+      </footer>
     </div>
   );
 }

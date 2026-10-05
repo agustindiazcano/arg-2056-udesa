@@ -61,11 +61,25 @@ describe('Intro', () => {
     expect(prov.querySelectorAll('.intro-layer.glow use')).toHaveLength(3);
   });
 
-  it('lists the four institutions as placeholders for their logos', () => {
+  it('lists the three institutions with their logos, each linking to its site in a new tab', () => {
     render(<Intro onStart={() => undefined} />);
     const list = screen.getByRole('list', { name: 'Instituciones' });
-    const names = Array.from(list.querySelectorAll('li')).map((li) => li.textContent);
-    expect(names).toEqual(['Universidad de San Andrés', 'Data Lab UdeSA', 'Contar con Datos', 'Secretaría de Innovación']);
+    const logos = Array.from(list.querySelectorAll('li')).map((li) => {
+      const a = li.querySelector('a')!;
+      const img = a.querySelector('img')!;
+      return [img.getAttribute('alt'), img.getAttribute('src'), a.getAttribute('href'), a.getAttribute('target'), a.getAttribute('rel')];
+    });
+    expect(logos).toEqual([
+      ['Data Science Lab, Universidad de San Andrés', '/images/data-science-lab-udesa.png', 'https://www.udesa.edu.ar/data-science-lab', '_blank', 'noopener noreferrer'],
+      ['Contar con Datos', '/images/contar-con-datos-logo-udesa.webp', 'https://www.udesa.edu.ar/contar-con-datos', '_blank', 'noopener noreferrer'],
+      [
+        'Secretaría de Innovación, Ciencia y Tecnología',
+        '/images/secretaria-innovacion-ciencia-tecnologia-recortado.png',
+        'https://www.argentina.gob.ar/jefatura/innovacion-ciencia-y-tecnologia',
+        '_blank',
+        'noopener noreferrer'
+      ]
+    ]);
   });
 
   it('Enter on a focused button leaves the choice to that button: it does not also open the Andes', () => {
