@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import data from './provinces.json';
 import { boxStyle, lightStep, pathBox, type Box } from './layout';
+import type { Section } from '../types/scene';
 import './intro.css';
 
 const LAYERS = 3; // 2 sides and the top: fewer composited layers per province
@@ -9,10 +10,18 @@ const LIGHT_SPEED = 0.8;
 const APPEAR_MS = 2300; // the provinces appear upright and centered, then the view tilts
 
 interface Props {
-  onStart: () => void;
+  /** The section to open: Comenzar and the Enter key open the Andes. */
+  onStart: (section: Section) => void;
 }
 
 const provinces = data.provinces;
+
+/** The ways in under Comenzar: straight to a section. */
+const SHORTCUTS: ReadonlyArray<{ section: Section; label: string }> = [
+  { section: 'andes', label: 'Cruce de los Andes' },
+  { section: 'tour', label: 'Recorrido al 2056' },
+  { section: 'dashboard', label: 'Data Dashboard' }
+];
 
 /** Text stands in for the logos until the images are provided. */
 const INSTITUTIONS = ['Universidad de San Andrés', 'Data Lab UdeSA', 'Contar con Datos', 'Secretaría de Innovación'];
@@ -77,7 +86,8 @@ export function Intro({ onStart }: Props) {
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Enter') onStart();
+      // on a focused button, Enter is that button's own click
+      if (e.key === 'Enter' && !(e.target instanceof HTMLButtonElement)) onStart('andes');
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
@@ -126,9 +136,16 @@ export function Intro({ onStart }: Props) {
           <span className="a">Argentina</span> <span className="n">2056</span>
         </h1>
         <p className="intro-sub">De 1810 a 2056: los datos, los recursos y los escenarios de un país.</p>
-        <button type="button" className="intro-start" onClick={onStart}>
+        <button type="button" className="intro-start" onClick={() => onStart('andes')}>
           Comenzar
         </button>
+        <div role="group" aria-label="Ir directo a" className="intro-shortcuts">
+          {SHORTCUTS.map(({ section, label }) => (
+            <button key={section} type="button" className="intro-shortcut" onClick={() => onStart(section)}>
+              {label}
+            </button>
+          ))}
+        </div>
       </main>
 
       <ul className="intro-logos" aria-label="Instituciones">

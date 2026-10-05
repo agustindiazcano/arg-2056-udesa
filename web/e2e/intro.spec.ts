@@ -20,4 +20,20 @@ test.describe('intro screen', () => {
     await page.keyboard.press('Enter');
     await expect(page.getByRole('tab').first()).toBeVisible();
   });
+
+  test('the buttons under Comenzar open the app in their section', async ({ page }) => {
+    await page.goto('/');
+    await page.getByRole('button', { name: 'Recorrido al 2056' }).click();
+    await expect(page.getByRole('tab', { name: 'Recorrido' })).toHaveAttribute('aria-selected', 'true');
+    await expect(page.getByRole('region', { name: 'Recorrido' })).toBeVisible();
+
+    await page.goto('/');
+    await page.getByRole('button', { name: 'Data Dashboard' }).click();
+    await expect(page.getByRole('tab', { name: 'Data Dashboard' })).toHaveAttribute('aria-selected', 'true');
+    await expect(page.getByRole('tab', { name: 'Economía' })).toHaveAttribute('aria-selected', 'true');
+
+    await page.goto('/');
+    await page.getByRole('button', { name: 'Cruce de los Andes' }).click();
+    await expect(page.getByRole('tab', { name: 'Andes' })).toHaveAttribute('aria-selected', 'true');
+  });
 });

@@ -230,6 +230,35 @@
   outline-offset: 4px;
 }
 
+.intro-shortcuts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: calc(var(--u) * 0.6);
+  margin-top: calc(var(--u) * 1.2);
+}
+.intro-shortcut {
+  cursor: pointer;
+  padding: calc(var(--u) * 0.6) calc(var(--u) * 1.4);
+  font: inherit;
+  font-size: calc(var(--u) * 0.8);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--intro-ink-dim);
+  background: transparent;
+  border: 1px solid color-mix(in srgb, var(--intro-light) 45%, transparent);
+  border-radius: 999px;
+  transition: color 0.2s, border-color 0.2s, background 0.2s;
+}
+.intro-shortcut:hover {
+  color: var(--intro-light);
+  border-color: var(--intro-light);
+  background: color-mix(in srgb, var(--intro-light) 10%, transparent);
+}
+.intro-shortcut:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 3px;
+}
+
 @keyframes intro-appear { from { opacity: 0; translate: 0 0 140px; } to { opacity: 1; translate: 0 0 0; } }
 
 @media (max-aspect-ratio: 3/2) {
@@ -237,6 +266,7 @@
 }
 @media (max-width: 700px) {
   .intro-copy { top: 14vh; transform: none; text-align: center; left: 0; right: 0; margin-inline: auto; }
+  .intro-shortcuts { justify-content: center; }
   .intro-cam { transform: scale(0.9) rotateX(0deg) rotateZ(0deg); }
   .intro[data-tilted='true'] .intro-cam { transform: translateY(18vh) scale(0.95) rotateX(54deg) rotateZ(36deg); animation: none; }
 }

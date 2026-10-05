@@ -1,5 +1,7 @@
 import React, { Suspense, lazy, useState } from 'react';
 import { App } from './App';
+import { useStore } from '../state/store';
+import type { Section } from '../types/scene';
 
 // The intro carries the province outlines: its own chunk, so the app does not pay for it
 const Intro = lazy(() => import('../intro/Intro').then((m) => ({ default: m.Intro })));
@@ -16,13 +18,18 @@ function skipIntro(): boolean {
   }
 }
 
-/** The first screen is the intro; "Comenzar" opens the app. */
+/** The first screen is the intro; "Comenzar" opens the app in the Andes, and each button under it in its own section. */
 export function Root() {
   const [started, setStarted] = useState(skipIntro);
   if (started) return <App />;
   return (
     <Suspense fallback={null}>
-      <Intro onStart={() => setStarted(true)} />
+      <Intro
+        onStart={(section: Section) => {
+          useStore.getState().dispatch({ type: 'setSection', section });
+          setStarted(true);
+        }}
+      />
     </Suspense>
   );
 }
