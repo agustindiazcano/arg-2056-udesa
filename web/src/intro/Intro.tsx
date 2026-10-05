@@ -4,7 +4,9 @@ import { boxStyle, lightStep, pathBox, type Box } from './layout';
 import './intro.css';
 
 const LAYERS = 6;
-const TICK_MS = 700;
+// speed of the lights (0.8): the prototype waits (350 to 1050 ms) / speed between changes
+const LIGHT_SPEED = 0.8;
+const APPEAR_MS = 2300; // the provinces appear upright and centered, then the view tilts
 
 interface Props {
   onStart: () => void;
@@ -44,26 +46,31 @@ export function Intro({ onStart }: Props) {
   // flat first, then it tilts into 3D
   useEffect(() => {
     if (reduced) return;
-    const t = setTimeout(() => setTilted(true), 700);
+    const t = setTimeout(() => setTilted(true), APPEAR_MS);
     return () => clearTimeout(t);
   }, [reduced]);
 
-  // provinces light up and go out at random; under reduced motion a fixed few stay lit
+  // once the map is tilted the provinces light up and go out at random; under reduced motion a fixed few stay lit
   useEffect(() => {
     if (reduced) {
       setLit(new Set([1, 5, 11, 16, 22]));
       return;
     }
-    const timer = setInterval(() => {
+    if (!tilted) return;
+    let timer: ReturnType<typeof setTimeout>;
+    const tick = () => {
       const step = lightStep(litRef.current, provinces.length, Math.random);
-      if (!step) return;
-      const next = new Set(litRef.current);
-      if (step.on) next.add(step.id);
-      else next.delete(step.id);
-      setLit(next);
-    }, TICK_MS);
-    return () => clearInterval(timer);
-  }, [reduced]);
+      if (step) {
+        const next = new Set(litRef.current);
+        if (step.on) next.add(step.id);
+        else next.delete(step.id);
+        setLit(next);
+      }
+      timer = setTimeout(tick, (350 + Math.random() * 700) / LIGHT_SPEED);
+    };
+    timer = setTimeout(tick, 900);
+    return () => clearTimeout(timer);
+  }, [reduced, tilted]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
