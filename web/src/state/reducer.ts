@@ -8,6 +8,9 @@ import { STEPS } from '../content/steps';
 import { applyFocus } from '../story/focus';
 import type { StepsByScene } from '../story/types';
 
+/** How many steps the Recorrido has: the numbered buttons of the navbar. */
+export const TOUR_STEPS = 15;
+
 export interface State {
   scene: Scene;
   /** where the viewer is: the Andes, the data dashboard or the tour; the Andes scene and the Andes section go together */
@@ -22,6 +25,8 @@ export interface State {
   aiOverlay: 'off' | 'on';
   /** the current story step of every scene; entering a scene restarts it at 0 */
   stepIndex: Record<Scene, number>;
+  /** the step of the Recorrido, from 1 to TOUR_STEPS */
+  tourStep: number;
 }
 
 export const INITIAL_STEP_INDEX: Readonly<Record<Scene, number>> = {
@@ -37,6 +42,7 @@ export type UiAction =
   | { type: 'setScene'; scene: Scene }
   | { type: 'setSection'; section: Section }
   | { type: 'setSpeed'; speed: number }
+  | { type: 'tourSet'; step: number }
   | { type: 'selectProvince'; province: ProvinceId | null }
   | { type: 'setYear'; year: number }
   | { type: 'setAiOverlay'; aiOverlay: 'off' | 'on' }
@@ -67,11 +73,14 @@ function goToStep(state: State, index: number, steps: StepsByScene): State {
 /** `steps` is injectable so tests can use a fixture; the app always reads the static STEPS. */
 export function reduce(state: State, action: Action, steps: StepsByScene = STEPS): State {
   switch (action.type) {
+    // in the Recorrido the left and right arrows walk its steps, not the scenes
     case 'nextScene': {
+      if (state.section === 'tour') return state.tourStep >= TOUR_STEPS ? state : { ...state, tourStep: state.tourStep + 1 };
       const ns = nextScene(state.scene);
       return ns === state.scene ? state : enterScene(state, ns, steps);
     }
     case 'prevScene': {
+      if (state.section === 'tour') return state.tourStep <= 1 ? state : { ...state, tourStep: state.tourStep - 1 };
       const ps = prevScene(state.scene);
       return ps === state.scene ? state : enterScene(state, ps, steps);
     }
@@ -125,6 +134,8 @@ export function reduce(state: State, action: Action, steps: StepsByScene = STEPS
     // UiActions
     case 'setScene':
       return action.scene === state.scene ? { ...state, scene: action.scene } : enterScene(state, action.scene, steps);
+    case 'tourSet':
+      return Number.isInteger(action.step) && action.step >= 1 && action.step <= TOUR_STEPS ? { ...state, tourStep: action.step } : state;
     case 'setSpeed':
       return SPEEDS.includes(action.speed) ? { ...state, speed: action.speed } : state;
     case 'setSection': {

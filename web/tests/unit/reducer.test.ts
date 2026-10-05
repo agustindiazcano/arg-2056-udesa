@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { reduce, tick, INITIAL_STEP_INDEX, State } from '../../src/state/reducer';
+import { reduce, tick, INITIAL_STEP_INDEX, TOUR_STEPS, State } from '../../src/state/reducer';
 import { YEAR_MAX, YEAR_MIN } from '../../src/types/year';
 
 describe('Reducer', () => {
@@ -14,7 +14,8 @@ describe('Reducer', () => {
     province: null,
     provinceFilterOpen: false,
     aiOverlay: 'off',
-    stepIndex: INITIAL_STEP_INDEX
+    stepIndex: INITIAL_STEP_INDEX,
+    tourStep: 1
   });
 
   describe('KeyActions', () => {
@@ -227,6 +228,31 @@ describe('Reducer', () => {
     it('the store itself opens at the first year, as the Andes is its first scene', async () => {
       const { useStore } = await import('../../src/state/store');
       expect(useStore.getState()).toMatchObject({ scene: 'andes', yearFloat: YEAR_MIN });
+    });
+  });
+
+  describe('the steps of the Recorrido', () => {
+    const tour: State = { ...initialState, scene: 'economy', section: 'tour' };
+
+    it('the arrow keys move the step, not the scene, and stop at 1 and at TOUR_STEPS', () => {
+      let state = reduce(tour, { type: 'nextScene' });
+      expect(state).toMatchObject({ tourStep: 2, scene: 'economy' });
+      state = reduce(state, { type: 'prevScene' });
+      expect(state.tourStep).toBe(1);
+      expect(reduce(state, { type: 'prevScene' })).toBe(state);
+      const last: State = { ...tour, tourStep: TOUR_STEPS };
+      expect(reduce(last, { type: 'nextScene' })).toBe(last);
+    });
+
+    it('tourSet picks a step of the list and ignores any other value', () => {
+      expect(reduce(tour, { type: 'tourSet', step: 7 }).tourStep).toBe(7);
+      expect(reduce(tour, { type: 'tourSet', step: 0 })).toBe(tour);
+      expect(reduce(tour, { type: 'tourSet', step: TOUR_STEPS + 1 })).toBe(tour);
+      expect(reduce(tour, { type: 'tourSet', step: 2.5 })).toBe(tour);
+    });
+
+    it('outside the tour the arrow keys still change the scene', () => {
+      expect(reduce({ ...tour, section: 'dashboard' }, { type: 'nextScene' })).toMatchObject({ scene: 'resources', tourStep: 1 });
     });
   });
 });

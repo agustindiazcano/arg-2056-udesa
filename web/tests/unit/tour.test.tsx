@@ -91,3 +91,34 @@ describe('Recorrido', () => {
     expect(screen.queryByRole('region', { name: 'Recorrido' })).toBeNull();
   });
 });
+
+describe('Recorrido steps in the navbar', () => {
+  const steps = () => within(screen.getByRole('group', { name: 'Pasos del Recorrido' }));
+
+  it('shows the buttons 1 to 15 in the header, the first pressed', () => {
+    render(<App />);
+    const buttons = steps().getAllByRole('button');
+    expect(buttons.map((b) => b.textContent)).toEqual(Array.from({ length: 15 }, (_, i) => String(i + 1)));
+    expect(buttons.map((b) => b.getAttribute('aria-pressed'))).toEqual(['true', ...Array(14).fill('false')]);
+    expect(document.querySelector('.app-header')?.contains(screen.getByRole('group', { name: 'Pasos del Recorrido' }))).toBe(true);
+  });
+
+  it('a click picks a step, and the right and left arrow keys move it', () => {
+    render(<App />);
+    fireEvent.click(steps().getByRole('button', { name: '4' }));
+    expect(useStore.getState().tourStep).toBe(4);
+    fireEvent.keyDown(window, { key: 'ArrowRight' });
+    expect(useStore.getState().tourStep).toBe(5);
+    expect(steps().getByRole('button', { name: '5' }).getAttribute('aria-pressed')).toBe('true');
+    fireEvent.keyDown(window, { key: 'ArrowLeft' });
+    fireEvent.keyDown(window, { key: 'ArrowLeft' });
+    expect(useStore.getState().tourStep).toBe(3);
+    expect(useStore.getState().scene).toBe('economy');
+  });
+
+  it('is only in the Recorrido', () => {
+    useStore.setState({ section: 'dashboard' });
+    render(<App />);
+    expect(screen.queryByRole('group', { name: 'Pasos del Recorrido' })).toBeNull();
+  });
+});

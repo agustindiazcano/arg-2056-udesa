@@ -20,7 +20,8 @@ const initialState: State = {
   province: null,
   provinceFilterOpen: false,
   aiOverlay: 'off',
-  stepIndex: INITIAL_STEP_INDEX
+  stepIndex: INITIAL_STEP_INDEX,
+  tourStep: 1
 };
 
 import { tick as tickReducer } from './reducer';
