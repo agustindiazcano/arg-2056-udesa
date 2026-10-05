@@ -21,7 +21,7 @@
   overflow: hidden;
   background: var(--intro-bg);
   color: var(--intro-ink);
-  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-family: var(--font-sans);
 }
 .intro[data-tilted='true'] {
   --lift: calc(var(--mh) * 0.04);

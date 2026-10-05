@@ -203,6 +203,16 @@ export function ReferencesPage({ references, extra }: { references: References; 
         </section>
       )}
 
+      <section aria-labelledby="typeface">
+        <h2 id="typeface">Tipografía</h2>
+        <p>
+          <a href="https://fonts.google.com/specimen/Clarity+City" target="_blank" rel="noopener noreferrer">
+            Clarity City
+          </a>{' '}
+          (The Clarity City Project Authors), con licencia SIL Open Font License 1.1. Se sirve desde esta misma aplicación.
+        </p>
+      </section>
+
       {leads.length > 0 && (
         <details>
           <summary>Pistas sin verificar</summary>

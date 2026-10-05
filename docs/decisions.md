@@ -116,6 +116,7 @@ A10, A13, A15, A16, A24, A26, A31, A32 and A33 are accepted as written, with the
 
 ## D-3d-4: Typeface
 - Decision: the system sans stack for the UI and the 3D labels. No webfont, no CDN (the CSP allows `font-src 'self'` only). A bundled display face can be added later with its license on the References page.
+- Update: Clarity City (SIL OFL 1.1) is now the typeface of the whole app, the intro and the 3D labels. It is bundled as a variable woff2 in `web/public/fonts/` (latin and latin-ext) with its `OFL.txt`, declared in `tokens.css` as `--font-sans` with the system stack as fallback, and credited on the References page.
 
 ## D-3d-5: Tour length and scenes
 - Decision: the narrated tour is the six views drafted from the proof of concept: mining, mix, GDP, per capita, ranking and map. Recorrido (tour) is the default and Explorar (free) is the other mode.

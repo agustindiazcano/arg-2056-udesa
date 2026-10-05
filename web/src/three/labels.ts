@@ -3,7 +3,7 @@ import { CanvasTexture, Sprite, SpriteMaterial, SRGBColorSpace } from 'three';
 /** A piece of text as a sprite that always faces the camera. `height` is its height in scene units. */
 export function textSprite(text: string, color: string, height: number, bold = false): Sprite {
   const px = 64;
-  const font = `${bold ? '700 ' : ''}${px}px system-ui, -apple-system, "Segoe UI", sans-serif`;
+  const font = `${bold ? '700 ' : ''}${px}px "Clarity City", system-ui, -apple-system, "Segoe UI", sans-serif`;
   const canvas = document.createElement('canvas');
   const ctx = canvas.getContext('2d');
   if (ctx) {

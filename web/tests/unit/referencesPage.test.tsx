@@ -193,6 +193,13 @@ describe('ReferencesPage: filters', () => {
 });
 
 describe('ReferencesPage: attributions, leads and links', () => {
+  it('credits the typeface with its license', () => {
+    render(<ReferencesPage references={refs()} />);
+    expect(screen.getByRole('heading', { level: 2, name: 'Tipografía' })).toBeDefined();
+    expect(screen.getByRole('link', { name: 'Clarity City' }).getAttribute('href')).toBe('https://fonts.google.com/specimen/Clarity+City');
+    expect(screen.getByText(/SIL Open Font License 1\.1/)).toBeDefined();
+  });
+
   it('lists the attributions with a link when there is a source url', () => {
     render(<ReferencesPage references={refs()} />);
     expect(screen.getByRole('heading', { level: 2, name: 'Atribuciones' })).toBeDefined();
