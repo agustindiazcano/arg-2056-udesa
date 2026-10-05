@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { NO_STEER, addSteer, battlePose, followPose, lookPoint, overviewPose, steered } from '../../src/scenes/andes/camera';
+import { FIGURE_NEAR } from '../../src/scenes/andes/column';
 import { sceneScale, toScene } from '../../src/scenes/andes/terrainMesh';
 import { syntheticTerrain } from '../../src/terrain/synthetic';
 import { sampleElevation } from '../../src/terrain/decode';
@@ -50,10 +51,17 @@ describe('followPose', () => {
     expect(p.radius).toBeLessThan(overviewPose(scale).radius);
   });
 
-  it('never leaves the camera below the horizon or straight above', () => {
-    const p = followPose(scale, { x: 0, y: 0, z: 0 }, { x: 0, y: 0, z: 0, theta: 0, phi: 1.54, radius: 5 });
-    expect(p.phi).toBeLessThanOrEqual(1.2);
-    expect(p.phi).toBeGreaterThanOrEqual(0.5);
+  it('keeps the camera low enough to see the horizon and the mountains, never straight above or past it', () => {
+    const low = followPose(scale, { x: 0, y: 0, z: 0 }, { x: 0, y: 0, z: 0, theta: 0, phi: 1.54, radius: 5 });
+    expect(low.phi).toBeLessThanOrEqual(1.45);
+    expect(low.phi).toBeGreaterThanOrEqual(1);
+    const high = followPose(scale, { x: 0, y: 0, z: 0 }, { x: 0, y: 0, z: 0, theta: 0, phi: 0.1, radius: 5 });
+    expect(high.phi).toBeGreaterThanOrEqual(1);
+  });
+
+  it('is close enough for the figures and the far mountains to show: nearer than where the figures give way to the marker', () => {
+    const p = followPose(scale, { x: 0, y: 0, z: 0 }, { x: 0, y: 0, z: 0, theta: 0, phi: 1, radius: 30 });
+    expect(p.radius).toBeLessThan(FIGURE_NEAR);
   });
 });
 

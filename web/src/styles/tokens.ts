@@ -74,11 +74,11 @@ export const DIVERGING = [
 export const TERRAIN_RAMP = ['#2f4a26', '#4c6a2f', '#7a8a3c', '#a08f4a', '#b0916a', '#a9a39c', '#cbc8c2', '#f1f3f6'];
 
 /**
- * The sky of the Andes scene, from the horizon (warm, light: the dawn) up to the zenith (deep blue, dark). The distance fog
- * of the terrain is the first step, so the far ground melts into the sky. A first choice by the agent, open to the human's
- * art direction. Mirrors --sky-1..4.
+ * The sky of the Andes scene, from the horizon (a pale blue haze, light) up to the zenith (deep blue): a clear day. The distance fog
+ * of the terrain is the first step, so the far ground melts into the haze. A first choice by the agent, taken from the visual proof of
+ * concept, and open to the human's art direction. Mirrors --sky-1..4.
  */
-export const SKY_RAMP = ['#d6a77f', '#7b8fb0', '#2c4a7c', '#0b1530'];
+export const SKY_RAMP = ['#cfe1f3', '#93b8e2', '#5189d2', '#2a60c0'];
 
 /** Fill of a province without data: the baseline color (design.md), never a step of the ramps. Mirrors --no-data. */
 export const NO_DATA = '#383835';

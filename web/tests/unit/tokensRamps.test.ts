@@ -120,8 +120,15 @@ describe('terrain ramp (the natural colors of the Andes scene)', () => {
 });
 
 describe('sky ramp (the dome of the Andes scene)', () => {
-  it('has 4 steps from the horizon (warm, light) to the zenith (deep blue, dark)', () => {
-    expect(SKY_RAMP).toEqual(['#d6a77f', '#7b8fb0', '#2c4a7c', '#0b1530']);
+  it('has 4 steps from the horizon (pale blue, light) to the zenith (deep blue)', () => {
+    expect(SKY_RAMP).toEqual(['#cfe1f3', '#93b8e2', '#5189d2', '#2a60c0']);
+  });
+
+  it('is a day sky: the horizon is a pale blue haze, not the orange of a dawn', () => {
+    const n = parseInt(SKY_RAMP[0]!.slice(1), 16);
+    const r = (n >> 16) & 255;
+    const b = n & 255;
+    expect(b).toBeGreaterThan(r);
   });
 
   it('gets darker with every step up, so the sky is lightest at the horizon', () => {

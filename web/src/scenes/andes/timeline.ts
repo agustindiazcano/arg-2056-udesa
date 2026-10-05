@@ -141,3 +141,33 @@ export function paceClock(route: Route, steps = 480): (yearFloat: number) => num
     return Math.min(last, ((lo + within) / steps) * last);
   };
 }
+
+export interface PaceProgress {
+  /** the share of the route walked by the clock's year, 0 to 1, by distance */
+  progress: (yearFloat: number) => number;
+  /** the year of the clock at which that share has been walked */
+  yearAt: (progress: number) => number;
+}
+
+/** The progress of the crossing as the reader sees it (a percentage of the route) and the way back from it to the shared clock. */
+export function paceProgress(route: Route): PaceProgress {
+  const day = paceClock(route);
+  const progress = (yearFloat: number) => {
+    if (route.totalKm <= 0) return 0;
+    const walked = positionAt(route, day(yearFloat))?.distanceKm ?? 0;
+    return Math.min(1, Math.max(0, walked / route.totalKm));
+  };
+  const yearAt = (p: number) => {
+    if (p <= 0) return YEAR_MIN;
+    if (p >= 1) return YEAR_MAX;
+    let lo = YEAR_MIN;
+    let hi = YEAR_MAX;
+    for (let i = 0; i < 40; i += 1) {
+      const mid = (lo + hi) / 2;
+      if (progress(mid) < p) lo = mid;
+      else hi = mid;
+    }
+    return hi;
+  };
+  return { progress, yearAt };
+}

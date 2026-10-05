@@ -2,7 +2,7 @@ import { sampleElevation } from '../../terrain/decode';
 import type { Terrain } from '../../types/terrain';
 import { sampleAlongExtended } from './pathAlong';
 import type { Path } from './pathAlong';
-import { corridorFactor, hash2, noise2, reliefOffset, smooth, terrainColor } from './relief';
+import { TRAIL_COLOR, corridorFactor, hash2, noise2, reliefOffset, smooth, terrainColor, trailBlend } from './relief';
 import { fromScene, toScene } from './terrainMesh';
 import type { SceneScale } from './terrainMesh';
 
@@ -20,8 +20,15 @@ const OPEN_FULL = 3.5;
 /** Trees grow on gentle ground below this fraction of the highest point of the terrain. */
 const TREE_LINE = 0.4;
 const TREE_SLOPE = 0.3;
-const TREE_SPACING = 0.2;
-const TREE_KEEP_OFF_ROUTE = 0.2;
+/** fewer trees, bigger: one candidate place every half unit, and the road stays clear of them */
+const TREE_SPACING = 0.5;
+const TREE_KEEP_OFF_ROUTE = 0.4;
+/** the trail painted on the ground: all dirt up to the core (about the width of the column), none beyond the edge */
+export const TRAIL_CORE = 0.14;
+export const TRAIL_EDGE = 0.3;
+/** scene units of ground that one repeat of the ground texture covers */
+export const TEXTURE_TILE = 0.5;
+const TRAIL_STRENGTH = 0.9;
 
 /** The ground in scene units: the base terrain with the procedural relief on top, gentle along the route. */
 export interface Field {
@@ -95,35 +102,40 @@ export interface ChunkData {
   positions: Float32Array;
   normals: Float32Array;
   colors: Float32Array;
+  /** texture coordinates in world space (the ground divided by `TEXTURE_TILE`), so neighbors continue the same texture */
+  uvs: Float32Array;
   indices: Uint32Array;
 }
 
 /**
- * The square of ground `size` scene units wide at grid cell (`cx`, `cz`) (the grid is anchored at the origin, so neighbors
- * meet exactly): `cells` by `cells` squares. Normals come from a ring of heights around the chunk, so the light has no seam at the edges.
+ * The rectangle of ground from (`x0`, `z0`) `width` by `depth` scene units, in `cellsX` by `cellsZ` squares. Normals come from a ring of
+ * heights around the patch, so the light has no seam at the edges. The trail of the army is painted on it: along the route, and behind
+ * its first point where the column stands.
  */
-export function buildChunk(field: Field, cx: number, cz: number, size: number, cells: number, seed = 0): ChunkData {
-  const columns = cells + 1;
-  const step = size / cells;
-  const x0 = cx * size;
-  const z0 = cz * size;
-  const wide = cells + 3;
-  const heights = new Float32Array(wide * wide);
-  for (let j = 0; j < wide; j += 1) for (let i = 0; i < wide; i += 1) heights[j * wide + i] = field.height(x0 + (i - 1) * step, z0 + (j - 1) * step);
+export function buildPatch(field: Field, x0: number, z0: number, width: number, depth: number, cellsX: number, cellsZ: number, seed = 0): ChunkData {
+  const columns = cellsX + 1;
+  const rows = cellsZ + 1;
+  const stepX = width / cellsX;
+  const stepZ = depth / cellsZ;
+  const wideX = cellsX + 3;
+  const wideZ = cellsZ + 3;
+  const heights = new Float32Array(wideX * wideZ);
+  for (let j = 0; j < wideZ; j += 1) for (let i = 0; i < wideX; i += 1) heights[j * wideX + i] = field.height(x0 + (i - 1) * stepX, z0 + (j - 1) * stepZ);
 
-  const positions = new Float32Array(columns * columns * 3);
-  const normals = new Float32Array(columns * columns * 3);
-  const colors = new Float32Array(columns * columns * 3);
+  const positions = new Float32Array(columns * rows * 3);
+  const normals = new Float32Array(columns * rows * 3);
+  const colors = new Float32Array(columns * rows * 3);
+  const uvs = new Float32Array(columns * rows * 2);
   const rgb = { r: 0, g: 0, b: 0 };
-  for (let j = 0; j < columns; j += 1) {
+  for (let j = 0; j < rows; j += 1) {
     for (let i = 0; i < columns; i += 1) {
       const k = j * columns + i;
-      const w = (j + 1) * wide + (i + 1);
+      const w = (j + 1) * wideX + (i + 1);
       const y = heights[w]!;
-      const x = x0 + i * step;
-      const z = z0 + j * step;
-      const gx = (heights[w - 1]! - heights[w + 1]!) / (2 * step);
-      const gz = (heights[w - wide]! - heights[w + wide]!) / (2 * step);
+      const x = x0 + i * stepX;
+      const z = z0 + j * stepZ;
+      const gx = (heights[w - 1]! - heights[w + 1]!) / (2 * stepX);
+      const gz = (heights[w - wideX]! - heights[w + wideX]!) / (2 * stepZ);
       const len = Math.hypot(gx, 1, gz);
       positions[k * 3] = x;
       positions[k * 3 + 1] = y;
@@ -131,16 +143,19 @@ export function buildChunk(field: Field, cx: number, cz: number, size: number, c
       normals[k * 3] = gx / len;
       normals[k * 3 + 1] = 1 / len;
       normals[k * 3 + 2] = gz / len;
+      uvs[k * 2] = x / TEXTURE_TILE;
+      uvs[k * 2 + 1] = z / TEXTURE_TILE;
       terrainColor(field.maxY > 0 ? y / field.maxY : 0, 1 - 1 / len, noise2(x * 0.9, z * 0.9, seed + 31), noise2(x * 3.7 + 40, z * 3.7, seed + 57), rgb);
-      colors[k * 3] = rgb.r;
-      colors[k * 3 + 1] = rgb.g;
-      colors[k * 3 + 2] = rgb.b;
+      const trail = trailBlend(Math.min(field.distanceToRoute(x, z), field.distanceToOpening(x, z)), TRAIL_CORE, TRAIL_EDGE) * TRAIL_STRENGTH;
+      colors[k * 3] = rgb.r + (TRAIL_COLOR[0] - rgb.r) * trail;
+      colors[k * 3 + 1] = rgb.g + (TRAIL_COLOR[1] - rgb.g) * trail;
+      colors[k * 3 + 2] = rgb.b + (TRAIL_COLOR[2] - rgb.b) * trail;
     }
   }
-  const indices = new Uint32Array(cells * cells * 6);
+  const indices = new Uint32Array(cellsX * cellsZ * 6);
   let q = 0;
-  for (let j = 0; j < cells; j += 1) {
-    for (let i = 0; i < cells; i += 1) {
+  for (let j = 0; j < cellsZ; j += 1) {
+    for (let i = 0; i < cellsX; i += 1) {
       const a = j * columns + i;
       const b = a + 1;
       const c = a + columns;
@@ -153,7 +168,12 @@ export function buildChunk(field: Field, cx: number, cz: number, size: number, c
       indices[q++] = d;
     }
   }
-  return { columns, positions, normals, colors, indices };
+  return { columns, positions, normals, colors, uvs, indices };
+}
+
+/** The square of ground `size` scene units wide at grid cell (`cx`, `cz`) (the grid is anchored at the origin, so neighbors meet exactly): `cells` by `cells` squares. */
+export function buildChunk(field: Field, cx: number, cz: number, size: number, cells: number, seed = 0): ChunkData {
+  return buildPatch(field, cx * size, cz * size, size, size, cells, cells, seed);
 }
 
 /**

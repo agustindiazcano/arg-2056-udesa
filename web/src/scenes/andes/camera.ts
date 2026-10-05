@@ -1,6 +1,7 @@
 import { sampleElevation } from '../../terrain/decode';
 import type { Terrain } from '../../types/terrain';
 import type { CameraState } from '../../charts3d/camera';
+import { FIGURE_NEAR } from './column';
 import { toScene } from './terrainMesh';
 import type { SceneScale } from './terrainMesh';
 
@@ -23,15 +24,18 @@ export function battlePose(
   return { x: at.x, y: at.y, z: at.z, theta: 0.5, phi: 0.85, radius: scale.depth * 0.5 };
 }
 
-/** The camera that follows the army: its target is the army, the angle the camera already has around it is kept (within a range that reads well), and it is closer than the overview. */
+/**
+ * The camera that follows the army: its target is the army, the turn the camera already has around it is kept, and it stands low and close, so
+ * the column of figures and the mountains to the horizon show (nearer than where the figures give way to the marker).
+ */
 export function followPose(scale: SceneScale, army: { x: number; y: number; z: number }, current: CameraState): CameraState {
   return {
     x: army.x,
     y: army.y,
     z: army.z,
     theta: current.theta,
-    phi: Math.min(1.2, Math.max(0.5, current.phi)),
-    radius: scale.depth * 0.55
+    phi: Math.min(1.45, Math.max(1, current.phi)),
+    radius: Math.min(scale.depth * 0.55, FIGURE_NEAR * 0.85)
   };
 }
 
@@ -143,4 +147,26 @@ export function steered(base: CameraState, steer: Steer, phiMax: number): Camera
     phi: Math.min(phiMax, Math.max(0.05, base.phi + steer.phi)),
     radius: base.radius * steer.zoom
   };
+}
+
+/** How the camera of the scene behaves: left to the reader, following the army, cinematic behind the column, from above, or a far view of the whole map. */
+export type CameraMode = 'free' | 'follow' | 'cine' | 'aerial' | 'map';
+export const CAMERA_MODES: readonly CameraMode[] = ['free', 'follow', 'cine', 'aerial', 'map'];
+
+/** The modes whose camera is written at every tick of the clock (what the reader does to it is kept on top, see `steered`). */
+export function isRigMode(mode: CameraMode): boolean {
+  return mode === 'cine' || mode === 'aerial';
+}
+
+/** Where a rigged camera stands: `back` scene units behind the army (or behind the whole column when `behindColumn`), `height` above the ground. */
+export interface Rig {
+  behindColumn: boolean;
+  back: number;
+  height: number;
+}
+
+export function rigFor(mode: CameraMode): Rig | null {
+  if (mode === 'cine') return { behindColumn: true, back: 1, height: 0.25 };
+  if (mode === 'aerial') return { behindColumn: false, back: 1.2, height: 6 };
+  return null;
 }
