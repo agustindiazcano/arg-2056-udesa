@@ -45,3 +45,11 @@ describe('title figures', () => {
     expect(read('src/styles/ui.css')).toMatch(/\.brand\s*\{[^}]*lining-nums/);
   });
 });
+
+describe('intro title weights', () => {
+  it('"Argentina" is weight 200 and "2056" is weight 400', () => {
+    const css = read('src/intro/intro.css');
+    expect(css).toMatch(/\.intro-title \.a\s*\{[^}]*font-weight:\s*200/);
+    expect(css).toMatch(/\.intro-title \.n\s*\{[^}]*font-weight:\s*400/);
+  });
+});

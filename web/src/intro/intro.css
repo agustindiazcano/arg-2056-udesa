@@ -185,17 +185,18 @@
   margin: 0;
   font-family: var(--font-title);
   font-variant-numeric: lining-nums; /* Raleway draws old-style figures by default */
-  font-weight: 900;
   text-transform: uppercase;
   line-height: 0.98;
 }
 .intro-title .a {
   display: block;
+  font-weight: 200;
   font-size: calc(var(--u) * 4.4);
   letter-spacing: 0.14em;
 }
 .intro-title .n {
   display: block;
+  font-weight: 400;
   font-size: calc(var(--u) * 9);
   letter-spacing: 0.06em;
   color: var(--intro-light);
