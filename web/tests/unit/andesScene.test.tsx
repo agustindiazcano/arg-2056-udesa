@@ -252,18 +252,21 @@ describe('Andes scene', () => {
     expect(c).toBeLessThanOrEqual(100);
   });
 
-  it('shows an estimate of the VO2 max that falls as the army climbs', async () => {
+  it('shows an estimate of the oxygen saturation that falls as the army climbs, and says it depends on the person', async () => {
     stubFetch();
     renderScene();
     await screen.findByTestId('andes-renderer');
-    const vo2 = () => Number(screen.getByTestId('andes-vo2').querySelector('.tile-value')!.textContent!.replace(/\D/g, ''));
-    const low = vo2();
+    const spo2 = () => Number(screen.getByTestId('andes-spo2').querySelector('.tile-value')!.textContent!.replace(/\D/g, ''));
+    const low = spo2();
     act(() => useStore.setState({ yearFloat: 1945 }));
-    const pass = vo2();
-    expect(low).toBeGreaterThan(90);
-    expect(pass).toBeLessThan(80);
-    expect(pass).toBeGreaterThan(60);
-    expect(screen.getByTestId('andes-vo2').textContent).toMatch(/Estimado/);
+    const pass = spo2();
+    expect(low).toBe(98);
+    expect(pass).toBeLessThan(94);
+    expect(pass).toBeGreaterThan(85);
+    const tile = screen.getByTestId('andes-spo2');
+    expect(tile.textContent).toMatch(/Estimada/);
+    expect(tile.textContent).toMatch(/depende de cada persona/);
+    expect(screen.queryByText(/VO₂/)).toBeNull();
   });
 
   it('has graphics options: the effects can be switched off, the choice is kept, and a low quality turns off what it cannot afford', async () => {

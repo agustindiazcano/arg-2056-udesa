@@ -1,18 +1,20 @@
 /**
- * What the body can do at altitude, as a rough estimate for the screen. This is NOT a measurement of the men of 1817: it is the
- * known shape of the loss of maximal oxygen uptake (VO2 max) with height, about 7% per 1,000 m from 300 m and faster above
- * 3,000 m (11% per 1,000 m), as a share of the capacity at sea level.
+ * What the blood carries at altitude, as a rough estimate for the screen. This is NOT a measurement of the men of 1817, and it
+ * changes a lot from one person to another (fitness, acclimatization, how long they have been up): it is the usual shape of
+ * the resting oxygen saturation of the blood (SpO2) with height, about 98% up to 1,000 m, 2 points less for every 1,000 m up to
+ * 3,000 m, and 4 points less for every 1,000 m above that.
  */
-const FROM_M = 300;
+const SEA_LEVEL = 98;
+const FROM_M = 1000;
 const BREAK_M = 3000;
-const LOSS_LOW = 0.07;
-const LOSS_HIGH = 0.11;
-const FLOOR = 0.2;
+const LOSS_LOW = 2;
+const LOSS_HIGH = 4;
+const FLOOR = 70;
 
-/** The share of the sea-level VO2 max left at this altitude, 0.2 to 1, or null when the altitude is not known. */
-export function vo2MaxShare(altitudeM: number | null): number | null {
+/** The estimated SpO2 in percent at this altitude, 70 to 98, or null when the altitude is not known. */
+export function spo2Estimate(altitudeM: number | null): number | null {
   if (altitudeM === null) return null;
   const low = Math.max(0, Math.min(altitudeM, BREAK_M) - FROM_M) / 1000;
   const high = Math.max(0, altitudeM - BREAK_M) / 1000;
-  return Math.min(1, Math.max(FLOOR, 1 - LOSS_LOW * low - LOSS_HIGH * high));
+  return Math.min(SEA_LEVEL, Math.max(FLOOR, SEA_LEVEL - LOSS_LOW * low - LOSS_HIGH * high));
 }

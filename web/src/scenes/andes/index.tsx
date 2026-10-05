@@ -21,7 +21,7 @@ import type { CameraMode } from './camera.js';
 import { GraphicsMenu } from './GraphicsMenu.js';
 import { loadToggles, resolveGraphics, saveToggles } from './graphics.js';
 import type { GraphicsToggles } from './graphics.js';
-import { vo2MaxShare } from './physiology.js';
+import { spo2Estimate } from './physiology.js';
 import { AndesProgress } from './Progress.js';
 import { buildRoute, paceClock, paceProgress, positionAt } from './timeline.js';
 import { useAndesTerrain } from './useAndesTerrain.js';
@@ -104,7 +104,7 @@ export default function Scene() {
 
   const position = positionAt(route, day);
   const graphics = resolveGraphics(tier, toggles);
-  const vo2 = vo2MaxShare(position?.altitudeM ?? null);
+  const spo2 = spo2Estimate(position?.altitudeM ?? null);
   const terrain = terrainState.status === 'ready' ? terrainState : null;
   const label = `Mapa 3D del cruce de los Andes, día ${Math.round(day)} de la campaña${
     selected ? `; evento elegido: ${selected.name}` : ''
@@ -246,8 +246,8 @@ export default function Scene() {
               {position && position.altitudeM !== null ? `${formatNumber(position.altitudeM, 0)} m` : 'sin dato'}
             </span>
           </Tile>
-          <Tile id="andes-vo2" label="VO₂ máx. en sangre" note="Estimado: % de la capacidad a nivel del mar">
-            <span className="tile-value">{vo2 === null ? 'sin dato' : `${Math.round(vo2 * 100)} %`}</span>
+          <Tile id="andes-spo2" label="Saturación de oxígeno (SpO₂)" note="Estimada por la altura; depende de cada persona">
+            <span className="tile-value">{spo2 === null ? 'sin dato' : `${Math.round(spo2)} %`}</span>
           </Tile>
           <Tile id="andes-events" label="Eventos">
             <span className="tile-value">{route.points.length}</span>
