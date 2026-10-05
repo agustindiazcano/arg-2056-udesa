@@ -61,11 +61,15 @@ describe('Intro', () => {
     expect(prov.querySelectorAll('.intro-layer.glow use')).toHaveLength(3);
   });
 
-  it('lists the four institutions as placeholders for their logos', () => {
+  it('lists the three institutions with their logos', () => {
     render(<Intro onStart={() => undefined} />);
     const list = screen.getByRole('list', { name: 'Instituciones' });
-    const names = Array.from(list.querySelectorAll('li')).map((li) => li.textContent);
-    expect(names).toEqual(['Universidad de San Andrés', 'Data Lab UdeSA', 'Contar con Datos', 'Secretaría de Innovación']);
+    const logos = Array.from(list.querySelectorAll('img')).map((img) => [img.getAttribute('alt'), img.getAttribute('src')]);
+    expect(logos).toEqual([
+      ['Data Science Lab, Universidad de San Andrés', '/images/data-science-lab-udesa.png'],
+      ['Contar con Datos', '/images/contar-con-datos-logo-udesa.webp'],
+      ['Secretaría de Innovación, Ciencia y Tecnología', '/images/secretaria-innovacion-ciencia-tecnologia-recortado.png']
+    ]);
   });
 
   it('Enter on a focused button leaves the choice to that button: it does not also open the Andes', () => {

@@ -247,7 +247,7 @@
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--intro-ink-dim);
-  background: transparent;
+  background: var(--intro-black);
   border: 1px solid color-mix(in srgb, var(--intro-light) 45%, transparent);
   border-radius: 999px;
   transition: color 0.2s, border-color 0.2s, background 0.2s;
@@ -255,7 +255,7 @@
 .intro-shortcut:hover {
   color: var(--intro-light);
   border-color: var(--intro-light);
-  background: color-mix(in srgb, var(--intro-light) 10%, transparent);
+  background: var(--intro-black);
 }
 .intro-shortcut:focus-visible {
   outline: 2px solid var(--color-focus);
@@ -287,7 +287,7 @@
   background: linear-gradient(90deg, var(--intro-light), transparent);
 }
 
-/* Institutions, bottom right. Rectangles with the name stand in for the logos. */
+/* Institutions, bottom right: the three logos. */
 .intro-logos {
   position: absolute;
   z-index: 5;
@@ -306,16 +306,22 @@
   opacity: 1;
 }
 .intro-logos li {
+  box-sizing: border-box;
   display: grid;
   place-items: center;
+  overflow: hidden;
   width: calc(var(--u) * 17);
-  height: calc(var(--u) * 5);
-  padding: 0 calc(var(--u) * 1);
-  text-align: center;
-  font-size: calc(var(--u) * 1.05);
-  letter-spacing: 0.06em;
-  color: var(--intro-ink-dim);
-  background: color-mix(in srgb, var(--intro-bg) 70%, transparent);
+  height: calc(var(--u) * 7);
+  padding: calc(var(--u) * 0.4) calc(var(--u) * 1);
+  background: var(--intro-black);
   border: 1px solid color-mix(in srgb, var(--intro-ink) 22%, transparent);
   border-radius: calc(var(--u) * 0.4);
+}
+.intro-logos img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  object-fit: contain;
 }
