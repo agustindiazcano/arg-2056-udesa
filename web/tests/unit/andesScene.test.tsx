@@ -11,7 +11,21 @@ const { mounts, unmounts } = vi.hoisted(() => ({ mounts: { n: 0 }, unmounts: { n
 vi.mock('../../src/scenes/andes/Renderer', async () => {
   const React = await import('react');
   return {
-    default: ({ day, selectedId, follow, label, terrain }: { day: number; selectedId: string | null; follow: boolean; label: string; terrain: { meta: { source: string } } }) => {
+    default: ({
+      day,
+      selectedId,
+      camera,
+      graphics,
+      label,
+      terrain
+    }: {
+      day: number;
+      selectedId: string | null;
+      camera: string;
+      graphics: { tier: string; snow: boolean; trees: boolean; textures: boolean; shadows: boolean };
+      label: string;
+      terrain: { meta: { source: string } };
+    }) => {
       React.useEffect(() => {
         mounts.n += 1;
         return () => {
@@ -19,7 +33,18 @@ vi.mock('../../src/scenes/andes/Renderer', async () => {
         };
       }, []);
       return (
-        <div data-testid="andes-renderer" data-day={Math.round(day)} data-selected={selectedId ?? ''} data-follow={String(follow)} data-source={terrain.meta.source}>
+        <div
+          data-testid="andes-renderer"
+          data-day={Math.round(day)}
+          data-selected={selectedId ?? ''}
+          data-camera={camera}
+          data-tier={graphics.tier}
+          data-snow={String(graphics.snow)}
+          data-trees={String(graphics.trees)}
+          data-textures={String(graphics.textures)}
+          data-shadows={String(graphics.shadows)}
+          data-source={terrain.meta.source}
+        >
           {label}
         </div>
       );
@@ -67,6 +92,7 @@ const renderScene = (webgl2 = true) =>
   );
 
 beforeEach(() => {
+  window.localStorage.clear();
   mounts.n = 0;
   unmounts.n = 0;
   resetDataVersion();
@@ -166,12 +192,106 @@ describe('Andes scene', () => {
     stubFetch();
     renderScene();
     const renderer = await screen.findByTestId('andes-renderer');
-    expect(renderer.getAttribute('data-follow')).toBe('false');
+    expect(renderer.getAttribute('data-camera')).toBe('free');
     const button = screen.getByRole('button', { name: 'Seguir al ejército' });
     expect(button.getAttribute('aria-pressed')).toBe('false');
     fireEvent.click(button);
     expect(button.getAttribute('aria-pressed')).toBe('true');
-    expect(screen.getByTestId('andes-renderer').getAttribute('data-follow')).toBe('true');
+    expect(screen.getByTestId('andes-renderer').getAttribute('data-camera')).toBe('follow');
+  });
+
+  it('has a camera for following, cinematic, aerial and the far map, one at a time, and a second press frees it', async () => {
+    stubFetch();
+    renderScene();
+    await screen.findByTestId('andes-renderer');
+    const camera = () => screen.getByTestId('andes-renderer').getAttribute('data-camera');
+    const pressed = (name: string) => screen.getByRole('button', { name }).getAttribute('aria-pressed');
+    fireEvent.click(screen.getByRole('button', { name: 'Aérea' }));
+    expect(camera()).toBe('aerial');
+    fireEvent.click(screen.getByRole('button', { name: 'Cine' }));
+    expect(camera()).toBe('cine');
+    expect(pressed('Aérea')).toBe('false');
+    fireEvent.click(screen.getByRole('button', { name: 'Vista de mapa' }));
+    expect(camera()).toBe('map');
+    expect(pressed('Cine')).toBe('false');
+    fireEvent.click(screen.getByRole('button', { name: 'Vista de mapa' }));
+    expect(camera()).toBe('free');
+  });
+
+  it('shows the progress of the crossing in percent, not the year, and moving it moves the clock', async () => {
+    stubFetch();
+    renderScene();
+    await screen.findByTestId('andes-renderer');
+    const slider = screen.getByRole('slider', { name: 'Avance del cruce' }) as HTMLInputElement;
+    expect(screen.getByTestId('andes-progress').textContent).toBe('0 %');
+    expect(slider.value).toBe('0');
+    fireEvent.change(slider, { target: { value: '50' } });
+    expect(screen.getByTestId('andes-progress').textContent).toBe('50 %');
+    const year = useStore.getState().yearFloat;
+    expect(year).toBeGreaterThan(1810);
+    expect(year).toBeLessThan(2056);
+    fireEvent.change(slider, { target: { value: '100' } });
+    expect(useStore.getState().yearFloat).toBe(2056);
+    expect(screen.getByTestId('andes-renderer').getAttribute('data-day')).toBe('21');
+  });
+
+  it('follows the clock with the percent too: more years, more crossing', async () => {
+    stubFetch();
+    renderScene();
+    await screen.findByTestId('andes-renderer');
+    const percentAt = (year: number) => {
+      act(() => useStore.setState({ yearFloat: year }));
+      return Number(screen.getByTestId('andes-progress').getAttribute('data-value'));
+    };
+    const a = percentAt(1850);
+    const b = percentAt(1950);
+    const c = percentAt(2030);
+    expect(a).toBeGreaterThan(0);
+    expect(b).toBeGreaterThan(a);
+    expect(c).toBeGreaterThan(b);
+    expect(c).toBeLessThanOrEqual(100);
+  });
+
+  it('shows an estimate of the VO2 max that falls as the army climbs', async () => {
+    stubFetch();
+    renderScene();
+    await screen.findByTestId('andes-renderer');
+    const vo2 = () => Number(screen.getByTestId('andes-vo2').querySelector('.tile-value')!.textContent!.replace(/\D/g, ''));
+    const low = vo2();
+    act(() => useStore.setState({ yearFloat: 1945 }));
+    const pass = vo2();
+    expect(low).toBeGreaterThan(90);
+    expect(pass).toBeLessThan(80);
+    expect(pass).toBeGreaterThan(60);
+    expect(screen.getByTestId('andes-vo2').textContent).toMatch(/Estimado/);
+  });
+
+  it('has graphics options: the effects can be switched off, the choice is kept, and a low quality turns off what it cannot afford', async () => {
+    stubFetch();
+    renderScene();
+    const renderer = await screen.findByTestId('andes-renderer');
+    expect(renderer.getAttribute('data-snow')).toBe('true');
+    fireEvent.click(screen.getByRole('button', { name: 'Gráficos' }));
+    const menu = screen.getByRole('group', { name: 'Opciones de gráficos' });
+    fireEvent.click(within(menu).getByRole('checkbox', { name: /Nieve/ }));
+    expect(screen.getByTestId('andes-renderer').getAttribute('data-snow')).toBe('false');
+    expect(window.localStorage.getItem('andes-graphics')).toContain('"snow":false');
+    fireEvent.click(within(menu).getByRole('checkbox', { name: /Árboles/ }));
+    expect(screen.getByTestId('andes-renderer').getAttribute('data-trees')).toBe('false');
+    fireEvent.click(within(menu).getByRole('radio', { name: 'Bajo' }));
+    const low = screen.getByTestId('andes-renderer');
+    expect(low.getAttribute('data-tier')).toBe('low');
+    expect(low.getAttribute('data-textures')).toBe('false');
+    expect(low.getAttribute('data-shadows')).toBe('false');
+    expect(within(menu).getByRole('checkbox', { name: /Texturas/ }).hasAttribute('disabled')).toBe(true);
+  });
+
+  it('starts with the effects the reader left switched off last time', async () => {
+    window.localStorage.setItem('andes-graphics', JSON.stringify({ snow: false, shadows: true, trees: true, textures: true }));
+    stubFetch();
+    renderScene();
+    const renderer = await screen.findByTestId('andes-renderer');
+    expect(renderer.getAttribute('data-snow')).toBe('false');
   });
 
   it('hides and shows the list of events', async () => {

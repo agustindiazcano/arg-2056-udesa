@@ -91,8 +91,18 @@ describe('control bar', () => {
     expect(useStore.getState().playing).toBe(false);
   });
 
+  it('shows the progress of the crossing, not the year, in the Andes: the year stays in the page for the clock, out of sight', () => {
+    useStore.setState({ scene: 'andes', yearFloat: 1950 });
+    render(<App />);
+    expect(within(controls()).queryByRole('slider', { name: 'Año' })).toBeNull();
+    const year = screen.getByTestId('hud-year');
+    expect(year.getAttribute('data-value')).toBe('1950');
+    expect(year.closest('.visually-hidden')).not.toBeNull();
+    expect(controls().querySelector('.progress-slot')).not.toBeNull();
+  });
+
   it('shows the year and moves it with a slider named Año', () => {
-    useStore.setState({ yearFloat: 2026.4 });
+    useStore.setState({ scene: 'economy', yearFloat: 2026.4 });
     render(<App />);
     const year = screen.getByTestId('hud-year');
     expect(year.textContent).toBe('2026');

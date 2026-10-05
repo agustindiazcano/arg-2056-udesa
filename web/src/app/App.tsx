@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useStore } from '../state/store';
 import { useKeyboard } from '../state/useKeyboard';
 import { useTicker } from '../state/useTicker';
@@ -25,6 +25,28 @@ export function App() {
 
   const [forecastSource, setForecastSource] = useState<string | null>(null);
 
+  // the real height of the header and of the bottom bar, for a scene that floats its panels over a full-screen canvas (the Andes)
+  const overlayRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const overlay = overlayRef.current;
+    const chrome = overlay?.querySelector('.chrome');
+    const bar = overlay?.querySelector('.bottom-bar');
+    if (!overlay || !chrome || !bar || typeof ResizeObserver === 'undefined') return;
+    const apply = () => {
+      overlay.style.setProperty('--chrome-h', `${Math.round(chrome.getBoundingClientRect().bottom)}px`);
+      overlay.style.setProperty('--bar-h', `${Math.round(window.innerHeight - bar.getBoundingClientRect().top)}px`);
+    };
+    apply();
+    const observer = new ResizeObserver(apply);
+    observer.observe(chrome);
+    observer.observe(bar);
+    window.addEventListener('resize', apply);
+    return () => {
+      observer.disconnect();
+      window.removeEventListener('resize', apply);
+    };
+  }, []);
+
   useEffect(() => {
     document.title = documentTitle(scene);
   }, [scene]);
@@ -42,7 +64,7 @@ export function App() {
         {/* Canvas will go here */}
       </div>
       
-      <div id="overlay" style={{ pointerEvents: 'none' }}>
+      <div id="overlay" ref={overlayRef} data-scene={scene} style={{ pointerEvents: 'none' }}>
         <div className="chrome">
           <a className="skip-link" href="#main">Saltar al contenido principal</a>
           <Header mockSource={forecastSource} />

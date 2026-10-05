@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useCallback } from 'react';
+import { useSlots } from '../dashboard/slots';
 import { useStore } from '../state/store';
 import { YEAR_MAX, YEAR_MIN } from '../types/year';
 import { PROVINCES } from '../types/province';
@@ -28,6 +29,10 @@ const PauseIcon = () => (
 export function Hud() {
   const { playing, yearFloat, speed, scenario, aiOverlay, province, provinceFilterOpen, dispatch } = useStore();
   const provinceName = PROVINCES.find((p) => p.id === province)?.name ?? 'Todas';
+  const scene = useStore((s) => s.scene);
+  const progressRef = useCallback((el: HTMLDivElement | null) => useSlots.getState().set('progress', el), []);
+  // in the Andes the bar is the progress of the crossing, in percent; the year stays in the page for the clock, out of sight
+  const crossing = scene === 'andes';
 
   return (
     <section aria-label="Controles" className="controls">
@@ -36,20 +41,23 @@ export function Hud() {
         {playing ? 'Pausar' : 'Reproducir'}
       </button>
 
-      <div className="year-block">
+      {crossing && <div className="progress-slot" ref={progressRef} />}
+      <div className={crossing ? 'year-block visually-hidden' : 'year-block'}>
         <span className="year" data-testid="hud-year" data-value={yearFloat}>
           {Math.floor(yearFloat)}
         </span>
-        <input
-          type="range"
-          className="slider"
-          aria-label="Año"
-          min={YEAR_MIN}
-          max={YEAR_MAX}
-          step={1}
-          value={Math.floor(yearFloat)}
-          onChange={(event) => dispatch({ type: 'setYear', year: Number(event.target.value) })}
-        />
+        {!crossing && (
+          <input
+            type="range"
+            className="slider"
+            aria-label="Año"
+            min={YEAR_MIN}
+            max={YEAR_MAX}
+            step={1}
+            value={Math.floor(yearFloat)}
+            onChange={(event) => dispatch({ type: 'setYear', year: Number(event.target.value) })}
+          />
+        )}
       </div>
 
       <div role="group" aria-label="Velocidad" className="control-group">

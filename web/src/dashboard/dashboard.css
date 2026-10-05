@@ -699,7 +699,7 @@
 
 .andes-title {
   position: absolute;
-  top: var(--space-md);
+  top: calc(var(--chrome-h, 0px) + var(--space-md));
   left: var(--space-md);
   z-index: 4;
   padding: var(--space-sm) var(--space-md);
@@ -719,21 +719,23 @@
 
 .andes-controls {
   position: absolute;
-  top: var(--space-md);
-  right: var(--space-md);
-  z-index: 4;
+  top: calc(var(--chrome-h, 0px) + var(--space-md));
+  right: calc(var(--side-w, 0px) + var(--space-md));
+  z-index: 6;
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-end;
   gap: var(--space-xs);
   padding: var(--space-xs);
+  /* never over the title card on the left: the buttons wrap into more rows instead */
+  max-width: calc(100% - var(--side-w, 0px) - 19rem);
 }
 
 .andes-list {
   position: absolute;
-  top: 5.5rem;
+  top: calc(var(--chrome-h, 0px) + 5.5rem);
   left: var(--space-md);
-  max-height: calc(100% - 9rem);
+  max-height: calc(100% - 9rem - var(--chrome-h, 0px) - var(--bar-h, 0px));
   z-index: 4;
   width: min(280px, 38%);
   padding: var(--space-xs);
@@ -742,7 +744,7 @@
 
 .andes-table {
   position: absolute;
-  inset: 5.5rem var(--space-md) 3.5rem;
+  inset: calc(var(--chrome-h, 0px) + 5.5rem) calc(var(--side-w, 0px) + var(--space-md)) calc(var(--bar-h, 0px) + 3.5rem) var(--space-md);
   z-index: 3;
   padding: var(--space-sm);
   overflow: hidden;
@@ -751,9 +753,9 @@
 .andes-foot {
   position: absolute;
   left: var(--space-md);
-  bottom: var(--space-sm);
+  bottom: calc(var(--bar-h, 0px) + var(--space-sm));
   z-index: 4;
-  max-width: 60%;
+  max-width: min(60%, calc(100% - var(--side-w, 0px) - 15rem));
   color: var(--ink-2);
   font-size: var(--font-sm);
 }
@@ -775,15 +777,144 @@
 
 .andes-detail {
   position: absolute;
-  right: var(--space-md);
-  bottom: 4rem;
+  right: calc(var(--side-w, 0px) + var(--space-md));
+  bottom: calc(var(--bar-h, 0px) + 4rem);
   z-index: 4;
   width: min(380px, 45%);
-  max-height: calc(100% - 9rem);
+  max-height: calc(100% - 9rem - var(--chrome-h, 0px) - var(--bar-h, 0px));
   overflow: hidden;
 }
 
 .andes-detail .andes-panel {
   background: none;
   border: 0;
+}
+
+/* ---- the Andes as an immersive stage: the canvas under everything, the interface in glass over it ---------------- */
+
+#overlay[data-scene='andes'] {
+  --chrome-h: 3.6rem;
+  --bar-h: 5rem;
+  --side-w: min(340px, 30vw);
+  --glass: color-mix(in srgb, var(--surface) 48%, transparent);
+  --glass-strong: color-mix(in srgb, var(--surface) 58%, transparent);
+}
+
+#overlay[data-scene='andes'] main.scene-container {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+#overlay[data-scene='andes'] .bottom-bar {
+  position: relative;
+  z-index: 15;
+  margin-top: auto;
+}
+
+#overlay[data-scene='andes'] .dash--stage {
+  display: block;
+  position: relative;
+  padding: 0;
+}
+
+#overlay[data-scene='andes'] .dash--stage .dash-stage {
+  position: absolute;
+  inset: 0;
+}
+
+#overlay[data-scene='andes'] .dash--stage .dash-side {
+  position: absolute;
+  top: calc(var(--chrome-h) + var(--space-md));
+  right: var(--space-md);
+  bottom: calc(var(--bar-h) + var(--space-md));
+  z-index: 5;
+  width: calc(var(--side-w) - var(--space-md));
+  padding: var(--space-sm) var(--space-md);
+  background: var(--glass);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  backdrop-filter: blur(10px);
+  overflow-y: auto;
+}
+
+#overlay[data-scene='andes'] .nav-controls {
+  right: calc(var(--side-w) + var(--space-md));
+  bottom: calc(var(--bar-h) + var(--space-md));
+}
+
+/* ---- floating names of the places of the route ------------------------------------------------------------------ */
+
+.andes-tags {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.andes-tag {
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+  white-space: nowrap;
+  padding: 2px var(--space-sm);
+  font-size: var(--font-sm);
+  color: var(--ink);
+  background: var(--glass-strong);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  will-change: transform;
+}
+
+/* ---- graphics options ------------------------------------------------------------------------------------------- */
+
+.andes-graphics {
+  position: relative;
+}
+
+.andes-graphics-panel {
+  position: absolute;
+  top: calc(100% + var(--space-xs));
+  right: 0;
+  z-index: 6;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  min-width: 15rem;
+  padding: var(--space-sm);
+}
+
+.andes-graphics-row {
+  display: flex;
+  gap: var(--space-xs);
+}
+
+.andes-graphics-note {
+  margin: 0;
+  font-size: var(--font-sm);
+  color: var(--ink-2);
+}
+
+.andes-graphics-switch {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-size: var(--font-sm);
+  color: var(--ink);
+}
+
+.andes-graphics-switch input {
+  accent-color: var(--blue);
+}
+
+/* the header sits over a bright sky: a soft scrim keeps its text readable without a bar */
+#overlay[data-scene='andes'] .chrome {
+  background: linear-gradient(to bottom, color-mix(in srgb, var(--page) 72%, transparent), transparent);
+  padding-bottom: var(--space-sm);
+}
+
+#overlay[data-scene='andes'] .progress-block .slider {
+  width: clamp(110px, 15vw, 240px);
 }
