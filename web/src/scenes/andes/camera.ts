@@ -1,6 +1,7 @@
 import { sampleElevation } from '../../terrain/decode';
 import type { Terrain } from '../../types/terrain';
 import type { CameraState } from '../../charts3d/camera';
+import { FIGURE_NEAR } from './column';
 import { toScene } from './terrainMesh';
 import type { SceneScale } from './terrainMesh';
 
@@ -23,15 +24,18 @@ export function battlePose(
   return { x: at.x, y: at.y, z: at.z, theta: 0.5, phi: 0.85, radius: scale.depth * 0.5 };
 }
 
-/** The camera that follows the army: its target is the army, the angle the camera already has around it is kept (within a range that reads well), and it is closer than the overview. */
+/**
+ * The camera that follows the army: its target is the army, the turn the camera already has around it is kept, and it stands low and close, so
+ * the column of figures and the mountains to the horizon show (nearer than where the figures give way to the marker).
+ */
 export function followPose(scale: SceneScale, army: { x: number; y: number; z: number }, current: CameraState): CameraState {
   return {
     x: army.x,
     y: army.y,
     z: army.z,
     theta: current.theta,
-    phi: Math.min(1.2, Math.max(0.5, current.phi)),
-    radius: scale.depth * 0.55
+    phi: Math.min(1.45, Math.max(1, current.phi)),
+    radius: Math.min(scale.depth * 0.55, FIGURE_NEAR * 0.85)
   };
 }
 
@@ -89,4 +93,80 @@ export function clearEye(
     y = Math.max(y, (ground - target.y * t) / (1 - t));
   }
   return y;
+}
+
+/** Where to look from `eye`: the target, or, with the camera past the horizon (`phi` above a right angle), as far above the horizon as it is past it. */
+export function lookPoint(
+  eye: { x: number; y: number; z: number },
+  target: { x: number; y: number; z: number },
+  phi: number
+): { x: number; y: number; z: number } {
+  if (phi <= Math.PI / 2) return { x: target.x, y: target.y, z: target.z };
+  const dx = target.x - eye.x;
+  const dy = target.y - eye.y;
+  const dz = target.z - eye.z;
+  const distance = Math.hypot(dx, dy, dz);
+  const flat = Math.hypot(dx, dz);
+  const hx = flat > 1e-9 ? dx / flat : 0;
+  const hz = flat > 1e-9 ? dz / flat : -1;
+  const pitch = phi - Math.PI / 2;
+  return {
+    x: eye.x + hx * Math.cos(pitch) * distance,
+    y: eye.y + Math.sin(pitch) * distance,
+    z: eye.z + hz * Math.cos(pitch) * distance
+  };
+}
+
+/** What the user has done to the cinematic camera: a turn and a tilt in radians, and a zoom as a factor of the distance. */
+export interface Steer {
+  theta: number;
+  phi: number;
+  zoom: number;
+}
+export const NO_STEER: Steer = { theta: 0, phi: 0, zoom: 1 };
+
+/** The steer after the user moved the camera from where it was `left` to where it is `now` (the cinematic camera writes the rest). */
+export function addSteer(steer: Steer, left: CameraState, now: CameraState): Steer {
+  let dTheta = (now.theta - left.theta) % TWO_PI;
+  if (dTheta > Math.PI) dTheta -= TWO_PI;
+  if (dTheta < -Math.PI) dTheta += TWO_PI;
+  return {
+    theta: steer.theta + dTheta,
+    phi: steer.phi + (now.phi - left.phi),
+    zoom: left.radius > 0 ? steer.zoom * (now.radius / left.radius) : steer.zoom
+  };
+}
+
+/** Where the camera ends up: the cinematic pose with the steer of the user on top; the target is the cinematic one. */
+export function steered(base: CameraState, steer: Steer, phiMax: number): CameraState {
+  return {
+    x: base.x,
+    y: base.y,
+    z: base.z,
+    theta: base.theta + steer.theta,
+    phi: Math.min(phiMax, Math.max(0.05, base.phi + steer.phi)),
+    radius: base.radius * steer.zoom
+  };
+}
+
+/** How the camera of the scene behaves: left to the reader, following the army, cinematic behind the column, from above, or a far view of the whole map. */
+export type CameraMode = 'free' | 'follow' | 'cine' | 'aerial' | 'map';
+export const CAMERA_MODES: readonly CameraMode[] = ['free', 'follow', 'cine', 'aerial', 'map'];
+
+/** The modes whose camera is written at every tick of the clock (what the reader does to it is kept on top, see `steered`). */
+export function isRigMode(mode: CameraMode): boolean {
+  return mode === 'cine' || mode === 'aerial';
+}
+
+/** Where a rigged camera stands: `back` scene units behind the army (or behind the whole column when `behindColumn`), `height` above the ground. */
+export interface Rig {
+  behindColumn: boolean;
+  back: number;
+  height: number;
+}
+
+export function rigFor(mode: CameraMode): Rig | null {
+  if (mode === 'cine') return { behindColumn: true, back: 1, height: 0.25 };
+  if (mode === 'aerial') return { behindColumn: false, back: 1.2, height: 6 };
+  return null;
 }

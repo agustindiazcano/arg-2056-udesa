@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { buildRoute, campaignDay, positionAt } from '../../src/scenes/andes/timeline';
+import { buildRoute, campaignDay, dwellWeight, paceClock, positionAt } from '../../src/scenes/andes/timeline';
 import type { AndesEvent } from '../../src/scenes/andes/data';
 
 const ev = (id: string, day: number, lon: number, lat: number, elevation_m: number | null): AndesEvent => ({
@@ -115,5 +115,66 @@ describe('campaignDay', () => {
   it('clamps a clock outside the range', () => {
     expect(campaignDay(1700, 20)).toBe(0);
     expect(campaignDay(3000, 20)).toBe(20);
+  });
+});
+
+describe('dwellWeight', () => {
+  it('is 1 on low ground and grows with the altitude up to a ceiling', () => {
+    expect(dwellWeight(800)).toBe(1);
+    expect(dwellWeight(null)).toBe(1);
+    expect(dwellWeight(2800)).toBeGreaterThan(1);
+    expect(dwellWeight(3900)).toBeGreaterThan(dwellWeight(2800));
+    expect(dwellWeight(7000)).toBe(dwellWeight(3900));
+    expect(dwellWeight(3900)).toBeGreaterThanOrEqual(2);
+  });
+});
+
+describe('paceClock', () => {
+  const pass = buildRoute([
+    ev('a', 0, -68.9, -32.9, 800),
+    ev('b', 4, -69.3, -32.6, 1500),
+    ev('c', 8, -69.9, -32.6, 3900),
+    ev('d', 12, -70.1, -32.8, 3900),
+    ev('e', 16, -70.5, -33.0, 800),
+    ev('f', 20, -70.7, -32.9, 800)
+  ]);
+  const clock = paceClock(pass);
+  const years = Array.from({ length: 247 }, (_, i) => 1810 + i);
+
+  it('starts at day 0 and ends at the last day, and clamps outside the range', () => {
+    expect(clock(1810)).toBe(0);
+    expect(clock(2056)).toBeCloseTo(20, 9);
+    expect(clock(1700)).toBe(0);
+    expect(clock(3000)).toBeCloseTo(20, 9);
+  });
+
+  it('never goes back', () => {
+    let last = -1;
+    for (const y of years) {
+      const d = clock(y);
+      expect(d).toBeGreaterThanOrEqual(last);
+      last = d;
+    }
+  });
+
+  it('spends more of the clock on the high part of the route than a clock that treats every day the same', () => {
+    const yearsInHigh = years.filter((y) => clock(y) >= 8 && clock(y) <= 12).length;
+    expect(yearsInHigh).toBeGreaterThan((4 / 20) * 246 * 1.5);
+  });
+
+  it('moves faster on low ground than it would at one pace', () => {
+    const yearsInLow = years.filter((y) => clock(y) <= 4).length;
+    expect(yearsInLow).toBeLessThan((4 / 20) * 246);
+  });
+
+  it('is the plain clock on a route with no height to dwell on', () => {
+    const flat = buildRoute([ev('a', 0, -69, -33, 800), ev('b', 10, -70, -33, 900), ev('c', 20, -71, -33, null)]);
+    const c = paceClock(flat);
+    expect(c(1933)).toBeCloseTo(10, 1);
+    expect(c(1871)).toBeCloseTo(5, 1);
+  });
+
+  it('survives an empty route', () => {
+    expect(paceClock(buildRoute([]))(1900)).toBe(0);
   });
 });

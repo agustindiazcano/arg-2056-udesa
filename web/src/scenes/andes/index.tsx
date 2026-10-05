@@ -4,17 +4,28 @@ import { formatNumber } from '../../charts/format.js';
 import { useDataset } from '../../data/useDataset.js';
 import { Dashboard } from '../../dashboard/Dashboard.js';
 import { useQualityOptional } from '../../runtime/CapabilityProvider.js';
+import { qualityTier } from '../../runtime/capabilities.js';
+import type { QualityTier } from '../../runtime/capabilities.js';
 import { WebGLRequired } from '../../runtime/WebGLRequired.js';
 import { isSyntheticTerrain } from '../../terrain/synthetic.js';
 import { useStore } from '../../state/store.js';
 import { Tile, TileGrid } from '../../ui/Tile.js';
+import { SlotPortal } from '../../dashboard/SlotPortal.js';
 import { SceneError, SceneLoading } from '../../ui/SceneStatus.js';
 import { sourceLine } from '../../ui/SceneShell.js';
 import { startingMen } from './column.js';
 import { figuresNote, forceText, parseAndesEvents } from './data.js';
 import type { AndesEvent } from './data.js';
 import { EventList, EventPanel } from './Panel.js';
-import { buildRoute, campaignDay, positionAt } from './timeline.js';
+import type { CameraMode } from './camera.js';
+import { AltitudeProfile } from './AltitudeProfile.js';
+import { GraphicsMenu } from './GraphicsMenu.js';
+import { loadToggles, resolveGraphics, saveToggles } from './graphics.js';
+import type { GraphicsToggles } from './graphics.js';
+import { spo2Estimate } from './physiology.js';
+import { altitudeProfile } from './profile.js';
+import { AndesProgress } from './Progress.js';
+import { buildRoute, paceClock, paceProgress, positionAt } from './timeline.js';
 import { useAndesTerrain } from './useAndesTerrain.js';
 
 // Three.js lives in its own chunk: it loads only when the scene is opened.
@@ -26,6 +37,13 @@ const TABLE_COLUMNS = [
   { key: 'name', header: 'Evento' },
   { key: 'altitude', header: 'Altitud' },
   { key: 'forces', header: 'Fuerzas' }
+];
+
+const CAMERA_BUTTONS: ReadonlyArray<{ mode: CameraMode; text: string }> = [
+  { mode: 'follow', text: 'Seguir al ejército' },
+  { mode: 'cine', text: 'Cine' },
+  { mode: 'aerial', text: 'Aérea' },
+  { mode: 'map', text: 'Vista de mapa' }
 ];
 
 const rows = (events: readonly AndesEvent[]) =>
@@ -43,14 +61,23 @@ export default function Scene() {
   const route = useMemo(() => buildRoute(events), [events]);
   const terrainState = useAndesTerrain(status === 'success' ? route.points : null);
   const quality = useQualityOptional();
+  const tier: QualityTier = quality?.tier ?? 'medium';
   const yearFloat = useStore((s) => s.yearFloat);
-  const day = campaignDay(yearFloat, route.lastDay);
+  // the high pass, the most epic part, gets more of the clock than the valleys (the whole campaign still takes the whole clock)
+  const clock = useMemo(() => paceClock(route), [route]);
+  const pace = useMemo(() => paceProgress(route), [route]);
+  const profile = useMemo(() => altitudeProfile(route), [route]);
+  const day = clock(yearFloat);
+  const crossed = pace.progress(yearFloat);
+  const percent = Math.round(crossed * 100);
+  const dispatch = useStore((s) => s.dispatch);
 
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [view, setView] = useState<'map' | 'table'>('map');
-  const [follow, setFollow] = useState(false);
+  const [camera, setCamera] = useState<CameraMode>('free');
   const [closeUp, setCloseUp] = useState(0);
-  const [cine, setCine] = useState(false);
+  const [toggles, setToggles] = useState<GraphicsToggles>(loadToggles);
+  const [tierChoice, setTierChoice] = useState<'auto' | QualityTier>('auto');
   const [listOpen, setListOpen] = useState(true);
   const opener = useRef<HTMLElement | null>(null);
   const selected = route.points.find((p) => p.id === selectedId) ?? null;
@@ -80,6 +107,8 @@ export default function Scene() {
   if (status === 'error' || !data) return <SceneError />;
 
   const position = positionAt(route, day);
+  const graphics = resolveGraphics(tier, toggles);
+  const spo2 = spo2Estimate(position?.altitudeM ?? null);
   const terrain = terrainState.status === 'ready' ? terrainState : null;
   const label = `Mapa 3D del cruce de los Andes, día ${Math.round(day)} de la campaña${
     selected ? `; evento elegido: ${selected.name}` : ''
@@ -95,9 +124,9 @@ export default function Scene() {
             route={route}
             day={day}
             selectedId={selectedId}
-            follow={follow}
+            camera={camera}
+            graphics={graphics}
             closeUp={closeUp}
-            cine={cine}
             onSelect={(id) => (id === null ? close() : select(id))}
             label={label}
           />
@@ -139,19 +168,43 @@ export default function Scene() {
         <button type="button" className="chip" aria-pressed={view === 'table'} onClick={() => setView('table')}>
           Tabla de eventos
         </button>
-        <button type="button" className="chip" aria-pressed={follow} disabled={view !== 'map'} onClick={() => setFollow(!follow)}>
-          Seguir al ejército
-        </button>
-        <button type="button" className="chip" aria-pressed={cine} disabled={view !== 'map'} onClick={() => setCine(!cine)}>
-          Cine
-        </button>
+        {CAMERA_BUTTONS.map(({ mode, text }) => (
+          <button
+            key={mode}
+            type="button"
+            className="chip"
+            aria-pressed={camera === mode}
+            disabled={view !== 'map'}
+            onClick={() => setCamera(camera === mode ? 'free' : mode)}
+          >
+            {text}
+          </button>
+        ))}
         <button type="button" className="chip" disabled={view !== 'map'} onClick={() => setCloseUp(closeUp + 1)}>
           Ver de cerca
         </button>
         <button type="button" className="chip" aria-pressed={listOpen} onClick={() => setListOpen(!listOpen)}>
           Eventos
         </button>
+        <GraphicsMenu
+          toggles={toggles}
+          onToggle={(key, value) => {
+            const next = { ...toggles, [key]: value };
+            setToggles(next);
+            saveToggles(next);
+          }}
+          tier={tier}
+          choice={tierChoice}
+          onChoice={(choice) => {
+            setTierChoice(choice);
+            if (quality) quality.setTier(choice === 'auto' ? qualityTier(quality.caps) : choice);
+          }}
+        />
       </div>
+
+      <SlotPortal slot="progress">
+        <AndesProgress percent={percent} onChange={(p) => dispatch({ type: 'setYear', year: pace.yearAt(p / 100) })} />
+      </SlotPortal>
 
       {listOpen && (
         <div className="andes-list andes-glass">
@@ -184,6 +237,13 @@ export default function Scene() {
       sources={[]}
       views={[]}
       stage={stage}
+      side={
+        <AltitudeProfile
+          points={profile}
+          progress={crossed}
+          events={route.points.map((p) => ({ progress: route.totalKm > 0 ? p.distanceKm / route.totalKm : 0, name: p.name }))}
+        />
+      }
       tiles={
         <TileGrid>
           <Tile id="andes-day" label="Día de la campaña">
@@ -196,6 +256,9 @@ export default function Scene() {
             <span className="tile-value">
               {position && position.altitudeM !== null ? `${formatNumber(position.altitudeM, 0)} m` : 'sin dato'}
             </span>
+          </Tile>
+          <Tile id="andes-spo2" label="Saturación de oxígeno (SpO₂)" note="Estimada por la altura; depende de cada persona">
+            <span className="tile-value">{spo2 === null ? 'sin dato' : `${Math.round(spo2)} %`}</span>
           </Tile>
           <Tile id="andes-events" label="Eventos">
             <span className="tile-value">{route.points.length}</span>

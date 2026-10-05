@@ -126,3 +126,40 @@ export function terrainColor(t: number, slope: number, n1: number, n2: number, o
   out.g = clamp01(g * shade);
   out.b = clamp01(b * shade);
 }
+
+/** The color of the dirt of the trail, painted on the ground where the army walks. */
+export const TRAIL_COLOR: [number, number, number] = [0.62, 0.52, 0.38];
+
+/** How much of the trail color a point at `distance` from the route takes: all of it up to `core`, none from `edge`, smooth between. */
+export function trailBlend(distance: number, core: number, edge: number): number {
+  return 1 - smooth(core, edge, distance);
+}
+
+/**
+ * Noise that tiles: `size` by `size` values from 0 to 1 whose last column meets the first (and the last row the first), built from a few
+ * octaves of periodic value noise. It is the grain of the ground texture; deterministic for a seed.
+ */
+export function tileableNoise(size: number, seed: number): Float32Array {
+  const out = new Float32Array(size * size);
+  const octaves = [4, 8, 16];
+  const weights = [0.5, 0.3, 0.2];
+  for (let y = 0; y < size; y += 1) {
+    for (let x = 0; x < size; x += 1) {
+      let v = 0;
+      octaves.forEach((cells, o) => {
+        const fx = (x / size) * cells;
+        const fy = (y / size) * cells;
+        const ix = Math.floor(fx);
+        const iy = Math.floor(fy);
+        const u = fade(fx - ix);
+        const w = fade(fy - iy);
+        const at = (cx: number, cy: number) => hash2(((cx % cells) + cells) % cells, ((cy % cells) + cells) % cells, seed + o * 31);
+        const top = at(ix, iy) + (at(ix + 1, iy) - at(ix, iy)) * u;
+        const bottom = at(ix, iy + 1) + (at(ix + 1, iy + 1) - at(ix, iy + 1)) * u;
+        v += (top + (bottom - top) * w) * weights[o]!;
+      });
+      out[y * size + x] = Math.min(1, Math.max(0, v));
+    }
+  }
+  return out;
+}

@@ -4,10 +4,15 @@ import {
   BackSide,
   BufferAttribute,
   BufferGeometry,
+  CanvasTexture,
   Color,
+  DataTexture,
   DirectionalLight,
+  DynamicDrawUsage,
   Float32BufferAttribute,
   Fog,
+  LinearFilter,
+  LinearMipmapLinearFilter,
   Line,
   LineBasicMaterial,
   Mesh,
@@ -16,29 +21,37 @@ import {
   Points,
   PointsMaterial,
   Raycaster,
+  RepeatWrapping,
   SphereGeometry,
   Vector2,
   Vector3
 } from 'three';
-import { useQualityOptional } from '../../runtime/CapabilityProvider';
 import { QUALITY_PRESETS } from '../../runtime/capabilities';
 import { useReducedMotion } from '../../runtime/useReducedMotion';
 import { SEQUENTIAL_BLUE, SKY_RAMP, TERRAIN_RAMP, tokens } from '../../styles/tokens';
+import { PHI_MAX, copyCamera } from '../../charts3d/camera';
+import type { CameraState } from '../../charts3d/camera';
 import { createStage } from '../../three/stage';
 import type { Stage } from '../../three/stage';
 import { useCameraNav } from '../../three/useCameraNav';
 import { sampleElevation } from '../../terrain/decode';
 import type { Terrain } from '../../types/terrain';
 import { NavControls } from '../../ui/NavControls';
-import { battlePose, cinePose, clearEye, closePose, followPose, overviewPose } from './camera';
+import { NO_STEER, addSteer, battlePose, cinePose, clearEye, closePose, followPose, lookPoint, overviewPose, rigFor, steered } from './camera';
+import type { CameraMode, Rig } from './camera';
 import { figureCount, lodFor, startingMen } from './column';
 import { createDetailTerrain } from './detail3d';
 import { createFigureColumn } from './figures3d';
+import type { Graphics } from './graphics';
+import { labelOpacity, toScreen } from './labels';
+import { minimapFrame, toMinimap, viewCone } from './minimap';
 import { arcAt, buildPath, sampleAlong, sampleAlongExtended } from './pathAlong';
 import type { PathSample } from './pathAlong';
-import { createField } from './reliefField';
-import { skyColorHex, starPositions } from './sky';
-import { buildTerrainMesh, sceneScale, toScene } from './terrainMesh';
+import { tileableNoise } from './relief';
+import { buildPatch, createField } from './reliefField';
+import { skyColorHex } from './sky';
+import { snowAmount, snowCount, snowField, stepSnow } from './snow';
+import { buildTerrainMesh, fromScene, sceneScale, toScene } from './terrainMesh';
 import { positionAt } from './timeline';
 import type { Route } from './timeline';
 
@@ -57,15 +70,13 @@ const CHUNK_SIZE = 2;
 const CHUNK_CELLS = 100;
 const CHUNK_RADIUS = 2;
 /** the fog close in: the detailed ground fades into the horizon before the chunks end */
-const NEAR_FOG: [number, number] = [1.5, 7];
+const NEAR_FOG: [number, number] = [6, 36];
 /** the camera never goes below the ground of the detailed terrain by less than this */
 const CAMERA_CLEARANCE = 0.08;
 /** how much of the turn toward the heading of the column the cinematic camera takes at each day tick */
 const CINE_TURN = 0.2;
-/** the cinematic camera stands behind the last figure of the column (this margin, this high above the ground) and looks at the column, this fraction of its length behind the head */
-const CINE_BACK_MARGIN = 1;
+/** a rigged camera (see `rigFor`) looks at the column, this fraction of its length behind the head, a little above the ground */
 const CINE_FOCUS = 0.35;
-const CINE_HEIGHT = 0.25;
 const CINE_LOOK = 0.1;
 /** the light, relative to the army, when the shadows are on */
 const SUN_OFFSET = new Vector3(-9, 5, 5);
@@ -73,8 +84,49 @@ const ROUTE_SAMPLES = 160;
 const CLICK_SLOP = 4;
 /** the closest zoom of this scene, as a fraction of the start radius: close enough to see the column of figures */
 const ZOOM_MIN_ANDES = 0.04;
+/** how low the camera may go, in radians from the top: past the horizon (1.57) it looks up, so the sky shows; far from the army it stays above it */
+const PHI_MAX_ANDES = 1.95;
+/** the snowstorm up close: the box of flakes around the camera (width and height, scene units), the wind, and the closer fog at full snow */
+const SNOW_SIZE = 4;
+const SNOW_HEIGHT = 2.5;
+const SNOW_WIND = { x: -0.5, z: 0.2 };
+const SNOW_FOG: [number, number] = [3, 16];
+/** in the storm the haze turns grey-blue and the sun dims, as much as the snow is heavy */
+const STORM_HAZE = new Color('#9fb0c4');
+const STORM_HAZE_SHARE = 0.65;
+const STORM_DIM = 0.45;
+/** the far mountains: one coarse mesh of the whole ground (the relief and the snow caps of the same field as the chunks), a step of this many units, set a little under the chunks */
+const FAR_STEP = 0.2;
+const FAR_LOWER = 0.06;
+/** the grain of the ground: a tiling texture of this many texels a side */
+const GROUND_TEXTURE_SIZE = 128;
+/** the minimap of the close view: its side in pixels, and how far and how wide the cone of what the camera looks at is drawn */
+const MINIMAP_SIZE = 160;
+const MINIMAP_CONE = 26;
+const MINIMAP_SPREAD = 0.45;
 /** the sky dome around the origin: the camera stays within ~100 units of it and the far plane is 300 */
 const SKY_RADIUS = 180;
+
+/** The grain of the ground as a tiling texture: grey values around 0.87 that darken or leave the color of the terrain, never tint it. */
+function makeGroundTexture(): DataTexture {
+  const noise = tileableNoise(GROUND_TEXTURE_SIZE, 5);
+  const data = new Uint8Array(GROUND_TEXTURE_SIZE * GROUND_TEXTURE_SIZE * 4);
+  for (let i = 0; i < noise.length; i += 1) {
+    const v = Math.round(255 * (0.74 + 0.26 * noise[i]!));
+    data[i * 4] = v;
+    data[i * 4 + 1] = v;
+    data[i * 4 + 2] = v;
+    data[i * 4 + 3] = 255;
+  }
+  const texture = new DataTexture(data, GROUND_TEXTURE_SIZE, GROUND_TEXTURE_SIZE);
+  texture.wrapS = RepeatWrapping;
+  texture.wrapT = RepeatWrapping;
+  texture.magFilter = LinearFilter;
+  texture.minFilter = LinearMipmapLinearFilter;
+  texture.generateMipmaps = true;
+  texture.needsUpdate = true;
+  return texture;
+}
 
 /** The color of a terrain height from 0 to 1: the natural ramp, green in the valleys and snow on the peaks. */
 function rampColor(t: number, out: Color, next: Color): Color {
@@ -90,24 +142,25 @@ export interface AndesRendererProps {
   /** the campaign day: the army marker and the travelled part of the route follow it */
   day: number;
   selectedId: string | null;
-  /** the camera follows the army as the days go by */
-  follow: boolean;
+  /** how the camera behaves: free, following the army, cinematic behind the column, from above, or a far view of the map */
+  camera: CameraMode;
+  /** the effective graphics: the tier and what the reader switched on or off */
+  graphics: Graphics;
   /** each increase flies the camera right next to the army, where the figures of the column show */
   closeUp: number;
-  /** the cinematic camera: behind the column, low, turning with the route */
-  cine: boolean;
   onSelect: (id: string | null) => void;
   /** what the canvas says to a screen reader */
   label: string;
 }
 
 /** The Andes in 3D: the terrain, the route, a marker per event and the army at its place of the day. The only file of the scene that touches WebGL. */
-export function AndesRenderer({ terrain, route, day, selectedId, follow, closeUp, cine, onSelect, label }: AndesRendererProps) {
+export function AndesRenderer({ terrain, route, day, selectedId, camera, graphics, closeUp, onSelect, label }: AndesRendererProps) {
   const hostRef = useRef<HTMLDivElement>(null);
   const tipRef = useRef<HTMLDivElement>(null);
   const reduced = useReducedMotion();
-  const quality = useQualityOptional();
-  const tier = quality?.tier ?? 'medium';
+  const tagsRef = useRef<HTMLDivElement>(null);
+  const minimapRef = useRef<HTMLCanvasElement>(null);
+  const { tier, shadows, trees, textures, flakeMax, shadowMapSize, treeDensity } = graphics;
   const preset = QUALITY_PRESETS[tier];
   const { stageRef, poseRef, controls } = useCameraNav();
   const onSelectRef = useRef(onSelect);
@@ -119,13 +172,10 @@ export function AndesRenderer({ terrain, route, day, selectedId, follow, closeUp
   dayRef.current = day;
   const selectedRef = useRef(selectedId);
   selectedRef.current = selectedId;
-  const setFollowRef = useRef<(on: boolean) => void>(() => {});
-  const followRef = useRef(follow);
-  followRef.current = follow;
   const closeUpRef = useRef<() => void>(() => {});
-  const setCineRef = useRef<(on: boolean) => void>(() => {});
-  const cineRef = useRef(cine);
-  cineRef.current = cine;
+  const setModeRef = useRef<(mode: CameraMode) => void>(() => {});
+  const modeRef = useRef(camera);
+  modeRef.current = camera;
 
   useEffect(() => {
     const host = hostRef.current;
@@ -143,7 +193,8 @@ export function AndesRenderer({ terrain, route, day, selectedId, follow, closeUp
       pose: poseRef.current ?? undefined,
       animateReset: !reduced && tier !== 'low',
       zoomMin: ZOOM_MIN_ANDES,
-      shadows: tier !== 'low',
+      phiMax: PHI_MAX_ANDES,
+      shadows,
       beforeRender: () => beforeRender()
     });
     poseRef.current = stage.pose;
@@ -155,7 +206,7 @@ export function AndesRenderer({ terrain, route, day, selectedId, follow, closeUp
     const fog = new Fog(SKY_RAMP[0]!, start.radius * 1.1, start.radius * 3);
     scene.fog = fog;
 
-    // the sky: a dome around the scene, dawn at the horizon to night overhead, with faint stars in the upper part
+    // the sky: a dome around the scene, a pale blue haze at the horizon to a deep blue overhead
     const dome = new SphereGeometry(SKY_RADIUS, 32, 16);
     const domeColors = new Float32Array(dome.attributes.position!.count * 3);
     const sky = new Color();
@@ -169,19 +220,12 @@ export function AndesRenderer({ terrain, route, day, selectedId, follow, closeUp
     const domeMesh = new Mesh(dome, new MeshBasicMaterial({ vertexColors: true, side: BackSide, fog: false, depthWrite: false }));
     domeMesh.renderOrder = -2;
     scene.add(domeMesh);
-    const starGeometry = new BufferGeometry();
-    starGeometry.setAttribute('position', new BufferAttribute(starPositions(tier === 'low' ? 120 : 400, SKY_RADIUS * 0.98), 3));
-    const stars = new Points(
-      starGeometry,
-      new PointsMaterial({ color: tokens.ink, size: 1.6, sizeAttenuation: false, transparent: true, opacity: 0.55, fog: false, depthWrite: false })
-    );
-    stars.renderOrder = -1;
-    scene.add(stars);
     scene.add(new AmbientLight(tokens.ink, 0.55));
-    const sun = new DirectionalLight(tokens.ink, 3.2);
+    const SUN_INTENSITY = 3.2;
+    const sun = new DirectionalLight(tokens.ink, SUN_INTENSITY);
     sun.position.set(-9, 5, 5); // low: the relief throws shadows
     scene.add(sun.target);
-    const shadowSize = tier === 'high' ? 2048 : 1024;
+    const shadowSize = shadowMapSize || 1024;
     sun.shadow.mapSize.set(shadowSize, shadowSize);
     sun.shadow.camera.left = -4;
     sun.shadow.camera.right = 4;
@@ -253,21 +297,82 @@ export function AndesRenderer({ terrain, route, day, selectedId, follow, closeUp
 
     // up close the marker gives way to a column of figures on terrain in detail: procedural relief, trees and shadows
     const field = createField({ terrain, scale, path, seed: RELIEF_SEED, amplitude: RELIEF_AMPLITUDE });
+    const groundTexture = textures ? makeGroundTexture() : null;
     const detail = createDetailTerrain(field, {
       size: CHUNK_SIZE,
       cells: Math.max(16, Math.round(CHUNK_CELLS * preset.terrainDetail)),
       radius: CHUNK_RADIUS,
-      treeDensity: tier === 'low' ? 0.3 : 0.7,
+      treeDensity: trees ? treeDensity : 0,
       seed: RELIEF_SEED,
-      treeColor: '#2f5a34'
+      treeColor: '#2f5a34',
+      texture: groundTexture
     });
     detail.group.visible = false;
     scene.add(detail.group);
+    // the far mountains: the whole ground from the same field as the chunks, coarse, so the peaks and the snow show to the horizon
+    const farData = buildPatch(
+      field,
+      -scale.width / 2,
+      -scale.depth / 2,
+      scale.width,
+      scale.depth,
+      Math.max(24, Math.round((scale.width / FAR_STEP) * preset.terrainDetail)),
+      Math.max(24, Math.round((scale.depth / FAR_STEP) * preset.terrainDetail)),
+      RELIEF_SEED
+    );
+    const farGeometry = new BufferGeometry();
+    farGeometry.setAttribute('position', new BufferAttribute(farData.positions, 3));
+    farGeometry.setAttribute('normal', new BufferAttribute(farData.normals, 3));
+    farGeometry.setAttribute('color', new Float32BufferAttribute(farData.colors, 3));
+    farGeometry.setAttribute('uv', new BufferAttribute(farData.uvs, 2));
+    farGeometry.setIndex(new BufferAttribute(farData.indices, 1));
+    const farMaterial = new MeshStandardMaterial({
+      vertexColors: true,
+      roughness: 0.95,
+      metalness: 0,
+      map: groundTexture,
+      polygonOffset: true,
+      polygonOffsetFactor: 2,
+      polygonOffsetUnits: 2
+    });
+    const farMesh = new Mesh(farGeometry, farMaterial);
+    farMesh.position.y = -FAR_LOWER;
+    farMesh.visible = false;
+    scene.add(farMesh);
     const { count } = figureCount(startingMen(route.points), preset.particleScale);
     const column = createFigureColumn(count, path, (x, z) => field.height(x, z) + FIGURE_LIFT, FIGURE_SCALE);
     column.mesh.castShadow = true;
     column.mesh.visible = false;
     scene.add(column.mesh);
+    // a light snowstorm up close, heavier the higher the army is: flakes that fall around the camera
+    const flakes = snowField(Math.max(1, flakeMax), RELIEF_SEED, army.position, SNOW_SIZE, SNOW_HEIGHT);
+    const flakePositions = new BufferAttribute(flakes.positions, 3);
+    flakePositions.setUsage(DynamicDrawUsage);
+    const snowGeometry = new BufferGeometry();
+    snowGeometry.setAttribute('position', flakePositions);
+    // a soft round flake (a points sprite is a square without a map)
+    const flakeCanvas = document.createElement('canvas');
+    flakeCanvas.width = 32;
+    flakeCanvas.height = 32;
+    const flakeContext = flakeCanvas.getContext('2d');
+    if (flakeContext) {
+      const glow = flakeContext.createRadialGradient(16, 16, 0, 16, 16, 16);
+      glow.addColorStop(0, 'rgba(255,255,255,1)');
+      glow.addColorStop(0.5, 'rgba(255,255,255,0.7)');
+      glow.addColorStop(1, 'rgba(255,255,255,0)');
+      flakeContext.fillStyle = glow;
+      flakeContext.fillRect(0, 0, 32, 32);
+    }
+    const flakeTexture = new CanvasTexture(flakeCanvas);
+    const snow = new Points(
+      snowGeometry,
+      new PointsMaterial({ color: '#ffffff', map: flakeTexture, size: 0.03, sizeAttenuation: true, transparent: true, opacity: 0.95, depthWrite: false, fog: false })
+    );
+    snow.frustumCulled = false;
+    snow.visible = false;
+    scene.add(snow);
+    let snowLevel = 0;
+    let stopSnow: (() => void) | null = null;
     // up close the markers of the events are as big as a mountain next to the figures: only the chosen one stays, and small
     const applyMarkers = () => {
       for (const m of markers) {
@@ -280,6 +385,35 @@ export function AndesRenderer({ terrain, route, day, selectedId, follow, closeUp
     const head: PathSample = { x: 0, y: 0, z: 0, heading: 0 };
     let leaderArc = 0;
     let lod: 'marker' | 'figures' = 'marker';
+    // the snow shows only up close and where the army is high; it falls on its own loop, still under reduced motion
+    const syncSnow = () => {
+      const near = lod === 'figures';
+      const on = near && flakeMax > 0 && snowLevel > 0;
+      const heavy = near ? snowLevel : 0;
+      fog.near = near ? NEAR_FOG[0] + (SNOW_FOG[0] - NEAR_FOG[0]) * heavy : fogFar[0];
+      fog.far = near ? NEAR_FOG[1] + (SNOW_FOG[1] - NEAR_FOG[1]) * heavy : fogFar[1];
+      fog.color.set(SKY_RAMP[0]!).lerp(STORM_HAZE, STORM_HAZE_SHARE * heavy);
+      sun.intensity = SUN_INTENSITY * (1 - STORM_DIM * heavy);
+      snow.visible = on;
+      snowGeometry.setDrawRange(0, snowCount(snowLevel, flakeMax));
+      if (on && !stopSnow) {
+        stepSnow(flakes, 0, SNOW_WIND, stage.camera.position, SNOW_SIZE, SNOW_HEIGHT);
+        flakePositions.needsUpdate = true;
+        if (!reduced) {
+          let last = 0;
+          stopSnow = stage.loop((ms) => {
+            const dt = last === 0 ? 0 : Math.min(0.1, (ms - last) / 1000);
+            last = ms;
+            stepSnow(flakes, dt, SNOW_WIND, stage.camera.position, SNOW_SIZE, SNOW_HEIGHT);
+            flakePositions.needsUpdate = true;
+          });
+        }
+      } else if (!on && stopSnow) {
+        stopSnow();
+        stopSnow = null;
+      }
+      stage.requestRender();
+    };
     const lightOnArmy = () => {
       sun.target.position.copy(army.position);
       sun.position.copy(army.position).add(SUN_OFFSET);
@@ -291,11 +425,11 @@ export function AndesRenderer({ terrain, route, day, selectedId, follow, closeUp
       applyMarkers();
       column.mesh.visible = near;
       baseMesh.visible = !near;
+      farMesh.visible = near;
+      if (mini) mini.hidden = !near;
       detail.group.visible = near;
-      sun.castShadow = near && tier !== 'low';
-      const [fogNear, fogEnd] = near ? NEAR_FOG : fogFar;
-      fog.near = fogNear;
-      fog.far = fogEnd;
+      sun.castShadow = near && shadows;
+      syncSnow();
       if (near) {
         detail.ensureAround(army.position.x, army.position.z);
         lightOnArmy();
@@ -304,27 +438,137 @@ export function AndesRenderer({ terrain, route, day, selectedId, follow, closeUp
         sun.position.set(-9, 5, 5);
       }
     };
+    // the minimap, only in the close view: the terrain by height (drawn once), the route and how far it is walked, the places, the army and what the camera looks at
+    const mini = minimapRef.current;
+    const miniContext = mini?.getContext('2d') ?? null;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const miniFrame = minimapFrame(scale.width, scale.depth, MINIMAP_SIZE, 6);
+    let backdrop: HTMLCanvasElement | null = null;
+    if (mini && miniContext) {
+      mini.width = MINIMAP_SIZE * dpr;
+      mini.height = MINIMAP_SIZE * dpr;
+      backdrop = document.createElement('canvas');
+      backdrop.width = MINIMAP_SIZE;
+      backdrop.height = MINIMAP_SIZE;
+      const back = backdrop.getContext('2d');
+      if (back) {
+        const cell = 3;
+        const lo = terrain.meta.elevation_min_m;
+        const span = Math.max(1, terrain.meta.elevation_max_m - lo);
+        const colorOut = new Color();
+        const colorNext = new Color();
+        for (let py = 0; py < MINIMAP_SIZE; py += cell) {
+          for (let px = 0; px < MINIMAP_SIZE; px += cell) {
+            const sx = (px + cell / 2 - miniFrame.offsetX) / miniFrame.scale - scale.width / 2;
+            const sz = (py + cell / 2 - miniFrame.offsetY) / miniFrame.scale - scale.depth / 2;
+            if (Math.abs(sx) > scale.width / 2 || Math.abs(sz) > scale.depth / 2) continue;
+            const at = fromScene(scale, sx, sz);
+            const h = sampleElevation(terrain, at.lon, at.lat);
+            if (h === null) continue;
+            rampColor((h - lo) / span, colorOut, colorNext);
+            back.fillStyle = `#${colorOut.getHexString()}`;
+            back.fillRect(px, py, cell, cell);
+          }
+        }
+      }
+    }
+    let walked = 0;
+    const drawMinimap = () => {
+      if (!mini || !miniContext || !backdrop) return;
+      const ctx = miniContext;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.clearRect(0, 0, MINIMAP_SIZE, MINIMAP_SIZE);
+      ctx.drawImage(backdrop, 0, 0);
+      const line = (to: number, color: string, width: number) => {
+        ctx.beginPath();
+        for (let i = 0; i < to; i += 1) {
+          const p = toMinimap(miniFrame, samples[i * 3]!, samples[i * 3 + 2]!);
+          if (i === 0) ctx.moveTo(p.x, p.y);
+          else ctx.lineTo(p.x, p.y);
+        }
+        ctx.strokeStyle = color;
+        ctx.lineWidth = width;
+        ctx.stroke();
+      };
+      line(sampleCount, tokens.muted, 1.5);
+      line(Math.max(2, Math.min(sampleCount, walked)), tokens.ink, 2);
+      for (const m of markers) {
+        const p = toMinimap(miniFrame, m.mesh.position.x, m.mesh.position.z);
+        ctx.fillStyle = tokens.ink2;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, 2, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      const cone = viewCone(miniFrame, { x: stage.camera.position.x, z: stage.camera.position.z }, { x: stage.pose.x, z: stage.pose.z }, MINIMAP_CONE, MINIMAP_SPREAD);
+      ctx.beginPath();
+      ctx.moveTo(cone[0].x, cone[0].y);
+      ctx.lineTo(cone[1].x, cone[1].y);
+      ctx.lineTo(cone[2].x, cone[2].y);
+      ctx.closePath();
+      ctx.fillStyle = 'rgba(255,255,255,0.28)';
+      ctx.fill();
+      const a = toMinimap(miniFrame, army.position.x, army.position.z);
+      ctx.fillStyle = '#' + lit.getHexString();
+      ctx.strokeStyle = tokens.ink;
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.arc(a.x, a.y, 4, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+    };
+    // the names of the places float over their markers: they fade with the distance and hide with the marker
+    const tagEls = tagsRef.current ? (Array.from(tagsRef.current.children) as HTMLElement[]) : [];
+    const tagPoint = new Vector3();
+    const updateTags = () => {
+      const w = host.clientWidth;
+      const h = host.clientHeight;
+      markers.forEach((m, i) => {
+        const el = tagEls[i];
+        if (!el) return;
+        tagPoint.copy(m.mesh.position);
+        tagPoint.y += 0.35 * m.mesh.scale.y;
+        const distance = stage.camera.position.distanceTo(tagPoint);
+        tagPoint.project(stage.camera);
+        const at = toScreen(tagPoint, w, h);
+        const opacity = at.visible && m.mesh.visible ? labelOpacity(distance) : 0;
+        el.style.opacity = opacity.toFixed(2);
+        if (opacity > 0) el.style.transform = `translate(${at.x.toFixed(1)}px, ${at.y.toFixed(1)}px) translate(-50%, -100%)`;
+      });
+    };
     beforeRender = () => {
+      updateTags();
       const next = lodFor(stage.camera.position.distanceTo(army.position), lod);
       if (next !== lod) enterLod(next);
-      if (lod !== 'figures') return;
+      if (lod === 'figures') drawMinimap();
+      if (lod !== 'figures') {
+        // far from the army the camera stays above the horizon: below it only the sky would show
+        if (stage.pose.phi > PHI_MAX) stage.nav.setPose({ ...stage.pose, phi: PHI_MAX });
+        return;
+      }
       // never under the ground of the detailed terrain
       const cam = stage.camera.position;
       const floor = field.height(cam.x, cam.z) + CAMERA_CLEARANCE;
-      if (cam.y < floor) {
-        cam.y = floor;
-        stage.camera.lookAt(stage.pose.x, stage.pose.y, stage.pose.z);
+      const lifted = cam.y < floor;
+      if (lifted) cam.y = floor;
+      // past the horizon the view keeps tilting up, so the sky shows even when the ground holds the camera back
+      if (lifted || stage.pose.phi > Math.PI / 2) {
+        const at = lookPoint(cam, stage.pose, stage.pose.phi);
+        stage.camera.lookAt(at.x, at.y, at.z);
       }
     };
-    // the cinematic camera: behind the head of the column; `k` is how much of the turn toward its heading is taken
+    // a rigged camera (cinematic, aerial): behind the army and above the ground; `k` is how much of the turn toward its heading is taken
     const eye: PathSample = { x: 0, y: 0, z: 0, heading: 0 };
-    const cineAt = (k: number) => {
+    let cineBase: CameraState | null = null;
+    let left: CameraState | null = null;
+    let steer = NO_STEER;
+    const rigAt = (rig: Rig, k: number, current: CameraState) => {
+      const back = rig.behindColumn ? column.length + rig.back : rig.back;
       sampleAlongExtended(path, leaderArc - column.length * CINE_FOCUS, head);
-      sampleAlong(path, leaderArc - column.length - CINE_BACK_MARGIN, eye); // on the route: never off its start
+      sampleAlong(path, leaderArc - back, eye); // on the route: never off its start
       const look = { x: head.x, y: field.height(head.x, head.z) + CINE_LOOK, z: head.z };
-      const from = { x: eye.x, y: field.height(eye.x, eye.z) + CINE_HEIGHT, z: eye.z };
+      const from = { x: eye.x, y: field.height(eye.x, eye.z) + rig.height, z: eye.z };
       from.y = clearEye(from, look, field.height, CAMERA_CLEARANCE); // a hill between the camera and the column lifts it
-      return cinePose(look, from, stage.pose, k);
+      return cinePose(look, from, current, k);
     };
 
     const setDay = (d: number) => {
@@ -332,6 +576,11 @@ export function AndesRenderer({ terrain, route, day, selectedId, follow, closeUp
       if (!p) return;
       const at = toScene(scale, p.lon, p.lat, ground(p.lon, p.lat, p.altitudeM));
       army.position.set(at.x, at.y + LIFT + 0.2, at.z);
+      const level = snowAmount(p.altitudeM);
+      if (level !== snowLevel) {
+        snowLevel = level;
+        syncSnow();
+      }
       const along = (d - route.firstDay) / Math.max(1, route.lastDay - route.firstDay);
       leaderArc = arcAt(path, Math.min(1, Math.max(0, along)) * (sampleCount - 1));
       column.update(leaderArc);
@@ -339,9 +588,16 @@ export function AndesRenderer({ terrain, route, day, selectedId, follow, closeUp
         detail.ensureAround(army.position.x, army.position.z);
         lightOnArmy();
       }
-      if (cineRef.current) stage.nav.setPose(cineAt(CINE_TURN));
-      else if (followRef.current) stage.nav.setTarget(at.x, at.y, at.z);
-      traveled.geometry.setDrawRange(0, Math.max(2, Math.round(((d - route.firstDay) / Math.max(1, route.lastDay - route.firstDay)) * ROUTE_SAMPLES) + 1));
+      const rig = rigFor(modeRef.current);
+      if (rig) {
+        // a rigged camera is written every day tick; what the user did to the camera in between stays on top of it
+        if (cineBase && left) steer = addSteer(steer, left, stage.pose);
+        cineBase = rigAt(rig, CINE_TURN, cineBase ?? stage.pose);
+        stage.nav.setPose(steered(cineBase, steer, PHI_MAX_ANDES));
+        left = copyCamera(stage.pose);
+      } else if (modeRef.current === 'follow') stage.nav.setTarget(at.x, at.y, at.z);
+      walked = Math.max(2, Math.round(((d - route.firstDay) / Math.max(1, route.lastDay - route.firstDay)) * ROUTE_SAMPLES) + 1);
+      traveled.geometry.setDrawRange(0, walked);
       stage.requestRender();
     };
     setDayRef.current = setDay;
@@ -363,16 +619,18 @@ export function AndesRenderer({ terrain, route, day, selectedId, follow, closeUp
     setSelectedRef.current = setSelected;
     setSelected(selectedRef.current, false);
 
-    // the cinematic camera: on, it flies to the army and then keeps it in the middle as the days go by
-    const setFollow = (on: boolean) => {
-      if (on) stage.nav.flyTo(followPose(scale, army.position, stage.pose));
-    };
-    setFollowRef.current = setFollow;
+    // a camera mode: it flies to its place (the army, behind it, above it, or the far view of the whole map) and, if it is rigged or following, keeps it as the days go by
     closeUpRef.current = () => stage.nav.flyTo(closePose(scale, army.position, stage.pose));
-    setCineRef.current = (on) => {
-      if (on) stage.nav.flyTo(cineAt(1));
+    setModeRef.current = (mode) => {
+      cineBase = null;
+      left = null;
+      steer = NO_STEER;
+      const rig = rigFor(mode);
+      if (rig) stage.nav.flyTo(rigAt(rig, 1, stage.pose));
+      else if (mode === 'follow') stage.nav.flyTo(followPose(scale, army.position, stage.pose));
+      else if (mode === 'map') stage.nav.flyTo(overviewPose(scale));
     };
-    if (followRef.current) setFollow(true);
+    if (modeRef.current !== 'free') setModeRef.current(modeRef.current);
 
     // pointer: a click (4 px or less) on a marker selects it; moving over one names it
     const canvas = stage.renderer.domElement;
@@ -421,31 +679,43 @@ export function AndesRenderer({ terrain, route, day, selectedId, follow, closeUp
     return () => {
       setDayRef.current = () => {};
       setSelectedRef.current = () => {};
-      setFollowRef.current = () => {};
       closeUpRef.current = () => {};
-      setCineRef.current = () => {};
+      setModeRef.current = () => {};
       canvas.removeEventListener('pointermove', onMove);
       canvas.removeEventListener('pointerleave', onLeave);
       canvas.removeEventListener('pointerdown', onDown);
       canvas.removeEventListener('pointerup', onUp);
       stageRef.current = null;
       markerGeometry.dispose();
+      snowGeometry.dispose();
+      flakeTexture.dispose();
+      farGeometry.dispose();
+      farMaterial.dispose();
+      groundTexture?.dispose();
+      detail.dispose();
       stage.dispose();
     };
-  }, [terrain, route, preset.terrainDetail, preset.pixelRatioCap, tier, reduced, poseRef, stageRef]);
+  }, [terrain, route, preset.terrainDetail, preset.pixelRatioCap, tier, shadows, trees, textures, flakeMax, shadowMapSize, treeDensity, reduced, poseRef, stageRef]);
 
   useEffect(() => setDayRef.current(day), [day]);
   useEffect(() => setSelectedRef.current(selectedId, true), [selectedId]);
-  useEffect(() => setFollowRef.current(follow), [follow]);
   useEffect(() => {
     if (closeUp > 0) closeUpRef.current();
   }, [closeUp]);
-  useEffect(() => setCineRef.current(cine), [cine]);
+  useEffect(() => setModeRef.current(camera), [camera]);
 
   return (
     <div className="chart3d-wrap">
       <div ref={hostRef} className="chart3d" role="img" aria-label={label} data-chart3d="andes">
         <div ref={tipRef} className="chart3d-tip" hidden />
+      </div>
+      <canvas ref={minimapRef} className="andes-minimap" aria-hidden="true" hidden />
+      <div ref={tagsRef} className="andes-tags" aria-hidden="true">
+        {route.points.map((p) => (
+          <span key={p.id} className="andes-tag">
+            {p.name}
+          </span>
+        ))}
       </div>
       <NavControls {...controls} />
     </div>

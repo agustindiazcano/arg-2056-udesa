@@ -29,7 +29,7 @@ export function createFigureColumn(count: number, path: Path, ground: (x: number
   mesh.frustumCulled = false;
   const color = new Color();
   let k = 0;
-  for (const slot of slots) for (const part of FIGURE_PARTS[slot.kind]) mesh.setColorAt(k++, color.set(part.color));
+  for (const slot of slots) for (const part of FIGURE_PARTS[slot.kind]) mesh.setColorAt(k++, color.set(part.color).offsetHSL(0, 0, slot.tint));
   if (mesh.instanceColor) mesh.instanceColor.needsUpdate = true;
   mesh.count = k;
 
@@ -41,8 +41,7 @@ export function createFigureColumn(count: number, path: Path, ground: (x: number
   const position = new Vector3();
   const partAt = new Vector3();
   const scale = new Vector3();
-  const one = new Vector3(figureScale, figureScale, figureScale);
-  const up = new Vector3(0, 1, 0);
+  const one = new Vector3(figureScale, figureScale, figureScale);  const up = new Vector3(0, 1, 0);
   const across = new Vector3(1, 0, 0);
 
   const update = (leaderArc: number) => {
@@ -56,13 +55,20 @@ export function createFigureColumn(count: number, path: Path, ground: (x: number
       const z = sample.z - sin * slot.lateral;
       const g = gaitAt(slot.kind, s / STRIDE + n * PHASE_STEP);
       position.set(x, (ground(x, z) ?? sample.y) + g.bob, z);
-      base.compose(position, qHeading.setFromAxisAngle(up, sample.heading), one);
+      base.compose(position, qHeading.setFromAxisAngle(up, sample.heading), one.setScalar(figureScale * slot.scale));
       for (const part of FIGURE_PARTS[slot.kind]) {
-        if (part.leg) {
-          // hangs from its pivot: the centre of the box swings with the leg
-          const angle = g.swing * part.leg;
-          const half = part.size[1] / 2;
-          partAt.set(part.at[0], part.at[1] - half * Math.cos(angle), part.at[2] - half * Math.sin(angle));
+        const swings = part.leg ?? part.arm;
+        if (swings) {
+          // turns about its pivot (the top of the box unless it has its own): the centre of the box swings with the leg or the arm
+          const angle = g.swing * swings;
+          const cos = Math.cos(angle);
+          const sin = Math.sin(angle);
+          const px = part.pivot ? part.pivot[0] : part.at[0];
+          const py = part.pivot ? part.pivot[1] : part.at[1];
+          const pz = part.pivot ? part.pivot[2] : part.at[2];
+          const oy = part.pivot ? part.at[1] - py : -part.size[1] / 2;
+          const oz = part.pivot ? part.at[2] - pz : 0;
+          partAt.set(px, py + oy * cos - oz * sin, pz + oy * sin + oz * cos);
           qPart.setFromAxisAngle(across, angle);
         } else {
           partAt.set(part.at[0], part.at[1], part.at[2]);

@@ -22,7 +22,7 @@ describe('skyColorHex', () => {
   });
 
   it('keeps the fog the horizon color: the first step', () => {
-    expect(SKY_RAMP[0]).toBe('#d6a77f');
+    expect(SKY_RAMP[0]).toBe('#cfe1f3');
   });
 });
 

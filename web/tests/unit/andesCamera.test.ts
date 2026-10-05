@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { battlePose, followPose, overviewPose } from '../../src/scenes/andes/camera';
+import { NO_STEER, addSteer, battlePose, followPose, lookPoint, overviewPose, steered } from '../../src/scenes/andes/camera';
+import { FIGURE_NEAR } from '../../src/scenes/andes/column';
 import { sceneScale, toScene } from '../../src/scenes/andes/terrainMesh';
 import { syntheticTerrain } from '../../src/terrain/synthetic';
 import { sampleElevation } from '../../src/terrain/decode';
@@ -50,9 +51,81 @@ describe('followPose', () => {
     expect(p.radius).toBeLessThan(overviewPose(scale).radius);
   });
 
-  it('never leaves the camera below the horizon or straight above', () => {
-    const p = followPose(scale, { x: 0, y: 0, z: 0 }, { x: 0, y: 0, z: 0, theta: 0, phi: 1.54, radius: 5 });
-    expect(p.phi).toBeLessThanOrEqual(1.2);
-    expect(p.phi).toBeGreaterThanOrEqual(0.5);
+  it('keeps the camera low enough to see the horizon and the mountains, never straight above or past it', () => {
+    const low = followPose(scale, { x: 0, y: 0, z: 0 }, { x: 0, y: 0, z: 0, theta: 0, phi: 1.54, radius: 5 });
+    expect(low.phi).toBeLessThanOrEqual(1.45);
+    expect(low.phi).toBeGreaterThanOrEqual(1);
+    const high = followPose(scale, { x: 0, y: 0, z: 0 }, { x: 0, y: 0, z: 0, theta: 0, phi: 0.1, radius: 5 });
+    expect(high.phi).toBeGreaterThanOrEqual(1);
+  });
+
+  it('is close enough for the figures and the far mountains to show: nearer than where the figures give way to the marker', () => {
+    const p = followPose(scale, { x: 0, y: 0, z: 0 }, { x: 0, y: 0, z: 0, theta: 0, phi: 1, radius: 30 });
+    expect(p.radius).toBeLessThan(FIGURE_NEAR);
+  });
+});
+
+describe('lookPoint', () => {
+  const eye = { x: 0, y: 1, z: 0 };
+  const target = { x: 0, y: 1, z: -4 };
+
+  it('is the target while the camera is not past the horizon', () => {
+    expect(lookPoint(eye, target, 1.2)).toEqual(target);
+    expect(lookPoint(eye, target, Math.PI / 2)).toEqual(target);
+  });
+
+  it('looks up from the horizon by the angle past it, at the same distance, toward the same side', () => {
+    const p = lookPoint(eye, target, Math.PI / 2 + 0.5);
+    expect(p.y).toBeCloseTo(1 + 4 * Math.sin(0.5), 9);
+    expect(p.z).toBeCloseTo(-4 * Math.cos(0.5), 9);
+    expect(p.x).toBeCloseTo(0, 9);
+    expect(Math.hypot(p.x - eye.x, p.y - eye.y, p.z - eye.z)).toBeCloseTo(4, 9);
+  });
+
+  it('survives a target straight above the eye', () => {
+    const p = lookPoint(eye, { x: 0, y: 5, z: 0 }, 2);
+    expect(Number.isFinite(p.x + p.y + p.z)).toBe(true);
+  });
+});
+
+describe('steering the cinematic camera', () => {
+  const left = { x: 1, y: 2, z: 3, theta: 0.5, phi: 1, radius: 2 };
+
+  it('adds nothing when the user did not touch the camera', () => {
+    expect(addSteer(NO_STEER, left, { ...left })).toEqual(NO_STEER);
+  });
+
+  it('adds the turn, the tilt and the zoom the user made since the camera was left', () => {
+    const s = addSteer(NO_STEER, left, { ...left, theta: 0.8, phi: 1.3, radius: 1 });
+    expect(s.theta).toBeCloseTo(0.3, 9);
+    expect(s.phi).toBeCloseTo(0.3, 9);
+    expect(s.zoom).toBeCloseTo(0.5, 9);
+  });
+
+  it('turns the short way around the circle', () => {
+    const s = addSteer(NO_STEER, { ...left, theta: 3 }, { ...left, theta: -3 });
+    expect(Math.abs(s.theta)).toBeLessThan(0.3);
+  });
+
+  it('keeps what it had and adds to it', () => {
+    const once = addSteer(NO_STEER, left, { ...left, theta: 0.7 });
+    const twice = addSteer(once, left, { ...left, theta: 0.7 });
+    expect(twice.theta).toBeCloseTo(0.4, 9);
+  });
+
+  it('puts the turn of the user on top of where the cinematic camera wants to be, and never moves the target', () => {
+    const base = { x: 1, y: 2, z: 3, theta: 1, phi: 0.9, radius: 3 };
+    const p = steered(base, { theta: 0.5, phi: 0.2, zoom: 0.5 }, 1.9);
+    expect([p.x, p.y, p.z]).toEqual([1, 2, 3]);
+    expect(p.theta).toBeCloseTo(1.5, 9);
+    expect(p.phi).toBeCloseTo(1.1, 9);
+    expect(p.radius).toBeCloseTo(1.5, 9);
+  });
+
+  it('keeps the tilt between almost straight down and the highest angle', () => {
+    const base = { x: 0, y: 0, z: 0, theta: 0, phi: 1, radius: 1 };
+    expect(steered(base, { theta: 0, phi: 5, zoom: 1 }, 1.9).phi).toBe(1.9);
+    expect(steered(base, { theta: 0, phi: -5, zoom: 1 }, 1.9).phi).toBeGreaterThan(0);
+    expect(steered(base, { theta: 0, phi: -5, zoom: 1 }, 1.9).phi).toBeLessThan(0.2);
   });
 });
