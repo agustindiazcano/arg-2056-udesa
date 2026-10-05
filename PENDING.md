@@ -122,4 +122,5 @@ Every task below has a brief (`<slug>.md` in the repository root) and a prompt (
 - [x] The 24 remaining briefs and their prompts (`task/briefs`).
 - [x] Folder tree and context files scaffolded.
 - [x] model-population: population cohorts model and TS port parity test (to be hardened by `model-population-hardening`).
+- [ ] `recorrido` (branch `task/recorrido`): intro polish (subtitle, black shortcut buttons, footer with the three institution logos as links) and a black navbar done; waiting for CI and review. Open: the Data Science Lab logo has a non-black background, and the footer logos need a minimum size on phones.
 - [ ] `micro-fixes` (branch `task/micro-fixes`): nav sections, Recorrido mode and intro buttons done; waiting for CI and review. Open: the Recorrido has no sourced narrative yet (it reuses the data scenes), and the 3D charts of the reference image (`test/recorrido-dashboard-2.png`) are not reproduced.

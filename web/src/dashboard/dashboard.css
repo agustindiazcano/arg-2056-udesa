@@ -918,12 +918,6 @@
   accent-color: var(--blue);
 }
 
-/* the header sits over a bright sky: a soft scrim keeps its text readable without a bar */
-#overlay[data-scene='andes'] .chrome {
-  background: linear-gradient(to bottom, color-mix(in srgb, var(--intro-bg) 94%, transparent) 55%, transparent);
-  padding-bottom: var(--space-md);
-}
-
 #overlay[data-scene='andes'] .progress-block .slider {
   width: clamp(110px, 15vw, 240px);
 }

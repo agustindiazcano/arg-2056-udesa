@@ -24,10 +24,14 @@ const SHORTCUTS: ReadonlyArray<{ section: Section; label: string }> = [
 ];
 
 /** The institutions behind the project; the logos live in public/images. */
-const INSTITUTIONS: ReadonlyArray<{ name: string; src: string }> = [
-  { name: 'Data Science Lab, Universidad de San Andrés', src: '/images/data-science-lab-udesa.png' },
-  { name: 'Contar con Datos', src: '/images/contar-con-datos-logo-udesa.webp' },
-  { name: 'Secretaría de Innovación, Ciencia y Tecnología', src: '/images/secretaria-innovacion-ciencia-tecnologia-recortado.png' }
+const INSTITUTIONS: ReadonlyArray<{ name: string; src: string; href: string }> = [
+  { name: 'Data Science Lab, Universidad de San Andrés', src: '/images/data-science-lab-udesa.png', href: 'https://www.udesa.edu.ar/data-science-lab' },
+  { name: 'Contar con Datos', src: '/images/contar-con-datos-logo-udesa.webp', href: 'https://www.udesa.edu.ar/contar-con-datos' },
+  {
+    name: 'Secretaría de Innovación, Ciencia y Tecnología',
+    src: '/images/secretaria-innovacion-ciencia-tecnologia-recortado.png',
+    href: 'https://www.argentina.gob.ar/jefatura/innovacion-ciencia-y-tecnologia'
+  }
 ];
 
 function viewBox(b: Box): string {
@@ -151,16 +155,20 @@ export function Intro({ onStart }: Props) {
           ))}
         </div>
       </main>
-
-      <ul className="intro-logos" aria-label="Instituciones">
-        {INSTITUTIONS.map(({ name, src }) => (
-          <li key={name}>
-            <img src={src} alt={name} />
-          </li>
-        ))}
-      </ul>
       </div>
       <div className="intro-vignette" aria-hidden="true" />
+
+      <footer className="intro-footer">
+        <ul className="intro-logos" aria-label="Instituciones">
+          {INSTITUTIONS.map(({ name, src, href }) => (
+            <li key={name}>
+              <a href={href} target="_blank" rel="noopener noreferrer">
+                <img src={src} alt={name} />
+              </a>
+            </li>
+          ))}
+        </ul>
+      </footer>
     </div>
   );
 }
