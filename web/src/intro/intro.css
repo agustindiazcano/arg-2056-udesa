@@ -1,0 +1,238 @@
+/* Intro screen. Adapted from test/argentina-2056-intro.html; system fonts only (the CSP forbids web fonts). */
+.intro {
+  --intro-bg: #05060b;
+  --intro-light: #fa8072;
+  --intro-ink: #e8ebf7;
+  --intro-ink-dim: color-mix(in srgb, var(--intro-ink) 62%, var(--intro-bg));
+  --intro-prov: color-mix(in srgb, var(--intro-bg), #fff 7%);
+  --intro-line: color-mix(in srgb, var(--intro-bg), #aab6e8 52%);
+  --intro-side-top: color-mix(in srgb, var(--intro-bg), #fff 6%);
+  --intro-side-bot: color-mix(in srgb, var(--intro-bg), #000 38%);
+  --intro-grid: rgba(170, 182, 232, 0.15);
+  --ar: 0.4895;
+  --lift: 2px;
+  --step: 0px;
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  overflow: hidden;
+  background: var(--intro-bg);
+  color: var(--intro-ink);
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+.intro[data-tilted='true'] {
+  --lift: 24px;
+  --step: 4px;
+}
+.intro-defs {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+.intro-stage {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  perspective: 6000px;
+  transition: perspective 0.95s cubic-bezier(0.22, 0.8, 0.24, 1);
+  --mh: min(calc(100dvh - 80px), calc((100vw - 32px) / var(--ar)));
+}
+.intro[data-tilted='true'] .intro-stage {
+  perspective: 1700px;
+}
+.intro-cam {
+  position: relative;
+  width: calc(var(--mh) * var(--ar));
+  height: var(--mh);
+  transform-style: preserve-3d;
+  transform: translateX(18vw) scale(1) rotateX(0deg) rotateZ(22deg);
+  transition: transform 0.95s cubic-bezier(0.22, 0.8, 0.24, 1);
+}
+.intro[data-tilted='true'] .intro-cam {
+  transform: translateX(18vw) scale(1.25) rotateX(54deg) rotateZ(22deg);
+  animation: intro-spin 90s linear 1s infinite;
+}
+.intro-map {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+}
+.intro-floor {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 360%;
+  height: 240%;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.9s;
+  transform: translate3d(-50%, -50%, -3px);
+  background-image: linear-gradient(var(--intro-grid) 1px, transparent 1px), linear-gradient(90deg, var(--intro-grid) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(closest-side, #000 22%, transparent 100%);
+}
+.intro[data-tilted='true'] .intro-floor {
+  opacity: 1;
+}
+
+.intro-prov {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  width: var(--w);
+  height: var(--h);
+  transform-style: preserve-3d;
+  transform: translateZ(0);
+  transition: transform 1s cubic-bezier(0.3, 0.7, 0.2, 1);
+  animation: intro-appear 1.1s var(--d, 0ms) cubic-bezier(0.2, 0.8, 0.2, 1) backwards;
+}
+.intro-prov.lit {
+  transform: translateZ(var(--lift));
+}
+.intro-layer {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+  transform: translateZ(calc(var(--i) * var(--step)));
+  transition: transform 0.8s cubic-bezier(0.22, 0.8, 0.24, 1), opacity 0.6s ease;
+}
+.intro-layer use {
+  stroke-linejoin: round;
+  transition: fill 1s ease, stroke 1s ease;
+}
+.intro-layer.side {
+  --sf: color-mix(in srgb, var(--intro-side-top) calc(var(--t) * 100%), var(--intro-side-bot));
+}
+.intro-layer.side use {
+  fill: var(--sf);
+  stroke: var(--sf);
+  stroke-width: 3.4;
+}
+.intro:not([data-tilted='true']) .intro-layer.side {
+  opacity: 0;
+}
+.intro-layer.top use {
+  fill: var(--intro-prov);
+  stroke: var(--intro-line);
+  stroke-width: 1.7;
+}
+.intro-layer.glow {
+  left: var(--x);
+  top: var(--y);
+  width: var(--w);
+  height: var(--h);
+  opacity: 0;
+  transition: transform 0.8s cubic-bezier(0.22, 0.8, 0.24, 1), opacity 1s ease;
+}
+.intro-layer.glow use {
+  fill: none;
+  stroke: var(--intro-light);
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+.intro-layer.glow .g1 { stroke-width: 38; stroke-opacity: 0.035; }
+.intro-layer.glow .g2 { stroke-width: 28; stroke-opacity: 0.05; }
+.intro-layer.glow .g3 { stroke-width: 19; stroke-opacity: 0.08; }
+.intro-layer.glow .g4 { stroke-width: 11; stroke-opacity: 0.13; }
+.intro-layer.glow .g5 { stroke-width: 5; stroke-opacity: 0.24; }
+.intro-prov.lit .intro-layer.glow {
+  opacity: 1;
+}
+.intro-prov.lit .intro-layer.top use {
+  fill: var(--intro-light);
+  stroke: color-mix(in srgb, var(--intro-light) 55%, #fff);
+}
+.intro-prov.lit .intro-layer.side {
+  --sf: color-mix(in srgb, var(--intro-light) calc(8% + var(--t) * 42%), var(--intro-side-bot));
+}
+
+.intro-vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse at 50% 48%, transparent 45%, rgba(0, 0, 0, 0.55) 100%);
+}
+
+.intro-copy {
+  position: absolute;
+  z-index: 5;
+  left: clamp(16px, 6vw, 96px);
+  top: 50%;
+  transform: translateY(-50%);
+  max-width: min(560px, 88vw);
+}
+.intro-title {
+  margin: 0;
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: 0.98;
+}
+.intro-title .a {
+  display: block;
+  font-size: clamp(24px, 4.6vw, 64px);
+  letter-spacing: 0.14em;
+  animation: intro-reveal 1.5s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+.intro-title .n {
+  display: block;
+  font-size: clamp(46px, 9.4vw, 132px);
+  letter-spacing: 0.06em;
+  color: var(--intro-light);
+  text-shadow: 0 0 14px var(--intro-light), 0 0 46px color-mix(in srgb, var(--intro-light) 55%, transparent);
+  animation: intro-reveal 1.5s 0.15s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+.intro-sub {
+  margin: 20px 0 28px;
+  max-width: 34ch;
+  font-size: clamp(14px, 1.4vw, 18px);
+  line-height: 1.5;
+  color: var(--intro-ink-dim);
+  animation: intro-reveal 1.5s 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+.intro-start {
+  cursor: pointer;
+  padding: 14px 40px;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #14080a;
+  background: var(--intro-light);
+  border: 0;
+  border-radius: 999px;
+  box-shadow: 0 0 24px color-mix(in srgb, var(--intro-light) 50%, transparent);
+  transition: transform 0.2s, box-shadow 0.2s;
+  animation: intro-reveal 1.5s 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+.intro-start:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 36px color-mix(in srgb, var(--intro-light) 70%, transparent);
+}
+.intro-start:focus-visible {
+  outline: 2px solid var(--color-focus, #ffc107);
+  outline-offset: 4px;
+}
+
+@keyframes intro-appear { from { opacity: 0; translate: 0 0 140px; } to { opacity: 1; translate: 0 0 0; } }
+@keyframes intro-reveal { from { opacity: 0; transform: translateX(-24px); } to { opacity: 1; transform: none; } }
+@keyframes intro-spin {
+  from { transform: translateX(18vw) scale(1.25) rotateX(54deg) rotateZ(22deg); }
+  to { transform: translateX(18vw) scale(1.25) rotateX(54deg) rotateZ(382deg); }
+}
+
+@media (max-width: 700px) {
+  .intro-copy { top: 14vh; transform: none; text-align: center; left: 0; right: 0; margin-inline: auto; }
+  .intro-cam { transform: translateY(18vh) scale(0.9) rotateX(0deg) rotateZ(22deg); }
+  .intro[data-tilted='true'] .intro-cam { transform: translateY(18vh) scale(0.95) rotateX(54deg) rotateZ(22deg); animation: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .intro *, .intro *::before { animation: none !important; transition: none !important; }
+}
