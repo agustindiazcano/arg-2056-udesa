@@ -17,22 +17,19 @@ describe('UI Components', () => {
   });
 
   describe('TabBar', () => {
-    it('renders six tabs in order, aria-selected follows store, click changes scene', () => {
+    it('renders three section tabs in order, aria-selected follows store, click changes section', () => {
       render(<TabBar />);
       const tabs = screen.getAllByRole('tab');
-      expect(tabs).toHaveLength(6);
-      
-      // Check order and initial selected
+      expect(tabs).toHaveLength(3);
       expect(tabs[0]!.getAttribute('aria-selected')).toBe('true');
       expect(tabs[1]!.getAttribute('aria-selected')).toBe('false');
-      
-      // Click economy tab
+
+      // Click Data Dashboard: it opens the first data scene and shows the five scene tabs
       fireEvent.click(tabs[1]!);
-      
-      expect(useStore.getState().scene).toBe('economy');
-      // TabBar should re-render and update aria-selected
+      expect(useStore.getState()).toMatchObject({ section: 'dashboard', scene: 'economy' });
       expect(tabs[0]!.getAttribute('aria-selected')).toBe('false');
       expect(tabs[1]!.getAttribute('aria-selected')).toBe('true');
+      expect(screen.getAllByRole('tab')).toHaveLength(8);
     });
   });
 

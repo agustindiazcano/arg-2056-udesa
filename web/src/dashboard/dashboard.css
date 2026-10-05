@@ -717,18 +717,27 @@
   font-size: var(--font-sm);
 }
 
-.andes-controls {
-  position: absolute;
-  top: calc(var(--chrome-h, 0px) + var(--space-md));
-  right: calc(var(--side-w, 0px) + var(--space-md));
-  z-index: 6;
+.andes-nav,
+.tour-steps {
   display: flex;
   flex-wrap: wrap;
-  justify-content: flex-end;
-  gap: var(--space-xs);
-  padding: var(--space-xs);
-  /* never over the title card on the left: the buttons wrap into more rows instead */
-  max-width: calc(100% - var(--side-w, 0px) - 19rem);
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.nav-slot {
+  /* takes the room between the tabs and the links, and wraps its own buttons so the links stay on the first row */
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.tour-steps {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.nav-slot:empty {
+  display: none;
 }
 
 .andes-list {
@@ -911,8 +920,8 @@
 
 /* the header sits over a bright sky: a soft scrim keeps its text readable without a bar */
 #overlay[data-scene='andes'] .chrome {
-  background: linear-gradient(to bottom, color-mix(in srgb, var(--page) 72%, transparent), transparent);
-  padding-bottom: var(--space-sm);
+  background: linear-gradient(to bottom, color-mix(in srgb, var(--intro-bg) 94%, transparent) 55%, transparent);
+  padding-bottom: var(--space-md);
 }
 
 #overlay[data-scene='andes'] .progress-block .slider {

@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { YEAR_MIN } from '../types/year';
 import { reduce, INITIAL_STEP_INDEX, State, Action } from './reducer';
 
 export interface AppStore extends State {
@@ -10,7 +11,8 @@ export interface AppStore extends State {
 
 const initialState: State = {
   scene: 'andes',
-  yearFloat: 2026,
+  section: 'andes',
+  yearFloat: YEAR_MIN, // the app opens in the Andes, which starts at 0 %
   scenario: 'expected',
   speed: 1,
   playing: false,
@@ -18,7 +20,8 @@ const initialState: State = {
   province: null,
   provinceFilterOpen: false,
   aiOverlay: 'off',
-  stepIndex: INITIAL_STEP_INDEX
+  stepIndex: INITIAL_STEP_INDEX,
+  tourStep: 1
 };
 
 import { tick as tickReducer } from './reducer';

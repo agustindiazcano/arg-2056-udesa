@@ -34,19 +34,40 @@ afterEach(() => {
 const controls = () => screen.getByRole('region', { name: 'Controles' });
 
 describe('header', () => {
-  it('names the app and has the six scenes in Spanish in a navigation named Escenas', () => {
+  it('names the app and has the three sections in a navigation named Escenas', () => {
     render(<App />);
-    expect(screen.getByText('Argentina 2056', { selector: '.brand' })).toBeTruthy();
+    const brand = document.querySelector('.brand')!;
+    expect(brand.textContent).toBe('Argentina 2056');
+    // like the intro title, in one line: "Argentina" light and "2056" in the accent
+    expect(brand.querySelector('.brand-a')?.textContent).toBe('Argentina');
+    expect(brand.querySelector('.brand-n')?.textContent).toBe('2056');
     const nav = screen.getByRole('navigation', { name: 'Escenas' });
-    expect(within(nav).getAllByRole('tab').map((t) => t.textContent)).toEqual([
-      'Andes',
-      'Economía',
-      'Recursos',
-      'Pronóstico 2056',
-      'Revolución IA',
-      'Simulador'
-    ]);
+    expect(within(nav).getAllByRole('tab').map((t) => t.textContent)).toEqual(['Andes', 'Data Dashboard', 'Recorrido']);
     expect(SCENE_LABELS.economy).toBe('Economía');
+  });
+
+  it('the brand is a button that goes back to the intro', () => {
+    const onHome = vi.fn();
+    render(<App onHome={onHome} />);
+    const brand = screen.getByRole('button', { name: 'Argentina 2056' });
+    expect(brand.className).toContain('brand');
+    fireEvent.click(brand);
+    expect(onHome).toHaveBeenCalledTimes(1);
+  });
+
+  it('shows the five data scenes only in the Data Dashboard section', () => {
+    render(<App />);
+    const names = ['Economía', 'Recursos', 'Pronóstico 2056', 'Revolución IA', 'Simulador'];
+    expect(screen.queryByRole('navigation', { name: 'Data Dashboard' })).toBeNull();
+    fireEvent.click(screen.getByRole('tab', { name: 'Data Dashboard' }));
+    const sub = screen.getByRole('navigation', { name: 'Data Dashboard' });
+    expect(within(sub).getAllByRole('tab').map((t) => t.textContent)).toEqual(names);
+    expect(screen.getByRole('tab', { name: 'Data Dashboard' }).getAttribute('aria-selected')).toBe('true');
+    expect(screen.getByRole('tab', { name: 'Economía' }).getAttribute('aria-selected')).toBe('true');
+    fireEvent.click(screen.getByRole('tab', { name: 'Recorrido' }));
+    expect(screen.queryByRole('navigation', { name: 'Data Dashboard' })).toBeNull();
+    fireEvent.click(screen.getByRole('tab', { name: 'Andes' }));
+    expect(screen.queryByRole('navigation', { name: 'Data Dashboard' })).toBeNull();
   });
 
   it('marks the selected tab with aria-selected and a visible class', () => {
@@ -54,8 +75,10 @@ describe('header', () => {
     const tab = screen.getByRole('tab', { name: 'Andes' });
     expect(tab.getAttribute('aria-selected')).toBe('true');
     expect(tab.className).toContain('tab');
-    fireEvent.click(screen.getByRole('tab', { name: 'Economía' }));
-    expect(screen.getByRole('tab', { name: 'Economía' }).getAttribute('aria-selected')).toBe('true');
+    fireEvent.click(screen.getByRole('tab', { name: 'Data Dashboard' }));
+    fireEvent.click(screen.getByRole('tab', { name: 'Recursos' }));
+    expect(screen.getByRole('tab', { name: 'Recursos' }).getAttribute('aria-selected')).toBe('true');
+    expect(screen.getByRole('tab', { name: 'Economía' }).getAttribute('aria-selected')).toBe('false');
     expect(screen.getByRole('tab', { name: 'Andes' }).getAttribute('aria-selected')).toBe('false');
   });
 
@@ -68,6 +91,7 @@ describe('header', () => {
   it('the document title is "<escena> | Argentina 2056"', () => {
     render(<App />);
     expect(document.title).toBe('Andes | Argentina 2056');
+    fireEvent.click(screen.getByRole('tab', { name: 'Data Dashboard' }));
     fireEvent.click(screen.getByRole('tab', { name: 'Simulador' }));
     expect(document.title).toBe('Simulador | Argentina 2056');
   });

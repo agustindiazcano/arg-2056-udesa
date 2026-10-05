@@ -1,4 +1,4 @@
-import { test, expect, SCENE_TABS } from './fixtures';
+import { test, expect, SCENE_TABS, openTab } from './fixtures';
 import { APP_TITLE } from '../src/app/title';
 
 test.describe('document title', () => {
@@ -6,7 +6,7 @@ test.describe('document title', () => {
     await page.goto('/');
     await expect(page).toHaveTitle(`Andes | ${APP_TITLE}`);
     for (const entry of SCENE_TABS) {
-      await page.getByRole('tab', { name: entry.tab }).click();
+      await openTab(page, entry.tab);
       await expect(page).toHaveTitle(`${entry.tab} | ${APP_TITLE}`);
     }
   });

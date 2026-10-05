@@ -71,3 +71,14 @@ export async function expectSceneShown(page: Page, entry: SceneTab) {
 export async function releaseFocus(page: Page) {
   await page.evaluate(() => (document.activeElement as HTMLElement | null)?.blur());
 }
+
+const DATA_TABS: readonly string[] = SCENE_TABS.filter((t) => t.scene !== 'andes').map((t) => t.tab);
+
+/** Opens a scene by its tab name: the five data scenes are under Data Dashboard, so that section opens first when it is not the current one. */
+export async function openTab(page: Page, name: string) {
+  if (DATA_TABS.includes(name)) {
+    const dashboard = page.getByRole('tab', { name: 'Data Dashboard' });
+    if ((await dashboard.getAttribute('aria-selected')) !== 'true') await dashboard.click();
+  }
+  await page.getByRole('tab', { name }).click();
+}

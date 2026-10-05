@@ -30,24 +30,39 @@
 }
 
 .brand {
+  font-family: var(--font-title);
+  font-variant-numeric: lining-nums;
   display: inline-flex;
-  align-items: center;
-  gap: var(--space-sm);
-  font-size: var(--font-sm);
-  font-weight: 700;
+  align-items: baseline;
+  gap: 0.45em;
+  font-size: 1.1rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--ink);
+  color: var(--intro-ink);
   white-space: nowrap;
 }
 
-.brand::before {
-  content: '';
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--blue);
-  box-shadow: 0 0 12px var(--glow);
+.brand-a {
+  font-weight: 200;
+}
+
+.brand-n {
+  font-weight: 800;
+  color: var(--intro-light);
+  text-shadow: 0 0 10px color-mix(in srgb, var(--intro-light) 55%, transparent);
+  transition: text-shadow 0.2s ease-out;
+}
+
+button.brand {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  font-family: var(--font-title);
+  cursor: pointer;
+}
+
+button.brand:hover .brand-n {
+  text-shadow: 0 0 16px var(--intro-light);
 }
 
 .header-end {
@@ -59,14 +74,14 @@
 }
 
 .header-end a {
-  color: var(--ink-2);
+  color: color-mix(in srgb, var(--intro-ink) 62%, var(--intro-bg));
   text-decoration: none;
   border-bottom: 1px solid var(--border);
 }
 
 .header-end a:hover {
-  color: var(--ink);
-  border-bottom-color: var(--blue);
+  color: var(--intro-light);
+  border-bottom-color: var(--intro-light);
 }
 
 .badge {
@@ -94,37 +109,69 @@
 .tabs {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-xs);
-  padding: var(--space-xs);
-  background: var(--glass);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-pill);
-  backdrop-filter: blur(12px);
+  gap: var(--space-sm);
 }
 
-.tab {
-  padding: var(--space-xs) var(--space-3) var(--space-xs) var(--space-3);
-  border: 0;
-  border-radius: var(--radius-pill);
-  background: transparent;
-  color: var(--ink-2);
+/*
+ * The buttons of the navbar (sections, scenes, the controls of the Andes and the steps of the Recorrido): small squares with
+ * slightly rounded corners on a dark fill, like glass on hover and filled with the accent when selected (test/buttons_styles.png).
+ */
+.tab,
+.andes-nav .chip,
+.tour-steps .chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2rem;
+  min-height: 2rem;
+  padding: var(--space-xs) var(--space-sm);
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--intro-bg) 78%, transparent);
+  color: color-mix(in srgb, var(--intro-ink) 62%, var(--intro-bg));
   font: inherit;
   font-size: var(--font-sm);
+  letter-spacing: 0.01em;
+  white-space: nowrap;
   cursor: pointer;
+  backdrop-filter: blur(8px);
   transition:
     background 0.2s ease-out,
-    color 0.2s ease-out;
+    border-color 0.2s ease-out,
+    color 0.2s ease-out,
+    box-shadow 0.2s ease-out;
 }
 
-.tab:hover {
-  color: var(--ink);
-  background: var(--hover);
+.tab:hover,
+.andes-nav .chip:hover:not(:disabled),
+.tour-steps .chip:hover {
+  color: var(--intro-light);
+  background: color-mix(in srgb, var(--intro-light) 16%, transparent);
+  border-color: color-mix(in srgb, var(--intro-light) 55%, transparent);
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--intro-ink) 24%, transparent),
+    0 4px 14px color-mix(in srgb, var(--intro-black) 45%, transparent);
+  backdrop-filter: blur(14px) saturate(1.4);
 }
 
-.tab[aria-selected='true'] {
-  color: var(--ink);
-  background: var(--selected);
-  box-shadow: inset 0 0 0 1px var(--blue);
+.tab[aria-selected='true'],
+.andes-nav .chip[aria-pressed='true'],
+.tour-steps .chip[aria-pressed='true'] {
+  color: var(--intro-on-light);
+  background: var(--intro-light);
+  border-color: transparent;
+  box-shadow: 0 0 18px color-mix(in srgb, var(--intro-light) 40%, transparent);
+}
+
+.tab[aria-selected='true']:hover,
+.andes-nav .chip[aria-pressed='true']:hover,
+.tour-steps .chip[aria-pressed='true']:hover {
+  background: color-mix(in srgb, var(--intro-light) 82%, var(--intro-white));
+}
+
+.andes-nav .chip:disabled {
+  opacity: 0.4;
+  cursor: default;
 }
 
 /* ---- controls ----------------------------------------------------------------------------------------------- */
@@ -492,4 +539,81 @@ main.scene-container {
   font-size: 0.72rem;
   line-height: 1.25;
   color: var(--muted);
+}
+
+/* ---- the Recorrido: a clean page with a long play bar -------------------------------------------------------------- */
+
+.tour-bar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-md);
+  background: var(--glass);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(14px);
+}
+
+.tour-line,
+.tour-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.tour-row {
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.tour-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+.tour-play {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--ink);
+  color: var(--page);
+  cursor: pointer;
+}
+
+.tour-play svg {
+  width: 1.1rem;
+  height: 1.1rem;
+  fill: currentColor;
+}
+
+.tour-slider {
+  flex: 1;
+  width: auto;
+  min-width: 0;
+}
+
+.tour-year {
+  font-size: var(--font-lg);
+}
+
+/* in the tour the page is the title, the subtitle and the view: no carousel, no view buttons, no side panel, no story panel */
+#overlay[data-section='tour'] .carousel,
+#overlay[data-section='tour'] .viewer-bar,
+#overlay[data-section='tour'] .dash-side,
+#overlay[data-section='tour'] .dash-names,
+#overlay[data-section='tour'] .filters-slot,
+#overlay[data-section='tour'] .story {
+  display: none;
+}
+
+#overlay[data-section='tour'] .dash {
+  grid-template-columns: minmax(200px, 340px) minmax(0, 1fr);
 }

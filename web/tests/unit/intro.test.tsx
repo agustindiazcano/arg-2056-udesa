@@ -4,8 +4,18 @@ import { describe, it, expect, afterEach, vi } from 'vitest';
 import { render, screen, cleanup, fireEvent } from '@testing-library/react';
 import { Intro } from '../../src/intro/Intro';
 import { Root } from '../../src/app/Root';
+import { useStore } from '../../src/state/store';
 
-vi.mock('../../src/app/App', () => ({ App: () => <div>app view</div> }));
+vi.mock('../../src/app/App', () => ({
+  App: ({ onHome }: { onHome?: () => void }) => (
+    <div>
+      app view
+      <button type="button" onClick={onHome}>
+        volver
+      </button>
+    </div>
+  )
+}));
 
 afterEach(() => {
   cleanup();
@@ -20,6 +30,21 @@ describe('Intro', () => {
     expect(screen.getByRole('heading', { level: 1 }).textContent).toMatch(/Argentina\s*2056/);
     fireEvent.click(screen.getByRole('button', { name: 'Comenzar' }));
     expect(onStart).toHaveBeenCalledTimes(1);
+  });
+
+  it('has three buttons under Comenzar: crossing of the Andes, tour to 2056 and data dashboard, each starting in its section', () => {
+    const onStart = vi.fn();
+    render(<Intro onStart={onStart} />);
+    const group = screen.getByRole('group', { name: 'Ir directo a' });
+    expect(Array.from(group.querySelectorAll('button')).map((b) => b.textContent)).toEqual([
+      'Cruce de los Andes',
+      'Recorrido al 2056',
+      'Data Dashboard'
+    ]);
+    fireEvent.click(screen.getByRole('button', { name: 'Cruce de los Andes' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Recorrido al 2056' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Data Dashboard' }));
+    expect(onStart.mock.calls).toEqual([['andes'], ['tour'], ['dashboard']]);
   });
 
   it('draws the 24 provinces as decoration hidden from assistive technology', () => {
@@ -43,6 +68,13 @@ describe('Intro', () => {
     expect(names).toEqual(['Universidad de San Andrés', 'Data Lab UdeSA', 'Contar con Datos', 'Secretaría de Innovación']);
   });
 
+  it('Enter on a focused button leaves the choice to that button: it does not also open the Andes', () => {
+    const onStart = vi.fn();
+    render(<Intro onStart={onStart} />);
+    fireEvent.keyDown(screen.getByRole('button', { name: 'Recorrido al 2056' }), { key: 'Enter' });
+    expect(onStart).not.toHaveBeenCalled();
+  });
+
   it('starts when Enter is pressed anywhere', () => {
     const onStart = vi.fn();
     render(<Intro onStart={onStart} />);
@@ -54,21 +86,48 @@ describe('Intro', () => {
 describe('Root', () => {
   it('shows the intro first and the app after Comenzar', async () => {
     render(<Root />);
-    expect(screen.queryByText('app view')).toBeNull();
+    expect(screen.queryByText(/app view/)).toBeNull();
     fireEvent.click(await screen.findByRole('button', { name: 'Comenzar' }));
-    expect(screen.getByText('app view')).toBeTruthy();
+    expect(screen.getByText(/app view/)).toBeTruthy();
     expect(screen.queryByRole('button', { name: 'Comenzar' })).toBeNull();
+  });
+
+  it('opens the app in the section of the button that was chosen', async () => {
+    useStore.setState({ section: 'andes', scene: 'andes' });
+    render(<Root />);
+    fireEvent.click(await screen.findByRole('button', { name: 'Recorrido al 2056' }));
+    expect(screen.getByText(/app view/)).toBeTruthy();
+    expect(useStore.getState()).toMatchObject({ section: 'tour', scene: 'economy' });
+  });
+
+  it('Comenzar opens the app in the Andes', async () => {
+    useStore.setState({ section: 'dashboard', scene: 'economy' });
+    render(<Root />);
+    fireEvent.click(await screen.findByRole('button', { name: 'Comenzar' }));
+    expect(useStore.getState()).toMatchObject({ section: 'andes', scene: 'andes' });
+  });
+
+  it('goes back to the intro from the app, and the crossing starts again at 0 % with Comenzar', async () => {
+    useStore.setState({ scene: 'andes', section: 'andes', yearFloat: 1900, playing: true });
+    render(<Root />);
+    fireEvent.click(await screen.findByRole('button', { name: 'Comenzar' }));
+    fireEvent.click(screen.getByRole('button', { name: 'volver' }));
+    expect(useStore.getState().playing).toBe(false);
+    expect(screen.queryByText(/app view/)).toBeNull();
+    fireEvent.click(await screen.findByRole('button', { name: 'Comenzar' }));
+    expect(screen.getByText(/app view/)).toBeTruthy();
+    expect(useStore.getState()).toMatchObject({ scene: 'andes', yearFloat: 1810, playing: false });
   });
 
   it('goes straight to the app with ?intro=0', () => {
     window.history.pushState({}, '', '/?intro=0');
     render(<Root />);
-    expect(screen.getByText('app view')).toBeTruthy();
+    expect(screen.getByText(/app view/)).toBeTruthy();
   });
 
   it('goes straight to the app when the skip key is set in localStorage', () => {
     window.localStorage.setItem('arg2056.skipIntro', '1');
     render(<Root />);
-    expect(screen.getByText('app view')).toBeTruthy();
+    expect(screen.getByText(/app view/)).toBeTruthy();
   });
 });

@@ -1,4 +1,4 @@
-import { test, expect } from './fixtures';
+import { test, expect, openTab } from './fixtures';
 
 test('every data request carries ?v=<data_version>, and _version.json is read once without a query', async ({ page }) => {
   const dataRequests: string[] = [];
@@ -8,9 +8,9 @@ test('every data request carries ?v=<data_version>, and _version.json is read on
   });
 
   await page.goto('/');
-  await page.getByRole('tab', { name: 'Economía' }).click();
+  await openTab(page, 'Economía');
   await expect(page.getByRole('heading', { name: 'Argentina en el largo plazo', level: 1 })).toBeVisible();
-  await page.getByRole('tab', { name: 'Recursos' }).click();
+  await openTab(page, 'Recursos');
   await expect(page.getByRole('heading', { name: 'Recursos naturales', level: 1 })).toBeVisible();
 
   const version = dataRequests.filter((u) => u.startsWith('/data/_version.json'));

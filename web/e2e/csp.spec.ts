@@ -3,7 +3,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { test, expect } from '@playwright/test';
 import type { Page } from '@playwright/test';
-import { SCENE_TABS, expectSceneShown } from './fixtures';
+import { SCENE_TABS, expectSceneShown, openTab } from './fixtures';
 import { headersFor, startStaticServer } from './helpers/staticServer';
 import type { StaticServer } from './helpers/staticServer';
 import type { HeadersConfig } from '../scripts/lib/headers';
@@ -64,7 +64,7 @@ test.describe('under the Content-Security-Policy', () => {
     test(`${entry.scene} scene loads with no violation and no error`, async ({ page }) => {
       const problems = watch(page);
       await page.goto(server.url);
-      await page.getByRole('tab', { name: entry.tab }).click();
+      await openTab(page, entry.tab);
       await expectSceneShown(page, entry);
       if (entry.heading) await expect(page.getByTestId('scene').getByRole('img', { name: /.+/ }).first()).toBeVisible();
       expect(await violations(page)).toEqual([]);
@@ -93,7 +93,7 @@ test.describe('under the Content-Security-Policy', () => {
   test('a table view and the province filter work under the policy too', async ({ page }) => {
     const problems = watch(page);
     await page.goto(server.url);
-    await page.getByRole('tab', { name: 'Economía' }).click();
+    await openTab(page, 'Economía');
     await page.getByTestId('scene').getByRole('button', { name: 'Ver tabla' }).first().click();
     await expect(page.getByTestId('scene').getByRole('table').first()).toBeVisible();
     await page.getByRole('button', { name: /^Provincia:/ }).click();

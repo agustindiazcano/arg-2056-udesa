@@ -1,4 +1,4 @@
-import { test, expect, SCENE_TABS, releaseFocus } from './fixtures';
+import { test, expect, SCENE_TABS, releaseFocus, openTab } from './fixtures';
 import { SPEEDS } from '../src/state/reducer';
 
 // The arrow keys move between scenes (KEY_MAP), not the year: the year moves with Space (play) or the store.
@@ -76,7 +76,7 @@ test.describe('keyboard', () => {
   });
 
   test('a slider keeps the arrow keys: the value changes and the scene does not', async ({ page }) => {
-    await page.getByRole('tab', { name: 'Simulador' }).click();
+    await openTab(page, 'Simulador');
     await expect(page.getByRole('heading', { name: 'Simulador', level: 1 })).toBeVisible();
 
     const year = page.getByTestId('hud-year');

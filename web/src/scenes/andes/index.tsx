@@ -161,46 +161,48 @@ export default function Scene() {
         <p>El cruce de 1817 sobre el terreno</p>
       </header>
 
-      <div className="andes-controls andes-glass" role="group" aria-label="Controles de la escena">
-        <button type="button" className="chip" aria-pressed={view === 'map'} onClick={() => setView('map')}>
-          Mapa 3D
-        </button>
-        <button type="button" className="chip" aria-pressed={view === 'table'} onClick={() => setView('table')}>
-          Tabla de eventos
-        </button>
-        {CAMERA_BUTTONS.map(({ mode, text }) => (
-          <button
-            key={mode}
-            type="button"
-            className="chip"
-            aria-pressed={camera === mode}
-            disabled={view !== 'map'}
-            onClick={() => setCamera(camera === mode ? 'free' : mode)}
-          >
-            {text}
+      <SlotPortal slot="nav">
+        <div className="andes-nav" role="group" aria-label="Controles de la escena">
+          <button type="button" className="chip" aria-pressed={view === 'map'} onClick={() => setView('map')}>
+            Mapa 3D
           </button>
-        ))}
-        <button type="button" className="chip" disabled={view !== 'map'} onClick={() => setCloseUp(closeUp + 1)}>
-          Ver de cerca
-        </button>
-        <button type="button" className="chip" aria-pressed={listOpen} onClick={() => setListOpen(!listOpen)}>
-          Eventos
-        </button>
-        <GraphicsMenu
-          toggles={toggles}
-          onToggle={(key, value) => {
-            const next = { ...toggles, [key]: value };
-            setToggles(next);
-            saveToggles(next);
-          }}
-          tier={tier}
-          choice={tierChoice}
-          onChoice={(choice) => {
-            setTierChoice(choice);
-            if (quality) quality.setTier(choice === 'auto' ? qualityTier(quality.caps) : choice);
-          }}
-        />
-      </div>
+          <button type="button" className="chip" aria-pressed={view === 'table'} onClick={() => setView('table')}>
+            Tabla de eventos
+          </button>
+          {CAMERA_BUTTONS.map(({ mode, text }) => (
+            <button
+              key={mode}
+              type="button"
+              className="chip"
+              aria-pressed={camera === mode}
+              disabled={view !== 'map'}
+              onClick={() => setCamera(camera === mode ? 'free' : mode)}
+            >
+              {text}
+            </button>
+          ))}
+          <button type="button" className="chip" disabled={view !== 'map'} onClick={() => setCloseUp(closeUp + 1)}>
+            Ver de cerca
+          </button>
+          <button type="button" className="chip" aria-pressed={listOpen} onClick={() => setListOpen(!listOpen)}>
+            Eventos
+          </button>
+          <GraphicsMenu
+            toggles={toggles}
+            onToggle={(key, value) => {
+              const next = { ...toggles, [key]: value };
+              setToggles(next);
+              saveToggles(next);
+            }}
+            tier={tier}
+            choice={tierChoice}
+            onChoice={(choice) => {
+              setTierChoice(choice);
+              if (quality) quality.setTier(choice === 'auto' ? qualityTier(quality.caps) : choice);
+            }}
+          />
+        </div>
+      </SlotPortal>
 
       <SlotPortal slot="progress">
         <AndesProgress percent={percent} onChange={(p) => dispatch({ type: 'setYear', year: pace.yearAt(p / 100) })} />
