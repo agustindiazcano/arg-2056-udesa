@@ -118,9 +118,9 @@ const mule: Part[] = [
 
 const pennant: Part[] = [
   { size: [0.004, 0.1, 0.004], at: [0.03, 0.24, -0.01], color: HAT },
-  // two equal halves: celeste above, white below
-  { size: [0.002, 0.015, 0.05], at: [0.03, 0.2775, -0.037], color: CELESTE },
-  { size: [0.002, 0.015, 0.05], at: [0.03, 0.2625, -0.037], color: PENNANT }
+  // two equal halves: white above, celeste below
+  { size: [0.002, 0.015, 0.05], at: [0.03, 0.2775, -0.037], color: PENNANT },
+  { size: [0.002, 0.015, 0.05], at: [0.03, 0.2625, -0.037], color: CELESTE }
 ];
 
 export const FIGURE_PARTS: Record<FigureKind, readonly Part[]> = {

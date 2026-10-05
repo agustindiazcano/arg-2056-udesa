@@ -395,7 +395,7 @@ describe('trousers and flag', () => {
     for (const p of rideLegs('leader')) expect(luminance(p.color)).toBeGreaterThan(0.75);
   });
 
-  it('has a flag in two equal halves, celeste above and white below', () => {
+  it('has a flag in two equal halves, white above and celeste below', () => {
     const halves = FIGURE_PARTS.leader.filter((p) => p.size[0] <= 0.004 && p.size[2] >= 0.04).sort((a, b) => b.at[1] - a.at[1]);
     expect(halves).toHaveLength(2);
     const top = halves[0]!;
@@ -403,8 +403,8 @@ describe('trousers and flag', () => {
     expect(top.size[1]).toBeCloseTo(bottom.size[1], 9);
     expect(top.size[2]).toBeCloseTo(bottom.size[2], 9);
     expect(top.at[1] - bottom.at[1]).toBeCloseTo(top.size[1], 9); // one right on top of the other
-    expect(isCeleste(top.color)).toBe(true);
-    expect(luminance(bottom.color)).toBeGreaterThan(0.9);
+    expect(luminance(top.color)).toBeGreaterThan(0.9);
+    expect(isCeleste(bottom.color)).toBe(true);
   });
 });
 
