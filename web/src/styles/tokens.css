@@ -2,6 +2,17 @@
   /* Colors */
   --color-focus: #ffc107;
 
+  /* Intro screen (src/intro/intro.css) */
+  --intro-bg: #05060b;
+  --intro-light: #9a9679; /* rgb(154, 150, 121): lit provinces, title, button */
+  --intro-ink: #e8ebf7;
+  --intro-on-light: #14080a;
+  --intro-line-tint: #aab6e8;
+  --intro-grid: rgba(170, 182, 232, 0.24);
+  --intro-edge: rgba(0, 0, 0, 0.55);
+  --intro-black: #000000;
+  --intro-white: #ffffff;
+
   /* Design Tokens */
   --page: #0d0d0d;
   --surface: #1a1a19;

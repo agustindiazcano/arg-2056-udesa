@@ -1,14 +1,10 @@
 /* Intro screen. Adapted from test/argentina-2056-intro.html; system fonts only (the CSP forbids web fonts). */
 .intro {
-  --intro-bg: #05060b;
-  --intro-light: #9a9679; /* rgb(154, 150, 121) */
-  --intro-ink: #e8ebf7;
   --intro-ink-dim: color-mix(in srgb, var(--intro-ink) 62%, var(--intro-bg));
-  --intro-prov: color-mix(in srgb, var(--intro-bg), #fff 7%);
-  --intro-line: color-mix(in srgb, var(--intro-bg), #aab6e8 52%);
-  --intro-side-top: color-mix(in srgb, var(--intro-bg), #fff 6%);
-  --intro-side-bot: color-mix(in srgb, var(--intro-bg), #000 38%);
-  --intro-grid: rgba(170, 182, 232, 0.24);
+  --intro-prov: color-mix(in srgb, var(--intro-bg), var(--intro-white) 7%);
+  --intro-line: color-mix(in srgb, var(--intro-bg), var(--intro-line-tint) 52%);
+  --intro-side-top: color-mix(in srgb, var(--intro-bg), var(--intro-white) 6%);
+  --intro-side-bot: color-mix(in srgb, var(--intro-bg), var(--intro-black) 38%);
   --ar: 0.4895;
   /* the whole composition lives in a frame with the proportions of the reference (1398 x 842), centered; everything is sized from it, so a laptop and a large monitor look the same */
   --fw: min(94vw, calc(94vh * 1.66));
@@ -85,7 +81,7 @@
   transform: translate3d(-50%, -50%, -3px) scale(0.5);
   background-image: linear-gradient(var(--intro-grid) 1px, transparent 1px), linear-gradient(90deg, var(--intro-grid) 1px, transparent 1px);
   background-size: calc(var(--mh) * 0.035) calc(var(--mh) * 0.035);
-  mask-image: radial-gradient(closest-side, #000 45%, transparent 100%);
+  mask-image: radial-gradient(closest-side, var(--intro-black) 45%, transparent 100%);
 }
 .intro[data-tilted='true'] .intro-floor {
   opacity: 1;
@@ -160,7 +156,7 @@
 }
 .intro-prov.lit .intro-layer.top use {
   fill: var(--intro-light);
-  stroke: color-mix(in srgb, var(--intro-light) 55%, #fff);
+  stroke: color-mix(in srgb, var(--intro-light) 55%, var(--intro-white));
 }
 .intro-prov.lit .intro-layer.side {
   --sf: color-mix(in srgb, var(--intro-light) calc(8% + var(--t) * 42%), var(--intro-side-bot));
@@ -170,7 +166,7 @@
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background: radial-gradient(ellipse at 50% 48%, transparent 45%, rgba(0, 0, 0, 0.55) 100%);
+  background: radial-gradient(ellipse at 50% 48%, transparent 45%, var(--intro-edge) 100%);
 }
 
 .intro-copy {
@@ -218,7 +214,7 @@
   font-weight: 700;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: #14080a;
+  color: var(--intro-on-light);
   background: var(--intro-light);
   border: 0;
   border-radius: 999px;
@@ -230,7 +226,7 @@
   box-shadow: 0 0 36px color-mix(in srgb, var(--intro-light) 70%, transparent);
 }
 .intro-start:focus-visible {
-  outline: 2px solid var(--color-focus, #ffc107);
+  outline: 2px solid var(--color-focus);
   outline-offset: 4px;
 }
 
