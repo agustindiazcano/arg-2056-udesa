@@ -10,11 +10,13 @@
   --intro-side-bot: color-mix(in srgb, var(--intro-bg), #000 38%);
   --intro-grid: rgba(170, 182, 232, 0.24);
   --ar: 0.4895;
-  /* 1vw on a 16:9 screen: the whole layout scales with it, so a laptop and a large monitor look the same */
-  --u: min(1vw, 1.7778vh);
+  /* the whole composition lives in a frame with the proportions of the reference (1398 x 842), centered; everything is sized from it, so a laptop and a large monitor look the same */
+  --fw: min(94vw, calc(94vh * 1.66));
+  --fh: calc(var(--fw) / 1.66);
+  --u: calc(var(--fw) / 100);
   --dur: 1250ms; /* 1000 ms at speed 0.8 */
-  --mh: min(calc(100dvh - 6vh), calc((100vw - 32px) / var(--ar))); /* height of the map */
-  --zoom: 1.45; /* the map fills the screen once tilted */
+  --mh: min(calc(var(--fh) * 0.86), calc((var(--fw) - 32px) / var(--ar))); /* height of the map */
+  --zoom: 2; /* the map fills the screen once tilted */
   --lift: calc(var(--mh) * 0.003);
   --step: 0px;
   position: fixed;
@@ -28,6 +30,14 @@
 .intro[data-tilted='true'] {
   --lift: calc(var(--mh) * 0.04);
   --step: calc(var(--mh) * 0.007);
+}
+.intro-frame {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: var(--fw);
+  height: var(--fh);
+  transform: translate(-50%, -50%);
 }
 .intro-defs {
   position: absolute;
@@ -56,8 +66,7 @@
   transition: transform 0.95s cubic-bezier(0.22, 0.8, 0.24, 1);
 }
 .intro[data-tilted='true'] .intro-cam {
-  transform: scale(var(--zoom)) rotateX(54deg) rotateZ(55deg);
-  animation: intro-spin 90s linear 1s infinite;
+  transform: translateX(calc(var(--fw) * 0.12)) scale(var(--zoom)) rotateX(54deg) rotateZ(36deg);
 }
 .intro-map {
   position: absolute;
@@ -168,8 +177,8 @@
 .intro-copy {
   position: absolute;
   z-index: 5;
-  left: calc(var(--u) * 3);
-  top: calc(var(--u) * 3.5);
+  left: 0;
+  top: 0;
   max-width: calc(var(--u) * 40);
   opacity: 0;
   transition: opacity 0.9s 0.5s;
@@ -227,18 +236,14 @@
 }
 
 @keyframes intro-appear { from { opacity: 0; translate: 0 0 140px; } to { opacity: 1; translate: 0 0 0; } }
-@keyframes intro-spin {
-  from { transform: scale(var(--zoom)) rotateX(54deg) rotateZ(55deg); }
-  to { transform: scale(var(--zoom)) rotateX(54deg) rotateZ(415deg); }
-}
 
 @media (max-aspect-ratio: 3/2) {
-  .intro { --zoom: 1.15; }
+  .intro { --zoom: 1.5; }
 }
 @media (max-width: 700px) {
   .intro-copy { top: 14vh; transform: none; text-align: center; left: 0; right: 0; margin-inline: auto; }
   .intro-cam { transform: scale(0.9) rotateX(0deg) rotateZ(0deg); }
-  .intro[data-tilted='true'] .intro-cam { transform: translateY(18vh) scale(0.95) rotateX(54deg) rotateZ(55deg); animation: none; }
+  .intro[data-tilted='true'] .intro-cam { transform: translateY(18vh) scale(0.95) rotateX(54deg) rotateZ(36deg); animation: none; }
 }
 @media (prefers-reduced-motion: reduce) {
   .intro *, .intro *::before { animation: none !important; transition: none !important; }

@@ -90,6 +90,7 @@ export function Intro({ onStart }: Props) {
         </defs>
       </svg>
 
+      <div className="intro-frame">
       <div className="intro-stage" aria-hidden="true">
         <div className="intro-cam">
           <div className="intro-floor" />
@@ -116,7 +117,6 @@ export function Intro({ onStart }: Props) {
           </div>
         </div>
       </div>
-      <div className="intro-vignette" aria-hidden="true" />
 
       <main className="intro-copy">
         <h1 className="intro-title">
@@ -127,6 +127,8 @@ export function Intro({ onStart }: Props) {
           Comenzar
         </button>
       </main>
+      </div>
+      <div className="intro-vignette" aria-hidden="true" />
     </div>
   );
 }
