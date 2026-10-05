@@ -65,7 +65,7 @@ describe('columnSlots', () => {
 
 describe('gaitAt', () => {
   it('moves the two legs in opposite directions and repeats every phase of 1', () => {
-    for (const kind of ['foot', 'rider', 'mule', 'leader'] as const) {
+    for (const kind of ['foot', 'rider', 'rider_black', 'mule', 'leader'] as const) {
       const a = gaitAt(kind, 0.3);
       expect(a.swing).toBeCloseTo(gaitAt(kind, 1.3).swing, 6);
       expect(Math.abs(a.swing)).toBeGreaterThan(0);
@@ -171,7 +171,7 @@ describe('sampleAlongExtended', () => {
 });
 
 describe('figure parts', () => {
-  const kinds = ['leader', 'foot', 'rider', 'mule'] as const;
+  const kinds = ['leader', 'foot', 'rider', 'rider_black', 'mule'] as const;
 
   it('every kind has parts with a real size', () => {
     for (const kind of kinds) {
@@ -210,6 +210,119 @@ describe('figure parts', () => {
     const slots = columnSlots(10);
     const total = slots.reduce((n, s) => n + FIGURE_PARTS[s.kind].length, 0);
     expect(instanceCount(slots)).toBe(total);
+  });
+});
+
+const luminance = (hex: string) => {
+  const n = parseInt(hex.slice(1), 16);
+  return (0.2126 * ((n >> 16) & 255) + 0.7152 * ((n >> 8) & 255) + 0.0722 * (n & 255)) / 255;
+};
+/** the body of the horse: the longest box of the figure */
+const horseBody = (kind: 'leader' | 'rider' | 'rider_black') => [...FIGURE_PARTS[kind]].sort((a, b) => b.size[2] - a.size[2])[0]!;
+
+describe('horses', () => {
+  it('has a white horse for the leader, a brown one and a black one for the riders', () => {
+    expect(luminance(horseBody('leader').color)).toBeGreaterThan(0.75);
+    const brown = horseBody('rider').color;
+    expect(luminance(brown)).toBeGreaterThan(0.12);
+    expect(luminance(brown)).toBeLessThan(0.4);
+    expect(luminance(horseBody('rider_black').color)).toBeLessThan(0.1);
+  });
+
+  it('puts both brown and black riders in the column, and only one white horse', () => {
+    const kinds = columnSlots(100).map((s) => s.kind);
+    expect(kinds.filter((k) => k === 'rider').length).toBeGreaterThan(2);
+    expect(kinds.filter((k) => k === 'rider_black').length).toBeGreaterThan(2);
+    expect(kinds.filter((k) => k === 'leader')).toHaveLength(1);
+  });
+
+  it('moves the legs of the black horse like the others', () => {
+    const legs = FIGURE_PARTS.rider_black.filter((p) => p.leg);
+    expect(legs).toHaveLength(4);
+    expect(gaitAt('rider_black', 0.3).swing).not.toBe(0);
+  });
+});
+
+describe('the leader', () => {
+  const hat = (kind: 'leader' | 'rider') => FIGURE_PARTS[kind].find((p) => p.at[1] > 0.2 && p.size[2] > 0.03 && !p.leg && p.size[1] < 0.05 && p.at[2] < 0.05);
+
+  it('wears a bicorn worn front to back (long along the direction of travel), unlike the shako of the others', () => {
+    const bicorn = hat('leader')!;
+    expect(bicorn).toBeDefined();
+    expect(bicorn.size[2]).toBeGreaterThan(bicorn.size[0] * 2.5);
+  });
+
+  it('is the only rider with that hat', () => {
+    expect(hat('rider')).toBeUndefined();
+  });
+});
+
+describe('the foot soldier', () => {
+  const foot = FIGURE_PARTS.foot;
+  const rifle = foot.filter((p) => Math.max(...p.size) >= 0.1 && Math.min(...p.size) >= 0.007);
+
+  it('carries a rifle big enough to see from the close camera', () => {
+    expect(rifle.length).toBeGreaterThan(0);
+  });
+
+  it('has two arms and only one of them swings (the other holds the rifle)', () => {
+    const arms = foot.filter((p) => p.arm);
+    expect(arms).toHaveLength(1);
+    const holding = foot.filter((p) => !p.arm && !p.leg && p.size[1] >= 0.03 && p.size[0] <= 0.014 && p.size[2] <= 0.014 && p.at[1] > 0.06);
+    expect(holding.length).toBeGreaterThan(0);
+  });
+
+  it('swings the arm against the leg on its own side', () => {
+    const arm = foot.find((p) => p.arm)!;
+    const sameSideLeg = foot.find((p) => p.leg && Math.sign(p.at[0]) === Math.sign(arm.at[0]))!;
+    expect(arm.arm).toBe(-sameSideLeg.leg!);
+  });
+
+  it('keeps the arm out of the legs rule: legs stay balanced', () => {
+    const legs = foot.filter((p) => p.leg);
+    expect(legs.filter((p) => p.leg === 1)).toHaveLength(1);
+    expect(legs.filter((p) => p.leg === -1)).toHaveLength(1);
+  });
+});
+
+describe('a natural column', () => {
+  it('is more than the old one: a force of 5000 men is 100 figures or more', () => {
+    expect(figureCount(5000, 1).count).toBeGreaterThanOrEqual(100);
+    expect(DEFAULT_FIGURES).toBeGreaterThanOrEqual(48);
+  });
+
+  it('is not a grid: laterals and distances vary, but stay deterministic and never behind the leader', () => {
+    const slots = columnSlots(90);
+    expect(new Set(slots.map((s) => s.lateral.toFixed(3))).size).toBeGreaterThan(20);
+    expect(new Set(slots.map((s) => s.along.toFixed(3))).size).toBeGreaterThan(30);
+    expect(columnSlots(90)).toEqual(slots);
+    for (const s of slots.slice(1)) expect(s.along).toBeGreaterThan(0);
+  });
+
+  it('keeps the column on the road: nobody strays further than three abreast plus a little', () => {
+    for (const s of columnSlots(150)) expect(Math.abs(s.lateral)).toBeLessThan(0.2);
+  });
+
+  it('gives each figure its own size and shade, within a few percent, and the leader none', () => {
+    const slots = columnSlots(60);
+    expect(slots[0]).toMatchObject({ scale: 1, tint: 0 });
+    for (const s of slots) {
+      expect(s.scale).toBeGreaterThan(0.9);
+      expect(s.scale).toBeLessThan(1.1);
+      expect(Math.abs(s.tint)).toBeLessThanOrEqual(0.05);
+    }
+    expect(new Set(slots.map((s) => s.scale.toFixed(3))).size).toBeGreaterThan(10);
+  });
+
+  it('does not stack figures: no two are closer than the body of a horse', () => {
+    const slots = columnSlots(150);
+    let closest = Infinity;
+    for (let i = 0; i < slots.length; i += 1) {
+      for (let j = i + 1; j < slots.length; j += 1) {
+        closest = Math.min(closest, Math.hypot(slots[i]!.along - slots[j]!.along, slots[i]!.lateral - slots[j]!.lateral));
+      }
+    }
+    expect(closest).toBeGreaterThan(0.05);
   });
 });
 
