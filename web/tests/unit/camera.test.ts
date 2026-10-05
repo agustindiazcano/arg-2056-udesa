@@ -29,6 +29,20 @@ describe('cameraLimits with its own closest zoom', () => {
   });
 });
 
+describe('cameraLimits with its own highest polar angle', () => {
+  it('allows a scene to look up past the horizon, and keeps the default for the others', () => {
+    expect(cameraLimits(start(), box, 0.05, 1.95).maxPhi).toBeCloseTo(1.95, 9);
+    expect(cameraLimits(start(), box).maxPhi).toBe(PHI_MAX);
+  });
+
+  it('lets a drag go as far as that angle', () => {
+    const l = cameraLimits(start(), box, 0.25, 1.95);
+    const s = start();
+    orbit(s, 0, -10000, l);
+    expect(s.phi).toBeCloseTo(1.95, 9);
+  });
+});
+
 describe('cameraLimits', () => {
   it('allows 0.25 to 3 times the start radius and the wide polar range', () => {
     expect(limits.minRadius).toBeCloseTo(2.5, 10);

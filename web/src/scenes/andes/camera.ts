@@ -90,3 +90,57 @@ export function clearEye(
   }
   return y;
 }
+
+/** Where to look from `eye`: the target, or, with the camera past the horizon (`phi` above a right angle), as far above the horizon as it is past it. */
+export function lookPoint(
+  eye: { x: number; y: number; z: number },
+  target: { x: number; y: number; z: number },
+  phi: number
+): { x: number; y: number; z: number } {
+  if (phi <= Math.PI / 2) return { x: target.x, y: target.y, z: target.z };
+  const dx = target.x - eye.x;
+  const dy = target.y - eye.y;
+  const dz = target.z - eye.z;
+  const distance = Math.hypot(dx, dy, dz);
+  const flat = Math.hypot(dx, dz);
+  const hx = flat > 1e-9 ? dx / flat : 0;
+  const hz = flat > 1e-9 ? dz / flat : -1;
+  const pitch = phi - Math.PI / 2;
+  return {
+    x: eye.x + hx * Math.cos(pitch) * distance,
+    y: eye.y + Math.sin(pitch) * distance,
+    z: eye.z + hz * Math.cos(pitch) * distance
+  };
+}
+
+/** What the user has done to the cinematic camera: a turn and a tilt in radians, and a zoom as a factor of the distance. */
+export interface Steer {
+  theta: number;
+  phi: number;
+  zoom: number;
+}
+export const NO_STEER: Steer = { theta: 0, phi: 0, zoom: 1 };
+
+/** The steer after the user moved the camera from where it was `left` to where it is `now` (the cinematic camera writes the rest). */
+export function addSteer(steer: Steer, left: CameraState, now: CameraState): Steer {
+  let dTheta = (now.theta - left.theta) % TWO_PI;
+  if (dTheta > Math.PI) dTheta -= TWO_PI;
+  if (dTheta < -Math.PI) dTheta += TWO_PI;
+  return {
+    theta: steer.theta + dTheta,
+    phi: steer.phi + (now.phi - left.phi),
+    zoom: left.radius > 0 ? steer.zoom * (now.radius / left.radius) : steer.zoom
+  };
+}
+
+/** Where the camera ends up: the cinematic pose with the steer of the user on top; the target is the cinematic one. */
+export function steered(base: CameraState, steer: Steer, phiMax: number): CameraState {
+  return {
+    x: base.x,
+    y: base.y,
+    z: base.z,
+    theta: base.theta + steer.theta,
+    phi: Math.min(phiMax, Math.max(0.05, base.phi + steer.phi)),
+    radius: base.radius * steer.zoom
+  };
+}

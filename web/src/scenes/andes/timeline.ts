@@ -100,3 +100,44 @@ export function campaignDay(yearFloat: number, lastDay: number): number {
   const t = (yearFloat - YEAR_MIN) / (YEAR_MAX - YEAR_MIN);
   return Math.min(1, Math.max(0, t)) * lastDay;
 }
+
+/** Altitude (m) from which the army dwells longer on the screen, and where the dwell is at its most; `DWELL_MAX` times the plain pace. */
+const DWELL_FROM = 2200;
+const DWELL_FULL = 3600;
+const DWELL_MAX = 2.5;
+
+/** How much of the clock a day of the campaign gets at this altitude, relative to a day on low ground (1): the high pass, the most epic part, lasts longer. */
+export function dwellWeight(altitudeM: number | null): number {
+  if (altitudeM === null) return 1;
+  const t = Math.min(1, Math.max(0, (altitudeM - DWELL_FROM) / (DWELL_FULL - DWELL_FROM)));
+  return 1 + (DWELL_MAX - 1) * t * t * (3 - 2 * t);
+}
+
+/**
+ * The clock of the scene: the shared clock (the years of the app) mapped onto the days of the campaign like `campaignDay`, but a day
+ * on high ground (`dwellWeight`) takes more of the clock than one in the valley. The whole campaign still takes the whole clock;
+ * only its pacing changes. Built once per route: the returned function is cheap to call every frame.
+ */
+export function paceClock(route: Route, steps = 480): (yearFloat: number) => number {
+  const last = route.lastDay;
+  if (route.points.length === 0 || last <= 0) return () => 0;
+  const cumulative = new Float64Array(steps + 1);
+  for (let i = 0; i < steps; i += 1) {
+    const mid = (last * (i + 0.5)) / steps;
+    cumulative[i + 1] = cumulative[i]! + dwellWeight(positionAt(route, mid)?.altitudeM ?? null);
+  }
+  const total = cumulative[steps]!;
+  return (yearFloat) => {
+    const t = Math.min(1, Math.max(0, (yearFloat - YEAR_MIN) / (YEAR_MAX - YEAR_MIN))) * total;
+    let lo = 0;
+    let hi = steps;
+    while (hi - lo > 1) {
+      const m = (lo + hi) >> 1;
+      if (cumulative[m]! <= t) lo = m;
+      else hi = m;
+    }
+    const span = cumulative[lo + 1]! - cumulative[lo]!;
+    const within = span === 0 ? 0 : (t - cumulative[lo]!) / span;
+    return Math.min(last, ((lo + within) / steps) * last);
+  };
+}

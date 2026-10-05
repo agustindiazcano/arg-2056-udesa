@@ -14,7 +14,7 @@ import { startingMen } from './column.js';
 import { figuresNote, forceText, parseAndesEvents } from './data.js';
 import type { AndesEvent } from './data.js';
 import { EventList, EventPanel } from './Panel.js';
-import { buildRoute, campaignDay, positionAt } from './timeline.js';
+import { buildRoute, paceClock, positionAt } from './timeline.js';
 import { useAndesTerrain } from './useAndesTerrain.js';
 
 // Three.js lives in its own chunk: it loads only when the scene is opened.
@@ -44,7 +44,9 @@ export default function Scene() {
   const terrainState = useAndesTerrain(status === 'success' ? route.points : null);
   const quality = useQualityOptional();
   const yearFloat = useStore((s) => s.yearFloat);
-  const day = campaignDay(yearFloat, route.lastDay);
+  // the high pass, the most epic part, gets more of the clock than the valleys (the whole campaign still takes the whole clock)
+  const clock = useMemo(() => paceClock(route), [route]);
+  const day = clock(yearFloat);
 
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [view, setView] = useState<'map' | 'table'>('map');

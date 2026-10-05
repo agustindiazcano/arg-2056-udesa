@@ -52,9 +52,13 @@ export function copyCamera(s: CameraState): CameraState {
   return { x: s.x, y: s.y, z: s.z, theta: s.theta, phi: s.phi, radius: s.radius };
 }
 
-/** The limits for a view that starts at `start`: the zoom range from the start radius and the target box. `zoomMin` is the closest zoom as a fraction of the start radius (a scene with something small to look at asks for less). */
-export function cameraLimits(start: CameraState, box: TargetBox, zoomMin: number = ZOOM_MIN): CameraLimits {
-  return { start: copyCamera(start), minRadius: start.radius * zoomMin, maxRadius: start.radius * ZOOM_MAX, minPhi: PHI_MIN, maxPhi: PHI_MAX, box };
+/**
+ * The limits for a view that starts at `start`: the zoom range from the start radius and the target box. `zoomMin` is the closest zoom
+ * as a fraction of the start radius (a scene with something small to look at asks for less); `phiMax` is the lowest the camera may go
+ * (a scene that lets the camera look up at the sky asks for more than the horizon).
+ */
+export function cameraLimits(start: CameraState, box: TargetBox, zoomMin: number = ZOOM_MIN, phiMax: number = PHI_MAX): CameraLimits {
+  return { start: copyCamera(start), minRadius: start.radius * zoomMin, maxRadius: start.radius * ZOOM_MAX, minPhi: PHI_MIN, maxPhi: phiMax, box };
 }
 
 const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v));

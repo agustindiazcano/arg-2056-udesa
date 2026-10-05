@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import { cinePose, clearEye } from '../../src/scenes/andes/camera';
 import { FIGURE_NEAR } from '../../src/scenes/andes/column';
-import { buildPath } from '../../src/scenes/andes/pathAlong';
+import { buildPath, sampleAlongExtended } from '../../src/scenes/andes/pathAlong';
 import { corridorFactor, hash2, noise2, reliefOffset, ridged, terrainColor } from '../../src/scenes/andes/relief';
-import { buildChunk, createField, treePlacements } from '../../src/scenes/andes/reliefField';
+import { OPENING_LENGTH, buildChunk, createField, treePlacements } from '../../src/scenes/andes/reliefField';
 import { sceneScale, toScene } from '../../src/scenes/andes/terrainMesh';
 import { syntheticTerrain } from '../../src/terrain/synthetic';
 
@@ -132,6 +132,53 @@ describe('relief field', () => {
   it('measures the distance to the route on the ground plane', () => {
     expect(field.distanceToRoute(routePoints[0]!, routePoints[2]!)).toBeCloseTo(0, 6);
     expect(field.distanceToRoute(routePoints[0]! - 2, routePoints[2]!)).toBeGreaterThanOrEqual(1.9);
+  });
+});
+
+describe('the valley where the army starts', () => {
+  const at = { x: 0, y: 0, z: 0, heading: 0 };
+  /** a point `back` scene units behind the start of the route (on its straight extension) and `side` to one side of it */
+  const behind = (back: number, side: number) => {
+    sampleAlongExtended(path, -back, at);
+    return { x: at.x + Math.cos(at.heading) * side, z: at.z - Math.sin(at.heading) * side };
+  };
+
+  it('has an opening that starts at the first point of the route and runs back along the column', () => {
+    expect(field.distanceToOpening(routePoints[0]!, routePoints[2]!)).toBeCloseTo(0, 6);
+    const end = behind(OPENING_LENGTH, 0);
+    expect(field.distanceToOpening(end.x, end.z)).toBeCloseTo(0, 6);
+    const far = behind(OPENING_LENGTH + 5, 0);
+    expect(field.distanceToOpening(far.x, far.z)).toBeGreaterThan(4.9);
+  });
+
+  it('is long enough for the whole column and the camera behind it', () => {
+    expect(OPENING_LENGTH).toBeGreaterThanOrEqual(7);
+  });
+
+  it('is open ground: no relief along the column or within a few units around the start', () => {
+    for (let back = 0; back <= OPENING_LENGTH; back += 0.5) {
+      for (const side of [-1, 0, 1]) {
+        const p = behind(back, side);
+        expect(Math.abs(field.height(p.x, p.z) - field.baseHeight(p.x, p.z))).toBeLessThan(1e-3);
+      }
+    }
+  });
+
+  it('closes into mountains further away, so it is a valley and not a plain without end', () => {
+    let relief = 0;
+    for (let side = 4; side <= 9; side += 0.5) {
+      for (let back = 0; back <= OPENING_LENGTH; back += 1) {
+        const p = behind(back, side);
+        relief = Math.max(relief, Math.abs(field.height(p.x, p.z) - field.baseHeight(p.x, p.z)));
+      }
+    }
+    expect(relief).toBeGreaterThan(0.05);
+  });
+
+  it('does not change the ground away from the start', () => {
+    const x = routePoints[12]! + 3;
+    const z = routePoints[14]! + 3;
+    expect(Math.abs(field.height(x, z) - field.baseHeight(x, z))).toBeGreaterThan(0.01);
   });
 });
 

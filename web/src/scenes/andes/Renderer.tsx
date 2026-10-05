@@ -4,8 +4,10 @@ import {
   BackSide,
   BufferAttribute,
   BufferGeometry,
+  CanvasTexture,
   Color,
   DirectionalLight,
+  DynamicDrawUsage,
   Float32BufferAttribute,
   Fog,
   Line,
@@ -24,13 +26,15 @@ import { useQualityOptional } from '../../runtime/CapabilityProvider';
 import { QUALITY_PRESETS } from '../../runtime/capabilities';
 import { useReducedMotion } from '../../runtime/useReducedMotion';
 import { SEQUENTIAL_BLUE, SKY_RAMP, TERRAIN_RAMP, tokens } from '../../styles/tokens';
+import { PHI_MAX, copyCamera } from '../../charts3d/camera';
+import type { CameraState } from '../../charts3d/camera';
 import { createStage } from '../../three/stage';
 import type { Stage } from '../../three/stage';
 import { useCameraNav } from '../../three/useCameraNav';
 import { sampleElevation } from '../../terrain/decode';
 import type { Terrain } from '../../types/terrain';
 import { NavControls } from '../../ui/NavControls';
-import { battlePose, cinePose, clearEye, closePose, followPose, overviewPose } from './camera';
+import { NO_STEER, addSteer, battlePose, cinePose, clearEye, closePose, followPose, lookPoint, overviewPose, steered } from './camera';
 import { figureCount, lodFor, startingMen } from './column';
 import { createDetailTerrain } from './detail3d';
 import { createFigureColumn } from './figures3d';
@@ -38,6 +42,7 @@ import { arcAt, buildPath, sampleAlong, sampleAlongExtended } from './pathAlong'
 import type { PathSample } from './pathAlong';
 import { createField } from './reliefField';
 import { skyColorHex, starPositions } from './sky';
+import { snowAmount, snowCount, snowField, stepSnow } from './snow';
 import { buildTerrainMesh, sceneScale, toScene } from './terrainMesh';
 import { positionAt } from './timeline';
 import type { Route } from './timeline';
@@ -73,6 +78,17 @@ const ROUTE_SAMPLES = 160;
 const CLICK_SLOP = 4;
 /** the closest zoom of this scene, as a fraction of the start radius: close enough to see the column of figures */
 const ZOOM_MIN_ANDES = 0.04;
+/** how low the camera may go, in radians from the top: past the horizon (1.57) it looks up, so the sky shows; far from the army it stays above it */
+const PHI_MAX_ANDES = 1.95;
+/** the snowstorm up close: the box of flakes around the camera (width and height, scene units), the wind, and the closer fog at full snow */
+const SNOW_SIZE = 4;
+const SNOW_HEIGHT = 2.5;
+const SNOW_WIND = { x: -0.5, z: 0.2 };
+const SNOW_FOG: [number, number] = [0.8, 4.5];
+/** in the storm the haze turns grey-blue and the sun dims, as much as the snow is heavy */
+const STORM_HAZE = new Color('#9fb0c4');
+const STORM_HAZE_SHARE = 0.65;
+const STORM_DIM = 0.45;
 /** the sky dome around the origin: the camera stays within ~100 units of it and the far plane is 300 */
 const SKY_RADIUS = 180;
 
@@ -143,6 +159,7 @@ export function AndesRenderer({ terrain, route, day, selectedId, follow, closeUp
       pose: poseRef.current ?? undefined,
       animateReset: !reduced && tier !== 'low',
       zoomMin: ZOOM_MIN_ANDES,
+      phiMax: PHI_MAX_ANDES,
       shadows: tier !== 'low',
       beforeRender: () => beforeRender()
     });
@@ -178,7 +195,8 @@ export function AndesRenderer({ terrain, route, day, selectedId, follow, closeUp
     stars.renderOrder = -1;
     scene.add(stars);
     scene.add(new AmbientLight(tokens.ink, 0.55));
-    const sun = new DirectionalLight(tokens.ink, 3.2);
+    const SUN_INTENSITY = 3.2;
+    const sun = new DirectionalLight(tokens.ink, SUN_INTENSITY);
     sun.position.set(-9, 5, 5); // low: the relief throws shadows
     scene.add(sun.target);
     const shadowSize = tier === 'high' ? 2048 : 1024;
@@ -268,6 +286,36 @@ export function AndesRenderer({ terrain, route, day, selectedId, follow, closeUp
     column.mesh.castShadow = true;
     column.mesh.visible = false;
     scene.add(column.mesh);
+    // a light snowstorm up close, heavier the higher the army is: flakes that fall around the camera
+    const flakeMax = tier === 'low' ? 0 : tier === 'high' ? 1400 : 700;
+    const flakes = snowField(Math.max(1, flakeMax), RELIEF_SEED, army.position, SNOW_SIZE, SNOW_HEIGHT);
+    const flakePositions = new BufferAttribute(flakes.positions, 3);
+    flakePositions.setUsage(DynamicDrawUsage);
+    const snowGeometry = new BufferGeometry();
+    snowGeometry.setAttribute('position', flakePositions);
+    // a soft round flake (a points sprite is a square without a map)
+    const flakeCanvas = document.createElement('canvas');
+    flakeCanvas.width = 32;
+    flakeCanvas.height = 32;
+    const flakeContext = flakeCanvas.getContext('2d');
+    if (flakeContext) {
+      const glow = flakeContext.createRadialGradient(16, 16, 0, 16, 16, 16);
+      glow.addColorStop(0, 'rgba(255,255,255,1)');
+      glow.addColorStop(0.5, 'rgba(255,255,255,0.7)');
+      glow.addColorStop(1, 'rgba(255,255,255,0)');
+      flakeContext.fillStyle = glow;
+      flakeContext.fillRect(0, 0, 32, 32);
+    }
+    const flakeTexture = new CanvasTexture(flakeCanvas);
+    const snow = new Points(
+      snowGeometry,
+      new PointsMaterial({ color: '#ffffff', map: flakeTexture, size: 0.03, sizeAttenuation: true, transparent: true, opacity: 0.95, depthWrite: false, fog: false })
+    );
+    snow.frustumCulled = false;
+    snow.visible = false;
+    scene.add(snow);
+    let snowLevel = 0;
+    let stopSnow: (() => void) | null = null;
     // up close the markers of the events are as big as a mountain next to the figures: only the chosen one stays, and small
     const applyMarkers = () => {
       for (const m of markers) {
@@ -280,6 +328,35 @@ export function AndesRenderer({ terrain, route, day, selectedId, follow, closeUp
     const head: PathSample = { x: 0, y: 0, z: 0, heading: 0 };
     let leaderArc = 0;
     let lod: 'marker' | 'figures' = 'marker';
+    // the snow shows only up close and where the army is high; it falls on its own loop, still under reduced motion
+    const syncSnow = () => {
+      const near = lod === 'figures';
+      const on = near && flakeMax > 0 && snowLevel > 0;
+      const heavy = near ? snowLevel : 0;
+      fog.near = near ? NEAR_FOG[0] + (SNOW_FOG[0] - NEAR_FOG[0]) * heavy : fogFar[0];
+      fog.far = near ? NEAR_FOG[1] + (SNOW_FOG[1] - NEAR_FOG[1]) * heavy : fogFar[1];
+      fog.color.set(SKY_RAMP[0]!).lerp(STORM_HAZE, STORM_HAZE_SHARE * heavy);
+      sun.intensity = SUN_INTENSITY * (1 - STORM_DIM * heavy);
+      snow.visible = on;
+      snowGeometry.setDrawRange(0, snowCount(snowLevel, flakeMax));
+      if (on && !stopSnow) {
+        stepSnow(flakes, 0, SNOW_WIND, stage.camera.position, SNOW_SIZE, SNOW_HEIGHT);
+        flakePositions.needsUpdate = true;
+        if (!reduced) {
+          let last = 0;
+          stopSnow = stage.loop((ms) => {
+            const dt = last === 0 ? 0 : Math.min(0.1, (ms - last) / 1000);
+            last = ms;
+            stepSnow(flakes, dt, SNOW_WIND, stage.camera.position, SNOW_SIZE, SNOW_HEIGHT);
+            flakePositions.needsUpdate = true;
+          });
+        }
+      } else if (!on && stopSnow) {
+        stopSnow();
+        stopSnow = null;
+      }
+      stage.requestRender();
+    };
     const lightOnArmy = () => {
       sun.target.position.copy(army.position);
       sun.position.copy(army.position).add(SUN_OFFSET);
@@ -293,9 +370,7 @@ export function AndesRenderer({ terrain, route, day, selectedId, follow, closeUp
       baseMesh.visible = !near;
       detail.group.visible = near;
       sun.castShadow = near && tier !== 'low';
-      const [fogNear, fogEnd] = near ? NEAR_FOG : fogFar;
-      fog.near = fogNear;
-      fog.far = fogEnd;
+      syncSnow();
       if (near) {
         detail.ensureAround(army.position.x, army.position.z);
         lightOnArmy();
@@ -307,24 +382,34 @@ export function AndesRenderer({ terrain, route, day, selectedId, follow, closeUp
     beforeRender = () => {
       const next = lodFor(stage.camera.position.distanceTo(army.position), lod);
       if (next !== lod) enterLod(next);
-      if (lod !== 'figures') return;
+      if (lod !== 'figures') {
+        // far from the army the camera stays above the horizon: below it only the sky would show
+        if (stage.pose.phi > PHI_MAX) stage.nav.setPose({ ...stage.pose, phi: PHI_MAX });
+        return;
+      }
       // never under the ground of the detailed terrain
       const cam = stage.camera.position;
       const floor = field.height(cam.x, cam.z) + CAMERA_CLEARANCE;
-      if (cam.y < floor) {
-        cam.y = floor;
-        stage.camera.lookAt(stage.pose.x, stage.pose.y, stage.pose.z);
+      const lifted = cam.y < floor;
+      if (lifted) cam.y = floor;
+      // past the horizon the view keeps tilting up, so the sky shows even when the ground holds the camera back
+      if (lifted || stage.pose.phi > Math.PI / 2) {
+        const at = lookPoint(cam, stage.pose, stage.pose.phi);
+        stage.camera.lookAt(at.x, at.y, at.z);
       }
     };
     // the cinematic camera: behind the head of the column; `k` is how much of the turn toward its heading is taken
     const eye: PathSample = { x: 0, y: 0, z: 0, heading: 0 };
-    const cineAt = (k: number) => {
+    let cineBase: CameraState | null = null;
+    let left: CameraState | null = null;
+    let steer = NO_STEER;
+    const cineAt = (k: number, current: CameraState) => {
       sampleAlongExtended(path, leaderArc - column.length * CINE_FOCUS, head);
       sampleAlong(path, leaderArc - column.length - CINE_BACK_MARGIN, eye); // on the route: never off its start
       const look = { x: head.x, y: field.height(head.x, head.z) + CINE_LOOK, z: head.z };
       const from = { x: eye.x, y: field.height(eye.x, eye.z) + CINE_HEIGHT, z: eye.z };
       from.y = clearEye(from, look, field.height, CAMERA_CLEARANCE); // a hill between the camera and the column lifts it
-      return cinePose(look, from, stage.pose, k);
+      return cinePose(look, from, current, k);
     };
 
     const setDay = (d: number) => {
@@ -332,6 +417,11 @@ export function AndesRenderer({ terrain, route, day, selectedId, follow, closeUp
       if (!p) return;
       const at = toScene(scale, p.lon, p.lat, ground(p.lon, p.lat, p.altitudeM));
       army.position.set(at.x, at.y + LIFT + 0.2, at.z);
+      const level = snowAmount(p.altitudeM);
+      if (level !== snowLevel) {
+        snowLevel = level;
+        syncSnow();
+      }
       const along = (d - route.firstDay) / Math.max(1, route.lastDay - route.firstDay);
       leaderArc = arcAt(path, Math.min(1, Math.max(0, along)) * (sampleCount - 1));
       column.update(leaderArc);
@@ -339,7 +429,13 @@ export function AndesRenderer({ terrain, route, day, selectedId, follow, closeUp
         detail.ensureAround(army.position.x, army.position.z);
         lightOnArmy();
       }
-      if (cineRef.current) stage.nav.setPose(cineAt(CINE_TURN));
+      if (cineRef.current) {
+        // the cinematic camera is written every day tick; what the user did to the camera in between stays on top of it
+        if (cineBase && left) steer = addSteer(steer, left, stage.pose);
+        cineBase = cineAt(CINE_TURN, cineBase ?? stage.pose);
+        stage.nav.setPose(steered(cineBase, steer, PHI_MAX_ANDES));
+        left = copyCamera(stage.pose);
+      }
       else if (followRef.current) stage.nav.setTarget(at.x, at.y, at.z);
       traveled.geometry.setDrawRange(0, Math.max(2, Math.round(((d - route.firstDay) / Math.max(1, route.lastDay - route.firstDay)) * ROUTE_SAMPLES) + 1));
       stage.requestRender();
@@ -370,7 +466,10 @@ export function AndesRenderer({ terrain, route, day, selectedId, follow, closeUp
     setFollowRef.current = setFollow;
     closeUpRef.current = () => stage.nav.flyTo(closePose(scale, army.position, stage.pose));
     setCineRef.current = (on) => {
-      if (on) stage.nav.flyTo(cineAt(1));
+      cineBase = null;
+      left = null;
+      steer = NO_STEER;
+      if (on) stage.nav.flyTo(cineAt(1, stage.pose));
     };
     if (followRef.current) setFollow(true);
 
@@ -430,6 +529,8 @@ export function AndesRenderer({ terrain, route, day, selectedId, follow, closeUp
       canvas.removeEventListener('pointerup', onUp);
       stageRef.current = null;
       markerGeometry.dispose();
+      snowGeometry.dispose();
+      flakeTexture.dispose();
       stage.dispose();
     };
   }, [terrain, route, preset.terrainDetail, preset.pixelRatioCap, tier, reduced, poseRef, stageRef]);

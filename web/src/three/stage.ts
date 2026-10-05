@@ -36,6 +36,8 @@ export interface StageOptions {
   beforeRender?: () => void;
   /** the closest zoom as a fraction of the start radius (default 0.25) */
   zoomMin?: number;
+  /** the highest polar angle of the camera, in radians from the top (default just under the horizon, 1.55); more lets it look up */
+  phiMax?: number;
   /** the reset glides back over a short time; false (reduced motion, low quality) jumps */
   animateReset?: boolean;
 }
@@ -100,7 +102,8 @@ export function createStage(host: HTMLElement, o: StageOptions): Stage {
   const limits = cameraLimits(
     startPose,
     o.box ?? { minX: o.target.x - half, maxX: o.target.x + half, minY: 0, maxY: o.target.y + half, minZ: o.target.z - half, maxZ: o.target.z + half },
-    o.zoomMin
+    o.zoomMin,
+    o.phiMax
   );
   const pose = o.pose ?? copyCamera(startPose);
   const fov = o.fov ?? 32;

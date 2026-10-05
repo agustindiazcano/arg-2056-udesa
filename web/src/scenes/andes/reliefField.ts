@@ -1,5 +1,6 @@
 import { sampleElevation } from '../../terrain/decode';
 import type { Terrain } from '../../types/terrain';
+import { sampleAlongExtended } from './pathAlong';
 import type { Path } from './pathAlong';
 import { corridorFactor, hash2, noise2, reliefOffset, smooth, terrainColor } from './relief';
 import { fromScene, toScene } from './terrainMesh';
@@ -8,6 +9,14 @@ import type { SceneScale } from './terrainMesh';
 /** The route stays gentle up to this distance (scene units) and has the full relief from the second one. */
 const FLAT = 0.5;
 const FULL = 2.4;
+/**
+ * The valley the army starts in: the column stands on the straight line behind the first point of the route (where the camera is too),
+ * which is not part of the route, so its ground is kept open for `OPENING_LENGTH` scene units back (the column is at most 6 long,
+ * and the camera stands 1 behind it). The relief is none up to `OPEN_FLAT` from that line and all from `OPEN_FULL`: mountains close in on the sides.
+ */
+export const OPENING_LENGTH = 8;
+const OPEN_FLAT = 1.5;
+const OPEN_FULL = 3.5;
 /** Trees grow on gentle ground below this fraction of the highest point of the terrain. */
 const TREE_LINE = 0.4;
 const TREE_SLOPE = 0.3;
@@ -22,6 +31,8 @@ export interface Field {
   height: (x: number, z: number) => number;
   /** distance on the ground plane to the closest point of the route (exact up to the width of the corridor, Infinity beyond it) */
   distanceToRoute: (x: number, z: number) => number;
+  /** distance on the ground plane to the opening: the first point of the route and the line behind it where the column starts */
+  distanceToOpening: (x: number, z: number) => number;
   /** y of the highest point of the base terrain */
   maxY: number;
 }
@@ -59,12 +70,24 @@ export function createField(o: { terrain: Terrain; scale: SceneScale; path: Path
     }
     return n === 1 ? Math.hypot(x - pts[0]!, z - pts[2]!) : best;
   };
+  const tail = { x: 0, y: 0, z: 0, heading: 0 };
+  if (n > 0) sampleAlongExtended(path, -OPENING_LENGTH, tail);
+  const distanceToOpening = (x: number, z: number) => {
+    if (n === 0) return Infinity;
+    const ax = tail.x;
+    const az = tail.z;
+    const dx = pts[0]! - ax;
+    const dz = pts[2]! - az;
+    const len2 = dx * dx + dz * dz;
+    const t = len2 === 0 ? 0 : Math.min(1, Math.max(0, ((x - ax) * dx + (z - az) * dz) / len2));
+    return Math.hypot(x - (ax + dx * t), z - (az + dz * t));
+  };
   const height = (x: number, z: number) => {
     const base = baseHeight(x, z);
-    const keep = corridorFactor(distanceToRoute(x, z), FLAT, FULL);
+    const keep = Math.min(corridorFactor(distanceToRoute(x, z), FLAT, FULL), corridorFactor(distanceToOpening(x, z), OPEN_FLAT, OPEN_FULL));
     return keep === 0 ? base : base + reliefOffset(x, z, seed, amplitude) * keep;
   };
-  return { baseHeight, height, distanceToRoute, maxY };
+  return { baseHeight, height, distanceToRoute, distanceToOpening, maxY };
 }
 
 export interface ChunkData {
