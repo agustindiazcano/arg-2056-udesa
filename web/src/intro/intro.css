@@ -8,12 +8,13 @@
   --intro-line: color-mix(in srgb, var(--intro-bg), #aab6e8 52%);
   --intro-side-top: color-mix(in srgb, var(--intro-bg), #fff 6%);
   --intro-side-bot: color-mix(in srgb, var(--intro-bg), #000 38%);
-  --intro-grid: rgba(170, 182, 232, 0.15);
+  --intro-grid: rgba(170, 182, 232, 0.24);
   --ar: 0.4895;
   /* 1vw on a 16:9 screen: the whole layout scales with it, so a laptop and a large monitor look the same */
   --u: min(1vw, 1.7778vh);
   --dur: 1250ms; /* 1000 ms at speed 0.8 */
   --mh: min(calc(100dvh - 6vh), calc((100vw - 32px) / var(--ar))); /* height of the map */
+  --zoom: 1.45; /* the map fills the screen once tilted */
   --lift: calc(var(--mh) * 0.003);
   --step: 0px;
   position: fixed;
@@ -25,8 +26,8 @@
   font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
 }
 .intro[data-tilted='true'] {
-  --lift: calc(var(--mh) * 0.035);
-  --step: calc(var(--mh) * 0.006);
+  --lift: calc(var(--mh) * 0.04);
+  --step: calc(var(--mh) * 0.007);
 }
 .intro-defs {
   position: absolute;
@@ -44,18 +45,18 @@
   transition: perspective 0.95s cubic-bezier(0.22, 0.8, 0.24, 1);
 }
 .intro[data-tilted='true'] .intro-stage {
-  perspective: calc(var(--mh) * 2.5);
+  perspective: calc(var(--mh) * 2.3);
 }
 .intro-cam {
   position: relative;
   width: calc(var(--mh) * var(--ar));
   height: var(--mh);
   transform-style: preserve-3d;
-  transform: translateX(0) scale(1) rotateX(0deg) rotateZ(0deg);
+  transform: scale(1) rotateX(0deg) rotateZ(0deg);
   transition: transform 0.95s cubic-bezier(0.22, 0.8, 0.24, 1);
 }
 .intro[data-tilted='true'] .intro-cam {
-  transform: translateX(15vw) scale(1.15) rotateX(54deg) rotateZ(22deg);
+  transform: scale(var(--zoom)) rotateX(54deg) rotateZ(55deg);
   animation: intro-spin 90s linear 1s infinite;
 }
 .intro-map {
@@ -71,14 +72,15 @@
   height: 240%;
   pointer-events: none;
   opacity: 0;
-  transition: opacity 0.9s;
-  transform: translate3d(-50%, -50%, -3px);
+  transition: opacity 1.6s, transform 1.8s cubic-bezier(0.22, 0.8, 0.24, 1);
+  transform: translate3d(-50%, -50%, -3px) scale(0.5);
   background-image: linear-gradient(var(--intro-grid) 1px, transparent 1px), linear-gradient(90deg, var(--intro-grid) 1px, transparent 1px);
-  background-size: 48px 48px;
-  mask-image: radial-gradient(closest-side, #000 22%, transparent 100%);
+  background-size: calc(var(--mh) * 0.07) calc(var(--mh) * 0.07);
+  mask-image: radial-gradient(closest-side, #000 45%, transparent 100%);
 }
 .intro[data-tilted='true'] .intro-floor {
   opacity: 1;
+  transform: translate3d(-50%, -50%, -3px) scale(1); /* the grid draws outward from the map */
 }
 
 .intro-prov {
@@ -166,9 +168,8 @@
 .intro-copy {
   position: absolute;
   z-index: 5;
-  left: calc(var(--u) * 6);
-  top: 50%;
-  transform: translateY(-50%);
+  left: calc(var(--u) * 3);
+  top: calc(var(--u) * 3.5);
   max-width: calc(var(--u) * 40);
   opacity: 0;
   transition: opacity 0.9s 0.5s;
@@ -227,15 +228,28 @@
 
 @keyframes intro-appear { from { opacity: 0; translate: 0 0 140px; } to { opacity: 1; translate: 0 0 0; } }
 @keyframes intro-spin {
-  from { transform: translateX(15vw) scale(1.15) rotateX(54deg) rotateZ(22deg); }
-  to { transform: translateX(15vw) scale(1.15) rotateX(54deg) rotateZ(382deg); }
+  from { transform: scale(var(--zoom)) rotateX(54deg) rotateZ(55deg); }
+  to { transform: scale(var(--zoom)) rotateX(54deg) rotateZ(415deg); }
 }
 
+@media (max-aspect-ratio: 3/2) {
+  .intro { --zoom: 1.15; }
+}
 @media (max-width: 700px) {
   .intro-copy { top: 14vh; transform: none; text-align: center; left: 0; right: 0; margin-inline: auto; }
   .intro-cam { transform: scale(0.9) rotateX(0deg) rotateZ(0deg); }
-  .intro[data-tilted='true'] .intro-cam { transform: translateY(18vh) scale(0.95) rotateX(54deg) rotateZ(22deg); animation: none; }
+  .intro[data-tilted='true'] .intro-cam { transform: translateY(18vh) scale(0.95) rotateX(54deg) rotateZ(55deg); animation: none; }
 }
 @media (prefers-reduced-motion: reduce) {
   .intro *, .intro *::before { animation: none !important; transition: none !important; }
+}
+
+.intro-title::after {
+  content: '';
+  display: block;
+  height: 2px;
+  margin-top: calc(var(--u) * 1);
+  width: calc(var(--u) * 36);
+  max-width: 100%;
+  background: linear-gradient(90deg, var(--intro-light), transparent);
 }
