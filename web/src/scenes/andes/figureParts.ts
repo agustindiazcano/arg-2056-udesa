@@ -21,7 +21,10 @@ export interface Part {
 
 /** the blue coat of the whole army, the leader included */
 const COAT = '#2f4a80';
-const TROUSERS = '#cfc9b6';
+/** blue trousers for everyone on the road; only the leader wears white */
+const TROUSERS = '#243a66';
+const LEADER_TROUSERS = '#f1efe8';
+const CELESTE = '#75aadb';
 const BOOT = '#1a1614';
 const EPAULETTE = '#e8b923';
 const VISOR = '#0b0b0b';
@@ -72,13 +75,13 @@ function horseOf(coat: string, dark: string): Part[] {
 }
 
 /** a rider seated on the horse: both arms forward to the reins, and a leg down each side of the horse with a boot; `headgear` is on the head */
-function riderOf(coat: string, headgear: Part[]): Part[] {
+function riderOf(coat: string, trousers: string, headgear: Part[]): Part[] {
   return [
     { size: [0.036, 0.05, 0.022], at: [0, 0.155, -0.01], color: coat },
     { size: [0.012, 0.04, 0.012], at: [0.024, 0.165, 0.005], color: coat, tilt: -0.9 },
     { size: [0.012, 0.04, 0.012], at: [-0.024, 0.165, 0.005], color: coat, tilt: -0.9 },
-    { size: [0.014, 0.065, 0.016], at: [0.037, 0.107, -0.01], color: TROUSERS },
-    { size: [0.014, 0.065, 0.016], at: [-0.037, 0.107, -0.01], color: TROUSERS },
+    { size: [0.014, 0.065, 0.016], at: [0.037, 0.107, -0.01], color: trousers },
+    { size: [0.014, 0.065, 0.016], at: [-0.037, 0.107, -0.01], color: trousers },
     { size: [0.016, 0.02, 0.03], at: [0.037, 0.078, -0.004], color: BOOT },
     { size: [0.016, 0.02, 0.03], at: [-0.037, 0.078, -0.004], color: BOOT },
     { size: [0.02, 0.02, 0.02], at: [0, 0.19, -0.01], color: SKIN },
@@ -115,15 +118,17 @@ const mule: Part[] = [
 
 const pennant: Part[] = [
   { size: [0.004, 0.1, 0.004], at: [0.03, 0.24, -0.01], color: HAT },
-  { size: [0.002, 0.03, 0.05], at: [0.03, 0.27, -0.037], color: PENNANT }
+  // two equal halves: celeste above, white below
+  { size: [0.002, 0.015, 0.05], at: [0.03, 0.2775, -0.037], color: CELESTE },
+  { size: [0.002, 0.015, 0.05], at: [0.03, 0.2625, -0.037], color: PENNANT }
 ];
 
 export const FIGURE_PARTS: Record<FigureKind, readonly Part[]> = {
   foot: walker,
-  rider: [...horseOf(BAY, BAY_DARK), ...riderOf(COAT, shako)],
-  rider_black: [...horseOf(BLACK, BLACK_DARK), ...riderOf(COAT, shako)],
+  rider: [...horseOf(BAY, BAY_DARK), ...riderOf(COAT, TROUSERS, shako)],
+  rider_black: [...horseOf(BLACK, BLACK_DARK), ...riderOf(COAT, TROUSERS, shako)],
   mule,
-  leader: [...horseOf(WHITE, WHITE_DARK), ...riderOf(COAT, [...bicorn, ...epaulettes]), ...pennant]
+  leader: [...horseOf(WHITE, WHITE_DARK), ...riderOf(COAT, LEADER_TROUSERS, [...bicorn, ...epaulettes]), ...pennant]
 };
 
 /** The boxes a column needs: the parts of every figure added up. */

@@ -372,6 +372,42 @@ describe('the foot soldier: feet and shako', () => {
   });
 });
 
+describe('trousers and flag', () => {
+  const isCeleste = (hex: string) => {
+    const n = parseInt(hex.slice(1), 16);
+    return (n & 255) > 190 && ((n >> 8) & 255) > 140 && ((n >> 16) & 255) < 150;
+  };
+  const rideLegs = (kind: 'rider' | 'rider_black' | 'leader') =>
+    FIGURE_PARTS[kind].filter((p) => !p.leg && !p.arm && p.at[1] > 0.1 && p.at[1] < 0.2 && p.size[1] >= 0.05 && p.size[0] <= 0.02 && Math.abs(p.at[0]) >= 0.03);
+
+  it('has blue trousers on the foot soldiers and the riders', () => {
+    const trousers = FIGURE_PARTS.foot.filter((p) => p.leg && !p.pivot);
+    expect(trousers).toHaveLength(2);
+    for (const p of trousers) expect(isBlue(p.color)).toBe(true);
+    for (const kind of ['rider', 'rider_black'] as const) {
+      expect(rideLegs(kind)).toHaveLength(2);
+      for (const p of rideLegs(kind)) expect(isBlue(p.color)).toBe(true);
+    }
+  });
+
+  it('has white trousers only on the leader', () => {
+    expect(rideLegs('leader')).toHaveLength(2);
+    for (const p of rideLegs('leader')) expect(luminance(p.color)).toBeGreaterThan(0.75);
+  });
+
+  it('has a flag in two equal halves, celeste above and white below', () => {
+    const halves = FIGURE_PARTS.leader.filter((p) => p.size[0] <= 0.004 && p.size[2] >= 0.04).sort((a, b) => b.at[1] - a.at[1]);
+    expect(halves).toHaveLength(2);
+    const top = halves[0]!;
+    const bottom = halves[1]!;
+    expect(top.size[1]).toBeCloseTo(bottom.size[1], 9);
+    expect(top.size[2]).toBeCloseTo(bottom.size[2], 9);
+    expect(top.at[1] - bottom.at[1]).toBeCloseTo(top.size[1], 9); // one right on top of the other
+    expect(isCeleste(top.color)).toBe(true);
+    expect(luminance(bottom.color)).toBeGreaterThan(0.9);
+  });
+});
+
 describe('a natural column', () => {
   it('is more than the old one: a force of 5000 men is 100 figures or more', () => {
     expect(figureCount(5000, 1).count).toBeGreaterThanOrEqual(100);
