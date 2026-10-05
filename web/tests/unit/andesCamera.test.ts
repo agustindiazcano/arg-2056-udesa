@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { battlePose, overviewPose } from '../../src/scenes/andes/camera';
+import { battlePose, followPose, overviewPose } from '../../src/scenes/andes/camera';
 import { sceneScale, toScene } from '../../src/scenes/andes/terrainMesh';
 import { syntheticTerrain } from '../../src/terrain/synthetic';
 import { sampleElevation } from '../../src/terrain/decode';
@@ -38,5 +38,21 @@ describe('battlePose', () => {
     const p = battlePose(scale, terrain, { lon: 10, lat: 10, elevation_m: null });
     expect(p.y).toBeCloseTo(toScene(scale, 10, 10, terrain.meta.elevation_min_m).y, 6);
     expect(p.y).toBeGreaterThan(0);
+  });
+});
+
+describe('followPose', () => {
+  it('looks at the army from where the camera already is around it, a bit closer than the overview', () => {
+    const current = { x: 5, y: 1, z: 5, theta: 1.2, phi: 0.6, radius: 30 };
+    const p = followPose(scale, { x: 1, y: 2, z: 3 }, current);
+    expect([p.x, p.y, p.z]).toEqual([1, 2, 3]);
+    expect(p.theta).toBe(1.2);
+    expect(p.radius).toBeLessThan(overviewPose(scale).radius);
+  });
+
+  it('never leaves the camera below the horizon or straight above', () => {
+    const p = followPose(scale, { x: 0, y: 0, z: 0 }, { x: 0, y: 0, z: 0, theta: 0, phi: 1.54, radius: 5 });
+    expect(p.phi).toBeLessThanOrEqual(1.2);
+    expect(p.phi).toBeGreaterThanOrEqual(0.5);
   });
 });

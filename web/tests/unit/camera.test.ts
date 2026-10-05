@@ -22,6 +22,13 @@ const box = { minX: -5, maxX: 5, minY: 0, maxY: 3, minZ: -4, maxZ: 4 };
 const limits = cameraLimits(start(), box);
 const FOV = 32;
 
+describe('cameraLimits with its own closest zoom', () => {
+  it('lets a view come closer than the default when it asks for it', () => {
+    expect(cameraLimits(start(), box, 0.05).minRadius).toBeCloseTo(0.5, 9);
+    expect(cameraLimits(start(), box).minRadius).toBeCloseTo(10 * ZOOM_MIN, 9);
+  });
+});
+
 describe('cameraLimits', () => {
   it('allows 0.25 to 3 times the start radius and the wide polar range', () => {
     expect(limits.minRadius).toBeCloseTo(2.5, 10);

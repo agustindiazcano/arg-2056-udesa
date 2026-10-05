@@ -1,15 +1,20 @@
 import React, { useEffect, useRef } from 'react';
 import {
   AmbientLight,
+  BackSide,
   BufferAttribute,
   BufferGeometry,
   Color,
   DirectionalLight,
   Float32BufferAttribute,
+  Fog,
   Line,
   LineBasicMaterial,
   Mesh,
+  MeshBasicMaterial,
   MeshStandardMaterial,
+  Points,
+  PointsMaterial,
   Raycaster,
   SphereGeometry,
   Vector2,
@@ -18,14 +23,21 @@ import {
 import { useQualityOptional } from '../../runtime/CapabilityProvider';
 import { QUALITY_PRESETS } from '../../runtime/capabilities';
 import { useReducedMotion } from '../../runtime/useReducedMotion';
-import { SEQUENTIAL_BLUE, tokens } from '../../styles/tokens';
+import { SEQUENTIAL_BLUE, SKY_RAMP, TERRAIN_RAMP, tokens } from '../../styles/tokens';
 import { createStage } from '../../three/stage';
 import type { Stage } from '../../three/stage';
 import { useCameraNav } from '../../three/useCameraNav';
 import { sampleElevation } from '../../terrain/decode';
 import type { Terrain } from '../../types/terrain';
 import { NavControls } from '../../ui/NavControls';
-import { battlePose, overviewPose } from './camera';
+import { battlePose, cinePose, clearEye, closePose, followPose, overviewPose } from './camera';
+import { figureCount, lodFor, startingMen } from './column';
+import { createDetailTerrain } from './detail3d';
+import { createFigureColumn } from './figures3d';
+import { arcAt, buildPath, sampleAlong, sampleAlongExtended } from './pathAlong';
+import type { PathSample } from './pathAlong';
+import { createField } from './reliefField';
+import { skyColorHex, starPositions } from './sky';
 import { buildTerrainMesh, sceneScale, toScene } from './terrainMesh';
 import { positionAt } from './timeline';
 import type { Route } from './timeline';
@@ -34,15 +46,42 @@ import type { Route } from './timeline';
 const LONG_SIDE = 20;
 const EXAGGERATION = 6;
 const LIFT = 0.05;
+/** the feet rest a little above the sampled ground: the mesh is coarser than the samples */
+const FIGURE_LIFT = 0.02;
+/** the figures are drawn at this fraction of their modelled size, so the mountains tower over them */
+const FIGURE_SCALE = 0.5;
+/** the procedural relief: its seed (same seed, same mountains), height scale, and the chunks of ground around the army */
+const RELIEF_SEED = 11;
+const RELIEF_AMPLITUDE = 4;
+const CHUNK_SIZE = 2;
+const CHUNK_CELLS = 100;
+const CHUNK_RADIUS = 2;
+/** the fog close in: the detailed ground fades into the horizon before the chunks end */
+const NEAR_FOG: [number, number] = [1.5, 7];
+/** the camera never goes below the ground of the detailed terrain by less than this */
+const CAMERA_CLEARANCE = 0.08;
+/** how much of the turn toward the heading of the column the cinematic camera takes at each day tick */
+const CINE_TURN = 0.2;
+/** the cinematic camera stands behind the last figure of the column (this margin, this high above the ground) and looks at the column, this fraction of its length behind the head */
+const CINE_BACK_MARGIN = 1;
+const CINE_FOCUS = 0.35;
+const CINE_HEIGHT = 0.25;
+const CINE_LOOK = 0.1;
+/** the light, relative to the army, when the shadows are on */
+const SUN_OFFSET = new Vector3(-9, 5, 5);
 const ROUTE_SAMPLES = 160;
 const CLICK_SLOP = 4;
+/** the closest zoom of this scene, as a fraction of the start radius: close enough to see the column of figures */
+const ZOOM_MIN_ANDES = 0.04;
+/** the sky dome around the origin: the camera stays within ~100 units of it and the far plane is 300 */
+const SKY_RADIUS = 180;
 
-/** The color of a terrain height from 0 to 1: the sequential blue ramp, dark in the valleys and light on the peaks. */
-function rampColor(t: number, out: Color): Color {
-  const n = SEQUENTIAL_BLUE.length - 1;
+/** The color of a terrain height from 0 to 1: the natural ramp, green in the valleys and snow on the peaks. */
+function rampColor(t: number, out: Color, next: Color): Color {
+  const n = TERRAIN_RAMP.length - 1;
   const x = Math.min(1, Math.max(0, t)) * n;
   const i = Math.min(n - 1, Math.floor(x));
-  return out.set(SEQUENTIAL_BLUE[i]!).lerp(new Color(SEQUENTIAL_BLUE[i + 1]!), x - i);
+  return out.set(TERRAIN_RAMP[i]!).lerp(next.set(TERRAIN_RAMP[i + 1]!), x - i);
 }
 
 export interface AndesRendererProps {
@@ -51,13 +90,19 @@ export interface AndesRendererProps {
   /** the campaign day: the army marker and the travelled part of the route follow it */
   day: number;
   selectedId: string | null;
+  /** the camera follows the army as the days go by */
+  follow: boolean;
+  /** each increase flies the camera right next to the army, where the figures of the column show */
+  closeUp: number;
+  /** the cinematic camera: behind the column, low, turning with the route */
+  cine: boolean;
   onSelect: (id: string | null) => void;
   /** what the canvas says to a screen reader */
   label: string;
 }
 
 /** The Andes in 3D: the terrain, the route, a marker per event and the army at its place of the day. The only file of the scene that touches WebGL. */
-export function AndesRenderer({ terrain, route, day, selectedId, onSelect, label }: AndesRendererProps) {
+export function AndesRenderer({ terrain, route, day, selectedId, follow, closeUp, cine, onSelect, label }: AndesRendererProps) {
   const hostRef = useRef<HTMLDivElement>(null);
   const tipRef = useRef<HTMLDivElement>(null);
   const reduced = useReducedMotion();
@@ -74,6 +119,13 @@ export function AndesRenderer({ terrain, route, day, selectedId, onSelect, label
   dayRef.current = day;
   const selectedRef = useRef(selectedId);
   selectedRef.current = selectedId;
+  const setFollowRef = useRef<(on: boolean) => void>(() => {});
+  const followRef = useRef(follow);
+  followRef.current = follow;
+  const closeUpRef = useRef<() => void>(() => {});
+  const setCineRef = useRef<(on: boolean) => void>(() => {});
+  const cineRef = useRef(cine);
+  cineRef.current = cine;
 
   useEffect(() => {
     const host = hostRef.current;
@@ -89,15 +141,57 @@ export function AndesRenderer({ terrain, route, day, selectedId, onSelect, label
       phi: start.phi,
       box: { minX: -scale.width / 2, maxX: scale.width / 2, minY: 0, maxY, minZ: -scale.depth / 2, maxZ: scale.depth / 2 },
       pose: poseRef.current ?? undefined,
-      animateReset: !reduced && tier !== 'low'
+      animateReset: !reduced && tier !== 'low',
+      zoomMin: ZOOM_MIN_ANDES,
+      shadows: tier !== 'low',
+      beforeRender: () => beforeRender()
     });
     poseRef.current = stage.pose;
     stageRef.current = stage;
     const { scene } = stage;
+    let beforeRender = () => {};
 
-    scene.add(new AmbientLight(tokens.ink, 0.9));
-    const sun = new DirectionalLight(tokens.ink, 2.6);
-    sun.position.set(-8, 10, 6);
+    // distance fades into the horizon color of the sky, so the edges of the terrain are not a cut
+    const fog = new Fog(SKY_RAMP[0]!, start.radius * 1.1, start.radius * 3);
+    scene.fog = fog;
+
+    // the sky: a dome around the scene, dawn at the horizon to night overhead, with faint stars in the upper part
+    const dome = new SphereGeometry(SKY_RADIUS, 32, 16);
+    const domeColors = new Float32Array(dome.attributes.position!.count * 3);
+    const sky = new Color();
+    for (let i = 0; i < dome.attributes.position!.count; i += 1) {
+      sky.set(skyColorHex(dome.attributes.position!.getY(i) / SKY_RADIUS));
+      domeColors[i * 3] = sky.r;
+      domeColors[i * 3 + 1] = sky.g;
+      domeColors[i * 3 + 2] = sky.b;
+    }
+    dome.setAttribute('color', new Float32BufferAttribute(domeColors, 3));
+    const domeMesh = new Mesh(dome, new MeshBasicMaterial({ vertexColors: true, side: BackSide, fog: false, depthWrite: false }));
+    domeMesh.renderOrder = -2;
+    scene.add(domeMesh);
+    const starGeometry = new BufferGeometry();
+    starGeometry.setAttribute('position', new BufferAttribute(starPositions(tier === 'low' ? 120 : 400, SKY_RADIUS * 0.98), 3));
+    const stars = new Points(
+      starGeometry,
+      new PointsMaterial({ color: tokens.ink, size: 1.6, sizeAttenuation: false, transparent: true, opacity: 0.55, fog: false, depthWrite: false })
+    );
+    stars.renderOrder = -1;
+    scene.add(stars);
+    scene.add(new AmbientLight(tokens.ink, 0.55));
+    const sun = new DirectionalLight(tokens.ink, 3.2);
+    sun.position.set(-9, 5, 5); // low: the relief throws shadows
+    scene.add(sun.target);
+    const shadowSize = tier === 'high' ? 2048 : 1024;
+    sun.shadow.mapSize.set(shadowSize, shadowSize);
+    sun.shadow.camera.left = -4;
+    sun.shadow.camera.right = 4;
+    sun.shadow.camera.top = 4;
+    sun.shadow.camera.bottom = -4;
+    sun.shadow.camera.near = 1;
+    sun.shadow.camera.far = 60;
+    sun.shadow.camera.updateProjectionMatrix();
+    sun.shadow.bias = -0.0005;
+    sun.shadow.normalBias = 0.02;
     scene.add(sun);
 
     // the terrain, colored by height
@@ -106,8 +200,9 @@ export function AndesRenderer({ terrain, route, day, selectedId, onSelect, label
     geometry.setAttribute('position', new BufferAttribute(mesh.positions, 3));
     const colors = new Float32Array(mesh.heightT.length * 3);
     const c = new Color();
+    const c2 = new Color();
     mesh.heightT.forEach((t, i) => {
-      rampColor(t, c);
+      rampColor(t, c, c2);
       colors[i * 3] = c.r;
       colors[i * 3 + 1] = c.g;
       colors[i * 3 + 2] = c.b;
@@ -115,7 +210,8 @@ export function AndesRenderer({ terrain, route, day, selectedId, onSelect, label
     geometry.setAttribute('color', new Float32BufferAttribute(colors, 3));
     geometry.setIndex(new BufferAttribute(mesh.indices, 1));
     geometry.computeVertexNormals();
-    scene.add(new Mesh(geometry, new MeshStandardMaterial({ vertexColors: true, roughness: 0.95, metalness: 0 })));
+    const baseMesh = new Mesh(geometry, new MeshStandardMaterial({ vertexColors: true, roughness: 0.95, metalness: 0 }));
+    scene.add(baseMesh);
 
     // the route on the ground: all of it faint, the travelled part bright (the same line, a draw range)
     const ground = (lon: number, lat: number, fallback: number | null) =>
@@ -132,9 +228,11 @@ export function AndesRenderer({ terrain, route, day, selectedId, onSelect, label
     scene.add(new Line(routeGeometry, new LineBasicMaterial({ color: tokens.muted })));
     const traveled = new Line(routeGeometry, new LineBasicMaterial({ color: tokens.ink }));
     scene.add(traveled);
+    const path = buildPath(Float32Array.from(samples));
+    const sampleCount = samples.length / 3;
 
     // a marker per event, lit when selected
-    const lit = new Color(SEQUENTIAL_BLUE[9]);
+    const lit = new Color(SEQUENTIAL_BLUE[9]); // the blue of the interface marks what is selected on the terrain
     const markerGeometry = new SphereGeometry(0.14, 16, 12);
     const markers = route.points.map((p) => {
       const material = new MeshStandardMaterial({ color: tokens.ink2, emissive: new Color(tokens.page), roughness: 0.5 });
@@ -152,11 +250,97 @@ export function AndesRenderer({ terrain, route, day, selectedId, onSelect, label
       new MeshStandardMaterial({ color: tokens.ink, emissive: lit, emissiveIntensity: 0.8, roughness: 0.4 })
     );
     scene.add(army);
+
+    // up close the marker gives way to a column of figures on terrain in detail: procedural relief, trees and shadows
+    const field = createField({ terrain, scale, path, seed: RELIEF_SEED, amplitude: RELIEF_AMPLITUDE });
+    const detail = createDetailTerrain(field, {
+      size: CHUNK_SIZE,
+      cells: Math.max(16, Math.round(CHUNK_CELLS * preset.terrainDetail)),
+      radius: CHUNK_RADIUS,
+      treeDensity: tier === 'low' ? 0.3 : 0.7,
+      seed: RELIEF_SEED,
+      treeColor: '#2f5a34'
+    });
+    detail.group.visible = false;
+    scene.add(detail.group);
+    const { count } = figureCount(startingMen(route.points), preset.particleScale);
+    const column = createFigureColumn(count, path, (x, z) => field.height(x, z) + FIGURE_LIFT, FIGURE_SCALE);
+    column.mesh.castShadow = true;
+    column.mesh.visible = false;
+    scene.add(column.mesh);
+    // up close the markers of the events are as big as a mountain next to the figures: only the chosen one stays, and small
+    const applyMarkers = () => {
+      for (const m of markers) {
+        const chosen = m.id === selectedRef.current;
+        m.mesh.visible = lod !== 'figures' || chosen;
+        m.mesh.scale.setScalar(chosen ? (lod === 'figures' ? 0.5 : 1.4) : 1);
+      }
+    };
+    const fogFar: [number, number] = [start.radius * 1.1, start.radius * 3];
+    const head: PathSample = { x: 0, y: 0, z: 0, heading: 0 };
+    let leaderArc = 0;
+    let lod: 'marker' | 'figures' = 'marker';
+    const lightOnArmy = () => {
+      sun.target.position.copy(army.position);
+      sun.position.copy(army.position).add(SUN_OFFSET);
+    };
+    const enterLod = (next: 'marker' | 'figures') => {
+      lod = next;
+      const near = lod === 'figures';
+      army.visible = !near;
+      applyMarkers();
+      column.mesh.visible = near;
+      baseMesh.visible = !near;
+      detail.group.visible = near;
+      sun.castShadow = near && tier !== 'low';
+      const [fogNear, fogEnd] = near ? NEAR_FOG : fogFar;
+      fog.near = fogNear;
+      fog.far = fogEnd;
+      if (near) {
+        detail.ensureAround(army.position.x, army.position.z);
+        lightOnArmy();
+      } else {
+        sun.target.position.set(0, 0, 0);
+        sun.position.set(-9, 5, 5);
+      }
+    };
+    beforeRender = () => {
+      const next = lodFor(stage.camera.position.distanceTo(army.position), lod);
+      if (next !== lod) enterLod(next);
+      if (lod !== 'figures') return;
+      // never under the ground of the detailed terrain
+      const cam = stage.camera.position;
+      const floor = field.height(cam.x, cam.z) + CAMERA_CLEARANCE;
+      if (cam.y < floor) {
+        cam.y = floor;
+        stage.camera.lookAt(stage.pose.x, stage.pose.y, stage.pose.z);
+      }
+    };
+    // the cinematic camera: behind the head of the column; `k` is how much of the turn toward its heading is taken
+    const eye: PathSample = { x: 0, y: 0, z: 0, heading: 0 };
+    const cineAt = (k: number) => {
+      sampleAlongExtended(path, leaderArc - column.length * CINE_FOCUS, head);
+      sampleAlong(path, leaderArc - column.length - CINE_BACK_MARGIN, eye); // on the route: never off its start
+      const look = { x: head.x, y: field.height(head.x, head.z) + CINE_LOOK, z: head.z };
+      const from = { x: eye.x, y: field.height(eye.x, eye.z) + CINE_HEIGHT, z: eye.z };
+      from.y = clearEye(from, look, field.height, CAMERA_CLEARANCE); // a hill between the camera and the column lifts it
+      return cinePose(look, from, stage.pose, k);
+    };
+
     const setDay = (d: number) => {
       const p = positionAt(route, d);
       if (!p) return;
       const at = toScene(scale, p.lon, p.lat, ground(p.lon, p.lat, p.altitudeM));
       army.position.set(at.x, at.y + LIFT + 0.2, at.z);
+      const along = (d - route.firstDay) / Math.max(1, route.lastDay - route.firstDay);
+      leaderArc = arcAt(path, Math.min(1, Math.max(0, along)) * (sampleCount - 1));
+      column.update(leaderArc);
+      if (lod === 'figures') {
+        detail.ensureAround(army.position.x, army.position.z);
+        lightOnArmy();
+      }
+      if (cineRef.current) stage.nav.setPose(cineAt(CINE_TURN));
+      else if (followRef.current) stage.nav.setTarget(at.x, at.y, at.z);
       traveled.geometry.setDrawRange(0, Math.max(2, Math.round(((d - route.firstDay) / Math.max(1, route.lastDay - route.firstDay)) * ROUTE_SAMPLES) + 1));
       stage.requestRender();
     };
@@ -171,12 +355,24 @@ export function AndesRenderer({ terrain, route, day, selectedId, onSelect, label
         m.material.emissiveIntensity = on ? 0.6 : 0;
         m.mesh.scale.setScalar(on ? 1.4 : 1);
       }
+      applyMarkers();
       const point = route.points.find((p) => p.id === id);
       if (fly && point) stage.nav.flyTo(battlePose(scale, terrain, point));
       stage.requestRender();
     };
     setSelectedRef.current = setSelected;
     setSelected(selectedRef.current, false);
+
+    // the cinematic camera: on, it flies to the army and then keeps it in the middle as the days go by
+    const setFollow = (on: boolean) => {
+      if (on) stage.nav.flyTo(followPose(scale, army.position, stage.pose));
+    };
+    setFollowRef.current = setFollow;
+    closeUpRef.current = () => stage.nav.flyTo(closePose(scale, army.position, stage.pose));
+    setCineRef.current = (on) => {
+      if (on) stage.nav.flyTo(cineAt(1));
+    };
+    if (followRef.current) setFollow(true);
 
     // pointer: a click (4 px or less) on a marker selects it; moving over one names it
     const canvas = stage.renderer.domElement;
@@ -186,7 +382,7 @@ export function AndesRenderer({ terrain, route, day, selectedId, onSelect, label
       const r = canvas.getBoundingClientRect();
       ndc.set(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1);
       raycaster.setFromCamera(ndc, stage.camera);
-      return raycaster.intersectObjects(markers.map((m) => m.mesh), false)[0]?.object ?? null;
+      return raycaster.intersectObjects(markers.filter((m) => m.mesh.visible).map((m) => m.mesh), false)[0]?.object ?? null;
     };
     const tip = tipRef.current;
     const onMove = (e: PointerEvent) => {
@@ -225,6 +421,9 @@ export function AndesRenderer({ terrain, route, day, selectedId, onSelect, label
     return () => {
       setDayRef.current = () => {};
       setSelectedRef.current = () => {};
+      setFollowRef.current = () => {};
+      closeUpRef.current = () => {};
+      setCineRef.current = () => {};
       canvas.removeEventListener('pointermove', onMove);
       canvas.removeEventListener('pointerleave', onLeave);
       canvas.removeEventListener('pointerdown', onDown);
@@ -237,6 +436,11 @@ export function AndesRenderer({ terrain, route, day, selectedId, onSelect, label
 
   useEffect(() => setDayRef.current(day), [day]);
   useEffect(() => setSelectedRef.current(selectedId, true), [selectedId]);
+  useEffect(() => setFollowRef.current(follow), [follow]);
+  useEffect(() => {
+    if (closeUp > 0) closeUpRef.current();
+  }, [closeUp]);
+  useEffect(() => setCineRef.current(cine), [cine]);
 
   return (
     <div className="chart3d-wrap">
