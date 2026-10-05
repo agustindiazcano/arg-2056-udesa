@@ -174,7 +174,7 @@
   z-index: 5;
   left: 0;
   top: 0;
-  max-width: calc(var(--u) * 40);
+  max-width: calc(var(--u) * 46);
   opacity: 0;
   transition: opacity 0.9s 0.5s;
 }
@@ -183,6 +183,8 @@
 }
 .intro-title {
   margin: 0;
+  font-family: var(--font-title);
+  font-variant-numeric: lining-nums; /* Raleway draws old-style figures by default */
   font-weight: 900;
   text-transform: uppercase;
   line-height: 0.98;

@@ -197,7 +197,8 @@ describe('ReferencesPage: attributions, leads and links', () => {
     render(<ReferencesPage references={refs()} />);
     expect(screen.getByRole('heading', { level: 2, name: 'Tipografía' })).toBeDefined();
     expect(screen.getByRole('link', { name: 'Clarity City' }).getAttribute('href')).toBe('https://fonts.google.com/specimen/Clarity+City');
-    expect(screen.getByText(/SIL Open Font License 1\.1/)).toBeDefined();
+    expect(screen.getByRole('link', { name: 'Raleway' }).getAttribute('href')).toBe('https://fonts.google.com/specimen/Raleway');
+    expect(screen.getAllByText(/SIL Open Font License 1\.1/).length).toBe(2);
   });
 
   it('lists the attributions with a link when there is a source url', () => {

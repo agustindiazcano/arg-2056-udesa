@@ -30,6 +30,8 @@
 }
 
 .brand {
+  font-family: var(--font-title);
+  font-variant-numeric: lining-nums;
   display: inline-flex;
   align-items: center;
   gap: var(--space-sm);
@@ -45,7 +47,7 @@ button.brand {
   padding: 0;
   border: 0;
   background: transparent;
-  font-family: inherit;
+  font-family: var(--font-title);
   cursor: pointer;
 }
 
