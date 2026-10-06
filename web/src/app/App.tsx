@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { Suspense, lazy, useCallback, useEffect, useRef, useState } from 'react';
 import { useStore } from '../state/store';
 import { useKeyboard } from '../state/useKeyboard';
 import { useTicker } from '../state/useTicker';
@@ -16,7 +16,9 @@ import { CapabilityProvider, QualityDebugLine } from '../runtime/CapabilityProvi
 import { documentTitle } from './title';
 import { describeError } from './describeError';
 import { useSlots } from '../dashboard/slots';
-import { GdpStep } from '../tour/GdpStep';
+
+/** The GDP step draws with ECharts, which must stay out of the initial load. */
+const GdpStep = lazy(() => import('../tour/GdpStep').then((m) => ({ default: m.GdpStep })));
 
 /** `onHome` is the way back to the intro: the brand in the header calls it. */
 export function App({ onHome }: { onHome?: () => void }) {
@@ -78,7 +80,9 @@ export function App({ onHome }: { onHome?: () => void }) {
         
         <main id="main" tabIndex={-1} className="scene-container" data-testid="scene">
           {section === 'tour' && tourStep === 1 ? (
-            <GdpStep />
+            <Suspense fallback={null}>
+              <GdpStep />
+            </Suspense>
           ) : (
             <SceneTransition sceneKey={scene}>
               <SceneHost scene={scene} />

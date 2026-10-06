@@ -6,6 +6,9 @@ import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { render, screen, cleanup, fireEvent, within } from '@testing-library/react';
 import { useStore } from '../../src/state/store';
 
+// The GDP step draws with ECharts, which needs a canvas that jsdom does not have; its own test is gdpTour.test.tsx.
+vi.mock('../../src/tour/GdpStep', () => ({ GdpStep: () => <h2>PBI de la Argentina</h2> }));
+
 // The real scenes load charts and maps; the shell is what is under test here. The labels stay the real ones.
 vi.mock('../../src/scenes/registry', async (importOriginal) => {
   const original = await importOriginal<typeof import('../../src/scenes/registry')>();
@@ -243,10 +246,10 @@ describe('styles', () => {
 });
 
 describe('Recorrido step 1', () => {
-  it('shows the GDP chart on step 1 and the scene on the other steps', () => {
+  it('shows the GDP chart on step 1 and the scene on the other steps', async () => {
     useStore.setState({ section: 'tour', tourStep: 1 });
     render(<App />);
-    expect(screen.getByRole('heading', { name: 'PBI de la Argentina' })).toBeTruthy();
+    expect(await screen.findByRole('heading', { name: 'PBI de la Argentina' })).toBeTruthy();
     expect(screen.queryByRole('heading', { name: 'escena' })).toBeNull();
     cleanup();
     useStore.setState({ section: 'tour', tourStep: 2 });
