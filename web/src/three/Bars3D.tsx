@@ -26,7 +26,9 @@ import { useReducedMotion } from '../runtime/useReducedMotion';
 import { SEQUENTIAL_BLUE, tokens } from '../styles/tokens';
 import { textSprite } from './labels';
 import { addProjection } from './projection';
+import { fitRadius, openingAngles } from '../charts3d/camera';
 import { createStage } from './stage';
+import { useSideView } from './useSideView';
 import { useCameraNav } from './useCameraNav';
 
 const MAX_HEIGHT = 4;
@@ -34,6 +36,11 @@ const BAR_WIDTH = 0.9;
 const GAP = 0.45;
 const DEPTH = 1.1;
 const GROW_MS = 600;
+/** How far below the axis the labels of the bars hang, so that a camera level with the chart still sees them. */
+const X_LABEL_DROP = 0.5;
+/** The side view looks a little below the middle of the chart, so that the chart sits high (the controls and the bar are under it), and fills the view. */
+const SIDE_TARGET_Y = 1.2;
+const SIDE_MARGIN = 1.02;
 
 const easeOutCubic = (t: number) => 1 - (1 - t) ** 3;
 
@@ -45,6 +52,7 @@ export function Bars3D({ spec, projection }: { spec: Bars3DSpec; projection?: Pr
   const quality = useQualityOptional();
   const pixelRatioCap = QUALITY_PRESETS[quality?.tier ?? 'medium'].pixelRatioCap;
   const { stageRef, poseRef, controls } = useCameraNav();
+  const side = useSideView();
 
   useEffect(() => {
     const host = hostRef.current;
@@ -54,10 +62,11 @@ export function Bars3D({ spec, projection }: { spec: Bars3DSpec; projection?: Pr
     const plateDepthBox = DEPTH + 3;
     const stage = createStage(host, {
       pixelRatioCap,
-      target: new Vector3(0, MAX_HEIGHT * 0.34 + (projection ? 0.9 : 0), 0),
-      radius: Math.max(13, layout.width * 1.05 + 8) * (projection ? 1.2 : 1),
-      theta: 0.22,
-      phi: 1.15,
+      target: side ? new Vector3(0.4, SIDE_TARGET_Y, 0) : new Vector3(0, MAX_HEIGHT * 0.34 + (projection ? 0.9 : 0), 0),
+      radius: side
+        ? fitRadius({ width: plateWidthBox + 1.6, height: MAX_HEIGHT + X_LABEL_DROP + 0.9 }, 32, host.clientHeight > 0 ? host.clientWidth / host.clientHeight : 0, SIDE_MARGIN)
+        : Math.max(13, layout.width * 1.05 + 8) * (projection ? 1.2 : 1),
+      ...openingAngles(side, { theta: 0.22, phi: 1.15 }),
       box: { minX: -plateWidthBox / 2, maxX: plateWidthBox / 2, minY: 0, maxY: MAX_HEIGHT, minZ: -plateDepthBox / 2, maxZ: plateDepthBox / 2 },
       pose: poseRef.current ?? undefined,
       animateReset: !reduced && quality?.tier !== 'low'
@@ -112,7 +121,7 @@ export function Bars3D({ spec, projection }: { spec: Bars3DSpec; projection?: Pr
       const value = textSprite(item.short, item.highlight ? tokens.ink : tokens.ink2, 0.36, item.highlight);
       scene.add(value);
       const name = textSprite(item.label, item.highlight ? tokens.ink : tokens.ink2, 0.32, item.highlight);
-      name.position.set(item.x, 0.12, item.depth / 2 + 0.6);
+      name.position.set(item.x, -X_LABEL_DROP, item.depth / 2 + 0.6);
       scene.add(name);
       return { item, mesh, material, value };
     });
@@ -195,7 +204,7 @@ export function Bars3D({ spec, projection }: { spec: Bars3DSpec; projection?: Pr
       stageRef.current = null;
       stage.dispose();
     };
-  }, [spec, projection?.title, quality?.tier, pixelRatioCap, reduced]);
+  }, [spec, projection?.title, quality?.tier, pixelRatioCap, reduced, side]);
 
   return (
     <div className="chart3d-wrap">

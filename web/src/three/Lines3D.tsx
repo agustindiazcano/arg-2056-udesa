@@ -25,13 +25,20 @@ import { QUALITY_PRESETS } from '../runtime/capabilities';
 import { useReducedMotion } from '../runtime/useReducedMotion';
 import { SEQUENTIAL_BLUE, tokens } from '../styles/tokens';
 import { textSprite } from './labels';
+import { fitRadius, openingAngles } from '../charts3d/camera';
 import { createStage } from './stage';
+import { useSideView } from './useSideView';
 import { useCameraNav } from './useCameraNav';
 
 const WIDTH = 11;
 const MAX_HEIGHT = 4.2;
 const LANE_GAP = 1.35;
 const GROW_MS = 600;
+/** How far below the axis the x labels hang, so that a camera level with the chart still sees them. */
+const X_LABEL_DROP = 0.55;
+/** The side view looks a little below the middle of the chart, so that the chart sits high (the controls and the bar are under it), and fills the view. */
+const SIDE_TARGET_Y = 1.1;
+const SIDE_MARGIN = 1.02;
 
 const easeOutCubic = (t: number) => 1 - (1 - t) ** 3;
 
@@ -48,18 +55,21 @@ export function Lines3D({ spec }: { spec: Lines3DSpec }) {
   const quality = useQualityOptional();
   const pixelRatioCap = QUALITY_PRESETS[quality?.tier ?? 'medium'].pixelRatioCap;
   const { stageRef, poseRef, controls } = useCameraNav();
+  const side = useSideView();
 
   useEffect(() => {
     const host = hostRef.current;
     if (!host) return;
     const layout = layoutLines(spec, { width: WIDTH, maxHeight: MAX_HEIGHT, laneGap: LANE_GAP });
     const lanesDepth = Math.max(spec.series.length - 1, 0) * LANE_GAP;
+    // from the side the chart fills the view: the plate with the height numbers on its left, the names at the end of the lines, the x labels below
+    const aspect = host.clientHeight > 0 ? host.clientWidth / host.clientHeight : 0;
+    const sideFit = { width: WIDTH + 3 + 1.6, height: MAX_HEIGHT + X_LABEL_DROP + 0.8 };
     const stage = createStage(host, {
       pixelRatioCap,
-      target: new Vector3(0, MAX_HEIGHT * 0.4, 0),
-      radius: WIDTH * 1.25 + lanesDepth * 0.5 + 5,
-      theta: 0.3,
-      phi: 1.0,
+      target: side ? new Vector3(0.4, SIDE_TARGET_Y, 0) : new Vector3(0, MAX_HEIGHT * 0.4, 0),
+      radius: side ? fitRadius(sideFit, 32, aspect, SIDE_MARGIN) : WIDTH * 1.25 + lanesDepth * 0.5 + 5,
+      ...openingAngles(side, { theta: 0.3, phi: 1.0 }),
       box: { minX: -(WIDTH + 3) / 2, maxX: (WIDTH + 3) / 2, minY: 0, maxY: MAX_HEIGHT, minZ: -(lanesDepth + 3.4) / 2, maxZ: (lanesDepth + 3.4) / 2 },
       pose: poseRef.current ?? undefined,
       animateReset: !reduced && quality?.tier !== 'low'
@@ -98,7 +108,7 @@ export function Lines3D({ spec }: { spec: Lines3DSpec }) {
     }
     for (const t of layout.xTicks) {
       const label = textSprite(t.label, tokens.muted, 0.3);
-      label.position.set(t.x, 0.1, plateDepth / 2 + 0.2);
+      label.position.set(t.x, -X_LABEL_DROP, plateDepth / 2 + 0.2);
       scene.add(label);
     }
 
@@ -185,7 +195,7 @@ export function Lines3D({ spec }: { spec: Lines3DSpec }) {
       stageRef.current = null;
       stage.dispose();
     };
-  }, [spec, quality?.tier, pixelRatioCap, reduced]);
+  }, [spec, quality?.tier, pixelRatioCap, reduced, side]);
 
   return (
     <div className="chart3d-wrap">
