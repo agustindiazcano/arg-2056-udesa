@@ -44,6 +44,24 @@ export const ORBIT_Y = 0.006;
 export const BUTTON_ZOOM = 0.8;
 export const WHEEL_ZOOM = 0.08;
 
+/** The polar angle of the side view: the camera as low as it may go, level with the chart. */
+export const SIDE_PHI = PHI_MAX;
+
+/** The angles a view opens at: its own, or the side view (the Recorrido opens every 3D chart straight from the side, also on load). */
+export function openingAngles(side: boolean, normal: { theta: number; phi: number }): { theta: number; phi: number } {
+  return side ? { theta: 0, phi: SIDE_PHI } : normal;
+}
+
+/**
+ * The distance at which a flat `extent` (world units, facing the camera) fills the view of a camera with vertical field of view `fovDeg`
+ * on a screen of `aspect` (width over height), with `margin` to spare (1.08 is 8 % of air). The tighter of width and height decides.
+ */
+export function fitRadius(extent: { width: number; height: number }, fovDeg: number, aspect: number, margin = 1.08): number {
+  const safe = Number.isFinite(aspect) && aspect > 0 ? aspect : 1.8;
+  const tan = Math.tan((fovDeg * Math.PI) / 360);
+  return (margin * Math.max(extent.height / 2, extent.width / 2 / safe)) / tan;
+}
+
 export type CameraPreset = 'top' | 'perspective';
 
 const TWO_PI = Math.PI * 2;

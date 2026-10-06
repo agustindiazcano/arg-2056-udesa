@@ -618,3 +618,56 @@ main.scene-container {
 #overlay[data-section='tour'] .dash {
   grid-template-columns: minmax(200px, 340px) minmax(0, 1fr);
 }
+
+/* ---- Recorrido step 1: the GDP chart ------------------------------------------------------------------------------- */
+
+.gdp-step {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  height: 100%;
+  padding: var(--space-3) var(--space-md);
+  pointer-events: none;
+}
+
+.gdp-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.gdp-head h2 {
+  margin: 0;
+  font-size: var(--font-xl, 1.6rem);
+  font-weight: 300;
+  letter-spacing: 0.01em;
+}
+
+.gdp-sub {
+  margin: var(--space-1, 0.25rem) 0 0;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.gdp-mock {
+  color: var(--state-warning);
+}
+
+.gdp-chart {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+  padding: var(--space-md);
+  background: radial-gradient(120% 100% at 50% 0%, color-mix(in srgb, var(--blue) 12%, transparent), transparent 60%), var(--glass);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(14px);
+}
+
+.gdp-chart > * {
+  width: 100%;
+  height: 100%;
+}

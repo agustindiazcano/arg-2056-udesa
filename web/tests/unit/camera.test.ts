@@ -2,12 +2,15 @@ import { describe, expect, it } from 'vitest';
 import {
   PHI_MAX,
   PHI_MIN,
+  SIDE_PHI,
   ZOOM_MAX,
   ZOOM_MIN,
   cameraLimits,
   blendCamera,
   copyCamera,
+  fitRadius,
   ndcOf,
+  openingAngles,
   orbit,
   pan,
   presetCamera,
@@ -231,5 +234,40 @@ describe('blendCamera', () => {
     expect(out.x).toBe(1);
     expect(out.radius).toBe(5);
     expect(out.theta).toBeCloseTo(-1, 10);
+  });
+});
+
+describe('openingAngles', () => {
+  const normal = { theta: 0.3, phi: 1 };
+  it('keeps the normal angles of the view when the opening is not from the side', () => {
+    expect(openingAngles(false, normal)).toEqual(normal);
+  });
+  it('looks straight at the side (no turn, almost horizontal) when asked', () => {
+    expect(openingAngles(true, normal)).toEqual({ theta: 0, phi: SIDE_PHI });
+    expect(SIDE_PHI).toBe(PHI_MAX);
+  });
+});
+
+describe('fitRadius', () => {
+  const extent = { width: 16, height: 6 };
+  const visible = (radius: number, aspect: number) => {
+    const half = Math.tan((FOV * Math.PI) / 360) * radius;
+    return { width: 2 * half * aspect, height: 2 * half };
+  };
+  it('shows the whole extent, with only the margin to spare, on a wide screen', () => {
+    const r = fitRadius(extent, FOV, 2, 1.1);
+    const v = visible(r, 2);
+    expect(v.width).toBeGreaterThanOrEqual(extent.width * 1.1 - 1e-9);
+    expect(v.height).toBeGreaterThanOrEqual(extent.height * 1.1 - 1e-9);
+    // one of the two is tight
+    expect(Math.min(v.width / extent.width, v.height / extent.height)).toBeCloseTo(1.1, 6);
+  });
+  it('is limited by the width on a narrow screen and by the height on a very wide one', () => {
+    expect(fitRadius(extent, FOV, 0.8, 1)).toBeCloseTo(extent.width / 2 / 0.8 / Math.tan((FOV * Math.PI) / 360), 6);
+    expect(fitRadius(extent, FOV, 6, 1)).toBeCloseTo(extent.height / 2 / Math.tan((FOV * Math.PI) / 360), 6);
+  });
+  it('falls back to a usable aspect when the host has no size yet', () => {
+    expect(fitRadius(extent, FOV, 0, 1.1)).toBeGreaterThan(0);
+    expect(Number.isFinite(fitRadius(extent, FOV, Number.NaN, 1.1))).toBe(true);
   });
 });
