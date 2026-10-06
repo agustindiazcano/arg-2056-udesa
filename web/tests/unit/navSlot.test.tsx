@@ -8,7 +8,7 @@ import { SlotPortal } from '../../src/dashboard/SlotPortal';
 afterEach(cleanup);
 
 describe('navbar slot', () => {
-  it('puts the controls of a scene in the header, to the right of the tabs and before the links', () => {
+  it('puts the controls of a scene in the second row of the header, under the brand, the tabs and the links', () => {
     render(
       <>
         <Header />
@@ -24,8 +24,10 @@ describe('navbar slot', () => {
     expect(header.contains(group)).toBe(true);
     const tabs = header.querySelector('nav[aria-label="Escenas"]')!;
     const links = header.querySelector('.header-end')!;
-    expect(tabs.compareDocumentPosition(group) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
-    expect(group.compareDocumentPosition(links) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    const [first, second] = Array.from(header.querySelectorAll('.header-row'));
+    expect(first!.contains(tabs) && first!.contains(links)).toBe(true);
+    expect(second!.contains(group)).toBe(true);
+    expect(first!.contains(group)).toBe(false);
   });
 
   it('the Andes scene sends its controls there', async () => {

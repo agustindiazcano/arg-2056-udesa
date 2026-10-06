@@ -5,6 +5,7 @@ import { useTicker } from '../state/useTicker';
 import { Hud } from './Hud';
 import { ProvinceFilter } from './ProvinceFilter';
 import { Header } from './Header';
+import { SiteFooter } from './SiteFooter';
 import { StoryCaption } from '../story/StoryCaption';
 import { StepRunner } from '../story/StepRunner';
 import { SceneHost } from './SceneHost';
@@ -56,6 +57,7 @@ export function App({ onHome }: { onHome?: () => void }) {
 
   return (
     <CapabilityProvider>
+      <div className="app-screen">
       <div id="stage">
         {/* Canvas will go here */}
       </div>
@@ -92,6 +94,8 @@ export function App({ onHome }: { onHome?: () => void }) {
         <StoryCaption />
         <StepRunner />
       </div>
+      </div>
+      <SiteFooter />
     </CapabilityProvider>
   );
 }

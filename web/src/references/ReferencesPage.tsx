@@ -181,6 +181,14 @@ export function ReferencesPage({ references, extra }: { references: References; 
         </>
       )}
 
+      <section aria-labelledby="metodologia">
+        <h2 id="metodologia">Metodología</h2>
+        <p>
+          Acá se va a publicar cómo se calculan los pronósticos: el modelo de población, el crecimiento de la economía y los escenarios con sus rangos. Mientras tanto, los gráficos que dicen «Datos de prueba» usan valores
+          inventados, que no son mediciones.
+        </p>
+      </section>
+
       {attributions.length > 0 && (
         <section aria-labelledby="attributions">
           <h2 id="attributions">Atribuciones</h2>

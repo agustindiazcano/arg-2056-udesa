@@ -20,8 +20,10 @@ test.describe('dashboard', () => {
         const overflow = await page.evaluate(() => {
           const doc = document.documentElement;
           const main = document.getElementById('main') as HTMLElement;
+          const screen = document.querySelector('.app-screen') as HTMLElement;
           return {
-            pageY: doc.scrollHeight - window.innerHeight,
+            // the page scrolls down to the footer; the app itself is one screen
+            pageY: screen.scrollHeight - screen.clientHeight,
             pageX: doc.scrollWidth - window.innerWidth,
             mainY: main.scrollHeight - main.clientHeight,
             mainX: main.scrollWidth - main.clientWidth
@@ -79,7 +81,8 @@ test.describe('dashboard', () => {
     await expect(page.locator('.viewer-pane')).toHaveCount(3);
     const overflow = await page.evaluate(() => {
       const main = document.getElementById('main') as HTMLElement;
-      return { page: document.documentElement.scrollHeight - window.innerHeight, main: main.scrollHeight - main.clientHeight };
+      const screen = document.querySelector('.app-screen') as HTMLElement;
+      return { page: screen.scrollHeight - screen.clientHeight, main: main.scrollHeight - main.clientHeight };
     });
     expect(overflow.page).toBeLessThanOrEqual(0);
     expect(overflow.main).toBeLessThanOrEqual(1);
@@ -145,7 +148,10 @@ test.describe('dashboard', () => {
 
     await page.getByRole('button', { name: 'Restablecer vista' }).click();
     await expect.poll(async () => (await camera()).join(',')).toBe(start.join(','));
-    const overflow = await page.evaluate(() => document.documentElement.scrollHeight - window.innerHeight);
+    const overflow = await page.evaluate(() => {
+      const screen = document.querySelector('.app-screen') as HTMLElement;
+      return screen.scrollHeight - screen.clientHeight;
+    });
     expect(overflow).toBeLessThanOrEqual(0);
   });
 
