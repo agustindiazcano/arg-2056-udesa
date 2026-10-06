@@ -33,6 +33,10 @@ export interface Map3DSpec {
   formatValue: (value: number) => string;
   /** a click on a province (null clears the selection) */
   onSelect: (id: string | null) => void;
+  /** the map stands upright, north up and seen almost from above (the Recorrido), not tilted on a table */
+  upright?: boolean;
+  /** the camera flies to the selected province and back to the whole map when nothing is selected */
+  zoomToSelected?: boolean;
   summary: string;
 }
 
@@ -59,6 +63,8 @@ export interface Lines3DSpec {
   band?: { lower: Array<number | null>; upper: Array<number | null> };
   /** index of the x label to mark (the playhead year) */
   marker?: number;
+  /** the line draws itself from the first x to the last while the camera follows it, then the camera pulls back to the whole chart */
+  follow?: boolean;
   summary: string;
 }
 

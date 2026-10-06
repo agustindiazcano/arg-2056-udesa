@@ -890,3 +890,191 @@ main.scene-container {
   outline: 2px solid var(--color-focus);
   outline-offset: 3px;
 }
+
+/* ---- Recorrido step 2: the big map and, on its right, the ranking and the bars ------------------------------------- */
+
+.prov-grid {
+  flex: 1 1 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  gap: var(--space-3);
+  min-height: 0;
+}
+
+.prov-grid > .gdp-chart,
+.prov-side > .gdp-chart {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2, 0.5rem);
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.prov-map > .tour-chart {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.prov-map > .tour-chart > * {
+  width: 100%;
+  height: 100%;
+}
+
+.prov-side {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
+  gap: var(--space-3);
+  min-width: 0;
+  min-height: 0;
+}
+
+.prov-rank-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2, 0.5rem);
+  font-size: 0.9rem;
+}
+
+.prov-rank-list {
+  flex: 1 1 auto;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  overflow-y: auto;
+}
+
+.prov-row {
+  display: grid;
+  grid-template-columns: 2rem minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--space-2, 0.5rem);
+  width: 100%;
+  padding: 0.3rem var(--space-2, 0.5rem);
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--ink-2);
+  font: inherit;
+  font-size: 0.85rem;
+  text-align: left;
+  cursor: pointer;
+}
+
+.prov-row:hover {
+  background: color-mix(in srgb, var(--nav-accent) 14%, transparent);
+}
+
+.prov-row[aria-pressed='true'] {
+  border-color: var(--nav-accent);
+  background: color-mix(in srgb, var(--nav-accent) 24%, transparent);
+  color: var(--ink);
+}
+
+.prov-pos {
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.prov-value {
+  font-variant-numeric: tabular-nums;
+}
+
+.prov-bars > .tour-chart {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.prov-bars > .tour-chart > * {
+  width: 100%;
+  height: 100%;
+}
+
+/* ---- Recorrido step 0: the GDP since 1900 and the rankings ----------------------------------------------------------- */
+
+.world-year {
+  position: absolute;
+  top: var(--space-md);
+  left: var(--space-md);
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  pointer-events: none;
+}
+
+.world-year strong {
+  font-size: 2.4rem;
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+.world-year span {
+  color: var(--ink-2);
+  font-size: 0.85rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.world-replay {
+  pointer-events: auto;
+}
+
+.world-table {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: block;
+  overflow-y: auto;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+  color: var(--ink-2);
+}
+
+.world-table thead,
+.world-table tbody,
+.world-table tfoot {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+}
+
+.world-table thead {
+  position: sticky;
+  top: 0;
+  background: color-mix(in srgb, var(--page) 88%, transparent);
+  color: var(--muted);
+}
+
+.world-table th,
+.world-table td {
+  padding: 0.25rem var(--space-2, 0.5rem);
+  text-align: left;
+}
+
+.world-table th:first-child,
+.world-table td:first-child {
+  width: 3.5rem;
+  color: var(--muted);
+}
+
+.world-table th:last-child,
+.world-table td:last-child {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.world-table tr[data-home='true'] {
+  background: color-mix(in srgb, var(--nav-accent) 24%, transparent);
+  color: var(--ink);
+}
+
+.world-table tfoot {
+  position: sticky;
+  bottom: 0;
+  border-top: 1px solid var(--border);
+}

@@ -241,7 +241,7 @@ describe('Recorrido step 1', () => {
     expect(await screen.findByRole('heading', { name: 'PBI de la Argentina' })).toBeTruthy();
     expect(screen.queryByRole('heading', { name: 'escena' })).toBeNull();
     cleanup();
-    useStore.setState({ section: 'tour', tourStep: 2 });
+    useStore.setState({ section: 'tour', tourStep: 14 });
     render(<App />);
     expect(screen.queryByRole('heading', { name: 'PBI de la Argentina' })).toBeNull();
     expect(screen.getByRole('heading', { name: 'escena' })).toBeTruthy();

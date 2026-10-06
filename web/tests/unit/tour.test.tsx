@@ -55,17 +55,18 @@ describe('Recorrido', () => {
 describe('Recorrido steps in the navbar', () => {
   const steps = () => within(screen.getByRole('group', { name: 'Pasos del Recorrido' }));
 
-  it('shows Anterior, three numbers and Siguiente in the header, the first step pressed and Anterior disabled', () => {
+  it('shows Anterior, three numbers and Siguiente in the header, step 0 pressed and Anterior disabled', () => {
     render(<App />);
     const buttons = steps().getAllByRole('button');
-    expect(buttons.map((b) => b.textContent)).toEqual(['Anterior', '1', '2', '3', 'Siguiente']);
+    expect(buttons.map((b) => b.textContent)).toEqual(['Anterior', '0', '1', '2', 'Siguiente']);
     expect(buttons.map((b) => b.getAttribute('aria-pressed'))).toEqual([null, 'true', 'false', 'false', null]);
     expect((buttons[0] as HTMLButtonElement).disabled).toBe(true);
     expect(document.querySelector('.app-header')?.contains(screen.getByRole('group', { name: 'Pasos del Recorrido' }))).toBe(true);
   });
 
-  it('keeps the current step in the middle of the three numbers, held inside 1 to 15', () => {
-    expect(stepWindow(1)).toEqual([1, 2, 3]);
+  it('keeps the current step in the middle of the three numbers, held inside 0 to 15', () => {
+    expect(stepWindow(0)).toEqual([0, 1, 2]);
+    expect(stepWindow(1)).toEqual([0, 1, 2]);
     expect(stepWindow(2)).toEqual([1, 2, 3]);
     expect(stepWindow(3)).toEqual([2, 3, 4]);
     expect(stepWindow(8)).toEqual([7, 8, 9]);
@@ -75,6 +76,7 @@ describe('Recorrido steps in the navbar', () => {
 
   it('Anterior and Siguiente move one step, and the last step disables Siguiente', () => {
     render(<App />);
+    fireEvent.click(steps().getByRole('button', { name: 'Siguiente' }));
     fireEvent.click(steps().getByRole('button', { name: 'Siguiente' }));
     fireEvent.click(steps().getByRole('button', { name: 'Siguiente' }));
     expect(useStore.getState().tourStep).toBe(3);
@@ -87,14 +89,14 @@ describe('Recorrido steps in the navbar', () => {
 
   it('a click picks a step, and the right and left arrow keys move it', () => {
     render(<App />);
-    fireEvent.click(steps().getByRole('button', { name: '3' }));
-    expect(useStore.getState().tourStep).toBe(3);
-    fireEvent.keyDown(window, { key: 'ArrowRight' });
-    expect(useStore.getState().tourStep).toBe(4);
-    expect(steps().getByRole('button', { name: '4' }).getAttribute('aria-pressed')).toBe('true');
-    fireEvent.keyDown(window, { key: 'ArrowLeft' });
-    fireEvent.keyDown(window, { key: 'ArrowLeft' });
+    fireEvent.click(steps().getByRole('button', { name: '2' }));
     expect(useStore.getState().tourStep).toBe(2);
+    fireEvent.keyDown(window, { key: 'ArrowRight' });
+    expect(useStore.getState().tourStep).toBe(3);
+    expect(steps().getByRole('button', { name: '3' }).getAttribute('aria-pressed')).toBe('true');
+    fireEvent.keyDown(window, { key: 'ArrowLeft' });
+    fireEvent.keyDown(window, { key: 'ArrowLeft' });
+    expect(useStore.getState().tourStep).toBe(1);
     expect(useStore.getState().scene).toBe('economy');
   });
 

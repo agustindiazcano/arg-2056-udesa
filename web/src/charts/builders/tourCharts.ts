@@ -45,6 +45,8 @@ interface ColumnsOpts {
   /** the category to paint with the accent color (single series only) */
   highlight?: string;
   summary: string;
+  /** a bar chart of many categories: thinner bars and names turned this many degrees under them */
+  dense?: { barWidth: number; rotate: number };
 }
 
 const BAR_WIDTH = 30;
@@ -53,7 +55,7 @@ const BAR_GAP = 1.1;
 /** Columns, one series per group member: a single series is a ranking, two are a comparison; a series may carry a range. */
 export function buildColumns(categories: string[], series: ColumnSeries[], opts: ColumnsOpts) {
   const n = series.length;
-  const barWidth = n === 1 ? 44 : BAR_WIDTH;
+  const barWidth = opts.dense?.barWidth ?? (n === 1 ? 44 : BAR_WIDTH);
   const bars = series.map((s) => ({
     name: s.name,
     type: 'bar',
@@ -124,6 +126,12 @@ export function buildColumns(categories: string[], series: ColumnSeries[], opts:
     ...axes(categories),
     series: [...bars, ...whiskers]
   };
+  if (opts.dense) {
+    option.xAxis.axisLabel = { ...option.xAxis.axisLabel, rotate: opts.dense.rotate, interval: 0, fontSize: 11 } as never;
+    option.series.forEach((s) => {
+      if (s.type === 'bar') (s as { label: { show: boolean } }).label.show = false;
+    });
+  }
   return { option, summary: opts.summary };
 }
 
@@ -196,6 +204,72 @@ export function buildShares(rows: Array<{ label: string; value: number }>, opts:
           rich: { n: { fontSize: 15, fontWeight: 600, color: tokens.ink }, v: { fontSize: 13, color: tokens.ink2 } }
         },
         data: sorted.map((r, i) => ({ name: r.label, value: r.value, itemStyle: { color: blues[Math.min(i, blues.length - 1)] } }))
+      }
+    ]
+  };
+  return { option, summary: opts.summary };
+}
+
+/** The GDP line as it is while the animation follows it: only up to `frame.year`, in a moving window of years. */
+export function buildFollowedSeries(
+  years: number[],
+  values: number[],
+  frame: { year: number; xMin: number; xMax: number; yMax: number; visibleCount: number },
+  opts: { unit: string; name: string; summary: string }
+) {
+  const drawn: Array<[number, number]> = years.slice(0, frame.visibleCount).map((y, i) => [y, values[i]!]);
+  const last = drawn.at(-1);
+  // the head, a little past the last whole year: it moves smoothly between two years
+  const next = years[frame.visibleCount];
+  const nextValue = values[frame.visibleCount];
+  if (last && next !== undefined && nextValue !== undefined && frame.year > last[0]) {
+    const t = (frame.year - last[0]) / (next - last[0]);
+    drawn.push([frame.year, last[1] + (nextValue - last[1]) * t]);
+  }
+  const head = drawn.at(-1);
+  const option = {
+    animation: false,
+    backgroundColor: 'transparent',
+    tooltip: { show: false },
+    grid: { left: 8, right: 28, top: 24, bottom: 8, containLabel: true },
+    xAxis: {
+      type: 'value',
+      min: frame.xMin,
+      max: frame.xMax,
+      minInterval: 1,
+      axisLine: { lineStyle: { color: tokens.baseline } },
+      axisTick: { show: false },
+      axisLabel: { color: tokens.muted, formatter: (v: number) => String(Math.round(v)) },
+      splitLine: { show: true, lineStyle: GRID_LINE }
+    },
+    yAxis: {
+      type: 'value',
+      min: 0,
+      max: frame.yMax,
+      splitLine: { lineStyle: GRID_LINE },
+      axisLabel: { color: tokens.muted, formatter: (v: number) => formatAxisNumber(v) }
+    },
+    series: [
+      {
+        name: opts.name,
+        type: 'line',
+        data: drawn,
+        symbol: 'none',
+        z: 3,
+        lineStyle: { width: 3, color: tokens.ink, shadowBlur: 12, shadowColor: 'rgba(255,255,255,0.35)' },
+        itemStyle: { color: tokens.ink },
+        areaStyle: { color: fade('#ffffff', '40', '00') }
+      },
+      {
+        name: 'Hoy',
+        type: 'line',
+        data: head ? [head] : [],
+        symbol: 'circle',
+        symbolSize: 11,
+        z: 4,
+        silent: true,
+        lineStyle: { opacity: 0 },
+        itemStyle: { color: tokens.blue, borderColor: tokens.ink, borderWidth: 2, shadowBlur: 14, shadowColor: 'rgba(57,135,229,0.7)' }
       }
     ]
   };

@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import {
   AdditiveBlending,
+  NormalBlending,
   AmbientLight,
   BoxGeometry,
   BufferGeometry,
@@ -8,6 +9,7 @@ import {
   Color,
   DirectionalLight,
   DoubleSide,
+  FrontSide,
   ExtrudeGeometry,
   Float32BufferAttribute,
   GridHelper,
@@ -17,6 +19,7 @@ import {
   Mesh,
   MeshBasicMaterial,
   MeshStandardMaterial,
+  Plane,
   Shape,
   SphereGeometry,
   TubeGeometry,
@@ -32,6 +35,7 @@ import { useReducedMotion } from '../runtime/useReducedMotion';
 import { SEQUENTIAL_BLUE, tokens } from '../styles/tokens';
 import { textSprite } from './labels';
 import { fitRadius, openingAngles } from '../charts3d/camera';
+import { FOLLOW_TOTAL_MS, followFrame, lerp } from '../charts3d/followAnim';
 import { createStage } from './stage';
 import { useSideView } from './useSideView';
 import { useCameraNav } from './useCameraNav';
@@ -95,6 +99,7 @@ export function Lines3D({ spec }: { spec: Lines3DSpec }) {
   const pixelRatioCap = QUALITY_PRESETS[quality?.tier ?? 'medium'].pixelRatioCap;
   const { stageRef, poseRef, controls } = useCameraNav();
   const side = useSideView();
+  const follow = spec.follow === true;
 
   useEffect(() => {
     const host = hostRef.current;
@@ -110,12 +115,20 @@ export function Lines3D({ spec }: { spec: Lines3DSpec }) {
       radius: side ? fitRadius(sideFit, 32, aspect, SIDE_MARGIN) : WIDTH * 1.25 + lanesDepth * 0.5 + 5,
       ...openingAngles(side, { theta: 0.3, phi: 1.0 }),
       box: { minX: -(WIDTH + 3) / 2, maxX: (WIDTH + 3) / 2, minY: 0, maxY: MAX_HEIGHT, minZ: -(lanesDepth + 3.4) / 2, maxZ: (lanesDepth + 3.4) / 2 },
-      pose: poseRef.current ?? undefined,
-      animateReset: !reduced && quality?.tier !== 'low'
+      // a followed line starts from the default camera: the pose of an earlier run (the camera of the follow itself) must not carry over
+      pose: follow ? undefined : (poseRef.current ?? undefined),
+      animateReset: !reduced && quality?.tier !== 'low',
+      wheelZoom: side ? 'modifier' : 'always',
+      ...(follow ? { zoomMin: 0.12 } : {})
     });
     poseRef.current = stage.pose;
     stageRef.current = stage;
     const { scene } = stage;
+    // a followed line is drawn only up to a moving plane: what is behind it is not there yet
+    const reveal = new Plane(new Vector3(-1, 0, 0), -WIDTH / 2 - 0.2);
+    const clip = follow ? [reveal] : undefined;
+    if (follow) stage.renderer.localClippingEnabled = true;
+    const hiddenUntilDone: Array<{ visible: boolean }> = [];
     scene.add(new AmbientLight(tokens.ink, 1.15));
     const sun = new DirectionalLight(tokens.ink, 2.2);
     sun.position.set(-5, 9, 7);
@@ -161,7 +174,7 @@ export function Lines3D({ spec }: { spec: Lines3DSpec }) {
     // the band, behind every lane
     const bandZ = -lanesDepth / 2 - LANE_GAP;
     for (const b of layout.bands) {
-      const material = new MeshBasicMaterial({ color: new Color(tokens.blue), transparent: true, opacity: 0.2, depthWrite: false });
+      const material = new MeshBasicMaterial({ color: new Color(tokens.blue), transparent: true, opacity: 0.2, depthWrite: false, clippingPlanes: clip });
       const shape = new Shape();
       shape.moveTo(b.lower[0]!.x, b.lower[0]!.y);
       for (const p of b.upper) shape.lineTo(p.x, p.y);
@@ -189,7 +202,7 @@ export function Lines3D({ spec }: { spec: Lines3DSpec }) {
       geometry.setAttribute('position', new Float32BufferAttribute(positions, 3));
       geometry.setAttribute('color', new Float32BufferAttribute(colors, 4));
       geometry.setIndex(index);
-      const mesh = new Mesh(geometry, new MeshBasicMaterial({ vertexColors: true, transparent: true, depthWrite: false, side: DoubleSide }));
+      const mesh = new Mesh(geometry, new MeshBasicMaterial({ vertexColors: true, transparent: true, depthWrite: false, side: DoubleSide, clippingPlanes: clip }));
       mesh.position.z = z;
       grow.add(mesh);
     };
@@ -204,7 +217,10 @@ export function Lines3D({ spec }: { spec: Lines3DSpec }) {
         transparent: opacity < 1,
         opacity,
         depthWrite: opacity >= 1,
-        blending: additive ? AdditiveBlending : undefined
+        blending: additive ? AdditiveBlending : NormalBlending,
+        clippingPlanes: clip,
+        // cut by the reveal plane, a tube must look filled, not hollow
+        side: clip ? DoubleSide : FrontSide
       });
       const mesh = new Mesh(geometry, material);
       mesh.position.z = z;
@@ -235,13 +251,14 @@ export function Lines3D({ spec }: { spec: Lines3DSpec }) {
       const end = lane.segments.at(-1)?.at(-1);
       if (end) {
         if (s.tone !== 'muted') {
-          const dot = new Mesh(new SphereGeometry(look.radius * 2.2, 16, 12), new MeshBasicMaterial({ color }));
+          const dot = new Mesh(new SphereGeometry(look.radius * 2.2, 16, 12), new MeshBasicMaterial({ color, clippingPlanes: clip }));
           dot.position.set(end.x, end.y, lane.z);
           grow.add(dot);
         }
         const name = textSprite(s.name, s.tone === 'muted' ? tokens.ink2 : tokens.ink, 0.34, s.tone !== 'muted');
         name.position.set(end.x + 0.7, end.y + 0.25, lane.z);
         scene.add(name);
+        if (follow) hiddenUntilDone.push(name);
       }
     });
 
@@ -260,7 +277,58 @@ export function Lines3D({ spec }: { spec: Lines3DSpec }) {
       grow.scale.y = k;
     };
     let cancel = () => {};
-    if (reduced) {
+    if (follow) {
+      // the line draws itself from the first year to the last and the camera follows its head; then it pulls back to the whole chart
+      setGrowth(1);
+      const base = { ...stage.pose };
+      const points = (layout.series[0]?.segments ?? []).flat();
+      const heightAt = (x: number): number => {
+        const next = points.findIndex((p) => p.x >= x);
+        if (next <= 0) return points[0]?.y ?? 0;
+        if (next < 0) return points.at(-1)?.y ?? 0;
+        const a = points[next - 1]!;
+        const b = points[next]!;
+        return lerp(a.y, b.y, (x - a.x) / Math.max(b.x - a.x, 1e-6));
+      };
+      // The camera follows the head until the visitor takes it (a drag, the wheel, the buttons, a double click): from then on
+      // the line keeps drawing and the camera is theirs. The stage animation is not used: any camera move cancels it.
+      let lastSet = { ...base };
+      let handedOver = false;
+      const frame = (elapsed: number) => {
+        const f = followFrame(elapsed);
+        const head = lerp(-WIDTH / 2, WIDTH / 2, f.reveal);
+        reveal.constant = f.reveal >= 1 ? WIDTH : head;
+        for (const item of hiddenUntilDone) item.visible = f.reveal >= 1;
+        if (!handedOver) {
+          const p = stage.pose;
+          handedOver = ['x', 'y', 'z', 'theta', 'phi', 'radius'].some((k) => Math.abs((p as never)[k] - (lastSet as never)[k]) > 1e-4);
+        }
+        if (!handedOver) {
+          stage.nav.setPose({
+            ...base,
+            x: lerp(Math.min(head + WIDTH * 0.05, WIDTH / 2), base.x, f.out),
+            y: lerp(heightAt(head) * 0.8 + 0.3, base.y, f.out),
+            radius: lerp(base.radius * 0.42, base.radius, f.out)
+          });
+          lastSet = { ...stage.pose };
+        }
+        stage.requestRender();
+      };
+      if (reduced) {
+        frame(FOLLOW_TOTAL_MS);
+      } else {
+        frame(0);
+        const startedAt = performance.now();
+        let raf = 0;
+        const step = (now: number) => {
+          const elapsed = Math.min(FOLLOW_TOTAL_MS, now - startedAt);
+          frame(elapsed);
+          if (elapsed < FOLLOW_TOTAL_MS) raf = requestAnimationFrame(step);
+        };
+        raf = requestAnimationFrame(step);
+        cancel = () => cancelAnimationFrame(raf);
+      }
+    } else if (reduced) {
       setGrowth(1);
       stage.requestRender();
     } else {
@@ -273,7 +341,7 @@ export function Lines3D({ spec }: { spec: Lines3DSpec }) {
       stageRef.current = null;
       stage.dispose();
     };
-  }, [spec, quality?.tier, pixelRatioCap, reduced, side]);
+  }, [spec, quality?.tier, pixelRatioCap, reduced, side, follow]);
 
   return (
     <div className="chart3d-wrap">

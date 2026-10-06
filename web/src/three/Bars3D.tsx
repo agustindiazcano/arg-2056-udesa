@@ -70,7 +70,8 @@ export function Bars3D({ spec, projection }: { spec: Bars3DSpec; projection?: Pr
       ...openingAngles(side, { theta: 0.22, phi: 1.15 }),
       box: { minX: -plateWidthBox / 2, maxX: plateWidthBox / 2, minY: 0, maxY: MAX_HEIGHT, minZ: -plateDepthBox / 2, maxZ: plateDepthBox / 2 },
       pose: poseRef.current ?? undefined,
-      animateReset: !reduced && quality?.tier !== 'low'
+      animateReset: !reduced && quality?.tier !== 'low',
+      wheelZoom: side ? 'modifier' : 'always'
     });
     poseRef.current = stage.pose;
     stageRef.current = stage;

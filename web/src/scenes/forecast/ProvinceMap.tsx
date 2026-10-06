@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { registerMap } from '../../charts/echarts.js';
 import type { ECharts } from '../../charts/echarts.js';
 import { resetMap, zoomMap } from '../../charts/mapNav.js';
-import { geoBbox } from '../../charts/navState.js';
+import { clampCenter, clampZoom, geoBbox } from '../../charts/navState.js';
 import { NavControls } from '../../ui/NavControls.js';
 import { MAP_NAME, buildProvinceMap } from '../../charts/builders/provinceMap.js';
 import { DataTable } from '../../charts/DataTable.js';
@@ -73,6 +73,8 @@ interface ProvinceMapProps {
   hideTitle?: boolean;
   /** A small preview: no toolbar and no minimum height (the Recorrido shows a map among small charts). */
   compact?: boolean;
+  /** The map zooms to the selected province and back to the whole territory when nothing is selected. */
+  zoomToSelected?: boolean;
   onSelect: (id: ProvinceId | null) => void;
 }
 
@@ -90,6 +92,7 @@ export function ProvinceMap({
   observed = false,
   hideTitle = false,
   compact = false,
+  zoomToSelected = false,
   onSelect
 }: ProvinceMapProps) {
   const [asTable, setAsTable] = useState(false);
@@ -110,6 +113,22 @@ export function ProvinceMap({
       ),
     [geo, values, centroids, smallIds, unit, indicatorLabel, metric, selectedId, scenario, year, observed]
   );
+
+  // after the new option (the child's effect runs first), the view goes to the selected province
+  useEffect(() => {
+    const chart = apiRef.current;
+    if (!zoomToSelected || !chart) return;
+    const feature = selectedId ? geo.features.find((f) => f.properties.id === selectedId) : undefined;
+    if (!feature) {
+      resetMap(chart);
+      return;
+    }
+    const [x0, y0, x1, y1] = feature.properties.bbox;
+    const [bx0, by0, bx1, by1] = bbox;
+    const zoom = clampZoom(0.75 * Math.min((bx1 - bx0) / Math.max(x1 - x0, 0.01), (by1 - by0) / Math.max(y1 - y0, 0.01)));
+    const [cx, cy] = clampCenter([(x0 + x1) / 2, (y0 + y1) / 2], zoom, bbox);
+    chart.setOption({ geo: { zoom, center: [cx, cy] } } as never);
+  }, [selectedId, zoomToSelected, geo, bbox]);
 
   const handleClick = (params: ChartClickParams) => {
     const id = params.data?.provinceId ?? params.name;

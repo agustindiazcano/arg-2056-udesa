@@ -234,11 +234,13 @@ describe('Reducer', () => {
   describe('the steps of the Recorrido', () => {
     const tour: State = { ...initialState, scene: 'economy', section: 'tour' };
 
-    it('the arrow keys move the step, not the scene, and stop at 1 and at TOUR_STEPS', () => {
-      let state = reduce(tour, { type: 'nextScene' });
+    it('the arrow keys move the step, not the scene, and stop at 0 and at TOUR_STEPS', () => {
+      let state = reduce({ ...tour, tourStep: 1 }, { type: 'nextScene' });
       expect(state).toMatchObject({ tourStep: 2, scene: 'economy' });
       state = reduce(state, { type: 'prevScene' });
       expect(state.tourStep).toBe(1);
+      state = reduce(state, { type: 'prevScene' });
+      expect(state.tourStep).toBe(0);
       expect(reduce(state, { type: 'prevScene' })).toBe(state);
       const last: State = { ...tour, tourStep: TOUR_STEPS };
       expect(reduce(last, { type: 'nextScene' })).toBe(last);
@@ -246,7 +248,8 @@ describe('Reducer', () => {
 
     it('tourSet picks a step of the list and ignores any other value', () => {
       expect(reduce(tour, { type: 'tourSet', step: 7 }).tourStep).toBe(7);
-      expect(reduce(tour, { type: 'tourSet', step: 0 })).toBe(tour);
+      expect(reduce({ ...tour, tourStep: 5 }, { type: 'tourSet', step: 0 }).tourStep).toBe(0);
+      expect(reduce(tour, { type: 'tourSet', step: -1 })).toBe(tour);
       expect(reduce(tour, { type: 'tourSet', step: TOUR_STEPS + 1 })).toBe(tour);
       expect(reduce(tour, { type: 'tourSet', step: 2.5 })).toBe(tour);
     });

@@ -4,14 +4,12 @@ import { formatValue } from '../charts/format.js';
 import { Chart2D3D } from '../charts3d/Chart2D3D.js';
 import { ProvinceMap, useProvinces } from '../scenes/forecast/ProvinceMap.js';
 import { mapSummary } from '../scenes/forecast/mapSelectors.js';
-import type { MapValues } from '../scenes/forecast/mapSelectors.js';
 import { useStore } from '../state/store.js';
 import { Reveal } from '../motion/Reveal.js';
 import { REVEAL_STAGGER } from '../motion/timings.js';
 import { Segmented } from '../ui/Segmented.js';
-import { PROVINCES } from '../types/province.js';
 import type { ProvinceId } from '../types/province.js';
-import { PROVINCE_VALUES } from './tourData.js';
+import { PRODUCTION_UNIT, mapValuesOf } from './provinceMock.js';
 import { CHART_STEP_LIST, TOUR_CHARTS } from './tourCharts.js';
 import { useTourLayout } from './useTourLayout.js';
 import type { TourCount } from './useTourLayout.js';
@@ -61,23 +59,11 @@ function ChartBody({ def }: { def: TourChartDef }) {
   );
 }
 
-const UNIT = 'millones de USD';
-
-/** Made-up values for the province map, ranked from the highest. */
-function mockProvinceValues(): MapValues {
-  const entries = PROVINCES.map((p, i) => ({ id: p.id as string, value: PROVINCE_VALUES[i] ?? 0 }));
-  const ranked = [...entries].sort((a, b) => b.value - a.value);
-  const values: MapValues['values'] = {};
-  ranked.forEach((e, i) => {
-    values[e.id] = { plotted: e.value, p10: e.value, p50: e.value, p90: e.value, rank: i + 1 };
-  });
-  const all = entries.map((e) => e.value);
-  return { values, missing: [], domain: [Math.min(...all), Math.max(...all)], excluded: 0 };
-}
+const UNIT = PRODUCTION_UNIT;
 
 function MapBody({ def, small = false }: { def: TourChartDef; small?: boolean }) {
   const provinces = useProvinces();
-  const values = useMemo(mockProvinceValues, []);
+  const values = useMemo(() => mapValuesOf(), []);
   const [selected, setSelected] = useState<ProvinceId | null>(null);
   if (provinces.status === 'loading') return <p className="poster">Cargando la geometría de las provincias...</p>;
   if (provinces.status === 'error') return <p style={{ color: 'var(--state-warning)' }}>{`La geometría de las provincias no está disponible: ${provinces.message}`}</p>;

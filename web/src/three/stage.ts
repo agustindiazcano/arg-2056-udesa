@@ -40,6 +40,8 @@ export interface StageOptions {
   phiMax?: number;
   /** the reset glides back over a short time; false (reduced motion, low quality) jumps */
   animateReset?: boolean;
+  /** `modifier`: the wheel zooms only with Ctrl or Cmd held (a pinch on a trackpad does), so that over the chart a page that scrolls keeps scrolling */
+  wheelZoom?: 'always' | 'modifier';
 }
 
 /** What the `+`, `-` and reset buttons call. */
@@ -213,6 +215,7 @@ export function createStage(host: HTMLElement, o: StageOptions): Stage {
     publish();
   };
   const wheel = (e: WheelEvent) => {
+    if (o.wheelZoom === 'modifier' && !e.ctrlKey && !e.metaKey) return;
     e.preventDefault();
     cancelGlide();
     ndc(e.clientX, e.clientY, cursor);
