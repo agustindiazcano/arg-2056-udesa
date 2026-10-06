@@ -342,6 +342,6 @@
   display: block;
   width: auto;
   height: var(--logo-h);
-  max-width: calc(var(--u) * 14);
+  max-width: calc(var(--u) * 26);
   object-fit: contain;
 }
