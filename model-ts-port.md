@@ -1,6 +1,6 @@
 # Task: `model-ts-port` (optional)
 
-Branch: `task/model-ts-port`. One PR. Read `AGENTS.md`, `LASTCONTEXT.md`, `PENDING.md`, `docs/model-design.md` (section 7 "TypeScript port" is binding; section 6 for which parameters the sandbox exposes), `docs/population-model.md`, `docs/growth-model.md`, `docs/hdi-model.md`, `docs/ai-overlay.md`, `docs/params.md`, `model/params/params.json`, the Python modules of those components, `web/src/model-ts/population.ts`, `web/tests/parity/population.test.ts`, `model/parity/gen_parity.py`, `scene-sandbox.md` and `web/src/scenes/sandbox/` first.
+Branch: `task/model-ts-port`. One PR. Read `AGENTS.md`, `LASTCONTEXT.md`, `PENDING.md`, `docs/model-design.md` (section 7 "TypeScript port" is binding; section 6 for which parameters the sandbox exposes), `docs/population-model.md`, `docs/growth-model.md`, `docs/hdi-model.md`, `docs/ai-overlay.md`, `docs/params.md`, `model/params/params.json`, the Python modules of those components, `web/src/model-ts/population.ts`, `web/tests/parity/population.test.ts`, `model/parity/gen_parity.py`, `docs/archived/scene-sandbox.md` and `web/src/scenes/sandbox/` first.
 Prerequisites: `model-growth-core` and `model-ai-overlay` are merged into `main` (and `model-population-drivers` and `model-hdi` for the full port). If one is not, stop and tell me which.
 
 ## Goal

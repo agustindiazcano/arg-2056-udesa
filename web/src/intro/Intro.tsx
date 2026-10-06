@@ -30,7 +30,7 @@ const INSTITUTIONS: ReadonlyArray<{ name: string; src: string; href: string }> =
   { name: 'Contar con Datos', src: '/images/contar-con-datos-logo-udesa.webp', href: 'https://www.udesa.edu.ar/contar-con-datos' },
   {
     name: 'Secretaría de Innovación, Ciencia y Tecnología',
-    src: '/images/secretaria-innovacion-ciencia-tecnologia-recortado.png',
+    src: '/images/logo-subsecretaria-sscyt-blanco.png',
     href: 'https://www.argentina.gob.ar/jefatura/innovacion-ciencia-y-tecnologia'
   }
 ];

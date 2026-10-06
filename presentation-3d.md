@@ -2,7 +2,7 @@
 
 Status: **brief written, direction approved by the human**. It replaces `scene-forecast-map-3d` (superseded: that brief made 3D an optional variant of one map; the human decided 3D is the default presentation of the whole story). It is a program of several small PRs, not one. Each PR is its own branch `task/presentation-3d-<part>`.
 
-Read `AGENTS.md`, `LASTCONTEXT.md`, `PENDING.md`, `design.md`, `docs/ui.md`, `docs/performance.md`, `docs/geo.md`, `storytelling-substeps.md`, `andes-integration.md` and the code under `web/src/{app,scenes,story,charts,runtime,state}/` first. The visual and interaction reference is the proof of concept `test/dashboard_3d_PoC.html` (Three.js from a CDN, one HTML file, invented model). Read it for the look and the mechanics; do **not** copy its data model, its CDN, its Google font or its global-variable style.
+Read `AGENTS.md`, `LASTCONTEXT.md`, `PENDING.md`, `design.md`, `docs/ui.md`, `docs/performance.md`, `docs/geo.md`, `docs/archived/storytelling-substeps.md`, `andes-integration.md` and the code under `web/src/{app,scenes,story,charts,runtime,state}/` first. The visual and interaction reference is the proof of concept `test/dashboard_3d_PoC.html` (Three.js from a CDN, one HTML file, invented model). Read it for the look and the mechanics; do **not** copy its data model, its CDN, its Google font or its global-variable style.
 
 Prerequisites: F2b merged (Spanish scenes, shared `SceneShell`, `TableToggle`, `FilterBar`, es-AR locale), and the human's confirmation of the open points in section 5.
 

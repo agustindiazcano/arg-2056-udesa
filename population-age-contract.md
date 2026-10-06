@@ -1,6 +1,6 @@
 # Task: `population-age-contract`
 
-Branch: `task/population-age-contract`. One PR. Read `AGENTS.md`, `LASTCONTEXT.md`, `PENDING.md`, `docs/model-design.md` (section 2.1 and decision `D-data-1`), `docs/data-dictionary.md`, `docs/data-pipeline.md`, `data/schemas/population.schema.json`, `data/schemas/economy_series.schema.json`, `scripts/dataset_checks.py`, `scripts/gen_mock.py`, `scripts/validate_data.py`, `web/src/types/` and `web/src/data/registry.ts` first. Read `composition-contract.md` and `research-contracts.md` as examples of how a contract task is written.
+Branch: `task/population-age-contract`. One PR. Read `AGENTS.md`, `LASTCONTEXT.md`, `PENDING.md`, `docs/model-design.md` (section 2.1 and decision `D-data-1`), `docs/data-dictionary.md`, `docs/data-pipeline.md`, `data/schemas/population.schema.json`, `data/schemas/economy_series.schema.json`, `scripts/dataset_checks.py`, `scripts/gen_mock.py`, `scripts/validate_data.py`, `web/src/types/` and `web/src/data/registry.ts` first. Read `docs/archived/composition-contract.md` and `docs/archived/research-contracts.md` as examples of how a contract task is written.
 Prerequisite: none.
 
 ## Goal

@@ -75,7 +75,7 @@ describe('Intro', () => {
       ['Contar con Datos', '/images/contar-con-datos-logo-udesa.webp', 'https://www.udesa.edu.ar/contar-con-datos', '_blank', 'noopener noreferrer'],
       [
         'Secretaría de Innovación, Ciencia y Tecnología',
-        '/images/secretaria-innovacion-ciencia-tecnologia-recortado.png',
+        '/images/logo-subsecretaria-sscyt-blanco.png',
         'https://www.argentina.gob.ar/jefatura/innovacion-ciencia-y-tecnologia',
         '_blank',
         'noopener noreferrer'

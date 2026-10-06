@@ -1,8 +1,8 @@
 Read roadmap.md to see whats next
 
-Every brief lives in the repository root as `<slug>.md`. The older prompts below say `docs/tasks/<slug>.md` and `docs/design.md`: they are the same files, now at the root (`<slug>.md`, `design.md`). The prompt of each task is the section named after it; the status table is "Next Steps" below.
+Every open brief lives in the repository root as `<slug>.md`; the briefs of finished tasks are in `docs/archived/<slug>.md`. The older prompts below say `docs/tasks/<slug>.md` and `docs/design.md`: they are the same files, now at the root (`<slug>.md`, `design.md`). The prompt of each task is the section named after it; the status table is "Next Steps" below.
 
-0. audit.md  [DONE - PR #17 merged]
+0. docs/archived/audit.md  [DONE - PR #17 merged]
 
 TARGET: <main | task slug | branch name>   (replace before sending)
 
@@ -28,7 +28,7 @@ Rules:
 When finished: write the report in the format of the brief, and a PR description with the verdict, the count of findings per severity, and the three findings I should read first.
 
 
-1. model-design.md  [DONE - PR #18 merged]
+1. docs/archived/model-design.md  [DONE - PR #18 merged]
 
 Before doing anything, read these files in this order:
 1. AGENTS.md
@@ -52,7 +52,7 @@ Rules:
 
 When finished: overwrite LASTCONTEXT.md, update PENDING.md as the brief says, and write a PR description with (a) what changed, (b) what was verified, (c) what the human must verify.v
 
-2. scene-forecast.md  [DONE - PR #19 merged]
+2. docs/archived/scene-forecast.md  [DONE - PR #19 merged]
 
 Before doing anything, read these files in this order:
 1. AGENTS.md
@@ -81,7 +81,7 @@ Rules:
 
 When finished: overwrite LASTCONTEXT.md, update PENDING.md, and write a PR description with (a) what changed, (b) what was verified, (c) what the human must verify (look and feel against docs/design.md, wording of the caveat and of the p10-p90 label, mock coverage).
 
-3. terrain-bake.md  [DONE - PR #20 merged]
+3. docs/archived/terrain-bake.md  [DONE - PR #20 merged]
 
 Before doing anything, read these files in this order:
 1. AGENTS.md
@@ -109,7 +109,7 @@ Rules:
 
 When finished: overwrite LASTCONTEXT.md, update PENDING.md, and write a PR description with (a) what changed, (b) what was verified, (c) what the human must verify.
 
-4. geo-provinces.md  [DONE - PR #21 merged]
+4. docs/archived/geo-provinces.md  [DONE - PR #21 merged]
 
 Before doing anything, read these files in this order:
 1. AGENTS.md
@@ -137,7 +137,7 @@ Rules:
 
 When finished: overwrite LASTCONTEXT.md, update PENDING.md, and write a PR description with (a) what changed, (b) what was verified, (c) what the human must verify.
 
-5. scene-forecast-map.md  [DONE - PR #22 merged]
+5. docs/archived/scene-forecast-map.md  [DONE - PR #22 merged]
 
 Before doing anything, read these files in this order:
 1. AGENTS.md
@@ -168,7 +168,7 @@ Rules:
 
 When finished: overwrite LASTCONTEXT.md, update PENDING.md, and write a PR description with (a) what changed, (b) what was verified, (c) what the human must verify.
 
-6. scene-economy.md  [DONE - PR #23 merged]
+6. docs/archived/scene-economy.md  [DONE - PR #23 merged]
 
 Before doing anything, read these files in this order:
 1. AGENTS.md
@@ -200,7 +200,7 @@ Rules:
 
 When finished: overwrite LASTCONTEXT.md, update PENDING.md, and write a PR description with (a) what changed, (b) what was verified, (c) what the human must verify.
 
-7. scene-sandbox.md  [DONE - merged]
+7. docs/archived/scene-sandbox.md  [DONE - merged]
 
 Before doing anything, read these files in this order:
 1. AGENTS.md
@@ -280,7 +280,7 @@ Legend: DONE = merged. READY = can start now. BLOCKED = needs the human input na
 | 30 | docs-submission | BLOCKED | the contest's rules (table in the brief); backtest-run |
 | 31 | demo-video (optional) | BLOCKED | what the contest requires |
 
-8. references-page.md  [DONE - merged]
+8. docs/archived/references-page.md  [DONE - merged]
 
 Before doing anything, read these files in this order:
 1. AGENTS.md
@@ -310,7 +310,7 @@ Rules:
 
 When finished: overwrite LASTCONTEXT.md, update PENDING.md, and write a PR description with (a) what changed, (b) what was verified, (c) what the human must verify.
 
-9. storytelling-substeps.md  [DONE - merged]
+9. docs/archived/storytelling-substeps.md  [DONE - merged]
 
 Before doing anything, read these files in this order:
 1. AGENTS.md
@@ -342,7 +342,7 @@ Rules:
 
 When finished: overwrite LASTCONTEXT.md, update PENDING.md, and write a PR description with (a) what changed, (b) what was verified, (c) what the human must verify.
 
-10. integration.md  [DONE - merged, PR #28]
+10. docs/archived/integration.md  [DONE - merged, PR #28]
 
 Before doing anything, read these files in this order:
 1. AGENTS.md
@@ -1099,7 +1099,7 @@ Before doing anything, read these files in this order:
 2. LASTCONTEXT.md
 3. PENDING.md
 4. population-age-contract.md   (the brief, in the repository root)
-Then read docs/model-design.md section 2.1 and D-data-1, docs/data-dictionary.md, docs/data-pipeline.md, data/schemas/population.schema.json, scripts/dataset_checks.py, scripts/gen_mock.py, scripts/validate_data.py, web/src/types/, web/src/data/registry.ts, composition-contract.md and research-contracts.md.
+Then read docs/model-design.md section 2.1 and D-data-1, docs/data-dictionary.md, docs/data-pipeline.md, data/schemas/population.schema.json, scripts/dataset_checks.py, scripts/gen_mock.py, scripts/validate_data.py, web/src/types/, web/src/data/registry.ts, docs/archived/composition-contract.md and docs/archived/research-contracts.md.
  
 Then execute the task described in population-age-contract.md exactly.
  
@@ -1444,7 +1444,7 @@ Before doing anything, read these files in this order:
 2. LASTCONTEXT.md
 3. PENDING.md
 4. model-ts-port.md   (the brief, in the repository root)
-Then read docs/model-design.md section 7 (binding) and section 6, the docs of the component tasks, docs/params.md, model/params/params.json, the Python modules of those components, web/src/model-ts/population.ts, web/tests/parity/population.test.ts, model/parity/gen_parity.py, scene-sandbox.md and web/src/scenes/sandbox/.
+Then read docs/model-design.md section 7 (binding) and section 6, the docs of the component tasks, docs/params.md, model/params/params.json, the Python modules of those components, web/src/model-ts/population.ts, web/tests/parity/population.test.ts, model/parity/gen_parity.py, docs/archived/scene-sandbox.md and web/src/scenes/sandbox/.
  
 Then execute the task described in model-ts-port.md exactly.
  
@@ -1512,7 +1512,7 @@ Before doing anything, read these files in this order:
 2. LASTCONTEXT.md
 3. PENDING.md
 4. scene-ai-revolution.md   (the brief, in the repository root)
-Then read design.md (binding), docs/model-design.md section 2.5, docs/data-dictionary.md (ai_estimates), data/schemas/ai_estimates.schema.json, web/src/types/research.ts, scene-forecast.md, scene-sandbox.md, storytelling-substeps.md and the code they produced (fan builder, EChart, DataTable, useDataset, story, references, the data registry).
+Then read design.md (binding), docs/model-design.md section 2.5, docs/data-dictionary.md (ai_estimates), data/schemas/ai_estimates.schema.json, web/src/types/research.ts, docs/archived/scene-forecast.md, docs/archived/scene-sandbox.md, docs/archived/storytelling-substeps.md and the code they produced (fan builder, EChart, DataTable, useDataset, story, references, the data registry).
  
 Then execute the task described in scene-ai-revolution.md exactly.
  
@@ -1688,7 +1688,7 @@ Before doing anything, read these files in this order:
 2. LASTCONTEXT.md
 3. PENDING.md
 4. data-research-inputs.md   (the brief, in the repository root)
-Then read research-contracts.md, docs/data-pipeline.md, docs/data-dictionary.md, docs/model-design.md, docs/assumptions.md, the five research schemas, web/src/types/research.ts, scripts/dataset_checks.py, scripts/datapipe/ and the research files.
+Then read docs/archived/research-contracts.md, docs/data-pipeline.md, docs/data-dictionary.md, docs/model-design.md, docs/assumptions.md, the five research schemas, web/src/types/research.ts, scripts/dataset_checks.py, scripts/datapipe/ and the research files.
  
 Then execute the task described in data-research-inputs.md exactly.
  
@@ -1792,7 +1792,7 @@ Before doing anything, read these files in this order:
 2. LASTCONTEXT.md
 3. PENDING.md
 4. presentation-3d.md   (the brief, in the repository root)
-Then read design.md, docs/ui.md, docs/performance.md, docs/geo.md, storytelling-substeps.md, andes-integration.md, test/dashboard_3d_PoC.html (look and mechanics only), and the code under web/src/{app,scenes,story,charts,runtime,state}/.
+Then read design.md, docs/ui.md, docs/performance.md, docs/geo.md, docs/archived/storytelling-substeps.md, andes-integration.md, test/dashboard_3d_PoC.html (look and mechanics only), and the code under web/src/{app,scenes,story,charts,runtime,state}/.
 
 Then execute ONLY the part I name (<part>: engine, shell, charts-a, story or charts-b) of presentation-3d.md exactly.
 
@@ -1826,10 +1826,10 @@ Before doing anything, read these files in this order:
 1. AGENTS.md
 2. LASTCONTEXT.md
 3. PENDING.md
-4. scene-forecast-map-3d.md   (the brief, in the repository root)
-Then read design.md, docs/geo.md, docs/performance.md, scene-forecast-map.md, andes-integration.md and the code they produced (ProvinceMap, mapSelectors, the provinceMap builder, web/src/geo/, web/src/runtime/, the Andes renderer).
+4. docs/archived/scene-forecast-map-3d.md   (the brief, in the repository root)
+Then read design.md, docs/geo.md, docs/performance.md, docs/archived/scene-forecast-map.md, andes-integration.md and the code they produced (ProvinceMap, mapSelectors, the provinceMap builder, web/src/geo/, web/src/runtime/, the Andes renderer).
  
-Then execute the task described in scene-forecast-map-3d.md exactly.
+Then execute the task described in docs/archived/scene-forecast-map-3d.md exactly.
  
 Rules:
 - Create branch `task/scene-forecast-map-3d`. Never touch `main`, never merge, never push to `main`.
@@ -1896,10 +1896,10 @@ Before doing anything, read these files in this order:
 1. AGENTS.md
 2. LASTCONTEXT.md
 3. PENDING.md
-4. map-navigation.md   (the brief, in the repository root)
+4. docs/archived/map-navigation.md   (the brief, in the repository root)
 Then read docs/dashboard.md, design.md, docs/performance.md, docs/decisions.md (D-3d-6) and the files the brief lists.
 
-Then execute the task described in map-navigation.md exactly.
+Then execute the task described in docs/archived/map-navigation.md exactly.
 
 Rules:
 - Create branch `task/map-navigation`. Never touch `main`, never merge, never push to `main`.
