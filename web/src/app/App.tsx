@@ -16,6 +16,7 @@ import { CapabilityProvider, QualityDebugLine } from '../runtime/CapabilityProvi
 import { documentTitle } from './title';
 import { describeError } from './describeError';
 import { useSlots } from '../dashboard/slots';
+import { GdpStep } from '../tour/GdpStep';
 
 /** `onHome` is the way back to the intro: the brand in the header calls it. */
 export function App({ onHome }: { onHome?: () => void }) {
@@ -24,6 +25,7 @@ export function App({ onHome }: { onHome?: () => void }) {
 
   const scene = useStore((s) => s.scene);
   const section = useStore((s) => s.section);
+  const tourStep = useStore((s) => s.tourStep);
   const filtersRef = useCallback((el: HTMLDivElement | null) => useSlots.getState().set('filters', el), []);
 
   const [forecastSource, setForecastSource] = useState<string | null>(null);
@@ -75,9 +77,13 @@ export function App({ onHome }: { onHome?: () => void }) {
         </div>
         
         <main id="main" tabIndex={-1} className="scene-container" data-testid="scene">
-          <SceneTransition sceneKey={scene}>
-            <SceneHost scene={scene} />
-          </SceneTransition>
+          {section === 'tour' && tourStep === 1 ? (
+            <GdpStep />
+          ) : (
+            <SceneTransition sceneKey={scene}>
+              <SceneHost scene={scene} />
+            </SceneTransition>
+          )}
         </main>
         
         <footer className="bottom-bar">

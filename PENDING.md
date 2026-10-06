@@ -66,7 +66,7 @@ Every task below has a brief (`<slug>.md` in the repository root) and a prompt (
 
 ## Data to verify (human, against original source)
 
-- [ ] (empty; the app shows mock data only)
+- [ ] (empty; the app shows mock data only) Recorrido step 1 GDP chart: every number is made up (`web/src/tour/gdpMock.ts`, labelled "Datos de prueba"); replace with sourced GDP (INDEC / World Bank / Maddison) and the model's fan before release.
 
 ## Model assumptions (record in `docs/assumptions.md`)
 
@@ -102,6 +102,7 @@ Every task below has a brief (`<slug>.md` in the repository root) and a prompt (
 
 ## Done
 
+- [ ] `tour-gdp-chart` (branch `task/tour-gdp-chart`): Recorrido step 1 shows a modern GDP chart (observed, projected to 2056, range) with 2D / 3D buttons, on made-up data. Waiting for CI and review; steps 2 to 15 still show the data scenes.
 - [x] `F4` (branch `task/motion-story`): gsap 3.15.0; scene transition, counters, series draw-in, story panel redesigned; the 18 steps are now drafts (no figures, no sources) that keep `placeholder: true`.
 - [x] `F3` (branch `task/filters-province-map`): one filter bar (scenario and AI only in the control bar), province geometry committed (`D-3d-3` decided by the agent: Natural Earth admin-1), Recursos follows the province, Economía shows a national note.
 - [x] `F2b` (branch `task/ui-scenes-es`): scenes, charts, tables, story panel and references page in Spanish on the shared `SceneShell`, `TableToggle`, `FilterBar`; `APP_LOCALE = 'es-AR'` and `lang="es"`. See `docs/ui.md`.

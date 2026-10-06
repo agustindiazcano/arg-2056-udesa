@@ -14,6 +14,8 @@ vi.mock('../../src/scenes/registry', async (importOriginal) => {
   return { ...original, SCENE_COMPONENTS: Object.fromEntries(names.map((n) => [n, Stub])) };
 });
 
+vi.mock('../../src/charts/EChart.js', () => ({ EChart: () => <div role="img" aria-label="gráfico" /> }));
+
 import { App } from '../../src/app/App';
 import { SCENE_LABELS } from '../../src/scenes/registry';
 
@@ -237,5 +239,25 @@ describe('styles', () => {
   it('is loaded by both entries', () => {
     expect(fs.readFileSync(path.join(dir, 'main.tsx'), 'utf8')).toContain("./styles/ui.css");
     expect(fs.readFileSync(path.join(dir, 'references', 'main.tsx'), 'utf8')).toContain('../styles/ui.css');
+  });
+});
+
+describe('Recorrido step 1', () => {
+  it('shows the GDP chart on step 1 and the scene on the other steps', () => {
+    useStore.setState({ section: 'tour', tourStep: 1 });
+    render(<App />);
+    expect(screen.getByRole('heading', { name: 'PBI de la Argentina' })).toBeTruthy();
+    expect(screen.queryByRole('heading', { name: 'escena' })).toBeNull();
+    cleanup();
+    useStore.setState({ section: 'tour', tourStep: 2 });
+    render(<App />);
+    expect(screen.queryByRole('heading', { name: 'PBI de la Argentina' })).toBeNull();
+    expect(screen.getByRole('heading', { name: 'escena' })).toBeTruthy();
+  });
+
+  it('does not show the GDP chart in the other sections', () => {
+    useStore.setState({ section: 'dashboard', tourStep: 1 });
+    render(<App />);
+    expect(screen.queryByRole('heading', { name: 'PBI de la Argentina' })).toBeNull();
   });
 });
