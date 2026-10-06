@@ -85,26 +85,6 @@ button.brand:hover .brand-n {
   border-bottom-color: var(--intro-light);
 }
 
-.badge {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-xs);
-  padding: var(--space-xs) var(--space-2);
-  border: 1px solid var(--state-warning);
-  border-radius: var(--radius-pill);
-  color: var(--state-warning);
-  font-size: var(--font-sm);
-  white-space: nowrap;
-}
-
-.badge::before {
-  content: '';
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--state-warning);
-}
-
 /* ---- tabs --------------------------------------------------------------------------------------------------- */
 
 .tabs {
@@ -146,9 +126,9 @@ button.brand:hover .brand-n {
 .tab:hover,
 .andes-nav .chip:hover:not(:disabled),
 .tour-steps .chip:hover {
-  color: var(--intro-light);
-  background: color-mix(in srgb, var(--intro-light) 16%, transparent);
-  border-color: color-mix(in srgb, var(--intro-light) 55%, transparent);
+  color: color-mix(in srgb, var(--nav-accent) 55%, var(--intro-white));
+  background: color-mix(in srgb, var(--nav-accent) 18%, transparent);
+  border-color: color-mix(in srgb, var(--nav-accent) 60%, transparent);
   box-shadow:
     inset 0 1px 0 color-mix(in srgb, var(--intro-ink) 24%, transparent),
     0 4px 14px color-mix(in srgb, var(--intro-black) 45%, transparent);
@@ -158,16 +138,17 @@ button.brand:hover .brand-n {
 .tab[aria-selected='true'],
 .andes-nav .chip[aria-pressed='true'],
 .tour-steps .chip[aria-pressed='true'] {
-  color: var(--intro-on-light);
-  background: var(--intro-light);
+  color: var(--nav-on-accent);
+  background: var(--nav-accent);
   border-color: transparent;
-  box-shadow: 0 0 18px color-mix(in srgb, var(--intro-light) 40%, transparent);
+  box-shadow: 0 0 18px color-mix(in srgb, var(--nav-accent) 45%, transparent);
 }
 
 .tab[aria-selected='true']:hover,
 .andes-nav .chip[aria-pressed='true']:hover,
 .tour-steps .chip[aria-pressed='true']:hover {
-  background: color-mix(in srgb, var(--intro-light) 82%, var(--intro-white));
+  color: var(--nav-on-accent);
+  background: color-mix(in srgb, var(--nav-accent) 82%, var(--intro-white));
 }
 
 .andes-nav .chip:disabled {
@@ -542,69 +523,6 @@ main.scene-container {
   color: var(--muted);
 }
 
-/* ---- the Recorrido: a clean page with a long play bar -------------------------------------------------------------- */
-
-.tour-bar {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
-  padding: var(--space-2) var(--space-md);
-  background: var(--glass);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow);
-  backdrop-filter: blur(14px);
-}
-
-.tour-line,
-.tour-row {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-}
-
-.tour-row {
-  flex-wrap: wrap;
-  justify-content: space-between;
-}
-
-.tour-chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-sm);
-}
-
-.tour-play {
-  display: inline-flex;
-  flex: none;
-  align-items: center;
-  justify-content: center;
-  width: 3rem;
-  height: 3rem;
-  padding: 0;
-  border: 0;
-  border-radius: 50%;
-  background: var(--ink);
-  color: var(--page);
-  cursor: pointer;
-}
-
-.tour-play svg {
-  width: 1.1rem;
-  height: 1.1rem;
-  fill: currentColor;
-}
-
-.tour-slider {
-  flex: 1;
-  width: auto;
-  min-width: 0;
-}
-
-.tour-year {
-  font-size: var(--font-lg);
-}
-
 /* in the tour the page is the title, the subtitle and the view: no carousel, no view buttons, no side panel, no story panel */
 #overlay[data-section='tour'] .carousel,
 #overlay[data-section='tour'] .viewer-bar,
@@ -622,6 +540,7 @@ main.scene-container {
 /* ---- Recorrido step 1: the GDP chart ------------------------------------------------------------------------------- */
 
 .gdp-step {
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
@@ -667,7 +586,197 @@ main.scene-container {
   backdrop-filter: blur(14px);
 }
 
-.gdp-chart > * {
+.gdp-chart > .tour-chart {
+  width: 100%;
+}
+
+.tour-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin: var(--space-2, 0.5rem) 0 0;
+  padding: 0;
+  list-style: none;
+  color: var(--ink-2);
+  font-size: 0.85rem;
+}
+
+.tour-legend li {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.tour-swatch {
+  width: 0.9rem;
+  height: 0.9rem;
+  border-radius: 3px;
+}
+
+.tour-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+/* the charts on screen: one, two side by side, three (the third across the bottom) or a square of four */
+.tour-grid {
+  flex: 1 1 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr);
+  overflow: hidden;
+  gap: var(--space-3);
+  min-height: 0;
+}
+
+.tour-grid[data-count='2'],
+.tour-grid[data-count='3'],
+.tour-grid[data-count='4'] {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+}
+
+.tour-grid[data-count='3'] > :nth-child(3) {
+  grid-column: 1 / -1;
+}
+
+.tour-grid[data-count='3'],
+.tour-grid[data-count='4'] {
+  grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
+}
+
+.tour-grid > .gdp-chart {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2, 0.5rem);
+  min-width: 0;
+  min-height: 0;
+}
+
+.tour-grid > .gdp-chart > .tour-chart {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.tour-grid > .gdp-chart > .tour-chart > * {
   width: 100%;
   height: 100%;
+}
+
+.tour-caption {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-3);
+  font-size: 0.9rem;
+}
+
+.tour-caption .tour-legend {
+  margin: 0;
+}
+
+/* several charts on screen: tighter panels and a one-line caption */
+.tour-grid:not([data-count='1']) > .gdp-chart {
+  padding: var(--space-2, 0.5rem) var(--space-3);
+}
+
+.tour-caption {
+  flex-wrap: nowrap;
+  white-space: nowrap;
+  overflow: hidden;
+  font-size: 0.8rem;
+}
+
+.tour-caption strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tour-caption .tour-legend {
+  flex: none;
+  gap: var(--space-2, 0.5rem);
+  font-size: 0.75rem;
+}
+
+/* laptop first: on a short screen the frame gives its height to the charts */
+@media (max-height: 800px) {
+  .gdp-step {
+    gap: var(--space-2, 0.5rem);
+    padding-top: var(--space-2, 0.5rem);
+    padding-bottom: var(--space-2, 0.5rem);
+  }
+
+  .gdp-head h2 {
+    font-size: 1.25rem;
+  }
+
+  .gdp-sub {
+    margin-top: 0;
+    font-size: 0.8rem;
+  }
+
+  .tour-legend {
+    margin-top: 0.25rem;
+  }
+
+  .gdp-chart {
+    padding: var(--space-2, 0.5rem);
+  }
+}
+
+/* "1/3": three small charts stacked on the left, the big one on the right */
+.tour-grid[data-layout='focus'] {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 3fr);
+  grid-template-rows: repeat(3, minmax(0, 1fr));
+}
+
+.tour-grid[data-layout='focus'] > .gdp-chart {
+  grid-column: 1;
+  position: relative;
+}
+
+.tour-grid[data-layout='focus'] > .gdp-chart[data-size='big'] {
+  grid-column: 2;
+  grid-row: 1 / span 3;
+}
+
+/* a small chart is a button: the whole panel takes the click, the chart under it only shows */
+.tour-pick {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: var(--radius-lg);
+  background: transparent;
+  cursor: pointer;
+}
+
+.tour-pick:hover {
+  border-color: var(--blue);
+  background: color-mix(in srgb, var(--blue) 8%, transparent);
+}
+
+.tour-pick:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+/* a small chart is only a preview: no buttons inside it */
+.tour-grid[data-layout='focus'] > .gdp-chart[data-size='small'] .tour-chart .btn,
+.tour-grid[data-layout='focus'] > .gdp-chart[data-size='small'] .tour-chart .nav-controls {
+  display: none;
+}
+
+.gdp-title {
+  min-width: 0;
+}
+
+.tour-steps .chip:disabled {
+  opacity: 0.35;
+  cursor: default;
+  pointer-events: none;
 }

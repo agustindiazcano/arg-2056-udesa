@@ -71,6 +71,8 @@ interface ProvinceMapProps {
   observed?: boolean;
   /** Without the heading: the dashboard panel already has the title. */
   hideTitle?: boolean;
+  /** A small preview: no toolbar and no minimum height (the Recorrido shows a map among small charts). */
+  compact?: boolean;
   onSelect: (id: ProvinceId | null) => void;
 }
 
@@ -87,6 +89,7 @@ export function ProvinceMap({
   year,
   observed = false,
   hideTitle = false,
+  compact = false,
   onSelect
 }: ProvinceMapProps) {
   const [asTable, setAsTable] = useState(false);
@@ -145,11 +148,13 @@ export function ProvinceMap({
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 'var(--space-sm)' }}>
-        {hideTitle ? <span /> : <span>Mapa de provincias, {year}</span>}
-        <TableToggle pressed={asTable} onToggle={() => setAsTable(!asTable)} />
-      </div>
-      <div style={{ flex: 1, minHeight: '280px', position: 'relative' }}>
+      {!compact && (
+        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 'var(--space-sm)' }}>
+          {hideTitle ? <span /> : <span>Mapa de provincias, {year}</span>}
+          <TableToggle pressed={asTable} onToggle={() => setAsTable(!asTable)} />
+        </div>
+      )}
+      <div style={{ flex: 1, minHeight: compact ? 0 : '280px', position: 'relative' }}>
         {asTable ? (
           <DataTable
             caption="Mapa de provincias"

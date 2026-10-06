@@ -7,7 +7,19 @@ export const LAST_OBSERVED_YEAR = 2025;
 const FIRST_YEAR = 1990;
 const LAST_YEAR = 2056;
 
+/** The names a band chart uses for its three parts and for the subject in its text alternative. */
+export interface BandLabels {
+  subject: string;
+  history: string;
+  expected: string;
+  range: string;
+}
+
+export const GDP_LABELS: BandLabels = { subject: 'PBI de la Argentina', history: 'PBI observado', expected: 'Proyección esperada', range: 'Rango' };
+
 export interface GdpData {
+  /** the last observed year when it is not `LAST_OBSERVED_YEAR` (another series of the Recorrido) */
+  lastObserved?: number;
   unit: string;
   source: string;
   years: number[];
@@ -70,16 +82,16 @@ function build(): GdpData {
 export const GDP_MOCK: GdpData = build();
 
 /** The same data for the 3D line chart. */
-export function gdpLinesSpec(data: GdpData): Lines3DSpec {
+export function gdpLinesSpec(data: GdpData, labels: BandLabels = GDP_LABELS): Lines3DSpec {
   return linesSpec({
-    title: 'PBI de la Argentina',
+    title: labels.subject,
     unit: data.unit,
     xLabels: data.years.map(String),
     series: [
-      { name: 'PBI observado', values: data.history, tone: 'highlight' },
-      { name: 'Proyección esperada', values: data.expected, tone: 'accent', color: tokens.blue }
+      { name: labels.history, values: data.history, tone: 'highlight' },
+      { name: labels.expected, values: data.expected, tone: 'accent', color: tokens.blue, dashed: true }
     ],
     band: { lower: data.low, upper: data.high },
-    marker: data.years.indexOf(LAST_OBSERVED_YEAR)
+    marker: data.years.indexOf(data.lastObserved ?? LAST_OBSERVED_YEAR)
   });
 }

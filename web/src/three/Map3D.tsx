@@ -22,8 +22,8 @@ import { useReducedMotion } from '../runtime/useReducedMotion';
 import { SEQUENTIAL_BLUE, tokens } from '../styles/tokens';
 import { addProjection } from './projection';
 import { fitRadius, openingAngles } from '../charts3d/camera';
-import { createStage } from './stage';
 import { useSideView } from './useSideView';
+import { createStage } from './stage';
 import { useCameraNav } from './useCameraNav';
 
 const GROW_MS = 600;
@@ -42,7 +42,9 @@ export function Map3D({ spec, projection }: { spec: Map3DSpec; projection?: Proj
   const quality = useQualityOptional();
   const pixelRatioCap = QUALITY_PRESETS[quality?.tier ?? 'medium'].pixelRatioCap;
   const { stageRef, poseRef, controls } = useCameraNav();
-  const side = useSideView();
+  // a map seen edge-on shows nothing (it is tall, not wide): in the Recorrido it keeps its oblique view, fitted to the box
+  const tour = useSideView();
+  const side = false;
 
   useEffect(() => {
     const host = hostRef.current;
@@ -53,7 +55,9 @@ export function Map3D({ spec, projection }: { spec: Map3DSpec; projection?: Proj
       target: side ? new Vector3(0, 0.9, 0) : new Vector3(0, 0.5 + (projection ? 0.8 : 0), 0),
       radius: side
         ? fitRadius({ width: map.bounds.width, height: 3.2 }, 32, host.clientHeight > 0 ? host.clientWidth / host.clientHeight : 0, 1.02)
-        : Math.max(7, map.bounds.height * 1.55) * (projection ? 1.9 : 1),
+        : tour
+          ? Math.max(7, map.bounds.height * 2.1)
+          : Math.max(7, map.bounds.height * 1.55) * (projection ? 1.9 : 1),
       ...openingAngles(side, { theta: 0, phi: 0.8 }),
       box: { minX: -map.bounds.width / 2, maxX: map.bounds.width / 2, minY: 0, maxY: 3, minZ: -map.bounds.height / 2, maxZ: map.bounds.height / 2 },
       pose: poseRef.current ?? undefined,
@@ -172,7 +176,7 @@ export function Map3D({ spec, projection }: { spec: Map3DSpec; projection?: Proj
       stageRef.current = null;
       stage.dispose();
     };
-  }, [spec.geo, spec.values, spec.metric, spec.selectedId, spec.formatValue, projection?.title, quality?.tier, pixelRatioCap, reduced, side]);
+  }, [spec.geo, spec.values, spec.metric, spec.selectedId, spec.formatValue, projection?.title, quality?.tier, pixelRatioCap, reduced, side, tour]);
 
   return (
     <div className="chart3d-wrap">

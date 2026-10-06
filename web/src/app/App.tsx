@@ -1,24 +1,22 @@
-import React, { Suspense, lazy, useCallback, useEffect, useRef, useState } from 'react';
+import React, { Suspense, lazy, useCallback, useEffect, useRef } from 'react';
 import { useStore } from '../state/store';
 import { useKeyboard } from '../state/useKeyboard';
 import { useTicker } from '../state/useTicker';
 import { Hud } from './Hud';
-import { TourBar } from './TourBar';
 import { ProvinceFilter } from './ProvinceFilter';
 import { Header } from './Header';
 import { StoryCaption } from '../story/StoryCaption';
 import { StepRunner } from '../story/StepRunner';
 import { SceneHost } from './SceneHost';
 import { SceneTransition } from '../motion/SceneTransition';
-import { loadForecast } from '../data/load';
-import { versionedUrl } from '../data/version';
 import { CapabilityProvider, QualityDebugLine } from '../runtime/CapabilityProvider';
 import { documentTitle } from './title';
-import { describeError } from './describeError';
 import { useSlots } from '../dashboard/slots';
 
-/** The GDP step draws with ECharts, which must stay out of the initial load. */
-const GdpStep = lazy(() => import('../tour/GdpStep').then((m) => ({ default: m.GdpStep })));
+import { hasTourChart } from '../tour/chartSteps';
+
+/** The charts of the Recorrido draw with ECharts, which must stay out of the initial load. */
+const TourStep = lazy(() => import('../tour/TourStep').then((m) => ({ default: m.TourStep })));
 
 /** `onHome` is the way back to the intro: the brand in the header calls it. */
 export function App({ onHome }: { onHome?: () => void }) {
@@ -29,8 +27,6 @@ export function App({ onHome }: { onHome?: () => void }) {
   const section = useStore((s) => s.section);
   const tourStep = useStore((s) => s.tourStep);
   const filtersRef = useCallback((el: HTMLDivElement | null) => useSlots.getState().set('filters', el), []);
-
-  const [forecastSource, setForecastSource] = useState<string | null>(null);
 
   // the real height of the header and of the bottom bar, for a scene that floats its panels over a full-screen canvas (the Andes)
   const overlayRef = useRef<HTMLDivElement>(null);
@@ -58,13 +54,6 @@ export function App({ onHome }: { onHome?: () => void }) {
     document.title = documentTitle(scene);
   }, [scene]);
 
-  useEffect(() => {
-    versionedUrl('/data/forecast_output.json')
-      .then(loadForecast)
-      .then(f => setForecastSource(f.source))
-      .catch((e: unknown) => console.error('No se pudo cargar el pronóstico:', describeError(e)));
-  }, []);
-
   return (
     <CapabilityProvider>
       <div id="stage">
@@ -74,14 +63,14 @@ export function App({ onHome }: { onHome?: () => void }) {
       <div id="overlay" ref={overlayRef} data-scene={scene} data-section={section} style={{ pointerEvents: 'none' }}>
         <div className="chrome">
           <a className="skip-link" href="#main">Saltar al contenido principal</a>
-          <Header mockSource={forecastSource} onHome={onHome} />
+          <Header onHome={onHome} />
           <QualityDebugLine />
         </div>
         
         <main id="main" tabIndex={-1} className="scene-container" data-testid="scene">
-          {section === 'tour' && tourStep === 1 ? (
+          {section === 'tour' && hasTourChart(tourStep) ? (
             <Suspense fallback={null}>
-              <GdpStep />
+              <TourStep step={tourStep} />
             </Suspense>
           ) : (
             <SceneTransition sceneKey={scene}>
@@ -91,9 +80,7 @@ export function App({ onHome }: { onHome?: () => void }) {
         </main>
         
         <footer className="bottom-bar">
-          {section === 'tour' ? (
-            <TourBar />
-          ) : (
+          {section !== 'tour' && (
             <div className="controls-wrap">
               <Hud />
               <ProvinceFilter />

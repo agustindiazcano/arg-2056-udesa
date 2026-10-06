@@ -25,7 +25,7 @@ test.describe('intro screen', () => {
     await page.goto('/');
     await page.getByRole('button', { name: 'Recorrido al 2056' }).click();
     await expect(page.getByRole('tab', { name: 'Recorrido' })).toHaveAttribute('aria-selected', 'true');
-    await expect(page.getByRole('region', { name: 'Recorrido' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'PBI de la Argentina' })).toBeVisible();
 
     await page.goto('/');
     await page.getByRole('button', { name: 'Data Dashboard' }).click();

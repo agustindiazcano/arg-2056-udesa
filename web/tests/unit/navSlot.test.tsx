@@ -11,7 +11,7 @@ describe('navbar slot', () => {
   it('puts the controls of a scene in the header, to the right of the tabs and before the links', () => {
     render(
       <>
-        <Header mockSource={null} />
+        <Header />
         <SlotPortal slot="nav">
           <div role="group" aria-label="Controles de la escena">
             <button type="button">Mapa 3D</button>

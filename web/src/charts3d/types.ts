@@ -44,6 +44,8 @@ export interface Line3D {
   tone: 'highlight' | 'muted' | 'accent';
   /** a color from the tokens that overrides the tone (the scenario colors) */
   color?: string;
+  /** drawn as a dashed line (a projection) */
+  dashed?: boolean;
 }
 
 /** A line chart in space: each series is a wall in its own lane, the band a translucent wall. */
@@ -62,7 +64,7 @@ export interface Lines3DSpec {
 
 export interface LinesLayout {
   xs: number[];
-  series: Array<{ name: string; tone: Line3D['tone']; z: number; segments: Array<Array<{ x: number; y: number }>> }>;
+  series: Array<{ name: string; tone: Line3D['tone']; dashed?: boolean; z: number; segments: Array<Array<{ x: number; y: number }>> }>;
   bands: Array<{ upper: Array<{ x: number; y: number }>; lower: Array<{ x: number; y: number }> }>;
   ticks: Tick[];
   xTicks: Array<{ x: number; label: string }>;
