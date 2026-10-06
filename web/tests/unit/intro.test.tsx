@@ -61,7 +61,7 @@ describe('Intro', () => {
     expect(prov.querySelectorAll('.intro-layer.glow use')).toHaveLength(3);
   });
 
-  it('lists the three institutions with their logos, each linking to its site in a new tab', () => {
+  it('lists the four institutions with their logos, each linking to its site in a new tab', () => {
     render(<Intro onStart={() => undefined} />);
     const list = screen.getByRole('list', { name: 'Instituciones' });
     const logos = Array.from(list.querySelectorAll('li')).map((li) => {
@@ -70,7 +70,8 @@ describe('Intro', () => {
       return [img.getAttribute('alt'), img.getAttribute('src'), a.getAttribute('href'), a.getAttribute('target'), a.getAttribute('rel')];
     });
     expect(logos).toEqual([
-      ['Data Science Lab, Universidad de San Andrés', '/images/data-science-lab-udesa.png', 'https://www.udesa.edu.ar/data-science-lab', '_blank', 'noopener noreferrer'],
+      ['Universidad de San Andrés', '/images/udesa-logo-recortado.png', 'https://www.udesa.edu.ar', '_blank', 'noopener noreferrer'],
+      ['Data Science Lab, Universidad de San Andrés', '/images/data-lab-recortado.webp', 'https://www.udesa.edu.ar/data-science-lab', '_blank', 'noopener noreferrer'],
       ['Contar con Datos', '/images/contar-con-datos-logo-udesa.webp', 'https://www.udesa.edu.ar/contar-con-datos', '_blank', 'noopener noreferrer'],
       [
         'Secretaría de Innovación, Ciencia y Tecnología',
