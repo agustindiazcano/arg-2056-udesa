@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { EChart } from '../charts/EChart.js';
 import { buildColumns, buildFollowedSeries } from '../charts/builders/tourCharts.js';
 import { formatValue } from '../charts/format.js';
-import { Chart2D3D } from '../charts3d/Chart2D3D.js';
+import { TourChart } from './TourChart.js';
 import { FOLLOW_TOTAL_MS } from '../charts3d/followAnim.js';
 import { barsSpec, linesSpec } from '../charts3d/specs.js';
 import { Reveal } from '../motion/Reveal.js';
@@ -124,9 +124,9 @@ export function WorldStep() {
             <span>{formatValue(Math.round(shownValue), WORLD_UNIT)}</span>
           </div>
           <div className="tour-chart" key={`${mode}-${run}`}>
-            <Chart2D3D spec={spec}>
+            <TourChart spec={spec}>
               <EChart option={flat.option} aria-label={summary} />
-            </Chart2D3D>
+            </TourChart>
           </div>
         </Reveal>
 
@@ -170,9 +170,9 @@ export function WorldStep() {
               <strong>Mayores economías de la región</strong>
             </div>
             <div className="tour-chart">
-              <Chart2D3D spec={regionBars.spec}>
+              <TourChart spec={regionBars.spec}>
                 <EChart option={regionBars.option} aria-label={regionBars.summary} />
-              </Chart2D3D>
+              </TourChart>
             </div>
           </Reveal>
         </div>

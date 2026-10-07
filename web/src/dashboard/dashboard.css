@@ -436,7 +436,12 @@
   cursor: grab;
 }
 
-.chart3d:active {
+.chart3d-still,
+.chart3d-still:active {
+  cursor: default;
+}
+
+.chart3d:not(.chart3d-still):active {
   cursor: grabbing;
 }
 
