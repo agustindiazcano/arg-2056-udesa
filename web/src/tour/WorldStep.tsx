@@ -103,7 +103,7 @@ export function WorldStep() {
           </p>
         </Reveal>
         <div className="tour-controls">
-          <button type="button" className="seg world-replay" onClick={() => setRun((n) => n + 1)}>
+          <button type="button" className="btn world-replay" onClick={() => setRun((n) => n + 1)}>
             Repetir
           </button>
           <Segmented
