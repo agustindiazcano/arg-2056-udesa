@@ -1,4 +1,4 @@
-import { followFrame, lerp } from '../charts3d/followAnim.js';
+import { FOLLOW_MS, FOLLOW_TOTAL_MS, followFrame, lerp } from '../charts3d/followAnim.js';
 
 /** The years that stay in view while the 2D chart follows the line. */
 export const FOLLOW_WINDOW_YEARS = 30;
@@ -56,4 +56,18 @@ export function seriesFrame(elapsedMs: number, years: number[], values: number[]
     yMax: lerp(followTop, fullTop, out),
     visibleCount: years.filter((y) => y <= year).length
   };
+}
+
+const FIRST = 1900;
+const LAST = 2026;
+
+/** The moment of the animation at which the line has reached a year: the last year is the end, with the view already pulled back. */
+export function elapsedForYear(year: number, first = FIRST, last = LAST): number {
+  if (year >= last) return FOLLOW_TOTAL_MS;
+  return ((Math.max(year, first) - first) / (last - first)) * FOLLOW_MS;
+}
+
+/** The year the line has reached `elapsedMs` after the animation began (the inverse of `elapsedForYear`, up to the end of the drawing). */
+export function yearAtElapsed(elapsedMs: number, first = FIRST, last = LAST): number {
+  return lerp(first, last, followFrame(elapsedMs).reveal);
 }

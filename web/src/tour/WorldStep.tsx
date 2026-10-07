@@ -1,17 +1,18 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { EChart } from '../charts/EChart.js';
 import { buildColumns, buildFollowedSeries } from '../charts/builders/tourCharts.js';
 import { formatValue } from '../charts/format.js';
 import { TourChart } from './TourChart.js';
-import { FOLLOW_TOTAL_MS } from '../charts3d/followAnim.js';
 import { barsSpec, linesSpec } from '../charts3d/specs.js';
 import { Reveal } from '../motion/Reveal.js';
 import { useReducedMotion } from '../runtime/useReducedMotion.js';
 import { useStore } from '../state/store.js';
 import { tokens } from '../styles/tokens.js';
 import { Segmented } from '../ui/Segmented.js';
-import { seriesFrame, valueAt } from './worldAnim.js';
-import { FIRST_YEAR, HOME, LAST_YEAR, MOCK_SOURCE, WORLD_UNIT, argentinaSince1900, regionRanking, worldRanking } from './worldData.js';
+import { elapsedForYear, seriesFrame, valueAt, yearAtElapsed } from './worldAnim.js';
+import { useTimeline } from './useTimeline.js';
+import { WorldTable } from './WorldTable.js';
+import { FIRST_YEAR, HOME, LAST_YEAR, MOCK_SOURCE, WORLD_UNIT, argentinaSince1900, regionCountries, regionValuesAt } from './worldData.js';
 
 const VIEWS = [
   { value: '2d', label: '2D' },
@@ -20,28 +21,6 @@ const VIEWS = [
 
 const TITLE = `El PBI de la Argentina desde ${FIRST_YEAR}`;
 const SERIES_NAME = 'PBI de la Argentina';
-
-/** The clock of the animation: milliseconds since it began, updated on every animation frame; a run starts again when `run` changes. */
-function useElapsed(run: number, reduced: boolean): number {
-  const [elapsed, setElapsed] = useState(reduced ? FOLLOW_TOTAL_MS : 0);
-  useEffect(() => {
-    if (reduced) {
-      setElapsed(FOLLOW_TOTAL_MS);
-      return;
-    }
-    const start = performance.now();
-    let id = 0;
-    const tick = (now: number) => {
-      const ms = Math.min(FOLLOW_TOTAL_MS, now - start);
-      setElapsed(ms);
-      if (ms < FOLLOW_TOTAL_MS) id = requestAnimationFrame(tick);
-    };
-    setElapsed(0);
-    id = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(id);
-  }, [run, reduced]);
-  return elapsed;
-}
 
 /**
  * Step 0 of the Recorrido: the GDP of Argentina from 1900 to today as a line that draws itself year by year while the view
@@ -53,13 +32,11 @@ export function WorldStep() {
   const dispatch = useStore((s) => s.dispatch);
   const reduced = useReducedMotion();
   const [run, setRun] = useState(0);
-  const elapsed = useElapsed(run, reduced);
+  const { elapsed, clock, seek } = useTimeline(run, reduced);
 
   const series = useMemo(argentinaSince1900, []);
   const today = series.values.at(-1) ?? 0;
-  const world = useMemo(() => worldRanking(today), [today]);
-  const region = useMemo(() => regionRanking(today), [today]);
-  const home = world.find((c) => c.country === HOME);
+  const regionNames = useMemo(regionCountries, []);
 
   const summary = `${SERIES_NAME} de ${FIRST_YEAR} a ${LAST_YEAR} (datos de prueba): de ${formatValue(series.values[0] ?? null, WORLD_UNIT)} a ${formatValue(today, WORLD_UNIT)}`;
   const frame = useMemo(() => seriesFrame(elapsed, series.years, series.values), [elapsed, series]);
@@ -75,20 +52,31 @@ export function WorldStep() {
         follow: true,
         summary
       }),
-    [series, summary, run, mode]
+    [series, summary]
   );
+  const lineSpec = useMemo(() => ({ ...spec, clock }), [spec, clock]);
 
-  const topWorld = world.slice(0, 20);
-  const regionBars = useMemo(() => {
-    const text = `Las mayores economías de la región, en miles de millones de USD (datos de prueba): ${region.map((c) => `${c.country} ${formatValue(c.value, WORLD_UNIT)}`).join(', ')}`;
-    const { option } = buildColumns(region.map((c) => c.country), [{ name: 'PBI', values: region.map((c) => c.value), color: tokens.muted }], {
-      unit: WORLD_UNIT,
-      highlight: HOME,
-      summary: text,
-      dense: { barWidth: 22, rotate: 35 }
-    });
-    return { option, summary: text, spec: barsSpec(region.map((c) => ({ label: c.country, value: c.value })), { title: 'Mayores economías de la región', unit: WORLD_UNIT, highlight: HOME, summary: text }) };
-  }, [region]);
+  // the table and the bars of the region show the year the line has reached
+  const regionValues = regionValuesAt(frame.year);
+  const regionText = `Las mayores economías de la región, en miles de millones de USD (datos de prueba), de ${FIRST_YEAR} a ${LAST_YEAR}: ${regionNames.map((c, i) => `${c} ${formatValue(regionValuesAt(LAST_YEAR)[i] ?? null, WORLD_UNIT)} en ${LAST_YEAR}`).join(', ')}`;
+  // the values change with the year: one option per frame, like the line
+  const regionFlat = buildColumns(regionNames, [{ name: 'PBI', values: regionValues, color: tokens.muted }], {
+    unit: WORLD_UNIT,
+    highlight: HOME,
+    summary: regionText,
+    dense: { barWidth: 22, rotate: 35 }
+  }).option;
+  // the bars in 3D keep their order and read the clock: the heights come from the year, the camera stays on the bar of Argentina
+  const regionSpec = useMemo(
+    () => ({
+      ...barsSpec(
+        regionNames.map((c, i) => ({ label: c, value: regionValuesAt(LAST_YEAR)[i] ?? 0 })),
+        { title: 'Mayores economías de la región', unit: WORLD_UNIT, highlight: HOME, summary: regionText }
+      ),
+      timeline: { clock, yearAt: yearAtElapsed, valuesAt: regionValuesAt, focus: regionNames.indexOf(HOME) }
+    }),
+    [regionNames, regionText, clock]
+  );
 
   const shownYear = Math.floor(frame.year + 1e-6);
   const shownValue = valueAt(series.years, series.values, frame.year);
@@ -106,6 +94,20 @@ export function WorldStep() {
           <button type="button" className="btn world-replay" onClick={() => setRun((n) => n + 1)}>
             Repetir
           </button>
+          <label className="world-timeline">
+            <span aria-hidden="true">{FIRST_YEAR}</span>
+            <input
+              type="range"
+              min={FIRST_YEAR}
+              max={LAST_YEAR}
+              step={0.25}
+              value={frame.year}
+              aria-label="Línea de tiempo"
+              aria-valuetext={`Año ${shownYear}`}
+              onChange={(e) => seek(elapsedForYear(Number(e.target.value)))}
+            />
+            <span aria-hidden="true">{LAST_YEAR}</span>
+          </label>
           <Segmented
             label="Vista"
             options={VIEWS}
@@ -124,54 +126,30 @@ export function WorldStep() {
             <span>{formatValue(Math.round(shownValue), WORLD_UNIT)}</span>
           </div>
           <div className="tour-chart" key={`${mode}-${run}`}>
-            <TourChart spec={spec}>
+            <TourChart spec={lineSpec}>
               <EChart option={flat.option} aria-label={summary} />
             </TourChart>
           </div>
         </Reveal>
 
         <div className="prov-side">
-          <Reveal k="top" delay={0.07} className="gdp-chart prov-rank" role="region" aria-label="Ranking mundial de PBI">
+          <Reveal k="top" delay={0.07} className="gdp-chart prov-rank" role="region" aria-label="Rankings mundiales de PBI y de PBI per cápita">
             <div className="prov-rank-head">
-              <strong>Top 20 mundial de PBI</strong>
-              <span className="gdp-sub">{WORLD_UNIT}</span>
+              <strong>Ranking mundial en {shownYear}</strong>
             </div>
-            <table className="world-table">
-              <thead>
-                <tr>
-                  <th scope="col">Puesto</th>
-                  <th scope="col">País</th>
-                  <th scope="col">PBI</th>
-                </tr>
-              </thead>
-              <tbody>
-                {topWorld.map((c) => (
-                  <tr key={c.country} data-home={c.country === HOME ? 'true' : undefined}>
-                    <td>{c.rank}</td>
-                    <td>{c.country}</td>
-                    <td>{formatValue(c.value, '')}</td>
-                  </tr>
-                ))}
-              </tbody>
-              {home && home.rank > 20 && (
-                <tfoot>
-                  <tr data-home="true">
-                    <td>{home.rank}</td>
-                    <td>{home.country}</td>
-                    <td>{formatValue(home.value, '')}</td>
-                  </tr>
-                </tfoot>
-              )}
-            </table>
+            <div className="world-ranks">
+              <WorldTable metric="gdp" title="PBI" unit={WORLD_UNIT} year={frame.year} />
+              <WorldTable metric="percapita" title="PBI per cápita" unit="USD por persona" year={frame.year} />
+            </div>
           </Reveal>
 
           <Reveal k="region" delay={0.14} className="gdp-chart prov-bars" role="region" aria-label="Mayores economías de la región">
             <div className="tour-caption">
-              <strong>Mayores economías de la región</strong>
+              <strong>Mayores economías de la región en {shownYear}</strong>
             </div>
             <div className="tour-chart">
-              <TourChart spec={regionBars.spec}>
-                <EChart option={regionBars.option} aria-label={regionBars.summary} />
+              <TourChart spec={regionSpec}>
+                <EChart option={regionFlat} aria-label={regionText} />
               </TourChart>
             </div>
           </Reveal>

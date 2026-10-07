@@ -50,6 +50,9 @@ const X_LABEL_DROP = 0.55;
 const SIDE_TARGET_Y = 1.1;
 const SIDE_MARGIN = 1.02;
 
+/** A step of the shared clock bigger than this (a drag on the timeline, a restart) is not the time going by: the camera follows the line again. */
+const CLOCK_JUMP_MS = 300;
+
 const easeOutCubic = (t: number) => 1 - (1 - t) ** 3;
 
 /** How each tone looks, as in the 2D chart: a glowing line (radius), a soft fade under it (fill) and a halo (glow). */
@@ -314,7 +317,22 @@ export function Lines3D({ spec }: { spec: Lines3DSpec }) {
         }
         stage.requestRender();
       };
-      if (reduced) {
+      const clock = spec.clock;
+      if (clock) {
+        // the page owns the time (it plays it and the visitor drags it): draw what the clock says on every frame; a jump of the clock takes the camera back
+        let last = clock.current;
+        frame(last);
+        let raf = 0;
+        const step = () => {
+          const elapsed = clock.current;
+          if (Math.abs(elapsed - last) > CLOCK_JUMP_MS) handedOver = false;
+          last = elapsed;
+          frame(elapsed);
+          raf = requestAnimationFrame(step);
+        };
+        raf = requestAnimationFrame(step);
+        cancel = () => cancelAnimationFrame(raf);
+      } else if (reduced) {
         frame(FOLLOW_TOTAL_MS);
       } else {
         frame(0);
