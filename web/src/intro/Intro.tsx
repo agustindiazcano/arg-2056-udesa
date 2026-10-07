@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import data from './provinces.json';
 import { boxStyle, lightStep, pathBox, type Box } from './layout';
+import { visibleSections } from '../content/sectionLabels';
 import type { Section } from '../types/scene';
 import './intro.css';
 import { INSTITUTIONS } from '../ui/institutions';
@@ -17,8 +18,8 @@ interface Props {
 
 const provinces = data.provinces;
 
-/** The ways in under Comenzar: straight to a section. */
-const SHORTCUTS: ReadonlyArray<{ section: Section; label: string }> = [
+/** The ways in under Comenzar: straight to a section (the Data Dashboard only when it is switched on: it is deprecated). */
+const ALL_SHORTCUTS: ReadonlyArray<{ section: Section; label: string }> = [
   { section: 'andes', label: 'Cruce de los Andes' },
   { section: 'tour', label: 'Recorrido al 2056' },
   { section: 'dashboard', label: 'Data Dashboard' }
@@ -30,6 +31,10 @@ function viewBox(b: Box): string {
 
 /** Intro screen: Argentina as a tilted, slowly turning map whose provinces light up at random, and a Comenzar button. */
 export function Intro({ onStart }: Props) {
+  const shortcuts = useMemo(() => {
+    const shown = new Set(visibleSections(ALL_SHORTCUTS.map((s) => s.section)));
+    return ALL_SHORTCUTS.filter((s) => shown.has(s.section));
+  }, []);
   const reduced = useMemo(() => typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches, []);
   const [tilted, setTilted] = useState(reduced);
   const [lit, setLit] = useState<ReadonlySet<number>>(new Set());
@@ -138,7 +143,7 @@ export function Intro({ onStart }: Props) {
           Comenzar
         </button>
         <div role="group" aria-label="Ir directo a" className="intro-shortcuts">
-          {SHORTCUTS.map(({ section, label }) => (
+          {shortcuts.map(({ section, label }) => (
             <button key={section} type="button" className="intro-shortcut" onClick={() => onStart(section)}>
               {label}
             </button>

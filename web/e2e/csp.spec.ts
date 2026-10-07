@@ -46,6 +46,8 @@ test.describe('under the Content-Security-Policy', () => {
   test.beforeEach(async ({ page }) => {
     // the intro screen has its own test below; the other tests start in the app (key of src/app/Root.tsx)
     await page.addInitScript(() => window.localStorage.setItem('arg2056.skipIntro', '1'));
+    // the Data Dashboard is deprecated and hidden unless switched on; the scenes are reached through it
+    await page.addInitScript(() => window.localStorage.setItem('arg2056.showDashboard', '1'));
     await page.addInitScript(() => {
       const list: string[] = [];
       Object.assign(window, { __csp: list });

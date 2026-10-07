@@ -34,6 +34,8 @@ export const test = base.extend({
 
     // the intro screen is covered by intro.spec.ts; every other test starts in the app (key of src/app/Root.tsx)
     await page.addInitScript(() => window.localStorage.setItem('arg2056.skipIntro', '1'));
+    // the Data Dashboard is deprecated and hidden from the navigation and the intro unless switched on (src/content/sectionLabels.ts); the tests cover it
+    await page.addInitScript(() => window.localStorage.setItem('arg2056.showDashboard', '1'));
 
     await use(page);
 

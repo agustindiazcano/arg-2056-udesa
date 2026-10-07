@@ -19,5 +19,7 @@ export function useCameraNav() {
     }),
     []
   );
-  return { stageRef, poseRef, controls };
+  // the 3D charts have the zoom and the reset only; the Andes scene also has the presets
+  const chartControls = useMemo(() => ({ onZoomIn: controls.onZoomIn, onZoomOut: controls.onZoomOut, onReset: controls.onReset }), [controls]);
+  return { stageRef, poseRef, controls, chartControls };
 }

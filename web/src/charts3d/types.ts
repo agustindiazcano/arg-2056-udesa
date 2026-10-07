@@ -11,6 +11,11 @@ export interface Bar3D {
   highlight: boolean;
 }
 
+/** A clock shared by a page and its 3D charts: the milliseconds of an animation, written by the page (it plays, it is dragged) and read by the charts on every frame. */
+export interface TimelineClock {
+  current: number;
+}
+
 /** What a 3D view needs to draw, as data: the 3D renderer knows nothing about the scenes. */
 export interface Bars3DSpec {
   kind: 'bars';
@@ -19,6 +24,16 @@ export interface Bars3DSpec {
   bars: Bar3D[];
   /** the text alternative of the canvas */
   summary: string;
+  /**
+   * Bars that change with a clock (the GDP of the region from 1900 to 2026): the heights come from `valuesAt(year)` on every frame, in the
+   * order of `bars`, and the camera stands close to the bar `focus` while the years go by and pulls back a little at the end.
+   */
+  timeline?: {
+    clock: TimelineClock;
+    yearAt: (elapsedMs: number) => number;
+    valuesAt: (year: number) => number[];
+    focus: number;
+  };
 }
 
 /** The province map in space: the same data as the flat map, as extruded provinces. */
@@ -65,6 +80,8 @@ export interface Lines3DSpec {
   marker?: number;
   /** the line draws itself from the first x to the last while the camera follows it, then the camera pulls back to the whole chart */
   follow?: boolean;
+  /** with `follow`: the moment of the animation comes from this clock (the page plays it and the visitor drags it) instead of from a timer of the chart */
+  clock?: TimelineClock;
   summary: string;
 }
 

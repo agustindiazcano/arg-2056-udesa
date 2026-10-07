@@ -3,7 +3,7 @@ import { EChart } from '../charts/EChart.js';
 import type { ChartClickParams } from '../charts/EChart.js';
 import { buildColumns } from '../charts/builders/tourCharts.js';
 import { formatValue } from '../charts/format.js';
-import { Chart2D3D } from '../charts3d/Chart2D3D.js';
+import { TourChart } from './TourChart.js';
 import { barsSpec } from '../charts3d/specs.js';
 import { Reveal } from '../motion/Reveal.js';
 import { ProvinceMap, useProvinces } from '../scenes/forecast/ProvinceMap.js';
@@ -11,6 +11,7 @@ import { mapSummary } from '../scenes/forecast/mapSelectors.js';
 import { useStore } from '../state/store.js';
 import { tokens } from '../styles/tokens.js';
 import { Segmented } from '../ui/Segmented.js';
+import { Spinner } from '../ui/Spinner.js';
 import type { Map3DSpec } from '../charts3d/types.js';
 import type { ProvinceId } from '../types/province.js';
 import { MOCK_SOURCE } from './tourData.js';
@@ -107,10 +108,10 @@ export function ProvinceStep() {
       <div className="prov-grid">
         <Reveal k="map" className="gdp-chart prov-map">
           <div className="tour-chart">
-            {provinces.status === 'loading' && <p className="poster">Cargando la geometría de las provincias...</p>}
+            {provinces.status === 'loading' && <Spinner label="Cargando el mapa de las provincias..." />}
             {provinces.status === 'error' && <p style={{ color: 'var(--state-warning)' }}>{`La geometría de las provincias no está disponible: ${provinces.message}`}</p>}
             {provinces.status === 'success' && (
-              <Chart2D3D spec={mapSpec ?? undefined}>
+              <TourChart spec={mapSpec ?? undefined}>
                 <ProvinceMap
                   geo={provinces.geo}
                   values={values}
@@ -124,7 +125,7 @@ export function ProvinceStep() {
                   zoomToSelected
                   onSelect={setSelected}
                 />
-              </Chart2D3D>
+              </TourChart>
             )}
           </div>
         </Reveal>
@@ -153,9 +154,9 @@ export function ProvinceStep() {
               <strong>{`Producción de ${sectorLabel.toLowerCase()} por provincia`}</strong>
             </div>
             <div className="tour-chart">
-              <Chart2D3D spec={bars.spec}>
+              <TourChart spec={bars.spec}>
                 <EChart option={bars.option} aria-label={bars.summary} onClick={onBarClick} />
-              </Chart2D3D>
+              </TourChart>
             </div>
           </Reveal>
         </div>

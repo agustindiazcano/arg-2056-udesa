@@ -12,7 +12,6 @@ import {
   FrontSide,
   ExtrudeGeometry,
   Float32BufferAttribute,
-  GridHelper,
   Group,
   LineBasicMaterial,
   LineSegments,
@@ -32,7 +31,8 @@ import { NavControls } from '../ui/NavControls';
 import { useQualityOptional } from '../runtime/CapabilityProvider';
 import { QUALITY_PRESETS } from '../runtime/capabilities';
 import { useReducedMotion } from '../runtime/useReducedMotion';
-import { SEQUENTIAL_BLUE, tokens } from '../styles/tokens';
+import { tokens } from '../styles/tokens';
+import { createFloor } from './floor';
 import { textSprite } from './labels';
 import { fitRadius, openingAngles } from '../charts3d/camera';
 import { FOLLOW_TOTAL_MS, followFrame, lerp } from '../charts3d/followAnim';
@@ -49,6 +49,9 @@ const X_LABEL_DROP = 0.55;
 /** The side view looks a little below the middle of the chart, so that the chart sits high (the controls and the bar are under it), and fills the view. */
 const SIDE_TARGET_Y = 1.1;
 const SIDE_MARGIN = 1.02;
+
+/** A step of the shared clock bigger than this (a drag on the timeline, a restart) is not the time going by: the camera follows the line again. */
+const CLOCK_JUMP_MS = 300;
 
 const easeOutCubic = (t: number) => 1 - (1 - t) ** 3;
 
@@ -97,7 +100,7 @@ export function Lines3D({ spec }: { spec: Lines3DSpec }) {
   const reduced = useReducedMotion();
   const quality = useQualityOptional();
   const pixelRatioCap = QUALITY_PRESETS[quality?.tier ?? 'medium'].pixelRatioCap;
-  const { stageRef, poseRef, controls } = useCameraNav();
+  const { stageRef, poseRef, chartControls } = useCameraNav();
   const side = useSideView();
   const follow = spec.follow === true;
 
@@ -137,15 +140,7 @@ export function Lines3D({ spec }: { spec: Lines3DSpec }) {
     // plate and grid, the height axis on the back, the x labels on the front
     const plateWidth = WIDTH + 3;
     const plateDepth = lanesDepth + 3.4;
-    const plateColor = new Color(tokens.baseline).lerp(new Color(SEQUENTIAL_BLUE[0]), 0.7);
-    const plate = new Mesh(new BoxGeometry(plateWidth, 0.12, plateDepth), new MeshStandardMaterial({ color: plateColor, roughness: 0.9 }));
-    plate.position.y = -0.06;
-    scene.add(plate);
-    const gridSize = Math.max(plateWidth, plateDepth);
-    const grid = new GridHelper(gridSize, 14, tokens.muted, tokens.grid);
-    grid.scale.set(plateWidth / gridSize, 1, plateDepth / gridSize);
-    grid.position.y = 0.01;
-    scene.add(grid);
+    scene.add(createFloor(plateWidth, plateDepth));
 
     const back = -plateDepth / 2 + 0.1;
     const lineGeometry = new BufferGeometry();
@@ -314,7 +309,22 @@ export function Lines3D({ spec }: { spec: Lines3DSpec }) {
         }
         stage.requestRender();
       };
-      if (reduced) {
+      const clock = spec.clock;
+      if (clock) {
+        // the page owns the time (it plays it and the visitor drags it): draw what the clock says on every frame; a jump of the clock takes the camera back
+        let last = clock.current;
+        frame(last);
+        let raf = 0;
+        const step = () => {
+          const elapsed = clock.current;
+          if (Math.abs(elapsed - last) > CLOCK_JUMP_MS) handedOver = false;
+          last = elapsed;
+          frame(elapsed);
+          raf = requestAnimationFrame(step);
+        };
+        raf = requestAnimationFrame(step);
+        cancel = () => cancelAnimationFrame(raf);
+      } else if (reduced) {
         frame(FOLLOW_TOTAL_MS);
       } else {
         frame(0);
@@ -346,7 +356,7 @@ export function Lines3D({ spec }: { spec: Lines3DSpec }) {
   return (
     <div className="chart3d-wrap">
       <div ref={hostRef} className="chart3d" role="img" aria-label={spec.summary} data-chart3d="lines" />
-      <NavControls {...controls} />
+      <NavControls {...chartControls} />
     </div>
   );
 }

@@ -21,6 +21,7 @@ vi.mock('../../src/charts/EChart.js', () => ({ EChart: () => <div role="img" ari
 
 import { App } from '../../src/app/App';
 import { SCENE_LABELS } from '../../src/scenes/registry';
+import { SHOW_DASHBOARD_KEY } from '../../src/content/sectionLabels';
 
 const initial = useStore.getState();
 
@@ -28,10 +29,13 @@ beforeEach(() => {
   vi.stubGlobal('fetch', vi.fn(() => Promise.reject(new Error('no network in tests'))));
   vi.spyOn(console, 'error').mockImplementation(() => undefined);
   useStore.setState(initial, true);
+  // the Data Dashboard is deprecated and hidden unless switched on: most of these tests are about it
+  window.localStorage.setItem(SHOW_DASHBOARD_KEY, '1');
 });
 
 afterEach(() => {
   cleanup();
+  window.localStorage.clear();
   vi.unstubAllGlobals();
   vi.restoreAllMocks();
 });
@@ -49,6 +53,14 @@ describe('header', () => {
     const nav = screen.getByRole('navigation', { name: 'Escenas' });
     expect(within(nav).getAllByRole('tab').map((t) => t.textContent)).toEqual(['Andes', 'Data Dashboard', 'Recorrido']);
     expect(SCENE_LABELS.economy).toBe('Economía');
+  });
+
+  it('hides the deprecated Data Dashboard from the navigation unless it is switched on', () => {
+    window.localStorage.removeItem(SHOW_DASHBOARD_KEY);
+    render(<App />);
+    const nav = screen.getByRole('navigation', { name: 'Escenas' });
+    expect(within(nav).getAllByRole('tab').map((t) => t.textContent)).toEqual(['Andes', 'Recorrido']);
+    expect(screen.queryByRole('tab', { name: 'Data Dashboard' })).toBeNull();
   });
 
   it('the brand is a button that goes back to the intro', () => {

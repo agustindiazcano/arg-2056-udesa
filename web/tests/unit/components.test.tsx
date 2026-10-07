@@ -5,9 +5,11 @@ import React from 'react';
 import { TabBar } from '../../src/app/TabBar';
 import { ProvinceFilter } from '../../src/app/ProvinceFilter';
 import { useStore } from '../../src/state/store';
+import { SHOW_DASHBOARD_KEY } from '../../src/content/sectionLabels';
 
 describe('UI Components', () => {
   beforeEach(() => {
+    window.localStorage.setItem(SHOW_DASHBOARD_KEY, '1'); // the Data Dashboard is deprecated: hidden unless switched on
     useStore.setState({ 
       scene: 'andes', 
       provinceFilterOpen: false, 
@@ -16,6 +18,13 @@ describe('UI Components', () => {
   });
 
   describe('TabBar', () => {
+    it('does not offer the deprecated Data Dashboard unless it is switched on', () => {
+      window.localStorage.removeItem(SHOW_DASHBOARD_KEY);
+      const { unmount } = render(<TabBar />);
+      expect(screen.getAllByRole('tab').map((t) => t.textContent)).toEqual(['Andes', 'Recorrido']);
+      unmount();
+    });
+
     it('renders three section tabs in order, aria-selected follows store, click changes section', () => {
       render(<TabBar />);
       const tabs = screen.getAllByRole('tab');

@@ -436,8 +436,27 @@
   cursor: grab;
 }
 
-.chart3d:active {
+.chart3d-still,
+.chart3d-still:active {
+  cursor: default;
+}
+
+.chart3d:not(.chart3d-still):active {
   cursor: grabbing;
+}
+
+.iso {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.iso-part {
+  cursor: pointer;
+}
+
+.iso-part:hover {
+  filter: brightness(1.25);
 }
 
 .chart3d-tip {
@@ -462,6 +481,14 @@
 }
 
 /* ---- Navigation buttons of the maps and 3D views ---------------------------------------------------------------- */
+
+/* The canvas is laid over this box (it cannot give it a size), so the box is laid over the wrap, which takes its size from the layout. */
+.chart3d-wrap > .chart3d {
+  position: absolute;
+  inset: 0;
+  width: auto;
+  height: auto;
+}
 
 .chart3d-wrap {
   position: relative;

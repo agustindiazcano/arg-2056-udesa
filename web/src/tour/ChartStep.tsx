@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { EChart } from '../charts/EChart.js';
 import { formatValue } from '../charts/format.js';
-import { Chart2D3D } from '../charts3d/Chart2D3D.js';
+import { TourChart } from './TourChart.js';
 import { ProvinceMap, useProvinces } from '../scenes/forecast/ProvinceMap.js';
 import { mapSummary } from '../scenes/forecast/mapSelectors.js';
 import { useStore } from '../state/store.js';
@@ -11,6 +11,7 @@ import { Segmented } from '../ui/Segmented.js';
 import type { ProvinceId } from '../types/province.js';
 import { PRODUCTION_UNIT, mapValuesOf } from './provinceMock.js';
 import { CHART_STEP_LIST, TOUR_CHARTS } from './tourCharts.js';
+import { Spinner } from '../ui/Spinner.js';
 import { useTourLayout } from './useTourLayout.js';
 import type { TourCount } from './useTourLayout.js';
 import type { TourChartDef } from './tourCharts.js';
@@ -53,9 +54,9 @@ export function visibleSteps(step: number, count: number): number[] {
 function ChartBody({ def }: { def: TourChartDef }) {
   const { option, summary, spec } = useMemo(() => def.build(), [def]);
   return (
-    <Chart2D3D spec={spec}>
+    <TourChart spec={spec}>
       <EChart option={option} aria-label={summary} />
-    </Chart2D3D>
+    </TourChart>
   );
 }
 
@@ -65,11 +66,11 @@ function MapBody({ def, small = false }: { def: TourChartDef; small?: boolean })
   const provinces = useProvinces();
   const values = useMemo(() => mapValuesOf(), []);
   const [selected, setSelected] = useState<ProvinceId | null>(null);
-  if (provinces.status === 'loading') return <p className="poster">Cargando la geometría de las provincias...</p>;
+  if (provinces.status === 'loading') return <Spinner label="Cargando el mapa de las provincias..." />;
   if (provinces.status === 'error') return <p style={{ color: 'var(--state-warning)' }}>{`La geometría de las provincias no está disponible: ${provinces.message}`}</p>;
   const summary = mapSummary(values, 'level', 'valor productivo (datos de prueba)', 2025, UNIT);
   return (
-    <Chart2D3D
+    <TourChart
       spec={{
         kind: 'map',
         title: def.title,
@@ -95,7 +96,7 @@ function MapBody({ def, small = false }: { def: TourChartDef; small?: boolean })
         compact={small}
         onSelect={setSelected}
       />
-    </Chart2D3D>
+    </TourChart>
   );
 }
 

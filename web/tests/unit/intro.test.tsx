@@ -2,6 +2,7 @@
 import React from 'react';
 import { describe, it, expect, afterEach, vi } from 'vitest';
 import { render, screen, cleanup, fireEvent } from '@testing-library/react';
+import { SHOW_DASHBOARD_KEY } from '../../src/content/sectionLabels';
 import { Intro } from '../../src/intro/Intro';
 import { Root } from '../../src/app/Root';
 import { useStore } from '../../src/state/store';
@@ -32,7 +33,16 @@ describe('Intro', () => {
     expect(onStart).toHaveBeenCalledTimes(1);
   });
 
-  it('has three buttons under Comenzar: crossing of the Andes, tour to 2056 and data dashboard, each starting in its section', () => {
+  it('has two buttons under Comenzar, the Data Dashboard being deprecated: crossing of the Andes and tour to 2056', () => {
+    const onStart = vi.fn();
+    render(<Intro onStart={onStart} />);
+    const group = screen.getByRole('group', { name: 'Ir directo a' });
+    expect(Array.from(group.querySelectorAll('button')).map((b) => b.textContent)).toEqual(['Cruce de los Andes', 'Recorrido al 2056']);
+    expect(screen.queryByRole('button', { name: 'Data Dashboard' })).toBeNull();
+  });
+
+  it('has three buttons under Comenzar when the dashboard is switched on: crossing of the Andes, tour to 2056 and data dashboard, each starting in its section', () => {
+    window.localStorage.setItem(SHOW_DASHBOARD_KEY, '1');
     const onStart = vi.fn();
     render(<Intro onStart={onStart} />);
     const group = screen.getByRole('group', { name: 'Ir directo a' });
