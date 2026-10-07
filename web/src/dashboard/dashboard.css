@@ -445,6 +445,20 @@
   cursor: grabbing;
 }
 
+.iso {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.iso-part {
+  cursor: pointer;
+}
+
+.iso-part:hover {
+  filter: brightness(1.25);
+}
+
 .chart3d-tip {
   position: absolute;
   z-index: 2;
