@@ -57,7 +57,7 @@ export function Bars3D({ spec, projection, free = false }: { spec: Bars3DSpec; p
   const reduced = useReducedMotion();
   const quality = useQualityOptional();
   const pixelRatioCap = QUALITY_PRESETS[quality?.tier ?? 'medium'].pixelRatioCap;
-  const { stageRef, poseRef, controls } = useCameraNav();
+  const { stageRef, poseRef, chartControls } = useCameraNav();
   // in the Recorrido it opens from the side with the wheel left to the page; `free` gives it the camera of the dashboard
   const side = useSideView() && !free;
   // seen from almost the side the chart is a flat picture: the camera stands where it fills the view (the ones that follow a clock and the projection test have their own distance)
@@ -270,7 +270,7 @@ export function Bars3D({ spec, projection, free = false }: { spec: Bars3DSpec; p
       <div ref={hostRef} className="chart3d" role="img" aria-label={spec.summary} data-chart3d={spec.kind}>
         <div ref={tipRef} className="chart3d-tip" hidden />
       </div>
-      <NavControls {...controls} />
+      <NavControls {...chartControls} />
     </div>
   );
 }

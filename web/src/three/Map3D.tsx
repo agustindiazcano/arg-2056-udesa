@@ -47,7 +47,7 @@ export function Map3D({ spec, projection, free = false }: { spec: Map3DSpec; pro
   const reduced = useReducedMotion();
   const quality = useQualityOptional();
   const pixelRatioCap = QUALITY_PRESETS[quality?.tier ?? 'medium'].pixelRatioCap;
-  const { stageRef, poseRef, controls } = useCameraNav();
+  const { stageRef, poseRef, chartControls } = useCameraNav();
   // a map seen edge-on shows nothing (it is tall, not wide): in the Recorrido it keeps its oblique view, fitted to the box
   const tour = useSideView() && !free;
   const side = false;
@@ -209,7 +209,7 @@ export function Map3D({ spec, projection, free = false }: { spec: Map3DSpec; pro
       <div ref={hostRef} className="chart3d" role="img" aria-label={spec.summary} data-chart3d="map">
         <div ref={tipRef} className="chart3d-tip" hidden />
       </div>
-      <NavControls {...controls} />
+      <NavControls {...chartControls} />
     </div>
   );
 }

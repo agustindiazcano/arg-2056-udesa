@@ -100,7 +100,7 @@ export function Lines3D({ spec }: { spec: Lines3DSpec }) {
   const reduced = useReducedMotion();
   const quality = useQualityOptional();
   const pixelRatioCap = QUALITY_PRESETS[quality?.tier ?? 'medium'].pixelRatioCap;
-  const { stageRef, poseRef, controls } = useCameraNav();
+  const { stageRef, poseRef, chartControls } = useCameraNav();
   const side = useSideView();
   const follow = spec.follow === true;
 
@@ -364,7 +364,7 @@ export function Lines3D({ spec }: { spec: Lines3DSpec }) {
   return (
     <div className="chart3d-wrap">
       <div ref={hostRef} className="chart3d" role="img" aria-label={spec.summary} data-chart3d="lines" />
-      <NavControls {...controls} />
+      <NavControls {...chartControls} />
     </div>
   );
 }
