@@ -3,6 +3,7 @@ import { useStore } from '../state/store';
 import { useKeyboard } from '../state/useKeyboard';
 import { useTicker } from '../state/useTicker';
 import { Hud } from './Hud';
+import { Spinner } from '../ui/Spinner';
 import { ProvinceFilter } from './ProvinceFilter';
 import { Header } from './Header';
 import { SiteFooter } from './SiteFooter';
@@ -71,7 +72,7 @@ export function App({ onHome }: { onHome?: () => void }) {
         
         <main id="main" tabIndex={-1} className="scene-container" data-testid="scene">
           {section === 'tour' && hasTourChart(tourStep) ? (
-            <Suspense fallback={null}>
+            <Suspense fallback={<Spinner label="Cargando el gráfico..." />}>
               <TourStep step={tourStep} />
             </Suspense>
           ) : (
