@@ -26,6 +26,10 @@ export function createTourScene(host: HTMLElement, o: { pixelRatioCap: number; v
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, o.pixelRatioCap));
   renderer.setClearColor(tokens.page, 0);
   const el = renderer.domElement;
+  // laid over the host: a canvas in the flow takes its height from its own pixel ratio, and a host that takes its height from the canvas grows with every resize
+  if (getComputedStyle(host).position === 'static') host.style.position = 'relative';
+  el.style.position = 'absolute';
+  el.style.inset = '0';
   el.style.display = 'block';
   el.style.width = '100%';
   el.style.height = '100%';

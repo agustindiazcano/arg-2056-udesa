@@ -36,6 +36,18 @@ describe('fixedView', () => {
   });
 });
 
+describe('createTourScene canvas size', () => {
+  it('is laid over its host and never decides its size', () => {
+    const host = document.createElement('div');
+    document.body.appendChild(host);
+    const scene = createTourScene(host, { pixelRatioCap: 1, view: fixedView({ width: 4, height: 4 }, 1, { phi: 1 }) });
+    expect(scene.renderer.domElement.style.position).toBe('absolute');
+    expect(getComputedStyle(host).position).not.toBe('static');
+    scene.dispose();
+    host.remove();
+  });
+});
+
 describe('createTourScene', () => {
   const hosts: HTMLElement[] = [];
   afterEach(() => {

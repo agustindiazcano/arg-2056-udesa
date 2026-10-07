@@ -44,6 +44,15 @@ afterEach(() => {
   vi.unstubAllGlobals();
 });
 
+describe('stage canvas size', () => {
+  it('never decides the size of its host: it is laid over it, so a resize cannot feed back into the layout', () => {
+    const style = canvas().style;
+    expect(style.position).toBe('absolute');
+    expect(style.inset === '0px' || style.inset === '0').toBe(true);
+    expect(getComputedStyle(host).position).not.toBe('static');
+  });
+});
+
 describe('stage setPose', () => {
   it('puts the camera at the pose at once and keeps it inside the limits', () => {
     stage.nav.setPose({ x: 1, y: 0.4, z: -1, theta: 2, phi: 3, radius: 0.0001 });
