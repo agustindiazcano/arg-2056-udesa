@@ -1,5 +1,7 @@
-import { describe, expect, it, vi } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { prefetchCharts } from '../../src/app/prefetch';
+
+afterEach(() => vi.unstubAllGlobals());
 
 describe('prefetchCharts', () => {
   it('loads every chunk of the charts, one at a time, each when the browser is idle', async () => {
@@ -18,6 +20,13 @@ describe('prefetchCharts', () => {
       await new Promise((r) => setTimeout(r, 0));
     }
     expect(order).toEqual(['start tour', 'end tour', 'start three', 'end three', 'start dashboard', 'end dashboard']);
+  });
+
+  it('works where there is no navigator (a plain Node, as in the CI)', async () => {
+    vi.stubGlobal('navigator', undefined);
+    const loader = vi.fn(() => Promise.resolve());
+    await prefetchCharts([loader], (run) => run());
+    expect(loader).toHaveBeenCalledOnce();
   });
 
   it('does nothing when the visitor asked to save data', async () => {

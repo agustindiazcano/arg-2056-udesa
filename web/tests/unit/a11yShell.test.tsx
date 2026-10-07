@@ -16,6 +16,7 @@ vi.mock('../../src/scenes/registry', async (importOriginal) => {
 
 import { App } from '../../src/app/App';
 import { APP_TITLE, documentTitle } from '../../src/app/title';
+import { SHOW_DASHBOARD_KEY } from '../../src/content/sectionLabels';
 
 const initial = useStore.getState();
 
@@ -23,10 +24,13 @@ beforeEach(() => {
   vi.stubGlobal('fetch', vi.fn(() => Promise.reject(new Error('no network in tests'))));
   vi.spyOn(console, 'error').mockImplementation(() => undefined);
   useStore.setState(initial, true);
+  // the Data Dashboard is deprecated and hidden unless switched on; these tests are about the three sections
+  window.localStorage.setItem(SHOW_DASHBOARD_KEY, '1');
 });
 
 afterEach(() => {
   cleanup();
+  window.localStorage.clear();
   vi.unstubAllGlobals();
   vi.restoreAllMocks();
 });

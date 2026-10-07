@@ -12,7 +12,7 @@ const whenIdle: Schedule = (run) => {
   else setTimeout(run, 200);
 };
 
-const saveDataRequested = () => (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData === true;
+const saveDataRequested = () => typeof navigator !== 'undefined' && (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData === true;
 
 /**
  * Downloads the chunks of the charts in the background, one at a time and each when the browser is idle, so that the first
