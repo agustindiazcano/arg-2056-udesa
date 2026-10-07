@@ -62,16 +62,6 @@ export function fitRadius(extent: { width: number; height: number }, fovDeg: num
   return (margin * Math.max(extent.height / 2, extent.width / 2 / safe)) / tan;
 }
 
-/**
- * How far the camera stands when it flies to one province seen from above: far enough for its `extent` (a little more than its size) to
- * fit, plus the height of its top (a tall province would otherwise press against the lens). Never closer than half of the start
- * distance, so what surrounds it stays in view, and never farther than the start.
- */
-export function zoomRadius(extent: { width: number; height: number }, topHeight: number, aspect: number, start: number): number {
-  const fit = fitRadius(extent, 32, aspect, 1) + topHeight;
-  return Math.min(start, Math.max(start / 2, fit));
-}
-
 export type CameraPreset = 'top' | 'perspective';
 
 const TWO_PI = Math.PI * 2;
