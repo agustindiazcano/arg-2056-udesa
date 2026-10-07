@@ -68,7 +68,7 @@ describe('stage beforeRender hook', () => {
 describe('stage navigation', () => {
   it('turns with a left drag, with no azimuth limit', () => {
     fire('pointerdown', { clientX: 100, clientY: 100, button: 0 });
-    fire('pointermove', { clientX: 600, clientY: 100 });
+    fire('pointermove', { buttons: 1, clientX: 600, clientY: 100 });
     fire('pointerup', { clientX: 600, clientY: 100 });
     const turned = 0.4 - 500 * 0.008; // -3.6 rad: past -pi, so it wraps instead of stopping
     expect(Math.cos(stage.pose.theta)).toBeCloseTo(Math.cos(turned), 8);
@@ -78,17 +78,27 @@ describe('stage navigation', () => {
 
   it('moves the target with a right drag and with a Shift drag, and does not turn', () => {
     fire('pointerdown', { clientX: 100, clientY: 100, button: 2 });
-    fire('pointermove', { clientX: 140, clientY: 100 });
+    fire('pointermove', { buttons: 1, clientX: 140, clientY: 100 });
     fire('pointerup', { clientX: 140, clientY: 100 });
     expect(stage.pose.x !== 0 || stage.pose.z !== 0).toBe(true);
     expect(stage.pose.theta).toBeCloseTo(0.4, 10);
     const after = { x: stage.pose.x, z: stage.pose.z };
     fire('pointerdown', { clientX: 100, clientY: 100, button: 0, shiftKey: true });
-    fire('pointermove', { clientX: 100, clientY: 130 });
+    fire('pointermove', { buttons: 1, clientX: 100, clientY: 130 });
     fire('pointerup', { clientX: 100, clientY: 130 });
     expect(stage.pose.theta).toBeCloseTo(0.4, 10);
     expect(stage.pose.y).not.toBe(0.5);
     expect(after).not.toEqual({ x: 0, z: 0 });
+  });
+
+  it('ignores a hover: a pointer whose release was lost (a context menu, a drag out of the window) does not keep turning or zooming', () => {
+    const before = { ...stage.pose };
+    fire('pointerdown', { pointerId: 1, clientX: 100, clientY: 100, button: 0 });
+    fire('pointerdown', { pointerId: 2, clientX: 300, clientY: 100, button: 0 });
+    // the buttons are up now, but no pointerup came: moving over the chart must not pinch-zoom
+    fire('pointermove', { pointerId: 1, buttons: 0, clientX: 150, clientY: 100 });
+    fire('pointermove', { pointerId: 2, buttons: 0, clientX: 400, clientY: 100 });
+    expect(stage.pose).toEqual(before);
   });
 
   it('zooms with the wheel within the range and stops the page from scrolling', () => {
@@ -111,7 +121,7 @@ describe('stage navigation', () => {
   it('restores the start pose with reset and with a double click', () => {
     fire('wheel', { deltaY: -100 });
     fire('pointerdown', { clientX: 0, clientY: 0, button: 0 });
-    fire('pointermove', { clientX: 50, clientY: 40 });
+    fire('pointermove', { buttons: 1, clientX: 50, clientY: 40 });
     fire('pointerup', { clientX: 50, clientY: 40 });
     stage.nav.reset();
     expect([stage.pose.x, stage.pose.y, stage.pose.z, stage.pose.theta, stage.pose.phi, stage.pose.radius]).toEqual([0, 0.5, 0, 0.4, 1, 10]);

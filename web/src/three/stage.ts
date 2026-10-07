@@ -178,6 +178,12 @@ export function createStage(host: HTMLElement, o: StageOptions): Stage {
   const move = (e: PointerEvent) => {
     const i = ids.indexOf(e.pointerId);
     if (i < 0) return;
+    // nothing is pressed: the release was lost (a context menu, a drag that ended outside the window), so this is a hover; it never navigates
+    if (e.buttons === 0) {
+      ids.length = xs.length = ys.length = 0;
+      lastDist = 0;
+      return;
+    }
     if (ids.length === 1) {
       const dx = e.clientX - xs[0]!;
       const dy = e.clientY - ys[0]!;
