@@ -12,7 +12,6 @@ import {
   FrontSide,
   ExtrudeGeometry,
   Float32BufferAttribute,
-  GridHelper,
   Group,
   LineBasicMaterial,
   LineSegments,
@@ -32,7 +31,8 @@ import { NavControls } from '../ui/NavControls';
 import { useQualityOptional } from '../runtime/CapabilityProvider';
 import { QUALITY_PRESETS } from '../runtime/capabilities';
 import { useReducedMotion } from '../runtime/useReducedMotion';
-import { SEQUENTIAL_BLUE, tokens } from '../styles/tokens';
+import { tokens } from '../styles/tokens';
+import { createFloor } from './floor';
 import { textSprite } from './labels';
 import { fitRadius, openingAngles } from '../charts3d/camera';
 import { FOLLOW_TOTAL_MS, followFrame, lerp } from '../charts3d/followAnim';
@@ -140,15 +140,7 @@ export function Lines3D({ spec }: { spec: Lines3DSpec }) {
     // plate and grid, the height axis on the back, the x labels on the front
     const plateWidth = WIDTH + 3;
     const plateDepth = lanesDepth + 3.4;
-    const plateColor = new Color(tokens.baseline).lerp(new Color(SEQUENTIAL_BLUE[0]), 0.7);
-    const plate = new Mesh(new BoxGeometry(plateWidth, 0.12, plateDepth), new MeshStandardMaterial({ color: plateColor, roughness: 0.9 }));
-    plate.position.y = -0.06;
-    scene.add(plate);
-    const gridSize = Math.max(plateWidth, plateDepth);
-    const grid = new GridHelper(gridSize, 14, tokens.muted, tokens.grid);
-    grid.scale.set(plateWidth / gridSize, 1, plateDepth / gridSize);
-    grid.position.y = 0.01;
-    scene.add(grid);
+    scene.add(createFloor(plateWidth, plateDepth));
 
     const back = -plateDepth / 2 + 0.1;
     const lineGeometry = new BufferGeometry();

@@ -4,7 +4,6 @@ import {
   BoxGeometry,
   Color,
   DirectionalLight,
-  GridHelper,
   Group,
   LineBasicMaterial,
   LineSegments,
@@ -26,6 +25,7 @@ import { useQualityOptional } from '../runtime/CapabilityProvider';
 import { QUALITY_PRESETS } from '../runtime/capabilities';
 import { useReducedMotion } from '../runtime/useReducedMotion';
 import { SEQUENTIAL_BLUE, tokens } from '../styles/tokens';
+import { createFloor } from './floor';
 import { fitLabel } from './labels';
 import { textSprite } from './labels';
 import { addProjection } from './projection';
@@ -95,14 +95,7 @@ export function Bars3D({ spec, projection, free = false }: { spec: Bars3DSpec; p
     // the plate and its grid
     const plateWidth = layout.width + 3.2;
     const plateDepth = DEPTH + 3;
-    const plateColor = new Color(tokens.baseline).lerp(new Color(SEQUENTIAL_BLUE[0]), 0.7);
-    const plate = new Mesh(new BoxGeometry(plateWidth, 0.12, plateDepth), new MeshStandardMaterial({ color: plateColor, roughness: 0.9 }));
-    plate.position.y = -0.06;
-    scene.add(plate);
-    const grid = new GridHelper(Math.max(plateWidth, plateDepth), 14, tokens.muted, tokens.grid);
-    grid.scale.set(plateWidth / Math.max(plateWidth, plateDepth), 1, plateDepth / Math.max(plateWidth, plateDepth));
-    grid.position.y = 0.01;
-    scene.add(grid);
+    scene.add(createFloor(plateWidth, plateDepth));
 
     // the height axis: faint lines on the back and the values at the left (they are drawn again when the scale of a timeline changes)
     const back = -DEPTH / 2 - 0.15;
