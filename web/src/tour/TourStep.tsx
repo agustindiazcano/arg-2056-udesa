@@ -1,10 +1,10 @@
 import React from 'react';
-import { ChartStep } from './ChartStep.js';
-import { ProvinceStep } from './ProvinceStep.js';
-import { WorldStep } from './WorldStep.js';
+import { LabStep } from './LabStep.js';
 
-/** The chart of a step of the Recorrido. One lazy chunk keeps ECharts out of the initial load. */
-export function TourStep({ step }: { step: number }) {
-  if (step === 0) return <WorldStep />;
-  return step === 2 ? <ProvinceStep /> : <ChartStep step={step} />;
+/**
+ * The Recorrido has one slide for now: a clean test of the 3D map and bars (the others were taken out while the 3D is rebuilt;
+ * `ChartStep`, `ProvinceStep`, `WorldStep` and `GdpStep` are still in the folder, unused). The step number does not matter.
+ */
+export function TourStep(_props: { step: number }) {
+  return <LabStep />;
 }
