@@ -46,14 +46,15 @@ const SIDE_MARGIN = 1.02;
 const easeOutCubic = (t: number) => 1 - (1 - t) ** 3;
 
 /** The reference look: bars standing on a dark plate with a grid, the highlighted one lit, the value over each bar. */
-export function Bars3D({ spec, projection }: { spec: Bars3DSpec; projection?: ProjectionRequest }) {
+export function Bars3D({ spec, projection, free = false }: { spec: Bars3DSpec; projection?: ProjectionRequest; free?: boolean }) {
   const hostRef = useRef<HTMLDivElement>(null);
   const tipRef = useRef<HTMLDivElement>(null);
   const reduced = useReducedMotion();
   const quality = useQualityOptional();
   const pixelRatioCap = QUALITY_PRESETS[quality?.tier ?? 'medium'].pixelRatioCap;
   const { stageRef, poseRef, controls } = useCameraNav();
-  const side = useSideView();
+  // in the Recorrido it opens from the side with the wheel left to the page; `free` gives it the camera of the dashboard
+  const side = useSideView() && !free;
 
   useEffect(() => {
     const host = hostRef.current;

@@ -9,8 +9,8 @@ import type { ProvinceId } from '../types/province.js';
 import { PRODUCTION_UNIT, SECTOR_VALUES, mapValuesOf, rankedProvinces } from './provinceMock.js';
 
 // the 3D renderers load only here, with Three.js in its own chunk
-const TourBars = lazy(() => import('../tour3d/TourBars.js').then((m) => ({ default: m.TourBars })));
-const TourMap = lazy(() => import('../tour3d/TourMap.js').then((m) => ({ default: m.TourMap })));
+const Bars3D = lazy(() => import('../three/Bars3D.js').then((m) => ({ default: m.Bars3D })));
+const Map3D = lazy(() => import('../three/Map3D.js').then((m) => ({ default: m.Map3D })));
 
 const TITLE = 'Prueba 3D';
 
@@ -49,7 +49,7 @@ const box: React.CSSProperties = { position: 'relative', height: 480, border: '1
 
 /**
  * The only slide of the Recorrido while the 3D is rebuilt: the map of the provinces and a chart of bars, each alone in a box
- * with a fixed camera, and nothing else around them. Made-up values.
+ * with the camera of the Data Dashboard (drag, wheel, buttons), and nothing else around them. Made-up values.
  */
 export function LabStep() {
   const provinces = useProvinces();
@@ -98,11 +98,11 @@ export function LabStep() {
       ) : (
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 'var(--space-md)' }}>
           <div style={box}>
-            <Suspense fallback={<p className="poster">Cargando el mapa...</p>}>{mapSpec ? <TourMap spec={mapSpec} /> : <p className="poster">Cargando la geometría...</p>}</Suspense>
+            <Suspense fallback={<p className="poster">Cargando el mapa...</p>}>{mapSpec ? <Map3D spec={mapSpec} free /> : <p className="poster">Cargando la geometría...</p>}</Suspense>
           </div>
           <div style={box}>
             <Suspense fallback={<p className="poster">Cargando las barras...</p>}>
-              <TourBars spec={barSpec} />
+              <Bars3D spec={barSpec} free />
             </Suspense>
           </div>
         </div>

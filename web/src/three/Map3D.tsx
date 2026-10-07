@@ -37,7 +37,7 @@ const ZOOM_FILL = 1.8;
 const easeOutCubic = (t: number) => 1 - (1 - t) ** 3;
 
 /** The provinces extruded: height and color follow the value, the selected province rises, a click selects. */
-export function Map3D({ spec, projection }: { spec: Map3DSpec; projection?: ProjectionRequest }) {
+export function Map3D({ spec, projection, free = false }: { spec: Map3DSpec; projection?: ProjectionRequest; free?: boolean }) {
   const hostRef = useRef<HTMLDivElement>(null);
   const tipRef = useRef<HTMLDivElement>(null);
   // the data the map last grew for: a new stage for the same data (a selection, a camera setting) shows it at once instead of growing it again
@@ -49,7 +49,7 @@ export function Map3D({ spec, projection }: { spec: Map3DSpec; projection?: Proj
   const pixelRatioCap = QUALITY_PRESETS[quality?.tier ?? 'medium'].pixelRatioCap;
   const { stageRef, poseRef, controls } = useCameraNav();
   // a map seen edge-on shows nothing (it is tall, not wide): in the Recorrido it keeps its oblique view, fitted to the box
-  const tour = useSideView();
+  const tour = useSideView() && !free;
   const side = false;
   const upright = spec.upright === true;
 
