@@ -17,7 +17,7 @@ import {
   Vector3
 } from 'three';
 import { formatAxisNumber } from '../charts/format';
-import { barsFocus, followFrame } from '../charts3d/followAnim';
+import { DEFAULT_BARS_VIEW, barsFocus, followFrame } from '../charts3d/followAnim';
 import { layoutBars, niceCeil } from '../charts3d/layout';
 import type { ProjectionRequest } from '../charts3d/projection';
 import type { Bars3DSpec, Tick } from '../charts3d/types';
@@ -48,9 +48,6 @@ const SIDE_MARGIN = 1.02;
 /** A step of the shared clock bigger than this (a drag on the timeline, a restart) is not the time going by: the camera goes back to the bar. */
 const CLOCK_JUMP_MS = 300;
 
-/** The polar angle of a bar chart that follows the clock: 0 is straight down, π/2 level with the chart. */
-const TIMELINE_PHI = 1.38;
-
 const easeOutCubic = (t: number) => 1 - (1 - t) ** 3;
 
 /** The reference look: bars standing on a dark plate with a grid, the highlighted one lit, the value over each bar. */
@@ -77,7 +74,7 @@ export function Bars3D({ spec, projection, free = false }: { spec: Bars3DSpec; p
         ? fitRadius({ width: plateWidthBox + 1.6, height: MAX_HEIGHT + X_LABEL_DROP + 0.9 }, 32, host.clientHeight > 0 ? host.clientWidth / host.clientHeight : 0, SIDE_MARGIN)
         : Math.max(13, layout.width * 1.05 + 8) * (projection ? 1.2 : 1),
       // a bar chart that follows the clock opens almost from the side, a little above (the example of the Recorrido); the others as before
-      ...(spec.timeline ? { theta: 0.22, phi: TIMELINE_PHI } : openingAngles(side, { theta: 0.22, phi: 1.15 })),
+      ...(spec.timeline ? { theta: (spec.timeline.view?.current ?? DEFAULT_BARS_VIEW).theta, phi: (spec.timeline.view?.current ?? DEFAULT_BARS_VIEW).phi, fov: (spec.timeline.view?.current ?? DEFAULT_BARS_VIEW).fov } : openingAngles(side, { theta: 0.22, phi: 1.15 })),
       box: { minX: -plateWidthBox / 2, maxX: plateWidthBox / 2, minY: 0, maxY: MAX_HEIGHT, minZ: -plateDepthBox / 2, maxZ: plateDepthBox / 2 },
       pose: poseRef.current ?? undefined,
       animateReset: !reduced && quality?.tier !== 'low',
@@ -170,11 +167,23 @@ export function Bars3D({ spec, projection, free = false }: { spec: Bars3DSpec; p
       let lastSet = { ...base };
       let handedOver = false;
       let lastElapsed = timeline.clock.current;
+      let lastView = JSON.stringify(timeline.view?.current ?? DEFAULT_BARS_VIEW);
       let top = -1;
       cancel = stage.loop(() => {
         const elapsed = timeline.clock.current;
         if (Math.abs(elapsed - lastElapsed) > CLOCK_JUMP_MS) handedOver = false;
         lastElapsed = elapsed;
+        // the numbers of the tuner changed: the camera goes where they say, even if the visitor had moved it
+        const view = timeline.view?.current ?? DEFAULT_BARS_VIEW;
+        const viewKey = JSON.stringify(view);
+        if (viewKey !== lastView) {
+          lastView = viewKey;
+          handedOver = false;
+          if (stage.camera.fov !== view.fov) {
+            stage.camera.fov = view.fov;
+            stage.camera.updateProjectionMatrix();
+          }
+        }
         const values = timeline.valuesAt(timeline.yearAt(elapsed));
         const nextTop = niceCeil(Math.max(...values));
         if (nextTop !== top) {
@@ -192,7 +201,7 @@ export function Bars3D({ spec, projection, free = false }: { spec: Bars3DSpec; p
           handedOver = ['x', 'y', 'z', 'theta', 'phi', 'radius'].some((k) => Math.abs((p as never)[k] - (lastSet as never)[k]) > 1e-4);
         }
         if (!handedOver) {
-          stage.nav.setPose(barsFocus(base, { x: focus.item.x, top: focus.mesh.scale.y }, followFrame(elapsed).out));
+          stage.nav.setPose(barsFocus({ ...base, theta: view.theta, phi: view.phi }, { x: focus.item.x, top: focus.mesh.scale.y }, followFrame(elapsed).out, view));
           lastSet = { ...stage.pose };
         }
       });

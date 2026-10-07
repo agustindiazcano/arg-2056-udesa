@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { FOLLOW_MS, FOLLOW_TOTAL_MS } from '../../src/charts3d/followAnim';
-import { barsFocus } from '../../src/charts3d/followAnim';
+import { DEFAULT_BARS_VIEW, barsFocus } from '../../src/charts3d/followAnim';
 import { elapsedForYear, yearAtElapsed } from '../../src/tour/worldAnim';
 import { FIRST_YEAR, HOME, LAST_YEAR, argentinaSince1900, gdpAtYear, gdpPerCapitaAt, populationAt, rankingTable, regionCountries, regionValuesAt, worldRanking, worldRankingAt } from '../../src/tour/worldData';
 
@@ -122,5 +122,24 @@ describe('the two tables of the ranking', () => {
     const byGdp = worldRankingAt(2026, 'gdp').map((c) => c.country);
     const byPerCapita = worldRankingAt(2026, 'percapita').map((c) => c.country);
     expect(byPerCapita).not.toEqual(byGdp);
+  });
+});
+
+describe('the camera of the region bars with the numbers of the tuner', () => {
+  const base = { x: 0, y: 1.4, z: 0, theta: 0.2, phi: 1.1, radius: 14 };
+  const bar = { x: 3, top: 1.2 };
+
+  it('uses the distances and the height that were set', () => {
+    const tuned = barsFocus(base, bar, 0, { near: 0.3, end: 0.8, height: 2 });
+    expect(tuned.radius).toBeCloseTo(base.radius * 0.3, 6);
+    expect(barsFocus(base, bar, 1, { near: 0.3, end: 0.8, height: 2 }).radius).toBeCloseTo(base.radius * 0.8, 6);
+    expect(tuned.y).toBeCloseTo(barsFocus(base, bar, 0).y + 2, 6);
+  });
+
+  it('keeps the defaults when nothing is set, and the angles of the base', () => {
+    const plain = barsFocus(base, bar, 0);
+    expect(plain.radius).toBeCloseTo(base.radius * DEFAULT_BARS_VIEW.near, 6);
+    expect(plain.theta).toBe(base.theta);
+    expect(plain.phi).toBe(base.phi);
   });
 });

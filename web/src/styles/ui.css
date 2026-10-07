@@ -1194,3 +1194,49 @@ main.scene-container {
   white-space: nowrap;
   text-overflow: ellipsis;
 }
+
+/* ---- Numbers to set the camera of the region bars by hand (step 0, 3D) ----------------------------------------------- */
+
+.view-tuner {
+  position: fixed;
+  left: var(--space-3);
+  bottom: var(--space-3);
+  z-index: 20;
+  display: grid;
+  gap: var(--space-xs);
+  max-width: 17rem;
+  padding: var(--space-sm) var(--space-3);
+  background: var(--glass-strong);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  color: var(--ink);
+  font-size: 0.8rem;
+}
+
+.view-tuner-fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-xs) var(--space-sm);
+}
+
+.view-tuner-fields label {
+  display: grid;
+  gap: 2px;
+  color: var(--ink-2);
+}
+
+.view-tuner-fields input {
+  width: 100%;
+  padding: 2px 4px;
+  background: var(--page);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm, 4px);
+  color: var(--ink);
+  font: inherit;
+}
+
+.view-tuner-readout {
+  margin: 0;
+  color: var(--ink-2);
+  user-select: all;
+}

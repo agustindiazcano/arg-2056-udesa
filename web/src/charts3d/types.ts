@@ -1,5 +1,6 @@
 import type { ProvincesGeo } from '../geo/provinces';
 import type { MapValues } from '../scenes/forecast/mapSelectors';
+import type { BarsView } from './followAnim';
 
 /** One bar of a 3D bar chart. `display` is the value already formatted (es-AR, with its unit). */
 export interface Bar3D {
@@ -33,6 +34,8 @@ export interface Bars3DSpec {
     yearAt: (elapsedMs: number) => number;
     valuesAt: (year: number) => number[];
     focus: number;
+    /** the numbers of the camera, read on every frame (the tuner of the page changes them while the chart is on screen) */
+    view?: { current: BarsView };
   };
 }
 
