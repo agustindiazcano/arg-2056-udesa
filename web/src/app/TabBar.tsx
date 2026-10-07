@@ -2,16 +2,16 @@ import React from 'react';
 import { useStore } from '../state/store';
 import { DATA_SCENES, SECTIONS } from '../types/scene';
 import { SCENE_LABELS } from '../scenes/registry';
-import { SECTION_LABELS } from '../content/sectionLabels';
+import { SECTION_LABELS, visibleSections } from '../content/sectionLabels';
 
-/** The three sections: the first row of the header, next to the brand. */
+/** The sections (the Data Dashboard is hidden: it is deprecated): the first row of the header, next to the brand. */
 export function SectionTabs() {
   const section = useStore((s) => s.section);
   const dispatch = useStore((s) => s.dispatch);
   return (
     <nav aria-label="Escenas">
       <div role="tablist" className="tabs">
-        {SECTIONS.map((s) => (
+        {visibleSections(SECTIONS).map((s) => (
           <button key={s} type="button" role="tab" className="tab" aria-selected={section === s} onClick={() => dispatch({ type: 'setSection', section: s })}>
             {SECTION_LABELS[s]}
           </button>
