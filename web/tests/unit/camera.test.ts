@@ -6,6 +6,7 @@ import {
   ZOOM_MAX,
   ZOOM_MIN,
   cameraLimits,
+  zoomRadius,
   blendCamera,
   copyCamera,
   fitRadius,
@@ -269,5 +270,18 @@ describe('fitRadius', () => {
   it('falls back to a usable aspect when the host has no size yet', () => {
     expect(fitRadius(extent, FOV, 0, 1.1)).toBeGreaterThan(0);
     expect(Number.isFinite(fitRadius(extent, FOV, Number.NaN, 1.1))).toBe(true);
+  });
+});
+
+describe('zoomRadius (the camera that flies to a province)', () => {
+  const start = 18;
+  it('stays farther from a taller province, so its top does not press against the camera', () => {
+    expect(zoomRadius({ width: 6, height: 6 }, 1.6, 1.2, start)).toBeGreaterThan(zoomRadius({ width: 6, height: 6 }, 0.2, 1.2, start));
+  });
+  it('never gets closer than half of the start distance, so the map is still a map', () => {
+    expect(zoomRadius({ width: 0.1, height: 0.1 }, 0, 1.2, start)).toBeGreaterThanOrEqual(start / 2);
+  });
+  it('never goes farther than the start distance', () => {
+    expect(zoomRadius({ width: 40, height: 40 }, 2, 1.2, start)).toBeLessThanOrEqual(start);
   });
 });

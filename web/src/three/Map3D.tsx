@@ -21,7 +21,7 @@ import { QUALITY_PRESETS } from '../runtime/capabilities';
 import { useReducedMotion } from '../runtime/useReducedMotion';
 import { SEQUENTIAL_BLUE, tokens } from '../styles/tokens';
 import { addProjection } from './projection';
-import { fitRadius, openingAngles } from '../charts3d/camera';
+import { fitRadius, openingAngles, zoomRadius } from '../charts3d/camera';
 import { useSideView } from './useSideView';
 import { createStage } from './stage';
 import { useCameraNav } from './useCameraNav';
@@ -85,8 +85,10 @@ export function Map3D({ spec, projection, free = false }: { spec: Map3DSpec; pro
         const ys = points.map((p) => p[1]);
         const [x0, x1, y0, y1] = [Math.min(...xs), Math.max(...xs), Math.min(...ys), Math.max(...ys)];
         const extent = Math.max(x1 - x0, y1 - y0, 0.6);
-        const fit = fitRadius({ width: extent * ZOOM_FILL, height: extent * ZOOM_FILL }, 32, aspect, 1);
-        stage.nav.flyTo({ ...stage.pose, x: (x0 + x1) / 2, y: 0, z: -(y0 + y1) / 2, radius: Math.min(stage.pose.radius, fit) });
+        const top = provinceStyle(spec.values.values[selected.id]?.plotted, spec.values.domain, spec.metric).height + SELECTED_LIFT;
+        const startRadius = stage.pose.radius;
+        const radius = zoomRadius({ width: extent * ZOOM_FILL, height: extent * ZOOM_FILL }, top, aspect, startRadius);
+        stage.nav.flyTo({ ...stage.pose, x: (x0 + x1) / 2, y: 0, z: -(y0 + y1) / 2, radius });
       } else stage.nav.reset();
     }
     const { scene } = stage;
