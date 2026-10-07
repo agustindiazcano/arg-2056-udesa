@@ -17,7 +17,7 @@ import {
   Vector3
 } from 'three';
 import { formatAxisNumber } from '../charts/format';
-import { DEFAULT_BARS_VIEW, barsFocus, followFrame } from '../charts3d/followAnim';
+import { DEFAULT_BARS_VIEW, barsFocus, barsOpeningAngles, followFrame } from '../charts3d/followAnim';
 import { layoutBars, niceCeil } from '../charts3d/layout';
 import type { ProjectionRequest } from '../charts3d/projection';
 import type { Bars3DSpec, Tick } from '../charts3d/types';
@@ -60,6 +60,8 @@ export function Bars3D({ spec, projection, free = false }: { spec: Bars3DSpec; p
   const { stageRef, poseRef, controls } = useCameraNav();
   // in the Recorrido it opens from the side with the wheel left to the page; `free` gives it the camera of the dashboard
   const side = useSideView() && !free;
+  // seen from almost the side the chart is a flat picture: the camera stands where it fills the view (the ones that follow a clock and the projection test have their own distance)
+  const fitView = (side || !projection) && !spec.timeline;
 
   useEffect(() => {
     const host = hostRef.current;
@@ -69,12 +71,13 @@ export function Bars3D({ spec, projection, free = false }: { spec: Bars3DSpec; p
     const plateDepthBox = DEPTH + 3;
     const stage = createStage(host, {
       pixelRatioCap,
-      target: side ? new Vector3(0.4, SIDE_TARGET_Y, 0) : new Vector3(0, MAX_HEIGHT * 0.34 + (projection ? 0.9 : 0), 0),
-      radius: side
+      target: fitView ? new Vector3(0.4, SIDE_TARGET_Y, 0) : new Vector3(0, MAX_HEIGHT * 0.34 + (projection ? 0.9 : 0), 0),
+      radius: fitView
         ? fitRadius({ width: plateWidthBox + 1.6, height: MAX_HEIGHT + X_LABEL_DROP + 0.9 }, 32, host.clientHeight > 0 ? host.clientWidth / host.clientHeight : 0, SIDE_MARGIN)
         : Math.max(13, layout.width * 1.05 + 8) * (projection ? 1.2 : 1),
       // a bar chart that follows the clock opens almost from the side, a little above (the example of the Recorrido); the others as before
-      ...(spec.timeline ? { theta: DEFAULT_BARS_VIEW.theta, phi: DEFAULT_BARS_VIEW.phi, fov: DEFAULT_BARS_VIEW.fov } : openingAngles(side, { theta: 0.22, phi: 1.15 })),
+      ...(projection ? openingAngles(side, { theta: 0.22, phi: 1.15 }) : barsOpeningAngles(side)),
+      ...(spec.timeline ? { fov: DEFAULT_BARS_VIEW.fov } : {}),
       box: { minX: -plateWidthBox / 2, maxX: plateWidthBox / 2, minY: 0, maxY: MAX_HEIGHT, minZ: -plateDepthBox / 2, maxZ: plateDepthBox / 2 },
       pose: poseRef.current ?? undefined,
       animateReset: !reduced && quality?.tier !== 'low',
@@ -260,7 +263,7 @@ export function Bars3D({ spec, projection, free = false }: { spec: Bars3DSpec; p
       stageRef.current = null;
       stage.dispose();
     };
-  }, [spec, projection?.title, quality?.tier, pixelRatioCap, reduced, side]);
+  }, [spec, projection?.title, quality?.tier, pixelRatioCap, reduced, side, fitView]);
 
   return (
     <div className="chart3d-wrap">

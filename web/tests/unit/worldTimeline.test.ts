@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
+import { SIDE_PHI } from '../../src/charts3d/camera';
 import { FOLLOW_MS, FOLLOW_TOTAL_MS } from '../../src/charts3d/followAnim';
-import { DEFAULT_BARS_VIEW, barsFocus } from '../../src/charts3d/followAnim';
+import { DEFAULT_BARS_VIEW, barsFocus, barsOpeningAngles } from '../../src/charts3d/followAnim';
 import { elapsedForYear, yearAtElapsed } from '../../src/tour/worldAnim';
 import { FIRST_YEAR, HOME, LAST_YEAR, argentinaSince1900, gdpAtYear, gdpPerCapitaAt, populationAt, rankingTable, regionCountries, regionValuesAt, worldRanking, worldRankingAt } from '../../src/tour/worldData';
 
@@ -121,6 +122,20 @@ describe('the two tables of the ranking', () => {
     const byGdp = worldRankingAt(2026, 'gdp').map((c) => c.country);
     const byPerCapita = worldRankingAt(2026, 'percapita').map((c) => c.country);
     expect(byPerCapita).not.toEqual(byGdp);
+  });
+});
+
+describe('how every 3D bar chart opens', () => {
+  it('faces the chart (turn 0) from almost the side (tilt 89°), the same for all of them', () => {
+    const angles = barsOpeningAngles(false);
+    expect(angles.theta).toBe(0);
+    expect(angles.phi).toBeCloseTo((89 * Math.PI) / 180, 9);
+    expect(angles).toEqual({ theta: DEFAULT_BARS_VIEW.theta, phi: DEFAULT_BARS_VIEW.phi });
+  });
+
+  it('keeps the side view of the Recorrido where that mode is on', () => {
+    expect(barsOpeningAngles(true).theta).toBe(0);
+    expect(barsOpeningAngles(true).phi).toBe(SIDE_PHI);
   });
 });
 
