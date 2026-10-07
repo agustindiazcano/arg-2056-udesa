@@ -482,6 +482,14 @@
 
 /* ---- Navigation buttons of the maps and 3D views ---------------------------------------------------------------- */
 
+/* The canvas is laid over this box (it cannot give it a size), so the box is laid over the wrap, which takes its size from the layout. */
+.chart3d-wrap > .chart3d {
+  position: absolute;
+  inset: 0;
+  width: auto;
+  height: auto;
+}
+
 .chart3d-wrap {
   position: relative;
   width: 100%;
