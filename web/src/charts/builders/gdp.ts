@@ -1,14 +1,14 @@
-import type { GdpData } from '../../tour/gdpMock.js';
-import { LAST_OBSERVED_YEAR } from '../../tour/gdpMock.js';
+import type { BandLabels, GdpData } from '../../tour/gdpMock.js';
+import { GDP_LABELS, LAST_OBSERVED_YEAR } from '../../tour/gdpMock.js';
 import { tokens } from '../../styles/tokens.js';
 import { formatAxisNumber, formatValue } from '../format.js';
 
-const HISTORY = 'PBI observado';
-const EXPECTED = 'Proyección esperada';
-const RANGE = 'Rango';
+/** One label (and one vertical grid line) every this many years. */
+const LABEL_EVERY = 4;
+const GRID_LINE = { color: tokens.grid, type: 'dashed' } as const;
 
 /** A vertical fade of one color (a hex without alpha), for the area under a line. */
-function fade(color: string, from: string, to: string) {
+export function fade(color: string, from: string, to: string) {
   return {
     type: 'linear',
     x: 0,
@@ -25,14 +25,18 @@ function fade(color: string, from: string, to: string) {
 const round1 = (value: number): number => Math.round(value * 10) / 10;
 
 /** The 2D chart of the GDP: the observed line with a glowing area, the projection dashed, and its range as a soft band. */
-export function buildGdp(data: GdpData) {
+export function buildGdp(data: GdpData, labels: BandLabels = GDP_LABELS) {
+  const HISTORY = labels.history;
+  const EXPECTED = labels.expected;
+  const RANGE = labels.range;
+  const lastObservedYear = data.lastObserved ?? LAST_OBSERVED_YEAR;
   const categories = data.years.map(String);
   const first = data.years[0];
   const last = data.years[data.years.length - 1];
   const firstObserved = data.history.find((v) => v !== null) ?? null;
-  const lastObserved = data.history[data.years.indexOf(LAST_OBSERVED_YEAR)] ?? null;
+  const lastObserved = data.history[data.years.indexOf(lastObservedYear)] ?? null;
   const end = data.expected[data.expected.length - 1] ?? null;
-  const rangeStart = data.years.indexOf(LAST_OBSERVED_YEAR);
+  const rangeStart = data.years.indexOf(lastObservedYear);
 
   // the range is two stacked lines: an invisible floor and a translucent band on top of it
   const floor = data.low.map((v, i) => (i < rangeStart ? null : v));
@@ -75,11 +79,13 @@ export function buildGdp(data: GdpData) {
       boundaryGap: false,
       axisLine: { lineStyle: { color: tokens.baseline } },
       axisTick: { show: false },
-      axisLabel: { color: tokens.muted, interval: 4 }
+      axisLabel: { color: tokens.muted, interval: LABEL_EVERY },
+      // a vertical line under every labelled year, in the style of the horizontal ones
+      splitLine: { show: true, interval: LABEL_EVERY, lineStyle: GRID_LINE }
     },
     yAxis: {
       type: 'value',
-      splitLine: { lineStyle: { color: tokens.grid, type: 'dashed' } },
+      splitLine: { lineStyle: GRID_LINE },
       axisLabel: { color: tokens.muted, formatter: (v: number) => formatAxisNumber(v) }
     },
     series: [
@@ -101,7 +107,7 @@ export function buildGdp(data: GdpData) {
           animation: false,
           lineStyle: { color: tokens.muted, type: 'dotted' },
           label: { color: tokens.muted, formatter: 'Hoy' },
-          data: [{ xAxis: String(LAST_OBSERVED_YEAR) }]
+          data: [{ xAxis: String(lastObservedYear) }]
         }
       },
       {
@@ -119,8 +125,8 @@ export function buildGdp(data: GdpData) {
   };
 
   const summary =
-    `PBI de la Argentina (datos de prueba): de ${formatValue(firstObserved, data.unit)} en ${first} ` +
-    `a ${formatValue(lastObserved, data.unit)} en ${LAST_OBSERVED_YEAR}, y una proyección esperada de ` +
-    `${formatValue(end, data.unit)} en ${last}, con un rango que se abre desde ${LAST_OBSERVED_YEAR}`;
+    `${labels.subject} (datos de prueba): de ${formatValue(firstObserved, data.unit)} en ${first} ` +
+    `a ${formatValue(lastObserved, data.unit)} en ${lastObservedYear}, y una proyección esperada de ` +
+    `${formatValue(end, data.unit)} en ${last}, con un rango que se abre desde ${lastObservedYear}`;
   return { option, summary };
 }

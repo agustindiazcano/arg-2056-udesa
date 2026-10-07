@@ -8,7 +8,8 @@ import { STEPS } from '../content/steps';
 import { applyFocus } from '../story/focus';
 import type { StepsByScene } from '../story/types';
 
-/** How many steps the Recorrido has: the numbered buttons of the navbar. */
+/** The first and the last step of the Recorrido (the numbered buttons of the navbar): the steps go from 0 to TOUR_STEPS. */
+export const TOUR_FIRST_STEP = 0;
 export const TOUR_STEPS = 15;
 
 export interface State {
@@ -25,7 +26,7 @@ export interface State {
   aiOverlay: 'off' | 'on';
   /** the current story step of every scene; entering a scene restarts it at 0 */
   stepIndex: Record<Scene, number>;
-  /** the step of the Recorrido, from 1 to TOUR_STEPS */
+  /** the step of the Recorrido, from TOUR_FIRST_STEP to TOUR_STEPS */
   tourStep: number;
 }
 
@@ -80,7 +81,7 @@ export function reduce(state: State, action: Action, steps: StepsByScene = STEPS
       return ns === state.scene ? state : enterScene(state, ns, steps);
     }
     case 'prevScene': {
-      if (state.section === 'tour') return state.tourStep <= 1 ? state : { ...state, tourStep: state.tourStep - 1 };
+      if (state.section === 'tour') return state.tourStep <= TOUR_FIRST_STEP ? state : { ...state, tourStep: state.tourStep - 1 };
       const ps = prevScene(state.scene);
       return ps === state.scene ? state : enterScene(state, ps, steps);
     }
@@ -135,7 +136,7 @@ export function reduce(state: State, action: Action, steps: StepsByScene = STEPS
     case 'setScene':
       return action.scene === state.scene ? { ...state, scene: action.scene } : enterScene(state, action.scene, steps);
     case 'tourSet':
-      return Number.isInteger(action.step) && action.step >= 1 && action.step <= TOUR_STEPS ? { ...state, tourStep: action.step } : state;
+      return Number.isInteger(action.step) && action.step >= TOUR_FIRST_STEP && action.step <= TOUR_STEPS ? { ...state, tourStep: action.step } : state;
     case 'setSpeed':
       return SPEEDS.includes(action.speed) ? { ...state, speed: action.speed } : state;
     case 'setSection': {

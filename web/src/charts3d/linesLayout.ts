@@ -46,6 +46,7 @@ export function layoutLines(spec: Lines3DSpec, opts: LinesOpts): LinesLayout {
   const series = spec.series.map((s, i) => ({
     name: s.name,
     tone: s.tone,
+    ...(s.dashed ? { dashed: true } : {}),
     z: (i - (lanes - 1) / 2) * laneGap,
     segments: runs(s.values, xs, y)
   }));

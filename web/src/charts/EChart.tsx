@@ -94,8 +94,12 @@ export const EChart: React.FC<EChartProps> = ({ option, onClick, style, 'aria-la
     };
     
     window.addEventListener('resize', handleResize);
-    
+    // the box can change without the window changing (the Recorrido shows one to four charts side by side)
+    const observer = typeof ResizeObserver === 'undefined' || !chartRef.current ? null : new ResizeObserver(handleResize);
+    if (observer && chartRef.current) observer.observe(chartRef.current);
+
     return () => {
+      observer?.disconnect();
       window.removeEventListener('resize', handleResize);
       chart.dispose();
       instanceRef.current = null;

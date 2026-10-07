@@ -3,6 +3,7 @@ import data from './provinces.json';
 import { boxStyle, lightStep, pathBox, type Box } from './layout';
 import type { Section } from '../types/scene';
 import './intro.css';
+import { INSTITUTIONS } from '../ui/institutions';
 
 const LAYERS = 3; // 2 sides and the top: fewer composited layers per province
 // speed of the lights (0.8): the prototype waits (350 to 1050 ms) / speed between changes
@@ -21,18 +22,6 @@ const SHORTCUTS: ReadonlyArray<{ section: Section; label: string }> = [
   { section: 'andes', label: 'Cruce de los Andes' },
   { section: 'tour', label: 'Recorrido al 2056' },
   { section: 'dashboard', label: 'Data Dashboard' }
-];
-
-/** The institutions behind the project; the logos live in public/images. */
-const INSTITUTIONS: ReadonlyArray<{ name: string; src: string; href: string }> = [
-  { name: 'Universidad de San Andrés', src: '/images/udesa-logo-recortado.png', href: 'https://www.udesa.edu.ar' },
-  { name: 'Data Science Lab, Universidad de San Andrés', src: '/images/data-lab-recortado.webp', href: 'https://www.udesa.edu.ar/data-science-lab' },
-  { name: 'Contar con Datos', src: '/images/contar-con-datos-logo-udesa.webp', href: 'https://www.udesa.edu.ar/contar-con-datos' },
-  {
-    name: 'Secretaría de Innovación, Ciencia y Tecnología',
-    src: '/images/logo-subsecretaria-sscyt-blanco.png',
-    href: 'https://www.argentina.gob.ar/jefatura/innovacion-ciencia-y-tecnologia'
-  }
 ];
 
 function viewBox(b: Box): string {

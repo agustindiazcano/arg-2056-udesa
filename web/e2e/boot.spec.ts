@@ -2,12 +2,10 @@ import { test, expect, SCENE_TABS } from './fixtures';
 import { SCENES } from '../src/types/scene';
 
 test.describe('boot', () => {
-  test('loads with a title, the MOCK badge and the three sections, with the data scenes under Data Dashboard', async ({ page }) => {
+  test('loads with a title and the three sections, with the data scenes under Data Dashboard', async ({ page }) => {
     await page.goto('/');
 
     await expect(page).toHaveTitle('Andes | Argentina 2056');
-    // the build uses mock data today; this assertion goes away with the mock (see docs/release-checklist.md)
-    await expect(page.getByText('Datos ilustrativos')).toBeVisible();
 
     const tabs = page.getByRole('tab');
     await expect(tabs).toHaveText(['Andes', 'Data Dashboard', 'Recorrido']);

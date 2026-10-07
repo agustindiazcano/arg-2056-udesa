@@ -24,6 +24,7 @@ import { useQualityOptional } from '../runtime/CapabilityProvider';
 import { QUALITY_PRESETS } from '../runtime/capabilities';
 import { useReducedMotion } from '../runtime/useReducedMotion';
 import { SEQUENTIAL_BLUE, tokens } from '../styles/tokens';
+import { fitLabel } from './labels';
 import { textSprite } from './labels';
 import { addProjection } from './projection';
 import { fitRadius, openingAngles } from '../charts3d/camera';
@@ -69,7 +70,8 @@ export function Bars3D({ spec, projection }: { spec: Bars3DSpec; projection?: Pr
       ...openingAngles(side, { theta: 0.22, phi: 1.15 }),
       box: { minX: -plateWidthBox / 2, maxX: plateWidthBox / 2, minY: 0, maxY: MAX_HEIGHT, minZ: -plateDepthBox / 2, maxZ: plateDepthBox / 2 },
       pose: poseRef.current ?? undefined,
-      animateReset: !reduced && quality?.tier !== 'low'
+      animateReset: !reduced && quality?.tier !== 'low',
+      wheelZoom: side ? 'modifier' : 'always'
     });
     poseRef.current = stage.pose;
     stageRef.current = stage;
@@ -120,8 +122,8 @@ export function Bars3D({ spec, projection }: { spec: Bars3DSpec; projection?: Pr
       scene.add(mesh);
       const value = textSprite(item.short, item.highlight ? tokens.ink : tokens.ink2, 0.36, item.highlight);
       scene.add(value);
-      const name = textSprite(item.label, item.highlight ? tokens.ink : tokens.ink2, 0.32, item.highlight);
-      name.position.set(item.x, -X_LABEL_DROP, item.depth / 2 + 0.6);
+      const name = fitLabel(item.label, item.width + GAP, item.highlight ? tokens.ink : tokens.ink2, 0.32, item.highlight);
+      name.position.set(item.x, -X_LABEL_DROP - (name.scale.y - 0.32) / 2, item.depth / 2 + 0.6);
       scene.add(name);
       return { item, mesh, material, value };
     });

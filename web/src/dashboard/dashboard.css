@@ -726,13 +726,13 @@
 }
 
 .nav-slot {
-  /* takes the room between the tabs and the links, and wraps its own buttons so the links stay on the first row */
-  flex: 1 1 0;
+  /* the controls of the scene, in the second row of the header */
+  flex: 1 1 auto;
   min-width: 0;
 }
 
 .tour-steps {
-  flex: 1 1 0;
+  flex: 0 1 auto;
   min-width: 0;
 }
 

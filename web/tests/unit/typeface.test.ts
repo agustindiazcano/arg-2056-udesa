@@ -69,14 +69,15 @@ describe('navbar with the look of the intro', () => {
     expect(ui.slice(start, ui.indexOf('}', start))).not.toContain('uppercase');
   });
 
-  it('the navbar buttons take the palette of the intro: accent fill when selected, accent border on hover', () => {
+  it('the navbar buttons take the blue accent of the navbar (#5f86b9): fill when selected, border on hover', () => {
     const rule = (selector: string) => {
       const start = ui.indexOf(`${selector} {`);
       return start < 0 ? '' : ui.slice(start, ui.indexOf('}', start));
     };
     const selected = rule(".tour-steps .chip[aria-pressed='true']");
-    expect(selected).toContain('background: var(--intro-light)');
-    expect(selected).toContain('color: var(--intro-on-light)');
-    expect(rule('.tour-steps .chip:hover')).toContain('var(--intro-light)');
+    expect(selected).toContain('background: var(--nav-accent)');
+    expect(selected).toContain('color: var(--nav-on-accent)');
+    expect(rule('.tour-steps .chip:hover')).toContain('var(--nav-accent)');
+    expect(read('src/styles/tokens.css')).toMatch(/--nav-accent:\s*#5f86b9/i);
   });
 });

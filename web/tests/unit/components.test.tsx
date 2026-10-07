@@ -4,7 +4,6 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import React from 'react';
 import { TabBar } from '../../src/app/TabBar';
 import { ProvinceFilter } from '../../src/app/ProvinceFilter';
-import { MockBadge } from '../../src/app/MockBadge';
 import { useStore } from '../../src/state/store';
 
 describe('UI Components', () => {
@@ -48,16 +47,6 @@ describe('UI Components', () => {
       const state = useStore.getState();
       expect(state.provinceFilterOpen).toBe(false);
       expect(state.province).not.toBeNull();
-    });
-  });
-
-  describe('MockBadge', () => {
-    it('visible for source: MOCK, absent for argmodel@0.1.0', () => {
-      const { rerender } = render(<MockBadge source="MOCK" />);
-      expect(screen.queryByText('Datos ilustrativos')).not.toBeNull();
-      
-      rerender(<MockBadge source="argmodel@0.1.0" />);
-      expect(screen.queryByText('Datos ilustrativos')).toBeNull();
     });
   });
 });

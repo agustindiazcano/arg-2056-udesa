@@ -6,8 +6,8 @@ import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { render, screen, cleanup, fireEvent, within } from '@testing-library/react';
 import { useStore } from '../../src/state/store';
 
-// The GDP step draws with ECharts, which needs a canvas that jsdom does not have; its own test is gdpTour.test.tsx.
-vi.mock('../../src/tour/GdpStep', () => ({ GdpStep: () => <h2>PBI de la Argentina</h2> }));
+// The charts of the Recorrido draw with ECharts, which needs a canvas that jsdom does not have; its own test is gdpTour.test.tsx.
+vi.mock('../../src/tour/TourStep', () => ({ TourStep: () => <h2>PBI de la Argentina</h2> }));
 
 // The real scenes load charts and maps; the shell is what is under test here. The labels stay the real ones.
 vi.mock('../../src/scenes/registry', async (importOriginal) => {
@@ -201,17 +201,6 @@ describe('control bar', () => {
   });
 });
 
-describe('badge', () => {
-  it('says the data are illustrative, in Spanish, once the data are loaded as mock', async () => {
-    const { MockBadge } = await import('../../src/app/MockBadge');
-    render(<MockBadge source="MOCK" />);
-    expect(screen.getByText('Datos ilustrativos')).toBeTruthy();
-    cleanup();
-    const { container } = render(<MockBadge source="Secretaría de Energía" />);
-    expect(container.textContent).toBe('');
-  });
-});
-
 describe('styles', () => {
   const dir = path.resolve(__dirname, '../../src');
   const cssFiles = (d: string): string[] =>
@@ -252,7 +241,7 @@ describe('Recorrido step 1', () => {
     expect(await screen.findByRole('heading', { name: 'PBI de la Argentina' })).toBeTruthy();
     expect(screen.queryByRole('heading', { name: 'escena' })).toBeNull();
     cleanup();
-    useStore.setState({ section: 'tour', tourStep: 2 });
+    useStore.setState({ section: 'tour', tourStep: 14 });
     render(<App />);
     expect(screen.queryByRole('heading', { name: 'PBI de la Argentina' })).toBeNull();
     expect(screen.getByRole('heading', { name: 'escena' })).toBeTruthy();

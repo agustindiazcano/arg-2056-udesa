@@ -1,19 +1,28 @@
 import React, { useEffect, useRef } from 'react';
 import {
+  AdditiveBlending,
+  NormalBlending,
   AmbientLight,
   BoxGeometry,
   BufferGeometry,
+  CatmullRomCurve3,
   Color,
   DirectionalLight,
+  DoubleSide,
+  FrontSide,
   ExtrudeGeometry,
   Float32BufferAttribute,
   GridHelper,
-  Line,
+  Group,
   LineBasicMaterial,
   LineSegments,
   Mesh,
+  MeshBasicMaterial,
   MeshStandardMaterial,
+  Plane,
   Shape,
+  SphereGeometry,
+  TubeGeometry,
   Vector3
 } from 'three';
 import { formatAxisNumber } from '../charts/format';
@@ -26,6 +35,7 @@ import { useReducedMotion } from '../runtime/useReducedMotion';
 import { SEQUENTIAL_BLUE, tokens } from '../styles/tokens';
 import { textSprite } from './labels';
 import { fitRadius, openingAngles } from '../charts3d/camera';
+import { FOLLOW_TOTAL_MS, followFrame, lerp } from '../charts3d/followAnim';
 import { createStage } from './stage';
 import { useSideView } from './useSideView';
 import { useCameraNav } from './useCameraNav';
@@ -42,11 +52,44 @@ const SIDE_MARGIN = 1.02;
 
 const easeOutCubic = (t: number) => 1 - (1 - t) ** 3;
 
-const WALL: Record<'highlight' | 'muted' | 'accent', { depth: number; color: string; opacity: number }> = {
-  highlight: { depth: 0.3, color: tokens.ink, opacity: 0.95 },
-  muted: { depth: 0.1, color: tokens.muted, opacity: 0.85 },
-  accent: { depth: 0.22, color: tokens.blue, opacity: 0.95 }
+/** How each tone looks, as in the 2D chart: a glowing line (radius), a soft fade under it (fill) and a halo (glow). */
+const LOOK: Record<'highlight' | 'muted' | 'accent', { color: string; radius: number; fill: number; glow: number }> = {
+  highlight: { color: tokens.ink, radius: 0.055, fill: 0.34, glow: 0.16 },
+  accent: { color: tokens.blue, radius: 0.05, fill: 0.4, glow: 0.2 },
+  muted: { color: tokens.muted, radius: 0.035, fill: 0, glow: 0 }
 };
+/** Length of a dash and of the gap after it, for a dashed line (a projection). */
+const DASH = 0.28;
+const GAP = 0.2;
+
+/** Cuts a polyline into the pieces of a dashed line. */
+function dashPieces(points: Vector3[]): Vector3[][] {
+  const pieces: Vector3[][] = [];
+  let current: Vector3[] = [points[0]!];
+  let drawing = true;
+  let left = DASH;
+  for (let i = 1; i < points.length; i++) {
+    const a = points[i - 1]!;
+    const b = points[i]!;
+    const length = a.distanceTo(b);
+    let at = 0;
+    while (length - at > left) {
+      at += left;
+      const p = a.clone().lerp(b, at / length);
+      if (drawing) {
+        current.push(p);
+        pieces.push(current);
+        current = [];
+      } else current = [p];
+      drawing = !drawing;
+      left = drawing ? DASH : GAP;
+    }
+    left -= length - at;
+    if (drawing) current.push(b.clone());
+  }
+  if (drawing && current.length > 1) pieces.push(current);
+  return pieces;
+}
 
 /** A line chart in space: every series is a wall standing in its own lane, a band is a translucent wall behind them. */
 export function Lines3D({ spec }: { spec: Lines3DSpec }) {
@@ -56,6 +99,7 @@ export function Lines3D({ spec }: { spec: Lines3DSpec }) {
   const pixelRatioCap = QUALITY_PRESETS[quality?.tier ?? 'medium'].pixelRatioCap;
   const { stageRef, poseRef, controls } = useCameraNav();
   const side = useSideView();
+  const follow = spec.follow === true;
 
   useEffect(() => {
     const host = hostRef.current;
@@ -71,12 +115,20 @@ export function Lines3D({ spec }: { spec: Lines3DSpec }) {
       radius: side ? fitRadius(sideFit, 32, aspect, SIDE_MARGIN) : WIDTH * 1.25 + lanesDepth * 0.5 + 5,
       ...openingAngles(side, { theta: 0.3, phi: 1.0 }),
       box: { minX: -(WIDTH + 3) / 2, maxX: (WIDTH + 3) / 2, minY: 0, maxY: MAX_HEIGHT, minZ: -(lanesDepth + 3.4) / 2, maxZ: (lanesDepth + 3.4) / 2 },
-      pose: poseRef.current ?? undefined,
-      animateReset: !reduced && quality?.tier !== 'low'
+      // a followed line starts from the default camera: the pose of an earlier run (the camera of the follow itself) must not carry over
+      pose: follow ? undefined : (poseRef.current ?? undefined),
+      animateReset: !reduced && quality?.tier !== 'low',
+      wheelZoom: side ? 'modifier' : 'always',
+      ...(follow ? { zoomMin: 0.12 } : {})
     });
     poseRef.current = stage.pose;
     stageRef.current = stage;
     const { scene } = stage;
+    // a followed line is drawn only up to a moving plane: what is behind it is not there yet
+    const reveal = new Plane(new Vector3(-1, 0, 0), -WIDTH / 2 - 0.2);
+    const clip = follow ? [reveal] : undefined;
+    if (follow) stage.renderer.localClippingEnabled = true;
+    const hiddenUntilDone: Array<{ visible: boolean }> = [];
     scene.add(new AmbientLight(tokens.ink, 1.15));
     const sun = new DirectionalLight(tokens.ink, 2.2);
     sun.position.set(-5, 9, 7);
@@ -99,6 +151,9 @@ export function Lines3D({ spec }: { spec: Lines3DSpec }) {
     const lineGeometry = new BufferGeometry();
     const positions: number[] = [];
     for (const t of layout.ticks) positions.push(-plateWidth / 2 + 0.2, t.height, back, plateWidth / 2 - 0.2, t.height, back);
+    // vertical lines on the back wall, one under every labelled x
+    const top = Math.max(0, ...layout.ticks.map((t) => t.height));
+    for (const t of layout.xTicks) positions.push(t.x, 0, back, t.x, top, back);
     lineGeometry.setAttribute('position', new Float32BufferAttribute(positions, 3));
     scene.add(new LineSegments(lineGeometry, new LineBasicMaterial({ color: tokens.grid })));
     for (const t of layout.ticks) {
@@ -112,58 +167,98 @@ export function Lines3D({ spec }: { spec: Lines3DSpec }) {
       scene.add(label);
     }
 
-    const walls: Mesh[] = [];
-    const wall = (points: Array<{ x: number; y: number }>, depth: number, z: number, material: MeshStandardMaterial) => {
-      const first = points[0]!;
-      const last = points[points.length - 1]!;
-      const shape = new Shape();
-      shape.moveTo(first.x, 0);
-      for (const p of points) shape.lineTo(p.x, p.y);
-      shape.lineTo(last.x, 0);
-      shape.closePath();
-      const mesh = new Mesh(new ExtrudeGeometry(shape, { depth, bevelEnabled: false }), material);
-      mesh.position.z = z - depth / 2;
-      scene.add(mesh);
-      walls.push(mesh);
-      return mesh;
-    };
+    // everything that grows from the floor lives in one group, so that the growth is one scale
+    const grow = new Group();
+    scene.add(grow);
 
     // the band, behind every lane
     const bandZ = -lanesDepth / 2 - LANE_GAP;
     for (const b of layout.bands) {
-      const material = new MeshStandardMaterial({ color: new Color(tokens.blue), transparent: true, opacity: 0.28, roughness: 0.8 });
+      const material = new MeshBasicMaterial({ color: new Color(tokens.blue), transparent: true, opacity: 0.2, depthWrite: false, clippingPlanes: clip });
       const shape = new Shape();
       shape.moveTo(b.lower[0]!.x, b.lower[0]!.y);
       for (const p of b.upper) shape.lineTo(p.x, p.y);
       for (const p of [...b.lower].reverse()) shape.lineTo(p.x, p.y);
       shape.closePath();
-      const mesh = new Mesh(new ExtrudeGeometry(shape, { depth: 0.06, bevelEnabled: false }), material);
+      const mesh = new Mesh(new ExtrudeGeometry(shape, { depth: 0.04, bevelEnabled: false }), material);
       mesh.position.z = bandZ;
-      scene.add(mesh);
-      walls.push(mesh);
+      grow.add(mesh);
     }
+
+    /** A soft fade under the line: opaque at the line, clear at the floor. */
+    const fillUnder = (points: Vector3[], z: number, color: Color, alpha: number) => {
+      const positions: number[] = [];
+      const colors: number[] = [];
+      const index: number[] = [];
+      points.forEach((p, i) => {
+        positions.push(p.x, p.y, 0, p.x, 0, 0);
+        colors.push(color.r, color.g, color.b, alpha, color.r, color.g, color.b, 0);
+        if (i > 0) {
+          const k = (i - 1) * 2;
+          index.push(k, k + 1, k + 2, k + 1, k + 3, k + 2);
+        }
+      });
+      const geometry = new BufferGeometry();
+      geometry.setAttribute('position', new Float32BufferAttribute(positions, 3));
+      geometry.setAttribute('color', new Float32BufferAttribute(colors, 4));
+      geometry.setIndex(index);
+      const mesh = new Mesh(geometry, new MeshBasicMaterial({ vertexColors: true, transparent: true, depthWrite: false, side: DoubleSide, clippingPlanes: clip }));
+      mesh.position.z = z;
+      grow.add(mesh);
+    };
+
+    /** A round line along the points (lit by nothing: it glows), or its halo when `additive`. */
+    const tube = (points: Vector3[], z: number, radius: number, color: Color, opacity: number, additive: boolean) => {
+      if (points.length < 2) return;
+      const curve = new CatmullRomCurve3(points, false, 'centripetal');
+      const geometry = new TubeGeometry(curve, Math.max(points.length * 2, 6), radius, 6, false);
+      const material = new MeshBasicMaterial({
+        color,
+        transparent: opacity < 1,
+        opacity,
+        depthWrite: opacity >= 1,
+        blending: additive ? AdditiveBlending : NormalBlending,
+        clippingPlanes: clip,
+        // cut by the reveal plane, a tube must look filled, not hollow
+        side: clip ? DoubleSide : FrontSide
+      });
+      const mesh = new Mesh(geometry, material);
+      mesh.position.z = z;
+      grow.add(mesh);
+    };
 
     // the series
     spec.series.forEach((s, i) => {
-      const look = WALL[s.tone];
+      const look = LOOK[s.tone];
       const color = new Color(s.color ?? look.color);
       const lane = layout.series[i]!;
       for (const segment of lane.segments) {
         if (segment.length < 2) continue;
-        const material = new MeshStandardMaterial({ color, transparent: look.opacity < 1, opacity: look.opacity, roughness: 0.6 });
-        wall(segment, look.depth, lane.z, material);
-        const edge = new Line(
-          new BufferGeometry().setFromPoints(segment.map((p) => new Vector3(p.x, p.y, lane.z + look.depth / 2 + 0.005))),
-          new LineBasicMaterial({ color: new Color(s.color ?? look.color).lerp(new Color(tokens.ink), 0.45) })
+        const curve = new CatmullRomCurve3(
+          segment.map((p) => new Vector3(p.x, p.y, 0)),
+          false,
+          'centripetal'
         );
-        scene.add(edge);
+        const points = curve.getPoints(segment.length * 4);
+        if (look.fill > 0) fillUnder(points, lane.z, color, look.fill);
+        const pieces = s.dashed ? dashPieces(points) : [points];
+        for (const piece of pieces) {
+          if (look.glow > 0) tube(piece, lane.z, look.radius * 3.2, color, look.glow, true);
+          tube(piece, lane.z, look.radius, color, 1, false);
+        }
       }
-      // the name at the end of the line
+      // the name at the end of the line, and a dot there
       const end = lane.segments.at(-1)?.at(-1);
       if (end) {
+        if (s.tone !== 'muted') {
+          const dot = new Mesh(new SphereGeometry(look.radius * 2.2, 16, 12), new MeshBasicMaterial({ color, clippingPlanes: clip }));
+          dot.position.set(end.x, end.y, lane.z);
+          grow.add(dot);
+        }
         const name = textSprite(s.name, s.tone === 'muted' ? tokens.ink2 : tokens.ink, 0.34, s.tone !== 'muted');
         name.position.set(end.x + 0.7, end.y + 0.25, lane.z);
         scene.add(name);
+        if (follow) hiddenUntilDone.push(name);
       }
     });
 
@@ -179,10 +274,61 @@ export function Lines3D({ spec }: { spec: Lines3DSpec }) {
 
     const setGrowth = (t: number) => {
       const k = Math.max(easeOutCubic(t), 0.001);
-      for (const w of walls) w.scale.y = k;
+      grow.scale.y = k;
     };
     let cancel = () => {};
-    if (reduced) {
+    if (follow) {
+      // the line draws itself from the first year to the last and the camera follows its head; then it pulls back to the whole chart
+      setGrowth(1);
+      const base = { ...stage.pose };
+      const points = (layout.series[0]?.segments ?? []).flat();
+      const heightAt = (x: number): number => {
+        const next = points.findIndex((p) => p.x >= x);
+        if (next <= 0) return points[0]?.y ?? 0;
+        if (next < 0) return points.at(-1)?.y ?? 0;
+        const a = points[next - 1]!;
+        const b = points[next]!;
+        return lerp(a.y, b.y, (x - a.x) / Math.max(b.x - a.x, 1e-6));
+      };
+      // The camera follows the head until the visitor takes it (a drag, the wheel, the buttons, a double click): from then on
+      // the line keeps drawing and the camera is theirs. The stage animation is not used: any camera move cancels it.
+      let lastSet = { ...base };
+      let handedOver = false;
+      const frame = (elapsed: number) => {
+        const f = followFrame(elapsed);
+        const head = lerp(-WIDTH / 2, WIDTH / 2, f.reveal);
+        reveal.constant = f.reveal >= 1 ? WIDTH : head;
+        for (const item of hiddenUntilDone) item.visible = f.reveal >= 1;
+        if (!handedOver) {
+          const p = stage.pose;
+          handedOver = ['x', 'y', 'z', 'theta', 'phi', 'radius'].some((k) => Math.abs((p as never)[k] - (lastSet as never)[k]) > 1e-4);
+        }
+        if (!handedOver) {
+          stage.nav.setPose({
+            ...base,
+            x: lerp(Math.min(head + WIDTH * 0.05, WIDTH / 2), base.x, f.out),
+            y: lerp(heightAt(head) * 0.8 + 0.3, base.y, f.out),
+            radius: lerp(base.radius * 0.42, base.radius, f.out)
+          });
+          lastSet = { ...stage.pose };
+        }
+        stage.requestRender();
+      };
+      if (reduced) {
+        frame(FOLLOW_TOTAL_MS);
+      } else {
+        frame(0);
+        const startedAt = performance.now();
+        let raf = 0;
+        const step = (now: number) => {
+          const elapsed = Math.min(FOLLOW_TOTAL_MS, now - startedAt);
+          frame(elapsed);
+          if (elapsed < FOLLOW_TOTAL_MS) raf = requestAnimationFrame(step);
+        };
+        raf = requestAnimationFrame(step);
+        cancel = () => cancelAnimationFrame(raf);
+      }
+    } else if (reduced) {
       setGrowth(1);
       stage.requestRender();
     } else {
@@ -195,7 +341,7 @@ export function Lines3D({ spec }: { spec: Lines3DSpec }) {
       stageRef.current = null;
       stage.dispose();
     };
-  }, [spec, quality?.tier, pixelRatioCap, reduced, side]);
+  }, [spec, quality?.tier, pixelRatioCap, reduced, side, follow]);
 
   return (
     <div className="chart3d-wrap">

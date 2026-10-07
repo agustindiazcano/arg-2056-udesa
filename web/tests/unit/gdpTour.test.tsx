@@ -42,6 +42,13 @@ describe('GDP mock data', () => {
 
 describe('buildGdp', () => {
   const { option, summary } = buildGdp(GDP_MOCK);
+
+  it('draws vertical grid lines at the labelled years, like the horizontal ones', () => {
+    const x = option.xAxis.splitLine;
+    expect(x.show).toBe(true);
+    expect(x.interval).toBe(option.xAxis.axisLabel.interval);
+    expect(x.lineStyle).toEqual(option.yAxis.splitLine.lineStyle);
+  });
   const series = (option as { series: Array<{ name?: string; type: string; data: Array<number | null> }> }).series;
 
   it('draws the history and the projection as lines with a gap, never as zero', () => {

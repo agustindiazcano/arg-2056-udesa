@@ -39,6 +39,8 @@
 
   /* Intro screen (src/intro/intro.css) */
   --intro-bg: #1c1c1c; /* rgb(28, 28, 28) */
+  --nav-accent: #5f86b9; /* rgb(95, 134, 185): selected and hovered buttons of the navbar */
+  --nav-on-accent: #0b1522;
   --intro-light: #9a9679; /* rgb(154, 150, 121): lit provinces, title, button */
   --intro-ink: #e8ebf7;
   --intro-on-light: #14080a;
@@ -201,20 +203,20 @@ main:focus {
 }
 
 #stage {
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   z-index: 0;
 }
 
 #overlay {
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   z-index: 10;
   display: flex;
   flex-direction: column;

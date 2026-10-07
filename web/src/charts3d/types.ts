@@ -33,6 +33,10 @@ export interface Map3DSpec {
   formatValue: (value: number) => string;
   /** a click on a province (null clears the selection) */
   onSelect: (id: string | null) => void;
+  /** the map stands upright, north up and seen almost from above (the Recorrido), not tilted on a table */
+  upright?: boolean;
+  /** the camera flies to the selected province and back to the whole map when nothing is selected */
+  zoomToSelected?: boolean;
   summary: string;
 }
 
@@ -44,6 +48,8 @@ export interface Line3D {
   tone: 'highlight' | 'muted' | 'accent';
   /** a color from the tokens that overrides the tone (the scenario colors) */
   color?: string;
+  /** drawn as a dashed line (a projection) */
+  dashed?: boolean;
 }
 
 /** A line chart in space: each series is a wall in its own lane, the band a translucent wall. */
@@ -57,12 +63,14 @@ export interface Lines3DSpec {
   band?: { lower: Array<number | null>; upper: Array<number | null> };
   /** index of the x label to mark (the playhead year) */
   marker?: number;
+  /** the line draws itself from the first x to the last while the camera follows it, then the camera pulls back to the whole chart */
+  follow?: boolean;
   summary: string;
 }
 
 export interface LinesLayout {
   xs: number[];
-  series: Array<{ name: string; tone: Line3D['tone']; z: number; segments: Array<Array<{ x: number; y: number }>> }>;
+  series: Array<{ name: string; tone: Line3D['tone']; dashed?: boolean; z: number; segments: Array<Array<{ x: number; y: number }>> }>;
   bands: Array<{ upper: Array<{ x: number; y: number }>; lower: Array<{ x: number; y: number }> }>;
   ticks: Tick[];
   xTicks: Array<{ x: number; label: string }>;

@@ -22,13 +22,17 @@ import { useReducedMotion } from '../runtime/useReducedMotion';
 import { SEQUENTIAL_BLUE, tokens } from '../styles/tokens';
 import { addProjection } from './projection';
 import { fitRadius, openingAngles } from '../charts3d/camera';
-import { createStage } from './stage';
 import { useSideView } from './useSideView';
+import { createStage } from './stage';
 import { useCameraNav } from './useCameraNav';
 
 const GROW_MS = 600;
 const SELECTED_LIFT = 0.35;
 const CLICK_SLOP = 4;
+/** Seen almost straight down, a little from the south: the country stands upright, north at the top. */
+const UPRIGHT_PHI = 0.22;
+/** How much of the view the selected province fills when the camera flies to it. */
+const ZOOM_FILL = 1.8;
 
 const easeOutCubic = (t: number) => 1 - (1 - t) ** 3;
 
@@ -36,31 +40,55 @@ const easeOutCubic = (t: number) => 1 - (1 - t) ** 3;
 export function Map3D({ spec, projection }: { spec: Map3DSpec; projection?: ProjectionRequest }) {
   const hostRef = useRef<HTMLDivElement>(null);
   const tipRef = useRef<HTMLDivElement>(null);
+  // the data the map last grew for: a new stage for the same data (a selection, a camera setting) shows it at once instead of growing it again
+  const grownFor = useRef<unknown>(null);
   const onSelectRef = useRef(spec.onSelect);
   onSelectRef.current = spec.onSelect;
   const reduced = useReducedMotion();
   const quality = useQualityOptional();
   const pixelRatioCap = QUALITY_PRESETS[quality?.tier ?? 'medium'].pixelRatioCap;
   const { stageRef, poseRef, controls } = useCameraNav();
-  const side = useSideView();
+  // a map seen edge-on shows nothing (it is tall, not wide): in the Recorrido it keeps its oblique view, fitted to the box
+  const tour = useSideView();
+  const side = false;
+  const upright = spec.upright === true;
 
   useEffect(() => {
     const host = hostRef.current;
     if (!host) return;
     const map = projectFeatures(spec.geo);
+    const aspect = host.clientHeight > 0 ? host.clientWidth / host.clientHeight : 0;
     const stage = createStage(host, {
       pixelRatioCap,
-      target: side ? new Vector3(0, 0.9, 0) : new Vector3(0, 0.5 + (projection ? 0.8 : 0), 0),
-      radius: side
+      target: side ? new Vector3(0, 0.9, 0) : new Vector3(0, upright ? 0 : 0.5 + (projection ? 0.8 : 0), 0),
+      radius: upright
+        ? fitRadius({ width: map.bounds.width, height: map.bounds.height }, 32, aspect, 1.1)
+        : side
         ? fitRadius({ width: map.bounds.width, height: 3.2 }, 32, host.clientHeight > 0 ? host.clientWidth / host.clientHeight : 0, 1.02)
-        : Math.max(7, map.bounds.height * 1.55) * (projection ? 1.9 : 1),
-      ...openingAngles(side, { theta: 0, phi: 0.8 }),
+        : tour
+          ? Math.max(7, map.bounds.height * 2.1)
+          : Math.max(7, map.bounds.height * 1.55) * (projection ? 1.9 : 1),
+      ...(upright ? { theta: 0, phi: UPRIGHT_PHI } : openingAngles(side, { theta: 0, phi: 0.8 })),
       box: { minX: -map.bounds.width / 2, maxX: map.bounds.width / 2, minY: 0, maxY: 3, minZ: -map.bounds.height / 2, maxZ: map.bounds.height / 2 },
       pose: poseRef.current ?? undefined,
-      animateReset: !reduced && quality?.tier !== 'low'
+      animateReset: !reduced && quality?.tier !== 'low',
+      wheelZoom: tour ? 'modifier' : 'always'
     });
     poseRef.current = stage.pose;
     stageRef.current = stage;
+    // a selected province: the camera flies to it; nothing selected: back to the whole map
+    if (spec.zoomToSelected) {
+      const selected = spec.selectedId ? map.provinces.find((p) => p.id === spec.selectedId) : undefined;
+      const points = selected ? selected.polygons.flatMap((p) => p.outer) : [];
+      if (selected && points.length > 0) {
+        const xs = points.map((p) => p[0]);
+        const ys = points.map((p) => p[1]);
+        const [x0, x1, y0, y1] = [Math.min(...xs), Math.max(...xs), Math.min(...ys), Math.max(...ys)];
+        const extent = Math.max(x1 - x0, y1 - y0, 0.6);
+        const fit = fitRadius({ width: extent * ZOOM_FILL, height: extent * ZOOM_FILL }, 32, aspect, 1);
+        stage.nav.flyTo({ ...stage.pose, x: (x0 + x1) / 2, y: 0, z: -(y0 + y1) / 2, radius: Math.min(stage.pose.radius, fit) });
+      } else stage.nav.reset();
+    }
     const { scene } = stage;
     scene.add(new AmbientLight(tokens.ink, 1.2));
     const sun = new DirectionalLight(tokens.ink, 2.4);
@@ -97,7 +125,9 @@ export function Map3D({ spec, projection }: { spec: Map3DSpec; projection?: Proj
       for (const m of all) m.scale.y = Math.max((m.userData.base as number) * k, 0.001);
     };
     let cancel = () => {};
-    if (reduced) {
+    const sameData = grownFor.current === spec.values && !projection;
+    grownFor.current = spec.values;
+    if (reduced || sameData) {
       setGrowth(1);
       stage.requestRender();
     } else {
@@ -172,7 +202,7 @@ export function Map3D({ spec, projection }: { spec: Map3DSpec; projection?: Proj
       stageRef.current = null;
       stage.dispose();
     };
-  }, [spec.geo, spec.values, spec.metric, spec.selectedId, spec.formatValue, projection?.title, quality?.tier, pixelRatioCap, reduced, side]);
+  }, [spec.geo, spec.values, spec.metric, spec.selectedId, spec.formatValue, spec.upright, spec.zoomToSelected, projection?.title, quality?.tier, pixelRatioCap, reduced, side, tour]);
 
   return (
     <div className="chart3d-wrap">

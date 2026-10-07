@@ -11,7 +11,7 @@ afterEach(cleanup);
 
 describe('shell link to the References page', () => {
   it('is present, points to references.html and is keyboard focusable', () => {
-    render(<Header mockSource={null} />);
+    render(<Header />);
     const link = screen.getByRole('link', { name: 'Fuentes y métodos' });
     expect(link.getAttribute('href')).toBe('references.html');
     expect(link.getAttribute('tabindex')).not.toBe('-1');
@@ -20,7 +20,7 @@ describe('shell link to the References page', () => {
   });
 
   it('opens in the same tab', () => {
-    render(<Header mockSource={null} />);
+    render(<Header />);
     expect(screen.getByRole('link', { name: 'Fuentes y métodos' }).getAttribute('target')).toBeNull();
   });
 });
