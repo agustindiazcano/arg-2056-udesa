@@ -1,10 +1,8 @@
-import React, { useMemo, useRef, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { EChart } from '../charts/EChart.js';
 import { buildColumns, buildFollowedSeries } from '../charts/builders/tourCharts.js';
 import { formatValue } from '../charts/format.js';
 import { TourChart } from './TourChart.js';
-import { DEFAULT_BARS_VIEW } from '../charts3d/followAnim.js';
-import type { BarsView } from '../charts3d/followAnim.js';
 import { barsSpec, linesSpec } from '../charts3d/specs.js';
 import { Reveal } from '../motion/Reveal.js';
 import { useReducedMotion } from '../runtime/useReducedMotion.js';
@@ -12,7 +10,6 @@ import { useStore } from '../state/store.js';
 import { tokens } from '../styles/tokens.js';
 import { Segmented } from '../ui/Segmented.js';
 import { elapsedForYear, seriesFrame, valueAt, yearAtElapsed } from './worldAnim.js';
-import { BarsViewTuner } from './BarsViewTuner.js';
 import { useTimeline } from './useTimeline.js';
 import { WorldTable } from './WorldTable.js';
 import { FIRST_YEAR, HOME, LAST_YEAR, MOCK_SOURCE, WORLD_UNIT, argentinaSince1900, regionCountries, regionValuesAt } from './worldData.js';
@@ -36,13 +33,6 @@ export function WorldStep() {
   const reduced = useReducedMotion();
   const [run, setRun] = useState(0);
   const { elapsed, clock, seek } = useTimeline(run, reduced);
-  // the numbers of the camera of the region bars: the chart reads the ref on every frame, the tuner shows the state
-  const [barsView, setBarsView] = useState<BarsView>(DEFAULT_BARS_VIEW);
-  const barsViewRef = useRef<BarsView>(DEFAULT_BARS_VIEW);
-  const tuneBars = (next: BarsView) => {
-    barsViewRef.current = next;
-    setBarsView(next);
-  };
 
   const series = useMemo(argentinaSince1900, []);
   const today = series.values.at(-1) ?? 0;
@@ -83,7 +73,7 @@ export function WorldStep() {
         regionNames.map((c, i) => ({ label: c, value: regionValuesAt(LAST_YEAR)[i] ?? 0 })),
         { title: 'Mayores economías de la región', unit: WORLD_UNIT, highlight: HOME, summary: regionText }
       ),
-      timeline: { clock, yearAt: yearAtElapsed, valuesAt: regionValuesAt, focus: regionNames.indexOf(HOME), view: barsViewRef }
+      timeline: { clock, yearAt: yearAtElapsed, valuesAt: regionValuesAt, focus: regionNames.indexOf(HOME) }
     }),
     [regionNames, regionText, clock]
   );
@@ -166,7 +156,6 @@ export function WorldStep() {
         </div>
       </div>
 
-      {mode === '3d' && <BarsViewTuner view={barsView} onChange={tuneBars} onReset={() => tuneBars(DEFAULT_BARS_VIEW)} />}
     </section>
   );
 }

@@ -74,14 +74,13 @@ describe('the camera on the bar of Argentina', () => {
   it('looks at the bar and stands close while the years go by', () => {
     const pose = barsFocus(base, bar, 0);
     expect(pose.x).toBeCloseTo(bar.x, 6);
-    expect(pose.radius).toBeLessThan(base.radius * 0.5);
+    expect(pose.radius).toBeCloseTo(base.radius * DEFAULT_BARS_VIEW.near, 6);
   });
 
-  it('pulls back a little at the end, never to the whole chart', () => {
-    const near = barsFocus(base, bar, 0);
+  it('ends at the distance that was chosen for the end, never at the whole chart', () => {
     const end = barsFocus(base, bar, 1);
-    expect(end.radius).toBeGreaterThan(near.radius);
-    expect(end.radius).toBeLessThan(base.radius * 0.6); // a few bars more, never all of them
+    expect(end.radius).toBeCloseTo(base.radius * DEFAULT_BARS_VIEW.end, 6);
+    expect(end.radius).toBeLessThan(base.radius * 0.6);
     expect(end.x).toBeGreaterThan(0); // still on the side of the bar, not centred on the chart
   });
 });

@@ -44,7 +44,8 @@ export interface BarsView {
   fov: number;
 }
 
-export const DEFAULT_BARS_VIEW: BarsView = { theta: 0.22, phi: 1.38, near: 0.42, end: 0.5, height: 0, fov: 32 };
+/** The view the human chose with the tuner (turn 0°, tilt 89°, near 0.46, end 0.32, height -0.3, lens 32°). */
+export const DEFAULT_BARS_VIEW: BarsView = { theta: 0, phi: (89 * Math.PI) / 180, near: 0.46, end: 0.32, height: -0.3, fov: 32 };
 
 /**
  * The camera of a bar chart that follows one bar (`bar`: its place along x and the height of its top): it looks at the bar from

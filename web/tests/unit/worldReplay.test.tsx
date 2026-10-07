@@ -8,7 +8,6 @@ vi.mock('../../src/charts/EChart.js', () => ({
 }));
 
 import { WorldStep } from '../../src/tour/WorldStep';
-import { useStore } from '../../src/state/store';
 
 afterEach(cleanup);
 
@@ -80,15 +79,5 @@ describe('step 0 of the Recorrido', () => {
     // its place and its value change with the year, the cell stays
     expect(new Set(places.PBI).size).toBeGreaterThan(1);
     expect(new Set(places['PBI per cápita']).size).toBeGreaterThan(1);
-  });
-
-  it('has numbers to set the camera of the region bars in 3D, and none in 2D', () => {
-    useStore.setState({ mode: '3d' });
-    const { unmount } = render(<WorldStep />);
-    expect(screen.getByLabelText('Inclinación (°)')).toBeTruthy();
-    unmount();
-    useStore.setState({ mode: '2d' });
-    render(<WorldStep />);
-    expect(screen.queryByLabelText('Inclinación (°)')).toBeNull();
   });
 });
