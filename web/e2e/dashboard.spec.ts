@@ -1,3 +1,4 @@
+import type { Locator } from '@playwright/test';
 import { test, expect, SCENE_TABS, expectSceneShown, openTab } from './fixtures';
 
 const VIEWPORTS = [
@@ -204,29 +205,31 @@ test.describe('dashboard', () => {
 });
 
 test.describe('andes scene', () => {
-  test('shows the campaign on the terrain, a panel per event, and moves the army with the clock', async ({ page }) => {
+  // the map is MapLibre: its zoom and pitch are published on the host (data-zoom, data-pitch)
+  const zoom = async (host: Locator) => Number(await host.getAttribute('data-zoom'));
+  const pitch = async (host: Locator) => Number(await host.getAttribute('data-pitch'));
+
+  test('shows the campaign on the real map, a panel per event, and moves the army with the clock', async ({ page }) => {
     await page.goto('/?quality=high');
     await openTab(page, 'Andes');
-    const canvas = page.locator('[data-chart3d="andes"] canvas');
-    await expect(canvas).toBeVisible();
-    await expect(page.getByRole('note')).toContainText('provisorio');
+    const host = page.locator('[data-chart3d="andes"]');
+    await expect(host.locator('canvas').first()).toBeVisible();
+    await expect(page.getByRole('note')).toContainText('MapTiler');
 
     // one big stage: the map fills the area (no small chart), with floating controls
-    const box = (await canvas.boundingBox())!;
+    const box = (await host.boundingBox())!;
     expect(box.width).toBeGreaterThan(700);
     expect(box.height).toBeGreaterThan(450);
-    await page.getByRole('button', { name: 'Seguir al ejército' }).click();
 
-    await page.getByRole('button', { name: /Alta cordillera/ }).click();
-    const panel = page.getByRole('region', { name: /Evento: Alta cordillera/ });
+    await page.getByRole('button', { name: /Manantiales/ }).click();
+    const panel = page.getByRole('region', { name: /Evento: Manantiales/ });
     await expect(panel).toBeVisible();
-    await expect(panel).toContainText('sin dato');
     // the camera flew to the event
-    await expect.poll(async () => Number((await canvas.getAttribute('data-camera'))!.split(',')[2])).toBeLessThan(25);
+    await expect.poll(() => zoom(host)).toBeGreaterThan(11);
 
     await page.keyboard.press('Escape');
     await expect(panel).toHaveCount(0);
-    await expect(page.getByRole('button', { name: /Alta cordillera/ })).toBeFocused();
+    await expect(page.getByRole('button', { name: /Manantiales/ })).toBeFocused();
 
     const day = page.getByTestId('andes-day');
     const before = await day.innerText();
@@ -237,14 +240,13 @@ test.describe('andes scene', () => {
   test('"Ver de cerca" brings the camera next to the army, where the column of figures shows, and says the figures are schematic', async ({ page }) => {
     await page.goto('/?quality=high');
     await openTab(page, 'Andes');
-    const canvas = page.locator('[data-chart3d="andes"] canvas');
-    await expect(canvas).toBeVisible();
+    const host = page.locator('[data-chart3d="andes"]');
+    await expect(host.locator('canvas').first()).toBeVisible();
     await expect(page.getByText(/Figuras esquemáticas/)).toBeVisible();
-    const radius = async () => Number((await canvas.getAttribute('data-camera'))!.split(',')[2]);
-    const far = await radius();
+    const far = await zoom(host);
     await page.getByRole('button', { name: 'Ver de cerca' }).click();
-    await expect.poll(radius).toBeLessThan(5);
-    expect(far).toBeGreaterThan(10);
+    await expect.poll(() => zoom(host)).toBeGreaterThan(14);
+    expect(far).toBeLessThan(10);
     // the table has no map to get close to
     await page.getByRole('button', { name: 'Tabla de eventos' }).click();
     await expect(page.getByRole('button', { name: 'Ver de cerca' })).toBeDisabled();
@@ -253,12 +255,11 @@ test.describe('andes scene', () => {
   test('"Cine" puts the camera low behind the column, close enough for the figures, and the table has no cinematic camera', async ({ page }) => {
     await page.goto('/?quality=high');
     await openTab(page, 'Andes');
-    const canvas = page.locator('[data-chart3d="andes"] canvas');
-    await expect(canvas).toBeVisible();
-    const pose = async () => (await canvas.getAttribute('data-camera'))!.split(',').map(Number);
+    const host = page.locator('[data-chart3d="andes"]');
+    await expect(host.locator('canvas').first()).toBeVisible();
     await page.getByRole('button', { name: 'Cine' }).click();
-    await expect.poll(async () => (await pose())[2]).toBeLessThan(8); // radius: near the column
-    expect((await pose())[1]).toBeGreaterThan(1); // polar angle: low, toward the horizon
+    await expect.poll(() => zoom(host)).toBeGreaterThan(14); // near the column
+    expect(await pitch(host)).toBeGreaterThan(70); // low, toward the horizon
     await expect(page.getByRole('button', { name: 'Cine' })).toHaveAttribute('aria-pressed', 'true');
     await page.getByRole('button', { name: 'Tabla de eventos' }).click();
     await expect(page.getByRole('button', { name: 'Cine' })).toBeDisabled();
@@ -268,6 +269,6 @@ test.describe('andes scene', () => {
     await page.goto('/');
     await openTab(page, 'Andes');
     await page.getByRole('button', { name: 'Tabla de eventos' }).click();
-    await expect(page.getByRole('table')).toContainText('Cumbre del paso');
+    await expect(page.getByRole('table')).toContainText('Cuesta de Chacabuco');
   });
 });

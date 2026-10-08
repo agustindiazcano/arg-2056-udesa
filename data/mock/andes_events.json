@@ -1,237 +1,216 @@
 [
   {
     "date": "1817-01-19",
-    "date_precision": "approximate",
+    "date_precision": "day",
     "day_of_campaign": 0,
-    "elevation_m": 800,
+    "elevation_m": 706,
     "forces": [
       {
-        "men": 3600,
-        "side": "Columna principal (ilustrativa)"
-      },
-      {
-        "men": null,
-        "note": "Sin fuerzas opuestas registradas en este punto (mock ilustrativo)",
-        "side": "Fuerzas opuestas (ilustrativas)"
+        "men": 3987,
+        "side": "Ejército de los Andes"
       }
     ],
-    "id": "mock-andes-01",
-    "lat": -32.9182,
-    "lon": -68.9,
-    "name": "Campamento base (ilustrativo)",
-    "retrieved_at": "2026-10-02",
-    "source": "MOCK"
+    "id": "andes-01",
+    "lat": -32.847,
+    "lon": -68.807,
+    "name": "El Plumerillo",
+    "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto. 3.987 soldados (sin los 1.200 milicianos y arrieros); la columna de Los Patos era una parte del ejército.",
+    "retrieved_at": "2026-10-08",
+    "source": "Diario de Cuyo, «Crónica de una epopeya» (2017); coordenadas: MapTiler Geocoding (OpenStreetMap); altitud: MapTiler Terrain-RGB v2"
   },
   {
-    "date": "1817-01-21",
+    "date": "1817-01-22",
     "date_precision": "approximate",
-    "day_of_campaign": 2,
-    "elevation_m": 1600,
+    "day_of_campaign": 3,
+    "elevation_m": 1884,
     "forces": [
       {
-        "men": 3500,
-        "side": "Columna principal (ilustrativa)"
-      },
-      {
-        "men": null,
-        "note": "Sin fuerzas opuestas registradas en este punto (mock ilustrativo)",
-        "side": "Fuerzas opuestas (ilustrativas)"
+        "men": 3987,
+        "side": "Ejército de los Andes"
       }
     ],
-    "id": "mock-andes-02",
-    "lat": -32.7137,
-    "lon": -69.1,
-    "name": "Salida de la columna (ilustrativo)",
-    "retrieved_at": "2026-10-02",
-    "source": "MOCK"
+    "id": "andes-02",
+    "lat": -32.591,
+    "lon": -69.348,
+    "name": "Valle de Uspallata",
+    "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto.",
+    "retrieved_at": "2026-10-08",
+    "source": "Diario de Cuyo, «Crónica de una epopeya» (2017); coordenadas: MapTiler Geocoding (OpenStreetMap); altitud: MapTiler Terrain-RGB v2"
   },
   {
-    "date": "1817-01-23",
+    "date": "1817-01-25",
     "date_precision": "approximate",
-    "day_of_campaign": 4,
-    "elevation_m": null,
+    "day_of_campaign": 6,
+    "elevation_m": 1871,
     "forces": [
       {
-        "men": 3500,
-        "side": "Columna principal (ilustrativa)"
-      },
-      {
-        "men": null,
-        "note": "Sin fuerzas opuestas registradas en este punto (mock ilustrativo)",
-        "side": "Fuerzas opuestas (ilustrativas)"
+        "men": 3987,
+        "side": "Ejército de los Andes"
       }
     ],
-    "id": "mock-andes-03",
-    "lat": -32.599,
-    "lon": -69.3,
-    "name": "Primer valle (ilustrativo)",
-    "note": "Altitud desconocida (mock ilustrativo)",
-    "retrieved_at": "2026-10-02",
-    "source": "MOCK"
+    "id": "andes-03",
+    "lat": -31.85,
+    "lon": -69.45,
+    "name": "Valle de Calingasta",
+    "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto.",
+    "retrieved_at": "2026-10-08",
+    "source": "Diario de Cuyo, «Crónica de una epopeya» (2017); coordenadas: MapTiler Geocoding (OpenStreetMap); altitud: MapTiler Terrain-RGB v2"
   },
   {
-    "date": "1817-01-26",
+    "date": "1817-01-27",
     "date_precision": "approximate",
-    "day_of_campaign": 7,
-    "elevation_m": 3100,
+    "day_of_campaign": 8,
+    "elevation_m": 1905,
     "forces": [
       {
-        "men": 3450,
-        "side": "Columna principal (ilustrativa)"
-      },
-      {
-        "men": null,
-        "note": "Sin fuerzas opuestas registradas en este punto (mock ilustrativo)",
-        "side": "Fuerzas opuestas (ilustrativas)"
+        "men": 3987,
+        "side": "Ejército de los Andes"
       }
     ],
-    "id": "mock-andes-04",
-    "lat": -32.5558,
-    "lon": -69.6,
-    "name": "Ascenso (ilustrativo)",
-    "retrieved_at": "2026-10-02",
-    "source": "MOCK"
+    "id": "andes-04",
+    "lat": -31.903,
+    "lon": -69.694,
+    "name": "Río de los Patos",
+    "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto.",
+    "retrieved_at": "2026-10-08",
+    "source": "Diario de Cuyo, «Crónica de una epopeya» (2017); coordenadas: MapTiler Geocoding (OpenStreetMap); altitud: MapTiler Terrain-RGB v2"
   },
   {
-    "date": "1817-01-28",
-    "date_precision": "approximate",
-    "day_of_campaign": 9,
-    "elevation_m": 3600,
+    "date": "1817-01-31",
+    "date_precision": "day",
+    "day_of_campaign": 12,
+    "elevation_m": 2564,
     "forces": [
       {
-        "men": 3400,
-        "side": "Columna principal (ilustrativa)"
-      },
-      {
-        "men": null,
-        "note": "Sin fuerzas opuestas registradas en este punto (mock ilustrativo)",
-        "side": "Fuerzas opuestas (ilustrativas)"
+        "men": 3987,
+        "side": "Ejército de los Andes"
       }
     ],
-    "id": "mock-andes-05",
-    "lat": -32.6366,
-    "lon": -69.9,
-    "name": "Alta cordillera (ilustrativo)",
-    "retrieved_at": "2026-10-02",
-    "source": "MOCK"
+    "id": "andes-05",
+    "lat": -31.92,
+    "lon": -69.88,
+    "name": "Manantiales",
+    "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto.",
+    "retrieved_at": "2026-10-08",
+    "source": "Diario de Cuyo, «Crónica de una epopeya» (2017); coordenadas: MapTiler Geocoding (OpenStreetMap); altitud: MapTiler Terrain-RGB v2"
   },
   {
-    "date": "1817-01-30",
+    "date": "1817-02-03",
     "date_precision": "approximate",
-    "day_of_campaign": 11,
-    "elevation_m": 3900,
+    "day_of_campaign": 15,
+    "elevation_m": 3175,
     "forces": [
       {
-        "men": 3300,
-        "side": "Columna principal (ilustrativa)"
-      },
-      {
-        "men": null,
-        "note": "Sin fuerzas opuestas registradas en este punto (mock ilustrativo)",
-        "side": "Fuerzas opuestas (ilustrativas)"
+        "men": 3987,
+        "side": "Ejército de los Andes"
       }
     ],
-    "id": "mock-andes-06",
-    "lat": -32.7729,
-    "lon": -70.1,
-    "name": "Cumbre del paso (ilustrativo)",
-    "retrieved_at": "2026-10-02",
-    "source": "MOCK"
+    "id": "andes-06",
+    "lat": -32.084,
+    "lon": -70.215,
+    "name": "Campo del Mercedario",
+    "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto.",
+    "retrieved_at": "2026-10-08",
+    "source": "Diario de Cuyo, «Crónica de una epopeya» (2017); coordenadas: MapTiler Geocoding (OpenStreetMap); altitud: MapTiler Terrain-RGB v2"
   },
   {
-    "date": "1817-02-01",
-    "date_precision": "approximate",
-    "day_of_campaign": 13,
-    "elevation_m": null,
+    "date": "1817-02-05",
+    "date_precision": "day",
+    "day_of_campaign": 17,
+    "elevation_m": 3486,
     "forces": [
       {
-        "men": 3250,
-        "side": "Columna principal (ilustrativa)"
-      },
-      {
-        "men": null,
-        "note": "Sin fuerzas opuestas registradas en este punto (mock ilustrativo)",
-        "side": "Fuerzas opuestas (ilustrativas)"
+        "men": 3987,
+        "side": "Ejército de los Andes"
       }
     ],
-    "id": "mock-andes-07",
-    "lat": -32.9014,
-    "lon": -70.3,
-    "name": "Descenso (ilustrativo)",
-    "note": "Altitud desconocida (mock ilustrativo)",
-    "retrieved_at": "2026-10-02",
-    "source": "MOCK"
-  },
-  {
-    "date": "1817-02-04",
-    "date_precision": "approximate",
-    "day_of_campaign": 16,
-    "elevation_m": 2300,
-    "forces": [
-      {
-        "men": 3200,
-        "side": "Columna principal (ilustrativa)"
-      },
-      {
-        "men": null,
-        "note": "Sin fuerzas opuestas registradas en este punto (mock ilustrativo)",
-        "side": "Fuerzas opuestas (ilustrativas)"
-      }
-    ],
-    "id": "mock-andes-08",
-    "lat": -33.0196,
-    "lon": -70.5,
-    "name": "Valle del oeste (ilustrativo)",
-    "retrieved_at": "2026-10-02",
-    "source": "MOCK"
+    "id": "andes-07",
+    "lat": -32.363,
+    "lon": -70.222,
+    "name": "Paso de Las Llaretas y Valle Hermoso",
+    "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto.",
+    "retrieved_at": "2026-10-08",
+    "source": "Diario de Cuyo, «Crónica de una epopeya» (2017); coordenadas: MapTiler Geocoding (OpenStreetMap); altitud: MapTiler Terrain-RGB v2"
   },
   {
     "date": "1817-02-07",
     "date_precision": "approximate",
     "day_of_campaign": 19,
-    "elevation_m": 1400,
+    "elevation_m": 1251,
     "forces": [
       {
-        "men": 3150,
-        "side": "Columna principal (ilustrativa)"
-      },
-      {
-        "men": 1500,
-        "side": "Fuerzas opuestas (ilustrativas)"
+        "men": 3987,
+        "side": "Ejército de los Andes"
       }
     ],
-    "id": "mock-andes-09",
-    "lat": -32.9497,
-    "lon": -70.6,
-    "name": "Combate de avanzada (ilustrativo)",
-    "retrieved_at": "2026-10-02",
-    "source": "MOCK"
+    "id": "andes-08",
+    "lat": -32.486,
+    "lon": -70.578,
+    "name": "Los Patos (Putaendo)",
+    "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto.",
+    "retrieved_at": "2026-10-08",
+    "source": "Diario de Cuyo, «Crónica de una epopeya» (2017); coordenadas: MapTiler Geocoding (OpenStreetMap); altitud: MapTiler Terrain-RGB v2"
   },
   {
-    "date": "1817-02-09",
+    "date": "1817-02-08",
     "date_precision": "approximate",
-    "day_of_campaign": 21,
-    "elevation_m": 800,
-    "estimate_range": {
-      "max": 3300,
-      "min": 2900
-    },
+    "day_of_campaign": 20,
+    "elevation_m": 816,
     "forces": [
       {
-        "men": 3100,
-        "side": "Columna principal (ilustrativa)"
-      },
-      {
-        "men": 1500,
-        "side": "Fuerzas opuestas (ilustrativas)"
+        "men": 3987,
+        "side": "Ejército de los Andes"
       }
     ],
-    "id": "mock-andes-10",
-    "lat": -32.8863,
-    "lon": -70.7,
-    "name": "Encuentro final (ilustrativo)",
-    "note": "Cifra en disputa: se muestra un rango (mock ilustrativo)",
-    "retrieved_at": "2026-10-02",
-    "source": "MOCK"
+    "id": "andes-09",
+    "lat": -32.626,
+    "lon": -70.717,
+    "name": "Putaendo",
+    "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto.",
+    "retrieved_at": "2026-10-08",
+    "source": "Diario de Cuyo, «Crónica de una epopeya» (2017); coordenadas: MapTiler Geocoding (OpenStreetMap); altitud: MapTiler Terrain-RGB v2"
+  },
+  {
+    "date": "1817-02-10",
+    "date_precision": "approximate",
+    "day_of_campaign": 22,
+    "elevation_m": 648,
+    "forces": [
+      {
+        "men": 3987,
+        "side": "Ejército de los Andes"
+      }
+    ],
+    "id": "andes-10",
+    "lat": -32.751,
+    "lon": -70.725,
+    "name": "San Felipe",
+    "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto.",
+    "retrieved_at": "2026-10-08",
+    "source": "Diario de Cuyo, «Crónica de una epopeya» (2017); coordenadas: MapTiler Geocoding (OpenStreetMap); altitud: MapTiler Terrain-RGB v2"
+  },
+  {
+    "date": "1817-02-12",
+    "date_precision": "day",
+    "day_of_campaign": 24,
+    "elevation_m": 1029,
+    "forces": [
+      {
+        "men": 3987,
+        "side": "Ejército de los Andes"
+      },
+      {
+        "men": null,
+        "note": "Cifra en disputa entre las fuentes; no se muestra un valor único",
+        "side": "Fuerzas realistas"
+      }
+    ],
+    "id": "andes-11",
+    "lat": -32.977,
+    "lon": -70.708,
+    "name": "Cuesta de Chacabuco (batalla)",
+    "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto.",
+    "retrieved_at": "2026-10-08",
+    "source": "Diario de Cuyo, «Crónica de una epopeya» (2017); coordenadas: MapTiler Geocoding (OpenStreetMap); altitud: MapTiler Terrain-RGB v2"
   }
 ]

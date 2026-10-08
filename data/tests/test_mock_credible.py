@@ -274,12 +274,12 @@ def test_projects_have_names_and_sit_in_the_right_provinces(mock):
         assert p["geo"] in RESOURCE_PROVINCES[p["resource"]], (p["id"], p["resource"], p["geo"])
 
 
-def test_andes_route_is_a_coherent_three_week_march_from_east_to_west(mock):
+def test_andes_route_is_the_march_of_the_los_patos_column_from_mendoza_to_chacabuco(mock):
     events = load(mock, "andes_events")
     assert [e["day_of_campaign"] for e in events] == sorted(e["day_of_campaign"] for e in events)
-    assert events[0]["day_of_campaign"] == 0 and events[-1]["day_of_campaign"] == 21
-    longitudes = [e["lon"] for e in events]
-    assert longitudes == sorted(longitudes, reverse=True)
-    assert all(-34.0 <= e["lat"] <= -32.0 for e in events)
+    assert events[0]["day_of_campaign"] == 0 and events[-1]["day_of_campaign"] == 24
+    assert events[0]["lon"] > events[-1]["lon"]  # from the east of the cordillera to the west
+    assert all(-33.5 <= e["lat"] <= -31.5 for e in events)
+    assert max(e["elevation_m"] for e in events) < 4000  # the pass of the army, not the summits around it
     assert not [e for e in events if "MOCK" in e["name"]]
     assert all(e["note"] for e in events if e["elevation_m"] is None)

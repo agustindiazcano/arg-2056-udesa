@@ -80,10 +80,19 @@ def _find_numeric_nulls_and_provenance(obj):
 
 def test_provenance_and_nulls(generated_mock_data):
     for p in generated_mock_data.glob("*.json"):
+        if p.name == "andes_events.json":
+            continue  # the route of the crossing is historical data with its own source (checked by test_andes_events_have_a_real_source)
         with open(p, encoding="utf-8") as f:
             data = json.load(f)
         errors = _find_numeric_nulls_and_provenance(data)
         assert not errors, f"Errors in {p.name}: {errors}"
+
+def test_andes_events_have_a_real_source(generated_mock_data):
+    with open(generated_mock_data / "andes_events.json", encoding="utf-8") as f:
+        events = json.load(f)
+    assert len(events) >= 10
+    assert all(e["source"] != "MOCK" and "MapTiler" in e["source"] and e["retrieved_at"] for e in events)
+
 
 def test_business_rules(generated_mock_data):
     # economy_series

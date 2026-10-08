@@ -7,7 +7,6 @@ import { useQualityOptional } from '../../runtime/CapabilityProvider.js';
 import { qualityTier } from '../../runtime/capabilities.js';
 import type { QualityTier } from '../../runtime/capabilities.js';
 import { WebGLRequired } from '../../runtime/WebGLRequired.js';
-import { isSyntheticTerrain } from '../../terrain/synthetic.js';
 import { useStore } from '../../state/store.js';
 import { Tile, TileGrid } from '../../ui/Tile.js';
 import { SlotPortal } from '../../dashboard/SlotPortal.js';
@@ -26,10 +25,9 @@ import { spo2Estimate } from './physiology.js';
 import { altitudeProfile } from './profile.js';
 import { AndesProgress } from './Progress.js';
 import { buildRoute, paceClock, paceProgress, positionAt } from './timeline.js';
-import { useAndesTerrain } from './useAndesTerrain.js';
 
-// Three.js lives in its own chunk: it loads only when the scene is opened.
-const AndesRenderer = lazy(() => import('./Renderer.js'));
+// MapLibre and Three.js live in their own chunk: it loads only when the scene is opened.
+const AndesRenderer = lazy(() => import('./MapLibreRenderer.js'));
 
 const TABLE_COLUMNS = [
   { key: 'day', header: 'Día' },
@@ -59,7 +57,6 @@ export default function Scene() {
   const { status, data } = useDataset('andes_events', parseAndesEvents);
   const events = useMemo(() => data ?? [], [data]);
   const route = useMemo(() => buildRoute(events), [events]);
-  const terrainState = useAndesTerrain(status === 'success' ? route.points : null);
   const quality = useQualityOptional();
   const tier: QualityTier = quality?.tier ?? 'medium';
   const yearFloat = useStore((s) => s.yearFloat);
@@ -109,7 +106,6 @@ export default function Scene() {
   const position = positionAt(route, day);
   const graphics = resolveGraphics(tier, toggles);
   const spo2 = spo2Estimate(position?.altitudeM ?? null);
-  const terrain = terrainState.status === 'ready' ? terrainState : null;
   const label = `Mapa 3D del cruce de los Andes, día ${Math.round(day)} de la campaña${
     selected ? `; evento elegido: ${selected.name}` : ''
   }.`;
@@ -117,23 +113,18 @@ export default function Scene() {
   const map = quality?.caps.webgl2 ? (
     <>
       <WebGLRequired />
-      {terrain ? (
-        <Suspense fallback={<p role="status" className="poster">Cargando la vista 3D...</p>}>
-          <AndesRenderer
-            terrain={terrain.terrain}
-            route={route}
-            day={day}
-            selectedId={selectedId}
-            camera={camera}
-            graphics={graphics}
-            closeUp={closeUp}
-            onSelect={(id) => (id === null ? close() : select(id))}
-            label={label}
-          />
-        </Suspense>
-      ) : (
-        <p role="status" className="poster">Cargando el terreno...</p>
-      )}
+      <Suspense fallback={<p role="status" className="poster">Cargando el mapa...</p>}>
+        <AndesRenderer
+          route={route}
+          day={day}
+          selectedId={selectedId}
+          camera={camera}
+          graphics={graphics}
+          closeUp={closeUp}
+          onSelect={(id) => (id === null ? close() : select(id))}
+          label={label}
+        />
+      </Suspense>
     </>
   ) : (
     <p role="status" className="notice andes-notice">
@@ -141,7 +132,6 @@ export default function Scene() {
     </p>
   );
 
-  const synthetic = terrain && isSyntheticTerrain(terrain.terrain);
   const source = sourceLine([...new Set(route.points.map((p) => p.source))], route.points[0]?.retrieved_at);
 
   const stage = (
@@ -221,13 +211,10 @@ export default function Scene() {
       )}
 
       <footer className="andes-foot">
-        {terrain && (
-          <p role="note">
-            {terrain.terrain.meta.attribution}
-            {synthetic && terrain.problem ? ` (${terrain.problem})` : ''}
-          </p>
-        )}
-        {terrain && view === 'map' && <p>{figuresNote(startingMen(route.points) !== null)}</p>}
+        <p role="note">
+          Imágenes satelitales y relieve: © MapTiler © OpenStreetMap contributors. Los lugares y el trazado de la marcha son aproximados.
+        </p>
+        {view === 'map' && <p>{figuresNote(startingMen(route.points) !== null)}</p>}
         {source && <p>{source}</p>}
       </footer>
     </div>

@@ -1,3 +1,4 @@
+import datetime
 import json
 import math
 import random
@@ -124,49 +125,54 @@ def gen_population(rng):
     return data
 
 
-# an illustrative march from the east of the cordillera to the west: name, day, longitude, latitude, elevation, men
+# The march of the main column (San Martín, Soler, O'Higgins) by the Los Patos route, from El Plumerillo to Chacabuco:
+# name, day of the campaign, longitude, latitude, elevation in meters. The days follow the dates of the crossing
+# (departure 1817-01-19, San Martín in Manantiales on 01-31, Chile on 02-05, Chacabuco on 02-12) and the places of the
+# itinerary of the column; the days between them are estimates. The positions are approximate (place names of OpenStreetMap
+# through the MapTiler geocoder); the elevations were read from the MapTiler Terrain-RGB v2 DEM at those positions.
 ANDES_ROUTE = [
-    ("Campamento base (ilustrativo)", 0, -68.90, -32.90, 800, 3600),
-    ("Salida de la columna (ilustrativo)", 2, -69.10, -32.70, 1600, 3500),
-    ("Primer valle (ilustrativo)", 4, -69.30, -32.60, 2400, 3500),
-    ("Ascenso (ilustrativo)", 7, -69.60, -32.55, 3100, 3450),
-    ("Alta cordillera (ilustrativo)", 9, -69.90, -32.65, 3600, 3400),
-    ("Cumbre del paso (ilustrativo)", 11, -70.10, -32.80, 3900, 3300),
-    ("Descenso (ilustrativo)", 13, -70.30, -32.90, 3200, 3250),
-    ("Valle del oeste (ilustrativo)", 16, -70.50, -33.00, 2300, 3200),
-    ("Combate de avanzada (ilustrativo)", 19, -70.60, -32.95, 1400, 3150),
-    ("Encuentro final (ilustrativo)", 21, -70.70, -32.90, 800, 3100),
+    ("El Plumerillo", 0, -68.807, -32.847, 706),
+    ("Valle de Uspallata", 3, -69.348, -32.591, 1884),
+    ("Valle de Calingasta", 6, -69.450, -31.850, 1871),
+    ("Río de los Patos", 8, -69.694, -31.903, 1905),
+    ("Manantiales", 12, -69.880, -31.920, 2564),
+    ("Campo del Mercedario", 15, -70.215, -32.084, 3175),
+    ("Paso de Las Llaretas y Valle Hermoso", 17, -70.222, -32.363, 3486),
+    ("Los Patos (Putaendo)", 19, -70.578, -32.486, 1251),
+    ("Putaendo", 20, -70.717, -32.626, 816),
+    ("San Felipe", 22, -70.725, -32.751, 648),
+    ("Cuesta de Chacabuco (batalla)", 24, -70.708, -32.977, 1029),
 ]
+ANDES_SOURCE = (
+    "Diario de Cuyo, «Crónica de una epopeya» (2017); coordenadas: MapTiler Geocoding (OpenStreetMap); altitud: MapTiler Terrain-RGB v2"
+)
 
 
 def gen_andes_events(rng):
+    for _ in range(10):  # the old illustrative route drew ten random numbers; keeping the draws keeps the other mock files as they were
+        rng.random()
+    start = datetime.date(1817, 1, 19)
     data = []
-    for i, (name, day, lon, lat, elevation, men) in enumerate(ANDES_ROUTE, start=1):
+    last = len(ANDES_ROUTE)
+    for i, (name, day, lon, lat, elevation) in enumerate(ANDES_ROUTE, start=1):
         event = {
-            "id": f"mock-andes-{i:02d}",
+            "id": f"andes-{i:02d}",
             "name": name,
             "day_of_campaign": day,
-            "date": f"1817-01-{19 + day:02d}" if day <= 12 else f"1817-02-{day - 12:02d}",
-            "date_precision": "approximate",
-            "lat": round(lat + rng.uniform(-0.03, 0.03), 4),
+            "date": (start + datetime.timedelta(days=day)).isoformat(),
+            "date_precision": "day" if day in (0, 12, 17, 24) else "approximate",
+            "lat": lat,
             "lon": lon,
             "elevation_m": elevation,
-            "forces": [
-                {"side": "Columna principal (ilustrativa)", "men": men},
-                {"side": "Fuerzas opuestas (ilustrativas)", "men": 1500 if i >= 9 else 0},
-            ],
-            "source": "MOCK",
-            "retrieved_at": RETRIEVED_AT,
+            "forces": [{"side": "Ejército de los Andes", "men": 3987}],
+            "source": ANDES_SOURCE,
+            "retrieved_at": "2026-10-08",
+            "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto.",
         }
-        if i in (3, 7):  # unknown elevations: the app shows a gap with its note
-            event["elevation_m"] = None
-            event["note"] = "Altitud desconocida (mock ilustrativo)"
-        if i < 9:  # nobody opposes the column on the way: the count is unknown, not zero
-            event["forces"][1]["men"] = None
-            event["forces"][1]["note"] = "Sin fuerzas opuestas registradas en este punto (mock ilustrativo)"
-        if i == 10:
-            event["estimate_range"] = {"min": 2900, "max": 3300}
-            event["note"] = "Cifra en disputa: se muestra un rango (mock ilustrativo)"
+        if i == 1:
+            event["note"] += " 3.987 soldados (sin los 1.200 milicianos y arrieros); la columna de Los Patos era una parte del ejército."
+        if i == last:
+            event["forces"].append({"side": "Fuerzas realistas", "men": None, "note": "Cifra en disputa entre las fuentes; no se muestra un valor único"})
         data.append(event)
     return data
 

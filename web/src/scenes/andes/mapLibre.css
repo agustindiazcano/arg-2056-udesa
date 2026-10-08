@@ -1,0 +1,8 @@
+/* The MapLibre map of the Andes fills its box; its own controls are replaced by the app's buttons. */
+.andes-maplibre.maplibregl-map {
+  font: inherit;
+}
+
+.andes-maplibre .maplibregl-ctrl-attrib {
+  font-size: var(--font-xs, 0.7rem);
+}

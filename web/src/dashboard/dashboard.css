@@ -788,12 +788,15 @@
 
 .andes-foot {
   position: absolute;
+  padding: var(--space-xs) var(--space-sm);
+  background: var(--glass-strong);
+  border-radius: var(--radius-md);
   left: var(--space-md);
   bottom: calc(var(--bar-h, 0px) + var(--space-sm));
   z-index: 4;
   max-width: min(60%, calc(100% - var(--side-w, 0px) - 15rem));
   color: var(--ink-2);
-  font-size: var(--font-sm);
+  font-size: var(--font-xs, 0.75rem);
 }
 
 .andes-foot p {
