@@ -37,11 +37,11 @@ the smoke script checks the real answer of the deployed host.
 ### Content-Security-Policy
 
 ```
-default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self';
-connect-src 'self'; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'
+default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://api.maptiler.com; font-src 'self';
+connect-src 'self' https://api.maptiler.com; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'
 ```
 
-- Nothing is loaded from another origin, and the policy has no `unsafe-eval`.
+- The only other origin is `https://api.maptiler.com` (satellite imagery, terrain and fonts of the Andes map, loaded by MapLibre; `VITE_MAPTILER_KEY` is read at build time and is public in the bundle, so restrict it by allowed origins in the MapTiler account). The policy has no `unsafe-eval`.
 - `style-src` needs `'unsafe-inline'` because ECharts writes inline styles on its elements.
 - No `eval` is needed because the schema validators are **precompiled at build time**
   (`web/src/validation/generated.js`, made by `npm run gen:validators` from `data/schemas`; `gen-validators --check` is a

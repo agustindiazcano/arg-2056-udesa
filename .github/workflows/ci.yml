@@ -66,6 +66,8 @@ jobs:
       - run: npm run data:sync
       - run: python ../scripts/build_references.py
       - run: npm run build
+        env:
+          VITE_MAPTILER_KEY: ${{ secrets.VITE_MAPTILER_KEY }}
       - run: npm run check:bundle
       # While the data is mock the release build must fail because of the mock. Delete this step at the same time
       # the release gate starts passing (docs/release-checklist.md, item 1).
@@ -115,6 +117,8 @@ jobs:
         working-directory: web
       - run: npm run build:release
         working-directory: web
+        env:
+          VITE_MAPTILER_KEY: ${{ secrets.VITE_MAPTILER_KEY }}
       - run: npm run check:bundle
         working-directory: web
       # the build above is the release build: the e2e suite serves it as it is

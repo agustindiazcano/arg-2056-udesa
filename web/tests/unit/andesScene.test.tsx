@@ -8,7 +8,7 @@ import './reducedMotionStub';
 const { mounts, unmounts } = vi.hoisted(() => ({ mounts: { n: 0 }, unmounts: { n: 0 } }));
 
 // the renderer is the only file that touches WebGL: replaced by a stub that shows what it was given
-vi.mock('../../src/scenes/andes/Renderer', async () => {
+vi.mock('../../src/scenes/andes/MapLibreRenderer', async () => {
   const React = await import('react');
   return {
     default: ({
@@ -16,15 +16,13 @@ vi.mock('../../src/scenes/andes/Renderer', async () => {
       selectedId,
       camera,
       graphics,
-      label,
-      terrain
+      label
     }: {
       day: number;
       selectedId: string | null;
       camera: string;
       graphics: { tier: string; snow: boolean; trees: boolean; textures: boolean; shadows: boolean };
       label: string;
-      terrain: { meta: { source: string } };
     }) => {
       React.useEffect(() => {
         mounts.n += 1;
@@ -43,7 +41,6 @@ vi.mock('../../src/scenes/andes/Renderer', async () => {
           data-trees={String(graphics.trees)}
           data-textures={String(graphics.textures)}
           data-shadows={String(graphics.shadows)}
-          data-source={terrain.meta.source}
         >
           {label}
         </div>
@@ -104,14 +101,14 @@ afterEach(() => {
 });
 
 describe('Andes scene', () => {
-  it('lists the events of the campaign and shows the made-up terrain with its warning', async () => {
+  it('lists the events of the campaign and shows the real map with its credits', async () => {
     stubFetch();
     renderScene();
     const list = await screen.findByRole('list', { name: 'Eventos de la campaña' });
-    expect(within(list).getAllByRole('button')).toHaveLength(10);
+    expect(within(list).getAllByRole('button')).toHaveLength(11);
     const renderer = await screen.findByTestId('andes-renderer');
-    expect(renderer.getAttribute('data-source')).toBe('Terreno sintético');
-    expect(screen.getByRole('note').textContent).toMatch(/provisorio/i);
+    expect(renderer).toBeTruthy();
+    expect(screen.getByRole('note').textContent).toMatch(/MapTiler/);
   });
 
   it('moves the army with the shared clock: the day follows the year', async () => {
@@ -120,27 +117,26 @@ describe('Andes scene', () => {
     const renderer = await screen.findByTestId('andes-renderer');
     expect(renderer.getAttribute('data-day')).toBe('0');
     act(() => useStore.setState({ yearFloat: 2056 }));
-    expect(screen.getByTestId('andes-renderer').getAttribute('data-day')).toBe('21');
-    expect(within(screen.getByTestId('andes-day')).getByText('21')).toBeTruthy();
+    expect(screen.getByTestId('andes-renderer').getAttribute('data-day')).toBe('24');
+    expect(within(screen.getByTestId('andes-day')).getByText('24')).toBeTruthy();
   });
 
   it('shows the panel of the chosen event with its forces, and an unknown count says so instead of 0', async () => {
     stubFetch();
     renderScene();
     await screen.findByTestId('andes-renderer');
-    fireEvent.click(screen.getByRole('button', { name: /Alta cordillera/ }));
-    const panel = screen.getByRole('region', { name: /Evento: Alta cordillera/ });
-    expect(within(panel).getByText(/Columna principal \(ilustrativa\): 3\.400/)).toBeTruthy();
-    expect(within(panel).getByText(/sin dato \(Sin fuerzas opuestas registradas/)).toBeTruthy();
-    expect(screen.getByTestId('andes-renderer').getAttribute('data-selected')).toBe('mock-andes-05');
+    fireEvent.click(screen.getByRole('button', { name: /Manantiales/ }));
+    const panel = screen.getByRole('region', { name: /Evento: Manantiales/ });
+    expect(within(panel).getByText(/Ejército de los Andes: 3\.987/)).toBeTruthy();
+    expect(screen.getByTestId('andes-renderer').getAttribute('data-selected')).toBe('andes-05');
   });
 
   it('says the altitude is unknown when the event has none', async () => {
-    stubFetch();
+    stubFetch((events as Array<Record<string, unknown>>).map((e) => (e.id === 'andes-03' ? { ...e, elevation_m: null, note: 'sin dato de altitud' } : e)));
     renderScene();
     await screen.findByTestId('andes-renderer');
-    fireEvent.click(screen.getByRole('button', { name: /Primer valle/ }));
-    const panel = screen.getByRole('region', { name: /Evento: Primer valle/ });
+    fireEvent.click(screen.getByRole('button', { name: /Valle de Calingasta/ }));
+    const panel = screen.getByRole('region', { name: /Evento: Valle de Calingasta/ });
     expect(within(panel).getByText('sin dato')).toBeTruthy();
   });
 
@@ -148,12 +144,12 @@ describe('Andes scene', () => {
     stubFetch();
     renderScene();
     await screen.findByTestId('andes-renderer');
-    const opener = screen.getByRole('button', { name: /Ascenso/ });
+    const opener = screen.getByRole('button', { name: /Río de los Patos/ });
     opener.focus();
     fireEvent.click(opener);
-    expect(screen.getByRole('region', { name: /Evento: Ascenso/ })).toBeTruthy();
+    expect(screen.getByRole('region', { name: /Evento: Río de los Patos/ })).toBeTruthy();
     fireEvent.keyDown(document.body, { key: 'Escape' });
-    expect(screen.queryByRole('region', { name: /Evento: Ascenso/ })).toBeNull();
+    expect(screen.queryByRole('region', { name: /Evento: Río de los Patos/ })).toBeNull();
     expect(document.activeElement).toBe(opener);
   });
 
@@ -174,8 +170,8 @@ describe('Andes scene', () => {
     await screen.findByRole('list', { name: 'Eventos de la campaña' });
     expect(screen.queryByTestId('andes-renderer')).toBeNull();
     expect(screen.getByText(/necesita WebGL2/)).toBeTruthy();
-    fireEvent.click(screen.getByRole('button', { name: /Ascenso/ }));
-    expect(screen.getByRole('region', { name: /Evento: Ascenso/ })).toBeTruthy();
+    fireEvent.click(screen.getByRole('button', { name: /Río de los Patos/ }));
+    expect(screen.getByRole('region', { name: /Evento: Río de los Patos/ })).toBeTruthy();
   });
 
   it('is one big stage with floating controls: the title is a heading and there is no carousel', async () => {
@@ -232,7 +228,7 @@ describe('Andes scene', () => {
     expect(year).toBeLessThan(2056);
     fireEvent.change(slider, { target: { value: '100' } });
     expect(useStore.getState().yearFloat).toBe(2056);
-    expect(screen.getByTestId('andes-renderer').getAttribute('data-day')).toBe('21');
+    expect(screen.getByTestId('andes-renderer').getAttribute('data-day')).toBe('24');
   });
 
   it('follows the clock with the percent too: more years, more crossing', async () => {
@@ -258,8 +254,12 @@ describe('Andes scene', () => {
     await screen.findByTestId('andes-renderer');
     const spo2 = () => Number(screen.getByTestId('andes-spo2').querySelector('.tile-value')!.textContent!.replace(/\D/g, ''));
     const low = spo2();
-    act(() => useStore.setState({ yearFloat: 1945 }));
-    const pass = spo2();
+    // the lowest saturation of the crossing, at the high pass
+    let pass = 100;
+    for (const year of [1900, 1920, 1940, 1960, 1980, 2000]) {
+      act(() => useStore.setState({ yearFloat: year }));
+      pass = Math.min(pass, spo2());
+    }
     expect(low).toBe(98);
     expect(pass).toBeLessThan(94);
     expect(pass).toBeGreaterThan(85);
@@ -277,7 +277,7 @@ describe('Andes scene', () => {
     const chart = within(side as HTMLElement).getByTestId('andes-profile');
     expect(chart.getAttribute('role')).toBe('img');
     expect(chart.getAttribute('aria-label')).toMatch(/Perfil de altitud del cruce/);
-    expect(chart.getAttribute('aria-label')).toMatch(/máximo de 3\.900 m/);
+    expect(chart.getAttribute('aria-label')).toMatch(/máximo de 3\.486 m/);
     expect(chart.getAttribute('data-progress')).toBe('0.000');
     const at = (year: number) => {
       act(() => useStore.setState({ yearFloat: year }));
@@ -349,7 +349,7 @@ describe('Andes scene', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Tabla de eventos' }));
     expect(screen.queryByTestId('andes-renderer')).toBeNull();
     const table = await screen.findByRole('table');
-    expect(within(table).getByText('Cumbre del paso (ilustrativo)')).toBeTruthy();
+    expect(within(table).getByText('Cuesta de Chacabuco (batalla)')).toBeTruthy();
   });
 
   it('shows a message and no blank screen when the data is invalid', async () => {

@@ -21,3 +21,4 @@ data/raw/_private/
 web/e2e/screenshots/
 web/playwright-report/
 web/test-results/
+.env.local

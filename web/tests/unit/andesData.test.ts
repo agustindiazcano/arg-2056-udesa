@@ -7,8 +7,8 @@ const mock = JSON.parse(readFileSync(new URL('../../../data/mock/andes_events.js
 describe('parseAndesEvents', () => {
   it('parses the mock file', () => {
     const events = parseAndesEvents(mock);
-    expect(events).toHaveLength(10);
-    expect(events[0]!.id).toBe('mock-andes-01');
+    expect(events).toHaveLength(11);
+    expect(events[0]!.id).toBe('andes-01');
   });
 
   it('throws with the reason when the data is invalid', () => {
@@ -65,13 +65,13 @@ describe('rangeText', () => {
 });
 
 describe('battleFacts', () => {
-  const [first, third] = [parseAndesEvents(mock)[0]!, parseAndesEvents(mock)[2]!];
+  const [first, third] = [parseAndesEvents(mock)[0]!, { ...parseAndesEvents(mock)[2]!, elevation_m: null }];
 
   it('lists the date, the place, the altitude and the forces of an event', () => {
     const facts = battleFacts(first);
     expect(facts.find((f) => f.label === 'Fecha')!.value).toMatch(/19 de enero de 1817/);
-    expect(facts.find((f) => f.label === 'Altitud')!.value).toBe('800 m');
-    expect(facts.find((f) => f.label === 'Lugar')!.value).toMatch(/32,9182° S/);
+    expect(facts.find((f) => f.label === 'Altitud')!.value).toBe('706 m');
+    expect(facts.find((f) => f.label === 'Lugar')!.value).toMatch(/32,8470° S/);
   });
 
   it('says the altitude is unknown, never 0 m, when it is null', () => {

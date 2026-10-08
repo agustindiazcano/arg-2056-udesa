@@ -15,13 +15,13 @@ export interface FigureColumn {
   /** scene units from the head of the column to the last figure */
   length: number;
   /** puts every figure at its place with the head of the column at arc length `leaderArc` of the path */
-  update: (leaderArc: number) => void;
+  update: (leaderArc: number, gaitPhase?: number, gaitAmount?: number) => void;
 }
 
 /**
  * The column of figures as ONE instanced mesh of boxes (the parts of `figureParts`, a color per instance). `ground` gives the
  * height of the terrain under a point, or null outside it (the figure then keeps the height of the route). Nothing is allocated
- * in `update`: the pose of a figure is a function of where it is on the route, so it marches as the days go by and stands still when they stop.
+ * in `update`: the pose of a figure is a function of where it is on the route, so it marches as the days go by and stands still when they stop (or, with a `gaitPhase`, at the pace of that clock).
  */
 export function createFigureColumn(count: number, path: Path, ground: (x: number, z: number) => number | null, figureScale = 1): FigureColumn {
   const slots: Slot[] = columnSlots(count);
@@ -44,7 +44,7 @@ export function createFigureColumn(count: number, path: Path, ground: (x: number
   const one = new Vector3(figureScale, figureScale, figureScale);  const up = new Vector3(0, 1, 0);
   const across = new Vector3(1, 0, 0);
 
-  const update = (leaderArc: number) => {
+  const update = (leaderArc: number, gaitPhase?: number, gaitAmount = 1) => {
     let i = 0;
     slots.forEach((slot, n) => {
       const s = leaderArc - slot.along;
@@ -53,7 +53,8 @@ export function createFigureColumn(count: number, path: Path, ground: (x: number
       const sin = Math.sin(sample.heading);
       const x = sample.x + cos * slot.lateral;
       const z = sample.z - sin * slot.lateral;
-      const g = gaitAt(slot.kind, s / STRIDE + n * PHASE_STEP);
+      // with a `gaitPhase` (strides, from a clock) the legs keep their own pace whatever the speed of the army; without it they follow the distance walked
+      const g = gaitAt(slot.kind, (gaitPhase ?? s / STRIDE) + n * PHASE_STEP, gaitAmount);
       position.set(x, (ground(x, z) ?? sample.y) + g.bob, z);
       base.compose(position, qHeading.setFromAxisAngle(up, sample.heading), one.setScalar(figureScale * slot.scale));
       for (const part of FIGURE_PARTS[slot.kind]) {

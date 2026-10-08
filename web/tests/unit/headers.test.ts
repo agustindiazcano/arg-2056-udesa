@@ -60,9 +60,9 @@ describe('headers.config.json: the Content-Security-Policy', () => {
       'default-src': ["'self'"],
       'script-src': ["'self'"],
       'style-src': ["'self'", "'unsafe-inline'"],
-      'img-src': ["'self'", 'data:', 'blob:'],
+      'img-src': ["'self'", 'data:', 'blob:', 'https://api.maptiler.com'],
       'font-src': ["'self'"],
-      'connect-src': ["'self'"],
+      'connect-src': ["'self'", 'https://api.maptiler.com'],
       'worker-src': ["'self'", 'blob:'],
       'object-src': ["'none'"],
       'base-uri': ["'self'"],
@@ -75,7 +75,8 @@ describe('headers.config.json: the Content-Security-Policy', () => {
     const text = rule('/*')!.headers['Content-Security-Policy']!;
     expect(text).not.toContain('unsafe-eval');
     expect(text).not.toMatch(/(^|\s)\*(\s|;|$)/);
-    expect(text).not.toMatch(/https?:/);
+    // the only outside origin is MapTiler (satellite imagery, terrain and fonts of the Andes map)
+    expect(text.replace(/https:\/\/api\.maptiler\.com/g, '')).not.toMatch(/https?:/);
   });
 
   it('explains the one loose directive: style-src needs unsafe-inline because ECharts writes inline styles', () => {
