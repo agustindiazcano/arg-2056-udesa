@@ -102,3 +102,16 @@ export function gaitPhaseAt(nowMs: number): number {
 export function gaitAmount(nowMs: number, lastMovedMs: number): number {
   return nowMs - lastMovedMs <= WALKING_GRACE_MS ? 1 : 0;
 }
+
+/** From this zoom on (and farther) the clock keeps its plain pace. */
+export const TIME_SCALE_FAR_ZOOM = 8;
+/** The clock never goes slower than this share of its pace, so the march never stops. */
+export const MIN_TIME_SCALE = 0.03;
+/** Octaves of slowdown per zoom level: 1 would keep the army at the same speed on the screen, 0 would not slow it at all. */
+const TIME_SCALE_PER_ZOOM = 0.6;
+
+/** How much of its pace the clock keeps at this zoom: the closer the camera, the slower the army and everything with it, so the march can be watched. */
+export function timeScaleForZoom(zoom: number): number {
+  if (zoom <= TIME_SCALE_FAR_ZOOM) return 1;
+  return Math.max(MIN_TIME_SCALE, 2 ** (-TIME_SCALE_PER_ZOOM * (zoom - TIME_SCALE_FAR_ZOOM)));
+}

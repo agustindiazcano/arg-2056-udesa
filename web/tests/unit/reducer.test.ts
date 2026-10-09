@@ -135,6 +135,13 @@ describe('Reducer', () => {
       expect(next).toBe(initialState); // Same object reference expected since immutable and no changes
     });
 
+    it('scales the pace of the clock with timeScale (closer on the map, slower), and 1 is the plain pace', () => {
+      const state = { ...initialState, playing: true, yearFloat: 2000, speed: 1 };
+      expect(tick(state, 0.5, 0.5).yearFloat).toBe(2000.5);
+      expect(tick(state, 0.5, 1).yearFloat).toBe(2001);
+      expect(tick(state, 0.5).yearFloat).toBe(2001);
+    });
+
     it('advances yearFloat if playing', () => {
       const state = { ...initialState, playing: true, yearFloat: 2000, speed: 1 };
       // speed 1 * YEARS_PER_SECOND(2) * dt(0.5) = 1.0 year advance

@@ -1,0 +1,94 @@
+/* The loading screen of the Andes: sky, drifting clouds and the title. Leaves in 1.3 s (INTRO_FADE_MS in AndesIntro.tsx). */
+.andes-intro {
+  position: absolute;
+  inset: 0;
+  z-index: 30;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  pointer-events: none;
+  background: linear-gradient(180deg, #16315a 0%, #3f6fa8 55%, #a9c8e6 100%);
+  transition: opacity 0.5s ease 0.8s;
+}
+
+.andes-intro.is-leaving {
+  opacity: 0;
+}
+
+.andes-cloud {
+  position: absolute;
+  width: 46vw;
+  height: 22vh;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgb(255 255 255 / 0.95), rgb(255 255 255 / 0.55) 55%, rgb(255 255 255 / 0));
+  filter: blur(14px);
+  opacity: 0.9;
+  transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: andes-drift 24s ease-in-out infinite alternate;
+}
+
+.andes-cloud-a { top: 6%; left: -10%; animation-duration: 26s; }
+.andes-cloud-b { top: 22%; left: 52%; width: 52vw; animation-duration: 31s; animation-direction: alternate-reverse; }
+.andes-cloud-c { top: 44%; left: -14%; width: 58vw; height: 26vh; animation-duration: 29s; }
+.andes-cloud-d { top: 58%; left: 48%; animation-duration: 23s; animation-direction: alternate-reverse; }
+.andes-cloud-e { top: 76%; left: 6%; width: 54vw; animation-duration: 33s; }
+.andes-cloud-f { top: 84%; left: 56%; width: 50vw; animation-duration: 27s; animation-direction: alternate-reverse; }
+
+@keyframes andes-drift {
+  from { translate: -4vw 0; }
+  to { translate: 6vw 1.5vh; }
+}
+
+/* leaving: the clouds on the left go left and the ones on the right go right */
+.andes-intro.is-leaving .andes-cloud-a,
+.andes-intro.is-leaving .andes-cloud-c,
+.andes-intro.is-leaving .andes-cloud-e {
+  transform: translateX(-120vw);
+}
+
+.andes-intro.is-leaving .andes-cloud-b,
+.andes-intro.is-leaving .andes-cloud-d,
+.andes-intro.is-leaving .andes-cloud-f {
+  transform: translateX(120vw);
+}
+
+.andes-intro-title {
+  position: relative;
+  margin: 0;
+  color: #fff;
+  font-size: clamp(2.2rem, 7vw, 5.5rem);
+  font-weight: 300;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-shadow: 0 2px 24px rgb(10 25 50 / 0.55);
+  animation: andes-title-in 1.4s ease-out both;
+  transition: opacity 0.5s ease, transform 1.2s ease;
+}
+
+.andes-intro.is-leaving .andes-intro-title {
+  opacity: 0;
+  transform: scale(1.08);
+}
+
+@keyframes andes-title-in {
+  from { opacity: 0; transform: translateY(14px) scale(0.98); letter-spacing: 0.3em; }
+  to { opacity: 1; transform: none; letter-spacing: 0.14em; }
+}
+
+.andes-intro.is-still .andes-cloud,
+.andes-intro.is-still .andes-intro-title {
+  animation: none;
+  transition: none;
+}
+
+.andes-intro.is-still {
+  transition: opacity 0.25s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .andes-cloud,
+  .andes-intro-title {
+    animation: none;
+    transition: none;
+  }
+}

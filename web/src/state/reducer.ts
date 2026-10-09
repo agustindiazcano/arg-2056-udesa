@@ -157,11 +157,12 @@ export function reduce(state: State, action: Action, steps: StepsByScene = STEPS
   }
 }
 
-export function tick(state: State, dtSeconds: number): State {
+/** `timeScale` slows (or speeds) the clock without touching the speed the reader chose: the Andes map uses it to go slower the closer the camera is. */
+export function tick(state: State, dtSeconds: number, timeScale = 1): State {
   if (!state.playing) return state;
   if (dtSeconds < 0 || Number.isNaN(dtSeconds)) return state;
 
-  let newYear = state.yearFloat + state.speed * YEARS_PER_SECOND * dtSeconds;
+  let newYear = state.yearFloat + state.speed * timeScale * YEARS_PER_SECOND * dtSeconds;
   let playing: boolean = state.playing;
 
   if (newYear >= YEAR_MAX) {

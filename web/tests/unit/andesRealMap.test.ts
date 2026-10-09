@@ -10,6 +10,9 @@ import {
   coordAtKm,
   figuresVisible,
   gaitAmount,
+  MIN_TIME_SCALE,
+  TIME_SCALE_FAR_ZOOM,
+  timeScaleForZoom,
   gaitPhaseAt,
   STRIDES_PER_SECOND,
   WALKING_GRACE_MS,
@@ -137,5 +140,24 @@ describe('gait', () => {
   it('walks while the position changed a moment ago and stands otherwise', () => {
     expect(gaitAmount(1000, 1000 - WALKING_GRACE_MS)).toBe(1);
     expect(gaitAmount(1000, 1000 - WALKING_GRACE_MS - 1)).toBe(0);
+  });
+});
+
+describe('timeScaleForZoom', () => {
+  it('is 1 from far away: the clock runs at its plain pace', () => {
+    expect(timeScaleForZoom(TIME_SCALE_FAR_ZOOM)).toBe(1);
+    expect(timeScaleForZoom(5)).toBe(1);
+  });
+
+  it('gets smaller the closer the camera is, so the march can be seen', () => {
+    const near = timeScaleForZoom(12);
+    const nearer = timeScaleForZoom(14.5);
+    expect(near).toBeLessThan(1);
+    expect(nearer).toBeLessThan(near);
+  });
+
+  it('never stops the clock: it has a floor', () => {
+    expect(timeScaleForZoom(30)).toBe(MIN_TIME_SCALE);
+    expect(MIN_TIME_SCALE).toBeGreaterThan(0);
   });
 });

@@ -12,7 +12,7 @@ import type { CameraMode } from './camera';
 import { createFigureColumn } from './figures3d';
 import type { FigureColumn } from './figures3d';
 import type { Graphics } from './graphics';
-import { FIGURE_MIN_ZOOM, cameraFor, coordAtKm, figuresVisible, gaitAmount, gaitPhaseAt, metersPerUnit } from './mapGeo';
+import { FIGURE_MIN_ZOOM, cameraFor, coordAtKm, figuresVisible, gaitAmount, gaitPhaseAt, metersPerUnit, timeScaleForZoom } from './mapGeo';
 import { arcAt, buildPath } from './pathAlong';
 import type { Path } from './pathAlong';
 import { positionAt } from './timeline';
@@ -46,6 +46,10 @@ export interface MapLibreRendererProps {
   graphics: Graphics;
   closeUp: number;
   onSelect: (id: string | null) => void;
+  /** the clock keeps this share of its pace: smaller the closer the camera is (called when it changes, and with 1 when the map goes away) */
+  onTimeScale?: (scale: number) => void;
+  /** the map has its first image: the loading screen can leave */
+  onReady?: () => void;
   label: string;
 }
 
@@ -220,7 +224,7 @@ class ArmyLayer implements CustomLayerInterface {
 }
 
 /** Real map of the crossing: MapTiler satellite imagery draped on the MapTiler terrain (real relief), the route and its places, and the army as miniatures on it. */
-export function MapLibreRenderer({ route, columns, day, selectedId, camera, graphics, closeUp, onSelect, label }: MapLibreRendererProps) {
+export function MapLibreRenderer({ route, columns, day, selectedId, camera, graphics, closeUp, onSelect, onTimeScale, onReady, label }: MapLibreRendererProps) {
   const hostRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<MapLibreMap | null>(null);
   const layerRef = useRef<ArmyLayer | null>(null);
@@ -228,6 +232,9 @@ export function MapLibreRenderer({ route, columns, day, selectedId, camera, grap
   const dayRef = useRef(day);
   const cameraRef = useRef(camera);
   const onSelectRef = useRef(onSelect);
+  const onTimeScaleRef = useRef(onTimeScale);
+  const onReadyRef = useRef(onReady);
+  const lastScaleRef = useRef(1);
   const [missingKey] = useState(MAPTILER_KEY === '');
   const position = positionAt(route, day);
   const km = position?.distanceKm ?? 0;
@@ -235,6 +242,8 @@ export function MapLibreRenderer({ route, columns, day, selectedId, camera, grap
   dayRef.current = day;
   cameraRef.current = camera;
   onSelectRef.current = onSelect;
+  onTimeScaleRef.current = onTimeScale;
+  onReadyRef.current = onReady;
   kmRef.current = km;
 
   const syncArmy = () => {
@@ -366,7 +375,18 @@ export function MapLibreRenderer({ route, columns, day, selectedId, camera, grap
       map.getCanvas().style.cursor = '';
     });
     map.on('error', (e) => console.warn('[andes map]', e.error?.message ?? e));
-    map.on('zoom', () => syncArmyRef.current());
+    const scaleClock = () => {
+      const scale = timeScaleForZoom(map.getZoom());
+      if (Math.abs(scale - lastScaleRef.current) < 0.005) return;
+      lastScaleRef.current = scale;
+      onTimeScaleRef.current?.(scale);
+    };
+    map.on('zoom', () => {
+      syncArmyRef.current();
+      scaleClock();
+    });
+    map.once('idle', () => onReadyRef.current?.());
+    scaleClock();
     const publish = () => {
       host.dataset.zoom = map.getZoom().toFixed(2);
       host.dataset.pitch = map.getPitch().toFixed(1);
@@ -377,6 +397,8 @@ export function MapLibreRenderer({ route, columns, day, selectedId, camera, grap
 
     return () => {
       readyRef.current = false;
+      lastScaleRef.current = 1;
+      onTimeScaleRef.current?.(1);
       map.remove();
       mapRef.current = null;
       layerRef.current = null;

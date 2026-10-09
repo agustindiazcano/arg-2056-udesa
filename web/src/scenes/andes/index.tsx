@@ -18,6 +18,7 @@ import type { AndesEvent } from './data.js';
 import { EventList, EventPanel } from './Panel.js';
 import type { CameraMode } from './camera.js';
 import { AltitudeProfile } from './AltitudeProfile.js';
+import { AndesIntro } from './AndesIntro.js';
 import { GraphicsMenu } from './GraphicsMenu.js';
 import { loadToggles, resolveGraphics, saveToggles } from './graphics.js';
 import type { GraphicsToggles } from './graphics.js';
@@ -70,6 +71,8 @@ export default function Scene() {
   const crossed = pace.progress(yearFloat);
   const percent = Math.round(crossed * 100);
   const dispatch = useStore((s) => s.dispatch);
+  const setTimeScale = useStore((s) => s.setTimeScale);
+  const [mapReady, setMapReady] = useState(false);
 
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [view, setView] = useState<'map' | 'table'>('map');
@@ -125,6 +128,8 @@ export default function Scene() {
           graphics={graphics}
           closeUp={closeUp}
           onSelect={(id) => (id === null ? close() : select(id))}
+          onTimeScale={setTimeScale}
+          onReady={() => setMapReady(true)}
           label={label}
         />
       </Suspense>
@@ -138,6 +143,7 @@ export default function Scene() {
 
   const stage = (
     <div className="andes-stage">
+      <AndesIntro ready={mapReady || view === 'table'} />
       <div className="andes-canvas">
         {view === 'map' ? (
           map
