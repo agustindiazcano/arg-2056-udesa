@@ -1,13 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { MercatorCoordinate, Map as MapLibreMap, setWorkerUrl } from 'maplibre-gl';
 import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?url';
-import type { CustomLayerInterface, CustomRenderMethodInput, GeoJSONSource, MapLayerMouseEvent } from 'maplibre-gl';
+import type { CustomLayerInterface, CustomRenderMethodInput, GeoJSONSource, MapLayerMouseEvent, SymbolLayerSpecification } from 'maplibre-gl';
 import { AmbientLight, Color, DirectionalLight, InstancedMesh, Matrix4, MeshStandardMaterial, PerspectiveCamera, Quaternion, Scene, SphereGeometry, Vector3, WebGLRenderer } from 'three';
 import { QUALITY_PRESETS } from '../../runtime/capabilities';
 import { NavControls } from '../../ui/NavControls';
 import { figureCount, startingMen } from './column';
 import type { CameraApi, CameraView } from './cameraKeyframes';
 import { columnColor, positionOfColumn } from './columns';
+import { RegionMinimap } from './RegionMinimap';
 import type { Column } from './columns';
 import type { CameraMode } from './camera';
 import { createFigureColumn } from './figures3d';
@@ -15,6 +16,7 @@ import type { FigureColumn } from './figures3d';
 import type { Graphics } from './graphics';
 import { FIGURE_MIN_ZOOM, cameraFor, coordAtKm, figuresVisible, gaitAmount, gaitPhaseAt, metersPerPixel, metersPerUnit, mixHex, timeScaleForZoom, WASD_SHIFT_FACTOR, WASD_SPEED_PX, wasdDelta } from './mapGeo';
 import { arcAt, buildPath } from './pathAlong';
+import { distanceKm } from './timeline';
 import { useReducedMotion } from '../../runtime/useReducedMotion';
 import { ANDES_FINAL_VIEW, ANDES_TOUR, SPOT_VIEW, TOUR_HOLD_MS, tourDurationMs, tourPoseAt } from './tour';
 import {
@@ -26,8 +28,10 @@ import {
   ballPositions,
   ballSpacingKm,
   beamGeometry,
+  figureMen,
   forceLabel,
   forceMen,
+  forceShortLabel,
   isSmallForce,
   placeLabel,
   spotlightDimAt,
@@ -92,6 +96,8 @@ const SKY_DARK = { 'sky-color': '#0b1830', 'horizon-color': '#1c2f4d', 'fog-colo
 const SPOT_RADIUS_PX = 96;
 /** How strong the light is (0 to 1): soft, so the dark map still reads under it. */
 const SPOT_LIGHT = 0.55;
+/** From this zoom on the groups carry their whole text (commanders, men, units); before it only their role. */
+const FULL_LABEL_ZOOM = 9.4;
 /** How the camera frames a force the reader chose: close enough to see its balls and its name, at an angle. */
 const FORCE_VIEW = { zoom: 9.6, pitch: 62 };
 
@@ -125,6 +131,8 @@ const SMALL_BALL_PX = 4.5;
 /** The local frame of the balls is centered here: the middle of the crossing. */
 const BALLS_ORIGIN: [number, number] = [-69.8, -32];
 const MAX_BALLS = 64;
+/** How much bigger the spheres are while the spotlight is on. */
+const SPOT_BALL_FACTOR = 2.6;
 
 /**
  * The balls of the far view as real spheres: a MapLibre custom layer drawn by Three.js (lit, with a little glow of their own so they read on the dark
@@ -149,8 +157,16 @@ class BallsLayer implements CustomLayerInterface {
   private readonly color = new Color();
   private readonly noTurn = new Quaternion();
 
+  private emphasized = false;
+
   setBalls(balls: Ball[]): void {
     this.balls = balls;
+    this.map?.triggerRepaint();
+  }
+
+  /** Bigger spheres while the spotlight goes over the forces, so they can be seen from far above. */
+  setEmphasis(on: boolean): void {
+    this.emphasized = on;
     this.map?.triggerRepaint();
   }
 
@@ -191,7 +207,7 @@ class BallsLayer implements CustomLayerInterface {
     for (let i = 0; i < n; i += 1) {
       const b = this.balls[i]!;
       const mc = MercatorCoordinate.fromLngLat([b.lon, b.lat], 0);
-      const radius = ((b.small ? SMALL_BALL_PX : BALL_PX) / 2) * mpp;
+      const radius = ((b.small ? SMALL_BALL_PX : BALL_PX) * (this.emphasized ? SPOT_BALL_FACTOR : 1) / 2) * mpp;
       const ground = map.queryTerrainElevation([b.lon, b.lat]) ?? 0;
       this.at.set((mc.x - originMc.x) / scale, ground + radius, (mc.y - originMc.y) / scale);
       this.instance.compose(this.at, this.noTurn, this.one.setScalar(radius));
@@ -214,7 +230,7 @@ function columnsGeoJson(columns: readonly Column[], day: number, main?: { route:
   const lines: GeoJSON.Feature[] = [];
   const balls: GeoJSON.Feature[] = [];
   for (const c of columns) {
-    const properties = { id: c.id, label: forceLabel(c.id), color: columnColor(c.id) };
+    const properties = { id: c.id, label: forceLabel(c.id), short: forceShortLabel(c.id), color: columnColor(c.id) };
     lines.push({ type: 'Feature', properties, geometry: { type: 'LineString', coordinates: c.route.points.map((p) => [p.lon, p.lat]) } });
     const at = positionOfColumn(c, day);
     if (at) balls.push({ type: 'Feature', properties, geometry: { type: 'Point', coordinates: [at.lon, at.lat] } });
@@ -222,7 +238,7 @@ function columnsGeoJson(columns: readonly Column[], day: number, main?: { route:
   // the main force carries its text too, at the head of its group
   if (main) {
     const head = coordAtKm(main.route, main.km);
-    balls.push({ type: 'Feature', properties: { id: MAIN_FORCE_ID, label: forceLabel(MAIN_FORCE_ID), color: MAIN_COLOR }, geometry: { type: 'Point', coordinates: [head.lon, head.lat] } });
+    balls.push({ type: 'Feature', properties: { id: MAIN_FORCE_ID, label: forceLabel(MAIN_FORCE_ID), short: forceShortLabel(MAIN_FORCE_ID), color: MAIN_COLOR }, geometry: { type: 'Point', coordinates: [head.lon, head.lat] } });
   }
   return { lines: { type: 'FeatureCollection', features: lines }, balls: { type: 'FeatureCollection', features: balls } };
 }
@@ -260,7 +276,7 @@ function routeGeoJson(route: Route, uptoKm: number): { all: GeoJSON.FeatureColle
  * height of the map's own terrain.
  */
 class ArmyLayer implements CustomLayerInterface {
-  readonly id = 'army-figures';
+  readonly id: string;
   readonly type = 'custom' as const;
   readonly renderingMode = '3d' as const;
   /** called when a frame wants the next one (the figures move with the days) */
@@ -291,8 +307,11 @@ class ArmyLayer implements CustomLayerInterface {
 
   constructor(
     private readonly route: Route,
-    private readonly count: number
-  ) {}
+    private readonly count: number,
+    id = 'army-figures'
+  ) {
+    this.id = id;
+  }
 
   onAdd(map: MapLibreMap, gl: WebGLRenderingContext | WebGL2RenderingContext): void {
     this.map = map;
@@ -387,6 +406,7 @@ export function MapLibreRenderer({ route, columns, day, selectedId, camera, grap
   const hostRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<MapLibreMap | null>(null);
   const layerRef = useRef<ArmyLayer | null>(null);
+  const otherArmiesRef = useRef<Array<{ id: string; layer: ArmyLayer }>>([]);
   const ballsRef = useRef<BallsLayer | null>(null);
   const readyRef = useRef(false);
   const dayRef = useRef(day);
@@ -402,6 +422,7 @@ export function MapLibreRenderer({ route, columns, day, selectedId, camera, grap
   const tookOverRef = useRef(false);
   const stopTourRef = useRef<() => void>(() => undefined);
   const beamRef = useRef<SVGSVGElement>(null);
+  const [mainMap, setMainMap] = useState<MapLibreMap | null>(null);
   const cardRef = useRef<HTMLElement>(null);
   const bigRef = useRef<HTMLDivElement>(null);
   const [card, setCard] = useState<{ force: ForceInfo; place: string } | null>(null);
@@ -457,11 +478,24 @@ export function MapLibreRenderer({ route, columns, day, selectedId, camera, grap
     (map.getSource('columns-balls') as GeoJSONSource | undefined)?.setData(columnsGeoJson(columns, dayRef.current, { route, km: k }).balls);
     (map.getSource('route-done') as GeoJSONSource | undefined)?.setData(g.done);
     (map.getSource('places') as GeoJSONSource | undefined)?.setData(g.places);
-    const wantFigures = figuresVisible(map.getZoom(), layer.active);
+    const zoom = map.getZoom();
+    const wantFigures = figuresVisible(zoom, layer.active);
     layer.active = wantFigures;
-    // up close the main force is its figures, so its balls go; the other forces always have theirs
-    const balls = forceBalls(route, k, columnsRef.current, dayRef.current, map.getZoom(), map.getCenter().lat);
-    ballsRef.current?.setBalls(wantFigures ? balls.filter((ball) => ball.id !== MAIN_FORCE_ID) : balls);
+    // the other forces show their figures too, up close and only when the camera is near them
+    const centre = map.getCenter();
+    const withFigures = new Set<string>(wantFigures ? [MAIN_FORCE_ID] : []);
+    for (const { id, layer: other } of otherArmiesRef.current) {
+      const column = columnsRef.current.find((q) => q.id === id);
+      const at = column ? positionOfColumn(column, dayRef.current) : null;
+      if (!column || !at) continue;
+      other.km = at.distanceKm;
+      const near = distanceKm(centre.lng, centre.lat, at.lon, at.lat) < 60;
+      other.active = figuresVisible(zoom, other.active) && near;
+      if (other.active) withFigures.add(id);
+    }
+    // a force that shows its figures has no balls
+    const balls = forceBalls(route, k, columnsRef.current, dayRef.current, zoom, centre.lat);
+    ballsRef.current?.setBalls(balls.filter((ball) => !withFigures.has(ball.id)));
     map.triggerRepaint();
   };
   const syncArmyRef = useRef(syncArmy);
@@ -491,9 +525,15 @@ export function MapLibreRenderer({ route, columns, day, selectedId, camera, grap
       canvasContextAttributes: { antialias: true }
     });
     mapRef.current = map;
+    setMainMap(map);
     if (import.meta.env.DEV) (window as unknown as { __andesMap?: MapLibreMap }).__andesMap = map; // for looking at the map from the console while developing
     const layer = new ArmyLayer(route, figureCount(startingMen(route.points), QUALITY_PRESETS[graphics.tier].particleScale).count);
     layerRef.current = layer;
+    const particleScale = QUALITY_PRESETS[graphics.tier].particleScale;
+    otherArmiesRef.current = columns.map((c) => ({
+      id: c.id,
+      layer: new ArmyLayer(c.route, figureCount(figureMen(c.id, forceMen(c.route.points)), particleScale).count, `army-figures-${c.id}`)
+    }));
 
     map.on('load', () => {
       if (!missingKey) {
@@ -541,21 +581,23 @@ export function MapLibreRenderer({ route, columns, day, selectedId, camera, grap
         id: 'places-label',
         type: 'symbol',
         source: 'places',
-        layout: { 'text-field': ['get', 'name'], 'text-font': ['Noto Sans Bold'], 'text-size': 13, 'text-offset': [0, 1.1], 'text-anchor': 'top', 'text-optional': true },
-        paint: { 'text-color': '#ffffff', 'text-halo-color': '#0b1220', 'text-halo-width': 1.8 }
+        layout: { 'text-field': ['get', 'name'], 'text-font': ['Noto Sans Bold'], 'text-size': 14, 'text-offset': [0, 1.1], 'text-anchor': 'top', 'text-allow-overlap': true, 'text-ignore-placement': true },
+        paint: { 'text-color': '#ffffff', 'text-halo-color': '#0b1220', 'text-halo-width': 2.2 }
       });
-      map.addLayer({
-        id: 'columns-label',
-        type: 'symbol',
-        source: 'columns-balls',
-        layout: { 'text-field': ['get', 'label'], 'text-font': ['Noto Sans Bold'], 'text-size': 12, 'text-offset': [0, -2.1], 'text-anchor': 'bottom', 'text-justify': 'center', 'text-allow-overlap': true, 'text-ignore-placement': true },
-        paint: { 'text-color': ['get', 'color'], 'text-halo-color': '#0b1220', 'text-halo-width': 1.8 }
-      });
+      // the names of the groups: only the role from far away (where the commanders and the units would pile up), the whole text from this zoom on
+      const labelLayout = { 'text-font': ['Noto Sans Bold'], 'text-size': 12, 'text-offset': [0, -2.1] as [number, number], 'text-anchor': 'bottom' as const, 'text-justify': 'center' as const, 'text-allow-overlap': true, 'text-ignore-placement': true };
+      const labelPaint: SymbolLayerSpecification['paint'] = { 'text-color': ['get', 'color'], 'text-halo-color': '#0b1220', 'text-halo-width': 1.8 };
+      map.addLayer({ id: 'columns-label', type: 'symbol', source: 'columns-balls', maxzoom: FULL_LABEL_ZOOM, layout: { ...labelLayout, 'text-field': ['get', 'short'] }, paint: labelPaint });
+      map.addLayer({ id: 'columns-label-full', type: 'symbol', source: 'columns-balls', minzoom: FULL_LABEL_ZOOM, layout: { ...labelLayout, 'text-field': ['get', 'label'] }, paint: labelPaint });
       // the figures and the spheres go under the names of the groups, so no name is hidden by the units it names
       map.addLayer(layer, 'columns-label');
+      for (const { layer: other } of otherArmiesRef.current) map.addLayer(other, 'columns-label');
       const balls = new BallsLayer();
       ballsRef.current = balls;
       map.addLayer(balls, 'columns-label');
+      // the names of the places are the most important text of the map: they go over everything else, the names of the groups and the 3D models included
+      map.moveLayer('places-dot');
+      map.moveLayer('places-label');
       readyRef.current = true;
       syncArmyRef.current();
       aim(cameraRef.current, 0);
@@ -572,18 +614,20 @@ export function MapLibreRenderer({ route, columns, day, selectedId, camera, grap
       map.getCanvas().style.cursor = '';
     });
     // a click on the name of a force goes to it, like its button
-    map.on('click', 'columns-label', (e: MapLayerMouseEvent) => {
+    for (const labelLayer of ['columns-label', 'columns-label-full']) {
+    map.on('click', labelLayer, (e: MapLayerMouseEvent) => {
       const id = e.features?.[0]?.properties?.id;
       if (typeof id !== 'string') return;
       flyToForceRef.current(id);
       onFocusForceRef.current?.(id);
     });
-    map.on('mouseenter', 'columns-label', () => {
+    map.on('mouseenter', labelLayer, () => {
       map.getCanvas().style.cursor = 'pointer';
     });
-    map.on('mouseleave', 'columns-label', () => {
+    map.on('mouseleave', labelLayer, () => {
       map.getCanvas().style.cursor = '';
     });
+    }
     map.on('error', (e) => console.warn('[andes map]', e.error?.message ?? e));
     const scaleClock = () => {
       const scale = timeScaleForZoom(map.getZoom());
@@ -640,6 +684,7 @@ export function MapLibreRenderer({ route, columns, day, selectedId, camera, grap
       lastScaleRef.current = 1;
       onTimeScaleRef.current?.(1);
       if (cameraApi) cameraApi.current = null;
+      setMainMap(null);
       map.remove();
       mapRef.current = null;
       layerRef.current = null;
@@ -756,9 +801,9 @@ export function MapLibreRenderer({ route, columns, day, selectedId, camera, grap
         });
       }
     };
-    // the other names of the map stay out of the way while the spotlight names a force
+    // the names of the groups stay out of the way while the spotlight names a force (the names of the places stay)
     const showOtherNames = (visible: boolean) => {
-      for (const id of ['places-label', 'columns-label']) if (map.getLayer(id)) map.setLayoutProperty(id, 'visibility', visible ? 'visible' : 'none');
+      for (const id of ['columns-label', 'columns-label-full']) if (map.getLayer(id)) map.setLayoutProperty(id, 'visibility', visible ? 'visible' : 'none');
     };
     // the card with the force, its place, its commanders and its numbers, to the right of the light on a rounded box, so no other text gets in the way
     const drawCard = (at: [number, number] | null, o: number) => {
@@ -782,6 +827,7 @@ export function MapLibreRenderer({ route, columns, day, selectedId, camera, grap
       el.style.transform = `translate(${Math.max(12, left)}px, ${top}px)`;
     };
     showOtherNames(false);
+    ballsRef.current?.setEmphasis(true);
     let raf = 0;
     let shown = -2;
     let finalStarted = false;
@@ -795,6 +841,7 @@ export function MapLibreRenderer({ route, columns, day, selectedId, camera, grap
       setCard(null);
       setDim(0);
       showOtherNames(true);
+      ballsRef.current?.setEmphasis(false);
     };
     const frame = (now: number) => {
       const state = spotlightStateAt(now - t0);
@@ -811,6 +858,7 @@ export function MapLibreRenderer({ route, columns, day, selectedId, camera, grap
           drawCard(null, 0);
           setCard(null);
           showOtherNames(true);
+          ballsRef.current?.setEmphasis(false);
           map.flyTo({
             center: [ANDES_FINAL_VIEW.lon, ANDES_FINAL_VIEW.lat],
             zoom: ANDES_FINAL_VIEW.zoom,
@@ -1038,6 +1086,19 @@ export function MapLibreRenderer({ route, columns, day, selectedId, camera, grap
           Falta la clave de MapTiler (VITE_MAPTILER_KEY): sin ella no hay mapa satelital ni relieve.
         </p>
       )}
+      <RegionMinimap
+        main={mainMap}
+        route={route}
+        km={km}
+        columns={columns}
+        day={day}
+        styleUrl={missingKey ? null : STYLE_URL}
+        onGo={(lng, lat) => {
+          tookOverRef.current = true;
+          stopAnimations();
+          mapRef.current?.easeTo({ center: [lng, lat], duration: 900, essential: true });
+        }}
+      />
       <NavControls
         onZoomIn={() => mapRef.current?.zoomIn({ duration: 400 })}
         onZoomOut={() => mapRef.current?.zoomOut({ duration: 400 })}

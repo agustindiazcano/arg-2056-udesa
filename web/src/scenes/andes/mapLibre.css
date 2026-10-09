@@ -109,3 +109,18 @@
   pointer-events: none;
   will-change: transform, opacity;
 }
+
+/* The minimap of the region, in the corner next to the side panel. */
+.andes-mm {
+  position: absolute;
+  right: calc(var(--side-w, 0px) + var(--space-md));
+  bottom: calc(var(--bar-h, 0px) + var(--space-md));
+  z-index: 5;
+  width: 150px;
+  height: 230px;
+  overflow: hidden;
+  border: 1.5px solid rgb(255 255 255 / 0.55);
+  border-radius: var(--radius-md, 12px);
+  box-shadow: 0 6px 22px rgb(0 0 0 / 0.45);
+  cursor: crosshair;
+}

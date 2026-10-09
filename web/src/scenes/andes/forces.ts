@@ -150,6 +150,19 @@ export function forceLabel(id: string): string {
   return `${facts.short}\n${facts.leaders}\n${numbers}\n${facts.battalions}`;
 }
 
+/** Just the role of the group: what shows on the map from far away, where the commanders and the units would pile up. */
+export function forceShortLabel(id: string): string {
+  return FORCE_FACTS[id]?.short ?? '';
+}
+
+/** The infantry of each force as a number, where the sources give it (a range counts at its middle): the figures up close stand for it. */
+const FORCE_INFANTRY: Readonly<Record<string, number>> = { 'las-heras': 683, zelada: 50, freire: 78 };
+
+/** The men the figures of a force stand for: its infantry when the sources give it, otherwise all its men; null when there is nothing. */
+export function figureMen(id: string, men: number | null): number | null {
+  return FORCE_INFANTRY[id] ?? men;
+}
+
 /** Where a force is on a day, in words: the place when it is at one, and from where to where when it is on the way. */
 export function placeLabel(route: Route, day: number): string {
   const at = positionAt(route, day);

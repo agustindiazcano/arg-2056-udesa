@@ -9,6 +9,8 @@ import {
   FORCES,
   FORCE_FACTS,
   forceLabel,
+  forceShortLabel,
+  figureMen,
   SPOTLIGHT_END_MS,
   SPOT_STEPS,
   ballCount,
@@ -333,5 +335,32 @@ describe('ballPositions', () => {
 
   it('has no balls for a count of zero', () => {
     expect(ballPositions(route, 5, 0, 5)).toEqual([]);
+  });
+});
+
+describe('forceShortLabel', () => {
+  it('is only the role of the group, without commanders or units, so it is short from far away', () => {
+    expect(forceShortLabel('main')).toBe('Fuerza principal');
+    expect(forceShortLabel('las-heras')).toBe('Artillería y logística');
+    expect(forceShortLabel('nobody')).toBe('');
+    for (const f of FORCES) expect(forceShortLabel(f.id)).not.toContain('\n');
+  });
+});
+
+describe('figureMen', () => {
+  it('is the infantry of the force when the sources give it, so the figures up close stand for its infantry', () => {
+    expect(figureMen('las-heras', 1235)).toBe(683);
+    expect(figureMen('zelada', 130)).toBe(50);
+    expect(figureMen('freire', 100)).toBe(78);
+  });
+
+  it('is the men of the force when the infantry is not known', () => {
+    expect(figureMen('cabot', 140)).toBe(140);
+    expect(figureMen('lemos', 55)).toBe(55);
+    expect(figureMen('main', 3987)).toBe(3987);
+  });
+
+  it('is null when there is nothing', () => {
+    expect(figureMen('cabot', null)).toBeNull();
   });
 });
