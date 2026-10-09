@@ -17,7 +17,8 @@ import {
   STRIDES_PER_SECOND,
   WALKING_GRACE_MS,
   metersPerPixel,
-  metersPerUnit
+  metersPerUnit,
+  mixHex
 } from '../../src/scenes/andes/mapGeo';
 
 const ev = (id: string, day: number, lon: number, lat: number): AndesEvent => ({
@@ -159,5 +160,18 @@ describe('timeScaleForZoom', () => {
   it('never stops the clock: it has a floor', () => {
     expect(timeScaleForZoom(30)).toBe(MIN_TIME_SCALE);
     expect(MIN_TIME_SCALE).toBeGreaterThan(0);
+  });
+});
+
+describe('mixHex', () => {
+  it('goes from one color to the other', () => {
+    expect(mixHex('#000000', '#ffffff', 0)).toBe('#000000');
+    expect(mixHex('#000000', '#ffffff', 1)).toBe('#ffffff');
+    expect(mixHex('#102030', '#305070', 0.5)).toBe('#203850');
+  });
+
+  it('stays between the two colors for a t outside 0 to 1', () => {
+    expect(mixHex('#102030', '#305070', -3)).toBe('#102030');
+    expect(mixHex('#102030', '#305070', 9)).toBe('#305070');
   });
 });

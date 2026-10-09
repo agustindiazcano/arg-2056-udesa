@@ -17,6 +17,12 @@ export const ANDES_TOUR: readonly TourStop[] = [
   { name: 'Mendoza', lon: -69.0816, lat: -32.89267, zoom: 8.32, pitch: 72.5, bearing: -18.6 }
 ];
 
+/** Where the camera ends, over the main force, after the spotlight: the point the reader saved. */
+export const ANDES_FINAL_VIEW: CameraView = { lon: -68.83449, lat: -32.80341, zoom: 12.14, pitch: 75.5, bearing: -33.8 };
+
+/** How the camera frames each force while its light is on: the same height and angle for all, centered on the force. */
+export const SPOT_VIEW = { zoom: 8.2, pitch: 62, bearing: -20.2 };
+
 /** How long the camera stays on the first view, when the loading screen has left, before it starts to move. */
 export const TOUR_HOLD_MS = 1000;
 

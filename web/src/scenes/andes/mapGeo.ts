@@ -103,6 +103,14 @@ export function gaitAmount(nowMs: number, lastMovedMs: number): number {
   return nowMs - lastMovedMs <= WALKING_GRACE_MS ? 1 : 0;
 }
 
+/** The color between two `#rrggbb` colors: `t` 0 gives `from`, 1 gives `to`. */
+export function mixHex(from: string, to: string, t: number): string {
+  const k = Math.min(1, Math.max(0, t));
+  const channel = (hex: string, i: number) => parseInt(hex.slice(1 + 2 * i, 3 + 2 * i), 16);
+  const out = [0, 1, 2].map((i) => Math.round(channel(from, i) + (channel(to, i) - channel(from, i)) * k));
+  return `#${out.map((v) => v.toString(16).padStart(2, '0')).join('')}`;
+}
+
 /** From this zoom on (and farther) the clock keeps its plain pace. */
 export const TIME_SCALE_FAR_ZOOM = 8;
 /** The clock never goes slower than this share of its pace, so the march never stops. */

@@ -13,10 +13,12 @@ import type { CameraMode } from './camera';
 import { createFigureColumn } from './figures3d';
 import type { FigureColumn } from './figures3d';
 import type { Graphics } from './graphics';
-import { FIGURE_MIN_ZOOM, cameraFor, coordAtKm, figuresVisible, gaitAmount, gaitPhaseAt, metersPerUnit, timeScaleForZoom } from './mapGeo';
+import { FIGURE_MIN_ZOOM, cameraFor, coordAtKm, figuresVisible, gaitAmount, gaitPhaseAt, metersPerUnit, mixHex, timeScaleForZoom } from './mapGeo';
 import { arcAt, buildPath } from './pathAlong';
 import { useReducedMotion } from '../../runtime/useReducedMotion';
-import { ANDES_TOUR, TOUR_HOLD_MS, tourDurationMs, tourPoseAt } from './tour';
+import { ANDES_FINAL_VIEW, ANDES_TOUR, SPOT_VIEW, TOUR_HOLD_MS, tourDurationMs, tourPoseAt } from './tour';
+import { FORCES, FORCE_FACTS, MAIN_FORCE_ID, SPOTLIGHT_FINAL_MS, beamGeometry, placeLabel, spotlightDimAt, spotlightStateAt } from './forces';
+import type { ForceInfo } from './forces';
 import type { Path } from './pathAlong';
 import { positionAt } from './timeline';
 import type { Route } from './timeline';
@@ -63,6 +65,12 @@ export interface MapLibreRendererProps {
   onTourEnd?: () => void;
   label: string;
 }
+
+/** The sky by day and in the dark of the spotlight (the map and the sky dim while the lights go on). */
+const SKY_DAY = { 'sky-color': '#5b9bd5', 'horizon-color': '#cfe3f3', 'fog-color': '#dbe7f2' };
+const SKY_DARK = { 'sky-color': '#0b1830', 'horizon-color': '#1c2f4d', 'fog-color': '#16253d' };
+/** How wide each light is on the ground, in pixels of the screen. */
+const SPOT_RADIUS_PX = 96;
 
 const EMPTY: GeoJSON.FeatureCollection = { type: 'FeatureCollection', features: [] };
 
@@ -250,6 +258,17 @@ export function MapLibreRenderer({ route, columns, day, selectedId, camera, grap
   const onTourEndRef = useRef(onTourEnd);
   const tookOverRef = useRef(false);
   const stopTourRef = useRef<() => void>(() => undefined);
+  const beamRef = useRef<SVGSVGElement>(null);
+  const cardRef = useRef<HTMLElement>(null);
+  const [card, setCard] = useState<{ force: ForceInfo; place: string } | null>(null);
+  const spotStopRef = useRef<() => void>(() => undefined);
+  const columnsRef = useRef(columns);
+  columnsRef.current = columns;
+  /** the reader takes the camera, or something else moves it: the tour and the spotlight stop */
+  const stopAnimations = () => {
+    stopTourRef.current();
+    spotStopRef.current();
+  };
   const lastScaleRef = useRef(1);
   const [missingKey] = useState(MAPTILER_KEY === '');
   const position = positionAt(route, day);
@@ -408,7 +427,7 @@ export function MapLibreRenderer({ route, columns, day, selectedId, camera, grap
     scaleClock();
     const takeOver = () => {
       tookOverRef.current = true;
-      stopTourRef.current();
+      stopAnimations();
     };
     for (const type of ['mousedown', 'touchstart', 'wheel'] as const) map.on(type, takeOver);
     const readView = (): CameraView => {
@@ -470,7 +489,7 @@ export function MapLibreRenderer({ route, columns, day, selectedId, camera, grap
     aim(camera, 1800);
     if (camera !== 'free') {
       tookOverRef.current = true;
-      stopTourRef.current();
+      stopAnimations();
     }
   }, [camera]);
 
@@ -513,10 +532,135 @@ export function MapLibreRenderer({ route, columns, day, selectedId, camera, grap
   useEffect(() => {
     if (closeUp === 0) return;
     tookOverRef.current = true;
-    stopTourRef.current();
+    stopAnimations();
     const map = mapRef.current;
     if (map) map.flyTo({ center: [coordAtKm(route, kmRef.current).lon, coordAtKm(route, kmRef.current).lat], zoom: Math.max(FIGURE_MIN_ZOOM + 3, 15.2), pitch: 70, duration: 2200, essential: true });
   }, [closeUp, route]);
+
+  // the spotlight: when the tour ends, one light at a time from above, on the main force, on the artillery and logistics and then on each of the others,
+  // with its name; the map goes dark while the lights are on; the camera goes to each force, and at the end it goes back to the main one and zooms onto it
+  const startSpotlight = () => {
+    const map = mapRef.current;
+    const svg = beamRef.current;
+    if (!map || !svg) return;
+    const where = (id: string): [number, number] | null => {
+      if (id === MAIN_FORCE_ID) {
+        const c = coordAtKm(route, kmRef.current);
+        return [c.lon, c.lat];
+      }
+      const column = columnsRef.current.find((q) => q.id === id);
+      const at = column ? positionOfColumn(column, dayRef.current) : null;
+      return at ? [at.lon, at.lat] : null;
+    };
+    const polygon = svg.querySelector('polygon');
+    const glow = svg.querySelector('ellipse');
+    const drawBeam = (at: [number, number] | null, o: number) => {
+      svg.style.opacity = at ? String(o) : '0';
+      if (!at || !polygon || !glow) return;
+      const p = map.project(at);
+      const g = beamGeometry({ x: p.x, y: p.y }, SPOT_RADIUS_PX);
+      polygon.setAttribute('points', g.polygon.map(([x, y]) => `${x},${y}`).join(' '));
+      glow.setAttribute('cx', String(g.ellipse.cx));
+      glow.setAttribute('cy', String(g.ellipse.cy));
+      glow.setAttribute('rx', String(g.ellipse.rx));
+      glow.setAttribute('ry', String(g.ellipse.ry));
+    };
+    // the map goes dark while the lights are on: the imagery loses brightness and the sky darkens (the light is not dimmed: it is over the map)
+    const rasterIds = (map.getStyle()?.layers ?? []).filter((l) => l.type === 'raster').map((l) => l.id);
+    let dimShown = -1;
+    const setDim = (d: number) => {
+      if (Math.abs(d - dimShown) < 0.01) return;
+      dimShown = d;
+      for (const id of rasterIds) map.setPaintProperty(id, 'raster-brightness-max', 1 - 0.62 * d);
+      if (map.getTerrain()) {
+        map.setSky({
+          'sky-color': mixHex(SKY_DAY['sky-color'], SKY_DARK['sky-color'], d),
+          'horizon-color': mixHex(SKY_DAY['horizon-color'], SKY_DARK['horizon-color'], d),
+          'fog-color': mixHex(SKY_DAY['fog-color'], SKY_DARK['fog-color'], d),
+          'sky-horizon-blend': 0.6,
+          'horizon-fog-blend': 0.8,
+          'fog-ground-blend': 0.2
+        });
+      }
+    };
+    // the other names of the map stay out of the way while the spotlight names a force
+    const showOtherNames = (visible: boolean) => {
+      for (const id of ['places-label', 'columns-label']) if (map.getLayer(id)) map.setLayoutProperty(id, 'visibility', visible ? 'visible' : 'none');
+    };
+    // the card with the force, its place, its commanders and its numbers, to the right of the light on a rounded box, so no other text gets in the way
+    const drawCard = (at: [number, number] | null, o: number) => {
+      const el = cardRef.current;
+      if (!el) return;
+      el.style.opacity = at ? String(o) : '0';
+      if (!at) return;
+      const p = map.project(at);
+      const box = map.getContainer().getBoundingClientRect();
+      const height = el.offsetHeight;
+      const left = Math.min(box.width - el.offsetWidth - 12, p.x + SPOT_RADIUS_PX * 1.3 + 12);
+      const top = Math.min(box.height - height - 12, Math.max(12, p.y - height / 2));
+      el.style.transform = `translate(${Math.max(12, left)}px, ${top}px)`;
+    };
+    showOtherNames(false);
+    let raf = 0;
+    let shown = -2;
+    let finalStarted = false;
+    let current: [number, number] | null = null;
+    const t0 = performance.now();
+    spotStopRef.current = () => {
+      window.cancelAnimationFrame(raf);
+      spotStopRef.current = () => undefined;
+      drawBeam(null, 0);
+      drawCard(null, 0);
+      setCard(null);
+      setDim(0);
+      showOtherNames(true);
+    };
+    const frame = (now: number) => {
+      const state = spotlightStateAt(now - t0);
+      setDim(spotlightDimAt(now - t0));
+      if (state.done) {
+        spotStopRef.current();
+        return;
+      }
+      if (state.final) {
+        if (!finalStarted) {
+          finalStarted = true;
+          current = null;
+          drawBeam(null, 0);
+          drawCard(null, 0);
+          setCard(null);
+          showOtherNames(true);
+          map.flyTo({
+            center: [ANDES_FINAL_VIEW.lon, ANDES_FINAL_VIEW.lat],
+            zoom: ANDES_FINAL_VIEW.zoom,
+            pitch: ANDES_FINAL_VIEW.pitch,
+            bearing: ANDES_FINAL_VIEW.bearing,
+            duration: SPOTLIGHT_FINAL_MS - 200,
+            curve: 1.4,
+            essential: true
+          });
+        }
+      } else {
+        if (state.step !== shown) {
+          shown = state.step;
+          drawCard(null, 0);
+          const force = FORCES[state.step]!;
+          current = where(force.id);
+          if (current) {
+            map.easeTo({ center: current, zoom: SPOT_VIEW.zoom, pitch: SPOT_VIEW.pitch, bearing: SPOT_VIEW.bearing, duration: state.step === 0 ? 500 : 1300, essential: true });
+            const column = columnsRef.current.find((q) => q.id === force.id);
+            setCard({ force, place: placeLabel(column ? column.route : route, dayRef.current) });
+          }
+        }
+        drawBeam(current, state.o);
+        drawCard(current, state.o);
+      }
+      raf = window.requestAnimationFrame(frame);
+    };
+    raf = window.requestAnimationFrame(frame);
+  };
+  const startSpotlightRef = useRef(startSpotlight);
+  startSpotlightRef.current = startSpotlight;
 
   // the camera tour: it waits a second on the first view and then goes through the stops; the reader (mouse, wheel, a camera button, an event) stops it
   useEffect(() => {
@@ -559,6 +703,7 @@ export function MapLibreRenderer({ route, columns, day, selectedId, camera, grap
         pose(tourPoseAt(ANDES_TOUR, ms));
         if (ms >= total) {
           finish();
+          startSpotlightRef.current();
           return;
         }
         raf = window.requestAnimationFrame(frame);
@@ -582,7 +727,7 @@ export function MapLibreRenderer({ route, columns, day, selectedId, camera, grap
     const p = route.points.find((q) => q.id === selectedId);
     if (p) {
       tookOverRef.current = true;
-      stopTourRef.current();
+      stopAnimations();
     }
     if (p) map.flyTo({ center: [p.lon, p.lat], zoom: 12.5, pitch: 65, duration: 2000, essential: true });
   }, [selectedId, route]);
@@ -590,6 +735,53 @@ export function MapLibreRenderer({ route, columns, day, selectedId, camera, grap
   return (
     <div className="chart3d-wrap">
       <div ref={hostRef} className="chart3d andes-maplibre" role="img" aria-label={label} data-chart3d="andes" />
+      <svg ref={beamRef} className="andes-spot" aria-hidden="true" focusable="false" width="100%" height="100%" style={{ opacity: 0 }}>
+        <defs>
+          <linearGradient id="andes-spot-fade" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stopColor="#fff6d0" stopOpacity="0" />
+            <stop offset="0.45" stopColor="#fff2bf" stopOpacity="0.2" />
+            <stop offset="1" stopColor="#ffeeb0" stopOpacity="0.62" />
+          </linearGradient>
+          <radialGradient id="andes-spot-pool">
+            <stop offset="0" stopColor="#fffbe6" stopOpacity="0.95" />
+            <stop offset="0.55" stopColor="#ffeeb0" stopOpacity="0.45" />
+            <stop offset="1" stopColor="#ffe9a0" stopOpacity="0" />
+          </radialGradient>
+          <filter id="andes-spot-blur" x="-30%" y="-10%" width="160%" height="120%">
+            <feGaussianBlur stdDeviation="14" />
+          </filter>
+          <filter id="andes-spot-soft" x="-30%" y="-60%" width="160%" height="220%">
+            <feGaussianBlur stdDeviation="6" />
+          </filter>
+        </defs>
+        <polygon points="0,0 0,0 0,0 0,0" fill="url(#andes-spot-fade)" filter="url(#andes-spot-blur)" />
+        <ellipse cx="0" cy="0" rx="0" ry="0" fill="url(#andes-spot-pool)" filter="url(#andes-spot-soft)" />
+      </svg>
+      {card && (
+        <aside ref={cardRef} className="andes-spot-card" aria-hidden="true" style={{ opacity: 0 }}>
+          <h3>{card.force.title}</h3>
+          <p className="andes-spot-detail">{card.force.detail}</p>
+          <p className="andes-spot-place">
+            <span>Lugar</span> {card.place}
+          </p>
+          <p className="andes-spot-section">Mando</p>
+          <ul>
+            {FORCE_FACTS[card.force.id]?.commanders.map((c) => (
+              <li key={c}>{c}</li>
+            ))}
+          </ul>
+          <p className="andes-spot-section">Fuerzas</p>
+          <dl>
+            {FORCE_FACTS[card.force.id]?.units.map(([label, value]) => (
+              <div key={label}>
+                <dt>{label}</dt>
+                <dd>{value}</dd>
+              </div>
+            ))}
+          </dl>
+          <p className="andes-spot-goal">{FORCE_FACTS[card.force.id]?.goal}</p>
+        </aside>
+      )}
       {missingKey && (
         <p role="status" className="notice andes-notice">
           Falta la clave de MapTiler (VITE_MAPTILER_KEY): sin ella no hay mapa satelital ni relieve.
