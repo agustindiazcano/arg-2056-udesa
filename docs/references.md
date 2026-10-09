@@ -92,3 +92,6 @@ Pendiente. Esas escenas todavía usan datos de prueba (cada gráfico lo dice con
 - Las URL que dicen «a confirmar».
 - Las posiciones de los pasos de Valle Hermoso, Mercedario, Portillo y Come-Caballos, y el trazado por los valles.
 - Si la reunión de las columnas fue el 08 o el 09 de febrero, y dónde.
+- El nombre de pila de Cabot (Juan Manuel o Juan Carlos) y sus efectivos al salir (65 o 140).
+- Las cifras de Chacabuco (patriotas 3.500 o 3.600; realistas 2.080 a 2.500) contra el parte de San Martín y el orden de batalla original.
+- La altura del Espinacito (4.476, 4.800 o 5.000 m) y dónde queda exactamente, para poder dibujarlo.
