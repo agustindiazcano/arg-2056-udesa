@@ -6,7 +6,9 @@
     "properties": {
       "id": { "type": "string" },
       "name": { "type": "string" },
-      "day_of_campaign": { "type": "integer", "minimum": 0, "maximum": 365 },
+      "day_of_campaign": { "type": "integer", "minimum": -30, "maximum": 365 },
+      "column_id": { "type": "string", "minLength": 1 },
+      "column_name": { "type": "string", "minLength": 1 },
       "date": { "type": "string", "format": "date" },
       "date_precision": { "type": "string", "enum": ["day", "month", "year", "approximate"] },
       "lat": { "type": "number" },

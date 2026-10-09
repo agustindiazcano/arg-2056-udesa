@@ -36,8 +36,8 @@ export function distanceKm(lon1: number, lat1: number, lon2: number, lat2: numbe
   return 2 * EARTH_KM * Math.asin(Math.sqrt(h));
 }
 
-/** The events ordered by campaign day, with the distance along the route at each. */
-export function buildRoute(events: readonly AndesEvent[]): Route {
+/** The events ordered by campaign day, with the distance along the route at each. `endDay` lets the clock run past the last event (the other columns arrive later). */
+export function buildRoute(events: readonly AndesEvent[], endDay?: number): Route {
   const sorted = [...events].sort((a, b) => a.day_of_campaign - b.day_of_campaign);
   let total = 0;
   const points = sorted.map((e, i) => {
@@ -51,7 +51,7 @@ export function buildRoute(events: readonly AndesEvent[]): Route {
     points,
     totalKm: total,
     firstDay: points[0]?.day_of_campaign ?? 0,
-    lastDay: points[points.length - 1]?.day_of_campaign ?? 0
+    lastDay: Math.max(endDay ?? 0, points[points.length - 1]?.day_of_campaign ?? 0)
   };
 }
 

@@ -140,12 +140,167 @@ ANDES_ROUTE = [
     ("Paso de Las Llaretas y Valle Hermoso", 17, -70.222, -32.363, 3486),
     ("Los Patos (Putaendo)", 19, -70.578, -32.486, 1251),
     ("Putaendo", 20, -70.717, -32.626, 816),
-    ("San Felipe", 22, -70.725, -32.751, 648),
+    ("Curimón (reunión con la columna de Las Heras)", 21, -70.684, -32.786, 710),
     ("Cuesta de Chacabuco (batalla)", 24, -70.708, -32.977, 1029),
 ]
 ANDES_SOURCE = (
     "Diario de Cuyo, «Crónica de una epopeya» (2017); coordenadas: MapTiler Geocoding (OpenStreetMap); altitud: MapTiler Terrain-RGB v2"
 )
+
+
+# The other columns of the crossing, drawn on the map next to the main one. Waypoints: name, longitude, latitude, elevation (m, DEM),
+# and the date when the sources give it (None: estimated by distance between the dated waypoints around it). Passes are placed
+# by their general location. Days are counted from the departure of the main column (1817-01-19), so a column that left earlier has negative days.
+ANDES_COLUMNS = [
+    {
+        "id": "las-heras",
+        "name": "Columna de Las Heras (artillería y logística)",
+        "men": None,
+        "men_note": "800 a 1.700 hombres según la fuente",
+        "range": (800, 1700),
+        "waypoints": [
+            ("El Plumerillo", -68.807, -32.847, 706, "1817-01-18"),
+            ("Potrerillos", -69.197, -32.961, 1426, None),
+            ("Uspallata", -69.348, -32.591, 1883, None),
+            ("Punta de Vacas", -69.755, -32.851, 2398, None),
+            ("Puente del Inca", -69.910, -32.825, 2728, None),
+            ("Las Cuevas", -70.049, -32.814, 3159, None),
+            ("Guardia Vieja", -70.269, -32.903, 1602, "1817-02-04"),
+            ("Santa Rosa de los Andes", -70.599, -32.853, 812, "1817-02-08"),
+            ("Curimón (reunión con la columna principal)", -70.684, -32.786, 710, "1817-02-09"),
+            ("Cuesta de Chacabuco (batalla)", -70.708, -32.977, 1029, "1817-02-12"),
+        ],
+    },
+    {
+        "id": "cabot",
+        "name": "Columna de Cabot (paso de Guana)",
+        "men": 140,
+        "waypoints": [
+            ("San Juan", -68.525, -31.537, 636, "1817-01-12"),
+            ("Talacasto", -68.639, -31.099, 954, None),
+            ("Pismanta", -69.230, -30.277, 1889, None),
+            ("Paso de Guana", -70.000, -30.100, 3890, None),
+            ("La Serena", -71.252, -29.903, 28, "1817-02-15"),
+        ],
+    },
+    {
+        "id": "freire",
+        "name": "Columna de Freire (paso del Planchón)",
+        "men": 100,
+        "men_note": "100 soldados, más guerrilleros y reclutas",
+        "waypoints": [
+            ("Mendoza (El Plumerillo)", -68.807, -32.847, 706, "1817-01-14"),
+            ("Luján de Cuyo", -68.880, -33.039, 955, None),
+            ("San Carlos", -69.048, -33.774, 955, None),
+            ("San Rafael", -68.331, -34.613, 701, None),
+            ("Paso del Planchón", -70.550, -35.240, 3145, "1817-02-01"),
+            ("Talca", -71.666, -35.427, 96, "1817-02-12"),
+        ],
+    },
+    {
+        "id": "lemos",
+        "name": "Columna de Lemos (paso del Portillo)",
+        "men": 55,
+        "pace_of": "freire",
+        "waypoints": [
+            ("San Carlos", -69.048, -33.774, 955, "1817-01-19"),
+            ("Paso del Portillo", -69.950, -33.650, 3198, None),
+            ("San Gabriel", -70.237, -33.783, 1261, None),
+        ],
+    },
+    {
+        "id": "zelada",
+        "name": "Columna de Zelada (paso de Come-Caballos)",
+        "men": 130,
+        "waypoints": [
+            ("Guandacol", -68.563, -29.525, 1076, "1817-01-05"),
+            ("Laguna Brava", -68.862, -28.332, 4257, None),
+            ("Paso de Come-Caballos", -69.300, -28.200, 4418, None),
+            ("Copiapó", -70.332, -27.366, 385, "1817-02-13"),
+        ],
+    },
+]
+ANDES_COLUMNS_SOURCE = (
+    "Wikipedia, «Rutas sanmartinianas» (columnas, pasos, fechas y efectivos); El Arcón de la Historia (fechas de Las Heras y Freire); "
+    "coordenadas: MapTiler Geocoding (OpenStreetMap); altitud: MapTiler Terrain-RGB v2"
+)
+
+
+def _km(a, b):
+    """Great-circle distance in km between two (lon, lat) points."""
+    r = 6371.0088
+    p1, p2 = math.radians(a[1]), math.radians(b[1])
+    dp, dl = p2 - p1, math.radians(b[0] - a[0])
+    h = math.sin(dp / 2) ** 2 + math.cos(p1) * math.cos(p2) * math.sin(dl / 2) ** 2
+    return 2 * r * math.asin(math.sqrt(h))
+
+
+def _day(date):
+    return (datetime.date.fromisoformat(date) - datetime.date(1817, 1, 19)).days
+
+
+def _column_days(column, pace=None):
+    """Day of each waypoint: the dated ones from their date, the others by distance between the dated ones around them.
+    A column with no date at its end (`pace`) walks at that many km per day. Returns the days and which of them are estimated."""
+    pts = column["waypoints"]
+    dists = [0.0]
+    for i in range(1, len(pts)):
+        dists.append(dists[-1] + _km(pts[i - 1][1:3], pts[i][1:3]))
+    days = [None if w[4] is None else _day(w[4]) for w in pts]
+    if pace is not None:
+        for i in range(1, len(pts)):
+            if days[i] is None:
+                days[i] = round(days[0] + dists[i] / pace)
+    known = [i for i, d in enumerate(days) if d is not None]
+    out = list(days)
+    for i, d in enumerate(days):
+        if d is None:
+            a = max(k for k in known if k < i)
+            b = min(k for k in known if k > i)
+            t = (dists[i] - dists[a]) / (dists[b] - dists[a])
+            out[i] = round(days[a] + (days[b] - days[a]) * t)
+    return out, [w[4] is None for w in pts]
+
+
+def gen_andes_column_events():
+    freire = next(c for c in ANDES_COLUMNS if c["id"] == "freire")
+    fdays, _ = _column_days(freire)
+    fkm = sum(_km(freire["waypoints"][i - 1][1:3], freire["waypoints"][i][1:3]) for i in range(1, 5))
+    freire_pace = fkm / (fdays[4] - fdays[0])  # km per day from Mendoza to the Planchón
+    events = []
+    for column in ANDES_COLUMNS:
+        pace = freire_pace if column.get("pace_of") else None
+        days, estimated = _column_days(column, pace)
+        for i, ((name, lon, lat, elevation, _date), day, est) in enumerate(zip(column["waypoints"], days, estimated), start=1):
+            force = {"side": column["name"], "men": column["men"]}
+            if column.get("men_note"):
+                force["note"] = column["men_note"]
+            event = {
+                "id": f"andes-{column['id']}-{i:02d}",
+                "column_id": column["id"],
+                "column_name": column["name"],
+                "name": name,
+                "day_of_campaign": day,
+                "date": (datetime.date(1817, 1, 19) + datetime.timedelta(days=day)).isoformat(),
+                "date_precision": "approximate" if est else "day",
+                "lat": lat,
+                "lon": lon,
+                "elevation_m": elevation,
+                "forces": [force],
+                "source": ANDES_COLUMNS_SOURCE,
+                "retrieved_at": "2026-10-09",
+                "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto.",
+            }
+            if est:
+                event["note"] += (
+                    " Sin fecha en las fuentes: se supone el ritmo de la columna de Freire."
+                    if column.get("pace_of")
+                    else " Fecha estimada por distancia entre las fechas documentadas."
+                )
+            if column.get("range") and i == 1:
+                event["estimate_range"] = {"min": column["range"][0], "max": column["range"][1]}
+            events.append(event)
+    return events
 
 
 def gen_andes_events(rng):
@@ -160,7 +315,7 @@ def gen_andes_events(rng):
             "name": name,
             "day_of_campaign": day,
             "date": (start + datetime.timedelta(days=day)).isoformat(),
-            "date_precision": "day" if day in (0, 12, 17, 24) else "approximate",
+            "date_precision": "day" if day in (0, 12, 17, 21, 24) else "approximate",
             "lat": lat,
             "lon": lon,
             "elevation_m": elevation,
@@ -173,8 +328,10 @@ def gen_andes_events(rng):
             event["note"] += " 3.987 soldados (sin los 1.200 milicianos y arrieros); la columna de Los Patos era una parte del ejército."
         if i == last:
             event["forces"].append({"side": "Fuerzas realistas", "men": None, "note": "Cifra en disputa entre las fuentes; no se muestra un valor único"})
+        if i == last - 1:
+            event["note"] += " Aquí se reúne con la columna de Las Heras, que llevaba la artillería y la logística (las fuentes dan el 8 o el 9 de febrero)."
         data.append(event)
-    return data
+    return data + gen_andes_column_events()
 
 
 def _finish(p50s, spread, digits, scale=1.0, absolute=False):

@@ -11,8 +11,8 @@ import { useStore } from '../../state/store.js';
 import { Tile, TileGrid } from '../../ui/Tile.js';
 import { SlotPortal } from '../../dashboard/SlotPortal.js';
 import { SceneError, SceneLoading } from '../../ui/SceneStatus.js';
-import { sourceLine } from '../../ui/SceneShell.js';
 import { startingMen } from './column.js';
+import { campaignEndDay, splitColumns } from './columns.js';
 import { figuresNote, forceText, parseAndesEvents } from './data.js';
 import type { AndesEvent } from './data.js';
 import { EventList, EventPanel } from './Panel.js';
@@ -56,7 +56,9 @@ const rows = (events: readonly AndesEvent[]) =>
 export default function Scene() {
   const { status, data } = useDataset('andes_events', parseAndesEvents);
   const events = useMemo(() => data ?? [], [data]);
-  const route = useMemo(() => buildRoute(events), [events]);
+  const split = useMemo(() => splitColumns(events), [events]);
+  // the clock runs to the arrival of the last column; the main one waits at Chacabuco until then
+  const route = useMemo(() => buildRoute(split.main, campaignEndDay(buildRoute(split.main), split.columns)), [split]);
   const quality = useQualityOptional();
   const tier: QualityTier = quality?.tier ?? 'medium';
   const yearFloat = useStore((s) => s.yearFloat);
@@ -116,6 +118,7 @@ export default function Scene() {
       <Suspense fallback={<p role="status" className="poster">Cargando el mapa...</p>}>
         <AndesRenderer
           route={route}
+          columns={split.columns}
           day={day}
           selectedId={selectedId}
           camera={camera}
@@ -132,7 +135,6 @@ export default function Scene() {
     </p>
   );
 
-  const source = sourceLine([...new Set(route.points.map((p) => p.source))], route.points[0]?.retrieved_at);
 
   const stage = (
     <div className="andes-stage">
@@ -212,10 +214,10 @@ export default function Scene() {
 
       <footer className="andes-foot">
         <p role="note">
-          Imágenes satelitales y relieve: © MapTiler © OpenStreetMap contributors. Los lugares y el trazado de la marcha son aproximados.
+          Imágenes satelitales y relieve: © MapTiler © OpenStreetMap contributors. Los lugares, las fechas intermedias y el trazado son aproximados.
         </p>
         {view === 'map' && <p>{figuresNote(startingMen(route.points) !== null)}</p>}
-        {source && <p>{source}</p>}
+        <p>Fuentes: Diario de Cuyo, Wikipedia («Rutas sanmartinianas»), El Arcón de la Historia, MapTiler y OpenStreetMap. Detalle en «Fuentes y métodos».</p>
       </footer>
     </div>
   );

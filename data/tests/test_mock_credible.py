@@ -275,7 +275,7 @@ def test_projects_have_names_and_sit_in_the_right_provinces(mock):
 
 
 def test_andes_route_is_the_march_of_the_los_patos_column_from_mendoza_to_chacabuco(mock):
-    events = load(mock, "andes_events")
+    events = [e for e in load(mock, "andes_events") if "column_id" not in e]  # the main column
     assert [e["day_of_campaign"] for e in events] == sorted(e["day_of_campaign"] for e in events)
     assert events[0]["day_of_campaign"] == 0 and events[-1]["day_of_campaign"] == 24
     assert events[0]["lon"] > events[-1]["lon"]  # from the east of the cordillera to the west
@@ -283,3 +283,21 @@ def test_andes_route_is_the_march_of_the_los_patos_column_from_mendoza_to_chacab
     assert max(e["elevation_m"] for e in events) < 4000  # the pass of the army, not the summits around it
     assert not [e for e in events if "MOCK" in e["name"]]
     assert all(e["note"] for e in events if e["elevation_m"] is None)
+
+
+def test_andes_other_columns_are_drawn_with_dates_and_meet_the_main_one_before_chacabuco(mock):
+    events = load(mock, "andes_events")
+    columns = {}
+    for e in events:
+        if "column_id" in e:
+            columns.setdefault(e["column_id"], []).append(e)
+    assert set(columns) == {"las-heras", "cabot", "freire", "lemos", "zelada"}
+    for column_id, points in columns.items():
+        assert [p["day_of_campaign"] for p in points] == sorted(p["day_of_campaign"] for p in points), column_id
+        assert len(points) >= 3, column_id
+    main = [e for e in events if "column_id" not in e]
+    curimon = next(e for e in main if e["name"].startswith("Curimón"))
+    las_heras_curimon = next(e for e in columns["las-heras"] if e["name"].startswith("Curimón"))
+    assert (curimon["lat"], curimon["lon"], curimon["day_of_campaign"]) == (las_heras_curimon["lat"], las_heras_curimon["lon"], las_heras_curimon["day_of_campaign"])
+    assert columns["las-heras"][-1]["day_of_campaign"] == main[-1]["day_of_campaign"]  # both arrive at Chacabuco together
+    assert all(p["source"] != "MOCK" and p["elevation_m"] is not None for points in columns.values() for p in points)

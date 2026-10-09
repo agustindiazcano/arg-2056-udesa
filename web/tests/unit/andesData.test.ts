@@ -7,7 +7,8 @@ const mock = JSON.parse(readFileSync(new URL('../../../data/mock/andes_events.js
 describe('parseAndesEvents', () => {
   it('parses the mock file', () => {
     const events = parseAndesEvents(mock);
-    expect(events).toHaveLength(11);
+    expect(events.filter((e) => !e.column_id)).toHaveLength(11);
+    expect(events.filter((e) => e.column_id).length).toBeGreaterThan(20);
     expect(events[0]!.id).toBe('andes-01');
   });
 

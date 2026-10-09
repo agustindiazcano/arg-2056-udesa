@@ -82,7 +82,7 @@ export function cameraFor(mode: CameraMode, army: RouteCoord): CameraTarget | nu
     case 'aerial':
       return { center, zoom: 11, pitch: 20 };
     case 'map':
-      return { center: [-69.75, -32.35], zoom: 7.8, pitch: 50, bearing: 0 };
+      return { center: [-70.7, -31.5], zoom: 5.9, pitch: 40, bearing: 0 };
     default:
       return null;
   }
