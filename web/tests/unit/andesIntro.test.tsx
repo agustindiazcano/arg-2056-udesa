@@ -10,12 +10,13 @@ afterEach(() => {
 });
 
 describe('AndesIntro', () => {
-  it('shows the title with the year over clouds while the map loads, hidden from the screen readers', () => {
+  it('shows the title and the year under it over clouds while the map loads, hidden from the screen readers', () => {
     render(<AndesIntro ready={false} />);
     const intro = screen.getByTestId('andes-intro');
     expect(intro.getAttribute('aria-hidden')).toBe('true');
-    expect(intro.textContent).toContain('Los Andes · 1817');
-    expect(intro.querySelectorAll('.andes-cloud').length).toBeGreaterThanOrEqual(4);
+    expect(intro.textContent).toContain('Cruce de los Andes');
+    expect(screen.getByText('1817')).toBeTruthy();
+    expect(intro.querySelectorAll('.andes-cloud-layer').length).toBeGreaterThanOrEqual(3);
   });
 
   it('stays while the map is not ready, as long as the map takes', () => {
