@@ -6,7 +6,7 @@ import './andesIntro.css';
 export const INTRO_MIN_MS = 2200;
 /** The most it waits for the map: after this it leaves anyway (a slow network must not hold the scene). */
 export const INTRO_MAX_MS = 15000;
-/** How long it takes to leave (the clouds part and it fades); the same number is in `andesIntro.css`. */
+/** How long it takes to leave (the clouds fade out); the same number is in `andesIntro.css`. */
 export const INTRO_FADE_MS = 1300;
 
 /**
@@ -33,8 +33,8 @@ interface AndesIntroProps {
 
 /**
  * The screen the Andes open with: a sky with three layers of clouds drifting at their own pace, "Cruce de los Andes" and under it "1817". It
- * covers the loading of the map (and of the chunk that draws it) and leaves when the map is ready: the clouds part to both sides and it
- * fades. It lets the clicks through and is hidden from the screen readers (the scene under it has the content). With reduced motion the
+ * covers the loading of the map (and of the chunk that draws it) and leaves when the map is ready: the clouds fade out layer by layer
+ * (they do not move). It lets the clicks through and is hidden from the screen readers (the scene under it has the content). With reduced motion the
  * clouds do not drift and it leaves quickly.
  */
 export function AndesIntro({ ready }: AndesIntroProps) {

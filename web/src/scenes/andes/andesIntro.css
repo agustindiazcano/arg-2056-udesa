@@ -1,4 +1,4 @@
-/* The loading screen of the Andes: sky, three layers of noise clouds and the title. Leaves in 1.3 s (INTRO_FADE_MS in AndesIntro.tsx). */
+/* The loading screen of the Andes: sky, three layers of noise clouds and the title. Leaves in 1.3 s: the clouds fade out, no movement (INTRO_FADE_MS in AndesIntro.tsx). */
 .andes-intro {
   position: absolute;
   inset: 0;
@@ -22,7 +22,7 @@
   left: -25%;
   width: 150%;
   height: 110%;
-  transition: transform 1.25s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: opacity 0.95s ease;
 }
 
 .andes-cloud-back {
@@ -50,17 +50,19 @@
   to { translate: -5% -1%; }
 }
 
-/* leaving: the front layers part to the sides, the back one fades behind them */
+/* leaving: the clouds do not move, they just fade out one layer after the other */
 .andes-intro.is-leaving .andes-cloud-front {
-  transform: translateX(-60%) scale(1.15);
+  opacity: 0;
 }
 
 .andes-intro.is-leaving .andes-cloud-mid {
-  transform: translateX(60%) scale(1.15);
+  opacity: 0;
+  transition-delay: 0.15s;
 }
 
 .andes-intro.is-leaving .andes-cloud-back {
-  transform: scale(1.3);
+  opacity: 0;
+  transition-delay: 0.3s;
 }
 
 .andes-intro-text {

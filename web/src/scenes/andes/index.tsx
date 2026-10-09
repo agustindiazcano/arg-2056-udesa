@@ -19,6 +19,8 @@ import { EventList, EventPanel } from './Panel.js';
 import type { CameraMode } from './camera.js';
 import { AltitudeProfile } from './AltitudeProfile.js';
 import { AndesIntro } from './AndesIntro.js';
+import { CameraTuner } from './CameraTuner.js';
+import type { CameraApi, CameraView } from './cameraKeyframes.js';
 import { GraphicsMenu } from './GraphicsMenu.js';
 import { loadToggles, resolveGraphics, saveToggles } from './graphics.js';
 import type { GraphicsToggles } from './graphics.js';
@@ -73,6 +75,9 @@ export default function Scene() {
   const dispatch = useStore((s) => s.dispatch);
   const setTimeScale = useStore((s) => s.setTimeScale);
   const [mapReady, setMapReady] = useState(false);
+  const cameraApi = useRef<CameraApi | null>(null);
+  const [tunerOpen, setTunerOpen] = useState(false);
+  const [camView, setCamView] = useState<CameraView>({ lon: -70, lat: -32, zoom: 6, pitch: 40, bearing: 0 });
 
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [view, setView] = useState<'map' | 'table'>('map');
@@ -130,6 +135,8 @@ export default function Scene() {
           onSelect={(id) => (id === null ? close() : select(id))}
           onTimeScale={setTimeScale}
           onReady={() => setMapReady(true)}
+          cameraApi={cameraApi}
+          onView={tunerOpen ? setCamView : undefined}
           label={label}
         />
       </Suspense>
@@ -182,6 +189,18 @@ export default function Scene() {
           <button type="button" className="chip" disabled={view !== 'map'} onClick={() => setCloseUp(closeUp + 1)}>
             Ver de cerca
           </button>
+          <button
+            type="button"
+            className="chip"
+            aria-pressed={tunerOpen}
+            disabled={view !== 'map'}
+            onClick={() => {
+              if (!tunerOpen && cameraApi.current) setCamView(cameraApi.current.get());
+              setTunerOpen(!tunerOpen);
+            }}
+          >
+            Cámara en números
+          </button>
           <button type="button" className="chip" aria-pressed={listOpen} onClick={() => setListOpen(!listOpen)}>
             Eventos
           </button>
@@ -211,6 +230,8 @@ export default function Scene() {
           <EventList events={route.points} selectedId={selectedId} onSelect={select} />
         </div>
       )}
+
+      {view === 'map' && tunerOpen && <CameraTuner api={cameraApi} view={camView} day={day} onGo={() => setCamera('free')} />}
 
       {selected && (
         <div className="andes-detail andes-glass">
