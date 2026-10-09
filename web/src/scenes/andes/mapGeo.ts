@@ -123,3 +123,19 @@ export function timeScaleForZoom(zoom: number): number {
   if (zoom <= TIME_SCALE_FAR_ZOOM) return 1;
   return Math.max(MIN_TIME_SCALE, 2 ** (-TIME_SCALE_PER_ZOOM * (zoom - TIME_SCALE_FAR_ZOOM)));
 }
+
+/** How many pixels per second the view moves with W, A, S and D (Shift multiplies it). */
+export const WASD_SPEED_PX = 520;
+export const WASD_SHIFT_FACTOR = 2.5;
+
+/**
+ * The move of the view, in pixels of the screen, for the keys held (lower case): W goes up the screen (forward, whatever the turn of the camera),
+ * S down, A left and D right; opposite keys cancel and a diagonal is not faster.
+ */
+export function wasdDelta(keys: ReadonlySet<string>, pixels: number): [number, number] {
+  const x = (keys.has('d') ? 1 : 0) - (keys.has('a') ? 1 : 0);
+  const y = (keys.has('s') ? 1 : 0) - (keys.has('w') ? 1 : 0);
+  if (x === 0 && y === 0) return [0, 0];
+  const k = pixels / Math.hypot(x, y);
+  return [x * k, y * k];
+}

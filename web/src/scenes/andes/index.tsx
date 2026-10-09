@@ -20,6 +20,7 @@ import type { CameraMode } from './camera.js';
 import { AltitudeProfile } from './AltitudeProfile.js';
 import { AndesIntro } from './AndesIntro.js';
 import { CameraTuner } from './CameraTuner.js';
+import { ForceButtons } from './ForceButtons.js';
 import type { CameraApi, CameraView } from './cameraKeyframes.js';
 import { GraphicsMenu } from './GraphicsMenu.js';
 import { loadToggles, resolveGraphics, saveToggles } from './graphics.js';
@@ -76,6 +77,8 @@ export default function Scene() {
   const setTimeScale = useStore((s) => s.setTimeScale);
   const [mapReady, setMapReady] = useState(false);
   const [tourPlay, setTourPlay] = useState(0);
+  const [focus, setFocus] = useState<{ id: string; n: number } | null>(null);
+  const [activeForce, setActiveForce] = useState<string | null>(null);
   const tourCount = useRef(0);
   const playTour = useCallback(() => {
     tourCount.current += 1;
@@ -143,6 +146,8 @@ export default function Scene() {
           onReady={() => setMapReady(true)}
           cameraApi={cameraApi}
           tourPlay={tourPlay}
+          focusForce={focus}
+          onFocusForce={setActiveForce}
           onTourEnd={() => setTourPlay(0)}
           onView={tunerOpen ? setCamView : undefined}
           label={label}
@@ -246,6 +251,14 @@ export default function Scene() {
 
       {listOpen && (
         <div className="andes-list andes-glass">
+          <ForceButtons
+            active={activeForce}
+            onGo={(id) => {
+              setCamera('free');
+              setActiveForce(id);
+              setFocus((f) => ({ id, n: (f?.n ?? 0) + 1 }));
+            }}
+          />
           <EventList events={route.points} selectedId={selectedId} onSelect={select} />
         </div>
       )}

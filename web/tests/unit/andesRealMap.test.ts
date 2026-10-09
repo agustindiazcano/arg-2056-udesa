@@ -18,7 +18,8 @@ import {
   WALKING_GRACE_MS,
   metersPerPixel,
   metersPerUnit,
-  mixHex
+  mixHex,
+  wasdDelta
 } from '../../src/scenes/andes/mapGeo';
 
 const ev = (id: string, day: number, lon: number, lat: number): AndesEvent => ({
@@ -173,5 +174,28 @@ describe('mixHex', () => {
   it('stays between the two colors for a t outside 0 to 1', () => {
     expect(mixHex('#102030', '#305070', -3)).toBe('#102030');
     expect(mixHex('#102030', '#305070', 9)).toBe('#305070');
+  });
+});
+
+describe('wasdDelta', () => {
+  it('moves the view up for W, down for S, left for A and right for D, in pixels', () => {
+    expect(wasdDelta(new Set(['w']), 10)).toEqual([0, -10]);
+    expect(wasdDelta(new Set(['s']), 10)).toEqual([0, 10]);
+    expect(wasdDelta(new Set(['a']), 10)).toEqual([-10, 0]);
+    expect(wasdDelta(new Set(['d']), 10)).toEqual([10, 0]);
+  });
+
+  it('cancels opposite keys and does not go faster on a diagonal', () => {
+    expect(wasdDelta(new Set(['w', 's']), 10)).toEqual([0, 0]);
+    expect(wasdDelta(new Set(['a', 'd']), 10)).toEqual([0, 0]);
+    const [dx, dy] = wasdDelta(new Set(['w', 'd']), 10);
+    expect(Math.hypot(dx, dy)).toBeCloseTo(10, 6);
+    expect(dx).toBeGreaterThan(0);
+    expect(dy).toBeLessThan(0);
+  });
+
+  it('does nothing for no key or for other keys', () => {
+    expect(wasdDelta(new Set(), 10)).toEqual([0, 0]);
+    expect(wasdDelta(new Set(['x']), 10)).toEqual([0, 0]);
   });
 });

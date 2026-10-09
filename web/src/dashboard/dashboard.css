@@ -775,7 +775,33 @@
   z-index: 4;
   width: min(280px, 38%);
   padding: var(--space-xs);
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.andes-forces {
+  padding: var(--space-xs);
+}
+
+.andes-forces-title {
+  margin: 0 0 var(--space-xs);
+  color: var(--ink-2);
+  font-size: var(--font-xs, 0.75rem);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.andes-forces-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-xs);
+}
+
+.andes-forces-grid .chip {
+  padding: 4px 8px;
+  font-size: var(--font-xs, 0.78rem);
+  line-height: 1.2;
+  text-align: left;
 }
 
 .andes-table {

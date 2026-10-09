@@ -13,7 +13,7 @@ import type { CameraMode } from './camera';
 import { createFigureColumn } from './figures3d';
 import type { FigureColumn } from './figures3d';
 import type { Graphics } from './graphics';
-import { FIGURE_MIN_ZOOM, cameraFor, coordAtKm, figuresVisible, gaitAmount, gaitPhaseAt, metersPerPixel, metersPerUnit, mixHex, timeScaleForZoom } from './mapGeo';
+import { FIGURE_MIN_ZOOM, cameraFor, coordAtKm, figuresVisible, gaitAmount, gaitPhaseAt, metersPerPixel, metersPerUnit, mixHex, timeScaleForZoom, WASD_SHIFT_FACTOR, WASD_SPEED_PX, wasdDelta } from './mapGeo';
 import { arcAt, buildPath } from './pathAlong';
 import { useReducedMotion } from '../../runtime/useReducedMotion';
 import { ANDES_FINAL_VIEW, ANDES_TOUR, SPOT_VIEW, TOUR_HOLD_MS, tourDurationMs, tourPoseAt } from './tour';
@@ -76,6 +76,10 @@ export interface MapLibreRendererProps {
   onView?: (view: CameraView) => void;
   /** 0: no tour; a number that grows each time the tour must play (the first one starts after the loading screen) */
   tourPlay?: number;
+  /** the reader chose a force in a button: the map goes to it (`n` grows on every click, so the same force can be asked twice) */
+  focusForce?: { id: string; n: number } | null;
+  /** a force was chosen on the map (its name): the scene can mark its button */
+  onFocusForce?: (id: string) => void;
   /** the tour finished or the reader took the camera: the scene can set `tourPlay` back to 0 */
   onTourEnd?: () => void;
   label: string;
@@ -86,6 +90,10 @@ const SKY_DAY = { 'sky-color': '#5b9bd5', 'horizon-color': '#cfe3f3', 'fog-color
 const SKY_DARK = { 'sky-color': '#0b1830', 'horizon-color': '#1c2f4d', 'fog-color': '#16253d' };
 /** How wide each light is on the ground, in pixels of the screen. */
 const SPOT_RADIUS_PX = 96;
+/** How strong the light is (0 to 1): soft, so the dark map still reads under it. */
+const SPOT_LIGHT = 0.55;
+/** How the camera frames a force the reader chose: close enough to see its balls and its name, at an angle. */
+const FORCE_VIEW = { zoom: 9.6, pitch: 62 };
 
 /** The light blue of the main force: its line, its label. */
 const MAIN_COLOR = '#8fbaff';
@@ -206,7 +214,7 @@ function columnsGeoJson(columns: readonly Column[], day: number, main?: { route:
   const lines: GeoJSON.Feature[] = [];
   const balls: GeoJSON.Feature[] = [];
   for (const c of columns) {
-    const properties = { id: c.id, label: forceLabel(c.id), color: columnColor(c.id), anchor: 'top', dy: 1.1 };
+    const properties = { id: c.id, label: forceLabel(c.id), color: columnColor(c.id) };
     lines.push({ type: 'Feature', properties, geometry: { type: 'LineString', coordinates: c.route.points.map((p) => [p.lon, p.lat]) } });
     const at = positionOfColumn(c, day);
     if (at) balls.push({ type: 'Feature', properties, geometry: { type: 'Point', coordinates: [at.lon, at.lat] } });
@@ -214,7 +222,7 @@ function columnsGeoJson(columns: readonly Column[], day: number, main?: { route:
   // the main force carries its text too, at the head of its group
   if (main) {
     const head = coordAtKm(main.route, main.km);
-    balls.push({ type: 'Feature', properties: { id: MAIN_FORCE_ID, label: forceLabel(MAIN_FORCE_ID), color: MAIN_COLOR, anchor: 'bottom', dy: -1.3 }, geometry: { type: 'Point', coordinates: [head.lon, head.lat] } });
+    balls.push({ type: 'Feature', properties: { id: MAIN_FORCE_ID, label: forceLabel(MAIN_FORCE_ID), color: MAIN_COLOR }, geometry: { type: 'Point', coordinates: [head.lon, head.lat] } });
   }
   return { lines: { type: 'FeatureCollection', features: lines }, balls: { type: 'FeatureCollection', features: balls } };
 }
@@ -374,7 +382,7 @@ class ArmyLayer implements CustomLayerInterface {
 }
 
 /** Real map of the crossing: MapTiler satellite imagery draped on the MapTiler terrain (real relief), the route and its places, and the army as miniatures on it. */
-export function MapLibreRenderer({ route, columns, day, selectedId, camera, graphics, closeUp, onSelect, onTimeScale, onReady, cameraApi, onView, tourPlay = 0, onTourEnd, label }: MapLibreRendererProps) {
+export function MapLibreRenderer({ route, columns, day, selectedId, camera, graphics, closeUp, onSelect, onTimeScale, onReady, cameraApi, onView, tourPlay = 0, onTourEnd, focusForce = null, onFocusForce, label }: MapLibreRendererProps) {
   const reduced = useReducedMotion();
   const hostRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<MapLibreMap | null>(null);
@@ -388,10 +396,14 @@ export function MapLibreRenderer({ route, columns, day, selectedId, camera, grap
   const onReadyRef = useRef(onReady);
   const onViewRef = useRef(onView);
   const onTourEndRef = useRef(onTourEnd);
+  const onFocusForceRef = useRef(onFocusForce);
+  const routeRef = useRef(route);
+  const flyToForceRef = useRef<(id: string) => void>(() => undefined);
   const tookOverRef = useRef(false);
   const stopTourRef = useRef<() => void>(() => undefined);
   const beamRef = useRef<SVGSVGElement>(null);
   const cardRef = useRef<HTMLElement>(null);
+  const bigRef = useRef<HTMLDivElement>(null);
   const [card, setCard] = useState<{ force: ForceInfo; place: string } | null>(null);
   const spotStopRef = useRef<() => void>(() => undefined);
   const columnsRef = useRef(columns);
@@ -413,6 +425,26 @@ export function MapLibreRenderer({ route, columns, day, selectedId, camera, grap
   onReadyRef.current = onReady;
   onViewRef.current = onView;
   onTourEndRef.current = onTourEnd;
+  onFocusForceRef.current = onFocusForce;
+  routeRef.current = route;
+  /** Takes the camera to a force: where it is on the clock's day, seen from a little above and at an angle. */
+  flyToForceRef.current = (id: string) => {
+    const map = mapRef.current;
+    if (!map) return;
+    let at: [number, number] | null = null;
+    if (id === MAIN_FORCE_ID) {
+      const c = coordAtKm(routeRef.current, kmRef.current);
+      at = [c.lon, c.lat];
+    } else {
+      const column = columnsRef.current.find((q) => q.id === id);
+      const where = column ? positionOfColumn(column, dayRef.current) : null;
+      if (where) at = [where.lon, where.lat];
+    }
+    if (!at) return;
+    tookOverRef.current = true;
+    stopAnimations();
+    map.flyTo({ center: at, zoom: FORCE_VIEW.zoom, pitch: FORCE_VIEW.pitch, bearing: map.getBearing(), duration: 1800, essential: true });
+  };
   kmRef.current = km;
 
   const syncArmy = () => {
@@ -516,13 +548,14 @@ export function MapLibreRenderer({ route, columns, day, selectedId, camera, grap
         id: 'columns-label',
         type: 'symbol',
         source: 'columns-balls',
-        layout: { 'text-field': ['get', 'label'], 'text-font': ['Noto Sans Bold'], 'text-size': 12, 'text-offset': ['case', ['==', ['get', 'anchor'], 'bottom'], ['literal', [0, -1.3]], ['literal', [0, 1.1]]], 'text-anchor': ['get', 'anchor'], 'text-justify': 'center', 'text-allow-overlap': true, 'text-ignore-placement': true },
+        layout: { 'text-field': ['get', 'label'], 'text-font': ['Noto Sans Bold'], 'text-size': 12, 'text-offset': [0, -2.1], 'text-anchor': 'bottom', 'text-justify': 'center', 'text-allow-overlap': true, 'text-ignore-placement': true },
         paint: { 'text-color': ['get', 'color'], 'text-halo-color': '#0b1220', 'text-halo-width': 1.8 }
       });
-      map.addLayer(layer);
+      // the figures and the spheres go under the names of the groups, so no name is hidden by the units it names
+      map.addLayer(layer, 'columns-label');
       const balls = new BallsLayer();
       ballsRef.current = balls;
-      map.addLayer(balls);
+      map.addLayer(balls, 'columns-label');
       readyRef.current = true;
       syncArmyRef.current();
       aim(cameraRef.current, 0);
@@ -536,6 +569,19 @@ export function MapLibreRenderer({ route, columns, day, selectedId, camera, grap
       map.getCanvas().style.cursor = 'pointer';
     });
     map.on('mouseleave', 'places-dot', () => {
+      map.getCanvas().style.cursor = '';
+    });
+    // a click on the name of a force goes to it, like its button
+    map.on('click', 'columns-label', (e: MapLayerMouseEvent) => {
+      const id = e.features?.[0]?.properties?.id;
+      if (typeof id !== 'string') return;
+      flyToForceRef.current(id);
+      onFocusForceRef.current?.(id);
+    });
+    map.on('mouseenter', 'columns-label', () => {
+      map.getCanvas().style.cursor = 'pointer';
+    });
+    map.on('mouseleave', 'columns-label', () => {
       map.getCanvas().style.cursor = '';
     });
     map.on('error', (e) => console.warn('[andes map]', e.error?.message ?? e));
@@ -682,7 +728,7 @@ export function MapLibreRenderer({ route, columns, day, selectedId, camera, grap
     const polygon = svg.querySelector('polygon');
     const glow = svg.querySelector('ellipse');
     const drawBeam = (at: [number, number] | null, o: number) => {
-      svg.style.opacity = at ? String(o) : '0';
+      svg.style.opacity = at ? String(o * SPOT_LIGHT) : '0';
       if (!at || !polygon || !glow) return;
       const p = map.project(at);
       const g = beamGeometry({ x: p.x, y: p.y }, SPOT_RADIUS_PX);
@@ -717,6 +763,14 @@ export function MapLibreRenderer({ route, columns, day, selectedId, camera, grap
     // the card with the force, its place, its commanders and its numbers, to the right of the light on a rounded box, so no other text gets in the way
     const drawCard = (at: [number, number] | null, o: number) => {
       const el = cardRef.current;
+      const big = bigRef.current;
+      if (big) {
+        big.style.opacity = at ? String(o) : '0';
+        if (at) {
+          const p = map.project(at);
+          big.style.transform = `translate(${p.x - big.offsetWidth / 2}px, ${p.y + SPOT_RADIUS_PX * 0.5 + 14}px)`;
+        }
+      }
       if (!el) return;
       el.style.opacity = at ? String(o) : '0';
       if (!at) return;
@@ -788,6 +842,67 @@ export function MapLibreRenderer({ route, columns, day, selectedId, camera, grap
   };
   const startSpotlightRef = useRef(startSpotlight);
   startSpotlightRef.current = startSpotlight;
+
+  // W, A, S and D move the view over the map (Shift faster); the keys are taken before the app's own shortcut for D (the 2D and 3D switch)
+  useEffect(() => {
+    const held = new Set<string>();
+    let raf = 0;
+    let last = 0;
+    const typing = (target: EventTarget | null) => {
+      const el = target as HTMLElement | null;
+      const tag = el?.tagName?.toLowerCase();
+      return tag === 'input' || tag === 'textarea' || tag === 'select' || Boolean(el?.isContentEditable);
+    };
+    const frame = (now: number) => {
+      const map = mapRef.current;
+      if (held.size === 0 || !map) {
+        raf = 0;
+        return;
+      }
+      const dt = Math.min(0.05, (now - last) / 1000);
+      last = now;
+      const speed = WASD_SPEED_PX * dt * (held.has('shift') ? WASD_SHIFT_FACTOR : 1);
+      const [dx, dy] = wasdDelta(held, speed);
+      if (dx !== 0 || dy !== 0) map.panBy([dx, dy], { duration: 0 });
+      raf = window.requestAnimationFrame(frame);
+    };
+    const down = (e: KeyboardEvent) => {
+      if (e.ctrlKey || e.metaKey || e.altKey || typing(e.target)) return;
+      const key = e.key.toLowerCase();
+      if (key === 'shift') {
+        held.add('shift');
+        return;
+      }
+      if (!['w', 'a', 's', 'd'].includes(key)) return;
+      e.preventDefault();
+      e.stopPropagation();
+      tookOverRef.current = true;
+      stopAnimations();
+      held.add(key);
+      if (raf === 0) {
+        last = performance.now();
+        raf = window.requestAnimationFrame(frame);
+      }
+    };
+    const up = (e: KeyboardEvent) => {
+      held.delete(e.key.toLowerCase());
+    };
+    const clear = () => held.clear();
+    window.addEventListener('keydown', down, true);
+    window.addEventListener('keyup', up, true);
+    window.addEventListener('blur', clear);
+    return () => {
+      window.removeEventListener('keydown', down, true);
+      window.removeEventListener('keyup', up, true);
+      window.removeEventListener('blur', clear);
+      window.cancelAnimationFrame(raf);
+    };
+  }, []);
+
+  // a force chosen in a button: the map goes to it
+  useEffect(() => {
+    if (focusForce) flyToForceRef.current(focusForce.id);
+  }, [focusForce]);
 
   // the camera tour: it waits a second on the first view and then goes through the stops; the reader (mouse, wheel, a camera button, an event) stops it
   useEffect(() => {
@@ -866,16 +981,16 @@ export function MapLibreRenderer({ route, columns, day, selectedId, camera, grap
         <defs>
           <linearGradient id="andes-spot-fade" x1="0" y1="0" x2="0" y2="1">
             <stop offset="0" stopColor="#fff6d0" stopOpacity="0" />
-            <stop offset="0.45" stopColor="#fff2bf" stopOpacity="0.2" />
-            <stop offset="1" stopColor="#ffeeb0" stopOpacity="0.62" />
+            <stop offset="0.45" stopColor="#fff2bf" stopOpacity="0.1" />
+            <stop offset="1" stopColor="#ffeeb0" stopOpacity="0.4" />
           </linearGradient>
           <radialGradient id="andes-spot-pool">
-            <stop offset="0" stopColor="#fffbe6" stopOpacity="0.95" />
+            <stop offset="0" stopColor="#fffbe6" stopOpacity="0.7" />
             <stop offset="0.55" stopColor="#ffeeb0" stopOpacity="0.45" />
             <stop offset="1" stopColor="#ffe9a0" stopOpacity="0" />
           </radialGradient>
           <filter id="andes-spot-blur" x="-30%" y="-10%" width="160%" height="120%">
-            <feGaussianBlur stdDeviation="14" />
+            <feGaussianBlur stdDeviation="18" />
           </filter>
           <filter id="andes-spot-soft" x="-30%" y="-60%" width="160%" height="220%">
             <feGaussianBlur stdDeviation="6" />
@@ -884,6 +999,11 @@ export function MapLibreRenderer({ route, columns, day, selectedId, camera, grap
         <polygon points="0,0 0,0 0,0 0,0" fill="url(#andes-spot-fade)" filter="url(#andes-spot-blur)" />
         <ellipse cx="0" cy="0" rx="0" ry="0" fill="url(#andes-spot-pool)" filter="url(#andes-spot-soft)" />
       </svg>
+      {card && (
+        <div ref={bigRef} className="andes-spot-big" aria-hidden="true" style={{ opacity: 0 }}>
+          {card.place}
+        </div>
+      )}
       {card && (
         <aside ref={cardRef} className="andes-spot-card" aria-hidden="true" style={{ opacity: 0 }}>
           <h3>{card.force.title}</h3>
