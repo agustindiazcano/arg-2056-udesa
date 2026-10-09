@@ -8,6 +8,7 @@ import { coordAtKm } from '../../src/scenes/andes/mapGeo';
 import {
   FORCES,
   FORCE_FACTS,
+  forceLabel,
   SPOTLIGHT_END_MS,
   SPOT_STEPS,
   ballCount,
@@ -191,9 +192,9 @@ describe('FORCE_FACTS', () => {
     expect(heras).toContain('Beltrán');
   });
 
-  it('says so when a number is not known, and never writes a zero for it', () => {
+  it('leaves out what the sources do not give: no «sin dato» anywhere, and never a zero', () => {
+    expect(JSON.stringify(FORCE_FACTS)).not.toContain('sin dato');
     const all = Object.values(FORCE_FACTS).flatMap((f) => f.units.map(([, value]) => value));
-    expect(all.some((v) => v.includes('sin dato'))).toBe(true);
     expect(all.every((v) => !/^0(\s|$)/.test(v))).toBe(true);
   });
 
@@ -204,6 +205,98 @@ describe('FORCE_FACTS', () => {
       const hombres = FORCE_FACTS[c.id]!.units.find(([label]) => label === 'Hombres')![1];
       expect(hombres, c.id).toContain(String(men).replace(/\B(?=(\d{3})+(?!\d))/g, '.'));
     }
+  });
+});
+
+describe('placeLabel', () => {
+  const route = buildRoute([ev(100, 'Mendoza'), ev(100, 'Uspallata', 4), ev(100, 'Chile', 9)]);
+
+  it('is the place when the force is at it, and from where to where when it is on the way', () => {
+    expect(placeLabel(route, 0)).toBe('Mendoza');
+    expect(placeLabel(route, 4)).toBe('Uspallata');
+    expect(placeLabel(route, 2)).toBe('Mendoza → Uspallata');
+    expect(placeLabel(route, 99)).toBe('Chile');
+    expect(placeLabel(route, -5)).toBe('Mendoza');
+  });
+});
+
+describe('ballPositions', () => {
+  const route = buildRoute([ev(100, 'a', 0), ev(100, 'b', 10)]);
+
+  it('puts the first ball at the head of the force and the others behind it along the route, one spacing apart', () => {
+    const km = route.totalKm / 2;
+    const balls = ballPositions(route, km, 3, 5);
+    expect(balls).toHaveLength(3);
+    const head = coordAtKm(route, km);
+    expect(balls[0]).toEqual([head.lon, head.lat]);
+    const second = coordAtKm(route, km - 5);
+    expect(balls[1]).toEqual([second.lon, second.lat]);
+  });
+
+  it('keeps the balls on the route at the start of it, where there is nothing behind', () => {
+    const balls = ballPositions(route, 1, 4, 5);
+    expect(balls).toHaveLength(4);
+    expect(balls[3]).toEqual([route.points[0]!.lon, route.points[0]!.lat]);
+  });
+
+  it('has no balls for a count of zero', () => {
+    expect(ballPositions(route, 5, 0, 5)).toEqual([]);
+  });
+});
+
+describe('forceLabel', () => {
+  it('is four lines for every force: its role, its commanders, its men and its units', () => {
+    for (const f of FORCES) {
+      const lines = forceLabel(f.id).split('\n');
+      expect(lines, f.id).toHaveLength(4);
+      expect(lines[0], f.id).toBeTruthy();
+      expect(lines[1], f.id).toBeTruthy();
+      expect(lines[2], f.id).toContain('hombres');
+      expect(lines[3], f.id).toBeTruthy();
+    }
+  });
+
+  it('names the battalions of the main force and of Las Heras, and the kind of men of the detachments', () => {
+    expect(forceLabel('main')).toContain('Batallones 1');
+    expect(forceLabel('main')).toContain('Granaderos a Caballo');
+    expect(forceLabel('las-heras')).toContain('Batallón 11');
+    expect(forceLabel('freire')).toContain('Destacamento');
+    expect(forceLabel('zelada')).toContain('milicianos');
+    expect(forceLabel('lemos')).toContain('blandengues');
+  });
+
+  it('names the commanders of each group', () => {
+    expect(forceLabel('main')).toContain('San Martín');
+    expect(forceLabel('main')).toContain('Soler');
+    expect(forceLabel('main')).toContain("O'Higgins");
+    expect(forceLabel('las-heras')).toContain('Las Heras');
+    expect(forceLabel('las-heras')).toContain('Beltrán');
+    expect(forceLabel('cabot')).toContain('Cabot');
+    expect(forceLabel('zelada')).toContain('Zelada');
+    expect(forceLabel('freire')).toContain('Freire');
+    expect(forceLabel('lemos')).toContain('Lemos');
+  });
+
+  it('says the main force and the artillery and logistics by their role', () => {
+    expect(forceLabel('main')).toContain('Fuerza principal');
+    expect(forceLabel('las-heras')).toContain('Artillería y logística');
+  });
+
+  it('gives the infantry of the ones that have it and says nothing of it for the ones that do not', () => {
+    expect(forceLabel('freire')).toContain('infantería: 75 a 80');
+    expect(forceLabel('zelada')).toContain('infantería: 50');
+    expect(forceLabel('las-heras')).toContain('683');
+    expect(forceLabel('main')).not.toContain('infantería');
+    expect(forceLabel('cabot')).not.toContain('infantería');
+    expect(forceLabel('lemos')).not.toContain('infantería');
+  });
+
+  it('never says sin dato', () => {
+    for (const f of FORCES) expect(forceLabel(f.id)).not.toContain('sin dato');
+  });
+
+  it('is empty for a force it does not know', () => {
+    expect(forceLabel('nobody')).toBe('');
   });
 });
 

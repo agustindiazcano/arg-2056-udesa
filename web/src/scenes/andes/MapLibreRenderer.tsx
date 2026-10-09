@@ -26,6 +26,7 @@ import {
   ballPositions,
   ballSpacingKm,
   beamGeometry,
+  forceLabel,
   forceMen,
   isSmallForce,
   placeLabel,
@@ -86,7 +87,8 @@ const SKY_DARK = { 'sky-color': '#0b1830', 'horizon-color': '#1c2f4d', 'fog-colo
 /** How wide each light is on the ground, in pixels of the screen. */
 const SPOT_RADIUS_PX = 96;
 
-const columnLabel = (name: string) => name.replace(/^Columna de /, '');
+/** The light blue of the main force: its line, its label. */
+const MAIN_COLOR = '#8fbaff';
 
 /** One of the blue balls of the far view: where it is, which force it belongs to and whether it is a small one. */
 interface Ball {
@@ -200,14 +202,19 @@ class BallsLayer implements CustomLayerInterface {
   }
 }
 
-function columnsGeoJson(columns: readonly Column[], day: number): { lines: GeoJSON.FeatureCollection; balls: GeoJSON.FeatureCollection } {
+function columnsGeoJson(columns: readonly Column[], day: number, main?: { route: Route; km: number }): { lines: GeoJSON.FeatureCollection; balls: GeoJSON.FeatureCollection } {
   const lines: GeoJSON.Feature[] = [];
   const balls: GeoJSON.Feature[] = [];
   for (const c of columns) {
-    const properties = { id: c.id, label: columnLabel(c.name), color: columnColor(c.id) };
+    const properties = { id: c.id, label: forceLabel(c.id), color: columnColor(c.id), anchor: 'top', dy: 1.1 };
     lines.push({ type: 'Feature', properties, geometry: { type: 'LineString', coordinates: c.route.points.map((p) => [p.lon, p.lat]) } });
     const at = positionOfColumn(c, day);
     if (at) balls.push({ type: 'Feature', properties, geometry: { type: 'Point', coordinates: [at.lon, at.lat] } });
+  }
+  // the main force carries its text too, at the head of its group
+  if (main) {
+    const head = coordAtKm(main.route, main.km);
+    balls.push({ type: 'Feature', properties: { id: MAIN_FORCE_ID, label: forceLabel(MAIN_FORCE_ID), color: MAIN_COLOR, anchor: 'bottom', dy: -1.3 }, geometry: { type: 'Point', coordinates: [head.lon, head.lat] } });
   }
   return { lines: { type: 'FeatureCollection', features: lines }, balls: { type: 'FeatureCollection', features: balls } };
 }
@@ -415,7 +422,7 @@ export function MapLibreRenderer({ route, columns, day, selectedId, camera, grap
     const k = kmRef.current;
     layer.km = k;
     const g = routeGeoJson(route, k);
-    (map.getSource('columns-balls') as GeoJSONSource | undefined)?.setData(columnsGeoJson(columns, dayRef.current).balls);
+    (map.getSource('columns-balls') as GeoJSONSource | undefined)?.setData(columnsGeoJson(columns, dayRef.current, { route, km: k }).balls);
     (map.getSource('route-done') as GeoJSONSource | undefined)?.setData(g.done);
     (map.getSource('places') as GeoJSONSource | undefined)?.setData(g.places);
     const wantFigures = figuresVisible(map.getZoom(), layer.active);
@@ -479,7 +486,7 @@ export function MapLibreRenderer({ route, columns, day, selectedId, camera, grap
       map.addSource('route-all', { type: 'geojson', data: routeGeoJson(route, 0).all });
       map.addSource('route-done', { type: 'geojson', data: g.done });
       map.addSource('places', { type: 'geojson', data: g.places });
-      const other = columnsGeoJson(columns, dayRef.current);
+      const other = columnsGeoJson(columns, dayRef.current, { route, km: kmRef.current });
       map.addSource('columns-lines', { type: 'geojson', data: other.lines });
       map.addSource('columns-balls', { type: 'geojson', data: other.balls });
       map.addLayer({ id: 'columns-casing', type: 'line', source: 'columns-lines', paint: { 'line-color': '#0b1220', 'line-width': 5, 'line-opacity': 0.5 }, layout: { 'line-join': 'round', 'line-cap': 'round' } });
@@ -509,7 +516,7 @@ export function MapLibreRenderer({ route, columns, day, selectedId, camera, grap
         id: 'columns-label',
         type: 'symbol',
         source: 'columns-balls',
-        layout: { 'text-field': ['get', 'label'], 'text-font': ['Noto Sans Bold'], 'text-size': 12, 'text-offset': [0, 1.0], 'text-anchor': 'top', 'text-optional': true },
+        layout: { 'text-field': ['get', 'label'], 'text-font': ['Noto Sans Bold'], 'text-size': 12, 'text-offset': ['case', ['==', ['get', 'anchor'], 'bottom'], ['literal', [0, -1.3]], ['literal', [0, 1.1]]], 'text-anchor': ['get', 'anchor'], 'text-justify': 'center', 'text-allow-overlap': true, 'text-ignore-placement': true },
         paint: { 'text-color': ['get', 'color'], 'text-halo-color': '#0b1220', 'text-halo-width': 1.8 }
       });
       map.addLayer(layer);
@@ -892,6 +899,10 @@ export function MapLibreRenderer({ route, columns, day, selectedId, camera, grap
           </ul>
           <p className="andes-spot-section">Fuerzas</p>
           <dl>
+            <div>
+              <dt>Unidades</dt>
+              <dd>{FORCE_FACTS[card.force.id]?.battalions}</dd>
+            </div>
             {FORCE_FACTS[card.force.id]?.units.map(([label, value]) => (
               <div key={label}>
                 <dt>{label}</dt>

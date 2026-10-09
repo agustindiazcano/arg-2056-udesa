@@ -62,6 +62,7 @@ Estado de cada fuente:
 - **Columnas de Lemos y de Zelada**: las fuentes dan salida y, para Zelada, llegada; los puntos intermedios son una marcha ilustrativa. Para Lemos no hay fecha de llegada y se supone el ritmo de la columna de Freire.
 - **Trazado**: línea recta entre lugares, no el camino real. Las listas de puntos intermedios de las fuentes (H10, H12) servirán para trazarlo por los valles cuando tengan coordenadas.
 - **Artillería en Chacabuco**: fray Luis Beltrán dirigía el parque y la maestranza; en el combate las piezas las mandaban oficiales como Domingo Frutos (batería de 7) y Fuentes (sección de 2) (H13). Hace falta para la escena de la batalla.
+- **Batallones en el mapa**: los de la fuerza principal (1 de Cazadores, 7 y 8, y los Granaderos a Caballo) y de la logística (Batallón 11, 683 hombres) salen del orden de batalla de Chacabuco (H13, por informe), no de una lista del cruce; las columnas chicas eran destacamentos y las fuentes solo dan el tipo de hombres (infantes, milicianos, blandengues, granaderos a caballo). Los comandantes y las cifras de infantería que no figuran en las fuentes no se muestran.
 - **Figuras en miniatura**: esquemáticas; cada una representa 50 hombres y la mezcla de infantería, jinetes y mulas es ilustrativa.
 
 ## 2. Mapa y terreno

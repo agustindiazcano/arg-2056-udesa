@@ -29,23 +29,39 @@ export const MAIN_FORCE_ID = 'main';
 
 /** What the spotlight says about a force: who commands it, its numbers (label and value), and what it was for. */
 export interface ForceFacts {
+  /** the short name the group carries on the map */
+  short: string;
+  /** how many men, in words (a number, or a range when the sources differ) */
+  men: string;
+  /** the commanders as the map names them under the role: a few names, short */
+  leaders: string;
+  /** the units it is made of: the battalions of the big columns, the kind of men of the small detachments */
+  battalions: string;
+  /** how many of them are infantry, in words; null when the sources do not say (then the map says nothing about it) */
+  infantry: string | null;
   commanders: readonly string[];
   units: ReadonlyArray<readonly [label: string, value: string]>;
   goal: string;
 }
 
 /**
+ * The battalions of the main force and of Las Heras follow the order of battle of Chacabuco (the municipality of Chacabuco, by report: battalions 1, 7, 8 and 11 and
+ * the squadrons of Granaderos), not a list of the crossing; the small columns were detachments and the sources give the kind of men, not battalions.
  * Commanders and numbers of each force, from the sources of `docs/references.md` (UNCuyo, Wikipedia «Rutas sanmartinianas», the municipality of Chacabuco,
  * the Estado general of 1816-12-31). The sources give the animals and the artillery for the whole army, not by column, and the split between infantry and
- * cavalry only for some of the small ones: what they do not give says «sin dato», never zero.
+ * cavalry only for some of the small ones: what they do not give is left out, never written as zero.
  */
 export const FORCE_FACTS: Readonly<Record<string, ForceFacts>> = {
   main: {
+    short: 'Fuerza principal',
+    men: '3.987',
+    leaders: "San Martín · Soler · O'Higgins",
+    battalions: "Batallones 1 (Cazadores), 7 y 8 · Granaderos a Caballo",
+    infantry: null,
     commanders: ['José de San Martín · jefe de la expedición', 'Estanislao Soler · vanguardia', "Bernardo O'Higgins · centro", 'Mariano Necochea · escolta de granaderos', 'Pedro Regalado de la Plaza · retaguardia y maestranza'],
     units: [
       ['Soldados del ejército', '3.987 (3.778 de tropa, 14 jefes y 195 oficiales)'],
       ['La columna', 'unos 3.000 hombres'],
-      ['Infantería y caballería', 'sin dato por separado'],
       ['Caballos', '1.600 (todo el ejército)'],
       ['Mulas', '9.281 (todo el ejército)'],
       ['Artillería', '16 piezas (todo el ejército)']
@@ -53,25 +69,38 @@ export const FORCE_FACTS: Readonly<Record<string, ForceFacts>> = {
     goal: 'Cruzar por Los Patos y atacar en el valle de Putaendo'
   },
   'las-heras': {
+    short: 'Artillería y logística',
+    men: '770 a 1.700',
+    leaders: "Las Heras · Martínez · Beltrán",
+    battalions: "Batallón 11 · artillería y parque",
+    infantry: '683 en el Batallón 11',
     commanders: ['Juan Gregorio de Las Heras · jefe', 'Enrique Martínez · segundo', 'fray Luis Beltrán · parque y maestranza'],
     units: [
       ['Hombres', '770 a 1.700 según la fuente'],
       ['Batallón 11', '683'],
-      ['Carga', 'el parque y la artillería de la expedición'],
-      ['Mulas y caballos', 'sin dato por columna']
+      ['Carga', 'el parque y la artillería de la expedición']
     ],
     goal: 'Cruzar por Uspallata con la artillería y la logística, y reunirse con la fuerza principal'
   },
   cabot: {
+    short: 'Flanco norte · Cabot',
+    men: '140',
+    leaders: "Cabot",
+    battalions: "Destacamento con 20 granaderos a caballo",
+    infantry: null,
     commanders: ['Juan Manuel Cabot · teniente coronel'],
     units: [
       ['Hombres', '140 (65 según otra fuente)'],
-      ['Caballería', '20 granaderos a caballo'],
-      ['Infantería', 'sin dato']
+      ['Caballería', '20 granaderos a caballo']
     ],
     goal: 'Cruzar por Guana, tomar La Serena y Coquimbo y distraer al enemigo por el norte'
   },
   zelada: {
+    short: 'Flanco norte · Zelada',
+    men: '130',
+    leaders: "Zelada · Dávila",
+    battalions: "Destacamento: 50 infantes y 80 milicianos",
+    infantry: '50',
     commanders: ['Francisco Zelada · teniente coronel', 'Nicolás Dávila · capitán, segundo'],
     units: [
       ['Hombres', '130'],
@@ -81,6 +110,11 @@ export const FORCE_FACTS: Readonly<Record<string, ForceFacts>> = {
     goal: 'Cruzar por Come-Caballos, ocupar Copiapó y distraer al enemigo por el norte'
   },
   freire: {
+    short: 'Flanco sur · Freire',
+    men: '100 a 110',
+    leaders: "Freire",
+    battalions: "Destacamento: 75 a 80 infantes y 25 a 30 granaderos a caballo",
+    infantry: '75 a 80',
     commanders: ['Ramón Freire · teniente coronel'],
     units: [
       ['Hombres', '100 (110 según otra fuente), más guerrilleros y reclutas'],
@@ -90,6 +124,11 @@ export const FORCE_FACTS: Readonly<Record<string, ForceFacts>> = {
     goal: 'Cruzar por el Planchón, tomar Talca y Curicó y distraer al enemigo por el sur'
   },
   lemos: {
+    short: 'Flanco sur · Lemos',
+    men: '55',
+    leaders: "Lemos",
+    battalions: "Destacamento: 25 blandengues y 30 milicianos",
+    infantry: null,
     commanders: ['José León Lemos · capitán'],
     units: [
       ['Hombres', '55'],
@@ -99,6 +138,17 @@ export const FORCE_FACTS: Readonly<Record<string, ForceFacts>> = {
     goal: 'Cruzar por el Portillo y sorprender el fuerte de San Gabriel, para distraer al enemigo por el sur'
   }
 };
+
+/**
+ * The text that follows a group on the map: its role, under it its commanders, then its men and, when the sources say it, its infantry, and last its
+ * units (battalions or detachment). What the sources do not give is left out.
+ */
+export function forceLabel(id: string): string {
+  const facts = FORCE_FACTS[id];
+  if (!facts) return '';
+  const numbers = `${facts.men} hombres${facts.infantry ? ` · infantería: ${facts.infantry}` : ''}`;
+  return `${facts.short}\n${facts.leaders}\n${numbers}\n${facts.battalions}`;
+}
 
 /** Where a force is on a day, in words: the place when it is at one, and from where to where when it is on the way. */
 export function placeLabel(route: Route, day: number): string {
