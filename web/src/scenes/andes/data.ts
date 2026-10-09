@@ -13,12 +13,16 @@ export interface AndesForce {
 export interface AndesEvent {
   id: string;
   name: string;
+  /** days from the departure of the main column (1817-01-19); negative for a column that left before it */
   day_of_campaign: number;
   date: string;
   date_precision: 'day' | 'month' | 'year' | 'approximate';
   lat: number;
   lon: number;
   elevation_m: number | null;
+  /** the other columns of the crossing; the events of the main column have none */
+  column_id?: string;
+  column_name?: string;
   forces: AndesForce[];
   estimate_range?: { min: number; max: number };
   source: string;

@@ -6,6 +6,8 @@ import { AmbientLight, DirectionalLight, Matrix4, PerspectiveCamera, Scene, WebG
 import { QUALITY_PRESETS } from '../../runtime/capabilities';
 import { NavControls } from '../../ui/NavControls';
 import { figureCount, startingMen } from './column';
+import { columnColor, positionOfColumn } from './columns';
+import type { Column } from './columns';
 import type { CameraMode } from './camera';
 import { createFigureColumn } from './figures3d';
 import type { FigureColumn } from './figures3d';
@@ -36,6 +38,8 @@ const REBUILD_EVERY_MS = 120;
 
 export interface MapLibreRendererProps {
   route: Route;
+  /** the other columns of the crossing: drawn on the map, a ball each that moves with the clock (the camera only follows the main one) */
+  columns: readonly Column[];
   day: number;
   selectedId: string | null;
   camera: CameraMode;
@@ -46,6 +50,20 @@ export interface MapLibreRendererProps {
 }
 
 const EMPTY: GeoJSON.FeatureCollection = { type: 'FeatureCollection', features: [] };
+
+const columnLabel = (name: string) => name.replace(/^Columna de /, '');
+
+function columnsGeoJson(columns: readonly Column[], day: number): { lines: GeoJSON.FeatureCollection; balls: GeoJSON.FeatureCollection } {
+  const lines: GeoJSON.Feature[] = [];
+  const balls: GeoJSON.Feature[] = [];
+  for (const c of columns) {
+    const properties = { id: c.id, label: columnLabel(c.name), color: columnColor(c.id) };
+    lines.push({ type: 'Feature', properties, geometry: { type: 'LineString', coordinates: c.route.points.map((p) => [p.lon, p.lat]) } });
+    const at = positionOfColumn(c, day);
+    if (at) balls.push({ type: 'Feature', properties, geometry: { type: 'Point', coordinates: [at.lon, at.lat] } });
+  }
+  return { lines: { type: 'FeatureCollection', features: lines }, balls: { type: 'FeatureCollection', features: balls } };
+}
 
 function routeGeoJson(route: Route, uptoKm: number): { all: GeoJSON.FeatureCollection; done: GeoJSON.FeatureCollection; places: GeoJSON.FeatureCollection } {
   const line = (coords: number[][]): GeoJSON.FeatureCollection => ({
@@ -202,7 +220,7 @@ class ArmyLayer implements CustomLayerInterface {
 }
 
 /** Real map of the crossing: MapTiler satellite imagery draped on the MapTiler terrain (real relief), the route and its places, and the army as miniatures on it. */
-export function MapLibreRenderer({ route, day, selectedId, camera, graphics, closeUp, onSelect, label }: MapLibreRendererProps) {
+export function MapLibreRenderer({ route, columns, day, selectedId, camera, graphics, closeUp, onSelect, label }: MapLibreRendererProps) {
   const hostRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<MapLibreMap | null>(null);
   const layerRef = useRef<ArmyLayer | null>(null);
@@ -227,6 +245,7 @@ export function MapLibreRenderer({ route, day, selectedId, camera, graphics, clo
     layer.km = k;
     const here = coordAtKm(route, k);
     const g = routeGeoJson(route, k);
+    (map.getSource('columns-balls') as GeoJSONSource | undefined)?.setData(columnsGeoJson(columns, dayRef.current).balls);
     (map.getSource('route-done') as GeoJSONSource | undefined)?.setData(g.done);
     (map.getSource('places') as GeoJSONSource | undefined)?.setData(g.places);
     (map.getSource('army') as GeoJSONSource | undefined)?.setData({
@@ -294,6 +313,11 @@ export function MapLibreRenderer({ route, day, selectedId, camera, graphics, clo
       map.addSource('route-done', { type: 'geojson', data: g.done });
       map.addSource('places', { type: 'geojson', data: g.places });
       map.addSource('army', { type: 'geojson', data: EMPTY });
+      const other = columnsGeoJson(columns, dayRef.current);
+      map.addSource('columns-lines', { type: 'geojson', data: other.lines });
+      map.addSource('columns-balls', { type: 'geojson', data: other.balls });
+      map.addLayer({ id: 'columns-casing', type: 'line', source: 'columns-lines', paint: { 'line-color': '#0b1220', 'line-width': 5, 'line-opacity': 0.5 }, layout: { 'line-join': 'round', 'line-cap': 'round' } });
+      map.addLayer({ id: 'columns-line', type: 'line', source: 'columns-lines', paint: { 'line-color': ['get', 'color'], 'line-width': 2.5, 'line-dasharray': [2, 1.5] }, layout: { 'line-join': 'round', 'line-cap': 'round' } });
       map.addLayer({ id: 'route-casing', type: 'line', source: 'route-all', paint: { 'line-color': '#0b1220', 'line-width': 7, 'line-opacity': 0.55 }, layout: { 'line-join': 'round', 'line-cap': 'round' } });
       map.addLayer({ id: 'route-line', type: 'line', source: 'route-all', paint: { 'line-color': '#f4f1e8', 'line-width': 3, 'line-dasharray': [1.5, 1.5] }, layout: { 'line-join': 'round', 'line-cap': 'round' } });
       map.addLayer({ id: 'route-walked', type: 'line', source: 'route-done', paint: { 'line-color': '#75aadb', 'line-width': 4 }, layout: { 'line-join': 'round', 'line-cap': 'round' } });
@@ -314,6 +338,14 @@ export function MapLibreRenderer({ route, day, selectedId, camera, graphics, clo
         source: 'places',
         layout: { 'text-field': ['get', 'name'], 'text-font': ['Noto Sans Bold'], 'text-size': 13, 'text-offset': [0, 1.1], 'text-anchor': 'top', 'text-optional': true },
         paint: { 'text-color': '#ffffff', 'text-halo-color': '#0b1220', 'text-halo-width': 1.8 }
+      });
+      map.addLayer({ id: 'columns-ball', type: 'circle', source: 'columns-balls', paint: { 'circle-radius': 7, 'circle-color': ['get', 'color'], 'circle-stroke-color': '#ffffff', 'circle-stroke-width': 2 } });
+      map.addLayer({
+        id: 'columns-label',
+        type: 'symbol',
+        source: 'columns-balls',
+        layout: { 'text-field': ['get', 'label'], 'text-font': ['Noto Sans Bold'], 'text-size': 12, 'text-offset': [0, 1.0], 'text-anchor': 'top', 'text-optional': true },
+        paint: { 'text-color': ['get', 'color'], 'text-halo-color': '#0b1220', 'text-halo-width': 1.8 }
       });
       map.addLayer({ id: 'army-marker-halo', type: 'circle', source: 'army', paint: { 'circle-radius': 16, 'circle-color': '#75aadb', 'circle-opacity': 0.35 } });
       map.addLayer({ id: 'army-marker', type: 'circle', source: 'army', paint: { 'circle-radius': 7, 'circle-color': '#ffffff', 'circle-stroke-color': '#2f4a80', 'circle-stroke-width': 3 } });
@@ -361,7 +393,7 @@ export function MapLibreRenderer({ route, day, selectedId, camera, graphics, clo
     const target = cameraFor(mode, coordAtKm(route, km));
     // jumpTo does not stop a gesture of the reader: in `follow` they keep the angle they chose, only the center goes with the army
     if (target) map.jumpTo({ center: target.center, ...(target.bearing !== undefined ? { bearing: target.bearing } : {}) });
-  }, [km, route]);
+  }, [km, day, route]);
 
   useEffect(() => aim(camera, 1800), [camera]);
 

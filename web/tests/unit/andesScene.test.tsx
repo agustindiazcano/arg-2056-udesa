@@ -117,8 +117,8 @@ describe('Andes scene', () => {
     const renderer = await screen.findByTestId('andes-renderer');
     expect(renderer.getAttribute('data-day')).toBe('0');
     act(() => useStore.setState({ yearFloat: 2056 }));
-    expect(screen.getByTestId('andes-renderer').getAttribute('data-day')).toBe('24');
-    expect(within(screen.getByTestId('andes-day')).getByText('24')).toBeTruthy();
+    expect(screen.getByTestId('andes-renderer').getAttribute('data-day')).toBe('27');
+    expect(within(screen.getByTestId('andes-day')).getByText('27')).toBeTruthy();
   });
 
   it('shows the panel of the chosen event with its forces, and an unknown count says so instead of 0', async () => {
@@ -228,7 +228,7 @@ describe('Andes scene', () => {
     expect(year).toBeLessThan(2056);
     fireEvent.change(slider, { target: { value: '100' } });
     expect(useStore.getState().yearFloat).toBe(2056);
-    expect(screen.getByTestId('andes-renderer').getAttribute('data-day')).toBe('24');
+    expect(screen.getByTestId('andes-renderer').getAttribute('data-day')).toBe('27');
   });
 
   it('follows the clock with the percent too: more years, more crossing', async () => {

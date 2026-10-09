@@ -171,10 +171,10 @@
     "source": "Diario de Cuyo, «Crónica de una epopeya» (2017); coordenadas: MapTiler Geocoding (OpenStreetMap); altitud: MapTiler Terrain-RGB v2"
   },
   {
-    "date": "1817-02-10",
-    "date_precision": "approximate",
-    "day_of_campaign": 22,
-    "elevation_m": 648,
+    "date": "1817-02-09",
+    "date_precision": "day",
+    "day_of_campaign": 21,
+    "elevation_m": 710,
     "forces": [
       {
         "men": 3987,
@@ -182,10 +182,10 @@
       }
     ],
     "id": "andes-10",
-    "lat": -32.751,
-    "lon": -70.725,
-    "name": "San Felipe",
-    "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto.",
+    "lat": -32.786,
+    "lon": -70.684,
+    "name": "Curimón (reunión con la columna de Las Heras)",
+    "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto. Aquí se reúne con la columna de Las Heras, que llevaba la artillería y la logística (las fuentes dan el 8 o el 9 de febrero).",
     "retrieved_at": "2026-10-08",
     "source": "Diario de Cuyo, «Crónica de una epopeya» (2017); coordenadas: MapTiler Geocoding (OpenStreetMap); altitud: MapTiler Terrain-RGB v2"
   },
@@ -212,5 +212,613 @@
     "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto.",
     "retrieved_at": "2026-10-08",
     "source": "Diario de Cuyo, «Crónica de una epopeya» (2017); coordenadas: MapTiler Geocoding (OpenStreetMap); altitud: MapTiler Terrain-RGB v2"
+  },
+  {
+    "column_id": "las-heras",
+    "column_name": "Columna de Las Heras (artillería y logística)",
+    "date": "1817-01-18",
+    "date_precision": "day",
+    "day_of_campaign": -1,
+    "elevation_m": 706,
+    "estimate_range": {
+      "max": 1700,
+      "min": 800
+    },
+    "forces": [
+      {
+        "men": null,
+        "note": "800 a 1.700 hombres según la fuente",
+        "side": "Columna de Las Heras (artillería y logística)"
+      }
+    ],
+    "id": "andes-las-heras-01",
+    "lat": -32.847,
+    "lon": -68.807,
+    "name": "El Plumerillo",
+    "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto.",
+    "retrieved_at": "2026-10-09",
+    "source": "Wikipedia, «Rutas sanmartinianas» (columnas, pasos, fechas y efectivos); El Arcón de la Historia (fechas de Las Heras y Freire); coordenadas: MapTiler Geocoding (OpenStreetMap); altitud: MapTiler Terrain-RGB v2"
+  },
+  {
+    "column_id": "las-heras",
+    "column_name": "Columna de Las Heras (artillería y logística)",
+    "date": "1817-01-22",
+    "date_precision": "approximate",
+    "day_of_campaign": 3,
+    "elevation_m": 1426,
+    "forces": [
+      {
+        "men": null,
+        "note": "800 a 1.700 hombres según la fuente",
+        "side": "Columna de Las Heras (artillería y logística)"
+      }
+    ],
+    "id": "andes-las-heras-02",
+    "lat": -32.961,
+    "lon": -69.197,
+    "name": "Potrerillos",
+    "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto. Fecha estimada por distancia entre las fechas documentadas.",
+    "retrieved_at": "2026-10-09",
+    "source": "Wikipedia, «Rutas sanmartinianas» (columnas, pasos, fechas y efectivos); El Arcón de la Historia (fechas de Las Heras y Freire); coordenadas: MapTiler Geocoding (OpenStreetMap); altitud: MapTiler Terrain-RGB v2"
+  },
+  {
+    "column_id": "las-heras",
+    "column_name": "Columna de Las Heras (artillería y logística)",
+    "date": "1817-01-26",
+    "date_precision": "approximate",
+    "day_of_campaign": 7,
+    "elevation_m": 1883,
+    "forces": [
+      {
+        "men": null,
+        "note": "800 a 1.700 hombres según la fuente",
+        "side": "Columna de Las Heras (artillería y logística)"
+      }
+    ],
+    "id": "andes-las-heras-03",
+    "lat": -32.591,
+    "lon": -69.348,
+    "name": "Uspallata",
+    "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto. Fecha estimada por distancia entre las fechas documentadas.",
+    "retrieved_at": "2026-10-09",
+    "source": "Wikipedia, «Rutas sanmartinianas» (columnas, pasos, fechas y efectivos); El Arcón de la Historia (fechas de Las Heras y Freire); coordenadas: MapTiler Geocoding (OpenStreetMap); altitud: MapTiler Terrain-RGB v2"
+  },
+  {
+    "column_id": "las-heras",
+    "column_name": "Columna de Las Heras (artillería y logística)",
+    "date": "1817-01-30",
+    "date_precision": "approximate",
+    "day_of_campaign": 11,
+    "elevation_m": 2398,
+    "forces": [
+      {
+        "men": null,
+        "note": "800 a 1.700 hombres según la fuente",
+        "side": "Columna de Las Heras (artillería y logística)"
+      }
+    ],
+    "id": "andes-las-heras-04",
+    "lat": -32.851,
+    "lon": -69.755,
+    "name": "Punta de Vacas",
+    "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto. Fecha estimada por distancia entre las fechas documentadas.",
+    "retrieved_at": "2026-10-09",
+    "source": "Wikipedia, «Rutas sanmartinianas» (columnas, pasos, fechas y efectivos); El Arcón de la Historia (fechas de Las Heras y Freire); coordenadas: MapTiler Geocoding (OpenStreetMap); altitud: MapTiler Terrain-RGB v2"
+  },
+  {
+    "column_id": "las-heras",
+    "column_name": "Columna de Las Heras (artillería y logística)",
+    "date": "1817-02-01",
+    "date_precision": "approximate",
+    "day_of_campaign": 13,
+    "elevation_m": 2728,
+    "forces": [
+      {
+        "men": null,
+        "note": "800 a 1.700 hombres según la fuente",
+        "side": "Columna de Las Heras (artillería y logística)"
+      }
+    ],
+    "id": "andes-las-heras-05",
+    "lat": -32.825,
+    "lon": -69.91,
+    "name": "Puente del Inca",
+    "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto. Fecha estimada por distancia entre las fechas documentadas.",
+    "retrieved_at": "2026-10-09",
+    "source": "Wikipedia, «Rutas sanmartinianas» (columnas, pasos, fechas y efectivos); El Arcón de la Historia (fechas de Las Heras y Freire); coordenadas: MapTiler Geocoding (OpenStreetMap); altitud: MapTiler Terrain-RGB v2"
+  },
+  {
+    "column_id": "las-heras",
+    "column_name": "Columna de Las Heras (artillería y logística)",
+    "date": "1817-02-02",
+    "date_precision": "approximate",
+    "day_of_campaign": 14,
+    "elevation_m": 3159,
+    "forces": [
+      {
+        "men": null,
+        "note": "800 a 1.700 hombres según la fuente",
+        "side": "Columna de Las Heras (artillería y logística)"
+      }
+    ],
+    "id": "andes-las-heras-06",
+    "lat": -32.814,
+    "lon": -70.049,
+    "name": "Las Cuevas",
+    "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto. Fecha estimada por distancia entre las fechas documentadas.",
+    "retrieved_at": "2026-10-09",
+    "source": "Wikipedia, «Rutas sanmartinianas» (columnas, pasos, fechas y efectivos); El Arcón de la Historia (fechas de Las Heras y Freire); coordenadas: MapTiler Geocoding (OpenStreetMap); altitud: MapTiler Terrain-RGB v2"
+  },
+  {
+    "column_id": "las-heras",
+    "column_name": "Columna de Las Heras (artillería y logística)",
+    "date": "1817-02-04",
+    "date_precision": "day",
+    "day_of_campaign": 16,
+    "elevation_m": 1602,
+    "forces": [
+      {
+        "men": null,
+        "note": "800 a 1.700 hombres según la fuente",
+        "side": "Columna de Las Heras (artillería y logística)"
+      }
+    ],
+    "id": "andes-las-heras-07",
+    "lat": -32.903,
+    "lon": -70.269,
+    "name": "Guardia Vieja",
+    "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto.",
+    "retrieved_at": "2026-10-09",
+    "source": "Wikipedia, «Rutas sanmartinianas» (columnas, pasos, fechas y efectivos); El Arcón de la Historia (fechas de Las Heras y Freire); coordenadas: MapTiler Geocoding (OpenStreetMap); altitud: MapTiler Terrain-RGB v2"
+  },
+  {
+    "column_id": "las-heras",
+    "column_name": "Columna de Las Heras (artillería y logística)",
+    "date": "1817-02-08",
+    "date_precision": "day",
+    "day_of_campaign": 20,
+    "elevation_m": 812,
+    "forces": [
+      {
+        "men": null,
+        "note": "800 a 1.700 hombres según la fuente",
+        "side": "Columna de Las Heras (artillería y logística)"
+      }
+    ],
+    "id": "andes-las-heras-08",
+    "lat": -32.853,
+    "lon": -70.599,
+    "name": "Santa Rosa de los Andes",
+    "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto.",
+    "retrieved_at": "2026-10-09",
+    "source": "Wikipedia, «Rutas sanmartinianas» (columnas, pasos, fechas y efectivos); El Arcón de la Historia (fechas de Las Heras y Freire); coordenadas: MapTiler Geocoding (OpenStreetMap); altitud: MapTiler Terrain-RGB v2"
+  },
+  {
+    "column_id": "las-heras",
+    "column_name": "Columna de Las Heras (artillería y logística)",
+    "date": "1817-02-09",
+    "date_precision": "day",
+    "day_of_campaign": 21,
+    "elevation_m": 710,
+    "forces": [
+      {
+        "men": null,
+        "note": "800 a 1.700 hombres según la fuente",
+        "side": "Columna de Las Heras (artillería y logística)"
+      }
+    ],
+    "id": "andes-las-heras-09",
+    "lat": -32.786,
+    "lon": -70.684,
+    "name": "Curimón (reunión con la columna principal)",
+    "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto.",
+    "retrieved_at": "2026-10-09",
+    "source": "Wikipedia, «Rutas sanmartinianas» (columnas, pasos, fechas y efectivos); El Arcón de la Historia (fechas de Las Heras y Freire); coordenadas: MapTiler Geocoding (OpenStreetMap); altitud: MapTiler Terrain-RGB v2"
+  },
+  {
+    "column_id": "las-heras",
+    "column_name": "Columna de Las Heras (artillería y logística)",
+    "date": "1817-02-12",
+    "date_precision": "day",
+    "day_of_campaign": 24,
+    "elevation_m": 1029,
+    "forces": [
+      {
+        "men": null,
+        "note": "800 a 1.700 hombres según la fuente",
+        "side": "Columna de Las Heras (artillería y logística)"
+      }
+    ],
+    "id": "andes-las-heras-10",
+    "lat": -32.977,
+    "lon": -70.708,
+    "name": "Cuesta de Chacabuco (batalla)",
+    "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto.",
+    "retrieved_at": "2026-10-09",
+    "source": "Wikipedia, «Rutas sanmartinianas» (columnas, pasos, fechas y efectivos); El Arcón de la Historia (fechas de Las Heras y Freire); coordenadas: MapTiler Geocoding (OpenStreetMap); altitud: MapTiler Terrain-RGB v2"
+  },
+  {
+    "column_id": "cabot",
+    "column_name": "Columna de Cabot (paso de Guana)",
+    "date": "1817-01-12",
+    "date_precision": "day",
+    "day_of_campaign": -7,
+    "elevation_m": 636,
+    "forces": [
+      {
+        "men": 140,
+        "side": "Columna de Cabot (paso de Guana)"
+      }
+    ],
+    "id": "andes-cabot-01",
+    "lat": -31.537,
+    "lon": -68.525,
+    "name": "San Juan",
+    "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto.",
+    "retrieved_at": "2026-10-09",
+    "source": "Wikipedia, «Rutas sanmartinianas» (columnas, pasos, fechas y efectivos); El Arcón de la Historia (fechas de Las Heras y Freire); coordenadas: MapTiler Geocoding (OpenStreetMap); altitud: MapTiler Terrain-RGB v2"
+  },
+  {
+    "column_id": "cabot",
+    "column_name": "Columna de Cabot (paso de Guana)",
+    "date": "1817-01-17",
+    "date_precision": "approximate",
+    "day_of_campaign": -2,
+    "elevation_m": 954,
+    "forces": [
+      {
+        "men": 140,
+        "side": "Columna de Cabot (paso de Guana)"
+      }
+    ],
+    "id": "andes-cabot-02",
+    "lat": -31.099,
+    "lon": -68.639,
+    "name": "Talacasto",
+    "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto. Fecha estimada por distancia entre las fechas documentadas.",
+    "retrieved_at": "2026-10-09",
+    "source": "Wikipedia, «Rutas sanmartinianas» (columnas, pasos, fechas y efectivos); El Arcón de la Historia (fechas de Las Heras y Freire); coordenadas: MapTiler Geocoding (OpenStreetMap); altitud: MapTiler Terrain-RGB v2"
+  },
+  {
+    "column_id": "cabot",
+    "column_name": "Columna de Cabot (paso de Guana)",
+    "date": "1817-01-27",
+    "date_precision": "approximate",
+    "day_of_campaign": 8,
+    "elevation_m": 1889,
+    "forces": [
+      {
+        "men": 140,
+        "side": "Columna de Cabot (paso de Guana)"
+      }
+    ],
+    "id": "andes-cabot-03",
+    "lat": -30.277,
+    "lon": -69.23,
+    "name": "Pismanta",
+    "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto. Fecha estimada por distancia entre las fechas documentadas.",
+    "retrieved_at": "2026-10-09",
+    "source": "Wikipedia, «Rutas sanmartinianas» (columnas, pasos, fechas y efectivos); El Arcón de la Historia (fechas de Las Heras y Freire); coordenadas: MapTiler Geocoding (OpenStreetMap); altitud: MapTiler Terrain-RGB v2"
+  },
+  {
+    "column_id": "cabot",
+    "column_name": "Columna de Cabot (paso de Guana)",
+    "date": "1817-02-03",
+    "date_precision": "approximate",
+    "day_of_campaign": 15,
+    "elevation_m": 3890,
+    "forces": [
+      {
+        "men": 140,
+        "side": "Columna de Cabot (paso de Guana)"
+      }
+    ],
+    "id": "andes-cabot-04",
+    "lat": -30.1,
+    "lon": -70.0,
+    "name": "Paso de Guana",
+    "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto. Fecha estimada por distancia entre las fechas documentadas.",
+    "retrieved_at": "2026-10-09",
+    "source": "Wikipedia, «Rutas sanmartinianas» (columnas, pasos, fechas y efectivos); El Arcón de la Historia (fechas de Las Heras y Freire); coordenadas: MapTiler Geocoding (OpenStreetMap); altitud: MapTiler Terrain-RGB v2"
+  },
+  {
+    "column_id": "cabot",
+    "column_name": "Columna de Cabot (paso de Guana)",
+    "date": "1817-02-15",
+    "date_precision": "day",
+    "day_of_campaign": 27,
+    "elevation_m": 28,
+    "forces": [
+      {
+        "men": 140,
+        "side": "Columna de Cabot (paso de Guana)"
+      }
+    ],
+    "id": "andes-cabot-05",
+    "lat": -29.903,
+    "lon": -71.252,
+    "name": "La Serena",
+    "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto.",
+    "retrieved_at": "2026-10-09",
+    "source": "Wikipedia, «Rutas sanmartinianas» (columnas, pasos, fechas y efectivos); El Arcón de la Historia (fechas de Las Heras y Freire); coordenadas: MapTiler Geocoding (OpenStreetMap); altitud: MapTiler Terrain-RGB v2"
+  },
+  {
+    "column_id": "freire",
+    "column_name": "Columna de Freire (paso del Planchón)",
+    "date": "1817-01-14",
+    "date_precision": "day",
+    "day_of_campaign": -5,
+    "elevation_m": 706,
+    "forces": [
+      {
+        "men": 100,
+        "note": "100 soldados, más guerrilleros y reclutas",
+        "side": "Columna de Freire (paso del Planchón)"
+      }
+    ],
+    "id": "andes-freire-01",
+    "lat": -32.847,
+    "lon": -68.807,
+    "name": "Mendoza (El Plumerillo)",
+    "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto.",
+    "retrieved_at": "2026-10-09",
+    "source": "Wikipedia, «Rutas sanmartinianas» (columnas, pasos, fechas y efectivos); El Arcón de la Historia (fechas de Las Heras y Freire); coordenadas: MapTiler Geocoding (OpenStreetMap); altitud: MapTiler Terrain-RGB v2"
+  },
+  {
+    "column_id": "freire",
+    "column_name": "Columna de Freire (paso del Planchón)",
+    "date": "1817-01-15",
+    "date_precision": "approximate",
+    "day_of_campaign": -4,
+    "elevation_m": 955,
+    "forces": [
+      {
+        "men": 100,
+        "note": "100 soldados, más guerrilleros y reclutas",
+        "side": "Columna de Freire (paso del Planchón)"
+      }
+    ],
+    "id": "andes-freire-02",
+    "lat": -33.039,
+    "lon": -68.88,
+    "name": "Luján de Cuyo",
+    "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto. Fecha estimada por distancia entre las fechas documentadas.",
+    "retrieved_at": "2026-10-09",
+    "source": "Wikipedia, «Rutas sanmartinianas» (columnas, pasos, fechas y efectivos); El Arcón de la Historia (fechas de Las Heras y Freire); coordenadas: MapTiler Geocoding (OpenStreetMap); altitud: MapTiler Terrain-RGB v2"
+  },
+  {
+    "column_id": "freire",
+    "column_name": "Columna de Freire (paso del Planchón)",
+    "date": "1817-01-18",
+    "date_precision": "approximate",
+    "day_of_campaign": -1,
+    "elevation_m": 955,
+    "forces": [
+      {
+        "men": 100,
+        "note": "100 soldados, más guerrilleros y reclutas",
+        "side": "Columna de Freire (paso del Planchón)"
+      }
+    ],
+    "id": "andes-freire-03",
+    "lat": -33.774,
+    "lon": -69.048,
+    "name": "San Carlos",
+    "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto. Fecha estimada por distancia entre las fechas documentadas.",
+    "retrieved_at": "2026-10-09",
+    "source": "Wikipedia, «Rutas sanmartinianas» (columnas, pasos, fechas y efectivos); El Arcón de la Historia (fechas de Las Heras y Freire); coordenadas: MapTiler Geocoding (OpenStreetMap); altitud: MapTiler Terrain-RGB v2"
+  },
+  {
+    "column_id": "freire",
+    "column_name": "Columna de Freire (paso del Planchón)",
+    "date": "1817-01-23",
+    "date_precision": "approximate",
+    "day_of_campaign": 4,
+    "elevation_m": 701,
+    "forces": [
+      {
+        "men": 100,
+        "note": "100 soldados, más guerrilleros y reclutas",
+        "side": "Columna de Freire (paso del Planchón)"
+      }
+    ],
+    "id": "andes-freire-04",
+    "lat": -34.613,
+    "lon": -68.331,
+    "name": "San Rafael",
+    "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto. Fecha estimada por distancia entre las fechas documentadas.",
+    "retrieved_at": "2026-10-09",
+    "source": "Wikipedia, «Rutas sanmartinianas» (columnas, pasos, fechas y efectivos); El Arcón de la Historia (fechas de Las Heras y Freire); coordenadas: MapTiler Geocoding (OpenStreetMap); altitud: MapTiler Terrain-RGB v2"
+  },
+  {
+    "column_id": "freire",
+    "column_name": "Columna de Freire (paso del Planchón)",
+    "date": "1817-02-01",
+    "date_precision": "day",
+    "day_of_campaign": 13,
+    "elevation_m": 3145,
+    "forces": [
+      {
+        "men": 100,
+        "note": "100 soldados, más guerrilleros y reclutas",
+        "side": "Columna de Freire (paso del Planchón)"
+      }
+    ],
+    "id": "andes-freire-05",
+    "lat": -35.24,
+    "lon": -70.55,
+    "name": "Paso del Planchón",
+    "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto.",
+    "retrieved_at": "2026-10-09",
+    "source": "Wikipedia, «Rutas sanmartinianas» (columnas, pasos, fechas y efectivos); El Arcón de la Historia (fechas de Las Heras y Freire); coordenadas: MapTiler Geocoding (OpenStreetMap); altitud: MapTiler Terrain-RGB v2"
+  },
+  {
+    "column_id": "freire",
+    "column_name": "Columna de Freire (paso del Planchón)",
+    "date": "1817-02-12",
+    "date_precision": "day",
+    "day_of_campaign": 24,
+    "elevation_m": 96,
+    "forces": [
+      {
+        "men": 100,
+        "note": "100 soldados, más guerrilleros y reclutas",
+        "side": "Columna de Freire (paso del Planchón)"
+      }
+    ],
+    "id": "andes-freire-06",
+    "lat": -35.427,
+    "lon": -71.666,
+    "name": "Talca",
+    "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto.",
+    "retrieved_at": "2026-10-09",
+    "source": "Wikipedia, «Rutas sanmartinianas» (columnas, pasos, fechas y efectivos); El Arcón de la Historia (fechas de Las Heras y Freire); coordenadas: MapTiler Geocoding (OpenStreetMap); altitud: MapTiler Terrain-RGB v2"
+  },
+  {
+    "column_id": "lemos",
+    "column_name": "Columna de Lemos (paso del Portillo)",
+    "date": "1817-01-19",
+    "date_precision": "day",
+    "day_of_campaign": 0,
+    "elevation_m": 955,
+    "forces": [
+      {
+        "men": 55,
+        "side": "Columna de Lemos (paso del Portillo)"
+      }
+    ],
+    "id": "andes-lemos-01",
+    "lat": -33.774,
+    "lon": -69.048,
+    "name": "San Carlos",
+    "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto.",
+    "retrieved_at": "2026-10-09",
+    "source": "Wikipedia, «Rutas sanmartinianas» (columnas, pasos, fechas y efectivos); El Arcón de la Historia (fechas de Las Heras y Freire); coordenadas: MapTiler Geocoding (OpenStreetMap); altitud: MapTiler Terrain-RGB v2"
+  },
+  {
+    "column_id": "lemos",
+    "column_name": "Columna de Lemos (paso del Portillo)",
+    "date": "1817-01-23",
+    "date_precision": "approximate",
+    "day_of_campaign": 4,
+    "elevation_m": 3198,
+    "forces": [
+      {
+        "men": 55,
+        "side": "Columna de Lemos (paso del Portillo)"
+      }
+    ],
+    "id": "andes-lemos-02",
+    "lat": -33.65,
+    "lon": -69.95,
+    "name": "Paso del Portillo",
+    "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto. Sin fecha en las fuentes: se supone el ritmo de la columna de Freire.",
+    "retrieved_at": "2026-10-09",
+    "source": "Wikipedia, «Rutas sanmartinianas» (columnas, pasos, fechas y efectivos); El Arcón de la Historia (fechas de Las Heras y Freire); coordenadas: MapTiler Geocoding (OpenStreetMap); altitud: MapTiler Terrain-RGB v2"
+  },
+  {
+    "column_id": "lemos",
+    "column_name": "Columna de Lemos (paso del Portillo)",
+    "date": "1817-01-24",
+    "date_precision": "approximate",
+    "day_of_campaign": 5,
+    "elevation_m": 1261,
+    "forces": [
+      {
+        "men": 55,
+        "side": "Columna de Lemos (paso del Portillo)"
+      }
+    ],
+    "id": "andes-lemos-03",
+    "lat": -33.783,
+    "lon": -70.237,
+    "name": "San Gabriel",
+    "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto. Sin fecha en las fuentes: se supone el ritmo de la columna de Freire.",
+    "retrieved_at": "2026-10-09",
+    "source": "Wikipedia, «Rutas sanmartinianas» (columnas, pasos, fechas y efectivos); El Arcón de la Historia (fechas de Las Heras y Freire); coordenadas: MapTiler Geocoding (OpenStreetMap); altitud: MapTiler Terrain-RGB v2"
+  },
+  {
+    "column_id": "zelada",
+    "column_name": "Columna de Zelada (paso de Come-Caballos)",
+    "date": "1817-01-05",
+    "date_precision": "day",
+    "day_of_campaign": -14,
+    "elevation_m": 1076,
+    "forces": [
+      {
+        "men": 130,
+        "side": "Columna de Zelada (paso de Come-Caballos)"
+      }
+    ],
+    "id": "andes-zelada-01",
+    "lat": -29.525,
+    "lon": -68.563,
+    "name": "Guandacol",
+    "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto.",
+    "retrieved_at": "2026-10-09",
+    "source": "Wikipedia, «Rutas sanmartinianas» (columnas, pasos, fechas y efectivos); El Arcón de la Historia (fechas de Las Heras y Freire); coordenadas: MapTiler Geocoding (OpenStreetMap); altitud: MapTiler Terrain-RGB v2"
+  },
+  {
+    "column_id": "zelada",
+    "column_name": "Columna de Zelada (paso de Come-Caballos)",
+    "date": "1817-01-22",
+    "date_precision": "approximate",
+    "day_of_campaign": 3,
+    "elevation_m": 4257,
+    "forces": [
+      {
+        "men": 130,
+        "side": "Columna de Zelada (paso de Come-Caballos)"
+      }
+    ],
+    "id": "andes-zelada-02",
+    "lat": -28.332,
+    "lon": -68.862,
+    "name": "Laguna Brava",
+    "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto. Fecha estimada por distancia entre las fechas documentadas.",
+    "retrieved_at": "2026-10-09",
+    "source": "Wikipedia, «Rutas sanmartinianas» (columnas, pasos, fechas y efectivos); El Arcón de la Historia (fechas de Las Heras y Freire); coordenadas: MapTiler Geocoding (OpenStreetMap); altitud: MapTiler Terrain-RGB v2"
+  },
+  {
+    "column_id": "zelada",
+    "column_name": "Columna de Zelada (paso de Come-Caballos)",
+    "date": "1817-01-27",
+    "date_precision": "approximate",
+    "day_of_campaign": 8,
+    "elevation_m": 4418,
+    "forces": [
+      {
+        "men": 130,
+        "side": "Columna de Zelada (paso de Come-Caballos)"
+      }
+    ],
+    "id": "andes-zelada-03",
+    "lat": -28.2,
+    "lon": -69.3,
+    "name": "Paso de Come-Caballos",
+    "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto. Fecha estimada por distancia entre las fechas documentadas.",
+    "retrieved_at": "2026-10-09",
+    "source": "Wikipedia, «Rutas sanmartinianas» (columnas, pasos, fechas y efectivos); El Arcón de la Historia (fechas de Las Heras y Freire); coordenadas: MapTiler Geocoding (OpenStreetMap); altitud: MapTiler Terrain-RGB v2"
+  },
+  {
+    "column_id": "zelada",
+    "column_name": "Columna de Zelada (paso de Come-Caballos)",
+    "date": "1817-02-13",
+    "date_precision": "day",
+    "day_of_campaign": 25,
+    "elevation_m": 385,
+    "forces": [
+      {
+        "men": 130,
+        "side": "Columna de Zelada (paso de Come-Caballos)"
+      }
+    ],
+    "id": "andes-zelada-04",
+    "lat": -27.366,
+    "lon": -70.332,
+    "name": "Copiapó",
+    "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto.",
+    "retrieved_at": "2026-10-09",
+    "source": "Wikipedia, «Rutas sanmartinianas» (columnas, pasos, fechas y efectivos); El Arcón de la Historia (fechas de Las Heras y Freire); coordenadas: MapTiler Geocoding (OpenStreetMap); altitud: MapTiler Terrain-RGB v2"
   }
 ]

@@ -19,7 +19,7 @@ import sys
 import urllib.error
 import urllib.parse
 import urllib.request
-from datetime import date, datetime, timedelta, timezone
+from datetime import UTC, date, datetime, timedelta
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -135,7 +135,7 @@ def main(argv=None, env=None, http_get=http_get, stdout=sys.stdout.write, stderr
         args = parser.parse_args(sys.argv[1:] if argv is None else argv)
         if args.days < 1:
             raise ValueError("--days must be at least 1")
-        today = date.fromisoformat(args.today) if args.today else datetime.now(timezone.utc).date()
+        today = date.fromisoformat(args.today) if args.today else datetime.now(UTC).date()
     except ValueError as error:
         stderr(f"sync_visits: {error}\n")
         return 2

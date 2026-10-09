@@ -1,0 +1,2 @@
+# One place for the lint settings, so the result does not depend on the defaults of the ruff version.
+target-version = "py312"
