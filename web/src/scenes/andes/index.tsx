@@ -75,6 +75,12 @@ export default function Scene() {
   const dispatch = useStore((s) => s.dispatch);
   const setTimeScale = useStore((s) => s.setTimeScale);
   const [mapReady, setMapReady] = useState(false);
+  const [tourPlay, setTourPlay] = useState(0);
+  const tourCount = useRef(0);
+  const playTour = useCallback(() => {
+    tourCount.current += 1;
+    setTourPlay(tourCount.current);
+  }, []);
   const cameraApi = useRef<CameraApi | null>(null);
   const [tunerOpen, setTunerOpen] = useState(false);
   const [camView, setCamView] = useState<CameraView>({ lon: -70, lat: -32, zoom: 6, pitch: 40, bearing: 0 });
@@ -136,6 +142,8 @@ export default function Scene() {
           onTimeScale={setTimeScale}
           onReady={() => setMapReady(true)}
           cameraApi={cameraApi}
+          tourPlay={tourPlay}
+          onTourEnd={() => setTourPlay(0)}
           onView={tunerOpen ? setCamView : undefined}
           label={label}
         />
@@ -150,7 +158,7 @@ export default function Scene() {
 
   const stage = (
     <div className="andes-stage">
-      <AndesIntro ready={mapReady || view === 'table'} />
+      <AndesIntro ready={mapReady || view === 'table'} onDone={playTour} />
       <div className="andes-canvas">
         {view === 'map' ? (
           map
@@ -186,6 +194,17 @@ export default function Scene() {
               {text}
             </button>
           ))}
+          <button
+            type="button"
+            className="chip"
+            disabled={view !== 'map'}
+            onClick={() => {
+              setCamera('free');
+              playTour();
+            }}
+          >
+            Tour
+          </button>
           <button type="button" className="chip" disabled={view !== 'map'} onClick={() => setCloseUp(closeUp + 1)}>
             Ver de cerca
           </button>

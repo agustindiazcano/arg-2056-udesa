@@ -15,6 +15,8 @@ import type { FigureColumn } from './figures3d';
 import type { Graphics } from './graphics';
 import { FIGURE_MIN_ZOOM, cameraFor, coordAtKm, figuresVisible, gaitAmount, gaitPhaseAt, metersPerUnit, timeScaleForZoom } from './mapGeo';
 import { arcAt, buildPath } from './pathAlong';
+import { useReducedMotion } from '../../runtime/useReducedMotion';
+import { ANDES_TOUR, TOUR_HOLD_MS, tourDurationMs, tourPoseAt } from './tour';
 import type { Path } from './pathAlong';
 import { positionAt } from './timeline';
 import type { Route } from './timeline';
@@ -55,6 +57,10 @@ export interface MapLibreRendererProps {
   cameraApi?: { current: CameraApi | null };
   /** the camera while it moves (about every 120 ms) and when it stops; only given while something shows the numbers */
   onView?: (view: CameraView) => void;
+  /** 0: no tour; a number that grows each time the tour must play (the first one starts after the loading screen) */
+  tourPlay?: number;
+  /** the tour finished or the reader took the camera: the scene can set `tourPlay` back to 0 */
+  onTourEnd?: () => void;
   label: string;
 }
 
@@ -229,7 +235,8 @@ class ArmyLayer implements CustomLayerInterface {
 }
 
 /** Real map of the crossing: MapTiler satellite imagery draped on the MapTiler terrain (real relief), the route and its places, and the army as miniatures on it. */
-export function MapLibreRenderer({ route, columns, day, selectedId, camera, graphics, closeUp, onSelect, onTimeScale, onReady, cameraApi, onView, label }: MapLibreRendererProps) {
+export function MapLibreRenderer({ route, columns, day, selectedId, camera, graphics, closeUp, onSelect, onTimeScale, onReady, cameraApi, onView, tourPlay = 0, onTourEnd, label }: MapLibreRendererProps) {
+  const reduced = useReducedMotion();
   const hostRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<MapLibreMap | null>(null);
   const layerRef = useRef<ArmyLayer | null>(null);
@@ -240,6 +247,9 @@ export function MapLibreRenderer({ route, columns, day, selectedId, camera, grap
   const onTimeScaleRef = useRef(onTimeScale);
   const onReadyRef = useRef(onReady);
   const onViewRef = useRef(onView);
+  const onTourEndRef = useRef(onTourEnd);
+  const tookOverRef = useRef(false);
+  const stopTourRef = useRef<() => void>(() => undefined);
   const lastScaleRef = useRef(1);
   const [missingKey] = useState(MAPTILER_KEY === '');
   const position = positionAt(route, day);
@@ -251,6 +261,7 @@ export function MapLibreRenderer({ route, columns, day, selectedId, camera, grap
   onTimeScaleRef.current = onTimeScale;
   onReadyRef.current = onReady;
   onViewRef.current = onView;
+  onTourEndRef.current = onTourEnd;
   kmRef.current = km;
 
   const syncArmy = () => {
@@ -287,14 +298,14 @@ export function MapLibreRenderer({ route, columns, day, selectedId, camera, grap
   useEffect(() => {
     const host = hostRef.current;
     if (!host) return undefined;
-    const overview = cameraFor('map', coordAtKm(route, 0))!;
+    const overview = ANDES_TOUR[0]!;
     const map = new MapLibreMap({
       container: host,
       style: missingKey ? { version: 8, sources: {}, layers: [{ id: 'bg', type: 'background', paint: { 'background-color': '#1b2733' } }] } : STYLE_URL,
-      center: overview.center,
+      center: [overview.lon, overview.lat],
       zoom: overview.zoom,
       pitch: overview.pitch,
-      bearing: 0,
+      bearing: overview.bearing,
       maxPitch: 82,
       maxZoom: 17.5,
       attributionControl: { compact: true },
@@ -392,8 +403,14 @@ export function MapLibreRenderer({ route, columns, day, selectedId, camera, grap
       syncArmyRef.current();
       scaleClock();
     });
-    map.once('idle', () => onReadyRef.current?.());
+    // ready on the first image of the map (not when every tile and the terrain are done): the loading screen should not wait for the last tile
+    map.once('load', () => onReadyRef.current?.());
     scaleClock();
+    const takeOver = () => {
+      tookOverRef.current = true;
+      stopTourRef.current();
+    };
+    for (const type of ['mousedown', 'touchstart', 'wheel'] as const) map.on(type, takeOver);
     const readView = (): CameraView => {
       const c = map.getCenter();
       return { lon: c.lng, lat: c.lat, zoom: map.getZoom(), pitch: map.getPitch(), bearing: map.getBearing() };
@@ -402,6 +419,7 @@ export function MapLibreRenderer({ route, columns, day, selectedId, camera, grap
       cameraApi.current = {
         get: readView,
         set: (v, ms = 0) => {
+          takeOver();
           const target = { center: [v.lon, v.lat] as [number, number], zoom: v.zoom, pitch: v.pitch, bearing: v.bearing };
           if (ms > 0) map.easeTo({ ...target, duration: ms, essential: true });
           else map.jumpTo(target);
@@ -448,7 +466,13 @@ export function MapLibreRenderer({ route, columns, day, selectedId, camera, grap
     if (target) map.jumpTo({ center: target.center, ...(target.bearing !== undefined ? { bearing: target.bearing } : {}) });
   }, [km, day, route]);
 
-  useEffect(() => aim(camera, 1800), [camera]);
+  useEffect(() => {
+    aim(camera, 1800);
+    if (camera !== 'free') {
+      tookOverRef.current = true;
+      stopTourRef.current();
+    }
+  }, [camera]);
 
   // following the army the reader orbits it: dragging turns (sideways) and tilts (up and down) the camera around the army, and the wheel zooms on it
   useEffect(() => {
@@ -488,9 +512,67 @@ export function MapLibreRenderer({ route, columns, day, selectedId, camera, grap
 
   useEffect(() => {
     if (closeUp === 0) return;
+    tookOverRef.current = true;
+    stopTourRef.current();
     const map = mapRef.current;
     if (map) map.flyTo({ center: [coordAtKm(route, kmRef.current).lon, coordAtKm(route, kmRef.current).lat], zoom: Math.max(FIGURE_MIN_ZOOM + 3, 15.2), pitch: 70, duration: 2200, essential: true });
   }, [closeUp, route]);
+
+  // the camera tour: it waits a second on the first view and then goes through the stops; the reader (mouse, wheel, a camera button, an event) stops it
+  useEffect(() => {
+    if (!tourPlay) return undefined;
+    const map = mapRef.current;
+    if (!map) return undefined;
+    const again = tourPlay > 1;
+    if (again) tookOverRef.current = false;
+    if (tookOverRef.current) {
+      onTourEndRef.current?.();
+      return undefined;
+    }
+    let cancelled = false;
+    let raf = 0;
+    let timer = 0;
+    const pose = (v: CameraView) => map.jumpTo({ center: [v.lon, v.lat], zoom: v.zoom, pitch: v.pitch, bearing: v.bearing });
+    const finish = () => {
+      stopTourRef.current = () => undefined;
+      onTourEndRef.current?.();
+    };
+    stopTourRef.current = () => {
+      cancelled = true;
+      window.clearTimeout(timer);
+      window.cancelAnimationFrame(raf);
+      finish();
+    };
+    if (reduced) {
+      pose(tourPoseAt(ANDES_TOUR, tourDurationMs(ANDES_TOUR)));
+      finish();
+      return undefined;
+    }
+    const first = ANDES_TOUR[0]!;
+    if (again) map.easeTo({ center: [first.lon, first.lat], zoom: first.zoom, pitch: first.pitch, bearing: first.bearing, duration: 1200, essential: true });
+    const run = () => {
+      const start = performance.now();
+      const total = tourDurationMs(ANDES_TOUR);
+      const frame = (now: number) => {
+        if (cancelled) return;
+        const ms = now - start;
+        pose(tourPoseAt(ANDES_TOUR, ms));
+        if (ms >= total) {
+          finish();
+          return;
+        }
+        raf = window.requestAnimationFrame(frame);
+      };
+      raf = window.requestAnimationFrame(frame);
+    };
+    timer = window.setTimeout(run, again ? 1400 : TOUR_HOLD_MS);
+    return () => {
+      cancelled = true;
+      window.clearTimeout(timer);
+      window.cancelAnimationFrame(raf);
+      stopTourRef.current = () => undefined;
+    };
+  }, [tourPlay, reduced]);
 
   // the chosen event: the camera flies to it and its dot grows
   useEffect(() => {
@@ -498,6 +580,10 @@ export function MapLibreRenderer({ route, columns, day, selectedId, camera, grap
     if (!map || !readyRef.current) return;
     map.setPaintProperty('places-dot', 'circle-radius', ['case', ['==', ['get', 'id'], selectedId ?? ''], 9, 6]);
     const p = route.points.find((q) => q.id === selectedId);
+    if (p) {
+      tookOverRef.current = true;
+      stopTourRef.current();
+    }
     if (p) map.flyTo({ center: [p.lon, p.lat], zoom: 12.5, pitch: 65, duration: 2000, essential: true });
   }, [selectedId, route]);
 

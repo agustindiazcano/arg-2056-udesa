@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useReducedMotion } from '../../runtime/useReducedMotion';
 import './andesIntro.css';
 
 /** The least time the loading screen stays, so the title can be read even when the map is ready at once. */
-export const INTRO_MIN_MS = 2200;
+export const INTRO_MIN_MS = 1200;
 /** The most it waits for the map: after this it leaves anyway (a slow network must not hold the scene). */
-export const INTRO_MAX_MS = 15000;
+export const INTRO_MAX_MS = 8000;
 /** How long it takes to leave (the clouds fade out); the same number is in `andesIntro.css`. */
-export const INTRO_FADE_MS = 1300;
+export const INTRO_FADE_MS = 800;
 
 /**
  * One layer of clouds: an SVG rectangle filled with fractal noise (`feTurbulence`) that a color matrix turns into white with an alpha that
@@ -29,6 +29,8 @@ function CloudLayer({ id, seed, base, gain, cut, className }: { id: string; seed
 interface AndesIntroProps {
   /** the map has its first image */
   ready: boolean;
+  /** called once, when the screen has left (the camera tour starts then) */
+  onDone?: () => void;
 }
 
 /**
@@ -37,15 +39,17 @@ interface AndesIntroProps {
  * (they do not move). It lets the clicks through and is hidden from the screen readers (the scene under it has the content). With reduced motion the
  * clouds do not drift and it leaves quickly.
  */
-export function AndesIntro({ ready }: AndesIntroProps) {
+export function AndesIntro({ ready, onDone }: AndesIntroProps) {
   const reduced = useReducedMotion();
+  const doneRef = useRef(onDone);
+  doneRef.current = onDone;
   const [minPassed, setMinPassed] = useState(false);
   const [maxPassed, setMaxPassed] = useState(false);
   const [gone, setGone] = useState(false);
   const leaving = (ready && minPassed) || maxPassed;
 
   useEffect(() => {
-    const min = window.setTimeout(() => setMinPassed(true), reduced ? 900 : INTRO_MIN_MS);
+    const min = window.setTimeout(() => setMinPassed(true), reduced ? 600 : INTRO_MIN_MS);
     const max = window.setTimeout(() => setMaxPassed(true), INTRO_MAX_MS);
     return () => {
       window.clearTimeout(min);
@@ -58,6 +62,10 @@ export function AndesIntro({ ready }: AndesIntroProps) {
     const t = window.setTimeout(() => setGone(true), reduced ? 300 : INTRO_FADE_MS);
     return () => window.clearTimeout(t);
   }, [leaving, reduced]);
+
+  useEffect(() => {
+    if (gone) doneRef.current?.();
+  }, [gone]);
 
   if (gone) return null;
   return (
