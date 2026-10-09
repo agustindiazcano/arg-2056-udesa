@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { MercatorCoordinate, Map as MapLibreMap, setWorkerUrl } from 'maplibre-gl';
 import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?url';
 import type { CustomLayerInterface, CustomRenderMethodInput, GeoJSONSource, MapLayerMouseEvent } from 'maplibre-gl';
-import { AmbientLight, DirectionalLight, Matrix4, PerspectiveCamera, Scene, WebGLRenderer } from 'three';
+import { AmbientLight, Color, DirectionalLight, InstancedMesh, Matrix4, MeshStandardMaterial, PerspectiveCamera, Quaternion, Scene, SphereGeometry, Vector3, WebGLRenderer } from 'three';
 import { QUALITY_PRESETS } from '../../runtime/capabilities';
 import { NavControls } from '../../ui/NavControls';
 import { figureCount, startingMen } from './column';
@@ -13,7 +13,7 @@ import type { CameraMode } from './camera';
 import { createFigureColumn } from './figures3d';
 import type { FigureColumn } from './figures3d';
 import type { Graphics } from './graphics';
-import { FIGURE_MIN_ZOOM, cameraFor, coordAtKm, figuresVisible, gaitAmount, gaitPhaseAt, metersPerUnit, mixHex, timeScaleForZoom } from './mapGeo';
+import { FIGURE_MIN_ZOOM, cameraFor, coordAtKm, figuresVisible, gaitAmount, gaitPhaseAt, metersPerPixel, metersPerUnit, mixHex, timeScaleForZoom } from './mapGeo';
 import { arcAt, buildPath } from './pathAlong';
 import { useReducedMotion } from '../../runtime/useReducedMotion';
 import { ANDES_FINAL_VIEW, ANDES_TOUR, SPOT_VIEW, TOUR_HOLD_MS, tourDurationMs, tourPoseAt } from './tour';
@@ -86,24 +86,118 @@ const SKY_DARK = { 'sky-color': '#0b1830', 'horizon-color': '#1c2f4d', 'fog-colo
 /** How wide each light is on the ground, in pixels of the screen. */
 const SPOT_RADIUS_PX = 96;
 
-const EMPTY: GeoJSON.FeatureCollection = { type: 'FeatureCollection', features: [] };
-
 const columnLabel = (name: string) => name.replace(/^Columna de /, '');
 
+/** One of the blue balls of the far view: where it is, which force it belongs to and whether it is a small one. */
+interface Ball {
+  id: string;
+  lon: number;
+  lat: number;
+  small: boolean;
+}
+
 /** The blue balls of the far view: one for about every 500 men of each force, a smaller one for a force under a hundred, in a short line behind its head. */
-function forceBallsGeoJson(main: Route, mainKm: number, columns: readonly Column[], day: number, zoom: number, latitude: number): GeoJSON.FeatureCollection {
+function forceBalls(main: Route, mainKm: number, columns: readonly Column[], day: number, zoom: number, latitude: number): Ball[] {
   const spacing = ballSpacingKm(zoom, latitude);
-  const features: GeoJSON.Feature[] = [];
+  const balls: Ball[] = [];
   const add = (id: string, route: Route, km: number) => {
     const men = forceMen(route.points);
-    const small = isSmallForce(men);
-    for (const at of ballPositions(route, km, ballCount(men), spacing)) {
-      features.push({ type: 'Feature', properties: { id, small: small ? 1 : 0 }, geometry: { type: 'Point', coordinates: at } });
-    }
+    for (const [lon, lat] of ballPositions(route, km, ballCount(men), spacing)) balls.push({ id, lon, lat, small: isSmallForce(men) });
   };
   add(MAIN_FORCE_ID, main, mainKm);
   for (const c of columns) add(c.id, c.route, positionOfColumn(c, day)?.distanceKm ?? 0);
-  return { type: 'FeatureCollection', features };
+  return balls;
+}
+
+/** The ball is this many pixels across on the screen, whatever the zoom: a small force has a smaller one. */
+const BALL_PX = 8;
+const SMALL_BALL_PX = 4.5;
+/** The local frame of the balls is centered here: the middle of the crossing. */
+const BALLS_ORIGIN: [number, number] = [-69.8, -32];
+const MAX_BALLS = 64;
+
+/**
+ * The balls of the far view as real spheres: a MapLibre custom layer drawn by Three.js (lit, with a little glow of their own so they read on the dark
+ * map of the spotlight), standing on the terrain and the same size on the screen at every zoom. A frame of meters around `BALLS_ORIGIN` keeps the
+ * numbers small for the 32-bit matrices.
+ */
+class BallsLayer implements CustomLayerInterface {
+  readonly id = 'force-balls-3d';
+  readonly type = 'custom' as const;
+  readonly renderingMode = '3d' as const;
+  private balls: Ball[] = [];
+  private map: MapLibreMap | null = null;
+  private renderer: WebGLRenderer | null = null;
+  private mesh: InstancedMesh | null = null;
+  private readonly scene = new Scene();
+  private readonly camera = new PerspectiveCamera();
+  private readonly model = new Matrix4();
+  private readonly projection = new Matrix4();
+  private readonly at = new Vector3();
+  private readonly one = new Vector3();
+  private readonly instance = new Matrix4();
+  private readonly color = new Color();
+  private readonly noTurn = new Quaternion();
+
+  setBalls(balls: Ball[]): void {
+    this.balls = balls;
+    this.map?.triggerRepaint();
+  }
+
+  onAdd(map: MapLibreMap, gl: WebGLRenderingContext | WebGL2RenderingContext): void {
+    this.map = map;
+    this.renderer = new WebGLRenderer({ canvas: map.getCanvas(), context: gl, antialias: true });
+    this.renderer.autoClear = false;
+    this.scene.add(new AmbientLight(0xffffff, 1.1));
+    const sun = new DirectionalLight(0xffffff, 2.4);
+    sun.position.set(-0.5, 1, 0.6);
+    this.scene.add(sun);
+    this.mesh = new InstancedMesh(
+      new SphereGeometry(1, 28, 18),
+      new MeshStandardMaterial({ color: 0xffffff, roughness: 0.28, metalness: 0.15, emissive: 0x0d2c6e, emissiveIntensity: 0.55 }),
+      MAX_BALLS
+    );
+    this.mesh.frustumCulled = false;
+    this.scene.add(this.mesh);
+  }
+
+  onRemove(): void {
+    this.mesh?.geometry.dispose();
+    this.renderer?.dispose();
+    this.renderer = null;
+    this.mesh = null;
+    this.map = null;
+  }
+
+  render(_gl: WebGLRenderingContext | WebGL2RenderingContext, args: CustomRenderMethodInput): void {
+    const map = this.map;
+    const renderer = this.renderer;
+    const mesh = this.mesh;
+    if (!map || !renderer || !mesh || this.balls.length === 0) return;
+    const originMc = MercatorCoordinate.fromLngLat(BALLS_ORIGIN, 0);
+    const scale = originMc.meterInMercatorCoordinateUnits();
+    const mpp = metersPerPixel(map.getZoom(), map.getCenter().lat);
+    const n = Math.min(MAX_BALLS, this.balls.length);
+    for (let i = 0; i < n; i += 1) {
+      const b = this.balls[i]!;
+      const mc = MercatorCoordinate.fromLngLat([b.lon, b.lat], 0);
+      const radius = ((b.small ? SMALL_BALL_PX : BALL_PX) / 2) * mpp;
+      const ground = map.queryTerrainElevation([b.lon, b.lat]) ?? 0;
+      this.at.set((mc.x - originMc.x) / scale, ground + radius, (mc.y - originMc.y) / scale);
+      this.instance.compose(this.at, this.noTurn, this.one.setScalar(radius));
+      mesh.setMatrixAt(i, this.instance);
+      mesh.setColorAt(i, this.color.set(b.small ? 0x6aa5ff : 0x2f7bff));
+    }
+    mesh.count = n;
+    mesh.instanceMatrix.needsUpdate = true;
+    if (mesh.instanceColor) mesh.instanceColor.needsUpdate = true;
+    const k = scale;
+    this.model.makeTranslation(originMc.x, originMc.y, 0).multiply(new Matrix4().makeScale(k, -k, k)).multiply(new Matrix4().makeRotationX(Math.PI / 2));
+    this.projection.fromArray(args.defaultProjectionData.mainMatrix as unknown as number[]);
+    this.camera.projectionMatrix.copy(this.projection).multiply(this.model);
+    renderer.resetState();
+    renderer.render(this.scene, this.camera);
+  }
 }
 
 function columnsGeoJson(columns: readonly Column[], day: number): { lines: GeoJSON.FeatureCollection; balls: GeoJSON.FeatureCollection } {
@@ -278,6 +372,7 @@ export function MapLibreRenderer({ route, columns, day, selectedId, camera, grap
   const hostRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<MapLibreMap | null>(null);
   const layerRef = useRef<ArmyLayer | null>(null);
+  const ballsRef = useRef<BallsLayer | null>(null);
   const readyRef = useRef(false);
   const dayRef = useRef(day);
   const cameraRef = useRef(camera);
@@ -323,11 +418,11 @@ export function MapLibreRenderer({ route, columns, day, selectedId, camera, grap
     (map.getSource('columns-balls') as GeoJSONSource | undefined)?.setData(columnsGeoJson(columns, dayRef.current).balls);
     (map.getSource('route-done') as GeoJSONSource | undefined)?.setData(g.done);
     (map.getSource('places') as GeoJSONSource | undefined)?.setData(g.places);
-    (map.getSource('force-balls') as GeoJSONSource | undefined)?.setData(forceBallsGeoJson(route, k, columnsRef.current, dayRef.current, map.getZoom(), map.getCenter().lat));
     const wantFigures = figuresVisible(map.getZoom(), layer.active);
     layer.active = wantFigures;
     // up close the main force is its figures, so its balls go; the other forces always have theirs
-    map.setFilter('force-balls', wantFigures ? ['!=', ['get', 'id'], MAIN_FORCE_ID] : null);
+    const balls = forceBalls(route, k, columnsRef.current, dayRef.current, map.getZoom(), map.getCenter().lat);
+    ballsRef.current?.setBalls(wantFigures ? balls.filter((ball) => ball.id !== MAIN_FORCE_ID) : balls);
     map.triggerRepaint();
   };
   const syncArmyRef = useRef(syncArmy);
@@ -384,15 +479,14 @@ export function MapLibreRenderer({ route, columns, day, selectedId, camera, grap
       map.addSource('route-all', { type: 'geojson', data: routeGeoJson(route, 0).all });
       map.addSource('route-done', { type: 'geojson', data: g.done });
       map.addSource('places', { type: 'geojson', data: g.places });
-      map.addSource('force-balls', { type: 'geojson', data: EMPTY });
       const other = columnsGeoJson(columns, dayRef.current);
       map.addSource('columns-lines', { type: 'geojson', data: other.lines });
       map.addSource('columns-balls', { type: 'geojson', data: other.balls });
       map.addLayer({ id: 'columns-casing', type: 'line', source: 'columns-lines', paint: { 'line-color': '#0b1220', 'line-width': 5, 'line-opacity': 0.5 }, layout: { 'line-join': 'round', 'line-cap': 'round' } });
       map.addLayer({ id: 'columns-line', type: 'line', source: 'columns-lines', paint: { 'line-color': ['get', 'color'], 'line-width': 2.5, 'line-dasharray': [2, 1.5] }, layout: { 'line-join': 'round', 'line-cap': 'round' } });
       map.addLayer({ id: 'route-casing', type: 'line', source: 'route-all', paint: { 'line-color': '#0b1220', 'line-width': 7, 'line-opacity': 0.55 }, layout: { 'line-join': 'round', 'line-cap': 'round' } });
-      map.addLayer({ id: 'route-line', type: 'line', source: 'route-all', paint: { 'line-color': '#f4f1e8', 'line-width': 3, 'line-dasharray': [1.5, 1.5] }, layout: { 'line-join': 'round', 'line-cap': 'round' } });
-      map.addLayer({ id: 'route-walked', type: 'line', source: 'route-done', paint: { 'line-color': '#75aadb', 'line-width': 4 }, layout: { 'line-join': 'round', 'line-cap': 'round' } });
+      map.addLayer({ id: 'route-line', type: 'line', source: 'route-all', paint: { 'line-color': '#2f7bff', 'line-width': 3.5, 'line-dasharray': [1.5, 1.5] }, layout: { 'line-join': 'round', 'line-cap': 'round' } });
+      map.addLayer({ id: 'route-walked', type: 'line', source: 'route-done', paint: { 'line-color': '#8fbaff', 'line-width': 4.5 }, layout: { 'line-join': 'round', 'line-cap': 'round' } });
       map.addLayer({
         id: 'places-dot',
         type: 'circle',
@@ -418,13 +512,10 @@ export function MapLibreRenderer({ route, columns, day, selectedId, camera, grap
         layout: { 'text-field': ['get', 'label'], 'text-font': ['Noto Sans Bold'], 'text-size': 12, 'text-offset': [0, 1.0], 'text-anchor': 'top', 'text-optional': true },
         paint: { 'text-color': ['get', 'color'], 'text-halo-color': '#0b1220', 'text-halo-width': 1.8 }
       });
-      map.addLayer({
-        id: 'force-balls',
-        type: 'circle',
-        source: 'force-balls',
-        paint: { 'circle-radius': ['case', ['==', ['get', 'small'], 1], 3.5, 6.5], 'circle-color': '#2f7bff', 'circle-stroke-color': '#ffffff', 'circle-stroke-width': 1.5 }
-      });
       map.addLayer(layer);
+      const balls = new BallsLayer();
+      ballsRef.current = balls;
+      map.addLayer(balls);
       readyRef.current = true;
       syncArmyRef.current();
       aim(cameraRef.current, 0);
