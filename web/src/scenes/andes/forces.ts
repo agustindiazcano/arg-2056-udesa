@@ -1,5 +1,5 @@
 import type { AndesEvent } from './data';
-import { metersPerPixel } from './mapGeo';
+import { coordAtKm, metersPerPixel } from './mapGeo';
 import { positionAt } from './timeline';
 import type { Route } from './timeline';
 
@@ -136,8 +136,18 @@ export function isSmallForce(men: number | null): boolean {
   return men !== null && men < SMALL_FORCE_MEN;
 }
 
+/** The places of the balls of a force: the first at the head (`km` along its route) and the others behind it, one `spacingKm` apart, never before the start. */
+export function ballPositions(route: Route, km: number, count: number, spacingKm: number): Array<[number, number]> {
+  const out: Array<[number, number]> = [];
+  for (let i = 0; i < count; i += 1) {
+    const c = coordAtKm(route, km - i * spacingKm);
+    out.push([c.lon, c.lat]);
+  }
+  return out;
+}
+
 /** Kilometers along the route between two balls of a force, so they stand a few pixels apart at this zoom. */
-export function ballSpacingKm(zoom: number, latitude: number, pixels = 7): number {
+export function ballSpacingKm(zoom: number, latitude: number, pixels = 14): number {
   return (pixels * metersPerPixel(zoom, latitude)) / 1000;
 }
 

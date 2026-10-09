@@ -4,12 +4,14 @@ import { parseAndesEvents } from '../../src/scenes/andes/data';
 import type { AndesEvent } from '../../src/scenes/andes/data';
 import { splitColumns } from '../../src/scenes/andes/columns';
 import { buildRoute } from '../../src/scenes/andes/timeline';
+import { coordAtKm } from '../../src/scenes/andes/mapGeo';
 import {
   FORCES,
   FORCE_FACTS,
   SPOTLIGHT_END_MS,
   SPOT_STEPS,
   ballCount,
+  ballPositions,
   ballSpacingKm,
   circlePolygon,
   beamGeometry,
@@ -214,5 +216,29 @@ describe('placeLabel', () => {
     expect(placeLabel(route, 2)).toBe('Mendoza → Uspallata');
     expect(placeLabel(route, 99)).toBe('Chile');
     expect(placeLabel(route, -5)).toBe('Mendoza');
+  });
+});
+
+describe('ballPositions', () => {
+  const route = buildRoute([ev(100, 'a', 0), ev(100, 'b', 10)]);
+
+  it('puts the first ball at the head of the force and the others behind it along the route, one spacing apart', () => {
+    const km = route.totalKm / 2;
+    const balls = ballPositions(route, km, 3, 5);
+    expect(balls).toHaveLength(3);
+    const head = coordAtKm(route, km);
+    expect(balls[0]).toEqual([head.lon, head.lat]);
+    const second = coordAtKm(route, km - 5);
+    expect(balls[1]).toEqual([second.lon, second.lat]);
+  });
+
+  it('keeps the balls on the route at the start of it, where there is nothing behind', () => {
+    const balls = ballPositions(route, 1, 4, 5);
+    expect(balls).toHaveLength(4);
+    expect(balls[3]).toEqual([route.points[0]!.lon, route.points[0]!.lat]);
+  });
+
+  it('has no balls for a count of zero', () => {
+    expect(ballPositions(route, 5, 0, 5)).toEqual([]);
   });
 });

@@ -17,7 +17,21 @@ import { FIGURE_MIN_ZOOM, cameraFor, coordAtKm, figuresVisible, gaitAmount, gait
 import { arcAt, buildPath } from './pathAlong';
 import { useReducedMotion } from '../../runtime/useReducedMotion';
 import { ANDES_FINAL_VIEW, ANDES_TOUR, SPOT_VIEW, TOUR_HOLD_MS, tourDurationMs, tourPoseAt } from './tour';
-import { FORCES, FORCE_FACTS, MAIN_FORCE_ID, SPOTLIGHT_FINAL_MS, beamGeometry, placeLabel, spotlightDimAt, spotlightStateAt } from './forces';
+import {
+  FORCES,
+  FORCE_FACTS,
+  MAIN_FORCE_ID,
+  SPOTLIGHT_FINAL_MS,
+  ballCount,
+  ballPositions,
+  ballSpacingKm,
+  beamGeometry,
+  forceMen,
+  isSmallForce,
+  placeLabel,
+  spotlightDimAt,
+  spotlightStateAt
+} from './forces';
 import type { ForceInfo } from './forces';
 import type { Path } from './pathAlong';
 import { positionAt } from './timeline';
@@ -75,6 +89,22 @@ const SPOT_RADIUS_PX = 96;
 const EMPTY: GeoJSON.FeatureCollection = { type: 'FeatureCollection', features: [] };
 
 const columnLabel = (name: string) => name.replace(/^Columna de /, '');
+
+/** The blue balls of the far view: one for about every 500 men of each force, a smaller one for a force under a hundred, in a short line behind its head. */
+function forceBallsGeoJson(main: Route, mainKm: number, columns: readonly Column[], day: number, zoom: number, latitude: number): GeoJSON.FeatureCollection {
+  const spacing = ballSpacingKm(zoom, latitude);
+  const features: GeoJSON.Feature[] = [];
+  const add = (id: string, route: Route, km: number) => {
+    const men = forceMen(route.points);
+    const small = isSmallForce(men);
+    for (const at of ballPositions(route, km, ballCount(men), spacing)) {
+      features.push({ type: 'Feature', properties: { id, small: small ? 1 : 0 }, geometry: { type: 'Point', coordinates: at } });
+    }
+  };
+  add(MAIN_FORCE_ID, main, mainKm);
+  for (const c of columns) add(c.id, c.route, positionOfColumn(c, day)?.distanceKm ?? 0);
+  return { type: 'FeatureCollection', features };
+}
 
 function columnsGeoJson(columns: readonly Column[], day: number): { lines: GeoJSON.FeatureCollection; balls: GeoJSON.FeatureCollection } {
   const lines: GeoJSON.Feature[] = [];
@@ -289,19 +319,15 @@ export function MapLibreRenderer({ route, columns, day, selectedId, camera, grap
     if (!map || !layer || !readyRef.current) return;
     const k = kmRef.current;
     layer.km = k;
-    const here = coordAtKm(route, k);
     const g = routeGeoJson(route, k);
     (map.getSource('columns-balls') as GeoJSONSource | undefined)?.setData(columnsGeoJson(columns, dayRef.current).balls);
     (map.getSource('route-done') as GeoJSONSource | undefined)?.setData(g.done);
     (map.getSource('places') as GeoJSONSource | undefined)?.setData(g.places);
-    (map.getSource('army') as GeoJSONSource | undefined)?.setData({
-      type: 'FeatureCollection',
-      features: [{ type: 'Feature', properties: {}, geometry: { type: 'Point', coordinates: [here.lon, here.lat] } }]
-    });
+    (map.getSource('force-balls') as GeoJSONSource | undefined)?.setData(forceBallsGeoJson(route, k, columnsRef.current, dayRef.current, map.getZoom(), map.getCenter().lat));
     const wantFigures = figuresVisible(map.getZoom(), layer.active);
     layer.active = wantFigures;
-    map.setLayoutProperty('army-marker', 'visibility', wantFigures ? 'none' : 'visible');
-    map.setLayoutProperty('army-marker-halo', 'visibility', wantFigures ? 'none' : 'visible');
+    // up close the main force is its figures, so its balls go; the other forces always have theirs
+    map.setFilter('force-balls', wantFigures ? ['!=', ['get', 'id'], MAIN_FORCE_ID] : null);
     map.triggerRepaint();
   };
   const syncArmyRef = useRef(syncArmy);
@@ -358,7 +384,7 @@ export function MapLibreRenderer({ route, columns, day, selectedId, camera, grap
       map.addSource('route-all', { type: 'geojson', data: routeGeoJson(route, 0).all });
       map.addSource('route-done', { type: 'geojson', data: g.done });
       map.addSource('places', { type: 'geojson', data: g.places });
-      map.addSource('army', { type: 'geojson', data: EMPTY });
+      map.addSource('force-balls', { type: 'geojson', data: EMPTY });
       const other = columnsGeoJson(columns, dayRef.current);
       map.addSource('columns-lines', { type: 'geojson', data: other.lines });
       map.addSource('columns-balls', { type: 'geojson', data: other.balls });
@@ -385,7 +411,6 @@ export function MapLibreRenderer({ route, columns, day, selectedId, camera, grap
         layout: { 'text-field': ['get', 'name'], 'text-font': ['Noto Sans Bold'], 'text-size': 13, 'text-offset': [0, 1.1], 'text-anchor': 'top', 'text-optional': true },
         paint: { 'text-color': '#ffffff', 'text-halo-color': '#0b1220', 'text-halo-width': 1.8 }
       });
-      map.addLayer({ id: 'columns-ball', type: 'circle', source: 'columns-balls', paint: { 'circle-radius': 7, 'circle-color': ['get', 'color'], 'circle-stroke-color': '#ffffff', 'circle-stroke-width': 2 } });
       map.addLayer({
         id: 'columns-label',
         type: 'symbol',
@@ -393,8 +418,12 @@ export function MapLibreRenderer({ route, columns, day, selectedId, camera, grap
         layout: { 'text-field': ['get', 'label'], 'text-font': ['Noto Sans Bold'], 'text-size': 12, 'text-offset': [0, 1.0], 'text-anchor': 'top', 'text-optional': true },
         paint: { 'text-color': ['get', 'color'], 'text-halo-color': '#0b1220', 'text-halo-width': 1.8 }
       });
-      map.addLayer({ id: 'army-marker-halo', type: 'circle', source: 'army', paint: { 'circle-radius': 16, 'circle-color': '#75aadb', 'circle-opacity': 0.35 } });
-      map.addLayer({ id: 'army-marker', type: 'circle', source: 'army', paint: { 'circle-radius': 7, 'circle-color': '#ffffff', 'circle-stroke-color': '#2f4a80', 'circle-stroke-width': 3 } });
+      map.addLayer({
+        id: 'force-balls',
+        type: 'circle',
+        source: 'force-balls',
+        paint: { 'circle-radius': ['case', ['==', ['get', 'small'], 1], 3.5, 6.5], 'circle-color': '#2f7bff', 'circle-stroke-color': '#ffffff', 'circle-stroke-width': 1.5 }
+      });
       map.addLayer(layer);
       readyRef.current = true;
       syncArmyRef.current();
