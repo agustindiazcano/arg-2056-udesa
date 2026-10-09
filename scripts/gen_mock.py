@@ -136,15 +136,18 @@ ANDES_ROUTE = [
     ("Valle de Calingasta", 6, -69.450, -31.850, 1871),
     ("Río de los Patos", 8, -69.694, -31.903, 1905),
     ("Manantiales", 12, -69.880, -31.920, 2564),
-    ("Campo del Mercedario", 15, -70.215, -32.084, 3175),
-    ("Paso de Las Llaretas y Valle Hermoso", 17, -70.222, -32.363, 3486),
-    ("Los Patos (Putaendo)", 19, -70.578, -32.486, 1251),
-    ("Putaendo", 20, -70.717, -32.626, 816),
+    ("Campo del Mercedario", 13, -70.215, -32.084, 3175),
+    ("Paso de Las Llaretas", 14, -70.317, -32.150, 3448),
+    ("Valle Hermoso", 15, -70.222, -32.363, 3486),
+    ("Las Achupallas (combate)", 16, -70.713, -32.630, 802),
+    ("Las Coimas (combate)", 19, -70.725, -32.691, 696),
+    ("San Felipe", 20, -70.725, -32.751, 648),
     ("Curimón (reunión con la columna de Las Heras)", 21, -70.684, -32.786, 710),
     ("Cuesta de Chacabuco (batalla)", 24, -70.708, -32.977, 1029),
 ]
 ANDES_SOURCE = (
-    "Diario de Cuyo, «Crónica de una epopeya» (2017); coordenadas: MapTiler Geocoding (OpenStreetMap); altitud: MapTiler Terrain-RGB v2"
+    "UNCuyo, Historia virtual de Mendoza, «Cruce de los Andes»; Diario de Cuyo, «Crónica de una epopeya» (2017); Wikipedia, «Rutas sanmartinianas» y «Paso de Los Patos»; "
+    "coordenadas: MapTiler Geocoding (OpenStreetMap) y lista oficial de pasos (argentina.gob.ar); altitud: MapTiler Terrain-RGB v2"
 )
 
 
@@ -156,8 +159,8 @@ ANDES_COLUMNS = [
         "id": "las-heras",
         "name": "Columna de Las Heras (artillería y logística)",
         "men": None,
-        "men_note": "800 a 1.700 hombres según la fuente",
-        "range": (800, 1700),
+        "men_note": "770 (Academia de Historia Militar de Chile), 800 (UNCuyo) o 1.700 (Wikipedia) hombres según la fuente; el Batallón 11 de Las Heras tenía 683 (Municipalidad de Chacabuco)",
+        "range": (770, 1700),
         "waypoints": [
             ("El Plumerillo", -68.807, -32.847, 706, "1817-01-18"),
             ("Potrerillos", -69.197, -32.961, 1426, None),
@@ -165,6 +168,7 @@ ANDES_COLUMNS = [
             ("Punta de Vacas", -69.755, -32.851, 2398, None),
             ("Puente del Inca", -69.910, -32.825, 2728, None),
             ("Las Cuevas", -70.049, -32.814, 3159, None),
+            ("Paso de la Cumbre", -70.083, -32.825, 3550, None),
             ("Guardia Vieja", -70.269, -32.903, 1602, "1817-02-04"),
             ("Santa Rosa de los Andes", -70.599, -32.853, 812, "1817-02-08"),
             ("Curimón (reunión con la columna principal)", -70.684, -32.786, 710, "1817-02-09"),
@@ -175,11 +179,12 @@ ANDES_COLUMNS = [
         "id": "cabot",
         "name": "Columna de Cabot (paso de Guana)",
         "men": 140,
+        "men_note": "140 según Wikipedia y 65, con 20 granaderos, según la Municipalidad de Chacabuco; más milicianos reclutados en el camino; las fuentes dan el 12 o el 18 de enero como salida",
         "waypoints": [
             ("San Juan", -68.525, -31.537, 636, "1817-01-12"),
             ("Talacasto", -68.639, -31.099, 954, None),
             ("Pismanta", -69.230, -30.277, 1889, None),
-            ("Paso de Guana", -70.000, -30.100, 3890, None),
+            ("Paso de Guana", -70.267, -30.733, 4092, "1817-02-05"),
             ("La Serena", -71.252, -29.903, 28, "1817-02-15"),
         ],
     },
@@ -187,13 +192,13 @@ ANDES_COLUMNS = [
         "id": "freire",
         "name": "Columna de Freire (paso del Planchón)",
         "men": 100,
-        "men_note": "100 soldados, más guerrilleros y reclutas",
+        "men_note": "100 a 110 soldados según la fuente (75 u 80 infantes y 25 o 30 granaderos), más guerrilleros y reclutas",
         "waypoints": [
             ("Mendoza (El Plumerillo)", -68.807, -32.847, 706, "1817-01-14"),
             ("Luján de Cuyo", -68.880, -33.039, 955, None),
             ("San Carlos", -69.048, -33.774, 955, None),
             ("San Rafael", -68.331, -34.613, 701, None),
-            ("Paso del Planchón", -70.550, -35.240, 3145, "1817-02-01"),
+            ("Paso del Planchón", -70.521, -35.206, 2503, "1817-02-01"),
             ("Talca", -71.666, -35.427, 96, "1817-02-12"),
         ],
     },
@@ -221,8 +226,8 @@ ANDES_COLUMNS = [
     },
 ]
 ANDES_COLUMNS_SOURCE = (
-    "Wikipedia, «Rutas sanmartinianas» (columnas, pasos, fechas y efectivos); El Arcón de la Historia (fechas de Las Heras y Freire); "
-    "coordenadas: MapTiler Geocoding (OpenStreetMap); altitud: MapTiler Terrain-RGB v2"
+    "UNCuyo, Historia virtual de Mendoza, «Cruce de los Andes»; Wikipedia, «Rutas sanmartinianas»; El Arcón de la Historia; Diario de Cuyo (Cabot en Guana, 05-02); "
+    "coordenadas: MapTiler Geocoding (OpenStreetMap) y lista oficial de pasos (argentina.gob.ar); altitud: MapTiler Terrain-RGB v2"
 )
 
 
@@ -315,11 +320,11 @@ def gen_andes_events(rng):
             "name": name,
             "day_of_campaign": day,
             "date": (start + datetime.timedelta(days=day)).isoformat(),
-            "date_precision": "day" if day in (0, 12, 17, 21, 24) else "approximate",
+            "date_precision": "day" if day in (0, 12, 14, 16, 19, 20, 21, 24) else "approximate",
             "lat": lat,
             "lon": lon,
             "elevation_m": elevation,
-            "forces": [{"side": "Ejército de los Andes", "men": 3987}],
+            "forces": [{"side": "Ejército de los Andes", "men": 3987, "note": "Estado general del 31-12-1816: 3.778 de tropa, 14 jefes y 195 oficiales; con milicianos y auxiliares, unos 5.000"}],
             "source": ANDES_SOURCE,
             "retrieved_at": "2026-10-08",
             "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto.",
@@ -327,7 +332,11 @@ def gen_andes_events(rng):
         if i == 1:
             event["note"] += " 3.987 soldados (sin los 1.200 milicianos y arrieros); la columna de Los Patos era una parte del ejército."
         if i == last:
-            event["forces"].append({"side": "Fuerzas realistas", "men": None, "note": "Cifra en disputa entre las fuentes; no se muestra un valor único"})
+            event["forces"] = [
+                {"side": "Ejército de los Andes", "men": 3500, "note": "unos 3.500 en la batalla (Wikipedia, Todo Argentina), o unos 3.600 sumando el despliegue de la Municipalidad de Chacabuco (Soler 2.100 y O'Higgins 1.500), con 9 piezas de artillería"},
+                {"side": "Fuerzas realistas", "men": None, "note": "Cifra en disputa: 2.080 (Municipalidad de Chacabuco), 2.450 (Atlas Militar) o unos 2.500 (Wikipedia), con 2 a 5 piezas; hay fuentes secundarias con cifras menores"},
+            ]
+            event["estimate_range"] = {"min": 2080, "max": 2500}
         if i == last - 1:
             event["note"] += " Aquí se reúne con la columna de Las Heras, que llevaba la artillería y la logística (las fuentes dan el 8 o el 9 de febrero)."
         data.append(event)
