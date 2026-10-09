@@ -7,6 +7,7 @@
     "forces": [
       {
         "men": 3987,
+        "note": "Estado general del 31-12-1816: 3.778 de tropa, 14 jefes y 195 oficiales; con milicianos y auxiliares, unos 5.000",
         "side": "Ejército de los Andes"
       }
     ],
@@ -16,7 +17,7 @@
     "name": "El Plumerillo",
     "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto. 3.987 soldados (sin los 1.200 milicianos y arrieros); la columna de Los Patos era una parte del ejército.",
     "retrieved_at": "2026-10-08",
-    "source": "Diario de Cuyo, «Crónica de una epopeya» (2017); coordenadas: MapTiler Geocoding (OpenStreetMap); altitud: MapTiler Terrain-RGB v2"
+    "source": "UNCuyo, Historia virtual de Mendoza, «Cruce de los Andes»; Diario de Cuyo, «Crónica de una epopeya» (2017); Wikipedia, «Rutas sanmartinianas» y «Paso de Los Patos»; coordenadas: MapTiler Geocoding (OpenStreetMap) y lista oficial de pasos (argentina.gob.ar); altitud: MapTiler Terrain-RGB v2"
   },
   {
     "date": "1817-01-22",
@@ -26,6 +27,7 @@
     "forces": [
       {
         "men": 3987,
+        "note": "Estado general del 31-12-1816: 3.778 de tropa, 14 jefes y 195 oficiales; con milicianos y auxiliares, unos 5.000",
         "side": "Ejército de los Andes"
       }
     ],
@@ -35,7 +37,7 @@
     "name": "Valle de Uspallata",
     "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto.",
     "retrieved_at": "2026-10-08",
-    "source": "Diario de Cuyo, «Crónica de una epopeya» (2017); coordenadas: MapTiler Geocoding (OpenStreetMap); altitud: MapTiler Terrain-RGB v2"
+    "source": "UNCuyo, Historia virtual de Mendoza, «Cruce de los Andes»; Diario de Cuyo, «Crónica de una epopeya» (2017); Wikipedia, «Rutas sanmartinianas» y «Paso de Los Patos»; coordenadas: MapTiler Geocoding (OpenStreetMap) y lista oficial de pasos (argentina.gob.ar); altitud: MapTiler Terrain-RGB v2"
   },
   {
     "date": "1817-01-25",
@@ -45,6 +47,7 @@
     "forces": [
       {
         "men": 3987,
+        "note": "Estado general del 31-12-1816: 3.778 de tropa, 14 jefes y 195 oficiales; con milicianos y auxiliares, unos 5.000",
         "side": "Ejército de los Andes"
       }
     ],
@@ -54,7 +57,7 @@
     "name": "Valle de Calingasta",
     "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto.",
     "retrieved_at": "2026-10-08",
-    "source": "Diario de Cuyo, «Crónica de una epopeya» (2017); coordenadas: MapTiler Geocoding (OpenStreetMap); altitud: MapTiler Terrain-RGB v2"
+    "source": "UNCuyo, Historia virtual de Mendoza, «Cruce de los Andes»; Diario de Cuyo, «Crónica de una epopeya» (2017); Wikipedia, «Rutas sanmartinianas» y «Paso de Los Patos»; coordenadas: MapTiler Geocoding (OpenStreetMap) y lista oficial de pasos (argentina.gob.ar); altitud: MapTiler Terrain-RGB v2"
   },
   {
     "date": "1817-01-27",
@@ -64,6 +67,7 @@
     "forces": [
       {
         "men": 3987,
+        "note": "Estado general del 31-12-1816: 3.778 de tropa, 14 jefes y 195 oficiales; con milicianos y auxiliares, unos 5.000",
         "side": "Ejército de los Andes"
       }
     ],
@@ -73,7 +77,7 @@
     "name": "Río de los Patos",
     "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto.",
     "retrieved_at": "2026-10-08",
-    "source": "Diario de Cuyo, «Crónica de una epopeya» (2017); coordenadas: MapTiler Geocoding (OpenStreetMap); altitud: MapTiler Terrain-RGB v2"
+    "source": "UNCuyo, Historia virtual de Mendoza, «Cruce de los Andes»; Diario de Cuyo, «Crónica de una epopeya» (2017); Wikipedia, «Rutas sanmartinianas» y «Paso de Los Patos»; coordenadas: MapTiler Geocoding (OpenStreetMap) y lista oficial de pasos (argentina.gob.ar); altitud: MapTiler Terrain-RGB v2"
   },
   {
     "date": "1817-01-31",
@@ -83,6 +87,7 @@
     "forces": [
       {
         "men": 3987,
+        "note": "Estado general del 31-12-1816: 3.778 de tropa, 14 jefes y 195 oficiales; con milicianos y auxiliares, unos 5.000",
         "side": "Ejército de los Andes"
       }
     ],
@@ -92,16 +97,17 @@
     "name": "Manantiales",
     "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto.",
     "retrieved_at": "2026-10-08",
-    "source": "Diario de Cuyo, «Crónica de una epopeya» (2017); coordenadas: MapTiler Geocoding (OpenStreetMap); altitud: MapTiler Terrain-RGB v2"
+    "source": "UNCuyo, Historia virtual de Mendoza, «Cruce de los Andes»; Diario de Cuyo, «Crónica de una epopeya» (2017); Wikipedia, «Rutas sanmartinianas» y «Paso de Los Patos»; coordenadas: MapTiler Geocoding (OpenStreetMap) y lista oficial de pasos (argentina.gob.ar); altitud: MapTiler Terrain-RGB v2"
   },
   {
-    "date": "1817-02-03",
+    "date": "1817-02-01",
     "date_precision": "approximate",
-    "day_of_campaign": 15,
+    "day_of_campaign": 13,
     "elevation_m": 3175,
     "forces": [
       {
         "men": 3987,
+        "note": "Estado general del 31-12-1816: 3.778 de tropa, 14 jefes y 195 oficiales; con milicianos y auxiliares, unos 5.000",
         "side": "Ejército de los Andes"
       }
     ],
@@ -111,64 +117,107 @@
     "name": "Campo del Mercedario",
     "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto.",
     "retrieved_at": "2026-10-08",
-    "source": "Diario de Cuyo, «Crónica de una epopeya» (2017); coordenadas: MapTiler Geocoding (OpenStreetMap); altitud: MapTiler Terrain-RGB v2"
+    "source": "UNCuyo, Historia virtual de Mendoza, «Cruce de los Andes»; Diario de Cuyo, «Crónica de una epopeya» (2017); Wikipedia, «Rutas sanmartinianas» y «Paso de Los Patos»; coordenadas: MapTiler Geocoding (OpenStreetMap) y lista oficial de pasos (argentina.gob.ar); altitud: MapTiler Terrain-RGB v2"
   },
   {
-    "date": "1817-02-05",
+    "date": "1817-02-02",
     "date_precision": "day",
-    "day_of_campaign": 17,
-    "elevation_m": 3486,
+    "day_of_campaign": 14,
+    "elevation_m": 3448,
     "forces": [
       {
         "men": 3987,
+        "note": "Estado general del 31-12-1816: 3.778 de tropa, 14 jefes y 195 oficiales; con milicianos y auxiliares, unos 5.000",
         "side": "Ejército de los Andes"
       }
     ],
     "id": "andes-07",
-    "lat": -32.363,
-    "lon": -70.222,
-    "name": "Paso de Las Llaretas y Valle Hermoso",
+    "lat": -32.15,
+    "lon": -70.317,
+    "name": "Paso de Las Llaretas",
     "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto.",
     "retrieved_at": "2026-10-08",
-    "source": "Diario de Cuyo, «Crónica de una epopeya» (2017); coordenadas: MapTiler Geocoding (OpenStreetMap); altitud: MapTiler Terrain-RGB v2"
+    "source": "UNCuyo, Historia virtual de Mendoza, «Cruce de los Andes»; Diario de Cuyo, «Crónica de una epopeya» (2017); Wikipedia, «Rutas sanmartinianas» y «Paso de Los Patos»; coordenadas: MapTiler Geocoding (OpenStreetMap) y lista oficial de pasos (argentina.gob.ar); altitud: MapTiler Terrain-RGB v2"
   },
   {
-    "date": "1817-02-07",
+    "date": "1817-02-03",
     "date_precision": "approximate",
-    "day_of_campaign": 19,
-    "elevation_m": 1251,
+    "day_of_campaign": 15,
+    "elevation_m": 3486,
     "forces": [
       {
         "men": 3987,
+        "note": "Estado general del 31-12-1816: 3.778 de tropa, 14 jefes y 195 oficiales; con milicianos y auxiliares, unos 5.000",
         "side": "Ejército de los Andes"
       }
     ],
     "id": "andes-08",
-    "lat": -32.486,
-    "lon": -70.578,
-    "name": "Los Patos (Putaendo)",
+    "lat": -32.363,
+    "lon": -70.222,
+    "name": "Valle Hermoso",
     "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto.",
     "retrieved_at": "2026-10-08",
-    "source": "Diario de Cuyo, «Crónica de una epopeya» (2017); coordenadas: MapTiler Geocoding (OpenStreetMap); altitud: MapTiler Terrain-RGB v2"
+    "source": "UNCuyo, Historia virtual de Mendoza, «Cruce de los Andes»; Diario de Cuyo, «Crónica de una epopeya» (2017); Wikipedia, «Rutas sanmartinianas» y «Paso de Los Patos»; coordenadas: MapTiler Geocoding (OpenStreetMap) y lista oficial de pasos (argentina.gob.ar); altitud: MapTiler Terrain-RGB v2"
   },
   {
-    "date": "1817-02-08",
-    "date_precision": "approximate",
-    "day_of_campaign": 20,
-    "elevation_m": 816,
+    "date": "1817-02-04",
+    "date_precision": "day",
+    "day_of_campaign": 16,
+    "elevation_m": 802,
     "forces": [
       {
         "men": 3987,
+        "note": "Estado general del 31-12-1816: 3.778 de tropa, 14 jefes y 195 oficiales; con milicianos y auxiliares, unos 5.000",
         "side": "Ejército de los Andes"
       }
     ],
     "id": "andes-09",
-    "lat": -32.626,
-    "lon": -70.717,
-    "name": "Putaendo",
+    "lat": -32.63,
+    "lon": -70.713,
+    "name": "Las Achupallas (combate)",
     "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto.",
     "retrieved_at": "2026-10-08",
-    "source": "Diario de Cuyo, «Crónica de una epopeya» (2017); coordenadas: MapTiler Geocoding (OpenStreetMap); altitud: MapTiler Terrain-RGB v2"
+    "source": "UNCuyo, Historia virtual de Mendoza, «Cruce de los Andes»; Diario de Cuyo, «Crónica de una epopeya» (2017); Wikipedia, «Rutas sanmartinianas» y «Paso de Los Patos»; coordenadas: MapTiler Geocoding (OpenStreetMap) y lista oficial de pasos (argentina.gob.ar); altitud: MapTiler Terrain-RGB v2"
+  },
+  {
+    "date": "1817-02-07",
+    "date_precision": "day",
+    "day_of_campaign": 19,
+    "elevation_m": 696,
+    "forces": [
+      {
+        "men": 3987,
+        "note": "Estado general del 31-12-1816: 3.778 de tropa, 14 jefes y 195 oficiales; con milicianos y auxiliares, unos 5.000",
+        "side": "Ejército de los Andes"
+      }
+    ],
+    "id": "andes-10",
+    "lat": -32.691,
+    "lon": -70.725,
+    "name": "Las Coimas (combate)",
+    "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto.",
+    "retrieved_at": "2026-10-08",
+    "source": "UNCuyo, Historia virtual de Mendoza, «Cruce de los Andes»; Diario de Cuyo, «Crónica de una epopeya» (2017); Wikipedia, «Rutas sanmartinianas» y «Paso de Los Patos»; coordenadas: MapTiler Geocoding (OpenStreetMap) y lista oficial de pasos (argentina.gob.ar); altitud: MapTiler Terrain-RGB v2"
+  },
+  {
+    "date": "1817-02-08",
+    "date_precision": "day",
+    "day_of_campaign": 20,
+    "elevation_m": 648,
+    "forces": [
+      {
+        "men": 3987,
+        "note": "Estado general del 31-12-1816: 3.778 de tropa, 14 jefes y 195 oficiales; con milicianos y auxiliares, unos 5.000",
+        "side": "Ejército de los Andes"
+      }
+    ],
+    "id": "andes-11",
+    "lat": -32.751,
+    "lon": -70.725,
+    "name": "San Felipe",
+    "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto.",
+    "retrieved_at": "2026-10-08",
+    "source": "UNCuyo, Historia virtual de Mendoza, «Cruce de los Andes»; Diario de Cuyo, «Crónica de una epopeya» (2017); Wikipedia, «Rutas sanmartinianas» y «Paso de Los Patos»; coordenadas: MapTiler Geocoding (OpenStreetMap) y lista oficial de pasos (argentina.gob.ar); altitud: MapTiler Terrain-RGB v2"
   },
   {
     "date": "1817-02-09",
@@ -178,40 +227,46 @@
     "forces": [
       {
         "men": 3987,
+        "note": "Estado general del 31-12-1816: 3.778 de tropa, 14 jefes y 195 oficiales; con milicianos y auxiliares, unos 5.000",
         "side": "Ejército de los Andes"
       }
     ],
-    "id": "andes-10",
+    "id": "andes-12",
     "lat": -32.786,
     "lon": -70.684,
     "name": "Curimón (reunión con la columna de Las Heras)",
     "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto. Aquí se reúne con la columna de Las Heras, que llevaba la artillería y la logística (las fuentes dan el 8 o el 9 de febrero).",
     "retrieved_at": "2026-10-08",
-    "source": "Diario de Cuyo, «Crónica de una epopeya» (2017); coordenadas: MapTiler Geocoding (OpenStreetMap); altitud: MapTiler Terrain-RGB v2"
+    "source": "UNCuyo, Historia virtual de Mendoza, «Cruce de los Andes»; Diario de Cuyo, «Crónica de una epopeya» (2017); Wikipedia, «Rutas sanmartinianas» y «Paso de Los Patos»; coordenadas: MapTiler Geocoding (OpenStreetMap) y lista oficial de pasos (argentina.gob.ar); altitud: MapTiler Terrain-RGB v2"
   },
   {
     "date": "1817-02-12",
     "date_precision": "day",
     "day_of_campaign": 24,
     "elevation_m": 1029,
+    "estimate_range": {
+      "max": 2500,
+      "min": 2080
+    },
     "forces": [
       {
-        "men": 3987,
+        "men": 3500,
+        "note": "unos 3.500 en la batalla (Wikipedia, Todo Argentina), o unos 3.600 sumando el despliegue de la Municipalidad de Chacabuco (Soler 2.100 y O'Higgins 1.500), con 9 piezas de artillería",
         "side": "Ejército de los Andes"
       },
       {
         "men": null,
-        "note": "Cifra en disputa entre las fuentes; no se muestra un valor único",
+        "note": "Cifra en disputa: 2.080 (Municipalidad de Chacabuco), 2.450 (Atlas Militar) o unos 2.500 (Wikipedia), con 2 a 5 piezas; hay fuentes secundarias con cifras menores",
         "side": "Fuerzas realistas"
       }
     ],
-    "id": "andes-11",
+    "id": "andes-13",
     "lat": -32.977,
     "lon": -70.708,
     "name": "Cuesta de Chacabuco (batalla)",
     "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto.",
     "retrieved_at": "2026-10-08",
-    "source": "Diario de Cuyo, «Crónica de una epopeya» (2017); coordenadas: MapTiler Geocoding (OpenStreetMap); altitud: MapTiler Terrain-RGB v2"
+    "source": "UNCuyo, Historia virtual de Mendoza, «Cruce de los Andes»; Diario de Cuyo, «Crónica de una epopeya» (2017); Wikipedia, «Rutas sanmartinianas» y «Paso de Los Patos»; coordenadas: MapTiler Geocoding (OpenStreetMap) y lista oficial de pasos (argentina.gob.ar); altitud: MapTiler Terrain-RGB v2"
   },
   {
     "column_id": "las-heras",
@@ -222,12 +277,12 @@
     "elevation_m": 706,
     "estimate_range": {
       "max": 1700,
-      "min": 800
+      "min": 770
     },
     "forces": [
       {
         "men": null,
-        "note": "800 a 1.700 hombres según la fuente",
+        "note": "770 (Academia de Historia Militar de Chile), 800 (UNCuyo) o 1.700 (Wikipedia) hombres según la fuente; el Batallón 11 de Las Heras tenía 683 (Municipalidad de Chacabuco)",
         "side": "Columna de Las Heras (artillería y logística)"
       }
     ],
@@ -237,7 +292,7 @@
     "name": "El Plumerillo",
     "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto.",
     "retrieved_at": "2026-10-09",
-    "source": "Wikipedia, «Rutas sanmartinianas» (columnas, pasos, fechas y efectivos); El Arcón de la Historia (fechas de Las Heras y Freire); coordenadas: MapTiler Geocoding (OpenStreetMap); altitud: MapTiler Terrain-RGB v2"
+    "source": "UNCuyo, Historia virtual de Mendoza, «Cruce de los Andes»; Wikipedia, «Rutas sanmartinianas»; El Arcón de la Historia; Diario de Cuyo (Cabot en Guana, 05-02); coordenadas: MapTiler Geocoding (OpenStreetMap) y lista oficial de pasos (argentina.gob.ar); altitud: MapTiler Terrain-RGB v2"
   },
   {
     "column_id": "las-heras",
@@ -249,7 +304,7 @@
     "forces": [
       {
         "men": null,
-        "note": "800 a 1.700 hombres según la fuente",
+        "note": "770 (Academia de Historia Militar de Chile), 800 (UNCuyo) o 1.700 (Wikipedia) hombres según la fuente; el Batallón 11 de Las Heras tenía 683 (Municipalidad de Chacabuco)",
         "side": "Columna de Las Heras (artillería y logística)"
       }
     ],
@@ -259,7 +314,7 @@
     "name": "Potrerillos",
     "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto. Fecha estimada por distancia entre las fechas documentadas.",
     "retrieved_at": "2026-10-09",
-    "source": "Wikipedia, «Rutas sanmartinianas» (columnas, pasos, fechas y efectivos); El Arcón de la Historia (fechas de Las Heras y Freire); coordenadas: MapTiler Geocoding (OpenStreetMap); altitud: MapTiler Terrain-RGB v2"
+    "source": "UNCuyo, Historia virtual de Mendoza, «Cruce de los Andes»; Wikipedia, «Rutas sanmartinianas»; El Arcón de la Historia; Diario de Cuyo (Cabot en Guana, 05-02); coordenadas: MapTiler Geocoding (OpenStreetMap) y lista oficial de pasos (argentina.gob.ar); altitud: MapTiler Terrain-RGB v2"
   },
   {
     "column_id": "las-heras",
@@ -271,7 +326,7 @@
     "forces": [
       {
         "men": null,
-        "note": "800 a 1.700 hombres según la fuente",
+        "note": "770 (Academia de Historia Militar de Chile), 800 (UNCuyo) o 1.700 (Wikipedia) hombres según la fuente; el Batallón 11 de Las Heras tenía 683 (Municipalidad de Chacabuco)",
         "side": "Columna de Las Heras (artillería y logística)"
       }
     ],
@@ -281,7 +336,7 @@
     "name": "Uspallata",
     "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto. Fecha estimada por distancia entre las fechas documentadas.",
     "retrieved_at": "2026-10-09",
-    "source": "Wikipedia, «Rutas sanmartinianas» (columnas, pasos, fechas y efectivos); El Arcón de la Historia (fechas de Las Heras y Freire); coordenadas: MapTiler Geocoding (OpenStreetMap); altitud: MapTiler Terrain-RGB v2"
+    "source": "UNCuyo, Historia virtual de Mendoza, «Cruce de los Andes»; Wikipedia, «Rutas sanmartinianas»; El Arcón de la Historia; Diario de Cuyo (Cabot en Guana, 05-02); coordenadas: MapTiler Geocoding (OpenStreetMap) y lista oficial de pasos (argentina.gob.ar); altitud: MapTiler Terrain-RGB v2"
   },
   {
     "column_id": "las-heras",
@@ -293,7 +348,7 @@
     "forces": [
       {
         "men": null,
-        "note": "800 a 1.700 hombres según la fuente",
+        "note": "770 (Academia de Historia Militar de Chile), 800 (UNCuyo) o 1.700 (Wikipedia) hombres según la fuente; el Batallón 11 de Las Heras tenía 683 (Municipalidad de Chacabuco)",
         "side": "Columna de Las Heras (artillería y logística)"
       }
     ],
@@ -303,7 +358,7 @@
     "name": "Punta de Vacas",
     "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto. Fecha estimada por distancia entre las fechas documentadas.",
     "retrieved_at": "2026-10-09",
-    "source": "Wikipedia, «Rutas sanmartinianas» (columnas, pasos, fechas y efectivos); El Arcón de la Historia (fechas de Las Heras y Freire); coordenadas: MapTiler Geocoding (OpenStreetMap); altitud: MapTiler Terrain-RGB v2"
+    "source": "UNCuyo, Historia virtual de Mendoza, «Cruce de los Andes»; Wikipedia, «Rutas sanmartinianas»; El Arcón de la Historia; Diario de Cuyo (Cabot en Guana, 05-02); coordenadas: MapTiler Geocoding (OpenStreetMap) y lista oficial de pasos (argentina.gob.ar); altitud: MapTiler Terrain-RGB v2"
   },
   {
     "column_id": "las-heras",
@@ -315,7 +370,7 @@
     "forces": [
       {
         "men": null,
-        "note": "800 a 1.700 hombres según la fuente",
+        "note": "770 (Academia de Historia Militar de Chile), 800 (UNCuyo) o 1.700 (Wikipedia) hombres según la fuente; el Batallón 11 de Las Heras tenía 683 (Municipalidad de Chacabuco)",
         "side": "Columna de Las Heras (artillería y logística)"
       }
     ],
@@ -325,7 +380,7 @@
     "name": "Puente del Inca",
     "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto. Fecha estimada por distancia entre las fechas documentadas.",
     "retrieved_at": "2026-10-09",
-    "source": "Wikipedia, «Rutas sanmartinianas» (columnas, pasos, fechas y efectivos); El Arcón de la Historia (fechas de Las Heras y Freire); coordenadas: MapTiler Geocoding (OpenStreetMap); altitud: MapTiler Terrain-RGB v2"
+    "source": "UNCuyo, Historia virtual de Mendoza, «Cruce de los Andes»; Wikipedia, «Rutas sanmartinianas»; El Arcón de la Historia; Diario de Cuyo (Cabot en Guana, 05-02); coordenadas: MapTiler Geocoding (OpenStreetMap) y lista oficial de pasos (argentina.gob.ar); altitud: MapTiler Terrain-RGB v2"
   },
   {
     "column_id": "las-heras",
@@ -337,7 +392,7 @@
     "forces": [
       {
         "men": null,
-        "note": "800 a 1.700 hombres según la fuente",
+        "note": "770 (Academia de Historia Militar de Chile), 800 (UNCuyo) o 1.700 (Wikipedia) hombres según la fuente; el Batallón 11 de Las Heras tenía 683 (Municipalidad de Chacabuco)",
         "side": "Columna de Las Heras (artillería y logística)"
       }
     ],
@@ -347,7 +402,29 @@
     "name": "Las Cuevas",
     "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto. Fecha estimada por distancia entre las fechas documentadas.",
     "retrieved_at": "2026-10-09",
-    "source": "Wikipedia, «Rutas sanmartinianas» (columnas, pasos, fechas y efectivos); El Arcón de la Historia (fechas de Las Heras y Freire); coordenadas: MapTiler Geocoding (OpenStreetMap); altitud: MapTiler Terrain-RGB v2"
+    "source": "UNCuyo, Historia virtual de Mendoza, «Cruce de los Andes»; Wikipedia, «Rutas sanmartinianas»; El Arcón de la Historia; Diario de Cuyo (Cabot en Guana, 05-02); coordenadas: MapTiler Geocoding (OpenStreetMap) y lista oficial de pasos (argentina.gob.ar); altitud: MapTiler Terrain-RGB v2"
+  },
+  {
+    "column_id": "las-heras",
+    "column_name": "Columna de Las Heras (artillería y logística)",
+    "date": "1817-02-02",
+    "date_precision": "approximate",
+    "day_of_campaign": 14,
+    "elevation_m": 3550,
+    "forces": [
+      {
+        "men": null,
+        "note": "770 (Academia de Historia Militar de Chile), 800 (UNCuyo) o 1.700 (Wikipedia) hombres según la fuente; el Batallón 11 de Las Heras tenía 683 (Municipalidad de Chacabuco)",
+        "side": "Columna de Las Heras (artillería y logística)"
+      }
+    ],
+    "id": "andes-las-heras-07",
+    "lat": -32.825,
+    "lon": -70.083,
+    "name": "Paso de la Cumbre",
+    "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto. Fecha estimada por distancia entre las fechas documentadas.",
+    "retrieved_at": "2026-10-09",
+    "source": "UNCuyo, Historia virtual de Mendoza, «Cruce de los Andes»; Wikipedia, «Rutas sanmartinianas»; El Arcón de la Historia; Diario de Cuyo (Cabot en Guana, 05-02); coordenadas: MapTiler Geocoding (OpenStreetMap) y lista oficial de pasos (argentina.gob.ar); altitud: MapTiler Terrain-RGB v2"
   },
   {
     "column_id": "las-heras",
@@ -359,17 +436,17 @@
     "forces": [
       {
         "men": null,
-        "note": "800 a 1.700 hombres según la fuente",
+        "note": "770 (Academia de Historia Militar de Chile), 800 (UNCuyo) o 1.700 (Wikipedia) hombres según la fuente; el Batallón 11 de Las Heras tenía 683 (Municipalidad de Chacabuco)",
         "side": "Columna de Las Heras (artillería y logística)"
       }
     ],
-    "id": "andes-las-heras-07",
+    "id": "andes-las-heras-08",
     "lat": -32.903,
     "lon": -70.269,
     "name": "Guardia Vieja",
     "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto.",
     "retrieved_at": "2026-10-09",
-    "source": "Wikipedia, «Rutas sanmartinianas» (columnas, pasos, fechas y efectivos); El Arcón de la Historia (fechas de Las Heras y Freire); coordenadas: MapTiler Geocoding (OpenStreetMap); altitud: MapTiler Terrain-RGB v2"
+    "source": "UNCuyo, Historia virtual de Mendoza, «Cruce de los Andes»; Wikipedia, «Rutas sanmartinianas»; El Arcón de la Historia; Diario de Cuyo (Cabot en Guana, 05-02); coordenadas: MapTiler Geocoding (OpenStreetMap) y lista oficial de pasos (argentina.gob.ar); altitud: MapTiler Terrain-RGB v2"
   },
   {
     "column_id": "las-heras",
@@ -381,17 +458,17 @@
     "forces": [
       {
         "men": null,
-        "note": "800 a 1.700 hombres según la fuente",
+        "note": "770 (Academia de Historia Militar de Chile), 800 (UNCuyo) o 1.700 (Wikipedia) hombres según la fuente; el Batallón 11 de Las Heras tenía 683 (Municipalidad de Chacabuco)",
         "side": "Columna de Las Heras (artillería y logística)"
       }
     ],
-    "id": "andes-las-heras-08",
+    "id": "andes-las-heras-09",
     "lat": -32.853,
     "lon": -70.599,
     "name": "Santa Rosa de los Andes",
     "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto.",
     "retrieved_at": "2026-10-09",
-    "source": "Wikipedia, «Rutas sanmartinianas» (columnas, pasos, fechas y efectivos); El Arcón de la Historia (fechas de Las Heras y Freire); coordenadas: MapTiler Geocoding (OpenStreetMap); altitud: MapTiler Terrain-RGB v2"
+    "source": "UNCuyo, Historia virtual de Mendoza, «Cruce de los Andes»; Wikipedia, «Rutas sanmartinianas»; El Arcón de la Historia; Diario de Cuyo (Cabot en Guana, 05-02); coordenadas: MapTiler Geocoding (OpenStreetMap) y lista oficial de pasos (argentina.gob.ar); altitud: MapTiler Terrain-RGB v2"
   },
   {
     "column_id": "las-heras",
@@ -403,17 +480,17 @@
     "forces": [
       {
         "men": null,
-        "note": "800 a 1.700 hombres según la fuente",
+        "note": "770 (Academia de Historia Militar de Chile), 800 (UNCuyo) o 1.700 (Wikipedia) hombres según la fuente; el Batallón 11 de Las Heras tenía 683 (Municipalidad de Chacabuco)",
         "side": "Columna de Las Heras (artillería y logística)"
       }
     ],
-    "id": "andes-las-heras-09",
+    "id": "andes-las-heras-10",
     "lat": -32.786,
     "lon": -70.684,
     "name": "Curimón (reunión con la columna principal)",
     "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto.",
     "retrieved_at": "2026-10-09",
-    "source": "Wikipedia, «Rutas sanmartinianas» (columnas, pasos, fechas y efectivos); El Arcón de la Historia (fechas de Las Heras y Freire); coordenadas: MapTiler Geocoding (OpenStreetMap); altitud: MapTiler Terrain-RGB v2"
+    "source": "UNCuyo, Historia virtual de Mendoza, «Cruce de los Andes»; Wikipedia, «Rutas sanmartinianas»; El Arcón de la Historia; Diario de Cuyo (Cabot en Guana, 05-02); coordenadas: MapTiler Geocoding (OpenStreetMap) y lista oficial de pasos (argentina.gob.ar); altitud: MapTiler Terrain-RGB v2"
   },
   {
     "column_id": "las-heras",
@@ -425,17 +502,17 @@
     "forces": [
       {
         "men": null,
-        "note": "800 a 1.700 hombres según la fuente",
+        "note": "770 (Academia de Historia Militar de Chile), 800 (UNCuyo) o 1.700 (Wikipedia) hombres según la fuente; el Batallón 11 de Las Heras tenía 683 (Municipalidad de Chacabuco)",
         "side": "Columna de Las Heras (artillería y logística)"
       }
     ],
-    "id": "andes-las-heras-10",
+    "id": "andes-las-heras-11",
     "lat": -32.977,
     "lon": -70.708,
     "name": "Cuesta de Chacabuco (batalla)",
     "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto.",
     "retrieved_at": "2026-10-09",
-    "source": "Wikipedia, «Rutas sanmartinianas» (columnas, pasos, fechas y efectivos); El Arcón de la Historia (fechas de Las Heras y Freire); coordenadas: MapTiler Geocoding (OpenStreetMap); altitud: MapTiler Terrain-RGB v2"
+    "source": "UNCuyo, Historia virtual de Mendoza, «Cruce de los Andes»; Wikipedia, «Rutas sanmartinianas»; El Arcón de la Historia; Diario de Cuyo (Cabot en Guana, 05-02); coordenadas: MapTiler Geocoding (OpenStreetMap) y lista oficial de pasos (argentina.gob.ar); altitud: MapTiler Terrain-RGB v2"
   },
   {
     "column_id": "cabot",
@@ -447,6 +524,7 @@
     "forces": [
       {
         "men": 140,
+        "note": "140 según Wikipedia y 65, con 20 granaderos, según la Municipalidad de Chacabuco; más milicianos reclutados en el camino; las fuentes dan el 12 o el 18 de enero como salida",
         "side": "Columna de Cabot (paso de Guana)"
       }
     ],
@@ -456,18 +534,19 @@
     "name": "San Juan",
     "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto.",
     "retrieved_at": "2026-10-09",
-    "source": "Wikipedia, «Rutas sanmartinianas» (columnas, pasos, fechas y efectivos); El Arcón de la Historia (fechas de Las Heras y Freire); coordenadas: MapTiler Geocoding (OpenStreetMap); altitud: MapTiler Terrain-RGB v2"
+    "source": "UNCuyo, Historia virtual de Mendoza, «Cruce de los Andes»; Wikipedia, «Rutas sanmartinianas»; El Arcón de la Historia; Diario de Cuyo (Cabot en Guana, 05-02); coordenadas: MapTiler Geocoding (OpenStreetMap) y lista oficial de pasos (argentina.gob.ar); altitud: MapTiler Terrain-RGB v2"
   },
   {
     "column_id": "cabot",
     "column_name": "Columna de Cabot (paso de Guana)",
-    "date": "1817-01-17",
+    "date": "1817-01-16",
     "date_precision": "approximate",
-    "day_of_campaign": -2,
+    "day_of_campaign": -3,
     "elevation_m": 954,
     "forces": [
       {
         "men": 140,
+        "note": "140 según Wikipedia y 65, con 20 granaderos, según la Municipalidad de Chacabuco; más milicianos reclutados en el camino; las fuentes dan el 12 o el 18 de enero como salida",
         "side": "Columna de Cabot (paso de Guana)"
       }
     ],
@@ -477,18 +556,19 @@
     "name": "Talacasto",
     "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto. Fecha estimada por distancia entre las fechas documentadas.",
     "retrieved_at": "2026-10-09",
-    "source": "Wikipedia, «Rutas sanmartinianas» (columnas, pasos, fechas y efectivos); El Arcón de la Historia (fechas de Las Heras y Freire); coordenadas: MapTiler Geocoding (OpenStreetMap); altitud: MapTiler Terrain-RGB v2"
+    "source": "UNCuyo, Historia virtual de Mendoza, «Cruce de los Andes»; Wikipedia, «Rutas sanmartinianas»; El Arcón de la Historia; Diario de Cuyo (Cabot en Guana, 05-02); coordenadas: MapTiler Geocoding (OpenStreetMap) y lista oficial de pasos (argentina.gob.ar); altitud: MapTiler Terrain-RGB v2"
   },
   {
     "column_id": "cabot",
     "column_name": "Columna de Cabot (paso de Guana)",
-    "date": "1817-01-27",
+    "date": "1817-01-26",
     "date_precision": "approximate",
-    "day_of_campaign": 8,
+    "day_of_campaign": 7,
     "elevation_m": 1889,
     "forces": [
       {
         "men": 140,
+        "note": "140 según Wikipedia y 65, con 20 granaderos, según la Municipalidad de Chacabuco; más milicianos reclutados en el camino; las fuentes dan el 12 o el 18 de enero como salida",
         "side": "Columna de Cabot (paso de Guana)"
       }
     ],
@@ -498,28 +578,29 @@
     "name": "Pismanta",
     "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto. Fecha estimada por distancia entre las fechas documentadas.",
     "retrieved_at": "2026-10-09",
-    "source": "Wikipedia, «Rutas sanmartinianas» (columnas, pasos, fechas y efectivos); El Arcón de la Historia (fechas de Las Heras y Freire); coordenadas: MapTiler Geocoding (OpenStreetMap); altitud: MapTiler Terrain-RGB v2"
+    "source": "UNCuyo, Historia virtual de Mendoza, «Cruce de los Andes»; Wikipedia, «Rutas sanmartinianas»; El Arcón de la Historia; Diario de Cuyo (Cabot en Guana, 05-02); coordenadas: MapTiler Geocoding (OpenStreetMap) y lista oficial de pasos (argentina.gob.ar); altitud: MapTiler Terrain-RGB v2"
   },
   {
     "column_id": "cabot",
     "column_name": "Columna de Cabot (paso de Guana)",
-    "date": "1817-02-03",
-    "date_precision": "approximate",
-    "day_of_campaign": 15,
-    "elevation_m": 3890,
+    "date": "1817-02-05",
+    "date_precision": "day",
+    "day_of_campaign": 17,
+    "elevation_m": 4092,
     "forces": [
       {
         "men": 140,
+        "note": "140 según Wikipedia y 65, con 20 granaderos, según la Municipalidad de Chacabuco; más milicianos reclutados en el camino; las fuentes dan el 12 o el 18 de enero como salida",
         "side": "Columna de Cabot (paso de Guana)"
       }
     ],
     "id": "andes-cabot-04",
-    "lat": -30.1,
-    "lon": -70.0,
+    "lat": -30.733,
+    "lon": -70.267,
     "name": "Paso de Guana",
-    "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto. Fecha estimada por distancia entre las fechas documentadas.",
+    "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto.",
     "retrieved_at": "2026-10-09",
-    "source": "Wikipedia, «Rutas sanmartinianas» (columnas, pasos, fechas y efectivos); El Arcón de la Historia (fechas de Las Heras y Freire); coordenadas: MapTiler Geocoding (OpenStreetMap); altitud: MapTiler Terrain-RGB v2"
+    "source": "UNCuyo, Historia virtual de Mendoza, «Cruce de los Andes»; Wikipedia, «Rutas sanmartinianas»; El Arcón de la Historia; Diario de Cuyo (Cabot en Guana, 05-02); coordenadas: MapTiler Geocoding (OpenStreetMap) y lista oficial de pasos (argentina.gob.ar); altitud: MapTiler Terrain-RGB v2"
   },
   {
     "column_id": "cabot",
@@ -531,6 +612,7 @@
     "forces": [
       {
         "men": 140,
+        "note": "140 según Wikipedia y 65, con 20 granaderos, según la Municipalidad de Chacabuco; más milicianos reclutados en el camino; las fuentes dan el 12 o el 18 de enero como salida",
         "side": "Columna de Cabot (paso de Guana)"
       }
     ],
@@ -540,7 +622,7 @@
     "name": "La Serena",
     "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto.",
     "retrieved_at": "2026-10-09",
-    "source": "Wikipedia, «Rutas sanmartinianas» (columnas, pasos, fechas y efectivos); El Arcón de la Historia (fechas de Las Heras y Freire); coordenadas: MapTiler Geocoding (OpenStreetMap); altitud: MapTiler Terrain-RGB v2"
+    "source": "UNCuyo, Historia virtual de Mendoza, «Cruce de los Andes»; Wikipedia, «Rutas sanmartinianas»; El Arcón de la Historia; Diario de Cuyo (Cabot en Guana, 05-02); coordenadas: MapTiler Geocoding (OpenStreetMap) y lista oficial de pasos (argentina.gob.ar); altitud: MapTiler Terrain-RGB v2"
   },
   {
     "column_id": "freire",
@@ -552,7 +634,7 @@
     "forces": [
       {
         "men": 100,
-        "note": "100 soldados, más guerrilleros y reclutas",
+        "note": "100 a 110 soldados según la fuente (75 u 80 infantes y 25 o 30 granaderos), más guerrilleros y reclutas",
         "side": "Columna de Freire (paso del Planchón)"
       }
     ],
@@ -562,7 +644,7 @@
     "name": "Mendoza (El Plumerillo)",
     "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto.",
     "retrieved_at": "2026-10-09",
-    "source": "Wikipedia, «Rutas sanmartinianas» (columnas, pasos, fechas y efectivos); El Arcón de la Historia (fechas de Las Heras y Freire); coordenadas: MapTiler Geocoding (OpenStreetMap); altitud: MapTiler Terrain-RGB v2"
+    "source": "UNCuyo, Historia virtual de Mendoza, «Cruce de los Andes»; Wikipedia, «Rutas sanmartinianas»; El Arcón de la Historia; Diario de Cuyo (Cabot en Guana, 05-02); coordenadas: MapTiler Geocoding (OpenStreetMap) y lista oficial de pasos (argentina.gob.ar); altitud: MapTiler Terrain-RGB v2"
   },
   {
     "column_id": "freire",
@@ -574,7 +656,7 @@
     "forces": [
       {
         "men": 100,
-        "note": "100 soldados, más guerrilleros y reclutas",
+        "note": "100 a 110 soldados según la fuente (75 u 80 infantes y 25 o 30 granaderos), más guerrilleros y reclutas",
         "side": "Columna de Freire (paso del Planchón)"
       }
     ],
@@ -584,7 +666,7 @@
     "name": "Luján de Cuyo",
     "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto. Fecha estimada por distancia entre las fechas documentadas.",
     "retrieved_at": "2026-10-09",
-    "source": "Wikipedia, «Rutas sanmartinianas» (columnas, pasos, fechas y efectivos); El Arcón de la Historia (fechas de Las Heras y Freire); coordenadas: MapTiler Geocoding (OpenStreetMap); altitud: MapTiler Terrain-RGB v2"
+    "source": "UNCuyo, Historia virtual de Mendoza, «Cruce de los Andes»; Wikipedia, «Rutas sanmartinianas»; El Arcón de la Historia; Diario de Cuyo (Cabot en Guana, 05-02); coordenadas: MapTiler Geocoding (OpenStreetMap) y lista oficial de pasos (argentina.gob.ar); altitud: MapTiler Terrain-RGB v2"
   },
   {
     "column_id": "freire",
@@ -596,7 +678,7 @@
     "forces": [
       {
         "men": 100,
-        "note": "100 soldados, más guerrilleros y reclutas",
+        "note": "100 a 110 soldados según la fuente (75 u 80 infantes y 25 o 30 granaderos), más guerrilleros y reclutas",
         "side": "Columna de Freire (paso del Planchón)"
       }
     ],
@@ -606,7 +688,7 @@
     "name": "San Carlos",
     "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto. Fecha estimada por distancia entre las fechas documentadas.",
     "retrieved_at": "2026-10-09",
-    "source": "Wikipedia, «Rutas sanmartinianas» (columnas, pasos, fechas y efectivos); El Arcón de la Historia (fechas de Las Heras y Freire); coordenadas: MapTiler Geocoding (OpenStreetMap); altitud: MapTiler Terrain-RGB v2"
+    "source": "UNCuyo, Historia virtual de Mendoza, «Cruce de los Andes»; Wikipedia, «Rutas sanmartinianas»; El Arcón de la Historia; Diario de Cuyo (Cabot en Guana, 05-02); coordenadas: MapTiler Geocoding (OpenStreetMap) y lista oficial de pasos (argentina.gob.ar); altitud: MapTiler Terrain-RGB v2"
   },
   {
     "column_id": "freire",
@@ -618,7 +700,7 @@
     "forces": [
       {
         "men": 100,
-        "note": "100 soldados, más guerrilleros y reclutas",
+        "note": "100 a 110 soldados según la fuente (75 u 80 infantes y 25 o 30 granaderos), más guerrilleros y reclutas",
         "side": "Columna de Freire (paso del Planchón)"
       }
     ],
@@ -628,7 +710,7 @@
     "name": "San Rafael",
     "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto. Fecha estimada por distancia entre las fechas documentadas.",
     "retrieved_at": "2026-10-09",
-    "source": "Wikipedia, «Rutas sanmartinianas» (columnas, pasos, fechas y efectivos); El Arcón de la Historia (fechas de Las Heras y Freire); coordenadas: MapTiler Geocoding (OpenStreetMap); altitud: MapTiler Terrain-RGB v2"
+    "source": "UNCuyo, Historia virtual de Mendoza, «Cruce de los Andes»; Wikipedia, «Rutas sanmartinianas»; El Arcón de la Historia; Diario de Cuyo (Cabot en Guana, 05-02); coordenadas: MapTiler Geocoding (OpenStreetMap) y lista oficial de pasos (argentina.gob.ar); altitud: MapTiler Terrain-RGB v2"
   },
   {
     "column_id": "freire",
@@ -636,21 +718,21 @@
     "date": "1817-02-01",
     "date_precision": "day",
     "day_of_campaign": 13,
-    "elevation_m": 3145,
+    "elevation_m": 2503,
     "forces": [
       {
         "men": 100,
-        "note": "100 soldados, más guerrilleros y reclutas",
+        "note": "100 a 110 soldados según la fuente (75 u 80 infantes y 25 o 30 granaderos), más guerrilleros y reclutas",
         "side": "Columna de Freire (paso del Planchón)"
       }
     ],
     "id": "andes-freire-05",
-    "lat": -35.24,
-    "lon": -70.55,
+    "lat": -35.206,
+    "lon": -70.521,
     "name": "Paso del Planchón",
     "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto.",
     "retrieved_at": "2026-10-09",
-    "source": "Wikipedia, «Rutas sanmartinianas» (columnas, pasos, fechas y efectivos); El Arcón de la Historia (fechas de Las Heras y Freire); coordenadas: MapTiler Geocoding (OpenStreetMap); altitud: MapTiler Terrain-RGB v2"
+    "source": "UNCuyo, Historia virtual de Mendoza, «Cruce de los Andes»; Wikipedia, «Rutas sanmartinianas»; El Arcón de la Historia; Diario de Cuyo (Cabot en Guana, 05-02); coordenadas: MapTiler Geocoding (OpenStreetMap) y lista oficial de pasos (argentina.gob.ar); altitud: MapTiler Terrain-RGB v2"
   },
   {
     "column_id": "freire",
@@ -662,7 +744,7 @@
     "forces": [
       {
         "men": 100,
-        "note": "100 soldados, más guerrilleros y reclutas",
+        "note": "100 a 110 soldados según la fuente (75 u 80 infantes y 25 o 30 granaderos), más guerrilleros y reclutas",
         "side": "Columna de Freire (paso del Planchón)"
       }
     ],
@@ -672,7 +754,7 @@
     "name": "Talca",
     "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto.",
     "retrieved_at": "2026-10-09",
-    "source": "Wikipedia, «Rutas sanmartinianas» (columnas, pasos, fechas y efectivos); El Arcón de la Historia (fechas de Las Heras y Freire); coordenadas: MapTiler Geocoding (OpenStreetMap); altitud: MapTiler Terrain-RGB v2"
+    "source": "UNCuyo, Historia virtual de Mendoza, «Cruce de los Andes»; Wikipedia, «Rutas sanmartinianas»; El Arcón de la Historia; Diario de Cuyo (Cabot en Guana, 05-02); coordenadas: MapTiler Geocoding (OpenStreetMap) y lista oficial de pasos (argentina.gob.ar); altitud: MapTiler Terrain-RGB v2"
   },
   {
     "column_id": "lemos",
@@ -693,7 +775,7 @@
     "name": "San Carlos",
     "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto.",
     "retrieved_at": "2026-10-09",
-    "source": "Wikipedia, «Rutas sanmartinianas» (columnas, pasos, fechas y efectivos); El Arcón de la Historia (fechas de Las Heras y Freire); coordenadas: MapTiler Geocoding (OpenStreetMap); altitud: MapTiler Terrain-RGB v2"
+    "source": "UNCuyo, Historia virtual de Mendoza, «Cruce de los Andes»; Wikipedia, «Rutas sanmartinianas»; El Arcón de la Historia; Diario de Cuyo (Cabot en Guana, 05-02); coordenadas: MapTiler Geocoding (OpenStreetMap) y lista oficial de pasos (argentina.gob.ar); altitud: MapTiler Terrain-RGB v2"
   },
   {
     "column_id": "lemos",
@@ -714,7 +796,7 @@
     "name": "Paso del Portillo",
     "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto. Sin fecha en las fuentes: se supone el ritmo de la columna de Freire.",
     "retrieved_at": "2026-10-09",
-    "source": "Wikipedia, «Rutas sanmartinianas» (columnas, pasos, fechas y efectivos); El Arcón de la Historia (fechas de Las Heras y Freire); coordenadas: MapTiler Geocoding (OpenStreetMap); altitud: MapTiler Terrain-RGB v2"
+    "source": "UNCuyo, Historia virtual de Mendoza, «Cruce de los Andes»; Wikipedia, «Rutas sanmartinianas»; El Arcón de la Historia; Diario de Cuyo (Cabot en Guana, 05-02); coordenadas: MapTiler Geocoding (OpenStreetMap) y lista oficial de pasos (argentina.gob.ar); altitud: MapTiler Terrain-RGB v2"
   },
   {
     "column_id": "lemos",
@@ -735,7 +817,7 @@
     "name": "San Gabriel",
     "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto. Sin fecha en las fuentes: se supone el ritmo de la columna de Freire.",
     "retrieved_at": "2026-10-09",
-    "source": "Wikipedia, «Rutas sanmartinianas» (columnas, pasos, fechas y efectivos); El Arcón de la Historia (fechas de Las Heras y Freire); coordenadas: MapTiler Geocoding (OpenStreetMap); altitud: MapTiler Terrain-RGB v2"
+    "source": "UNCuyo, Historia virtual de Mendoza, «Cruce de los Andes»; Wikipedia, «Rutas sanmartinianas»; El Arcón de la Historia; Diario de Cuyo (Cabot en Guana, 05-02); coordenadas: MapTiler Geocoding (OpenStreetMap) y lista oficial de pasos (argentina.gob.ar); altitud: MapTiler Terrain-RGB v2"
   },
   {
     "column_id": "zelada",
@@ -756,7 +838,7 @@
     "name": "Guandacol",
     "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto.",
     "retrieved_at": "2026-10-09",
-    "source": "Wikipedia, «Rutas sanmartinianas» (columnas, pasos, fechas y efectivos); El Arcón de la Historia (fechas de Las Heras y Freire); coordenadas: MapTiler Geocoding (OpenStreetMap); altitud: MapTiler Terrain-RGB v2"
+    "source": "UNCuyo, Historia virtual de Mendoza, «Cruce de los Andes»; Wikipedia, «Rutas sanmartinianas»; El Arcón de la Historia; Diario de Cuyo (Cabot en Guana, 05-02); coordenadas: MapTiler Geocoding (OpenStreetMap) y lista oficial de pasos (argentina.gob.ar); altitud: MapTiler Terrain-RGB v2"
   },
   {
     "column_id": "zelada",
@@ -777,7 +859,7 @@
     "name": "Laguna Brava",
     "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto. Fecha estimada por distancia entre las fechas documentadas.",
     "retrieved_at": "2026-10-09",
-    "source": "Wikipedia, «Rutas sanmartinianas» (columnas, pasos, fechas y efectivos); El Arcón de la Historia (fechas de Las Heras y Freire); coordenadas: MapTiler Geocoding (OpenStreetMap); altitud: MapTiler Terrain-RGB v2"
+    "source": "UNCuyo, Historia virtual de Mendoza, «Cruce de los Andes»; Wikipedia, «Rutas sanmartinianas»; El Arcón de la Historia; Diario de Cuyo (Cabot en Guana, 05-02); coordenadas: MapTiler Geocoding (OpenStreetMap) y lista oficial de pasos (argentina.gob.ar); altitud: MapTiler Terrain-RGB v2"
   },
   {
     "column_id": "zelada",
@@ -798,7 +880,7 @@
     "name": "Paso de Come-Caballos",
     "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto. Fecha estimada por distancia entre las fechas documentadas.",
     "retrieved_at": "2026-10-09",
-    "source": "Wikipedia, «Rutas sanmartinianas» (columnas, pasos, fechas y efectivos); El Arcón de la Historia (fechas de Las Heras y Freire); coordenadas: MapTiler Geocoding (OpenStreetMap); altitud: MapTiler Terrain-RGB v2"
+    "source": "UNCuyo, Historia virtual de Mendoza, «Cruce de los Andes»; Wikipedia, «Rutas sanmartinianas»; El Arcón de la Historia; Diario de Cuyo (Cabot en Guana, 05-02); coordenadas: MapTiler Geocoding (OpenStreetMap) y lista oficial de pasos (argentina.gob.ar); altitud: MapTiler Terrain-RGB v2"
   },
   {
     "column_id": "zelada",
@@ -819,6 +901,6 @@
     "name": "Copiapó",
     "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto.",
     "retrieved_at": "2026-10-09",
-    "source": "Wikipedia, «Rutas sanmartinianas» (columnas, pasos, fechas y efectivos); El Arcón de la Historia (fechas de Las Heras y Freire); coordenadas: MapTiler Geocoding (OpenStreetMap); altitud: MapTiler Terrain-RGB v2"
+    "source": "UNCuyo, Historia virtual de Mendoza, «Cruce de los Andes»; Wikipedia, «Rutas sanmartinianas»; El Arcón de la Historia; Diario de Cuyo (Cabot en Guana, 05-02); coordenadas: MapTiler Geocoding (OpenStreetMap) y lista oficial de pasos (argentina.gob.ar); altitud: MapTiler Terrain-RGB v2"
   }
 ]

@@ -217,7 +217,7 @@ export default function Scene() {
           Imágenes satelitales y relieve: © MapTiler © OpenStreetMap contributors. Los lugares, las fechas intermedias y el trazado son aproximados.
         </p>
         {view === 'map' && <p>{figuresNote(startingMen(route.points) !== null)}</p>}
-        <p>Fuentes: Diario de Cuyo, Wikipedia («Rutas sanmartinianas»), El Arcón de la Historia, MapTiler y OpenStreetMap. Detalle en «Fuentes y métodos».</p>
+        <p>Fuentes: UNCuyo, Los Andes, Diario de Cuyo, Wikipedia, El Arcón de la Historia, MapTiler y OpenStreetMap. Detalle en «Fuentes y métodos».</p>
       </footer>
     </div>
   );

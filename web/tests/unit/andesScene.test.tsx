@@ -105,7 +105,7 @@ describe('Andes scene', () => {
     stubFetch();
     renderScene();
     const list = await screen.findByRole('list', { name: 'Eventos de la campaña' });
-    expect(within(list).getAllByRole('button')).toHaveLength(11);
+    expect(within(list).getAllByRole('button')).toHaveLength(13);
     const renderer = await screen.findByTestId('andes-renderer');
     expect(renderer).toBeTruthy();
     expect(screen.getByRole('note').textContent).toMatch(/MapTiler/);
