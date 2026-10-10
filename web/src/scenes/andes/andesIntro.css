@@ -7,7 +7,7 @@
   place-items: center;
   overflow: hidden;
   pointer-events: none;
-  background: linear-gradient(180deg, #0f2850 0%, #2f64a3 45%, #8fb8e0 80%, #cfe2f2 100%);
+  background: linear-gradient(180deg, var(--andes-c1) 0%, var(--andes-c2) 45%, var(--andes-c3) 80%, var(--andes-c4) 100%);
   transition: opacity 0.35s ease 0.45s;
 }
 
@@ -68,8 +68,8 @@
 .andes-intro-text {
   position: relative;
   text-align: center;
-  color: #fff;
-  text-shadow: 0 2px 30px rgb(8 22 48 / 0.9), 0 0 8px rgb(8 22 48 / 0.6);
+  color: var(--andes-c5);
+  text-shadow: 0 2px 30px var(--andes-c6), 0 0 8px var(--andes-c7);
   animation: andes-title-in 1.5s ease-out both;
   transition: opacity 0.35s ease, transform 0.8s ease;
 }
@@ -84,7 +84,7 @@
   position: absolute;
   inset: -40% -12%;
   z-index: -1;
-  background: radial-gradient(closest-side, rgb(10 28 60 / 0.55), rgb(10 28 60 / 0));
+  background: radial-gradient(closest-side, var(--andes-c8), var(--andes-c9));
 }
 
 .andes-intro-title,

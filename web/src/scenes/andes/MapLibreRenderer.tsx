@@ -9,6 +9,7 @@ import { figureCount, startingMen } from './column';
 import type { CameraApi, CameraView } from './cameraKeyframes';
 import { columnColor, positionOfColumn } from './columns';
 import { RegionMinimap } from './RegionMinimap';
+import { SlotPortal } from '../../dashboard/SlotPortal';
 import type { Column } from './columns';
 import type { CameraMode } from './camera';
 import { createFigureColumn } from './figures3d';
@@ -1086,6 +1087,7 @@ export function MapLibreRenderer({ route, columns, day, selectedId, camera, grap
           Falta la clave de MapTiler (VITE_MAPTILER_KEY): sin ella no hay mapa satelital ni relieve.
         </p>
       )}
+      <SlotPortal slot="minimap">
       <RegionMinimap
         main={mainMap}
         route={route}
@@ -1099,6 +1101,7 @@ export function MapLibreRenderer({ route, columns, day, selectedId, camera, grap
           mapRef.current?.easeTo({ center: [lng, lat], duration: 900, essential: true });
         }}
       />
+      </SlotPortal>
       <NavControls
         onZoomIn={() => mapRef.current?.zoomIn({ duration: 400 })}
         onZoomOut={() => mapRef.current?.zoomOut({ duration: 400 })}

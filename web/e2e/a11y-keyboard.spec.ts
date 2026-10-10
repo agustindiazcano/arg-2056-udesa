@@ -70,6 +70,7 @@ test.describe('keyboard operability', () => {
 
   test('Enter and Space activate a button and a tab', async ({ page }) => {
     await page.goto('/');
+    await openTab(page, 'Economía'); // the AI toggle is a control of the data scenes
     const ai = page.getByRole('button', { name: 'Efecto de la IA' });
     await ai.focus();
     await expect(ai).toHaveAttribute('aria-pressed', 'false');
@@ -91,6 +92,7 @@ test.describe('keyboard operability', () => {
 
   test('the AI toggle exposes aria-pressed with the right state after activation', async ({ page }) => {
     await page.goto('/');
+    await openTab(page, 'Economía'); // the AI toggle is a control of the data scenes
     const button = page.getByRole('button', { name: 'Efecto de la IA' });
     await expect(button).toHaveAttribute('aria-pressed', 'false');
     await button.click();
@@ -122,6 +124,7 @@ test.describe('keyboard operability', () => {
 
   test('the province filter traps no focus and Escape returns the focus to the control that opened it', async ({ page }) => {
     await page.goto('/');
+    await openTab(page, 'Economía'); // the province filter is a control of the data scenes
     const opener = page.getByRole('button', { name: /^Provincia:/ });
     await opener.focus();
     await page.keyboard.press('Enter');

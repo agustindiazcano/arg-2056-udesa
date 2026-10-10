@@ -47,6 +47,14 @@ const COLORS: Record<string, string> = {
   zelada: '#ff6b8a'
 };
 
+/** The light blue of the main force: its route, its label, its button. */
+export const MAIN_COLOR = '#8fbaff';
+
+/** The color of a force: the light blue for the main one, the one of its column for the others. */
+export function forceColor(id: string): string {
+  return id === 'main' ? MAIN_COLOR : columnColor(id);
+}
+
 /** The color of a column on the map (the main one is the light blue of the army). */
 export function columnColor(id: string): string {
   return COLORS[id] ?? '#cfd8e3';

@@ -51,7 +51,7 @@
   padding: 4px 6px;
   border: 1px solid var(--border);
   border-radius: var(--radius-sm, 6px);
-  background: rgb(0 0 0 / 0.35);
+  background: var(--andes-c10);
   color: var(--ink);
   font: inherit;
 }

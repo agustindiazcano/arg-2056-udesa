@@ -171,6 +171,7 @@ describe('control bar', () => {
   });
 
   it('chooses the scenario among Pesimista, Esperado and Optimista, with aria-pressed', () => {
+    useStore.setState({ scene: 'economy' }); // the scenario, the AI effect and the province are for the data scenes, not the Andes
     render(<App />);
     const group = within(controls()).getByRole('group', { name: 'Escenario' });
     const pressed = () => within(group).getAllByRole('button').map((b) => [b.textContent, b.getAttribute('aria-pressed')]);
@@ -181,6 +182,7 @@ describe('control bar', () => {
   });
 
   it('turns the AI overlay on and off with a toggle named Efecto de la IA', () => {
+    useStore.setState({ scene: 'economy' }); // the scenario, the AI effect and the province are for the data scenes, not the Andes
     render(<App />);
     const toggle = () => within(controls()).getByRole('button', { name: 'Efecto de la IA' });
     expect(toggle().getAttribute('aria-pressed')).toBe('false');
@@ -190,6 +192,7 @@ describe('control bar', () => {
   });
 
   it('the province button shows the selection and opens a dialog with the 24 provinces', () => {
+    useStore.setState({ scene: 'economy' }); // the scenario, the AI effect and the province are for the data scenes, not the Andes
     render(<App />);
     const button = () => within(controls()).getByRole('button', { name: /^Provincia:/ });
     expect(button().textContent).toBe('Provincia: Todas');
@@ -244,6 +247,16 @@ describe('styles', () => {
     expect(fs.readFileSync(path.join(dir, 'main.tsx'), 'utf8')).toContain("./styles/ui.css");
     expect(fs.readFileSync(path.join(dir, 'references', 'main.tsx'), 'utf8')).toContain('../styles/ui.css');
   });
+});
+
+it('the control bar of the Andes has only play, the progress and the speed', () => {
+  useStore.setState({ scene: 'andes' });
+  render(<App />);
+  expect(within(controls()).getByRole('button', { name: 'Reproducir' })).toBeTruthy();
+  expect(within(controls()).getByRole('group', { name: 'Velocidad' })).toBeTruthy();
+  expect(within(controls()).queryByRole('group', { name: 'Escenario' })).toBeNull();
+  expect(within(controls()).queryByRole('button', { name: 'Efecto de la IA' })).toBeNull();
+  expect(within(controls()).queryByRole('button', { name: /^Provincia:/ })).toBeNull();
 });
 
 describe('Recorrido step 1', () => {

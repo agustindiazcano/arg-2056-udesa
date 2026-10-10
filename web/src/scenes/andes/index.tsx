@@ -174,6 +174,19 @@ export default function Scene() {
         )}
       </div>
 
+      {view === 'map' && (
+        <div className="andes-forces-top">
+          <ForceButtons
+            active={activeForce}
+            onGo={(id) => {
+              setCamera('free');
+              setActiveForce(id);
+              setFocus((f) => ({ id, n: (f?.n ?? 0) + 1 }));
+            }}
+          />
+        </div>
+      )}
+
       <header className="andes-title andes-glass">
         <h1>Los Andes</h1>
         <p>El cruce de 1817 sobre el terreno</p>
@@ -251,14 +264,6 @@ export default function Scene() {
 
       {listOpen && (
         <div className="andes-list andes-glass">
-          <ForceButtons
-            active={activeForce}
-            onGo={(id) => {
-              setCamera('free');
-              setActiveForce(id);
-              setFocus((f) => ({ id, n: (f?.n ?? 0) + 1 }));
-            }}
-          />
           <EventList events={route.points} selectedId={selectedId} onSelect={select} />
         </div>
       )}

@@ -1,5 +1,6 @@
 import React from 'react';
-import { FORCES, FORCE_FACTS } from './forces';
+import { forceColor } from './columns';
+import { FORCES, forceChip, forceFullName } from './forces';
 
 interface ForceButtonsProps {
   /** the force the map is on, if any */
@@ -8,18 +9,27 @@ interface ForceButtonsProps {
   onGo: (id: string) => void;
 }
 
-/** One button per force of the crossing, to go to it on the map: the main force, the artillery and logistics, and the four flanks. */
+/**
+ * One round button per force of the crossing, in the color of the force with a short name; hovering one says its whole name. A click goes to the
+ * force on the map. The main force, the artillery and logistics, and the four flanks.
+ */
 export function ForceButtons({ active, onGo }: ForceButtonsProps) {
   return (
     <div className="andes-forces" role="group" aria-label="Fuerzas">
-      <p className="andes-forces-title">Fuerzas</p>
-      <div className="andes-forces-grid">
-        {FORCES.map((f) => (
-          <button key={f.id} type="button" className="chip" aria-pressed={active === f.id} onClick={() => onGo(f.id)}>
-            {FORCE_FACTS[f.id]?.short ?? f.title}
-          </button>
-        ))}
-      </div>
+      {FORCES.map((f) => (
+        <button
+          key={f.id}
+          type="button"
+          className="andes-force-chip"
+          aria-pressed={active === f.id}
+          aria-label={forceFullName(f.id)}
+          data-full={forceFullName(f.id)}
+          onClick={() => onGo(f.id)}
+        >
+          <span className="andes-force-dot" style={{ background: forceColor(f.id) }} aria-hidden="true" />
+          <span className="andes-force-name">{forceChip(f.id)}</span>
+        </button>
+      ))}
     </div>
   );
 }

@@ -150,6 +150,19 @@ export function forceLabel(id: string): string {
   return `${facts.short}\n${facts.leaders}\n${numbers}\n${facts.battalions}`;
 }
 
+const CHIPS: Readonly<Record<string, string>> = { main: 'Principal', 'las-heras': 'Logística', cabot: 'Cabot', zelada: 'Zelada', freire: 'Freire', lemos: 'Lemos' };
+
+/** The short name on the round button of a force. */
+export function forceChip(id: string): string {
+  return CHIPS[id] ?? '';
+}
+
+/** The whole name of a force, for the hover of its button: its role and its detail. */
+export function forceFullName(id: string): string {
+  const f = FORCES.find((x) => x.id === id);
+  return f ? `${f.title} · ${f.detail}` : '';
+}
+
 /** Just the role of the group: what shows on the map from far away, where the commanders and the units would pile up. */
 export function forceShortLabel(id: string): string {
   return FORCE_FACTS[id]?.short ?? '';

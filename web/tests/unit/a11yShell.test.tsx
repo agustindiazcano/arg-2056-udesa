@@ -96,6 +96,7 @@ describe('document title', () => {
 
 describe('toggle buttons expose aria-pressed', () => {
   it('"Efecto de la IA" starts aria-pressed false, becomes true after activation and returns after a second one', () => {
+    act(() => useStore.setState({ scene: 'economy' })); // it is a control of the data scenes
     render(<App />);
     const name = 'Efecto de la IA';
     expect(screen.getByRole('button', { name }).getAttribute('aria-pressed')).toBe('false');
@@ -117,6 +118,7 @@ describe('province filter focus', () => {
   const opener = () => screen.getByRole('button', { name: /^Provincia:/ });
 
   it('is a dialog with an accessible name, and the focus moves into it when it opens', () => {
+    act(() => useStore.setState({ scene: 'economy' })); // the province filter is a control of the data scenes
     render(<App />);
     opener().focus();
     fireEvent.click(opener());
@@ -125,6 +127,7 @@ describe('province filter focus', () => {
   });
 
   it('Escape closes it and returns the focus to the control that opened it', () => {
+    act(() => useStore.setState({ scene: 'economy' })); // the province filter is a control of the data scenes
     render(<App />);
     opener().focus();
     fireEvent.click(opener());
@@ -135,6 +138,7 @@ describe('province filter focus', () => {
   });
 
   it('choosing a province closes it and returns the focus to the control that opened it', () => {
+    act(() => useStore.setState({ scene: 'economy' })); // the province filter is a control of the data scenes
     render(<App />);
     opener().focus();
     fireEvent.click(opener());
@@ -144,6 +148,7 @@ describe('province filter focus', () => {
   });
 
   it('traps no focus: Tab is not intercepted by the dialog', () => {
+    act(() => useStore.setState({ scene: 'economy' })); // the province filter is a control of the data scenes
     render(<App />);
     opener().focus();
     fireEvent.click(opener());

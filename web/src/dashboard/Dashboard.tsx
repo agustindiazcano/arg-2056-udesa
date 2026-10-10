@@ -30,6 +30,7 @@ export function Dashboard({
 }: DashScene) {
   const [choice, setChoice] = useState<string[]>([]);
   const narrativeRef = useCallback((el: HTMLDivElement | null) => useSlots.getState().set('narrative', el), []);
+  const minimapRef = useCallback((el: HTMLDivElement | null) => useSlots.getState().set('minimap', el), []);
   const layout = useDashPrefs((s) => s.layout);
   const selected = choice.filter((id) => views.some((v) => v.id === id));
   const base = selected.length > 0 ? selected : views[0] ? [views[0].id] : [];
@@ -49,11 +50,12 @@ export function Dashboard({
     return (
       <div className="dash dash--stage">
         <div className="dash-stage">{stage}</div>
+        <section aria-label="Indicadores" className="dash-tiles dash-tiles--strip">
+          <h2 className="visually-hidden">Indicadores</h2>
+          {tiles}
+        </section>
         <aside className="dash-side">
-          <section aria-label="Indicadores" className="dash-tiles">
-            <h2 className="panel-title">Indicadores</h2>
-            {tiles}
-          </section>
+          <div className="dash-minimap" data-slot="minimap" ref={minimapRef} />
           <div className="dash-narrative" data-slot="narrative" ref={narrativeRef} />
           {side}
         </aside>
