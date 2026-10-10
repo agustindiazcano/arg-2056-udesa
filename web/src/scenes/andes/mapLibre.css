@@ -178,11 +178,24 @@
   gap: 2px;
 }
 
+/* the container of the data cards: over every panel and pop up of the stage (the bubbles themselves stay under the panels) */
+.andes-pops {
+  position: absolute;
+  inset: 0;
+  z-index: 60;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.andes-pops[hidden] {
+  display: none;
+}
+
 .andes-bubble-pop {
   position: absolute;
   top: 0;
   left: 0;
-  z-index: 4;
+  z-index: 1;
   width: max-content;
   max-width: 300px;
   padding: 8px 12px 10px;
@@ -282,4 +295,40 @@
     linear-gradient(to top right, transparent calc(50% - 1.6px), var(--andes-flag-red) calc(50% - 1.6px), var(--andes-flag-red) calc(50% + 1.6px), transparent calc(50% + 1.6px)),
     linear-gradient(to bottom right, transparent calc(50% - 1.6px), var(--andes-flag-red) calc(50% - 1.6px), var(--andes-flag-red) calc(50% + 1.6px), transparent calc(50% + 1.6px)),
     var(--andes-flag-white);
+}
+
+/* the data of a force as little tables */
+.andes-bubble-table {
+  width: 100%;
+  margin: 0 0 6px;
+  border-collapse: collapse;
+  font-size: 0.74rem;
+}
+
+.andes-bubble-table caption {
+  padding: 4px 0 2px;
+  color: var(--ink-2);
+  font-size: 0.64rem;
+  letter-spacing: 0.08em;
+  text-align: left;
+  text-transform: uppercase;
+}
+
+.andes-bubble-table th,
+.andes-bubble-table td {
+  padding: 2px 6px;
+  border: 1px solid var(--border);
+  text-align: left;
+  vertical-align: top;
+}
+
+.andes-bubble-table th {
+  color: var(--ink-2);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.andes-bubble-subtitle {
+  margin: 8px 0 0 !important;
+  font-weight: 600;
 }

@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import type { Map as MapLibreMap } from 'maplibre-gl';
 import { forceColor } from './columns';
 import { ENEMY_ID, FORCE_FACTS, joinedLabel } from './forces';
-import type { Bubble } from './forces';
+import type { Bubble, ForceFacts } from './forces';
 import { popPosition } from './popPosition';
 
 interface ForceBubblesProps {
@@ -11,6 +11,23 @@ interface ForceBubblesProps {
   items: readonly Bubble[];
   /** false while something else names the forces (the spotlight) */
   visible: boolean;
+}
+
+/** The commanders of a force as table rows: the name, and the role after the dot (`Estanislao Soler · vanguardia`). */
+function commanderRows(commanders: readonly string[]): Array<[string, string]> {
+  return commanders.map((c): [string, string] => {
+    const [name = '', ...role] = c.split(' · ');
+    return [name, role.join(' · ')];
+  });
+}
+
+/** The numbers of a force as table rows (label, value): men, infantry where the sources give it, its units, and the rest (animals, artillery). */
+function numberRows(facts: ForceFacts): Array<[string, string]> {
+  const rows: Array<[string, string]> = [['Hombres', facts.men]];
+  if (facts.infantry) rows.push(['Infantería', facts.infantry]);
+  rows.push(['Cuerpos', facts.battalions]);
+  for (const [label, value] of facts.units) if (label !== 'Hombres' && label !== 'Infantería' && label !== 'Unidades') rows.push([label, value]);
+  return rows;
 }
 
 /** The space the details keep free of the edges of the map: the top has the title, the buttons and the indicators over it. */
@@ -77,16 +94,14 @@ export function ForceBubbles({ map, items, visible }: ForceBubblesProps) {
   useEffect(() => () => window.clearTimeout(hoverTimer.current), []);
 
   return (
-    <div className="andes-bubbles" hidden={!visible}>
-      {items.map((item) => {
-        const lines = joinedLabel(item.ids).split('\n');
-        const name = lines[0] ?? '';
-        const facts = item.ids.map((id) => FORCE_FACTS[id]).filter(Boolean);
-        const isOpen = open === item.id;
-        const showPop = active === item.id;
-        return (
-          <React.Fragment key={item.id}>
+    <>
+      <div className="andes-bubbles" hidden={!visible}>
+        {items.map((item) => {
+          const name = joinedLabel(item.ids).split('\n')[0] ?? '';
+          const isOpen = open === item.id;
+          return (
             <div
+              key={item.id}
               ref={(el) => {
                 if (el) bubbleRefs.current.set(item.id, el);
                 else bubbleRefs.current.delete(item.id);
@@ -121,13 +136,24 @@ export function ForceBubbles({ map, items, visible }: ForceBubblesProps) {
                 </button>
               </div>
             </div>
+          );
+        })}
+      </div>
+
+      {/* the data of the forces: over every other panel and pop up of the map */}
+      <div className="andes-pops" hidden={!visible}>
+        {items.map((item) => {
+          const name = joinedLabel(item.ids).split('\n')[0] ?? '';
+          const facts = item.ids.map((id) => ({ id, facts: FORCE_FACTS[id] })).filter((f): f is { id: string; facts: ForceFacts } => Boolean(f.facts));
+          return (
             <div
+              key={item.id}
               ref={(el) => {
                 if (el) popRefs.current.set(item.id, el);
                 else popRefs.current.delete(item.id);
               }}
               className="andes-bubble-pop"
-              hidden={!showPop}
+              hidden={active !== item.id}
               onMouseEnter={() => enter(item.id)}
               onMouseLeave={leave}
             >
@@ -146,17 +172,38 @@ export function ForceBubbles({ map, items, visible }: ForceBubblesProps) {
                   ×
                 </button>
               </header>
-              <p className="andes-bubble-section">Mando</p>
-              <p>{lines[1]}</p>
-              <p className="andes-bubble-section">Fuerzas</p>
-              <p>{lines[2]}</p>
-              <p className="andes-bubble-section">Unidades</p>
-              <p>{lines[3]}</p>
-              {facts.length === 1 && facts[0] && <p className="andes-bubble-goal">{facts[0].goal}</p>}
+              {facts.map(({ id, facts: f }) => (
+                <div key={id} className="andes-bubble-force">
+                  {facts.length > 1 && <p className="andes-bubble-subtitle">{f.short}</p>}
+                  <table className="andes-bubble-table">
+                    <caption>Mando</caption>
+                    <tbody>
+                      {commanderRows(f.commanders).map(([who, role]) => (
+                        <tr key={who}>
+                          <th scope="row">{who}</th>
+                          <td>{role}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                  <table className="andes-bubble-table">
+                    <caption>Fuerzas</caption>
+                    <tbody>
+                      {numberRows(f).map(([label, value]) => (
+                        <tr key={label}>
+                          <th scope="row">{label}</th>
+                          <td>{value}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                  {facts.length === 1 && <p className="andes-bubble-goal">{f.goal}</p>}
+                </div>
+              ))}
             </div>
-          </React.Fragment>
-        );
-      })}
-    </div>
+          );
+        })}
+      </div>
+    </>
   );
 }
