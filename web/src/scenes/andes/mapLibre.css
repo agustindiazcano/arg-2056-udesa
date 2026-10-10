@@ -6,3 +6,472 @@
 .andes-maplibre .maplibregl-ctrl-attrib {
   font-size: var(--font-xs, 0.7rem);
 }
+
+/* The light of the spotlight, over the map: it adds light to the dark map under it. */
+.andes-spot {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  overflow: hidden;
+  pointer-events: none;
+  mix-blend-mode: screen;
+}
+
+/* The card of the spotlight: a rounded dark box to the right of the light, with the force, its place, its commanders and its numbers. */
+.andes-spot-card {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 3;
+  width: min(330px, 60%);
+  padding: 12px 16px;
+  border: 1.5px solid var(--andes-c11);
+  border-radius: 14px;
+  background: var(--andes-c12);
+  color: var(--andes-c5);
+  font-size: 0.82rem;
+  line-height: 1.35;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+
+.andes-spot-card h3 {
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+.andes-spot-card p,
+.andes-spot-card ul,
+.andes-spot-card dl {
+  margin: 0;
+}
+
+.andes-spot-detail {
+  color: var(--andes-c13);
+}
+
+.andes-spot-place {
+  margin-top: 6px !important;
+}
+
+.andes-spot-place span,
+.andes-spot-section {
+  color: var(--andes-c14);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.andes-spot-section {
+  margin-top: 8px !important;
+}
+
+.andes-spot-card ul {
+  padding-left: 1.1em;
+}
+
+.andes-spot-card dl div {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 1px 0;
+}
+
+.andes-spot-card dt {
+  color: var(--andes-c15);
+}
+
+.andes-spot-card dd {
+  margin: 0;
+  text-align: right;
+}
+
+.andes-spot-goal {
+  margin-top: 8px !important;
+  padding-top: 6px;
+  border-top: 1px solid var(--andes-c16);
+  color: var(--andes-c17);
+  font-size: 0.76rem;
+}
+
+/* The big name of the place under each light, in white. */
+.andes-spot-battle {
+  text-align: center;
+}
+
+.andes-spot-date {
+  display: block;
+  margin-top: 2px;
+  font-size: 0.55em;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+}
+
+.andes-spot-big {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 4;
+  color: var(--andes-c5);
+  font-size: clamp(1.5rem, 2.8vw, 2.4rem);
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+  text-shadow: 0 2px 14px var(--andes-c18), 0 0 4px var(--andes-c19);
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+
+/* The minimap of the region, in the right panel (it fills its slot). */
+.andes-mm {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border: 1.5px solid var(--andes-c20);
+  border-radius: var(--radius-md, 12px);
+  box-shadow: 0 6px 22px var(--andes-c21);
+  cursor: crosshair;
+}
+
+/* The bubbles over the forces: the name, and the rest when it is hovered, focused or clicked. */
+.andes-bubbles {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.andes-bubbles[hidden] {
+  display: none;
+}
+
+.andes-bubble {
+  position: absolute;
+  top: 0;
+  left: 0;
+  will-change: transform;
+}
+
+.andes-bubble-card {
+  position: absolute;
+  bottom: 22px;
+  left: 0;
+  width: max-content;
+  max-width: 300px;
+  transform: translateX(-50%);
+  border: 1.5px solid var(--border);
+  border-radius: 14px;
+  background: var(--glass-strong);
+  color: var(--ink);
+  font-size: 0.78rem;
+  line-height: 1.35;
+  backdrop-filter: blur(8px);
+  pointer-events: auto;
+}
+
+.andes-bubble-name {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px 3px 6px;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.andes-bubble-dots {
+  display: inline-flex;
+  gap: 2px;
+}
+
+/* the container of the data cards: over every panel and pop up of the stage (the bubbles themselves stay under the panels) */
+.andes-pops {
+  position: absolute;
+  inset: 0;
+  z-index: 60;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.andes-pops[hidden] {
+  display: none;
+}
+
+.andes-bubble-pop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  width: max-content;
+  max-width: 300px;
+  padding: 8px 12px 10px;
+  border: 1.5px solid var(--border);
+  border-radius: 14px;
+  background: var(--glass-strong);
+  color: var(--ink);
+  font-size: 0.78rem;
+  line-height: 1.35;
+  backdrop-filter: blur(10px);
+  pointer-events: auto;
+}
+
+.andes-bubble-pop[hidden] {
+  display: none;
+}
+
+.andes-bubble-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.andes-bubble-title {
+  margin: 0 0 2px !important;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.andes-bubble-close {
+  flex: 0 0 auto;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.andes-bubble-pop p {
+  margin: 0;
+}
+
+.andes-bubble-section {
+  margin-top: 6px !important;
+  color: var(--ink-2);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.andes-bubble-goal {
+  margin-top: 8px !important;
+  padding-top: 6px;
+  border-top: 1px solid var(--border);
+  color: var(--ink-2);
+}
+
+/* The flags over the bubbles: the patriot one is white over sky blue, half and half; the royalist one is white with a red saltire (the cross of Burgundy). */
+.andes-flag {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  display: flex;
+  flex-direction: column;
+  width: 28px;
+  height: 18px;
+  margin-bottom: 5px;
+  overflow: hidden;
+  border: 1px solid var(--ink);
+  border-radius: 2px;
+  transform: translateX(-50%);
+  box-shadow: 0 2px 6px var(--andes-flag-shadow);
+}
+
+.andes-flag i {
+  display: block;
+  flex: 1 1 0;
+}
+
+.andes-flag--patriot i:first-child {
+  background: var(--andes-flag-white);
+}
+
+.andes-flag--patriot i:last-child {
+  background: var(--andes-flag-sky);
+}
+
+/* white with a red saltire, the cross of Burgundy of the Spanish army */
+.andes-flag--royal i {
+  background:
+    linear-gradient(to top right, transparent calc(50% - 1.6px), var(--andes-flag-red) calc(50% - 1.6px), var(--andes-flag-red) calc(50% + 1.6px), transparent calc(50% + 1.6px)),
+    linear-gradient(to bottom right, transparent calc(50% - 1.6px), var(--andes-flag-red) calc(50% - 1.6px), var(--andes-flag-red) calc(50% + 1.6px), transparent calc(50% + 1.6px)),
+    var(--andes-flag-white);
+}
+
+/* the data of a force as little tables */
+.andes-bubble-table {
+  width: 100%;
+  margin: 0 0 6px;
+  border-collapse: collapse;
+  font-size: 0.74rem;
+}
+
+.andes-bubble-table caption {
+  padding: 4px 0 2px;
+  color: var(--ink-2);
+  font-size: 0.64rem;
+  letter-spacing: 0.08em;
+  text-align: left;
+  text-transform: uppercase;
+}
+
+.andes-bubble-table th,
+.andes-bubble-table td {
+  padding: 2px 6px;
+  border: 1px solid var(--border);
+  text-align: left;
+  vertical-align: top;
+}
+
+.andes-bubble-table th {
+  color: var(--ink-2);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.andes-bubble-subtitle {
+  margin: 8px 0 0 !important;
+  font-weight: 600;
+}
+
+/* the card of a battle or a combat, over the red balls of the royalists seen from far away: it follows the mouse */
+.andes-battle-card {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 61;
+  width: 300px;
+  padding: 10px 14px 12px;
+  border: 1.5px solid var(--border);
+  border-radius: 14px;
+  background: var(--glass-strong);
+  color: var(--ink);
+  font-size: 0.78rem;
+  line-height: 1.35;
+  backdrop-filter: blur(10px);
+  pointer-events: none;
+}
+
+.andes-battle-card p {
+  margin: 0;
+}
+
+.andes-battle-card-title {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.andes-battle-card-date {
+  margin-bottom: 6px !important;
+  color: var(--ink-2);
+}
+
+.andes-battle-card table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.andes-battle-card th {
+  padding: 2px 8px 2px 0;
+  color: var(--ink-2);
+  font-weight: 400;
+  text-align: left;
+}
+
+.andes-battle-card td {
+  padding: 2px 0;
+  text-align: right;
+}
+
+.andes-battle-card tr + tr {
+  border-top: 1px solid var(--border);
+}
+
+.andes-battle-card-note {
+  margin-top: 6px !important;
+  color: var(--ink-2);
+  font-size: 0.7rem;
+}
+
+/* the flags of the report of a battle sit in the line of its text, not over a bubble */
+.andes-flag--inline {
+  position: static;
+  flex: 0 0 auto;
+  margin: 0;
+  transform: none;
+}
+
+/* ---- the report of a battle or a combat, at the bottom of the map when it is chosen ------------------------------- */
+
+.andes-report {
+  position: absolute;
+  left: var(--space-md);
+  bottom: calc(var(--bar-h, 0px) + 3.4rem);
+  z-index: 4;
+  width: min(600px, calc(100% - var(--side-w, 0px) - 380px - 4 * var(--space-md)));
+  min-width: 340px;
+  padding: var(--space-xs) var(--space-sm) var(--space-sm);
+  font-size: var(--font-xs, 0.78rem);
+  line-height: 1.35;
+}
+
+.andes-report-result {
+  margin: 0 0 var(--space-xs);
+  color: var(--ink);
+  font-size: var(--font-sm);
+  font-weight: 600;
+  text-align: center;
+}
+
+.andes-report-sides {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-sm);
+}
+
+.andes-report-side h3 {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0 0 4px;
+  font-size: var(--font-xs, 0.78rem);
+}
+
+.andes-report-side table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.andes-report-side th {
+  padding: 2px 8px 2px 0;
+  color: var(--ink-2);
+  font-weight: 400;
+  text-align: left;
+  vertical-align: top;
+}
+
+.andes-report-side td {
+  padding: 2px 0;
+  text-align: right;
+}
+
+.andes-report-side tr + tr {
+  border-top: 1px solid var(--border);
+}
+
+.andes-report-note {
+  margin: 4px 0 0;
+  color: var(--ink-2);
+  font-size: 0.68rem;
+}

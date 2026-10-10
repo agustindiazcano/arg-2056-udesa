@@ -47,6 +47,7 @@ test.describe('axe', () => {
 
   test('the province filter open has no serious or critical violation', async ({ page }) => {
     await page.goto('/');
+    await openTab(page, 'Economía'); // the province filter is a control of the data scenes
     await page.getByRole('button', { name: /^Provincia:/ }).click();
     await expect(page.getByRole('dialog', { name: 'Filtrar por provincia' })).toBeVisible();
     expect(await seriousViolations(new AxeBuilder({ page }))).toEqual([]);

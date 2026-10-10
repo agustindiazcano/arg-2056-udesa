@@ -1,0 +1,148 @@
+/* The loading screen of the Andes: sky, three layers of noise clouds and the title. Leaves in 0.8 s: the clouds fade out, no movement (INTRO_FADE_MS in AndesIntro.tsx). */
+.andes-intro {
+  position: absolute;
+  inset: 0;
+  z-index: 30;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  pointer-events: none;
+  background: linear-gradient(180deg, var(--andes-c1) 0%, var(--andes-c2) 45%, var(--andes-c3) 80%, var(--andes-c4) 100%);
+  transition: opacity 0.35s ease 0.45s;
+}
+
+.andes-intro.is-leaving {
+  opacity: 0;
+}
+
+/* each layer is wider than the screen and drifts sideways at its own pace */
+.andes-cloud-layer {
+  position: absolute;
+  top: -5%;
+  left: -25%;
+  width: 150%;
+  height: 110%;
+  transition: opacity 0.6s ease;
+}
+
+.andes-cloud-back {
+  opacity: 0.55;
+  animation: andes-drift-a 70s linear infinite alternate;
+}
+
+.andes-cloud-mid {
+  opacity: 0.8;
+  animation: andes-drift-b 48s linear infinite alternate;
+}
+
+.andes-cloud-front {
+  opacity: 0.95;
+  animation: andes-drift-a 34s linear infinite alternate;
+}
+
+@keyframes andes-drift-a {
+  from { translate: -6% 0; }
+  to { translate: 6% 1%; }
+}
+
+@keyframes andes-drift-b {
+  from { translate: 5% 1%; }
+  to { translate: -5% -1%; }
+}
+
+/* leaving: the clouds do not move, they just fade out one layer after the other */
+.andes-intro.is-leaving .andes-cloud-front {
+  opacity: 0;
+}
+
+.andes-intro.is-leaving .andes-cloud-mid {
+  opacity: 0;
+  transition-delay: 0.08s;
+}
+
+.andes-intro.is-leaving .andes-cloud-back {
+  opacity: 0;
+  transition-delay: 0.16s;
+}
+
+.andes-intro-text {
+  position: relative;
+  text-align: center;
+  color: var(--andes-c5);
+  text-shadow: 0 2px 30px var(--andes-c6), 0 0 8px var(--andes-c7);
+  animation: andes-title-in 1.5s ease-out both;
+  transition: opacity 0.35s ease, transform 0.8s ease;
+}
+
+.andes-intro.is-leaving .andes-intro-text {
+  opacity: 0;
+  transform: scale(1.08);
+}
+
+.andes-intro-text::before {
+  content: '';
+  position: absolute;
+  inset: -40% -12%;
+  z-index: -1;
+  background: radial-gradient(closest-side, var(--andes-c8), var(--andes-c9));
+}
+
+.andes-intro-title,
+.andes-intro-year {
+  margin: 0;
+}
+
+.andes-intro-title {
+  font-size: clamp(2rem, 6.2vw, 5rem);
+  font-weight: 300;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.andes-intro-year {
+  margin-top: 0.4em;
+  font-size: clamp(1.4rem, 3.4vw, 2.6rem);
+  font-weight: 200;
+  letter-spacing: 0.5em;
+  padding-left: 0.5em;
+}
+
+@keyframes andes-title-in {
+  from { opacity: 0; transform: translateY(14px) scale(0.98); }
+  to { opacity: 1; transform: none; }
+}
+
+.andes-intro.is-still .andes-cloud-layer,
+.andes-intro.is-still .andes-intro-text {
+  animation: none;
+  transition: none;
+}
+
+.andes-intro.is-still {
+  transition: opacity 0.25s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .andes-cloud-layer,
+  .andes-intro-text {
+    animation: none;
+    transition: none;
+  }
+}
+
+/* the button that skips the intro: over the clouds (they let the clicks through), at the bottom; it stays through the tour and the spotlight */
+.andes-intro-skip {
+  position: absolute;
+  left: 50%;
+  bottom: calc(var(--bar-h, 0px) + var(--space-lg, 2rem));
+  z-index: 31;
+  transform: translateX(-50%);
+  padding: var(--space-xs) var(--space-md);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--glass-strong);
+  color: var(--ink);
+  font: inherit;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+}

@@ -35,6 +35,35 @@
 
 :root {
   /* Colors */
+  /* The flags of the Andes map: the patriot one (white over sky blue) and the royalist one (white with a red saltire) */
+  --andes-flag-white: #ffffff;
+  --andes-flag-sky: #75aadb;
+  --andes-flag-red: #c60b1e;
+  --andes-flag-shadow: rgb(0 0 0 / 0.45);
+
+  /* The Andes scene: the loading sky, the camera tool, the spotlight and the map names (src/scenes/andes/*.css) */
+  --andes-c1: #0f2850;
+  --andes-c2: #2f64a3;
+  --andes-c3: #8fb8e0;
+  --andes-c4: #cfe2f2;
+  --andes-c5: #fff;
+  --andes-c6: rgb(8 22 48 / 0.9);
+  --andes-c7: rgb(8 22 48 / 0.6);
+  --andes-c8: rgb(10 28 60 / 0.55);
+  --andes-c9: rgb(10 28 60 / 0);
+  --andes-c10: rgb(0 0 0 / 0.35);
+  --andes-c11: rgb(255 241 184 / 0.85);
+  --andes-c12: rgb(11 18 32 / 0.9);
+  --andes-c13: #ffeeb0;
+  --andes-c14: rgb(255 241 184 / 0.75);
+  --andes-c15: rgb(255 255 255 / 0.7);
+  --andes-c16: rgb(255 255 255 / 0.18);
+  --andes-c17: rgb(255 255 255 / 0.85);
+  --andes-c18: rgb(5 12 28 / 0.95);
+  --andes-c19: rgb(5 12 28 / 0.8);
+  --andes-c20: rgb(255 255 255 / 0.55);
+  --andes-c21: rgb(0 0 0 / 0.45);
+
   --color-focus: #ffc107;
 
   /* Intro screen (src/intro/intro.css) */

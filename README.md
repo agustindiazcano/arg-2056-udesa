@@ -43,14 +43,23 @@ La lista completa, con qué dato sale de cada fuente y qué falta verificar, est
 7. El Arcón de la Historia, «El cruce de la cordillera de los Andes (18/01/1817 al 08/02/1817)». <https://elarcondelahistoria.com/el-cruce-de-la-cordillera-de-los-andes-18011817-al-08021817/>
 8. Estado general del Ejército de los Andes (Mendoza, 31-12-1816), en Espejo, *El paso de los Andes* (por verificar en el original).
 9. Plano de la batalla de Chacabuco coordinado por B. Mitre, en *Historia de San Martín*. <https://www.memoriachilena.gob.cl/602/w3-article-546948.html>
+10. Municipalidad de Chacabuco, «Batalla de Chacabuco» (orden de batalla). <https://chacabuco.gob.ar/wp-content/uploads/nuestraciudad/Batalla_Chacabuco.pdf>
+11. Todo Argentina, «San Martín: batalla de Chacabuco». <https://www.todo-argentina.net/biografias/san_martin/mili016.htm>
+12. Foro Defensa Nacional, «El Cruce de Los Andes». <https://defensanacional.foroactivo.com/t4878-el-cruce-de-los-andes>
+13. Diario El Tiempo, «El general San Martín y el Azul». <https://www.diarioeltiempo.com.ar/nota-el-general-san-martin-y-el-azul-166860>
+14. Wikipedia, «Cruce de los Andes». <https://es.wikipedia.org/wiki/Cruce_de_los_Andes>
+15. Resolución 258/2013 de SENASA (altura del Espinacito). <https://www.argentina.gob.ar/normativa/nacional/norma-216719/texto>
+16. El Bibliote, «Logística del Ejército de los Andes». <https://elbibliote.com/resources/Temas/html/1468.php>
+
+Las fuentes marcadas «por informe» en [`docs/references.md`](docs/references.md) todavía no se verificaron en el original.
 
 ### Mapa y terreno
 
-10. MapTiler: imágenes satelitales, modelo de elevación Terrain-RGB v2 y geocodificador. <https://www.maptiler.com>
-11. © OpenStreetMap contributors (nombres y posiciones de los lugares). <https://www.openstreetmap.org/copyright>
+17. MapTiler: imágenes satelitales, modelo de elevación Terrain-RGB v2 y geocodificador. <https://www.maptiler.com>
+18. © OpenStreetMap contributors (nombres y posiciones de los lugares). <https://www.openstreetmap.org/copyright>
 
 ### Marco conceptual
 
-12. Schwab, K. (2016). *La Cuarta Revolución Industrial*. Foro Económico Mundial.
+19. Schwab, K. (2016). *La Cuarta Revolución Industrial*. Foro Económico Mundial.
 
 > Las posiciones de los lugares son aproximadas, las fechas intermedias entre las documentadas son estimaciones marcadas como tales, y las cifras de efectivos varían según la fuente. Todo está señalado en [`docs/references.md`](docs/references.md).

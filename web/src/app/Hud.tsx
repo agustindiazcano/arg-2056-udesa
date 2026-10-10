@@ -25,7 +25,7 @@ const PauseIcon = () => (
   </svg>
 );
 
-/** The control bar: play, year, speed, scenario, AI overlay and the province filter. */
+/** The control bar: play, year, speed, scenario, AI overlay and the province filter. In the Andes only play, the progress and the speed: the rest is for the data scenes. */
 export function Hud() {
   const { playing, yearFloat, speed, scenario, aiOverlay, province, provinceFilterOpen, dispatch } = useStore();
   const provinceName = PROVINCES.find((p) => p.id === province)?.name ?? 'Todas';
@@ -38,7 +38,7 @@ export function Hud() {
     <section aria-label="Controles" className="controls">
       <button type="button" className="btn btn--primary" aria-keyshortcuts="Space" onClick={() => dispatch({ type: 'togglePlay' })}>
         {playing ? <PauseIcon /> : <PlayIcon />}
-        {playing ? 'Pausar' : 'Reproducir'}
+        <span className={crossing ? 'visually-hidden' : undefined}>{playing ? 'Pausar' : 'Reproducir'}</span>
       </button>
 
       {crossing && <div className="progress-slot" ref={progressRef} />}
@@ -70,32 +70,36 @@ export function Hud() {
         </button>
       </div>
 
-      <Segmented
-        label="Escenario"
-        options={SCENARIO_OPTIONS}
-        value={scenario}
-        onChange={(next) => dispatch({ type: 'setScenario', scenario: next })}
-      />
+      {!crossing && (
+        <>
+          <Segmented
+            label="Escenario"
+            options={SCENARIO_OPTIONS}
+            value={scenario}
+            onChange={(next) => dispatch({ type: 'setScenario', scenario: next })}
+          />
 
-      <button
-        type="button"
-        className="btn"
-        aria-pressed={aiOverlay === 'on'}
-        onClick={() => dispatch({ type: 'setAiOverlay', aiOverlay: aiOverlay === 'off' ? 'on' : 'off' })}
-      >
-        Efecto de la IA
-      </button>
+          <button
+            type="button"
+            className="btn"
+            aria-pressed={aiOverlay === 'on'}
+            onClick={() => dispatch({ type: 'setAiOverlay', aiOverlay: aiOverlay === 'off' ? 'on' : 'off' })}
+          >
+            Efecto de la IA
+          </button>
 
-      <button
-        type="button"
-        className="btn"
-        aria-haspopup="dialog"
-        aria-expanded={provinceFilterOpen}
-        aria-keyshortcuts="P"
-        onClick={() => dispatch({ type: 'openProvinceFilter' })}
-      >
-        Provincia: <span className="province-name">{provinceName}</span>
-      </button>
+          <button
+            type="button"
+            className="btn"
+            aria-haspopup="dialog"
+            aria-expanded={provinceFilterOpen}
+            aria-keyshortcuts="P"
+            onClick={() => dispatch({ type: 'openProvinceFilter' })}
+          >
+            Provincia: <span className="province-name">{provinceName}</span>
+          </button>
+        </>
+      )}
     </section>
   );
 }

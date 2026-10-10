@@ -47,6 +47,19 @@ const COLORS: Record<string, string> = {
   zelada: '#ff6b8a'
 };
 
+/** The light blue of the main force: its route, its label, its button. */
+export const MAIN_COLOR = '#8fbaff';
+
+/** The red of the royalist army, and of the battle. */
+export const ENEMY_COLOR = '#e53935';
+
+/** The color of a force: the light blue for the main one, the red for the royalists, the one of its column for the others. */
+export function forceColor(id: string): string {
+  if (id === 'main') return MAIN_COLOR;
+  if (id.startsWith('royalists')) return ENEMY_COLOR;
+  return columnColor(id);
+}
+
 /** The color of a column on the map (the main one is the light blue of the army). */
 export function columnColor(id: string): string {
   return COLORS[id] ?? '#cfd8e3';

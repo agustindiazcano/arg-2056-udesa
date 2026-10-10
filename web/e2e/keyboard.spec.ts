@@ -61,6 +61,10 @@ test.describe('keyboard', () => {
   });
 
   test('PageDown and PageUp move the caption between steps and Home returns to step 1', async ({ page }) => {
+    // the story is in the panel of the right, which starts folded on a laptop screen (1440 px): the reader opens it
+    const panel = page.getByRole('button', { name: 'Panel lateral' });
+    if ((await panel.getAttribute('aria-expanded')) === 'false') await panel.click();
+    await releaseFocus(page);
     const story = page.getByRole('region', { name: 'Historia' });
     await expect(story.getByText('Paso 1 de 3')).toBeVisible();
     await page.keyboard.press('PageDown');

@@ -7,6 +7,9 @@ export interface AppStore extends State {
   // It's helpful to expose a direct `tick` method for the ticker loop to avoid object allocation of an action if needed, or we can just use a normal tick function.
   // Actually, wait, tick needs to get state.
   tick: (dtSeconds: number) => void;
+  /** how much of its pace the clock keeps (1 = all); a scene that wants a slower or faster march sets it and puts it back to 1 when it leaves */
+  timeScale: number;
+  setTimeScale: (scale: number) => void;
 }
 
 const initialState: State = {
@@ -28,6 +31,8 @@ import { tick as tickReducer } from './reducer';
 
 export const useStore = create<AppStore>((set) => ({
   ...initialState,
+  timeScale: 1,
+  setTimeScale: (scale: number) => set((state) => (state.timeScale === scale ? state : { timeScale: scale })),
   dispatch: (action: Action) => set((state) => reduce(state, action)),
-  tick: (dtSeconds: number) => set((state) => tickReducer(state, dtSeconds))
+  tick: (dtSeconds: number) => set((state) => tickReducer(state, dtSeconds, state.timeScale))
 }));

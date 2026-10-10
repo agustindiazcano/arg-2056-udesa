@@ -46,4 +46,6 @@ export interface DashScene {
    * bar or viewer, only the right panel. The scene draws its own title, names and source line over the stage.
    */
   stage?: ReactNode;
+  /** with a `stage`: the right panel is folded away (the stage gets its width) */
+  sideHidden?: boolean;
 }

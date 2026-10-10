@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { buildRoute } from '../../src/scenes/andes/timeline';
+import { buildRoute, campaignDateText } from '../../src/scenes/andes/timeline';
 import type { AndesEvent } from '../../src/scenes/andes/data';
 import {
   FIGURE_HEIGHT_UNITS,
@@ -10,11 +10,16 @@ import {
   coordAtKm,
   figuresVisible,
   gaitAmount,
+  MIN_TIME_SCALE,
+  TIME_SCALE_FAR_ZOOM,
+  timeScaleForZoom,
   gaitPhaseAt,
   STRIDES_PER_SECOND,
   WALKING_GRACE_MS,
   metersPerPixel,
-  metersPerUnit
+  metersPerUnit,
+  mixHex,
+  wasdDelta
 } from '../../src/scenes/andes/mapGeo';
 
 const ev = (id: string, day: number, lon: number, lat: number): AndesEvent => ({
@@ -137,5 +142,76 @@ describe('gait', () => {
   it('walks while the position changed a moment ago and stands otherwise', () => {
     expect(gaitAmount(1000, 1000 - WALKING_GRACE_MS)).toBe(1);
     expect(gaitAmount(1000, 1000 - WALKING_GRACE_MS - 1)).toBe(0);
+  });
+});
+
+describe('timeScaleForZoom', () => {
+  it('is 1 from far away: the clock runs at its plain pace', () => {
+    expect(timeScaleForZoom(TIME_SCALE_FAR_ZOOM)).toBe(1);
+    expect(timeScaleForZoom(5)).toBe(1);
+  });
+
+  it('gets smaller the closer the camera is, so the march can be seen', () => {
+    const near = timeScaleForZoom(12);
+    const nearer = timeScaleForZoom(14.5);
+    expect(near).toBeLessThan(1);
+    expect(nearer).toBeLessThan(near);
+  });
+
+  it('never stops the clock: it has a floor', () => {
+    expect(timeScaleForZoom(30)).toBe(MIN_TIME_SCALE);
+    expect(MIN_TIME_SCALE).toBeGreaterThan(0);
+  });
+});
+
+describe('mixHex', () => {
+  it('goes from one color to the other', () => {
+    expect(mixHex('#000000', '#ffffff', 0)).toBe('#000000');
+    expect(mixHex('#000000', '#ffffff', 1)).toBe('#ffffff');
+    expect(mixHex('#102030', '#305070', 0.5)).toBe('#203850');
+  });
+
+  it('stays between the two colors for a t outside 0 to 1', () => {
+    expect(mixHex('#102030', '#305070', -3)).toBe('#102030');
+    expect(mixHex('#102030', '#305070', 9)).toBe('#305070');
+  });
+});
+
+describe('wasdDelta', () => {
+  it('moves the view up for W, down for S, left for A and right for D, in pixels', () => {
+    expect(wasdDelta(new Set(['w']), 10)).toEqual([0, -10]);
+    expect(wasdDelta(new Set(['s']), 10)).toEqual([0, 10]);
+    expect(wasdDelta(new Set(['a']), 10)).toEqual([-10, 0]);
+    expect(wasdDelta(new Set(['d']), 10)).toEqual([10, 0]);
+  });
+
+  it('cancels opposite keys and does not go faster on a diagonal', () => {
+    expect(wasdDelta(new Set(['w', 's']), 10)).toEqual([0, 0]);
+    expect(wasdDelta(new Set(['a', 'd']), 10)).toEqual([0, 0]);
+    const [dx, dy] = wasdDelta(new Set(['w', 'd']), 10);
+    expect(Math.hypot(dx, dy)).toBeCloseTo(10, 6);
+    expect(dx).toBeGreaterThan(0);
+    expect(dy).toBeLessThan(0);
+  });
+
+  it('does nothing for no key or for other keys', () => {
+    expect(wasdDelta(new Set(), 10)).toEqual([0, 0]);
+    expect(wasdDelta(new Set(['x']), 10)).toEqual([0, 0]);
+  });
+});
+
+describe('campaignDateText', () => {
+  it('is the day and the month of the campaign, from the 19th of January of 1817', () => {
+    expect(campaignDateText(0)).toBe('19 de enero');
+    expect(campaignDateText(12)).toBe('31 de enero');
+    expect(campaignDateText(13)).toBe('1 de febrero');
+    expect(campaignDateText(24)).toBe('12 de febrero');
+    expect(campaignDateText(27)).toBe('15 de febrero');
+  });
+
+  it('keeps the day for a fraction of it, and does not go before the first columns left', () => {
+    expect(campaignDateText(12.9)).toBe('31 de enero');
+    expect(campaignDateText(-14)).toBe('5 de enero');
+    expect(campaignDateText(-400)).toBe(campaignDateText(-30));
   });
 });

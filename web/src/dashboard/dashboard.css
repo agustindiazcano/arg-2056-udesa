@@ -676,11 +676,6 @@
   color: var(--ink-2);
 }
 
-.andes-forces {
-  margin: 0;
-  padding-left: var(--space-md);
-}
-
 .andes-note,
 .andes-source {
   margin: var(--space-xs) 0 0;
@@ -738,6 +733,15 @@
   line-height: 1.15;
 }
 
+.andes-modes {
+  /* the camera buttons: in a row over the bar of the bottom, to the right of the credits button */
+  position: absolute;
+  left: calc(var(--space-md) + 40px);
+  bottom: calc(var(--bar-h, 0px) + var(--space-sm));
+  z-index: 4;
+  max-width: calc(100% - var(--side-w, 0px) - 4rem);
+}
+
 .andes-title p {
   margin: 0;
   color: var(--ink-2);
@@ -750,6 +754,11 @@
   flex-wrap: wrap;
   align-items: center;
   gap: var(--space-sm);
+}
+
+/* the second row of the header is only for the scenes that use it: it goes away when it has nothing in it (the Andes put their controls on the map) */
+.header-row--sub:has(> .nav-slot:empty):not(:has(> nav, > .tour-steps)) {
+  display: none;
 }
 
 .nav-slot {
@@ -775,8 +784,10 @@
   z-index: 4;
   width: min(280px, 38%);
   padding: var(--space-xs);
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
+
 
 .andes-table {
   position: absolute;
@@ -788,19 +799,50 @@
 
 .andes-foot {
   position: absolute;
-  padding: var(--space-xs) var(--space-sm);
-  background: var(--glass-strong);
-  border-radius: var(--radius-md);
   left: var(--space-md);
   bottom: calc(var(--bar-h, 0px) + var(--space-sm));
   z-index: 4;
-  max-width: min(60%, calc(100% - var(--side-w, 0px) - 15rem));
   color: var(--ink-2);
   font-size: var(--font-xs, 0.75rem);
 }
 
 .andes-foot p {
   margin: 0;
+}
+
+/* the credits are a round button; the text shows in a tooltip over it on hover or focus */
+.andes-foot-btn {
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: var(--glass-strong);
+  color: var(--ink);
+  font: inherit;
+  font-style: italic;
+  font-weight: 600;
+  cursor: help;
+}
+
+.andes-foot-tip {
+  position: absolute;
+  left: 0;
+  bottom: calc(100% + 8px);
+  width: min(560px, 60vw);
+  padding: var(--space-xs) var(--space-sm);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--glass-strong);
+  backdrop-filter: blur(10px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s;
+}
+
+.andes-foot:hover .andes-foot-tip,
+.andes-foot:focus-within .andes-foot-tip {
+  opacity: 1;
 }
 
 .andes-notice {
@@ -877,9 +919,11 @@
   overflow-y: auto;
 }
 
+/* the zoom buttons: in the top right corner of the map, over the minimap */
 #overlay[data-scene='andes'] .nav-controls {
-  right: calc(var(--side-w) + var(--space-md));
-  bottom: calc(var(--bar-h) + var(--space-md));
+  top: calc(var(--chrome-h, 0px) + var(--space-sm));
+  right: var(--space-md);
+  bottom: auto;
 }
 
 /* ---- floating names of the places of the route ------------------------------------------------------------------ */
@@ -1034,4 +1078,262 @@
   margin: 0;
   color: var(--muted);
   font-size: var(--font-sm);
+}
+
+/* ---- the Andes: indicators in a strip over the map, minimap and altitude in the right panel, a shorter bottom bar ---- */
+
+#overlay[data-scene='andes'] .dash-tiles--strip {
+  position: absolute;
+  top: calc(var(--chrome-h) + var(--space-md));
+  left: 37rem;
+  z-index: 5;
+  width: max-content;
+  max-width: calc(100% - 37rem - var(--space-md));
+  pointer-events: none;
+}
+
+/* the indicators are only as wide as what they say */
+#overlay[data-scene='andes'] .dash-tiles--strip .tile-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+}
+
+#overlay[data-scene='andes'] .dash-tiles--strip .tile {
+  display: flex;
+  flex-direction: column;
+  padding: 2px var(--space-sm);
+  background: var(--glass-strong);
+  backdrop-filter: blur(10px);
+}
+
+#overlay[data-scene='andes'] .dash-tiles--strip .tile-label {
+  font-size: 0.66rem;
+  line-height: 1.15;
+  white-space: nowrap;
+}
+
+#overlay[data-scene='andes'] .dash-tiles--strip .tile-value {
+  font-size: 0.95rem;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+#overlay[data-scene='andes'] .dash-tiles--strip .tile-note {
+  display: none;
+}
+
+/* the panel starts under the strip and goes down to the bottom of the screen; the bottom bar stops at its left edge */
+#overlay[data-scene='andes'] .dash--stage .dash-side {
+  top: calc(var(--chrome-h) + var(--space-md) + 3.4rem);
+  bottom: var(--space-md);
+}
+
+/* the bottom bar is only as wide as its controls: play, the progress and the speed */
+#overlay[data-scene='andes'] .bottom-bar {
+  width: fit-content;
+  max-width: calc(100% - var(--side-w));
+}
+
+#overlay[data-scene='andes'] .bottom-bar .progress-slot {
+  flex: 0 0 auto;
+  width: 14rem;
+}
+
+.dash-minimap {
+  flex: 0 0 auto;
+  height: 220px;
+}
+
+.dash-minimap:empty {
+  display: none;
+}
+
+/* the altitude profile goes to the bottom of the panel */
+#overlay[data-scene='andes'] .dash--stage .dash-side > :last-child:not(.dash-minimap):not(.dash-narrative) {
+  margin-top: auto;
+}
+
+/* ---- the round buttons of the forces, at the top of the map next to the title ----------------------------------- */
+
+.andes-forces-top {
+  position: absolute;
+  top: calc(var(--chrome-h, 0px) + var(--space-md));
+  left: 17rem;
+  z-index: 6;
+}
+
+.andes-forces {
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  gap: var(--space-xs) var(--space-sm);
+}
+
+.andes-force-chip {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px 4px 6px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--glass-strong);
+  color: var(--ink);
+  font: inherit;
+  font-size: var(--font-sm);
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+}
+
+.andes-force-chip[aria-pressed='true'] {
+  border-color: var(--ink);
+}
+
+.andes-force-dot {
+  width: 14px;
+  height: 14px;
+  border: 1.5px solid var(--ink);
+  border-radius: 50%;
+}
+
+/* the whole name shows on hover or focus */
+.andes-force-chip::after {
+  content: attr(data-full);
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 7;
+  padding: 4px 8px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--glass-strong);
+  color: var(--ink);
+  font-size: var(--font-xs, 0.75rem);
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.12s ease;
+}
+
+.andes-force-chip:hover::after,
+.andes-force-chip:focus-visible::after {
+  opacity: 1;
+}
+
+/* ---- the clean box of data of the selected force, at the right of the map ------------------------------------ */
+
+.andes-force-info {
+  position: absolute;
+  top: calc(var(--chrome-h, 0px) + 7.5rem);
+  right: calc(var(--side-w, 0px) + var(--space-md));
+  z-index: 5;
+  width: min(320px, 30%);
+  max-height: calc(100% - 15rem - var(--chrome-h, 0px) - var(--bar-h, 0px));
+  overflow-y: auto;
+  padding: var(--space-xs) var(--space-sm) var(--space-sm);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--glass-strong);
+  font-size: var(--font-xs, 0.78rem);
+  line-height: 1.35;
+}
+
+.andes-force-info header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-xs);
+}
+
+.andes-force-info h2 {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  font-size: var(--font-sm);
+}
+
+.andes-force-info h3 {
+  margin: var(--space-xs) 0 2px;
+  color: var(--ink-2);
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.andes-force-info ul {
+  margin: 0;
+  padding-left: 1.1em;
+}
+
+.andes-force-info dl {
+  margin: 0;
+}
+
+.andes-force-info dl div {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-sm);
+}
+
+.andes-force-info dt {
+  color: var(--ink-2);
+}
+
+.andes-force-info dd {
+  margin: 0;
+  text-align: right;
+}
+
+/* ---- the dates and events as a dropdown ---------------------------------------------------------------------------- */
+
+.andes-list-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  width: 100%;
+  padding: var(--space-xs) var(--space-sm);
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  font-size: var(--font-sm);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+#andes-events[hidden] {
+  display: none;
+}
+
+/* ---- the panel of the right can be folded away: the stage takes its width ---------------------------------------- */
+
+#overlay[data-scene='andes']:has(.dash--side-hidden) {
+  --side-w: 0px;
+}
+
+/* it is moved off to the right and not removed, so the minimap keeps its size and shows again as it was */
+#overlay[data-scene='andes'] .dash--side-hidden .dash-side {
+  transform: translateX(calc(100% + var(--space-lg, 2rem)));
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+#overlay[data-scene='andes'] .dash--stage .dash-side {
+  transition: transform 0.25s ease, opacity 0.25s ease, visibility 0.25s;
+}
+
+.andes-side-toggle {
+  position: absolute;
+  top: calc(var(--chrome-h, 0px) + var(--space-sm));
+  right: calc(var(--space-md) + 124px);
+  z-index: 6;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  display: grid;
+  place-items: center;
 }

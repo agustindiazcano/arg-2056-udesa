@@ -95,6 +95,23 @@ export function positionAt(route: Route, day: number): RoutePosition | null {
   };
 }
 
+/** Day 0 of the campaign: the main column leaves El Plumerillo (1817-01-19). */
+const CAMPAIGN_START_UTC = Date.UTC(1817, 0, 19);
+
+/** The calendar day of a day of the campaign, in words: «19 de enero», «1 de febrero». A fraction of a day belongs to the day it is in. */
+export function campaignDateText(day: number): string {
+  const whole = Math.floor(Math.max(-30, day));
+  const date = new Date(CAMPAIGN_START_UTC + whole * 86_400_000);
+  return new Intl.DateTimeFormat('es-AR', { day: 'numeric', month: 'long', timeZone: 'UTC' }).format(date);
+}
+
+/** The date of an event (`1817-02-12`) in words, with the year: «12 de febrero de 1817». */
+export function eventDateText(date: string): string {
+  const [y, m, d] = date.split('-').map(Number);
+  if (!y || !m || !d) return date;
+  return new Intl.DateTimeFormat('es-AR', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }).format(new Date(Date.UTC(y, m - 1, d)));
+}
+
 /** The shared clock (the years of the app) mapped onto the days of the campaign. */
 export function campaignDay(yearFloat: number, lastDay: number): number {
   const t = (yearFloat - YEAR_MIN) / (YEAR_MAX - YEAR_MIN);

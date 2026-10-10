@@ -1,12 +1,13 @@
 import { create } from 'zustand';
 
-export type SlotName = 'filters' | 'narrative' | 'progress' | 'nav';
+export type SlotName = 'filters' | 'narrative' | 'progress' | 'nav' | 'minimap';
 
 interface SlotsState {
   filters: HTMLElement | null;
   narrative: HTMLElement | null;
   progress: HTMLElement | null;
   nav: HTMLElement | null;
+  minimap: HTMLElement | null;
   set: (slot: SlotName, element: HTMLElement | null) => void;
 }
 
@@ -16,5 +17,6 @@ export const useSlots = create<SlotsState>((set) => ({
   narrative: null,
   progress: null,
   nav: null,
+  minimap: null,
   set: (slot, element) => set({ [slot]: element } as Partial<SlotsState>)
 }));

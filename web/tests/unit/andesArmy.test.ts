@@ -57,6 +57,15 @@ describe('columnSlots', () => {
     expect(kinds).toContain('mule');
   });
 
+  it('draws about a fifth of the men on foot as Afro-descendant soldiers, in red', () => {
+    const kinds = columnSlots(200).map((s) => s.kind);
+    const afro = kinds.filter((k) => k === 'foot_afro').length;
+    const onFoot = afro + kinds.filter((k) => k === 'foot').length;
+    expect(afro / onFoot).toBeGreaterThan(0.12);
+    expect(afro / onFoot).toBeLessThan(0.28);
+    expect(columnSlots(200).map((s) => s.kind)).toEqual(kinds);
+  });
+
   it('grows backwards with the count', () => {
     const last = (n: number) => columnSlots(n)[n - 1]!.along;
     expect(last(60)).toBeGreaterThan(last(20));
