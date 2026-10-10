@@ -58,6 +58,10 @@ test.describe('keyboard operability', () => {
       await page.goto('/');
       await openTab(page, entry.tab);
       await expectSceneShown(page, entry);
+      // the Andes show "Saltar intro" while their intro goes on and take it away after: the controls are counted once it is gone
+      const skip = page.getByRole('button', { name: 'Saltar intro' });
+      if (await skip.count()) await skip.click();
+      await expect(skip).toHaveCount(0);
 
       const { total, visited } = await tabThroughEveryControl(page);
       expect(total).toBeGreaterThan(8); // the skip link, six tabs, the HUD buttons and the story caption at least
