@@ -121,3 +121,146 @@
   box-shadow: 0 6px 22px var(--andes-c21);
   cursor: crosshair;
 }
+
+/* The bubbles over the forces: the name, and the rest when it is hovered, focused or clicked. */
+.andes-bubbles {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.andes-bubbles[hidden] {
+  display: none;
+}
+
+.andes-bubble {
+  position: absolute;
+  top: 0;
+  left: 0;
+  will-change: transform;
+}
+
+.andes-bubble-card {
+  position: absolute;
+  bottom: 22px;
+  left: 0;
+  width: max-content;
+  max-width: 300px;
+  transform: translateX(-50%);
+  border: 1.5px solid var(--border);
+  border-radius: 14px;
+  background: var(--glass-strong);
+  color: var(--ink);
+  font-size: 0.78rem;
+  line-height: 1.35;
+  backdrop-filter: blur(8px);
+  pointer-events: auto;
+}
+
+.andes-bubble-name {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px 3px 6px;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.andes-bubble-dots {
+  display: inline-flex;
+  gap: 2px;
+}
+
+.andes-bubble-pop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 4;
+  width: max-content;
+  max-width: 300px;
+  padding: 8px 12px 10px;
+  border: 1.5px solid var(--border);
+  border-radius: 14px;
+  background: var(--glass-strong);
+  color: var(--ink);
+  font-size: 0.78rem;
+  line-height: 1.35;
+  backdrop-filter: blur(10px);
+  pointer-events: auto;
+}
+
+.andes-bubble-pop[hidden] {
+  display: none;
+}
+
+.andes-bubble-title {
+  margin: 0 0 2px !important;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.andes-bubble-pop p {
+  margin: 0;
+}
+
+.andes-bubble-section {
+  margin-top: 6px !important;
+  color: var(--ink-2);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.andes-bubble-goal {
+  margin-top: 8px !important;
+  padding-top: 6px;
+  border-top: 1px solid var(--border);
+  color: var(--ink-2);
+}
+
+/* The flags over the bubbles: the patriot one is white over sky blue, half and half; the royalist one is red, yellow and red (the Spanish flag of 1785). */
+.andes-flag {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  display: flex;
+  flex-direction: column;
+  width: 28px;
+  height: 18px;
+  margin-bottom: 5px;
+  overflow: hidden;
+  border: 1px solid var(--ink);
+  border-radius: 2px;
+  transform: translateX(-50%);
+  box-shadow: 0 2px 6px var(--andes-flag-shadow);
+}
+
+.andes-flag i {
+  display: block;
+  flex: 1 1 0;
+}
+
+.andes-flag--patriot i:first-child {
+  background: var(--andes-flag-white);
+}
+
+.andes-flag--patriot i:last-child {
+  background: var(--andes-flag-sky);
+}
+
+.andes-flag--royal i:nth-child(odd) {
+  flex-grow: 1;
+  background: var(--andes-flag-red);
+}
+
+.andes-flag--royal i:nth-child(2) {
+  flex-grow: 2;
+  background: var(--andes-flag-yellow);
+}

@@ -50,9 +50,14 @@ const COLORS: Record<string, string> = {
 /** The light blue of the main force: its route, its label, its button. */
 export const MAIN_COLOR = '#8fbaff';
 
-/** The color of a force: the light blue for the main one, the one of its column for the others. */
+/** The red of the royalist army, and of the battle. */
+export const ENEMY_COLOR = '#e53935';
+
+/** The color of a force: the light blue for the main one, the red for the royalists, the one of its column for the others. */
 export function forceColor(id: string): string {
-  return id === 'main' ? MAIN_COLOR : columnColor(id);
+  if (id === 'main') return MAIN_COLOR;
+  if (id === 'royalists') return ENEMY_COLOR;
+  return columnColor(id);
 }
 
 /** The color of a column on the map (the main one is the light blue of the army). */

@@ -1172,3 +1172,65 @@
 .andes-force-chip:focus-visible::after {
   opacity: 1;
 }
+
+/* ---- the clean box of data of the selected force, under the dates on the left ------------------------------------ */
+
+.andes-force-info {
+  position: sticky;
+  bottom: 0;
+  margin-top: var(--space-xs);
+  padding: var(--space-xs) var(--space-sm) var(--space-sm);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--glass-strong);
+  font-size: var(--font-xs, 0.78rem);
+  line-height: 1.35;
+}
+
+.andes-force-info header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-xs);
+}
+
+.andes-force-info h2 {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  font-size: var(--font-sm);
+}
+
+.andes-force-info h3 {
+  margin: var(--space-xs) 0 2px;
+  color: var(--ink-2);
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.andes-force-info ul {
+  margin: 0;
+  padding-left: 1.1em;
+}
+
+.andes-force-info dl {
+  margin: 0;
+}
+
+.andes-force-info dl div {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-sm);
+}
+
+.andes-force-info dt {
+  color: var(--ink-2);
+}
+
+.andes-force-info dd {
+  margin: 0;
+  text-align: right;
+}

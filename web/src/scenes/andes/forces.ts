@@ -1,7 +1,12 @@
 import type { AndesEvent } from './data';
 import { coordAtKm, metersPerPixel } from './mapGeo';
-import { positionAt } from './timeline';
+import { positionOfColumn } from './columns';
+import type { Column } from './columns';
+import { distanceKm, positionAt } from './timeline';
 import type { Route } from './timeline';
+
+/** The royalist army at Chacabuco: not one of the patriot forces (no button, no spotlight), but it has its balls, its bubble and its flag on the map. */
+export const ENEMY_ID = 'royalists';
 
 /** One force of the crossing, as the map names it: its role and the column it is. */
 export interface ForceInfo {
@@ -55,6 +60,20 @@ export interface ForceFacts {
  * cavalry only for some of the small ones: what they do not give is left out, never written as zero.
  */
 export const FORCE_FACTS: Readonly<Record<string, ForceFacts>> = {
+  [ENEMY_ID]: {
+    short: 'Fuerzas realistas',
+    men: '2.080 a 2.500',
+    leaders: 'Rafael Maroto · jefe en el campo',
+    battalions: 'Batallón Talavera · unidades de Chiloé · 2 a 5 piezas',
+    infantry: null,
+    commanders: ['Rafael Maroto · jefe en el campo'],
+    units: [
+      ['Hombres', '2.080 a 2.500 según la fuente'],
+      ['Unidades', 'Batallón Talavera y unidades de Chiloé'],
+      ['Artillería', '2 a 5 piezas']
+    ],
+    goal: 'Defender la cuesta de Chacabuco, en el camino a Santiago, contra el ataque patriota del 12 de febrero'
+  },
   main: {
     short: 'Fuerza principal',
     men: '3.987',
@@ -164,6 +183,52 @@ export function forceChip(id: string): string {
 export function forceFullName(id: string): string {
   const f = FORCES.find((x) => x.id === id);
   return f ? `${f.title} · ${f.detail}` : '';
+}
+
+/** Where the royalists stood: the hacienda of Chacabuco, south of the cuesta (an approximate, schematic place; the sources give no coordinates). */
+export const ENEMY_POSITION = { lon: -70.692, lat: -33.028 };
+
+/** The men of the royalist army, as the sources give them: 2,080 (municipality of Chacabuco) to about 2,500; the balls count at the middle. */
+export const ENEMY_MEN = 2290;
+
+/** The places of the red balls of the royalists: a row across the place of the army, `spacingKm` apart, centered on it. */
+export function enemyBalls(spacingKm: number): Array<[number, number]> {
+  const count = ballCount(ENEMY_MEN);
+  const dLon = spacingKm / (111.32 * Math.cos((ENEMY_POSITION.lat * Math.PI) / 180));
+  return Array.from({ length: count }, (_, i): [number, number] => [ENEMY_POSITION.lon + (i - (count - 1) / 2) * dLon, ENEMY_POSITION.lat]);
+}
+
+/** A bubble over the head of one force, or of two that march together. */
+export interface Bubble {
+  /** the id of the first force of the bubble */
+  id: string;
+  /** every force the bubble speaks for */
+  ids: string[];
+  lon: number;
+  lat: number;
+}
+
+/**
+ * The bubbles of the map: one over the head of each force, the main one first; the column of Uspallata shares the bubble of the main force only once the two
+ * roads have crossed, at Curimón before Chacabuco (the day of that place in its route), and while they are within `MERGE_KM` of each other. Before that
+ * (they both leave from El Plumerillo) each has its own. The royalist army has the last bubble.
+ */
+export function bubblesFor(main: Route, mainKm: number, columns: readonly Column[], day: number): Bubble[] {
+  const head = coordAtKm(main, mainKm);
+  const mainBubble: Bubble = { id: MAIN_FORCE_ID, ids: [MAIN_FORCE_ID], lon: head.lon, lat: head.lat };
+  const out: Bubble[] = [mainBubble];
+  for (const c of columns) {
+    const at = positionOfColumn(c, day);
+    if (!at) continue;
+    const meeting = c.route.points.find((p) => /^Curimón/.test(p.name))?.day_of_campaign;
+    if (c.id === 'las-heras' && meeting !== undefined && day >= meeting && distanceKm(head.lon, head.lat, at.lon, at.lat) < MERGE_KM) {
+      mainBubble.ids.push(c.id);
+      continue;
+    }
+    out.push({ id: c.id, ids: [c.id], lon: at.lon, lat: at.lat });
+  }
+  out.push({ id: ENEMY_ID, ids: [ENEMY_ID], lon: ENEMY_POSITION.lon, lat: ENEMY_POSITION.lat });
+  return out;
 }
 
 /** Two forces closer than this (km) march as one on the map: their texts are one. */

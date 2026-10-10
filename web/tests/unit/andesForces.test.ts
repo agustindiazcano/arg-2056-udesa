@@ -10,6 +10,10 @@ import {
   FORCE_FACTS,
   forceLabel,
   joinedLabel,
+  bubblesFor,
+  ENEMY_ID,
+  ENEMY_POSITION,
+  enemyBalls,
   joinedShortLabel,
   MERGE_KM,
   forceShortLabel,
@@ -397,5 +401,74 @@ describe('joinedLabel and joinedShortLabel', () => {
   it('merges the texts of forces that are within a few kilometers of each other', () => {
     expect(MERGE_KM).toBeGreaterThan(2);
     expect(MERGE_KM).toBeLessThan(40);
+  });
+});
+
+describe('bubblesFor', () => {
+  const bubbleRoute = buildRoute(main);
+  const at = (day: number) => bubblesFor(bubbleRoute, 0, columns, day);
+
+  it('has a bubble for every force, the main one first', () => {
+    const away = at(14);
+    expect(away.map((b) => b.id)[0]).toBe('main');
+    expect(away.flatMap((b) => b.ids).filter((id) => id !== ENEMY_ID).sort()).toEqual(['cabot', 'freire', 'las-heras', 'lemos', 'main', 'zelada']);
+  });
+
+  it('keeps the column of Uspallata apart at the start, when both leave El Plumerillo, and joins it only after the roads cross at Curimón', () => {
+    const start = bubblesFor(bubbleRoute, 0, columns, 0);
+    expect(start.find((b) => b.id === 'las-heras')).toBeTruthy();
+    expect(start[0]!.ids).toEqual(['main']);
+    const curimon = columns.find((c) => c.id === 'las-heras')!.route.points.find((p) => p.name.startsWith('Curimón'))!;
+    const before = bubblesFor(bubbleRoute, bubbleRoute.points.find((p) => p.name.startsWith('Curimón'))!.distanceKm, columns, curimon.day_of_campaign - 1);
+    expect(before[0]!.ids).toEqual(['main']);
+    const after = bubblesFor(bubbleRoute, bubbleRoute.points.find((p) => p.name.startsWith('Curimón'))!.distanceKm, columns, curimon.day_of_campaign);
+    expect(after[0]!.ids).toEqual(['main', 'las-heras']);
+  });
+
+  it('shares one bubble between the main force and the column of Uspallata while they are together', () => {
+    const together = bubblesFor(bubbleRoute, bubbleRoute.totalKm, columns, bubbleRoute.lastDay);
+    const first = together[0]!;
+    expect(first.ids).toEqual(['main', 'las-heras']);
+    expect(together.flatMap((b) => b.ids).filter((id) => id === 'las-heras')).toHaveLength(1);
+    expect(together.filter((b) => b.id !== ENEMY_ID)).toHaveLength(5);
+  });
+
+  it('gives each bubble the place of the head of its force', () => {
+    const start = at(0)[0]!;
+    expect(start.lon).toBeCloseTo(bubbleRoute.points[0]!.lon, 6);
+    expect(start.lat).toBeCloseTo(bubbleRoute.points[0]!.lat, 6);
+  });
+});
+
+describe('the royalist force at Chacabuco', () => {
+  it('has a bubble of its own, last, over its position, with its commander and its units', () => {
+    const all = bubblesFor(buildRoute(main), 0, columns, 0);
+    const enemy = all[all.length - 1]!;
+    expect(enemy.id).toBe(ENEMY_ID);
+    expect([enemy.lon, enemy.lat]).toEqual([ENEMY_POSITION.lon, ENEMY_POSITION.lat]);
+    const label = joinedLabel([ENEMY_ID]);
+    expect(label).toContain('Fuerzas realistas');
+    expect(label).toContain('Maroto');
+    expect(label).toContain('2.080 a 2.500');
+    expect(label).toContain('Talavera');
+  });
+
+  it('is not one of the patriot forces: the buttons and the spotlight do not know it', () => {
+    expect(FORCES.map((f) => f.id)).not.toContain(ENEMY_ID);
+  });
+
+  it('is at the hacienda of Chacabuco, south of the cuesta where the patriot columns end', () => {
+    const last = main[main.length - 1]!;
+    expect(ENEMY_POSITION.lat).toBeLessThan(last.lat);
+    expect(Math.abs(ENEMY_POSITION.lon - last.lon)).toBeLessThan(0.1);
+  });
+
+  it('is drawn with a ball for every 500 men, in a row across the place, centered on it', () => {
+    const balls = enemyBalls(3);
+    expect(balls).toHaveLength(5);
+    const lons = balls.map(([lon]) => lon);
+    expect(lons).toEqual([...lons].sort((a, b) => a - b));
+    expect((lons[0]! + lons[4]!) / 2).toBeCloseTo(ENEMY_POSITION.lon, 6);
+    for (const [, lat] of balls) expect(lat).toBe(ENEMY_POSITION.lat);
   });
 });

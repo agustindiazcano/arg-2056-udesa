@@ -21,6 +21,7 @@ import { AltitudeProfile } from './AltitudeProfile.js';
 import { AndesIntro } from './AndesIntro.js';
 import { CameraTuner } from './CameraTuner.js';
 import { ForceButtons } from './ForceButtons.js';
+import { ForceInfo } from './ForceInfo.js';
 import type { CameraApi, CameraView } from './cameraKeyframes.js';
 import { GraphicsMenu } from './GraphicsMenu.js';
 import { loadToggles, resolveGraphics, saveToggles } from './graphics.js';
@@ -265,6 +266,7 @@ export default function Scene() {
       {listOpen && (
         <div className="andes-list andes-glass">
           <EventList events={route.points} selectedId={selectedId} onSelect={select} />
+          {view === 'map' && <ForceInfo id={activeForce} onClose={() => setActiveForce(null)} />}
         </div>
       )}
 
