@@ -30,8 +30,12 @@ describe('navbar slot', () => {
     expect(first!.contains(group)).toBe(false);
   });
 
-  it('the Andes scene sends its controls there', async () => {
-    const source = (await import('node:fs')).readFileSync('src/scenes/andes/index.tsx', 'utf8');
-    expect(source).toMatch(/<SlotPortal slot="nav">[\s\S]*Controles de la escena/);
+  it('the Andes scene keeps its controls over the map, so the second row of the header stays empty and is hidden', async () => {
+    const fs = await import('node:fs');
+    const source = fs.readFileSync('src/scenes/andes/index.tsx', 'utf8');
+    expect(source).not.toMatch(/<SlotPortal slot="nav">/);
+    expect(source).toMatch(/aria-label="Controles de la escena"/);
+    const css = fs.readFileSync('src/dashboard/dashboard.css', 'utf8');
+    expect(css).toMatch(/\.header-row--sub:has\(> \.nav-slot:empty\)[^{]*\{\s*display: none;/);
   });
 });
