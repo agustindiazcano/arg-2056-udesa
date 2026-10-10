@@ -43,6 +43,7 @@ export function RegionMinimap({ main, route, km, columns, day, styleUrl, onGo }:
     (map.getSource('mm-routes') as GeoJSONSource | undefined)?.setData(data.routes);
     (map.getSource('mm-heads') as GeoJSONSource | undefined)?.setData(data.heads);
     (map.getSource('mm-battle') as GeoJSONSource | undefined)?.setData(data.battle);
+    (map.getSource('mm-combats') as GeoJSONSource | undefined)?.setData(data.combats);
   };
   const drawRef = useRef(draw);
   drawRef.current = draw;
@@ -64,9 +65,11 @@ export function RegionMinimap({ main, route, km, columns, day, styleUrl, onGo }:
       map.addSource('mm-heads', { type: 'geojson', data: EMPTY });
       map.addSource('mm-view', { type: 'geojson', data: EMPTY });
       map.addSource('mm-battle', { type: 'geojson', data: EMPTY });
+      map.addSource('mm-combats', { type: 'geojson', data: EMPTY });
       map.addLayer({ id: 'mm-routes', type: 'line', source: 'mm-routes', paint: { 'line-color': ['get', 'color'], 'line-width': 2 } });
       map.addLayer({ id: 'mm-heads', type: 'circle', source: 'mm-heads', paint: { 'circle-radius': 4, 'circle-color': '#2f7bff', 'circle-stroke-color': '#ffffff', 'circle-stroke-width': 1.2 } });
       map.addLayer({ id: 'mm-battle', type: 'circle', source: 'mm-battle', paint: { 'circle-radius': 5, 'circle-color': BATTLE_COLOR, 'circle-stroke-color': '#ffffff', 'circle-stroke-width': 1.5 } });
+      map.addLayer({ id: 'mm-combats', type: 'circle', source: 'mm-combats', paint: { 'circle-radius': 4, 'circle-color': BATTLE_COLOR, 'circle-stroke-color': '#ffffff', 'circle-stroke-width': 1.2 } });
       map.addLayer({ id: 'mm-view', type: 'circle', source: 'mm-view', paint: { 'circle-radius': 9, 'circle-color': '#ffffff', 'circle-opacity': 0.12, 'circle-stroke-color': '#ffffff', 'circle-stroke-width': 2 } });
       readyRef.current = true;
       drawRef.current();

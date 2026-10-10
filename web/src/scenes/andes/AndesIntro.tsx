@@ -29,24 +29,26 @@ function CloudLayer({ id, seed, base, gain, cut, className }: { id: string; seed
 interface AndesIntroProps {
   /** the map has its first image */
   ready: boolean;
-  /** called once, when the screen has left (the camera tour starts then) */
-  onDone?: () => void;
+  /** the reader skipped the intro: the screen leaves at once, whether the map is ready or not */
+  skip?: boolean;
+  /** called once, when the screen has left, with whether the reader skipped it (the camera tour starts then, unless it was skipped) */
+  onDone?: (skipped: boolean) => void;
 }
 
 /**
  * The screen the Andes open with: a sky with three layers of clouds drifting at their own pace, "Cruce de los Andes" and under it "1817". It
  * covers the loading of the map (and of the chunk that draws it) and leaves when the map is ready: the clouds fade out layer by layer
  * (they do not move). It lets the clicks through and is hidden from the screen readers (the scene under it has the content). With reduced motion the
- * clouds do not drift and it leaves quickly.
+ * clouds do not drift and it leaves quickly. With `skip` it leaves at once (the scene has the button "Saltar intro").
  */
-export function AndesIntro({ ready, onDone }: AndesIntroProps) {
+export function AndesIntro({ ready, skip = false, onDone }: AndesIntroProps) {
   const reduced = useReducedMotion();
   const doneRef = useRef(onDone);
   doneRef.current = onDone;
   const [minPassed, setMinPassed] = useState(false);
   const [maxPassed, setMaxPassed] = useState(false);
   const [gone, setGone] = useState(false);
-  const leaving = (ready && minPassed) || maxPassed;
+  const leaving = (ready && minPassed) || maxPassed || skip;
 
   useEffect(() => {
     const min = window.setTimeout(() => setMinPassed(true), reduced ? 600 : INTRO_MIN_MS);
@@ -64,7 +66,7 @@ export function AndesIntro({ ready, onDone }: AndesIntroProps) {
   }, [leaving, reduced]);
 
   useEffect(() => {
-    if (gone) doneRef.current?.();
+    if (gone) doneRef.current?.(skip);
   }, [gone]);
 
   if (gone) return null;

@@ -6,7 +6,7 @@ import { MAX_LINE_SPACING_KM, formationBalls } from '../../src/scenes/andes/forc
 
 const slots = columnSlots(80);
 const offsets = battleSlots(slots);
-const at = (kind: string) => slots.map((s, i) => ({ s, o: offsets[i]! })).filter(({ s }) => s.kind === kind);
+const at = (kind: string) => slots.map((s, i) => ({ s, o: offsets[i]! })).filter(({ s }) => (kind === 'foot' ? s.kind === 'foot' || s.kind === 'foot_afro' : s.kind === kind));
 
 describe('battleSlots', () => {
   it('gives every figure a place', () => {
@@ -91,6 +91,6 @@ describe('formationBalls', () => {
 
 describe('BATTLE_VIEW', () => {
   it('is the view the reader saved for the battle: close, tilted, over Chacabuco', () => {
-    expect(BATTLE_VIEW).toMatchObject({ lon: -70.69952, lat: -32.99905, zoom: 13.64, pitch: 77, bearing: -32 });
+    expect(BATTLE_VIEW).toMatchObject({ lon: -70.68004, lat: -32.99149, zoom: 13.72, pitch: 69, bearing: -47.8 });
   });
 });

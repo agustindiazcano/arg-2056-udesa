@@ -56,7 +56,7 @@ export const ENEMY_COLOR = '#e53935';
 /** The color of a force: the light blue for the main one, the red for the royalists, the one of its column for the others. */
 export function forceColor(id: string): string {
   if (id === 'main') return MAIN_COLOR;
-  if (id === 'royalists') return ENEMY_COLOR;
+  if (id.startsWith('royalists')) return ENEMY_COLOR;
   return columnColor(id);
 }
 

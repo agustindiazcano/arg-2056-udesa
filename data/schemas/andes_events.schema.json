@@ -42,6 +42,31 @@
         "required": ["min", "max"],
         "additionalProperties": false
       },
+      "outcome": {
+        "type": "object",
+        "properties": {
+          "result": { "type": "string", "minLength": 1 },
+          "sides": {
+            "type": "array",
+            "minItems": 2,
+            "items": {
+              "type": "object",
+              "properties": {
+                "side": { "type": "string" },
+                "units": { "type": "string" },
+                "killed": { "type": ["integer", "null"] },
+                "wounded": { "type": ["integer", "null"] },
+                "prisoners": { "type": ["integer", "null"] },
+                "note": { "type": "string" }
+              },
+              "required": ["side", "units", "killed", "wounded", "prisoners"],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": ["result", "sides"],
+        "additionalProperties": false
+      },
       "source": { "type": "string", "minLength": 1 },
       "retrieved_at": { "type": "string", "format": "date" },
       "note": { "type": "string" }

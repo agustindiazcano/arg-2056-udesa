@@ -21,7 +21,7 @@ export const ANDES_TOUR: readonly TourStop[] = [
 export const ANDES_FINAL_VIEW: CameraView = { lon: -68.83449, lat: -32.80341, zoom: 12.14, pitch: 75.5, bearing: -33.8 };
 
 /** Where the camera goes when the battle of Chacabuco is chosen: the view the reader saved, over the field where the lines stand. */
-export const BATTLE_VIEW: CameraView = { lon: -70.69952, lat: -32.99905, zoom: 13.64, pitch: 77, bearing: -32 };
+export const BATTLE_VIEW: CameraView = { lon: -70.68004, lat: -32.99149, zoom: 13.72, pitch: 69, bearing: -47.8 };
 
 /** How the camera frames each force while its light is on: the same height and angle for all, centered on the force. */
 export const SPOT_VIEW = { zoom: 8.2, pitch: 62, bearing: -20.2 };

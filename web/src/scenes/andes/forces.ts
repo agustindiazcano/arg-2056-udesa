@@ -39,6 +39,8 @@ export interface ForceFacts {
   short: string;
   /** how many men, in words (a number, or a range when the sources differ) */
   men: string;
+  /** what the number of men counts, when it is not just the men of the force (the whole army when it left, for the main force); `Hombres` when missing */
+  menLabel?: string;
   /** the commanders as the map names them under the role: a few names, short */
   leaders: string;
   /** the units it is made of: the battalions of the big columns, the kind of men of the small detachments */
@@ -63,27 +65,69 @@ export const FORCE_FACTS: Readonly<Record<string, ForceFacts>> = {
   [ENEMY_ID]: {
     short: 'Fuerzas realistas',
     men: '2.080 a 2.500',
-    leaders: 'Rafael Maroto · jefe en el campo',
-    battalions: 'Batallón Talavera · unidades de Chiloé · 2 a 5 piezas',
-    infantry: null,
-    commanders: ['Rafael Maroto · jefe en el campo'],
+    leaders: 'Rafael Maroto · Piquero · Arenas · Quintanilla · Barañao',
+    battalions: 'Talavera · Chiloé · Valdivia · caballería (Concordia y Abascal) · 2 a 5 piezas',
+    infantry: '880',
+    commanders: [
+      'Rafael Maroto · jefe en el campo, coronel del Talavera',
+      'José Piquero · batallón de Chiloé',
+      'José Arenas · batallón de Valdivia',
+      'Antonio de Quintanilla · caballería (Concordia)',
+      'Manuel Barañao · caballería (Abascal)'
+    ],
     units: [
-      ['Hombres', '2.080 a 2.500 según la fuente'],
-      ['Unidades', 'Batallón Talavera y unidades de Chiloé'],
-      ['Artillería', '2 a 5 piezas']
+      ['Hombres', '2.080 a 2.500 según la fuente; 1.220 de infantería y caballería según otra'],
+      ['Talavera', '440 (170 peninsulares), 4 compañías'],
+      ['Chiloé', '220, 2 compañías'],
+      ['Valdivia', '220, 2 compañías'],
+      ['Caballería', '340: Concordia 120 y Abascal 220'],
+      ['Artillería', '2 a 5 piezas de montaña']
     ],
     goal: 'Defender la cuesta de Chacabuco, en el camino a Santiago, contra el ataque patriota del 12 de febrero'
   },
+
+  [`${ENEMY_ID}-achupallas`]: {
+    short: 'Realistas en Las Achupallas',
+    men: 'más de 100',
+    leaders: 'jefe de la guarnición de San Felipe',
+    battalions: 'guarnición de San Felipe',
+    infantry: null,
+    commanders: ['Jefe de la guarnición de San Felipe · las fuentes no dan su nombre'],
+    units: [
+      ['Hombres', 'más de 100 (en emboscada)'],
+      ['Enfrente', '200 granaderos con Antonio Arcos; Lavalle llegó con 25']
+    ],
+    goal: 'Atacar la avanzada patriota de Arcos el 4 de febrero; fueron rechazados y dejaron Putaendo y San Felipe: el primer triunfo de la campaña'
+  },
+  [`${ENEMY_ID}-coimas`]: {
+    short: 'Realistas en Las Coimas',
+    men: 'unos 700',
+    leaders: 'Miguel María de Atero',
+    battalions: 'caballería e infantería · 2 piezas',
+    infantry: '300',
+    commanders: ['Miguel María de Atero · jefe realista'],
+    units: [
+      ['Hombres', 'unos 700'],
+      ['Caballería', '400'],
+      ['Artillería', '2 piezas'],
+      ['Enfrente', '140 Granaderos a Caballo con Mariano Necochea'],
+      ['Bajas', 'unos 30 muertos realistas']
+    ],
+    goal: 'Cortar el avance de la vanguardia patriota el 7 de febrero; Necochea los atrajo con una falsa retirada, los venció y se retiraron hacia Santiago'
+  },
+
   main: {
     short: 'Fuerza principal',
     men: '3.987',
+    menLabel: 'Hombres al partir',
     leaders: "San Martín · Soler · O'Higgins",
     battalions: "Batallones 1 (Cazadores), 7 y 8 · Granaderos a Caballo",
     infantry: null,
     commanders: ['José de San Martín · jefe de la expedición', 'Estanislao Soler · vanguardia', "Bernardo O'Higgins · centro", 'Mariano Necochea · escolta de granaderos', 'Pedro Regalado de la Plaza · retaguardia y maestranza'],
     units: [
-      ['Soldados del ejército', '3.987 (3.778 de tropa, 14 jefes y 195 oficiales)'],
-      ['La columna', 'unos 3.000 hombres'],
+      ['Ejército al partir', '3.987 (3.778 de tropa, 14 jefes y 195 oficiales), con todas las columnas'],
+      ['La columna', 'unos 3.000 hombres (solo la de Los Patos)'],
+      ['En Chacabuco', 'unos 3.500 patriotas (con la columna de Las Heras)'],
       ['Caballos', '1.600 (todo el ejército)'],
       ['Mulas', '9.281 (todo el ejército)'],
       ['Artillería', '16 piezas (todo el ejército)']
@@ -185,8 +229,52 @@ export function forceFullName(id: string): string {
   return f ? `${f.title} · ${f.detail}` : '';
 }
 
-/** Where the royalists stood: the hacienda of Chacabuco, south of the cuesta (an approximate, schematic place; the sources give no coordinates). */
-export const ENEMY_POSITION = { lon: -70.692, lat: -33.028 };
+/** Where the royalists stood: on the plain of the hacienda of Chacabuco, before the cerro de la Victoria, a short way south of the place of the battle (-70.684, -32.993, as Wikipedia gives it); schematic, the sources give no coordinates for the lines. */
+export const ENEMY_POSITION = { lon: -70.686, lat: -33.008 };
+
+/**
+ * The royalist forces of the two skirmishes before Chacabuco. Each has a red ball (or a few) and a bubble with its flag on the place of the combat of the route (the event
+ * whose name matches `match`), from half a day before its day until two days after it. The men are the ones the sources give (Wikipedia, «Paso de Los Patos»; El Arcón de la Historia).
+ */
+export interface Skirmish {
+  id: string;
+  name: string;
+  /** the name of the event of the route that is the place of the combat */
+  match: RegExp;
+  men: number;
+}
+export const SKIRMISHES: readonly Skirmish[] = [
+  { id: `${ENEMY_ID}-achupallas`, name: 'Combate de Las Achupallas', match: /Achupallas/, men: 100 },
+  { id: `${ENEMY_ID}-coimas`, name: 'Combate de Las Coimas', match: /Coimas/, men: 700 }
+];
+/** The royalists show from this many days before the day of their combat... */
+export const SKIRMISH_BEFORE_DAYS = 0.5;
+/** ...until this many days after it. */
+export const SKIRMISH_AFTER_DAYS = 2;
+
+/** The skirmishes on the map on `day` of the campaign: the royalists of each, at the place of its combat. */
+export function activeSkirmishes(route: Route, day: number): Array<{ id: string; lon: number; lat: number; men: number }> {
+  const out: Array<{ id: string; lon: number; lat: number; men: number }> = [];
+  for (const k of SKIRMISHES) {
+    const place = route.points.find((p) => k.match.test(p.name));
+    if (place && day >= place.day_of_campaign - SKIRMISH_BEFORE_DAYS && day <= place.day_of_campaign + SKIRMISH_AFTER_DAYS) out.push({ id: k.id, lon: place.lon, lat: place.lat, men: k.men });
+  }
+  return out;
+}
+
+/** The fewest red balls a skirmish has, so the royalists can be seen even when the sources give a hundred men (a ball stands for about 500). */
+export const SKIRMISH_MIN_BALLS = 3;
+
+/** The red balls of the skirmishes on `day`: a short row across each place, `spacingKm` apart. */
+export function skirmishBalls(route: Route, day: number, spacingKm: number): Array<{ id: string; lon: number; lat: number; small: boolean }> {
+  const out: Array<{ id: string; lon: number; lat: number; small: boolean }> = [];
+  for (const k of activeSkirmishes(route, day)) {
+    const count = Math.max(SKIRMISH_MIN_BALLS, ballCount(k.men));
+    const dLon = Math.min(spacingKm, MAX_LINE_SPACING_KM) / (111.32 * Math.cos((k.lat * Math.PI) / 180));
+    for (let i = 0; i < count; i += 1) out.push({ id: k.id, lon: k.lon + (i - (count - 1) / 2) * dLon, lat: k.lat, small: false });
+  }
+  return out;
+}
 
 /** The men of the royalist army, as the sources give them: 2,080 (municipality of Chacabuco) to about 2,500; the balls count at the middle. */
 export const ENEMY_MEN = 2290;
@@ -196,7 +284,7 @@ export const ENEMY_MEN = 2290;
  * Chacabuco (blue, green or all white for the Talavera, blue jackets with white trousers for others); a contemporary account says the Talavera was «all white, from the cover of
  * the helmet to the boots», and white is also what the reader remembers. A schematic choice, said in `docs/references.md`.
  */
-export const ENEMY_PALETTE: Readonly<Record<string, string>> = { '#2f4a80': '#ecece4', '#243a66': '#dcdcd2', '#75aadb': '#b3262b' };
+export const ENEMY_PALETTE: Readonly<Record<string, string>> = { '#2f4a80': '#ecece4', '#243a66': '#dcdcd2', '#b3262b': '#ecece4', '#e9e6dc': '#dcdcd2', '#75aadb': '#b3262b' };
 
 /** A route that does not go anywhere (two points a kilometer apart, north-south) for a force that stands still: its figures need a path to stand on. */
 export function stationaryRoute(lon: number, lat: number): Route {
@@ -263,7 +351,7 @@ export interface Bubble {
 /**
  * The bubbles of the map: one over the head of each force, the main one first; the column of Uspallata shares the bubble of the main force only once the two
  * roads have crossed, at Curimón before Chacabuco (the day of that place in its route), and while they are within `MERGE_KM` of each other. Before that
- * (they both leave from El Plumerillo) each has its own. The royalist army has the last bubble.
+ * (they both leave from El Plumerillo) each has its own. The royalists of a skirmish have a bubble on its day, and the royalist army the last one.
  */
 export function bubblesFor(main: Route, mainKm: number, columns: readonly Column[], day: number): Bubble[] {
   const head = coordAtKm(main, mainKm);
@@ -279,6 +367,7 @@ export function bubblesFor(main: Route, mainKm: number, columns: readonly Column
     }
     out.push({ id: c.id, ids: [c.id], lon: at.lon, lat: at.lat });
   }
+  for (const k of activeSkirmishes(main, day)) out.push({ id: k.id, ids: [k.id], lon: k.lon, lat: k.lat });
   out.push({ id: ENEMY_ID, ids: [ENEMY_ID], lon: ENEMY_POSITION.lon, lat: ENEMY_POSITION.lat });
   return out;
 }

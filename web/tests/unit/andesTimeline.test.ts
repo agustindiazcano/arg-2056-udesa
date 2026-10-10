@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { buildRoute, campaignDay, dwellWeight, paceClock, positionAt } from '../../src/scenes/andes/timeline';
+import { buildRoute, campaignDay, dwellWeight, eventDateText, paceClock, positionAt } from '../../src/scenes/andes/timeline';
 import type { AndesEvent } from '../../src/scenes/andes/data';
 
 const ev = (id: string, day: number, lon: number, lat: number, elevation_m: number | null): AndesEvent => ({
@@ -176,5 +176,12 @@ describe('paceClock', () => {
 
   it('survives an empty route', () => {
     expect(paceClock(buildRoute([]))(1900)).toBe(0);
+  });
+});
+
+describe('eventDateText', () => {
+  it('writes the date of an event in words, with the year', () => {
+    expect(eventDateText('1817-02-12')).toBe('12 de febrero de 1817');
+    expect(eventDateText('1817-01-19')).toBe('19 de enero de 1817');
   });
 });

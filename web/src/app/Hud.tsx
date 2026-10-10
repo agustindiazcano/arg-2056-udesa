@@ -38,7 +38,7 @@ export function Hud() {
     <section aria-label="Controles" className="controls">
       <button type="button" className="btn btn--primary" aria-keyshortcuts="Space" onClick={() => dispatch({ type: 'togglePlay' })}>
         {playing ? <PauseIcon /> : <PlayIcon />}
-        {playing ? 'Pausar' : 'Reproducir'}
+        <span className={crossing ? 'visually-hidden' : undefined}>{playing ? 'Pausar' : 'Reproducir'}</span>
       </button>
 
       {crossing && <div className="progress-slot" ref={progressRef} />}

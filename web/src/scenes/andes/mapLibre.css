@@ -95,6 +95,18 @@
 }
 
 /* The big name of the place under each light, in white. */
+.andes-spot-battle {
+  text-align: center;
+}
+
+.andes-spot-date {
+  display: block;
+  margin-top: 2px;
+  font-size: 0.55em;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+}
+
 .andes-spot-big {
   position: absolute;
   top: 0;
@@ -331,4 +343,135 @@
 .andes-bubble-subtitle {
   margin: 8px 0 0 !important;
   font-weight: 600;
+}
+
+/* the card of a battle or a combat, over the red balls of the royalists seen from far away: it follows the mouse */
+.andes-battle-card {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 61;
+  width: 300px;
+  padding: 10px 14px 12px;
+  border: 1.5px solid var(--border);
+  border-radius: 14px;
+  background: var(--glass-strong);
+  color: var(--ink);
+  font-size: 0.78rem;
+  line-height: 1.35;
+  backdrop-filter: blur(10px);
+  pointer-events: none;
+}
+
+.andes-battle-card p {
+  margin: 0;
+}
+
+.andes-battle-card-title {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.andes-battle-card-date {
+  margin-bottom: 6px !important;
+  color: var(--ink-2);
+}
+
+.andes-battle-card table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.andes-battle-card th {
+  padding: 2px 8px 2px 0;
+  color: var(--ink-2);
+  font-weight: 400;
+  text-align: left;
+}
+
+.andes-battle-card td {
+  padding: 2px 0;
+  text-align: right;
+}
+
+.andes-battle-card tr + tr {
+  border-top: 1px solid var(--border);
+}
+
+.andes-battle-card-note {
+  margin-top: 6px !important;
+  color: var(--ink-2);
+  font-size: 0.7rem;
+}
+
+/* the flags of the report of a battle sit in the line of its text, not over a bubble */
+.andes-flag--inline {
+  position: static;
+  flex: 0 0 auto;
+  margin: 0;
+  transform: none;
+}
+
+/* ---- the report of a battle or a combat, at the bottom of the map when it is chosen ------------------------------- */
+
+.andes-report {
+  position: absolute;
+  left: var(--space-md);
+  bottom: calc(var(--bar-h, 0px) + 3.4rem);
+  z-index: 4;
+  width: min(600px, calc(100% - var(--side-w, 0px) - 380px - 4 * var(--space-md)));
+  min-width: 340px;
+  padding: var(--space-xs) var(--space-sm) var(--space-sm);
+  font-size: var(--font-xs, 0.78rem);
+  line-height: 1.35;
+}
+
+.andes-report-result {
+  margin: 0 0 var(--space-xs);
+  color: var(--ink);
+  font-size: var(--font-sm);
+  font-weight: 600;
+  text-align: center;
+}
+
+.andes-report-sides {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-sm);
+}
+
+.andes-report-side h3 {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0 0 4px;
+  font-size: var(--font-xs, 0.78rem);
+}
+
+.andes-report-side table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.andes-report-side th {
+  padding: 2px 8px 2px 0;
+  color: var(--ink-2);
+  font-weight: 400;
+  text-align: left;
+  vertical-align: top;
+}
+
+.andes-report-side td {
+  padding: 2px 0;
+  text-align: right;
+}
+
+.andes-report-side tr + tr {
+  border-top: 1px solid var(--border);
+}
+
+.andes-report-note {
+  margin: 4px 0 0;
+  color: var(--ink-2);
+  font-size: 0.68rem;
 }

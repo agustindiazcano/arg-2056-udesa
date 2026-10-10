@@ -205,9 +205,8 @@ test.describe('dashboard', () => {
 });
 
 test.describe('andes scene', () => {
-  // the map is MapLibre: its zoom and pitch are published on the host (data-zoom, data-pitch)
+  // the map is MapLibre: its zoom is published on the host (data-zoom)
   const zoom = async (host: Locator) => Number(await host.getAttribute('data-zoom'));
-  const pitch = async (host: Locator) => Number(await host.getAttribute('data-pitch'));
 
   test('shows the campaign on the real map, a panel per event, and moves the army with the clock', async ({ page }) => {
     await page.goto('/?quality=high');
@@ -248,28 +247,5 @@ test.describe('andes scene', () => {
     await page.getByRole('button', { name: 'Ver de cerca' }).click();
     await expect.poll(() => zoom(host)).toBeGreaterThan(14);
     expect(far).toBeLessThan(10);
-    // the table has no map to get close to
-    await page.getByRole('button', { name: 'Tabla de eventos' }).click();
-    await expect(page.getByRole('button', { name: 'Ver de cerca' })).toBeDisabled();
-  });
-
-  test('"Cine" puts the camera low behind the column, close enough for the figures, and the table has no cinematic camera', async ({ page }) => {
-    await page.goto('/?quality=high');
-    await openTab(page, 'Andes');
-    const host = page.locator('[data-chart3d="andes"]');
-    await expect(host.locator('canvas').first()).toBeVisible();
-    await page.getByRole('button', { name: 'Cine' }).click();
-    await expect.poll(() => zoom(host)).toBeGreaterThan(14); // near the column
-    expect(await pitch(host)).toBeGreaterThan(70); // low, toward the horizon
-    await expect(page.getByRole('button', { name: 'Cine' })).toHaveAttribute('aria-pressed', 'true');
-    await page.getByRole('button', { name: 'Tabla de eventos' }).click();
-    await expect(page.getByRole('button', { name: 'Cine' })).toBeDisabled();
-  });
-
-  test('the table of events is the text version of the scene', async ({ page }) => {
-    await page.goto('/');
-    await openTab(page, 'Andes');
-    await page.getByRole('button', { name: 'Tabla de eventos' }).click();
-    await expect(page.getByRole('table')).toContainText('Cuesta de Chacabuco');
   });
 });

@@ -19,7 +19,7 @@ describe('ForceInfo', () => {
     expect(within(box).getByText(/José de San Martín/)).toBeTruthy();
     expect(within(box).getByText(/Estanislao Soler/)).toBeTruthy();
     expect(within(box).getByText(/O'Higgins/)).toBeTruthy();
-    expect(within(box).getByText('Hombres')).toBeTruthy();
+    expect(within(box).getByText('Hombres al partir')).toBeTruthy();
     expect(within(box).getByText('3.987')).toBeTruthy();
     expect(within(box).getByText(/Batallones 1 \(Cazadores\)/)).toBeTruthy();
     // no prose: the goal of the force is for the bubble, not for this box

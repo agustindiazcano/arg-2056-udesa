@@ -10,6 +10,23 @@ export interface AndesForce {
   note?: string;
 }
 
+export interface AndesSideReport {
+  side: string;
+  /** the units that fought, in words */
+  units: string;
+  killed: number | null;
+  wounded: number | null;
+  prisoners: number | null;
+  note?: string;
+}
+
+export interface AndesOutcome {
+  /** «Victoria patriota» */
+  result: string;
+  /** the patriot side first, then the royalist one */
+  sides: AndesSideReport[];
+}
+
 export interface AndesEvent {
   id: string;
   name: string;
@@ -25,6 +42,8 @@ export interface AndesEvent {
   column_name?: string;
   forces: AndesForce[];
   estimate_range?: { min: number; max: number };
+  /** the report of a battle or a combat: who won and what each side lost; a number the sources do not give is null (the screen says «sin dato», never 0) */
+  outcome?: AndesOutcome;
   source: string;
   retrieved_at: string;
   note?: string;

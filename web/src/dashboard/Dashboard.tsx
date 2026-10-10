@@ -26,7 +26,8 @@ export function Dashboard({
   side,
   filters,
   notes,
-  stage
+  stage,
+  sideHidden = false
 }: DashScene) {
   const [choice, setChoice] = useState<string[]>([]);
   const narrativeRef = useCallback((el: HTMLDivElement | null) => useSlots.getState().set('narrative', el), []);
@@ -48,7 +49,7 @@ export function Dashboard({
 
   if (stage) {
     return (
-      <div className="dash dash--stage">
+      <div className={`dash dash--stage${sideHidden ? ' dash--side-hidden' : ''}`}>
         <div className="dash-stage">{stage}</div>
         <section aria-label="Indicadores" className="dash-tiles dash-tiles--strip">
           <h2 className="visually-hidden">Indicadores</h2>

@@ -20,8 +20,16 @@ export function battleFeature(route: Route): GeoJSON.FeatureCollection {
   return { type: 'FeatureCollection', features: [{ type: 'Feature', properties: { name: 'Batalla de Chacabuco' }, geometry: { type: 'Point', coordinates: [last.lon, last.lat] } }] };
 }
 
+/** The combats before the battle (Las Achupallas, Las Coimas) as red points: the places of the route named as a combat, each with the id of its event. */
+export function combatFeature(route: Route): GeoJSON.FeatureCollection {
+  const features = route.points
+    .filter((p) => /combate/i.test(p.name))
+    .map((p): GeoJSON.Feature => ({ type: 'Feature', properties: { id: p.id, name: p.name }, geometry: { type: 'Point', coordinates: [p.lon, p.lat] } }));
+  return { type: 'FeatureCollection', features };
+}
+
 /** What the minimap draws: the route of every force as a line, and the head of every force as a point. */
-export function minimapData(main: Route, mainKm: number, columns: readonly Column[], day: number): { routes: GeoJSON.FeatureCollection; heads: GeoJSON.FeatureCollection; battle: GeoJSON.FeatureCollection } {
+export function minimapData(main: Route, mainKm: number, columns: readonly Column[], day: number): { routes: GeoJSON.FeatureCollection; heads: GeoJSON.FeatureCollection; battle: GeoJSON.FeatureCollection; combats: GeoJSON.FeatureCollection } {
   const routes: GeoJSON.Feature[] = [
     { type: 'Feature', properties: { id: MAIN_FORCE_ID, color: MINIMAP_MAIN_COLOR }, geometry: { type: 'LineString', coordinates: main.points.map((p) => [p.lon, p.lat]) } }
   ];
@@ -32,5 +40,5 @@ export function minimapData(main: Route, mainKm: number, columns: readonly Colum
     const at = positionOfColumn(c, day);
     if (at) heads.push({ type: 'Feature', properties: { id: c.id, color: columnColor(c.id) }, geometry: { type: 'Point', coordinates: [at.lon, at.lat] } });
   }
-  return { routes: { type: 'FeatureCollection', features: routes }, heads: { type: 'FeatureCollection', features: heads }, battle: battleFeature(main) };
+  return { routes: { type: 'FeatureCollection', features: routes }, heads: { type: 'FeatureCollection', features: heads }, battle: battleFeature(main), combats: combatFeature(main) };
 }

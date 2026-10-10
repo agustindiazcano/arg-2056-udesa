@@ -24,7 +24,7 @@ export interface Offset {
  */
 export function battleSlots(slots: readonly Slot[]): Offset[] {
   const out: Offset[] = slots.map(() => ({ x: 0, z: 0 }));
-  const foot = slots.map((s, i) => ({ s, i })).filter(({ s }) => s.kind === 'foot');
+  const foot = slots.map((s, i) => ({ s, i })).filter(({ s }) => s.kind === 'foot' || s.kind === 'foot_afro');
   const horse = slots.map((s, i) => ({ s, i })).filter(({ s }) => s.kind === 'rider' || s.kind === 'rider_black');
   const mules = slots.map((s, i) => ({ s, i })).filter(({ s }) => s.kind === 'mule');
 

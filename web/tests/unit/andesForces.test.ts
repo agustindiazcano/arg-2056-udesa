@@ -13,6 +13,9 @@ import {
   bubblesFor,
   ENEMY_ID,
   ENEMY_POSITION,
+  SKIRMISHES,
+  activeSkirmishes,
+  skirmishBalls,
   enemyBalls,
   ENEMY_PALETTE,
   stationaryRoute,
@@ -453,6 +456,22 @@ describe('the royalist force at Chacabuco', () => {
     expect(label).toContain('Maroto');
     expect(label).toContain('2.080 a 2.500');
     expect(label).toContain('Talavera');
+    expect(label).toContain('Quintanilla');
+    expect(label).toContain('Barañao');
+  });
+
+  it('has the cavalry in its table: two units, 340 men, and the infantry of its three corps', () => {
+    const facts = FORCE_FACTS[ENEMY_ID]!;
+    const rows = Object.fromEntries(facts.units);
+    expect(rows['Caballería']).toContain('340');
+    expect(rows['Caballería']).toContain('Concordia');
+    expect(rows['Caballería']).toContain('Abascal');
+    expect(rows['Talavera']).toContain('440');
+    expect(rows['Chiloé']).toContain('220');
+    expect(rows['Valdivia']).toContain('220');
+    expect(facts.infantry).toBe('880');
+    expect(facts.commanders.join(' ')).toContain('Quintanilla');
+    expect(facts.commanders.join(' ')).toContain('Barañao');
   });
 
   it('is not one of the patriot forces: the buttons and the spotlight do not know it', () => {
@@ -488,5 +507,54 @@ describe('the figures of the royalists', () => {
     expect(r.totalKm).toBeGreaterThan(0.1);
     expect(r.points[0]!.lon).toBe(ENEMY_POSITION.lon);
     expect(r.points[0]!.lat).toBe(ENEMY_POSITION.lat);
+  });
+});
+
+describe('the skirmishes before Chacabuco', () => {
+  const route = buildRoute(main);
+  const dayOf = (name: RegExp) => route.points.find((p) => name.test(p.name))!.day_of_campaign;
+
+  it('are the combats of Las Achupallas (4 Feb) and Las Coimas (7 Feb), each with its royalists, and each has data for its card', () => {
+    expect(SKIRMISHES.map((k) => k.name)).toEqual(['Combate de Las Achupallas', 'Combate de Las Coimas']);
+    for (const k of SKIRMISHES) {
+      expect(k.id.startsWith(ENEMY_ID)).toBe(true);
+      expect(FORCE_FACTS[k.id]).toBeTruthy();
+      expect(k.men).toBeGreaterThan(50);
+    }
+    expect(dayOf(/Achupallas/)).toBe(16);
+    expect(dayOf(/Coimas/)).toBe(19);
+  });
+
+  it('show the royalists only on their days, at the place of the combat of the route', () => {
+    expect(activeSkirmishes(route, 5)).toEqual([]);
+    const at16 = activeSkirmishes(route, dayOf(/Achupallas/));
+    expect(at16.map((k) => k.id)).toEqual([SKIRMISHES[0]!.id]);
+    const place = route.points.find((p) => /Achupallas/.test(p.name))!;
+    expect(at16[0]!.lon).toBe(place.lon);
+    expect(at16[0]!.lat).toBe(place.lat);
+    expect(activeSkirmishes(route, dayOf(/Coimas/)).map((k) => k.id)).toEqual([SKIRMISHES[1]!.id]);
+    expect(activeSkirmishes(route, 23)).toEqual([]);
+  });
+
+  it('add a bubble (with its flag) and red balls at the place while they last', () => {
+    const day = dayOf(/Coimas/);
+    const bubbles = bubblesFor(route, 0, columns, day);
+    expect(bubbles.map((b) => b.id)).toContain(SKIRMISHES[1]!.id);
+    expect(bubblesFor(route, 0, columns, 5).map((b) => b.id)).not.toContain(SKIRMISHES[1]!.id);
+    const balls = skirmishBalls(route, day, 1);
+    expect(balls.length).toBeGreaterThanOrEqual(3);
+    expect(balls.every((b) => b.id === SKIRMISHES[1]!.id)).toBe(true);
+    expect(skirmishBalls(route, 5, 1)).toEqual([]);
+  });
+});
+
+describe('the numbers of the main force', () => {
+  it('say when each one counts: the army when it left, the column of Los Patos and the patriots at Chacabuco', () => {
+    const f = FORCE_FACTS.main!;
+    expect(f.men).toBe('3.987');
+    expect(f.menLabel).toBe('Hombres al partir');
+    const rows = Object.fromEntries(f.units.map(([label, value]) => [label, value]));
+    expect(rows['Ejército al partir']).toContain('3.987');
+    expect(rows['En Chacabuco']).toContain('3.500');
   });
 });

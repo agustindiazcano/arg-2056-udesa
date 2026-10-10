@@ -8,16 +8,18 @@ import { NavControls } from '../../ui/NavControls';
 import { figureCount, startingMen } from './column';
 import type { CameraApi, CameraView } from './cameraKeyframes';
 import { columnColor, positionOfColumn } from './columns';
+import { BattleCard } from './BattleCard';
+import { eventOfRedBall } from './battleHover';
 import { ForceBubbles } from './ForceBubbles';
 import { RegionMinimap } from './RegionMinimap';
-import { BATTLE_COLOR, battleFeature } from './regionMap';
+import { BATTLE_COLOR, battleFeature, combatFeature } from './regionMap';
 import { SlotPortal } from '../../dashboard/SlotPortal';
 import type { Column } from './columns';
 import type { CameraMode } from './camera';
 import { createFigureColumn } from './figures3d';
 import type { FigureColumn } from './figures3d';
 import type { Graphics } from './graphics';
-import { FIGURE_MIN_ZOOM, cameraFor, coordAtKm, figuresVisible, gaitAmount, gaitPhaseAt, metersPerPixel, metersPerUnit, mixHex, timeScaleForZoom, WASD_SHIFT_FACTOR, WASD_SPEED_PX, wasdDelta } from './mapGeo';
+import { cameraFor, coordAtKm, figuresVisible, gaitAmount, gaitPhaseAt, metersPerPixel, metersPerUnit, mixHex, timeScaleForZoom, WASD_SHIFT_FACTOR, WASD_SPEED_PX, wasdDelta } from './mapGeo';
 import { arcAt, buildPath } from './pathAlong';
 import { distanceKm } from './timeline';
 import { useReducedMotion } from '../../runtime/useReducedMotion';
@@ -37,6 +39,9 @@ import {
   ENEMY_PALETTE,
   ENEMY_POSITION,
   enemyBalls,
+  skirmishBalls,
+  activeSkirmishes,
+  SKIRMISHES,
   formationBalls,
   stationaryRoute,
   ENEMY_MEN,
@@ -49,7 +54,7 @@ import {
 } from './forces';
 import type { ForceInfo } from './forces';
 import type { Path } from './pathAlong';
-import { positionAt } from './timeline';
+import { eventDateText, positionAt } from './timeline';
 import type { Route } from './timeline';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import './mapLibre.css';
@@ -78,7 +83,8 @@ export interface MapLibreRendererProps {
   selectedId: string | null;
   camera: CameraMode;
   graphics: Graphics;
-  closeUp: number;
+  /** the force the camera follows as the clock runs (null: the camera is free of any force) */
+  followId?: string | null;
   onSelect: (id: string | null) => void;
   /** the clock keeps this share of its pace: smaller the closer the camera is (called when it changes, and with 1 when the map goes away) */
   onTimeScale?: (scale: number) => void;
@@ -91,11 +97,15 @@ export interface MapLibreRendererProps {
   /** 0: no tour; a number that grows each time the tour must play (the first one starts after the loading screen) */
   tourPlay?: number;
   /** the reader chose a force in a button: the map goes to it (`n` grows on every click, so the same force can be asked twice) */
-  focusForce?: { id: string; n: number } | null;
+  focusForce?: { id: string; n: number; near?: boolean } | null;
   /** a force was chosen on the map (its name): the scene can mark its button */
   onFocusForce?: (id: string) => void;
   /** the tour finished or the reader took the camera: the scene can set `tourPlay` back to 0 */
   onTourEnd?: () => void;
+  /** 0: nothing; a number that grows each time the battle of Chacabuco must be shown: the light over it with its name, and then the camera over the lines */
+  battleShow?: number;
+  /** the whole intro (the tour and the spotlight over each force) is over, because it ended or because the reader took the camera */
+  onIntroEnd?: () => void;
   label: string;
 }
 
@@ -106,8 +116,14 @@ const SKY_DARK = { 'sky-color': '#0b1830', 'horizon-color': '#1c2f4d', 'fog-colo
 const SPOT_RADIUS_PX = 96;
 /** How strong the light is (0 to 1): soft, so the dark map still reads under it. */
 const SPOT_LIGHT = 0.55;
+/** The names of the places show from this zoom on: from afar (the map view, a force seen from far away) only the names of the forces and their flags are left. */
+export const PLACE_LABEL_MIN_ZOOM = 10.2;
+/** The fewest figures a skirmish has (one stands for 50 men, and a hundred would be two): enough for a line that can be seen. */
+const SKIRMISH_MIN_FIGURES = 6;
 /** How the camera frames a force the reader chose: close enough to see its balls and its name, at an angle. */
 const FORCE_VIEW = { zoom: 9.6, pitch: 62 };
+/** How the camera frames a force from close by: the figures are life-size and march by. */
+const FORCE_CLOSE_VIEW = { zoom: 15.2, pitch: 70 };
 
 
 /** One of the blue balls of the far view: where it is, which force it belongs to and whether it is a small one. */
@@ -142,12 +158,16 @@ function forceBalls(main: Route, mainKm: number, columns: readonly Column[], day
   if (battle) for (const b of formationBalls(lined, [battle.lon, battle.lat], spacing)) balls.push(b);
   // the royalist army at Chacabuco: red balls in a row across its place
   for (const [lon, lat] of enemyBalls(spacing)) balls.push({ id: ENEMY_ID, lon, lat, small: false, color: 0xe53935 });
+  // the royalists of a skirmish, red too, on its place while it lasts
+  for (const b of skirmishBalls(main, day, spacing)) balls.push({ ...b, color: 0xe53935 });
   return balls;
 }
 
 /** A force is at the end of its route (the battlefield) when it is within this many km of it. */
 const ARRIVED_KM = 0.5;
 
+/** The mouse is over a red ball when it is within this many pixels of its center. */
+const BALL_HOVER_PX = 14;
 /** The ball is this many pixels across on the screen, whatever the zoom: a small force has a smaller one. */
 const BALL_PX = 8;
 const SMALL_BALL_PX = 4.5;
@@ -181,6 +201,24 @@ class BallsLayer implements CustomLayerInterface {
   private readonly noTurn = new Quaternion();
 
   private emphasized = false;
+
+  /** The red ball under a point of the screen (within `radiusPx` of its center), or null: the royalist balls answer to the mouse, the blue ones do not. */
+  pick(x: number, y: number, radiusPx: number): string | null {
+    const map = this.map;
+    if (!map) return null;
+    let best: string | null = null;
+    let bestD = radiusPx;
+    for (const ball of this.balls) {
+      if (ball.color === undefined) continue;
+      const p = map.project([ball.lon, ball.lat]);
+      const d = Math.hypot(p.x - x, p.y - y);
+      if (d <= bestD) {
+        best = ball.id;
+        bestD = d;
+      }
+    }
+    return best;
+  }
 
   setBalls(balls: Ball[]): void {
     this.balls = balls;
@@ -385,7 +423,13 @@ class ArmyLayer implements CustomLayerInterface {
       this.scene.remove(this.column.mesh);
       this.column.mesh.geometry.dispose();
     }
-    this.column = createFigureColumn(this.count, this.path, () => null, 1, this.palette);
+    // every figure stands on the terrain under its own feet (the line of a battle is a kilometer wide, and the ground is not level across it)
+    const groundAt = (x: number, z: number): number | null => {
+      const ll = new MercatorCoordinate(originMc.x + x * unitMeters * scale, originMc.y + z * unitMeters * scale, 0).toLngLat();
+      const height = map.queryTerrainElevation([ll.lng, ll.lat]);
+      return height === null || height === undefined ? null : height / unitMeters;
+    };
+    this.column = createFigureColumn(this.count, this.path, groundAt, 1, this.palette);
     this.column.mesh.frustumCulled = false;
     this.scene.add(this.column.mesh);
   }
@@ -425,13 +469,54 @@ class ArmyLayer implements CustomLayerInterface {
 }
 
 /** Real map of the crossing: MapTiler satellite imagery draped on the MapTiler terrain (real relief), the route and its places, and the army as miniatures on it. */
-export function MapLibreRenderer({ route, columns, day, selectedId, camera, graphics, closeUp, onSelect, onTimeScale, onReady, cameraApi, onView, tourPlay = 0, onTourEnd, focusForce = null, onFocusForce, label }: MapLibreRendererProps) {
+/** The beam of light over a place of the map and the darkening of the map and the sky around it (shared by the spotlight over the forces and the one over the battle). */
+function createLight(map: MapLibreMap, svg: SVGSVGElement) {
+  const polygon = svg.querySelector('polygon');
+  const glow = svg.querySelector('ellipse');
+  const drawBeam = (at: [number, number] | null, o: number) => {
+    svg.style.opacity = at ? String(o * SPOT_LIGHT) : '0';
+    if (!at || !polygon || !glow) return;
+    const p = map.project(at);
+    const g = beamGeometry({ x: p.x, y: p.y }, SPOT_RADIUS_PX);
+    polygon.setAttribute('points', g.polygon.map(([x, y]) => `${x},${y}`).join(' '));
+    glow.setAttribute('cx', String(g.ellipse.cx));
+    glow.setAttribute('cy', String(g.ellipse.cy));
+    glow.setAttribute('rx', String(g.ellipse.rx));
+    glow.setAttribute('ry', String(g.ellipse.ry));
+  };
+  // the map goes dark while the lights are on: the imagery loses brightness and the sky darkens (the light is not dimmed: it is over the map)
+  const rasterIds = (map.getStyle()?.layers ?? []).filter((l) => l.type === 'raster').map((l) => l.id);
+  let dimShown = -1;
+  const setDim = (d: number) => {
+    if (Math.abs(d - dimShown) < 0.01) return;
+    dimShown = d;
+    for (const id of rasterIds) map.setPaintProperty(id, 'raster-brightness-max', 1 - 0.62 * d);
+    if (map.getTerrain()) {
+      map.setSky({
+        'sky-color': mixHex(SKY_DAY['sky-color'], SKY_DARK['sky-color'], d),
+        'horizon-color': mixHex(SKY_DAY['horizon-color'], SKY_DARK['horizon-color'], d),
+        'fog-color': mixHex(SKY_DAY['fog-color'], SKY_DARK['fog-color'], d),
+        'sky-horizon-blend': 0.6,
+        'horizon-fog-blend': 0.8,
+        'fog-ground-blend': 0.2
+      });
+    }
+  };
+  return { drawBeam, setDim };
+}
+
+/** How long the light over the battle takes to come up, stays, and goes (ms): the camera leaves for the battle when it starts to go. */
+const BATTLE_LIGHT = { in: 1100, hold: 3600, out: 4300 };
+
+export function MapLibreRenderer({ route, columns, day, selectedId, camera, graphics, followId = null, onSelect, onTimeScale, onReady, cameraApi, onView, tourPlay = 0, onTourEnd, onIntroEnd, battleShow = 0, focusForce = null, onFocusForce, label }: MapLibreRendererProps) {
   const reduced = useReducedMotion();
   const hostRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<MapLibreMap | null>(null);
   const layerRef = useRef<ArmyLayer | null>(null);
   const otherArmiesRef = useRef<Array<{ id: string; layer: ArmyLayer }>>([]);
   const enemyArmyRef = useRef<ArmyLayer | null>(null);
+  /** the royalists of the skirmishes (Las Achupallas, Las Coimas): their figures, on the place of the combat while it lasts */
+  const skirmishArmiesRef = useRef<Array<{ id: string; layer: ArmyLayer }>>([]);
   const ballsRef = useRef<BallsLayer | null>(null);
   const readyRef = useRef(false);
   const dayRef = useRef(day);
@@ -441,9 +526,16 @@ export function MapLibreRenderer({ route, columns, day, selectedId, camera, grap
   const onReadyRef = useRef(onReady);
   const onViewRef = useRef(onView);
   const onTourEndRef = useRef(onTourEnd);
+  const onIntroEndRef = useRef(onIntroEnd);
+  /** a force asked for before the map was ready: the camera goes to it as soon as it is */
+  const pendingFocusRef = useRef<{ id: string; near: boolean } | null>(null);
   const onFocusForceRef = useRef(onFocusForce);
   const routeRef = useRef(route);
-  const flyToForceRef = useRef<(id: string) => void>(() => undefined);
+  const flyToForceRef = useRef<(id: string, near?: boolean) => void>(() => undefined);
+  const forcePositionRef = useRef<(id: string) => [number, number] | null>(() => null);
+  const followRef = useRef(followId);
+  /** the camera is on its way to a force: the clock does not move it until it arrives */
+  const flyingRef = useRef(false);
   const tookOverRef = useRef(false);
   const stopTourRef = useRef<() => void>(() => undefined);
   const beamRef = useRef<SVGSVGElement>(null);
@@ -451,6 +543,10 @@ export function MapLibreRenderer({ route, columns, day, selectedId, camera, grap
   const [bubblesOn, setBubblesOn] = useState(true);
   const cardRef = useRef<HTMLElement>(null);
   const bigRef = useRef<HTMLDivElement>(null);
+  const battleTitleRef = useRef<HTMLDivElement>(null);
+  /** the red ball under the mouse (from far away): the battle or the combat it stands for, and where the mouse is */
+  const [ballHover, setBallHover] = useState<{ event: Route['points'][number]; x: number; y: number; area: { width: number; height: number } } | null>(null);
+  const [battleTitle, setBattleTitle] = useState<string | null>(null);
   const [card, setCard] = useState<{ force: ForceInfo; place: string } | null>(null);
   const spotStopRef = useRef<() => void>(() => undefined);
   const columnsRef = useRef(columns);
@@ -472,27 +568,42 @@ export function MapLibreRenderer({ route, columns, day, selectedId, camera, grap
   onReadyRef.current = onReady;
   onViewRef.current = onView;
   onTourEndRef.current = onTourEnd;
+  onIntroEndRef.current = onIntroEnd;
   onFocusForceRef.current = onFocusForce;
   routeRef.current = route;
   /** Takes the camera to a force: where it is on the clock's day, seen from a little above and at an angle. */
-  flyToForceRef.current = (id: string) => {
-    const map = mapRef.current;
-    if (!map) return;
-    let at: [number, number] | null = null;
+  forcePositionRef.current = (id: string) => {
     if (id === MAIN_FORCE_ID) {
       const c = coordAtKm(routeRef.current, kmRef.current);
-      at = [c.lon, c.lat];
-    } else {
-      const column = columnsRef.current.find((q) => q.id === id);
-      const where = column ? positionOfColumn(column, dayRef.current) : null;
-      if (where) at = [where.lon, where.lat];
+      return [c.lon, c.lat];
     }
+    if (id === ENEMY_ID) return [ENEMY_POSITION.lon, ENEMY_POSITION.lat];
+    const skirmish = activeSkirmishes(routeRef.current, dayRef.current).find((k) => k.id === id);
+    if (skirmish) return [skirmish.lon, skirmish.lat];
+    const column = columnsRef.current.find((q) => q.id === id);
+    const where = column ? positionOfColumn(column, dayRef.current) : null;
+    return where ? [where.lon, where.lat] : null;
+  };
+  flyToForceRef.current = (id: string, near = false) => {
+    const map = mapRef.current;
+    if (!map || !readyRef.current) {
+      pendingFocusRef.current = { id, near };
+      return;
+    }
+    const at = forcePositionRef.current(id);
     if (!at) return;
     tookOverRef.current = true;
     stopAnimations();
-    map.flyTo({ center: at, zoom: FORCE_VIEW.zoom, pitch: FORCE_VIEW.pitch, bearing: map.getBearing(), duration: 1800, essential: true });
+    const view = near ? FORCE_CLOSE_VIEW : FORCE_VIEW;
+    flyingRef.current = true;
+    map.once('moveend', () => {
+      flyingRef.current = false;
+    });
+    map.flyTo({ center: at, zoom: view.zoom, pitch: view.pitch, bearing: map.getBearing(), duration: 1800, essential: true });
   };
+
   kmRef.current = km;
+  followRef.current = followId;
   const bubbles = useMemo(() => bubblesFor(route, km, columns, day), [route, km, columns, day]);
 
   const syncArmy = () => {
@@ -527,10 +638,19 @@ export function MapLibreRenderer({ route, columns, day, selectedId, camera, grap
     // the royalist army stands at Chacabuco, facing north, in its line: infantry across and cavalry on the wings
     const enemy = enemyArmyRef.current;
     if (enemy) {
-      enemy.km = 0.5;
+      enemy.km = 0; // the head of its line is the start of its route: exactly its place
       enemy.formation = { dx: 0, north: true };
       enemy.active = figuresVisible(zoom, enemy.active) && distanceKm(centre.lng, centre.lat, ENEMY_POSITION.lon, ENEMY_POSITION.lat) < 60;
       if (enemy.active) withFigures.add(ENEMY_ID);
+    }
+    // the royalists of a skirmish: white figures on its place while it lasts, facing north like the line of Chacabuco
+    const skirmishes = activeSkirmishes(route, dayRef.current);
+    for (const { id, layer: figures } of skirmishArmiesRef.current) {
+      const here = skirmishes.find((k) => k.id === id);
+      figures.km = 0;
+      figures.formation = { dx: 0, north: true };
+      figures.active = Boolean(here) && figuresVisible(zoom, figures.active) && distanceKm(centre.lng, centre.lat, here!.lon, here!.lat) < 60;
+      if (figures.active) withFigures.add(id);
     }
     // a force that shows its figures has no balls
     const balls = forceBalls(route, k, columnsRef.current, dayRef.current, zoom, centre.lat);
@@ -569,6 +689,10 @@ export function MapLibreRenderer({ route, columns, day, selectedId, camera, grap
     const layer = new ArmyLayer(route, figureCount(startingMen(route.points), QUALITY_PRESETS[graphics.tier].particleScale).count);
     layerRef.current = layer;
     const particleScale = QUALITY_PRESETS[graphics.tier].particleScale;
+    skirmishArmiesRef.current = SKIRMISHES.flatMap((k) => {
+      const place = route.points.find((p) => k.match.test(p.name));
+      return place ? [{ id: k.id, layer: new ArmyLayer(stationaryRoute(place.lon, place.lat), Math.max(SKIRMISH_MIN_FIGURES, figureCount(k.men, particleScale).count), `army-figures-${k.id}`, ENEMY_PALETTE) }] : [];
+    });
     enemyArmyRef.current = new ArmyLayer(stationaryRoute(ENEMY_POSITION.lon, ENEMY_POSITION.lat), figureCount(ENEMY_MEN, particleScale).count, 'army-figures-royalists', ENEMY_PALETTE);
     otherArmiesRef.current = columns.map((c) => ({
       id: c.id,
@@ -619,12 +743,14 @@ export function MapLibreRenderer({ route, columns, day, selectedId, camera, grap
         id: 'places-label',
         type: 'symbol',
         source: 'places',
+        minzoom: PLACE_LABEL_MIN_ZOOM,
         layout: { 'text-field': ['get', 'name'], 'text-font': ['Noto Sans Bold'], 'text-size': 14, 'text-offset': [0, 1.1], 'text-anchor': 'top', 'text-allow-overlap': true, 'text-ignore-placement': true },
         paint: { 'text-color': '#ffffff', 'text-halo-color': '#0b1220', 'text-halo-width': 2.2 }
       });
       map.addLayer(layer);
       for (const { layer: other } of otherArmiesRef.current) map.addLayer(other);
       if (enemyArmyRef.current) map.addLayer(enemyArmyRef.current);
+      for (const { layer: figures } of skirmishArmiesRef.current) map.addLayer(figures);
       const balls = new BallsLayer();
       ballsRef.current = balls;
       map.addLayer(balls);
@@ -633,11 +759,21 @@ export function MapLibreRenderer({ route, columns, day, selectedId, camera, grap
       map.addSource('battle', { type: 'geojson', data: battleFeature(route) });
       map.addLayer({ id: 'battle-halo', type: 'circle', source: 'battle', paint: { 'circle-radius': 17, 'circle-color': BATTLE_COLOR, 'circle-opacity': 0.3 } });
       map.addLayer({ id: 'battle-dot', type: 'circle', source: 'battle', paint: { 'circle-radius': 8, 'circle-color': BATTLE_COLOR, 'circle-stroke-color': '#ffffff', 'circle-stroke-width': 2.5 } });
+      // the combats before it (Las Achupallas, Las Coimas): red dots too, a little smaller
+      map.addSource('combat', { type: 'geojson', data: combatFeature(route) });
+      map.addLayer({ id: 'combat-halo', type: 'circle', source: 'combat', paint: { 'circle-radius': 13, 'circle-color': BATTLE_COLOR, 'circle-opacity': 0.3 } });
+      map.addLayer({ id: 'combat-dot', type: 'circle', source: 'combat', paint: { 'circle-radius': 6.5, 'circle-color': BATTLE_COLOR, 'circle-stroke-color': '#ffffff', 'circle-stroke-width': 2 } });
       map.moveLayer('places-dot');
+      map.moveLayer('combat-halo');
+      map.moveLayer('combat-dot');
       map.moveLayer('battle-halo');
       map.moveLayer('battle-dot');
       map.moveLayer('places-label');
       readyRef.current = true;
+      if (pendingFocusRef.current) {
+        flyToForceRef.current(pendingFocusRef.current.id, pendingFocusRef.current.near);
+        pendingFocusRef.current = null;
+      }
       syncArmyRef.current();
       aim(cameraRef.current, 0);
     });
@@ -657,6 +793,27 @@ export function MapLibreRenderer({ route, columns, day, selectedId, camera, grap
       map.on('click', layerId, () => {
         const battle = routeRef.current.points.find((q) => /batalla/i.test(q.name));
         if (battle) onSelectRef.current(battle.id);
+      });
+      map.on('mouseenter', layerId, () => {
+        map.getCanvas().style.cursor = 'pointer';
+      });
+      map.on('mouseleave', layerId, () => {
+        map.getCanvas().style.cursor = '';
+      });
+    }
+    // from far away the red balls of the royalists answer to the mouse: a card with the name of the battle (or the combat) and its data
+    map.on('mousemove', (e: MapLayerMouseEvent) => {
+      const id = ballsRef.current?.pick(e.point.x, e.point.y, BALL_HOVER_PX) ?? null;
+      const event = id ? eventOfRedBall(id, routeRef.current.points) : null;
+      map.getCanvas().style.cursor = event ? 'help' : '';
+      setBallHover((was) => (event ? { event, x: e.point.x, y: e.point.y, area: { width: map.getCanvas().clientWidth, height: map.getCanvas().clientHeight } } : was ? null : was));
+    });
+    map.on('mouseout', () => setBallHover(null));
+    // a click on the red dot of a combat chooses its event
+    for (const layerId of ['combat-dot', 'combat-halo']) {
+      map.on('click', layerId, (e) => {
+        const id = e.features?.[0]?.properties?.id as string | undefined;
+        if (id) onSelectRef.current(id);
       });
       map.on('mouseenter', layerId, () => {
         map.getCanvas().style.cursor = 'pointer';
@@ -734,6 +891,12 @@ export function MapLibreRenderer({ route, columns, day, selectedId, camera, grap
     syncArmyRef.current();
     const mode = cameraRef.current;
     const map = mapRef.current;
+    // a force that is followed: the camera goes with it (after the flight that took it there)
+    if (map && readyRef.current && followRef.current) {
+      const at = forcePositionRef.current(followRef.current);
+      if (at && !flyingRef.current) map.jumpTo({ center: at });
+      return;
+    }
     if (!map || !readyRef.current || mode === 'free' || mode === 'map' || mode === 'aerial') return;
     const target = cameraFor(mode, coordAtKm(route, km));
     // jumpTo does not stop a gesture of the reader: in `follow` they keep the angle they chose, only the center goes with the army
@@ -751,7 +914,7 @@ export function MapLibreRenderer({ route, columns, day, selectedId, camera, grap
   // following the army the reader orbits it: dragging turns (sideways) and tilts (up and down) the camera around the army, and the wheel zooms on it
   useEffect(() => {
     const map = mapRef.current;
-    if (!map || camera !== 'follow') return undefined;
+    if (!map || (camera !== 'follow' && !followId)) return undefined;
     const canvas = map.getCanvas();
     map.dragPan.disable();
     map.scrollZoom.enable({ around: 'center' });
@@ -782,15 +945,7 @@ export function MapLibreRenderer({ route, columns, day, selectedId, camera, grap
       map.dragPan.enable();
       map.scrollZoom.enable();
     };
-  }, [camera]);
-
-  useEffect(() => {
-    if (closeUp === 0) return;
-    tookOverRef.current = true;
-    stopAnimations();
-    const map = mapRef.current;
-    if (map) map.flyTo({ center: [coordAtKm(route, kmRef.current).lon, coordAtKm(route, kmRef.current).lat], zoom: Math.max(FIGURE_MIN_ZOOM + 3, 15.2), pitch: 70, duration: 2200, essential: true });
-  }, [closeUp, route]);
+  }, [camera, followId]);
 
   // the spotlight: when the tour ends, one light at a time from above, on the main force, on the artillery and logistics and then on each of the others,
   // with its name; the map goes dark while the lights are on; the camera goes to each force, and at the end it goes back to the main one and zooms onto it
@@ -807,37 +962,7 @@ export function MapLibreRenderer({ route, columns, day, selectedId, camera, grap
       const at = column ? positionOfColumn(column, dayRef.current) : null;
       return at ? [at.lon, at.lat] : null;
     };
-    const polygon = svg.querySelector('polygon');
-    const glow = svg.querySelector('ellipse');
-    const drawBeam = (at: [number, number] | null, o: number) => {
-      svg.style.opacity = at ? String(o * SPOT_LIGHT) : '0';
-      if (!at || !polygon || !glow) return;
-      const p = map.project(at);
-      const g = beamGeometry({ x: p.x, y: p.y }, SPOT_RADIUS_PX);
-      polygon.setAttribute('points', g.polygon.map(([x, y]) => `${x},${y}`).join(' '));
-      glow.setAttribute('cx', String(g.ellipse.cx));
-      glow.setAttribute('cy', String(g.ellipse.cy));
-      glow.setAttribute('rx', String(g.ellipse.rx));
-      glow.setAttribute('ry', String(g.ellipse.ry));
-    };
-    // the map goes dark while the lights are on: the imagery loses brightness and the sky darkens (the light is not dimmed: it is over the map)
-    const rasterIds = (map.getStyle()?.layers ?? []).filter((l) => l.type === 'raster').map((l) => l.id);
-    let dimShown = -1;
-    const setDim = (d: number) => {
-      if (Math.abs(d - dimShown) < 0.01) return;
-      dimShown = d;
-      for (const id of rasterIds) map.setPaintProperty(id, 'raster-brightness-max', 1 - 0.62 * d);
-      if (map.getTerrain()) {
-        map.setSky({
-          'sky-color': mixHex(SKY_DAY['sky-color'], SKY_DARK['sky-color'], d),
-          'horizon-color': mixHex(SKY_DAY['horizon-color'], SKY_DARK['horizon-color'], d),
-          'fog-color': mixHex(SKY_DAY['fog-color'], SKY_DARK['fog-color'], d),
-          'sky-horizon-blend': 0.6,
-          'horizon-fog-blend': 0.8,
-          'fog-ground-blend': 0.2
-        });
-      }
-    };
+    const { drawBeam, setDim } = createLight(map, svg);
     // the bubbles stay out of the way while the spotlight names a force (the names of the places stay)
     const showOtherNames = (visible: boolean) => setBubblesOn(visible);
     // the card with the force, its place, its commanders and its numbers, to the right of the light on a rounded box, so no other text gets in the way
@@ -871,6 +996,7 @@ export function MapLibreRenderer({ route, columns, day, selectedId, camera, grap
     spotStopRef.current = () => {
       window.cancelAnimationFrame(raf);
       spotStopRef.current = () => undefined;
+      onIntroEndRef.current?.();
       drawBeam(null, 0);
       drawCard(null, 0);
       setCard(null);
@@ -925,6 +1051,65 @@ export function MapLibreRenderer({ route, columns, day, selectedId, camera, grap
   };
   const startSpotlightRef = useRef(startSpotlight);
   startSpotlightRef.current = startSpotlight;
+
+  // the battle of Chacabuco: the map goes dark, a light falls on the battlefield with its name, and then the camera goes over the two lines
+  const startBattleShow = () => {
+    const map = mapRef.current;
+    const svg = beamRef.current;
+    if (!map || !svg || !readyRef.current) return;
+    tookOverRef.current = true;
+    stopAnimations();
+    const battle = route.points.find((q) => /batalla/i.test(q.name));
+    const at: [number, number] = battle ? [battle.lon, battle.lat] : [BATTLE_VIEW.lon, BATTLE_VIEW.lat];
+    const { drawBeam, setDim } = createLight(map, svg);
+    setBubblesOn(false);
+    setBattleTitle(battle ? eventDateText(battle.date) : eventDateText('1817-02-12'));
+    ballsRef.current?.setEmphasis(true);
+    map.easeTo({ center: at, zoom: 11.5, pitch: 55, duration: BATTLE_LIGHT.in + 300, essential: true });
+    let raf = 0;
+    let left = false;
+    const t0 = performance.now();
+    const title = () => battleTitleRef.current;
+    const clean = () => {
+      drawBeam(null, 0);
+      setDim(0);
+      setBattleTitle(null);
+      setBubblesOn(true);
+      ballsRef.current?.setEmphasis(false);
+    };
+    spotStopRef.current = () => {
+      window.cancelAnimationFrame(raf);
+      spotStopRef.current = () => undefined;
+      clean();
+    };
+    const frame = (now: number) => {
+      const ms = now - t0;
+      const o = ms < BATTLE_LIGHT.hold ? Math.min(1, ms / BATTLE_LIGHT.in) : Math.max(0, 1 - (ms - BATTLE_LIGHT.hold) / (BATTLE_LIGHT.out - BATTLE_LIGHT.hold));
+      setDim(o);
+      drawBeam(at, o);
+      const el = title();
+      if (el) {
+        const p = map.project(at);
+        el.style.opacity = String(o);
+        el.style.transform = `translate(${p.x - el.offsetWidth / 2}px, ${p.y + SPOT_RADIUS_PX * 0.5 + 14}px)`;
+      }
+      if (ms >= BATTLE_LIGHT.hold && !left) {
+        left = true;
+        map.flyTo({ center: [BATTLE_VIEW.lon, BATTLE_VIEW.lat], zoom: BATTLE_VIEW.zoom, pitch: BATTLE_VIEW.pitch, bearing: BATTLE_VIEW.bearing, duration: 2600, essential: true });
+      }
+      if (ms >= BATTLE_LIGHT.out) {
+        spotStopRef.current();
+        return;
+      }
+      raf = window.requestAnimationFrame(frame);
+    };
+    raf = window.requestAnimationFrame(frame);
+  };
+  const startBattleShowRef = useRef(startBattleShow);
+  startBattleShowRef.current = startBattleShow;
+  useEffect(() => {
+    if (battleShow) startBattleShowRef.current();
+  }, [battleShow]);
 
   // W, A, S and D move the view over the map (Shift faster); the keys are taken before the app's own shortcut for D (the 2D and 3D switch)
   useEffect(() => {
@@ -984,7 +1169,7 @@ export function MapLibreRenderer({ route, columns, day, selectedId, camera, grap
 
   // a force chosen in a button: the map goes to it
   useEffect(() => {
-    if (focusForce) flyToForceRef.current(focusForce.id);
+    if (focusForce) flyToForceRef.current(focusForce.id, focusForce.near);
   }, [focusForce]);
 
   // the camera tour: it waits a second on the first view and then goes through the stops; the reader (mouse, wheel, a camera button, an event) stops it
@@ -996,6 +1181,7 @@ export function MapLibreRenderer({ route, columns, day, selectedId, camera, grap
     if (again) tookOverRef.current = false;
     if (tookOverRef.current) {
       onTourEndRef.current?.();
+      onIntroEndRef.current?.();
       return undefined;
     }
     let cancelled = false;
@@ -1011,10 +1197,12 @@ export function MapLibreRenderer({ route, columns, day, selectedId, camera, grap
       window.clearTimeout(timer);
       window.cancelAnimationFrame(raf);
       finish();
+      onIntroEndRef.current?.();
     };
     if (reduced) {
       pose(tourPoseAt(ANDES_TOUR, tourDurationMs(ANDES_TOUR)));
       finish();
+      onIntroEndRef.current?.();
       return undefined;
     }
     const first = ANDES_TOUR[0]!;
@@ -1085,6 +1273,13 @@ export function MapLibreRenderer({ route, columns, day, selectedId, camera, grap
         <polygon points="0,0 0,0 0,0 0,0" fill="url(#andes-spot-fade)" filter="url(#andes-spot-blur)" />
         <ellipse cx="0" cy="0" rx="0" ry="0" fill="url(#andes-spot-pool)" filter="url(#andes-spot-soft)" />
       </svg>
+      {ballHover && !battleTitle && <BattleCard event={ballHover.event} x={ballHover.x} y={ballHover.y} area={ballHover.area} />}
+      {battleTitle && (
+        <div ref={battleTitleRef} className="andes-spot-big andes-spot-battle" aria-hidden="true" style={{ opacity: 0 }}>
+          Batalla de Chacabuco
+          <span className="andes-spot-date">{battleTitle}</span>
+        </div>
+      )}
       {card && (
         <div ref={bigRef} className="andes-spot-big" aria-hidden="true" style={{ opacity: 0 }}>
           {card.place}

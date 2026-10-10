@@ -143,8 +143,47 @@ ANDES_ROUTE = [
     ("Las Coimas (combate)", 19, -70.725, -32.691, 696),
     ("San Felipe", 20, -70.725, -32.751, 648),
     ("Curimón (reunión con la columna de Las Heras)", 21, -70.684, -32.786, 710),
-    ("Cuesta de Chacabuco (batalla)", 24, -70.708, -32.977, 1029),
+    ("Batalla de Chacabuco", 24, -70.684, -32.993, 794),
 ]
+# The two skirmishes before Chacabuco, with the forces the sources give (Wikipedia, «Paso de Los Patos»: 200 granaderos under Arcos at Achupallas, about 100
+# royalists in ambush; 140 Granaderos a Caballo under Necochea at Las Coimas against about 700 royalists with 2 pieces under Atero, 30 royalist dead;
+# El Arcón de la Historia: the chief of the San Felipe garrison attacked Arcos with more than 100 men and Lieutenant Lavalle came with 25 granaderos).
+ANDES_SKIRMISHES = {
+    "Las Achupallas (combate)": [
+        {"side": "Ejército de los Andes (avanzada de Arcos)", "men": 200, "note": "200 granaderos con el sargento mayor Antonio Arcos; el teniente Juan Lavalle llegó a tiempo con 25 granaderos"},
+        {"side": "Fuerzas realistas", "men": 100, "note": "más de 100 hombres de la guarnición de San Felipe, que atacaron a Arcos; fueron rechazados y dejaron Putaendo y San Felipe"},
+    ],
+    "Las Coimas (combate)": [
+        {"side": "Ejército de los Andes (vanguardia de Necochea)", "men": 140, "note": "140 Granaderos a Caballo con Mariano Necochea (65 a 100 según otras fuentes)"},
+        {"side": "Fuerzas realistas", "men": 700, "note": "unos 700 (400 de caballería y 300 de infantería, con 2 piezas) al mando de Miguel María de Atero; unos 30 muertos; se retiraron hacia Santiago"},
+    ],
+}
+# The report of the battle and of the two combats: who won and what each side lost (None: the sources do not give it).
+# Chacabuco: Wikipedia «Batalla de Chacabuco» (12 patriot dead and 120 wounded; 500 royalist dead and 600 prisoners), H3 of docs/references.md.
+# Achupallas and Las Coimas: Wikipedia «Paso de Los Patos» (about 30 royalist dead at Las Coimas), El Arcón de la Historia («el primer triunfo de la campaña»).
+ANDES_OUTCOMES = {
+    "Las Achupallas (combate)": {
+        "result": "Victoria patriota",
+        "sides": [
+            {"side": "Ejército de los Andes", "units": "Granaderos a Caballo: la avanzada de Arcos y los 25 de Lavalle", "killed": None, "wounded": None, "prisoners": None, "note": "Las fuentes no dan las bajas"},
+            {"side": "Fuerzas realistas", "units": "Guarnición de San Felipe", "killed": None, "wounded": None, "prisoners": None, "note": "Se retiraron y dejaron Putaendo y San Felipe; las fuentes no dan las bajas"},
+        ],
+    },
+    "Las Coimas (combate)": {
+        "result": "Victoria patriota",
+        "sides": [
+            {"side": "Ejército de los Andes", "units": "Granaderos a Caballo de Necochea", "killed": None, "wounded": None, "prisoners": None, "note": "Las fuentes no dan las bajas patriotas"},
+            {"side": "Fuerzas realistas", "units": "Caballería e infantería con 2 piezas", "killed": 30, "wounded": None, "prisoners": None, "note": "Unos 30 muertos (Wikipedia, por informe); se retiraron hacia Santiago"},
+        ],
+    },
+    "Batalla de Chacabuco": {
+        "result": "Victoria patriota",
+        "sides": [
+            {"side": "Ejército de los Andes", "units": "Batallones 1 (Cazadores), 7, 8 y 11 · Granaderos a Caballo · artillería", "killed": 12, "wounded": 120, "prisoners": None, "note": "12 muertos y 120 heridos (Wikipedia, por informe)"},
+            {"side": "Fuerzas realistas", "units": "Talavera, Chiloé y Valdivia · caballería de la Concordia y de Abascal · artillería", "killed": 500, "wounded": None, "prisoners": 600, "note": "500 muertos y 600 prisioneros (Wikipedia, por informe)"},
+        ],
+    },
+}
 ANDES_SOURCE = (
     "UNCuyo, Historia virtual de Mendoza, «Cruce de los Andes»; Diario de Cuyo, «Crónica de una epopeya» (2017); Wikipedia, «Rutas sanmartinianas» y «Paso de Los Patos»; "
     "coordenadas: MapTiler Geocoding (OpenStreetMap) y lista oficial de pasos (argentina.gob.ar); altitud: MapTiler Terrain-RGB v2"
@@ -172,7 +211,7 @@ ANDES_COLUMNS = [
             ("Guardia Vieja", -70.269, -32.903, 1602, "1817-02-04"),
             ("Santa Rosa de los Andes", -70.599, -32.853, 812, "1817-02-08"),
             ("Curimón (reunión con la columna principal)", -70.684, -32.786, 710, "1817-02-09"),
-            ("Cuesta de Chacabuco (batalla)", -70.708, -32.977, 1029, "1817-02-12"),
+            ("Batalla de Chacabuco", -70.684, -32.993, 794, "1817-02-12"),
         ],
     },
     {
@@ -329,11 +368,16 @@ def gen_andes_events(rng):
             "retrieved_at": "2026-10-08",
             "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto.",
         }
+        if name in ANDES_OUTCOMES:
+            event["outcome"] = ANDES_OUTCOMES[name]
+        if name in ANDES_SKIRMISHES:
+            event["forces"] = ANDES_SKIRMISHES[name]
+            event["note"] += " Combate de la vanguardia, no de todo el ejército."
         if i == 1:
             event["note"] += " 3.987 soldados (sin los 1.200 milicianos y arrieros); la columna de Los Patos era una parte del ejército."
         if i == last:
             event["forces"] = [
-                {"side": "Ejército de los Andes", "men": 3500, "note": "unos 3.500 en la batalla (Wikipedia, Todo Argentina), o unos 3.600 sumando el despliegue de la Municipalidad de Chacabuco (Soler 2.100 y O'Higgins 1.500), con 9 piezas de artillería"},
+                {"side": "Ejército de los Andes", "men": 3500, "note": "unos 3.500 en la batalla (Wikipedia, Todo Argentina; los 3.987 del estado de 1816 son todo el ejército al partir, con las columnas que fueron por otros pasos), o unos 3.600 sumando el despliegue de la Municipalidad de Chacabuco (Soler 2.100 y O'Higgins 1.500), con 9 piezas de artillería"},
                 {"side": "Fuerzas realistas", "men": None, "note": "Cifra en disputa: 2.080 (Municipalidad de Chacabuco), 2.450 (Atlas Militar) o unos 2.500 (Wikipedia), con 2 a 5 piezas; hay fuentes secundarias con cifras menores"},
             ]
             event["estimate_range"] = {"min": 2080, "max": 2500}

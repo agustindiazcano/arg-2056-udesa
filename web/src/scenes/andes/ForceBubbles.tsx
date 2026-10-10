@@ -23,7 +23,7 @@ function commanderRows(commanders: readonly string[]): Array<[string, string]> {
 
 /** The numbers of a force as table rows (label, value): men, infantry where the sources give it, its units, and the rest (animals, artillery). */
 function numberRows(facts: ForceFacts): Array<[string, string]> {
-  const rows: Array<[string, string]> = [['Hombres', facts.men]];
+  const rows: Array<[string, string]> = [[facts.menLabel ?? 'Hombres', facts.men]];
   if (facts.infantry) rows.push(['Infantería', facts.infantry]);
   rows.push(['Cuerpos', facts.battalions]);
   for (const [label, value] of facts.units) if (label !== 'Hombres' && label !== 'Infantería' && label !== 'Unidades') rows.push([label, value]);
@@ -109,7 +109,7 @@ export function ForceBubbles({ map, items, visible }: ForceBubblesProps) {
               className="andes-bubble"
             >
               <div className="andes-bubble-card" onMouseEnter={() => enter(item.id)} onMouseLeave={leave}>
-                {item.id === ENEMY_ID ? (
+                {item.id.startsWith(ENEMY_ID) ? (
                   <span className="andes-flag andes-flag--royal" role="img" aria-label="Bandera realista (cruz de Borgoña)">
                     <i />
                   </span>

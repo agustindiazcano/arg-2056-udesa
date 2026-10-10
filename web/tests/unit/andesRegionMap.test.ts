@@ -3,7 +3,7 @@ import { readFileSync } from 'node:fs';
 import { parseAndesEvents } from '../../src/scenes/andes/data';
 import { splitColumns } from '../../src/scenes/andes/columns';
 import { buildRoute } from '../../src/scenes/andes/timeline';
-import { REGION_BOUNDS, battleFeature, minimapData } from '../../src/scenes/andes/regionMap';
+import { REGION_BOUNDS, battleFeature, combatFeature, minimapData } from '../../src/scenes/andes/regionMap';
 
 const events = parseAndesEvents(JSON.parse(readFileSync(new URL('../../../data/mock/andes_events.json', import.meta.url), 'utf8')) as unknown);
 const { main, columns } = splitColumns(events);
@@ -59,5 +59,20 @@ describe('battleFeature', () => {
 
   it('goes with the data of the minimap', () => {
     expect(minimapData(route, 0, columns, 0).battle.features).toHaveLength(1);
+  });
+});
+
+describe('combatFeature', () => {
+  it('is the places of the two combats before the battle, as red points with the id of their event', () => {
+    const f = combatFeature(route);
+    expect(f.features.map((x) => x.properties?.name)).toEqual(['Las Achupallas (combate)', 'Las Coimas (combate)']);
+    for (const x of f.features) {
+      const p = route.points.find((q) => q.id === x.properties?.id)!;
+      expect((x.geometry as GeoJSON.Point).coordinates).toEqual([p.lon, p.lat]);
+    }
+  });
+
+  it('goes with the data of the minimap', () => {
+    expect(minimapData(route, 0, columns, 0).combats.features).toHaveLength(2);
   });
 });

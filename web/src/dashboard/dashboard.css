@@ -733,6 +733,15 @@
   line-height: 1.15;
 }
 
+.andes-modes {
+  /* the camera buttons: in a row over the bar of the bottom, to the right of the credits button */
+  position: absolute;
+  left: calc(var(--space-md) + 40px);
+  bottom: calc(var(--bar-h, 0px) + var(--space-sm));
+  z-index: 4;
+  max-width: calc(100% - var(--side-w, 0px) - 4rem);
+}
+
 .andes-title p {
   margin: 0;
   color: var(--ink-2);
@@ -745,6 +754,11 @@
   flex-wrap: wrap;
   align-items: center;
   gap: var(--space-sm);
+}
+
+/* the second row of the header is only for the scenes that use it: it goes away when it has nothing in it (the Andes put their controls on the map) */
+.header-row--sub:has(> .nav-slot:empty):not(:has(> nav, > .tour-steps)) {
+  display: none;
 }
 
 .nav-slot {
@@ -785,19 +799,50 @@
 
 .andes-foot {
   position: absolute;
-  padding: var(--space-xs) var(--space-sm);
-  background: var(--glass-strong);
-  border-radius: var(--radius-md);
   left: var(--space-md);
   bottom: calc(var(--bar-h, 0px) + var(--space-sm));
   z-index: 4;
-  max-width: min(60%, calc(100% - var(--side-w, 0px) - 15rem));
   color: var(--ink-2);
   font-size: var(--font-xs, 0.75rem);
 }
 
 .andes-foot p {
   margin: 0;
+}
+
+/* the credits are a round button; the text shows in a tooltip over it on hover or focus */
+.andes-foot-btn {
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: var(--glass-strong);
+  color: var(--ink);
+  font: inherit;
+  font-style: italic;
+  font-weight: 600;
+  cursor: help;
+}
+
+.andes-foot-tip {
+  position: absolute;
+  left: 0;
+  bottom: calc(100% + 8px);
+  width: min(560px, 60vw);
+  padding: var(--space-xs) var(--space-sm);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--glass-strong);
+  backdrop-filter: blur(10px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s;
+}
+
+.andes-foot:hover .andes-foot-tip,
+.andes-foot:focus-within .andes-foot-tip {
+  opacity: 1;
 }
 
 .andes-notice {
@@ -874,9 +919,11 @@
   overflow-y: auto;
 }
 
+/* the zoom buttons: in the top right corner of the map, over the minimap */
 #overlay[data-scene='andes'] .nav-controls {
-  right: calc(var(--side-w) + var(--space-md));
-  bottom: calc(var(--bar-h) + var(--space-md));
+  top: calc(var(--chrome-h, 0px) + var(--space-sm));
+  right: var(--space-md);
+  bottom: auto;
 }
 
 /* ---- floating names of the places of the route ------------------------------------------------------------------ */
@@ -1173,12 +1220,16 @@
   opacity: 1;
 }
 
-/* ---- the clean box of data of the selected force, under the dates on the left ------------------------------------ */
+/* ---- the clean box of data of the selected force, at the right of the map ------------------------------------ */
 
 .andes-force-info {
-  position: sticky;
-  bottom: 0;
-  margin-top: var(--space-xs);
+  position: absolute;
+  top: calc(var(--chrome-h, 0px) + 7.5rem);
+  right: calc(var(--side-w, 0px) + var(--space-md));
+  z-index: 5;
+  width: min(320px, 30%);
+  max-height: calc(100% - 15rem - var(--chrome-h, 0px) - var(--bar-h, 0px));
+  overflow-y: auto;
   padding: var(--space-xs) var(--space-sm) var(--space-sm);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
@@ -1255,4 +1306,34 @@
 
 #andes-events[hidden] {
   display: none;
+}
+
+/* ---- the panel of the right can be folded away: the stage takes its width ---------------------------------------- */
+
+#overlay[data-scene='andes']:has(.dash--side-hidden) {
+  --side-w: 0px;
+}
+
+/* it is moved off to the right and not removed, so the minimap keeps its size and shows again as it was */
+#overlay[data-scene='andes'] .dash--side-hidden .dash-side {
+  transform: translateX(calc(100% + var(--space-lg, 2rem)));
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+#overlay[data-scene='andes'] .dash--stage .dash-side {
+  transition: transform 0.25s ease, opacity 0.25s ease, visibility 0.25s;
+}
+
+.andes-side-toggle {
+  position: absolute;
+  top: calc(var(--chrome-h, 0px) + var(--space-sm));
+  right: calc(var(--space-md) + 124px);
+  z-index: 6;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  display: grid;
+  place-items: center;
 }

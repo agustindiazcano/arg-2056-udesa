@@ -41,4 +41,23 @@ describe('AndesIntro', () => {
     expect(screen.queryByTestId('andes-intro')).toBeNull();
   });
 
+  it('leaves at once when skipped, even when the map is not ready, and tells the scene it was skipped', () => {
+    const onDone = vi.fn();
+    const { rerender } = render(<AndesIntro ready={false} onDone={onDone} />);
+    rerender(<AndesIntro ready={false} skip onDone={onDone} />);
+    expect(screen.getByTestId('andes-intro').className).toContain('is-leaving');
+    act(() => void vi.advanceTimersByTime(INTRO_FADE_MS + 50));
+    expect(screen.queryByTestId('andes-intro')).toBeNull();
+    expect(onDone).toHaveBeenCalledTimes(1);
+    expect(onDone).toHaveBeenCalledWith(true);
+  });
+
+  it('tells the scene the intro was not skipped when it left by itself', () => {
+    const onDone = vi.fn();
+    render(<AndesIntro ready onDone={onDone} />);
+    act(() => void vi.advanceTimersByTime(INTRO_MIN_MS + 100));
+    act(() => void vi.advanceTimersByTime(INTRO_FADE_MS + 50));
+    expect(onDone).toHaveBeenCalledWith(false);
+  });
+
 });

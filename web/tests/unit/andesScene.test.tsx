@@ -16,11 +16,17 @@ vi.mock('../../src/scenes/andes/MapLibreRenderer', async () => {
       selectedId,
       camera,
       graphics,
+      followId,
+      focusForce,
+      battleShow,
       label
     }: {
       day: number;
       selectedId: string | null;
       camera: string;
+      followId?: string | null;
+      battleShow?: number;
+      focusForce?: { id: string; n: number; near?: boolean } | null;
       graphics: { tier: string; snow: boolean; trees: boolean; textures: boolean; shadows: boolean };
       label: string;
     }) => {
@@ -36,6 +42,10 @@ vi.mock('../../src/scenes/andes/MapLibreRenderer', async () => {
           data-day={Math.round(day)}
           data-selected={selectedId ?? ''}
           data-camera={camera}
+          data-follow={followId ?? ''}
+          data-focus={focusForce?.id ?? ''}
+          data-battle={battleShow}
+          data-near={String(focusForce?.near ?? false)}
           data-tier={graphics.tier}
           data-snow={String(graphics.snow)}
           data-trees={String(graphics.trees)}
@@ -149,6 +159,19 @@ describe('Andes scene', () => {
     expect(screen.getByTestId('andes-renderer').getAttribute('data-selected')).toBe('andes-05');
   });
 
+  it('shows the report of a battle at the bottom only when a battle is chosen', async () => {
+    stubFetch();
+    renderScene();
+    await screen.findByTestId('andes-renderer');
+    expect(screen.queryByRole('region', { name: /Resultado:/ })).toBeNull();
+    openEvents();
+    fireEvent.click(screen.getByRole('button', { name: /Manantiales/ }));
+    expect(screen.queryByRole('region', { name: /Resultado:/ })).toBeNull();
+    fireEvent.click(screen.getByRole('button', { name: /Las Coimas/ }));
+    const report = screen.getByRole('region', { name: /Resultado: Las Coimas/ });
+    expect(within(report).getByText('Victoria patriota')).toBeTruthy();
+  });
+
   it('says the altitude is unknown when the event has none', async () => {
     stubFetch((events as Array<Record<string, unknown>>).map((e) => (e.id === 'andes-03' ? { ...e, elevation_m: null, note: 'sin dato de altitud' } : e)));
     renderScene();
@@ -206,19 +229,7 @@ describe('Andes scene', () => {
     expect(screen.getByRole('group', { name: 'Controles de la escena' })).toBeTruthy();
   });
 
-  it('follows the army only when asked, and says so with a pressed button', async () => {
-    stubFetch();
-    renderScene();
-    const renderer = await screen.findByTestId('andes-renderer');
-    expect(renderer.getAttribute('data-camera')).toBe('free');
-    const button = screen.getByRole('button', { name: 'Seguir al ejército' });
-    expect(button.getAttribute('aria-pressed')).toBe('false');
-    fireEvent.click(button);
-    expect(button.getAttribute('aria-pressed')).toBe('true');
-    expect(screen.getByTestId('andes-renderer').getAttribute('data-camera')).toBe('follow');
-  });
-
-  it('has a camera for following, cinematic, aerial and the far map, one at a time, and a second press frees it', async () => {
+  it('has an aerial camera and the far map, one at a time, and a second press frees it', async () => {
     stubFetch();
     renderScene();
     await screen.findByTestId('andes-renderer');
@@ -226,12 +237,9 @@ describe('Andes scene', () => {
     const pressed = (name: string) => screen.getByRole('button', { name }).getAttribute('aria-pressed');
     fireEvent.click(screen.getByRole('button', { name: 'Aérea' }));
     expect(camera()).toBe('aerial');
-    fireEvent.click(screen.getByRole('button', { name: 'Cine' }));
-    expect(camera()).toBe('cine');
-    expect(pressed('Aérea')).toBe('false');
     fireEvent.click(screen.getByRole('button', { name: 'Vista de mapa' }));
     expect(camera()).toBe('map');
-    expect(pressed('Cine')).toBe('false');
+    expect(pressed('Aérea')).toBe('false');
     fireEvent.click(screen.getByRole('button', { name: 'Vista de mapa' }));
     expect(camera()).toBe('free');
   });
@@ -325,26 +333,6 @@ describe('Andes scene', () => {
     expect(empty?.textContent).toBe('sin dato');
   });
 
-  it('has graphics options: the effects can be switched off, the choice is kept, and a low quality turns off what it cannot afford', async () => {
-    stubFetch();
-    renderScene();
-    const renderer = await screen.findByTestId('andes-renderer');
-    expect(renderer.getAttribute('data-snow')).toBe('true');
-    fireEvent.click(screen.getByRole('button', { name: 'Gráficos' }));
-    const menu = screen.getByRole('group', { name: 'Opciones de gráficos' });
-    fireEvent.click(within(menu).getByRole('checkbox', { name: /Nieve/ }));
-    expect(screen.getByTestId('andes-renderer').getAttribute('data-snow')).toBe('false');
-    expect(window.localStorage.getItem('andes-graphics')).toContain('"snow":false');
-    fireEvent.click(within(menu).getByRole('checkbox', { name: /Árboles/ }));
-    expect(screen.getByTestId('andes-renderer').getAttribute('data-trees')).toBe('false');
-    fireEvent.click(within(menu).getByRole('radio', { name: 'Bajo' }));
-    const low = screen.getByTestId('andes-renderer');
-    expect(low.getAttribute('data-tier')).toBe('low');
-    expect(low.getAttribute('data-textures')).toBe('false');
-    expect(low.getAttribute('data-shadows')).toBe('false');
-    expect(within(menu).getByRole('checkbox', { name: /Texturas/ }).hasAttribute('disabled')).toBe(true);
-  });
-
   it('starts with the effects the reader left switched off last time', async () => {
     window.localStorage.setItem('andes-graphics', JSON.stringify({ snow: false, shadows: true, trees: true, textures: true }));
     stubFetch();
@@ -367,14 +355,83 @@ describe('Andes scene', () => {
     expect(screen.queryByRole('list', { name: 'Eventos de la campaña' })).toBeNull();
   });
 
-  it('shows the same events as a table', async () => {
+  it('follows a force when it is chosen, from near or from afar as asked, until the camera is set free', async () => {
     stubFetch();
     renderScene();
     await screen.findByTestId('andes-renderer');
-    fireEvent.click(screen.getByRole('button', { name: 'Tabla de eventos' }));
-    expect(screen.queryByTestId('andes-renderer')).toBeNull();
-    const table = await screen.findByRole('table');
-    expect(within(table).getByText('Cuesta de Chacabuco (batalla)')).toBeTruthy();
+    const attr = (name: string) => screen.getByTestId('andes-renderer').getAttribute(name);
+    expect(attr('data-follow')).toBe('');
+    fireEvent.click(screen.getByRole('button', { name: /Las Heras/ }));
+    expect(attr('data-follow')).toBe('las-heras');
+    expect(attr('data-near')).toBe('false');
+    fireEvent.click(screen.getByRole('button', { name: 'Ver de cerca' }));
+    expect(attr('data-follow')).toBe('las-heras');
+    expect(attr('data-near')).toBe('true');
+    fireEvent.click(screen.getByRole('button', { name: 'Ver de lejos' }));
+    expect(attr('data-follow')).toBe('las-heras');
+    expect(attr('data-near')).toBe('false');
+    fireEvent.click(screen.getByRole('button', { name: 'Cámara libre' }));
+    expect(attr('data-follow')).toBe('');
+    expect(attr('data-camera')).toBe('free');
+  });
+
+  it('follows the main force from close by when no force was chosen', async () => {
+    stubFetch();
+    renderScene();
+    await screen.findByTestId('andes-renderer');
+    fireEvent.click(screen.getByRole('button', { name: 'Ver de cerca' }));
+    expect(screen.getByTestId('andes-renderer').getAttribute('data-follow')).toBe('main');
+  });
+
+  it('has a "Saltar intro" button that skips the clouds, the tour and the spotlight, leaves the camera on the main force, and goes away', async () => {
+    stubFetch();
+    renderScene();
+    await screen.findByTestId('andes-renderer');
+    expect(screen.getByTestId('andes-renderer').getAttribute('data-focus')).toBe('');
+    fireEvent.click(screen.getByRole('button', { name: 'Saltar intro' }));
+    expect(screen.getByTestId('andes-renderer').getAttribute('data-focus')).toBe('main');
+    expect(screen.getByTestId('andes-renderer').getAttribute('data-near')).toBe('false');
+    expect(screen.queryByRole('button', { name: 'Saltar intro' })).toBeNull();
+  });
+
+  it('has a "Batalla de Chacabuco" button that moves the progress to 100 % and shows the battle', async () => {
+    stubFetch();
+    renderScene();
+    const renderer = await screen.findByTestId('andes-renderer');
+    expect(renderer.getAttribute('data-battle')).toBe('0');
+    fireEvent.click(screen.getByRole('button', { name: 'Batalla de Chacabuco' }));
+    expect(screen.getByTestId('andes-renderer').getAttribute('data-battle')).toBe('1');
+    expect(screen.getByTestId('andes-renderer').getAttribute('data-day')).toBe('27');
+    expect(screen.queryByRole('button', { name: 'Saltar intro' })).toBeNull();
+  });
+
+  it('has a toggle for the panel of the right, open by default on a wide screen and folded away on a laptop', async () => {
+    const media = (matches: boolean) => vi.fn(() => ({ matches, addEventListener: () => undefined, removeEventListener: () => undefined }) as unknown as MediaQueryList);
+    vi.stubGlobal('matchMedia', media(false));
+    stubFetch();
+    const first = renderScene();
+    await screen.findByTestId('andes-renderer');
+    const toggle = () => screen.getByRole('button', { name: 'Panel lateral' });
+    expect(toggle().getAttribute('aria-expanded')).toBe('true');
+    expect(document.querySelector('.dash--side-hidden')).toBeNull();
+    fireEvent.click(toggle());
+    expect(toggle().getAttribute('aria-expanded')).toBe('false');
+    expect(document.querySelector('.dash--side-hidden')).not.toBeNull();
+    first.unmount();
+    vi.stubGlobal('matchMedia', media(true));
+    renderScene();
+    await screen.findByTestId('andes-renderer');
+    expect(toggle().getAttribute('aria-expanded')).toBe('false');
+    expect(document.querySelector('.dash--side-hidden')).not.toBeNull();
+    vi.unstubAllGlobals();
+  });
+
+  it('shows only the icon on the play button and "Avance" over the progress bar', async () => {
+    stubFetch();
+    renderScene();
+    await screen.findByTestId('andes-renderer');
+    expect(screen.getByText('Avance').className).toContain('progress-label');
+    expect(screen.queryByText('Avance del cruce')).toBeNull();
   });
 
   it('shows a message and no blank screen when the data is invalid', async () => {

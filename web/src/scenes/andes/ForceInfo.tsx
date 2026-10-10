@@ -35,7 +35,7 @@ export function ForceInfo({ id, onClose }: ForceInfoProps) {
       <h3>Unidades</h3>
       <dl>
         <div>
-          <dt>Hombres</dt>
+          <dt>{facts.menLabel ?? 'Hombres'}</dt>
           <dd>{facts.men}</dd>
         </div>
         {facts.infantry && (

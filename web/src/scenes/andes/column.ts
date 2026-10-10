@@ -3,7 +3,7 @@
  * of the data divided by `MEN_PER_FIGURE`, and the mix of foot soldiers, riders and mules and the spacing are a schematic
  * picture (the screen says so). The renderer only places what these functions return.
  */
-export type FigureKind = 'leader' | 'foot' | 'rider' | 'rider_black' | 'mule';
+export type FigureKind = 'leader' | 'foot' | 'foot_afro' | 'rider' | 'rider_black' | 'mule';
 
 export interface Slot {
   kind: FigureKind;
@@ -37,6 +37,9 @@ const JITTER_ACROSS = 0.015;
 /** The schematic mix, repeated down the column: six on foot, a brown and a black rider, two mules in ten. */
 const PATTERN: readonly FigureKind[] = ['foot', 'foot', 'rider', 'foot', 'mule', 'foot', 'foot', 'rider_black', 'foot', 'mule'];
 
+/** The share of the men on foot drawn as Afro-descendant soldiers (the pardos y morenos battalions, in red); a schematic share, chosen by the human. */
+export const AFRO_SHARE = 0.2;
+
 /** A number from 0 up to 1 that depends only on its two arguments: the same column is drawn every time. */
 function unit(n: number, salt: number): number {
   let x = (Math.imul(n + 1, 0x9e3779b1) ^ Math.imul(salt + 1, 0x85ebca6b)) >>> 0;
@@ -57,6 +60,12 @@ export function figureCount(men: number | null, tierScale: number): { count: num
  * The places of a column of `count` figures: the leader at the head, the rest three abreast behind it, each a little off its place
  * (a fixed pseudo-random jitter, so the column looks like men walking and not like a grid), the whole column no longer than `MAX_LENGTH`.
  */
+/** The kind of the figure in slot `i`: the schematic mix, with a fifth of the men on foot Afro-descendant (a fixed pseudo-random pick, so it is the same every time). */
+function kindAt(i: number): FigureKind {
+  const kind = PATTERN[(i - 1) % PATTERN.length]!;
+  return kind === 'foot' && unit(i, 5) < AFRO_SHARE ? 'foot_afro' : kind;
+}
+
 export function columnSlots(count: number): Slot[] {
   const rows = Math.ceil(Math.max(0, count - 1) / 3);
   const spacing = Math.min(ROW_SPACING, MAX_LENGTH / Math.max(1, rows));
@@ -68,7 +77,7 @@ export function columnSlots(count: number): Slot[] {
     }
     const lane = (i - 1) % 3;
     slots.push({
-      kind: PATTERN[(i - 1) % PATTERN.length]!,
+      kind: kindAt(i),
       along: Math.ceil(i / 3) * spacing + (unit(i, 1) - 0.5) * 2 * JITTER_ALONG * spacing,
       lateral: (lane - 1) * LATERAL + (unit(i, 2) - 0.5) * 2 * JITTER_ACROSS,
       scale: 1 + (unit(i, 3) - 0.5) * 0.12,
@@ -78,8 +87,8 @@ export function columnSlots(count: number): Slot[] {
   return slots;
 }
 
-const SWING: Record<FigureKind, number> = { foot: 0.6, rider: 0.45, rider_black: 0.45, mule: 0.4, leader: 0.45 };
-const BOB: Record<FigureKind, number> = { foot: 0.012, rider: 0.02, rider_black: 0.02, mule: 0.014, leader: 0.02 };
+const SWING: Record<FigureKind, number> = { foot: 0.6, foot_afro: 0.6, rider: 0.45, rider_black: 0.45, mule: 0.4, leader: 0.45 };
+const BOB: Record<FigureKind, number> = { foot: 0.012, foot_afro: 0.012, rider: 0.02, rider_black: 0.02, mule: 0.014, leader: 0.02 };
 
 /**
  * The pose of a walking figure at a phase of the stride (one stride per unit): the angle of one pair of legs (the other

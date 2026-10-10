@@ -166,16 +166,42 @@
     "elevation_m": 802,
     "forces": [
       {
-        "men": 3987,
-        "note": "Estado general del 31-12-1816: 3.778 de tropa, 14 jefes y 195 oficiales; con milicianos y auxiliares, unos 5.000",
-        "side": "Ejército de los Andes"
+        "men": 200,
+        "note": "200 granaderos con el sargento mayor Antonio Arcos; el teniente Juan Lavalle llegó a tiempo con 25 granaderos",
+        "side": "Ejército de los Andes (avanzada de Arcos)"
+      },
+      {
+        "men": 100,
+        "note": "más de 100 hombres de la guarnición de San Felipe, que atacaron a Arcos; fueron rechazados y dejaron Putaendo y San Felipe",
+        "side": "Fuerzas realistas"
       }
     ],
     "id": "andes-09",
     "lat": -32.63,
     "lon": -70.713,
     "name": "Las Achupallas (combate)",
-    "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto.",
+    "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto. Combate de la vanguardia, no de todo el ejército.",
+    "outcome": {
+      "result": "Victoria patriota",
+      "sides": [
+        {
+          "killed": null,
+          "note": "Las fuentes no dan las bajas",
+          "prisoners": null,
+          "side": "Ejército de los Andes",
+          "units": "Granaderos a Caballo: la avanzada de Arcos y los 25 de Lavalle",
+          "wounded": null
+        },
+        {
+          "killed": null,
+          "note": "Se retiraron y dejaron Putaendo y San Felipe; las fuentes no dan las bajas",
+          "prisoners": null,
+          "side": "Fuerzas realistas",
+          "units": "Guarnición de San Felipe",
+          "wounded": null
+        }
+      ]
+    },
     "retrieved_at": "2026-10-08",
     "source": "UNCuyo, Historia virtual de Mendoza, «Cruce de los Andes»; Diario de Cuyo, «Crónica de una epopeya» (2017); Wikipedia, «Rutas sanmartinianas» y «Paso de Los Patos»; coordenadas: MapTiler Geocoding (OpenStreetMap) y lista oficial de pasos (argentina.gob.ar); altitud: MapTiler Terrain-RGB v2"
   },
@@ -186,16 +212,42 @@
     "elevation_m": 696,
     "forces": [
       {
-        "men": 3987,
-        "note": "Estado general del 31-12-1816: 3.778 de tropa, 14 jefes y 195 oficiales; con milicianos y auxiliares, unos 5.000",
-        "side": "Ejército de los Andes"
+        "men": 140,
+        "note": "140 Granaderos a Caballo con Mariano Necochea (65 a 100 según otras fuentes)",
+        "side": "Ejército de los Andes (vanguardia de Necochea)"
+      },
+      {
+        "men": 700,
+        "note": "unos 700 (400 de caballería y 300 de infantería, con 2 piezas) al mando de Miguel María de Atero; unos 30 muertos; se retiraron hacia Santiago",
+        "side": "Fuerzas realistas"
       }
     ],
     "id": "andes-10",
     "lat": -32.691,
     "lon": -70.725,
     "name": "Las Coimas (combate)",
-    "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto.",
+    "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto. Combate de la vanguardia, no de todo el ejército.",
+    "outcome": {
+      "result": "Victoria patriota",
+      "sides": [
+        {
+          "killed": null,
+          "note": "Las fuentes no dan las bajas patriotas",
+          "prisoners": null,
+          "side": "Ejército de los Andes",
+          "units": "Granaderos a Caballo de Necochea",
+          "wounded": null
+        },
+        {
+          "killed": 30,
+          "note": "Unos 30 muertos (Wikipedia, por informe); se retiraron hacia Santiago",
+          "prisoners": null,
+          "side": "Fuerzas realistas",
+          "units": "Caballería e infantería con 2 piezas",
+          "wounded": null
+        }
+      ]
+    },
     "retrieved_at": "2026-10-08",
     "source": "UNCuyo, Historia virtual de Mendoza, «Cruce de los Andes»; Diario de Cuyo, «Crónica de una epopeya» (2017); Wikipedia, «Rutas sanmartinianas» y «Paso de Los Patos»; coordenadas: MapTiler Geocoding (OpenStreetMap) y lista oficial de pasos (argentina.gob.ar); altitud: MapTiler Terrain-RGB v2"
   },
@@ -243,7 +295,7 @@
     "date": "1817-02-12",
     "date_precision": "day",
     "day_of_campaign": 24,
-    "elevation_m": 1029,
+    "elevation_m": 794,
     "estimate_range": {
       "max": 2500,
       "min": 2080
@@ -251,7 +303,7 @@
     "forces": [
       {
         "men": 3500,
-        "note": "unos 3.500 en la batalla (Wikipedia, Todo Argentina), o unos 3.600 sumando el despliegue de la Municipalidad de Chacabuco (Soler 2.100 y O'Higgins 1.500), con 9 piezas de artillería",
+        "note": "unos 3.500 en la batalla (Wikipedia, Todo Argentina; los 3.987 del estado de 1816 son todo el ejército al partir, con las columnas que fueron por otros pasos), o unos 3.600 sumando el despliegue de la Municipalidad de Chacabuco (Soler 2.100 y O'Higgins 1.500), con 9 piezas de artillería",
         "side": "Ejército de los Andes"
       },
       {
@@ -261,10 +313,31 @@
       }
     ],
     "id": "andes-13",
-    "lat": -32.977,
-    "lon": -70.708,
-    "name": "Cuesta de Chacabuco (batalla)",
+    "lat": -32.993,
+    "lon": -70.684,
+    "name": "Batalla de Chacabuco",
     "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto.",
+    "outcome": {
+      "result": "Victoria patriota",
+      "sides": [
+        {
+          "killed": 12,
+          "note": "12 muertos y 120 heridos (Wikipedia, por informe)",
+          "prisoners": null,
+          "side": "Ejército de los Andes",
+          "units": "Batallones 1 (Cazadores), 7, 8 y 11 · Granaderos a Caballo · artillería",
+          "wounded": 120
+        },
+        {
+          "killed": 500,
+          "note": "500 muertos y 600 prisioneros (Wikipedia, por informe)",
+          "prisoners": 600,
+          "side": "Fuerzas realistas",
+          "units": "Talavera, Chiloé y Valdivia · caballería de la Concordia y de Abascal · artillería",
+          "wounded": null
+        }
+      ]
+    },
     "retrieved_at": "2026-10-08",
     "source": "UNCuyo, Historia virtual de Mendoza, «Cruce de los Andes»; Diario de Cuyo, «Crónica de una epopeya» (2017); Wikipedia, «Rutas sanmartinianas» y «Paso de Los Patos»; coordenadas: MapTiler Geocoding (OpenStreetMap) y lista oficial de pasos (argentina.gob.ar); altitud: MapTiler Terrain-RGB v2"
   },
@@ -498,7 +571,7 @@
     "date": "1817-02-12",
     "date_precision": "day",
     "day_of_campaign": 24,
-    "elevation_m": 1029,
+    "elevation_m": 794,
     "forces": [
       {
         "men": null,
@@ -507,9 +580,9 @@
       }
     ],
     "id": "andes-las-heras-11",
-    "lat": -32.977,
-    "lon": -70.708,
-    "name": "Cuesta de Chacabuco (batalla)",
+    "lat": -32.993,
+    "lon": -70.684,
+    "name": "Batalla de Chacabuco",
     "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto.",
     "retrieved_at": "2026-10-09",
     "source": "UNCuyo, Historia virtual de Mendoza, «Cruce de los Andes»; Wikipedia, «Rutas sanmartinianas»; El Arcón de la Historia; Diario de Cuyo (Cabot en Guana, 05-02); coordenadas: MapTiler Geocoding (OpenStreetMap) y lista oficial de pasos (argentina.gob.ar); altitud: MapTiler Terrain-RGB v2"

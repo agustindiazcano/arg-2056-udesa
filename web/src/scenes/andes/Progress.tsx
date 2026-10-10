@@ -4,7 +4,7 @@ import React from 'react';
 export function AndesProgress({ percent, onChange }: { percent: number; onChange: (percent: number) => void }) {
   return (
     <div className="progress-block">
-      <span className="progress-label">Avance del cruce</span>
+      <span className="progress-label">Avance</span>
       <span className="year" data-testid="andes-progress" data-value={percent}>
         {percent} %
       </span>

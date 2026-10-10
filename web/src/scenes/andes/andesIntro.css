@@ -129,3 +129,20 @@
     transition: none;
   }
 }
+
+/* the button that skips the intro: over the clouds (they let the clicks through), at the bottom; it stays through the tour and the spotlight */
+.andes-intro-skip {
+  position: absolute;
+  left: 50%;
+  bottom: calc(var(--bar-h, 0px) + var(--space-lg, 2rem));
+  z-index: 31;
+  transform: translateX(-50%);
+  padding: var(--space-xs) var(--space-md);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--glass-strong);
+  color: var(--ink);
+  font: inherit;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+}
