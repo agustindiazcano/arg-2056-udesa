@@ -1,4 +1,5 @@
 import { BoxGeometry, Color, InstancedMesh, Matrix4, MeshStandardMaterial, Quaternion, Vector3 } from 'three';
+import { battleSlots } from './battleLine';
 import { columnSlots, gaitAt } from './column';
 import type { Slot } from './column';
 import { FIGURE_PARTS, instanceCount } from './figureParts';
@@ -15,7 +16,7 @@ export interface FigureColumn {
   /** scene units from the head of the column to the last figure */
   length: number;
   /** puts every figure at its place with the head of the column at arc length `leaderArc` of the path */
-  update: (leaderArc: number, gaitPhase?: number, gaitAmount?: number) => void;
+  update: (leaderArc: number, gaitPhase?: number, gaitAmount?: number, formation?: { dx: number; north?: boolean } | null) => void;
 }
 
 /**
@@ -23,13 +24,19 @@ export interface FigureColumn {
  * height of the terrain under a point, or null outside it (the figure then keeps the height of the route). Nothing is allocated
  * in `update`: the pose of a figure is a function of where it is on the route, so it marches as the days go by and stands still when they stop (or, with a `gaitPhase`, at the pace of that clock).
  */
-export function createFigureColumn(count: number, path: Path, ground: (x: number, z: number) => number | null, figureScale = 1): FigureColumn {
+export function createFigureColumn(
+  count: number,
+  path: Path,
+  ground: (x: number, z: number) => number | null,
+  figureScale = 1,
+  palette?: Readonly<Record<string, string>>
+): FigureColumn {
   const slots: Slot[] = columnSlots(count);
   const mesh = new InstancedMesh(new BoxGeometry(1, 1, 1), new MeshStandardMaterial({ roughness: 0.9, metalness: 0 }), Math.max(1, instanceCount(slots)));
   mesh.frustumCulled = false;
   const color = new Color();
   let k = 0;
-  for (const slot of slots) for (const part of FIGURE_PARTS[slot.kind]) mesh.setColorAt(k++, color.set(part.color).offsetHSL(0, 0, slot.tint));
+  for (const slot of slots) for (const part of FIGURE_PARTS[slot.kind]) mesh.setColorAt(k++, color.set(palette?.[part.color] ?? part.color).offsetHSL(0, 0, slot.tint));
   if (mesh.instanceColor) mesh.instanceColor.needsUpdate = true;
   mesh.count = k;
 
@@ -44,15 +51,27 @@ export function createFigureColumn(count: number, path: Path, ground: (x: number
   const one = new Vector3(figureScale, figureScale, figureScale);  const up = new Vector3(0, 1, 0);
   const across = new Vector3(1, 0, 0);
 
-  const update = (leaderArc: number, gaitPhase?: number, gaitAmount = 1) => {
+  const offsets = battleSlots(slots);
+  const head = { x: 0, y: 0, z: 0 };
+  const update = (leaderArc: number, gaitPhase?: number, gaitAmount = 1, formation?: { dx: number; north?: boolean } | null) => {
     let i = 0;
+    if (formation) {
+      // formed to fight: every figure stands at its place of the line, around the head of the column, facing south (toward the enemy)
+      sampleAlongExtended(path, leaderArc, sample);
+      head.x = sample.x;
+      head.y = sample.y;
+      head.z = sample.z;
+    }
     slots.forEach((slot, n) => {
       const s = leaderArc - slot.along;
-      sampleAlongExtended(path, s, sample);
+      if (formation) sample.heading = formation.north ? Math.PI : 0;
+      else sampleAlongExtended(path, s, sample);
       const cos = Math.cos(sample.heading);
       const sin = Math.sin(sample.heading);
-      const x = sample.x + cos * slot.lateral;
-      const z = sample.z - sin * slot.lateral;
+      // a line that faces north is the same line seen from the other side: the front is toward -z
+      const x = formation ? head.x + formation.dx + offsets[n]!.x : sample.x + cos * slot.lateral;
+      const z = formation ? head.z + (formation.north ? -offsets[n]!.z : offsets[n]!.z) : sample.z - sin * slot.lateral;
+      if (formation) sample.y = head.y;
       // with a `gaitPhase` (strides, from a clock) the legs keep their own pace whatever the speed of the army; without it they follow the distance walked
       const g = gaitAt(slot.kind, (gaitPhase ?? s / STRIDE) + n * PHASE_STEP, gaitAmount);
       position.set(x, (ground(x, z) ?? sample.y) + g.bob, z);

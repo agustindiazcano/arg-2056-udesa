@@ -21,7 +21,8 @@ import { FIGURE_MIN_ZOOM, cameraFor, coordAtKm, figuresVisible, gaitAmount, gait
 import { arcAt, buildPath } from './pathAlong';
 import { distanceKm } from './timeline';
 import { useReducedMotion } from '../../runtime/useReducedMotion';
-import { ANDES_FINAL_VIEW, ANDES_TOUR, SPOT_VIEW, TOUR_HOLD_MS, tourDurationMs, tourPoseAt } from './tour';
+import { ANDES_FINAL_VIEW, ANDES_TOUR, BATTLE_VIEW, SPOT_VIEW, TOUR_HOLD_MS, tourDurationMs, tourPoseAt } from './tour';
+import { battleWidth } from './battleLine';
 import {
   FORCES,
   FORCE_FACTS,
@@ -33,7 +34,12 @@ import {
   beamGeometry,
   bubblesFor,
   ENEMY_ID,
+  ENEMY_PALETTE,
+  ENEMY_POSITION,
   enemyBalls,
+  formationBalls,
+  stationaryRoute,
+  ENEMY_MEN,
   figureMen,
   forceMen,
   isSmallForce,
@@ -122,12 +128,25 @@ function forceBalls(main: Route, mainKm: number, columns: readonly Column[], day
     const men = forceMen(route.points);
     for (const [lon, lat] of ballPositions(route, km, ballCount(men), spacing)) balls.push({ id, lon, lat, small: isSmallForce(men) });
   };
-  add(MAIN_FORCE_ID, main, mainKm);
-  for (const c of columns) add(c.id, c.route, positionOfColumn(c, day)?.distanceKm ?? 0);
+  // the forces that have reached Chacabuco form to fight: one row, side by side, the main force and the column of Uspallata next to each other
+  const arrived = (route: Route, km: number) => route.totalKm > 0 && km >= route.totalKm - ARRIVED_KM;
+  const battle = arrived(main, mainKm) ? main.points[main.points.length - 1] : undefined;
+  const lined: Array<{ id: string; count: number; small: boolean }> = [];
+  if (battle) lined.push({ id: MAIN_FORCE_ID, count: ballCount(forceMen(main.points)), small: false });
+  else add(MAIN_FORCE_ID, main, mainKm);
+  for (const c of columns) {
+    const km = positionOfColumn(c, day)?.distanceKm ?? 0;
+    if (battle && c.id === 'las-heras' && arrived(c.route, km)) lined.push({ id: c.id, count: ballCount(forceMen(c.route.points)), small: false });
+    else add(c.id, c.route, km);
+  }
+  if (battle) for (const b of formationBalls(lined, [battle.lon, battle.lat], spacing)) balls.push(b);
   // the royalist army at Chacabuco: red balls in a row across its place
   for (const [lon, lat] of enemyBalls(spacing)) balls.push({ id: ENEMY_ID, lon, lat, small: false, color: 0xe53935 });
   return balls;
 }
+
+/** A force is at the end of its route (the battlefield) when it is within this many km of it. */
+const ARRIVED_KM = 0.5;
 
 /** The ball is this many pixels across on the screen, whatever the zoom: a small force has a smaller one. */
 const BALL_PX = 8;
@@ -279,6 +298,12 @@ class ArmyLayer implements CustomLayerInterface {
   readonly renderingMode = '3d' as const;
   /** called when a frame wants the next one (the figures move with the days) */
   active = false;
+  /** formed to fight: the figures stand in their line (the infantry across, the cavalry on the wings), `dx` units to the east of the center of the battle line */
+  formation: { dx: number; north?: boolean } | null = null;
+  /** how many figures the column has */
+  get figureCount(): number {
+    return this.count;
+  }
   /** the km along the route where the leader of the column is; when it changes the army is walking */
   private kmValue = 0;
   private lastMovedMs = 0;
@@ -306,7 +331,8 @@ class ArmyLayer implements CustomLayerInterface {
   constructor(
     private readonly route: Route,
     private readonly count: number,
-    id = 'army-figures'
+    id = 'army-figures',
+    private readonly palette?: Readonly<Record<string, string>>
   ) {
     this.id = id;
   }
@@ -359,7 +385,7 @@ class ArmyLayer implements CustomLayerInterface {
       this.scene.remove(this.column.mesh);
       this.column.mesh.geometry.dispose();
     }
-    this.column = createFigureColumn(this.count, this.path, () => null);
+    this.column = createFigureColumn(this.count, this.path, () => null, 1, this.palette);
     this.column.mesh.frustumCulled = false;
     this.scene.add(this.column.mesh);
   }
@@ -383,7 +409,7 @@ class ArmyLayer implements CustomLayerInterface {
     const index = (km - this.pathKm0) / this.pathStepKm;
     const now = performance.now();
     const amount = gaitAmount(now, this.lastMovedMs);
-    this.column.update(arcAt(this.path, index), gaitPhaseAt(now), amount);
+    this.column.update(arcAt(this.path, index), gaitPhaseAt(now), amount, this.formation);
     if (amount > 0) map.triggerRepaint(); // the legs keep moving while the army does
 
     const s = this.origin.scale * this.builtUnit;
@@ -405,6 +431,7 @@ export function MapLibreRenderer({ route, columns, day, selectedId, camera, grap
   const mapRef = useRef<MapLibreMap | null>(null);
   const layerRef = useRef<ArmyLayer | null>(null);
   const otherArmiesRef = useRef<Array<{ id: string; layer: ArmyLayer }>>([]);
+  const enemyArmyRef = useRef<ArmyLayer | null>(null);
   const ballsRef = useRef<BallsLayer | null>(null);
   const readyRef = useRef(false);
   const dayRef = useRef(day);
@@ -480,6 +507,9 @@ export function MapLibreRenderer({ route, columns, day, selectedId, camera, grap
     const zoom = map.getZoom();
     const wantFigures = figuresVisible(zoom, layer.active);
     layer.active = wantFigures;
+    // at Chacabuco the figures stand in their line: the main force at the center, the column of Uspallata to its east
+    const mainArrived = route.totalKm > 0 && k >= route.totalKm - ARRIVED_KM;
+    layer.formation = mainArrived ? { dx: 0 } : null;
     // the other forces show their figures too, up close and only when the camera is near them
     const centre = map.getCenter();
     const withFigures = new Set<string>(wantFigures ? [MAIN_FORCE_ID] : []);
@@ -488,9 +518,19 @@ export function MapLibreRenderer({ route, columns, day, selectedId, camera, grap
       const at = column ? positionOfColumn(column, dayRef.current) : null;
       if (!column || !at) continue;
       other.km = at.distanceKm;
+      const herasArrived = mainArrived && id === 'las-heras' && at.distanceKm >= column.route.totalKm - ARRIVED_KM;
+      other.formation = herasArrived ? { dx: (battleWidth(layer.figureCount) + battleWidth(other.figureCount)) / 2 + 3 * 0.13 } : null;
       const near = distanceKm(centre.lng, centre.lat, at.lon, at.lat) < 60;
       other.active = figuresVisible(zoom, other.active) && near;
       if (other.active) withFigures.add(id);
+    }
+    // the royalist army stands at Chacabuco, facing north, in its line: infantry across and cavalry on the wings
+    const enemy = enemyArmyRef.current;
+    if (enemy) {
+      enemy.km = 0.5;
+      enemy.formation = { dx: 0, north: true };
+      enemy.active = figuresVisible(zoom, enemy.active) && distanceKm(centre.lng, centre.lat, ENEMY_POSITION.lon, ENEMY_POSITION.lat) < 60;
+      if (enemy.active) withFigures.add(ENEMY_ID);
     }
     // a force that shows its figures has no balls
     const balls = forceBalls(route, k, columnsRef.current, dayRef.current, zoom, centre.lat);
@@ -529,6 +569,7 @@ export function MapLibreRenderer({ route, columns, day, selectedId, camera, grap
     const layer = new ArmyLayer(route, figureCount(startingMen(route.points), QUALITY_PRESETS[graphics.tier].particleScale).count);
     layerRef.current = layer;
     const particleScale = QUALITY_PRESETS[graphics.tier].particleScale;
+    enemyArmyRef.current = new ArmyLayer(stationaryRoute(ENEMY_POSITION.lon, ENEMY_POSITION.lat), figureCount(ENEMY_MEN, particleScale).count, 'army-figures-royalists', ENEMY_PALETTE);
     otherArmiesRef.current = columns.map((c) => ({
       id: c.id,
       layer: new ArmyLayer(c.route, figureCount(figureMen(c.id, forceMen(c.route.points)), particleScale).count, `army-figures-${c.id}`)
@@ -583,6 +624,7 @@ export function MapLibreRenderer({ route, columns, day, selectedId, camera, grap
       });
       map.addLayer(layer);
       for (const { layer: other } of otherArmiesRef.current) map.addLayer(other);
+      if (enemyArmyRef.current) map.addLayer(enemyArmyRef.current);
       const balls = new BallsLayer();
       ballsRef.current = balls;
       map.addLayer(balls);
@@ -610,6 +652,19 @@ export function MapLibreRenderer({ route, columns, day, selectedId, camera, grap
     map.on('mouseleave', 'places-dot', () => {
       map.getCanvas().style.cursor = '';
     });
+    // a click on the red dot of the battle chooses the battle: the camera goes to its view
+    for (const layerId of ['battle-dot', 'battle-halo']) {
+      map.on('click', layerId, () => {
+        const battle = routeRef.current.points.find((q) => /batalla/i.test(q.name));
+        if (battle) onSelectRef.current(battle.id);
+      });
+      map.on('mouseenter', layerId, () => {
+        map.getCanvas().style.cursor = 'pointer';
+      });
+      map.on('mouseleave', layerId, () => {
+        map.getCanvas().style.cursor = '';
+      });
+    }
     map.on('error', (e) => console.warn('[andes map]', e.error?.message ?? e));
     const scaleClock = () => {
       const scale = timeScaleForZoom(map.getZoom());
@@ -999,7 +1054,10 @@ export function MapLibreRenderer({ route, columns, day, selectedId, camera, grap
       tookOverRef.current = true;
       stopAnimations();
     }
-    if (p) map.flyTo({ center: [p.lon, p.lat], zoom: 12.5, pitch: 65, duration: 2000, essential: true });
+    if (p && /batalla/i.test(p.name)) {
+      // the battle of Chacabuco: the view the reader saved, over the field where the lines stand
+      map.flyTo({ center: [BATTLE_VIEW.lon, BATTLE_VIEW.lat], zoom: BATTLE_VIEW.zoom, pitch: BATTLE_VIEW.pitch, bearing: BATTLE_VIEW.bearing, duration: 2600, essential: true });
+    } else if (p) map.flyTo({ center: [p.lon, p.lat], zoom: 12.5, pitch: 65, duration: 2000, essential: true });
   }, [selectedId, route]);
 
   return (

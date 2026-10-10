@@ -29,7 +29,7 @@ import type { GraphicsToggles } from './graphics.js';
 import { spo2Estimate } from './physiology.js';
 import { altitudeProfile } from './profile.js';
 import { AndesProgress } from './Progress.js';
-import { buildRoute, paceClock, paceProgress, positionAt } from './timeline.js';
+import { buildRoute, campaignDateText, paceClock, paceProgress, positionAt } from './timeline.js';
 
 // MapLibre and Three.js live in their own chunk: it loads only when the scene is opened.
 const AndesRenderer = lazy(() => import('./MapLibreRenderer.js'));
@@ -95,14 +95,21 @@ export default function Scene() {
   const [closeUp, setCloseUp] = useState(0);
   const [toggles, setToggles] = useState<GraphicsToggles>(loadToggles);
   const [tierChoice, setTierChoice] = useState<'auto' | QualityTier>('auto');
-  const [listOpen, setListOpen] = useState(true);
+  // the dates and events are a dropdown, closed at first, so the left side of the map stays free
+  const [eventsOpen, setEventsOpen] = useState(false);
   const opener = useRef<HTMLElement | null>(null);
   const selected = route.points.find((p) => p.id === selectedId) ?? null;
 
-  const select = useCallback((id: string, from?: HTMLElement) => {
-    if (from) opener.current = from;
-    setSelectedId(id);
-  }, []);
+  const select = useCallback(
+    (id: string, from?: HTMLElement) => {
+      if (from) opener.current = from;
+      setSelectedId(id);
+      // the battle of Chacabuco: the clock goes to the end of the crossing, when the forces have arrived and stand in their lines
+      const chosen = route.points.find((p) => p.id === id);
+      if (chosen && /batalla/i.test(chosen.name)) dispatch({ type: 'setYear', year: pace.yearAt(1) });
+    },
+    [route, dispatch, pace]
+  );
   const close = useCallback(() => {
     setSelectedId(null);
     opener.current?.focus();
@@ -239,9 +246,6 @@ export default function Scene() {
           >
             Cámara en números
           </button>
-          <button type="button" className="chip" aria-pressed={listOpen} onClick={() => setListOpen(!listOpen)}>
-            Eventos
-          </button>
           <GraphicsMenu
             toggles={toggles}
             onToggle={(key, value) => {
@@ -263,12 +267,16 @@ export default function Scene() {
         <AndesProgress percent={percent} onChange={(p) => dispatch({ type: 'setYear', year: pace.yearAt(p / 100) })} />
       </SlotPortal>
 
-      {listOpen && (
-        <div className="andes-list andes-glass">
-          <EventList events={route.points} selectedId={selectedId} onSelect={select} />
-          {view === 'map' && <ForceInfo id={activeForce} onClose={() => setActiveForce(null)} />}
+      <div className="andes-list andes-glass">
+        <button type="button" className="andes-list-toggle" aria-expanded={eventsOpen} aria-controls="andes-events" onClick={() => setEventsOpen(!eventsOpen)}>
+          <span>Eventos del cruce ({route.points.length})</span>
+          <span aria-hidden="true">{eventsOpen ? '▴' : '▾'}</span>
+        </button>
+        <div id="andes-events" hidden={!eventsOpen}>
+          {eventsOpen && <EventList events={route.points} selectedId={selectedId} onSelect={select} />}
         </div>
-      )}
+        {view === 'map' && <ForceInfo id={activeForce} onClose={() => setActiveForce(null)} />}
+      </div>
 
       {view === 'map' && tunerOpen && <CameraTuner api={cameraApi} view={camView} day={day} onGo={() => setCamera('free')} />}
 
@@ -303,6 +311,9 @@ export default function Scene() {
       }
       tiles={
         <TileGrid>
+          <Tile id="andes-date" label="Fecha">
+            <span className="tile-value">{campaignDateText(day)}</span>
+          </Tile>
           <Tile id="andes-day" label="Día de la campaña">
             <span className="tile-value">{Math.round(day)}</span>
           </Tile>

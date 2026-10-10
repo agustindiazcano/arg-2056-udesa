@@ -221,6 +221,7 @@ test.describe('andes scene', () => {
     expect(box.width).toBeGreaterThan(700);
     expect(box.height).toBeGreaterThan(450);
 
+    await page.getByRole('button', { name: /^Eventos del cruce/ }).click(); // the dates and events are a dropdown
     await page.getByRole('button', { name: /Manantiales/ }).click();
     const panel = page.getByRole('region', { name: /Evento: Manantiales/ });
     await expect(panel).toBeVisible();

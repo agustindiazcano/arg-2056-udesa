@@ -1234,3 +1234,25 @@
   margin: 0;
   text-align: right;
 }
+
+/* ---- the dates and events as a dropdown ---------------------------------------------------------------------------- */
+
+.andes-list-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  width: 100%;
+  padding: var(--space-xs) var(--space-sm);
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  font-size: var(--font-sm);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+#andes-events[hidden] {
+  display: none;
+}

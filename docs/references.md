@@ -53,6 +53,10 @@ Estado de cada fuente:
 
 La fuente de Los Andes («La marcha del Ejército de los Andes», leída) dice que la columna de Las Heras rompió la marcha el 18 de enero y que «el 19 salió del Campo de Instrucción la artillería con Fray Luis Beltrán»: eran dos escalones por el mismo camino. Una revista de la Escuela Superior de Guerra (Revista ESG n.º 595, 2017, **por informe**: el PDF no se pudo leer) describe la columna de Las Heras como el Batallón 11, 30 granaderos a caballo y 2 piezas, con la artillería y el parque de Beltrán dos días atrás. UNCuyo (H6) dice que Las Heras llevaba «todo el parque y la artillería». El mapa la llama **Columna de Uspallata** (Las Heras · artillería y parque): «parque» es la palabra de la época para las municiones y los pertrechos, y «logística» es un término moderno que las fuentes no usan. A verificar: cuántas piezas iban con Las Heras y cuántas con Beltrán, y el día exacto en que se juntaron.
 
+### Uniformes y bandera de los realistas
+
+Las fuentes no coinciden sobre el uniforme de los realistas en Chacabuco. Un artículo de modelismo histórico (balagan.info, «Steven's 1817 Royalist Army», leído) recoge para el Talavera tres versiones (casaca azul con cuello verde, casaca y pantalón verdes, o todo blanco) y cita una crónica de la época que dice que su traje era «todo blanco, desde el cubre del casco hasta las botas»; el batallón de Chiloé, casaca y pantalón azules; el regimiento de Concepción, casaca azul y pantalón blanco; el de Los Ángeles, casaca blanca y pantalón azul. En el mapa las miniaturas llevan casaca y pantalón blancos (elección esquemática, apoyada en esa crónica y en lo que recordaba el equipo). La bandera del globito es blanca con aspa roja (cruz de Borgoña), la que usaron los ejércitos realistas de América: **por verificar** en una fuente sobre los colores del ejército realista de Chile.
+
 ### Datos descartados
 
 - Coordenadas de Come-Caballos (29°23'S, 67°30'O) y de San Felipe (32°49'S, 70°35'O) de Wikimapia: la primera cae lejos de la cordillera y la segunda es la de la ciudad de Los Andes. No se usan.

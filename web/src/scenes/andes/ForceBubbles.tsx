@@ -38,13 +38,16 @@ export function ForceBubbles({ map, items, visible }: ForceBubblesProps) {
     if (!map) return;
     const canvas = map.getCanvas();
     const area = { width: canvas.clientWidth, height: canvas.clientHeight };
+    // the cards stay to the right of the panel of the left (the dates, the events, the data of a force), whatever its height
+    const panel = document.querySelector('.andes-list');
+    const margins = panel ? { ...MARGINS, left: Math.max(MARGINS.left, panel.getBoundingClientRect().right - canvas.getBoundingClientRect().left + 12) } : MARGINS;
     for (const item of itemsRef.current) {
       const p = map.project([item.lon, item.lat]);
       const el = bubbleRefs.current.get(item.id);
       if (el) el.style.transform = `translate(${Math.round(p.x)}px, ${Math.round(p.y)}px)`;
       const pop = popRefs.current.get(item.id);
       if (pop && activeRef.current === item.id) {
-        const at = popPosition({ x: p.x, y: p.y }, { width: pop.offsetWidth, height: pop.offsetHeight }, area, MARGINS);
+        const at = popPosition({ x: p.x, y: p.y }, { width: pop.offsetWidth, height: pop.offsetHeight }, area, margins);
         pop.style.transform = `translate(${at.x}px, ${at.y}px)`;
       }
     }
@@ -92,9 +95,7 @@ export function ForceBubbles({ map, items, visible }: ForceBubblesProps) {
             >
               <div className="andes-bubble-card" onMouseEnter={() => enter(item.id)} onMouseLeave={leave}>
                 {item.id === ENEMY_ID ? (
-                  <span className="andes-flag andes-flag--royal" role="img" aria-label="Bandera realista">
-                    <i />
-                    <i />
+                  <span className="andes-flag andes-flag--royal" role="img" aria-label="Bandera realista (cruz de Borgoña)">
                     <i />
                   </span>
                 ) : (
@@ -130,7 +131,21 @@ export function ForceBubbles({ map, items, visible }: ForceBubblesProps) {
               onMouseEnter={() => enter(item.id)}
               onMouseLeave={leave}
             >
-              <p className="andes-bubble-title">{name}</p>
+              <header className="andes-bubble-head">
+                <p className="andes-bubble-title">{name}</p>
+                <button
+                  type="button"
+                  className="andes-bubble-close"
+                  aria-label={`Cerrar los datos de ${name}`}
+                  onClick={() => {
+                    window.clearTimeout(hoverTimer.current);
+                    setOpen(null);
+                    setHover(null);
+                  }}
+                >
+                  ×
+                </button>
+              </header>
               <p className="andes-bubble-section">Mando</p>
               <p>{lines[1]}</p>
               <p className="andes-bubble-section">Fuerzas</p>

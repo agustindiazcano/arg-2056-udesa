@@ -100,15 +100,32 @@ afterEach(() => {
   vi.unstubAllGlobals();
 });
 
+/** The dates and events are a dropdown, closed at first: open it. */
+const openEvents = () => {
+  const toggle = screen.getByRole('button', { name: /^Eventos del cruce/ });
+  if (toggle.getAttribute('aria-expanded') !== 'true') fireEvent.click(toggle);
+};
+
 describe('Andes scene', () => {
   it('lists the events of the campaign and shows the real map with its credits', async () => {
     stubFetch();
     renderScene();
+    await screen.findByTestId('andes-renderer');
+    openEvents();
     const list = await screen.findByRole('list', { name: 'Eventos de la campaña' });
     expect(within(list).getAllByRole('button')).toHaveLength(13);
     const renderer = await screen.findByTestId('andes-renderer');
     expect(renderer).toBeTruthy();
     expect(screen.getByRole('note').textContent).toMatch(/MapTiler/);
+  });
+
+  it('shows the date, day and month, next to the other indicators, and it follows the clock', async () => {
+    stubFetch();
+    renderScene();
+    await screen.findByTestId('andes-renderer');
+    expect(within(screen.getByTestId('andes-date')).getByText('19 de enero')).toBeTruthy();
+    act(() => useStore.setState({ yearFloat: 2056 }));
+    expect(within(screen.getByTestId('andes-date')).getByText('15 de febrero')).toBeTruthy();
   });
 
   it('moves the army with the shared clock: the day follows the year', async () => {
@@ -125,6 +142,7 @@ describe('Andes scene', () => {
     stubFetch();
     renderScene();
     await screen.findByTestId('andes-renderer');
+    openEvents();
     fireEvent.click(screen.getByRole('button', { name: /Manantiales/ }));
     const panel = screen.getByRole('region', { name: /Evento: Manantiales/ });
     expect(within(panel).getByText(/Ejército de los Andes: 3\.987/)).toBeTruthy();
@@ -135,6 +153,7 @@ describe('Andes scene', () => {
     stubFetch((events as Array<Record<string, unknown>>).map((e) => (e.id === 'andes-03' ? { ...e, elevation_m: null, note: 'sin dato de altitud' } : e)));
     renderScene();
     await screen.findByTestId('andes-renderer');
+    openEvents();
     fireEvent.click(screen.getByRole('button', { name: /Valle de Calingasta/ }));
     const panel = screen.getByRole('region', { name: /Evento: Valle de Calingasta/ });
     expect(within(panel).getByText('sin dato')).toBeTruthy();
@@ -144,6 +163,7 @@ describe('Andes scene', () => {
     stubFetch();
     renderScene();
     await screen.findByTestId('andes-renderer');
+    openEvents();
     const opener = screen.getByRole('button', { name: /Río de los Patos/ });
     opener.focus();
     fireEvent.click(opener);
@@ -167,6 +187,8 @@ describe('Andes scene', () => {
   it('without WebGL2 shows the message and keeps the list and the panel working', async () => {
     stubFetch();
     renderScene(false);
+    await screen.findByText(/necesita WebGL2/);
+    openEvents();
     await screen.findByRole('list', { name: 'Eventos de la campaña' });
     expect(screen.queryByTestId('andes-renderer')).toBeNull();
     expect(screen.getByText(/necesita WebGL2/)).toBeTruthy();
@@ -331,15 +353,18 @@ describe('Andes scene', () => {
     expect(renderer.getAttribute('data-snow')).toBe('false');
   });
 
-  it('hides and shows the list of events', async () => {
+  it('opens and closes the dropdown of dates and events, closed at first', async () => {
     stubFetch();
     renderScene();
     await screen.findByTestId('andes-renderer');
-    expect(screen.getByRole('list', { name: 'Eventos de la campaña' })).toBeTruthy();
-    fireEvent.click(screen.getByRole('button', { name: 'Eventos' }));
+    const toggle = () => screen.getByRole('button', { name: /^Eventos del cruce/ });
+    expect(toggle().getAttribute('aria-expanded')).toBe('false');
     expect(screen.queryByRole('list', { name: 'Eventos de la campaña' })).toBeNull();
-    fireEvent.click(screen.getByRole('button', { name: 'Eventos' }));
+    fireEvent.click(toggle());
+    expect(toggle().getAttribute('aria-expanded')).toBe('true');
     expect(screen.getByRole('list', { name: 'Eventos de la campaña' })).toBeTruthy();
+    fireEvent.click(toggle());
+    expect(screen.queryByRole('list', { name: 'Eventos de la campaña' })).toBeNull();
   });
 
   it('shows the same events as a table', async () => {

@@ -2,7 +2,7 @@ import type { AndesEvent } from './data';
 import { coordAtKm, metersPerPixel } from './mapGeo';
 import { positionOfColumn } from './columns';
 import type { Column } from './columns';
-import { distanceKm, positionAt } from './timeline';
+import { buildRoute, distanceKm, positionAt } from './timeline';
 import type { Route } from './timeline';
 
 /** The royalist army at Chacabuco: not one of the patriot forces (no button, no spotlight), but it has its balls, its bubble and its flag on the map. */
@@ -191,10 +191,62 @@ export const ENEMY_POSITION = { lon: -70.692, lat: -33.028 };
 /** The men of the royalist army, as the sources give them: 2,080 (municipality of Chacabuco) to about 2,500; the balls count at the middle. */
 export const ENEMY_MEN = 2290;
 
+/**
+ * The colors of the figures of the royalists: the same figures, in white where the patriot ones wear blue. The sources disagree on the uniforms of the royalist army at
+ * Chacabuco (blue, green or all white for the Talavera, blue jackets with white trousers for others); a contemporary account says the Talavera was «all white, from the cover of
+ * the helmet to the boots», and white is also what the reader remembers. A schematic choice, said in `docs/references.md`.
+ */
+export const ENEMY_PALETTE: Readonly<Record<string, string>> = { '#2f4a80': '#ecece4', '#243a66': '#dcdcd2', '#75aadb': '#b3262b' };
+
+/** A route that does not go anywhere (two points a kilometer apart, north-south) for a force that stands still: its figures need a path to stand on. */
+export function stationaryRoute(lon: number, lat: number): Route {
+  const event = (name: string, dLat: number) => ({
+    id: name,
+    name,
+    day_of_campaign: 0,
+    date: '1817-02-12',
+    date_precision: 'day' as const,
+    lat: lat + dLat,
+    lon,
+    elevation_m: null,
+    forces: [],
+    source: 'schematic',
+    retrieved_at: '2026-10-09',
+    note: 'Posición esquemática'
+  });
+  return buildRoute([event('a', 0), event('b', 0.009)]);
+}
+
+/** The most a line of balls spreads on the ground: a front of 3,500 men was about a kilometer, so a ball every 0.35 km, however far the camera is. */
+export const MAX_LINE_SPACING_KM = 0.35;
+
+/**
+ * The balls of forces that have formed to fight: all in one row, side by side, centered on `center`, the first group at the west end. The spacing is the one of the
+ * map (a few pixels) but never more than `MAX_LINE_SPACING_KM`.
+ */
+export function formationBalls(
+  groups: ReadonlyArray<{ id: string; count: number; small: boolean }>,
+  center: [number, number],
+  spacingKm: number
+): Array<{ id: string; lon: number; lat: number; small: boolean }> {
+  const step = Math.min(spacingKm, MAX_LINE_SPACING_KM);
+  const dLon = step / (111.32 * Math.cos((center[1] * Math.PI) / 180));
+  const total = groups.reduce((n, g) => n + g.count, 0);
+  const out: Array<{ id: string; lon: number; lat: number; small: boolean }> = [];
+  let i = 0;
+  for (const g of groups) {
+    for (let k = 0; k < g.count; k += 1) {
+      out.push({ id: g.id, lon: center[0] + (i - (total - 1) / 2) * dLon, lat: center[1], small: g.small });
+      i += 1;
+    }
+  }
+  return out;
+}
+
 /** The places of the red balls of the royalists: a row across the place of the army, `spacingKm` apart, centered on it. */
 export function enemyBalls(spacingKm: number): Array<[number, number]> {
   const count = ballCount(ENEMY_MEN);
-  const dLon = spacingKm / (111.32 * Math.cos((ENEMY_POSITION.lat * Math.PI) / 180));
+  const dLon = Math.min(spacingKm, MAX_LINE_SPACING_KM) / (111.32 * Math.cos((ENEMY_POSITION.lat * Math.PI) / 180));
   return Array.from({ length: count }, (_, i): [number, number] => [ENEMY_POSITION.lon + (i - (count - 1) / 2) * dLon, ENEMY_POSITION.lat]);
 }
 

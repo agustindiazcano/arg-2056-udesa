@@ -14,6 +14,8 @@ import {
   ENEMY_ID,
   ENEMY_POSITION,
   enemyBalls,
+  ENEMY_PALETTE,
+  stationaryRoute,
   joinedShortLabel,
   MERGE_KM,
   forceShortLabel,
@@ -470,5 +472,21 @@ describe('the royalist force at Chacabuco', () => {
     expect(lons).toEqual([...lons].sort((a, b) => a - b));
     expect((lons[0]! + lons[4]!) / 2).toBeCloseTo(ENEMY_POSITION.lon, 6);
     for (const [, lat] of balls) expect(lat).toBe(ENEMY_POSITION.lat);
+  });
+});
+
+describe('the figures of the royalists', () => {
+  it('wear white where the patriot ones wear blue', () => {
+    expect(ENEMY_PALETTE['#2f4a80']).toBe('#ecece4');
+    expect(ENEMY_PALETTE['#2f4a80']).not.toBe('#2f4a80');
+    expect(ENEMY_PALETTE['#243a66']).not.toBe('#243a66');
+  });
+
+  it('stand on a route of their own that does not move: two points a short way apart, at their place', () => {
+    const r = stationaryRoute(ENEMY_POSITION.lon, ENEMY_POSITION.lat);
+    expect(r.points).toHaveLength(2);
+    expect(r.totalKm).toBeGreaterThan(0.1);
+    expect(r.points[0]!.lon).toBe(ENEMY_POSITION.lon);
+    expect(r.points[0]!.lat).toBe(ENEMY_POSITION.lat);
   });
 });

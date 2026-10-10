@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { buildRoute } from '../../src/scenes/andes/timeline';
+import { buildRoute, campaignDateText } from '../../src/scenes/andes/timeline';
 import type { AndesEvent } from '../../src/scenes/andes/data';
 import {
   FIGURE_HEIGHT_UNITS,
@@ -197,5 +197,21 @@ describe('wasdDelta', () => {
   it('does nothing for no key or for other keys', () => {
     expect(wasdDelta(new Set(), 10)).toEqual([0, 0]);
     expect(wasdDelta(new Set(['x']), 10)).toEqual([0, 0]);
+  });
+});
+
+describe('campaignDateText', () => {
+  it('is the day and the month of the campaign, from the 19th of January of 1817', () => {
+    expect(campaignDateText(0)).toBe('19 de enero');
+    expect(campaignDateText(12)).toBe('31 de enero');
+    expect(campaignDateText(13)).toBe('1 de febrero');
+    expect(campaignDateText(24)).toBe('12 de febrero');
+    expect(campaignDateText(27)).toBe('15 de febrero');
+  });
+
+  it('keeps the day for a fraction of it, and does not go before the first columns left', () => {
+    expect(campaignDateText(12.9)).toBe('31 de enero');
+    expect(campaignDateText(-14)).toBe('5 de enero');
+    expect(campaignDateText(-400)).toBe(campaignDateText(-30));
   });
 });
