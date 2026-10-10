@@ -157,7 +157,7 @@ ANDES_SOURCE = (
 ANDES_COLUMNS = [
     {
         "id": "las-heras",
-        "name": "Columna de Las Heras (artillería y logística)",
+        "name": "Columna de Las Heras (camino de Uspallata)",
         "men": None,
         "men_note": "770 (Academia de Historia Militar de Chile), 800 (UNCuyo) o 1.700 (Wikipedia) hombres según la fuente; el Batallón 11 de Las Heras tenía 683 (Municipalidad de Chacabuco)",
         "range": (770, 1700),
@@ -338,7 +338,7 @@ def gen_andes_events(rng):
             ]
             event["estimate_range"] = {"min": 2080, "max": 2500}
         if i == last - 1:
-            event["note"] += " Aquí se reúne con la columna de Las Heras, que llevaba la artillería y la logística (las fuentes dan el 8 o el 9 de febrero)."
+            event["note"] += " Aquí se reúne con la columna de Las Heras, cuya artillería y parque (fray Luis Beltrán) salieron un día después por el mismo camino (las fuentes dan el 8 o el 9 de febrero)."
         data.append(event)
     return data + gen_andes_column_events()
 

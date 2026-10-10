@@ -235,7 +235,7 @@
     "lat": -32.786,
     "lon": -70.684,
     "name": "Curimón (reunión con la columna de Las Heras)",
-    "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto. Aquí se reúne con la columna de Las Heras, que llevaba la artillería y la logística (las fuentes dan el 8 o el 9 de febrero).",
+    "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto. Aquí se reúne con la columna de Las Heras, cuya artillería y parque (fray Luis Beltrán) salieron un día después por el mismo camino (las fuentes dan el 8 o el 9 de febrero).",
     "retrieved_at": "2026-10-08",
     "source": "UNCuyo, Historia virtual de Mendoza, «Cruce de los Andes»; Diario de Cuyo, «Crónica de una epopeya» (2017); Wikipedia, «Rutas sanmartinianas» y «Paso de Los Patos»; coordenadas: MapTiler Geocoding (OpenStreetMap) y lista oficial de pasos (argentina.gob.ar); altitud: MapTiler Terrain-RGB v2"
   },
@@ -270,7 +270,7 @@
   },
   {
     "column_id": "las-heras",
-    "column_name": "Columna de Las Heras (artillería y logística)",
+    "column_name": "Columna de Las Heras (camino de Uspallata)",
     "date": "1817-01-18",
     "date_precision": "day",
     "day_of_campaign": -1,
@@ -283,7 +283,7 @@
       {
         "men": null,
         "note": "770 (Academia de Historia Militar de Chile), 800 (UNCuyo) o 1.700 (Wikipedia) hombres según la fuente; el Batallón 11 de Las Heras tenía 683 (Municipalidad de Chacabuco)",
-        "side": "Columna de Las Heras (artillería y logística)"
+        "side": "Columna de Las Heras (camino de Uspallata)"
       }
     ],
     "id": "andes-las-heras-01",
@@ -296,7 +296,7 @@
   },
   {
     "column_id": "las-heras",
-    "column_name": "Columna de Las Heras (artillería y logística)",
+    "column_name": "Columna de Las Heras (camino de Uspallata)",
     "date": "1817-01-22",
     "date_precision": "approximate",
     "day_of_campaign": 3,
@@ -305,7 +305,7 @@
       {
         "men": null,
         "note": "770 (Academia de Historia Militar de Chile), 800 (UNCuyo) o 1.700 (Wikipedia) hombres según la fuente; el Batallón 11 de Las Heras tenía 683 (Municipalidad de Chacabuco)",
-        "side": "Columna de Las Heras (artillería y logística)"
+        "side": "Columna de Las Heras (camino de Uspallata)"
       }
     ],
     "id": "andes-las-heras-02",
@@ -318,7 +318,7 @@
   },
   {
     "column_id": "las-heras",
-    "column_name": "Columna de Las Heras (artillería y logística)",
+    "column_name": "Columna de Las Heras (camino de Uspallata)",
     "date": "1817-01-26",
     "date_precision": "approximate",
     "day_of_campaign": 7,
@@ -327,7 +327,7 @@
       {
         "men": null,
         "note": "770 (Academia de Historia Militar de Chile), 800 (UNCuyo) o 1.700 (Wikipedia) hombres según la fuente; el Batallón 11 de Las Heras tenía 683 (Municipalidad de Chacabuco)",
-        "side": "Columna de Las Heras (artillería y logística)"
+        "side": "Columna de Las Heras (camino de Uspallata)"
       }
     ],
     "id": "andes-las-heras-03",
@@ -340,7 +340,7 @@
   },
   {
     "column_id": "las-heras",
-    "column_name": "Columna de Las Heras (artillería y logística)",
+    "column_name": "Columna de Las Heras (camino de Uspallata)",
     "date": "1817-01-30",
     "date_precision": "approximate",
     "day_of_campaign": 11,
@@ -349,7 +349,7 @@
       {
         "men": null,
         "note": "770 (Academia de Historia Militar de Chile), 800 (UNCuyo) o 1.700 (Wikipedia) hombres según la fuente; el Batallón 11 de Las Heras tenía 683 (Municipalidad de Chacabuco)",
-        "side": "Columna de Las Heras (artillería y logística)"
+        "side": "Columna de Las Heras (camino de Uspallata)"
       }
     ],
     "id": "andes-las-heras-04",
@@ -362,7 +362,7 @@
   },
   {
     "column_id": "las-heras",
-    "column_name": "Columna de Las Heras (artillería y logística)",
+    "column_name": "Columna de Las Heras (camino de Uspallata)",
     "date": "1817-02-01",
     "date_precision": "approximate",
     "day_of_campaign": 13,
@@ -371,7 +371,7 @@
       {
         "men": null,
         "note": "770 (Academia de Historia Militar de Chile), 800 (UNCuyo) o 1.700 (Wikipedia) hombres según la fuente; el Batallón 11 de Las Heras tenía 683 (Municipalidad de Chacabuco)",
-        "side": "Columna de Las Heras (artillería y logística)"
+        "side": "Columna de Las Heras (camino de Uspallata)"
       }
     ],
     "id": "andes-las-heras-05",
@@ -384,7 +384,7 @@
   },
   {
     "column_id": "las-heras",
-    "column_name": "Columna de Las Heras (artillería y logística)",
+    "column_name": "Columna de Las Heras (camino de Uspallata)",
     "date": "1817-02-02",
     "date_precision": "approximate",
     "day_of_campaign": 14,
@@ -393,7 +393,7 @@
       {
         "men": null,
         "note": "770 (Academia de Historia Militar de Chile), 800 (UNCuyo) o 1.700 (Wikipedia) hombres según la fuente; el Batallón 11 de Las Heras tenía 683 (Municipalidad de Chacabuco)",
-        "side": "Columna de Las Heras (artillería y logística)"
+        "side": "Columna de Las Heras (camino de Uspallata)"
       }
     ],
     "id": "andes-las-heras-06",
@@ -406,7 +406,7 @@
   },
   {
     "column_id": "las-heras",
-    "column_name": "Columna de Las Heras (artillería y logística)",
+    "column_name": "Columna de Las Heras (camino de Uspallata)",
     "date": "1817-02-02",
     "date_precision": "approximate",
     "day_of_campaign": 14,
@@ -415,7 +415,7 @@
       {
         "men": null,
         "note": "770 (Academia de Historia Militar de Chile), 800 (UNCuyo) o 1.700 (Wikipedia) hombres según la fuente; el Batallón 11 de Las Heras tenía 683 (Municipalidad de Chacabuco)",
-        "side": "Columna de Las Heras (artillería y logística)"
+        "side": "Columna de Las Heras (camino de Uspallata)"
       }
     ],
     "id": "andes-las-heras-07",
@@ -428,7 +428,7 @@
   },
   {
     "column_id": "las-heras",
-    "column_name": "Columna de Las Heras (artillería y logística)",
+    "column_name": "Columna de Las Heras (camino de Uspallata)",
     "date": "1817-02-04",
     "date_precision": "day",
     "day_of_campaign": 16,
@@ -437,7 +437,7 @@
       {
         "men": null,
         "note": "770 (Academia de Historia Militar de Chile), 800 (UNCuyo) o 1.700 (Wikipedia) hombres según la fuente; el Batallón 11 de Las Heras tenía 683 (Municipalidad de Chacabuco)",
-        "side": "Columna de Las Heras (artillería y logística)"
+        "side": "Columna de Las Heras (camino de Uspallata)"
       }
     ],
     "id": "andes-las-heras-08",
@@ -450,7 +450,7 @@
   },
   {
     "column_id": "las-heras",
-    "column_name": "Columna de Las Heras (artillería y logística)",
+    "column_name": "Columna de Las Heras (camino de Uspallata)",
     "date": "1817-02-08",
     "date_precision": "day",
     "day_of_campaign": 20,
@@ -459,7 +459,7 @@
       {
         "men": null,
         "note": "770 (Academia de Historia Militar de Chile), 800 (UNCuyo) o 1.700 (Wikipedia) hombres según la fuente; el Batallón 11 de Las Heras tenía 683 (Municipalidad de Chacabuco)",
-        "side": "Columna de Las Heras (artillería y logística)"
+        "side": "Columna de Las Heras (camino de Uspallata)"
       }
     ],
     "id": "andes-las-heras-09",
@@ -472,7 +472,7 @@
   },
   {
     "column_id": "las-heras",
-    "column_name": "Columna de Las Heras (artillería y logística)",
+    "column_name": "Columna de Las Heras (camino de Uspallata)",
     "date": "1817-02-09",
     "date_precision": "day",
     "day_of_campaign": 21,
@@ -481,7 +481,7 @@
       {
         "men": null,
         "note": "770 (Academia de Historia Militar de Chile), 800 (UNCuyo) o 1.700 (Wikipedia) hombres según la fuente; el Batallón 11 de Las Heras tenía 683 (Municipalidad de Chacabuco)",
-        "side": "Columna de Las Heras (artillería y logística)"
+        "side": "Columna de Las Heras (camino de Uspallata)"
       }
     ],
     "id": "andes-las-heras-10",
@@ -494,7 +494,7 @@
   },
   {
     "column_id": "las-heras",
-    "column_name": "Columna de Las Heras (artillería y logística)",
+    "column_name": "Columna de Las Heras (camino de Uspallata)",
     "date": "1817-02-12",
     "date_precision": "day",
     "day_of_campaign": 24,
@@ -503,7 +503,7 @@
       {
         "men": null,
         "note": "770 (Academia de Historia Militar de Chile), 800 (UNCuyo) o 1.700 (Wikipedia) hombres según la fuente; el Batallón 11 de Las Heras tenía 683 (Municipalidad de Chacabuco)",
-        "side": "Columna de Las Heras (artillería y logística)"
+        "side": "Columna de Las Heras (camino de Uspallata)"
       }
     ],
     "id": "andes-las-heras-11",

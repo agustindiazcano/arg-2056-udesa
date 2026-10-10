@@ -1039,28 +1039,37 @@
   position: absolute;
   top: calc(var(--chrome-h) + var(--space-md));
   left: 37rem;
-  right: var(--space-md);
   z-index: 5;
+  width: max-content;
+  max-width: calc(100% - 37rem - var(--space-md));
   pointer-events: none;
 }
 
+/* the indicators are only as wide as what they say */
 #overlay[data-scene='andes'] .dash-tiles--strip .tile-grid {
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: var(--space-sm);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
 }
 
 #overlay[data-scene='andes'] .dash-tiles--strip .tile {
-  padding: var(--space-xs) var(--space-md);
+  display: flex;
+  flex-direction: column;
+  padding: 2px var(--space-sm);
   background: var(--glass-strong);
   backdrop-filter: blur(10px);
 }
 
 #overlay[data-scene='andes'] .dash-tiles--strip .tile-label {
-  font-size: var(--font-xs, 0.75rem);
+  font-size: 0.66rem;
+  line-height: 1.15;
+  white-space: nowrap;
 }
 
 #overlay[data-scene='andes'] .dash-tiles--strip .tile-value {
-  font-size: var(--font-lg, 1.15rem);
+  font-size: 0.95rem;
+  line-height: 1.2;
+  white-space: nowrap;
 }
 
 #overlay[data-scene='andes'] .dash-tiles--strip .tile-note {
@@ -1069,7 +1078,7 @@
 
 /* the panel starts under the strip and goes down to the bottom of the screen; the bottom bar stops at its left edge */
 #overlay[data-scene='andes'] .dash--stage .dash-side {
-  top: calc(var(--chrome-h) + var(--space-md) + 4.6rem);
+  top: calc(var(--chrome-h) + var(--space-md) + 3.4rem);
   bottom: var(--space-md);
 }
 

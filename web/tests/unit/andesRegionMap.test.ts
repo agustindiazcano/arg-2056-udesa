@@ -3,7 +3,7 @@ import { readFileSync } from 'node:fs';
 import { parseAndesEvents } from '../../src/scenes/andes/data';
 import { splitColumns } from '../../src/scenes/andes/columns';
 import { buildRoute } from '../../src/scenes/andes/timeline';
-import { REGION_BOUNDS, minimapData } from '../../src/scenes/andes/regionMap';
+import { REGION_BOUNDS, battleFeature, minimapData } from '../../src/scenes/andes/regionMap';
 
 const events = parseAndesEvents(JSON.parse(readFileSync(new URL('../../../data/mock/andes_events.json', import.meta.url), 'utf8')) as unknown);
 const { main, columns } = splitColumns(events);
@@ -39,5 +39,25 @@ describe('minimapData', () => {
     expect(lon).toBeLessThan(route.points[0]!.lon);
     expect(lon).toBeGreaterThan(route.points[route.points.length - 1]!.lon);
     expect(typeof lat).toBe('number');
+  });
+});
+
+describe('battleFeature', () => {
+  it('is the place of the battle of Chacabuco: the last place of the route, named as a battle', () => {
+    const f = battleFeature(route);
+    expect(f.features).toHaveLength(1);
+    const last = route.points[route.points.length - 1]!;
+    expect(last.name.toLowerCase()).toContain('batalla');
+    expect((f.features[0]!.geometry as GeoJSON.Point).coordinates).toEqual([last.lon, last.lat]);
+    expect(f.features[0]!.properties).toMatchObject({ name: 'Batalla de Chacabuco' });
+  });
+
+  it('is empty for a route without a battle', () => {
+    const peaceful = buildRoute(main.slice(0, 3));
+    expect(battleFeature(peaceful).features).toEqual([]);
+  });
+
+  it('goes with the data of the minimap', () => {
+    expect(minimapData(route, 0, columns, 0).battle.features).toHaveLength(1);
   });
 });

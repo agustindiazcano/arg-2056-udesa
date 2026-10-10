@@ -49,6 +49,10 @@ Estado de cada fuente:
 | Altura de los pasos | Espinacito: 5.000 m (H6), 4.800 m (H17) o 4.476 m (H12). Llaretas: 3.356 a 3.776 m. Planchón: 2.505 a 3.800 m (histórica o actual). Uspallata o Cumbre: 3.553 a 3.834 m. Portillo: 4.035 m. Come-Caballos: 4.100 m | Se lee la altura del modelo de elevación en la posición del paso; no se elige entre las alturas de las fuentes |
 | Papel de San Martín en la columna | Retaguardia (H1, H2) o jefe de toda la expedición (H6) | Solo se nombra en el texto |
 
+### Nombre de la columna de Las Heras
+
+La fuente de Los Andes («La marcha del Ejército de los Andes», leída) dice que la columna de Las Heras rompió la marcha el 18 de enero y que «el 19 salió del Campo de Instrucción la artillería con Fray Luis Beltrán»: eran dos escalones por el mismo camino. Una revista de la Escuela Superior de Guerra (Revista ESG n.º 595, 2017, **por informe**: el PDF no se pudo leer) describe la columna de Las Heras como el Batallón 11, 30 granaderos a caballo y 2 piezas, con la artillería y el parque de Beltrán dos días atrás. UNCuyo (H6) dice que Las Heras llevaba «todo el parque y la artillería». El mapa la llama **Columna de Uspallata** (Las Heras · artillería y parque): «parque» es la palabra de la época para las municiones y los pertrechos, y «logística» es un término moderno que las fuentes no usan. A verificar: cuántas piezas iban con Las Heras y cuántas con Beltrán, y el día exacto en que se juntaron.
+
 ### Datos descartados
 
 - Coordenadas de Come-Caballos (29°23'S, 67°30'O) y de San Felipe (32°49'S, 70°35'O) de Wikimapia: la primera cae lejos de la cordillera y la segunda es la de la ciudad de Los Andes. No se usan.
@@ -62,7 +66,7 @@ Estado de cada fuente:
 - **Columnas de Lemos y de Zelada**: las fuentes dan salida y, para Zelada, llegada; los puntos intermedios son una marcha ilustrativa. Para Lemos no hay fecha de llegada y se supone el ritmo de la columna de Freire.
 - **Trazado**: línea recta entre lugares, no el camino real. Las listas de puntos intermedios de las fuentes (H10, H12) servirán para trazarlo por los valles cuando tengan coordenadas.
 - **Artillería en Chacabuco**: fray Luis Beltrán dirigía el parque y la maestranza; en el combate las piezas las mandaban oficiales como Domingo Frutos (batería de 7) y Fuentes (sección de 2) (H13). Hace falta para la escena de la batalla.
-- **Batallones en el mapa**: los de la fuerza principal (1 de Cazadores, 7 y 8, y los Granaderos a Caballo) y de la logística (Batallón 11, 683 hombres) salen del orden de batalla de Chacabuco (H13, por informe), no de una lista del cruce; las columnas chicas eran destacamentos y las fuentes solo dan el tipo de hombres (infantes, milicianos, blandengues, granaderos a caballo). Los comandantes y las cifras de infantería que no figuran en las fuentes no se muestran.
+- **Batallones en el mapa**: los de la fuerza principal (1 de Cazadores, 7 y 8, y los Granaderos a Caballo) y de la columna de Uspallata (Batallón 11, 683 hombres) salen del orden de batalla de Chacabuco (H13, por informe), no de una lista del cruce; las columnas chicas eran destacamentos y las fuentes solo dan el tipo de hombres (infantes, milicianos, blandengues, granaderos a caballo). Los comandantes y las cifras de infantería que no figuran en las fuentes no se muestran.
 - **Figuras en miniatura**: esquemáticas; cada una representa 50 hombres y la mezcla de infantería, jinetes y mulas es ilustrativa.
 
 ## 2. Mapa y terreno

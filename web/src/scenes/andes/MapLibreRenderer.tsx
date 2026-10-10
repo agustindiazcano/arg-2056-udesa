@@ -9,6 +9,7 @@ import { figureCount, startingMen } from './column';
 import type { CameraApi, CameraView } from './cameraKeyframes';
 import { columnColor, positionOfColumn } from './columns';
 import { RegionMinimap } from './RegionMinimap';
+import { BATTLE_COLOR, battleFeature } from './regionMap';
 import { SlotPortal } from '../../dashboard/SlotPortal';
 import type { Column } from './columns';
 import type { CameraMode } from './camera';
@@ -31,6 +32,9 @@ import {
   beamGeometry,
   figureMen,
   forceLabel,
+  joinedLabel,
+  joinedShortLabel,
+  MERGE_KM,
   forceMen,
   forceShortLabel,
   isSmallForce,
@@ -230,16 +234,26 @@ class BallsLayer implements CustomLayerInterface {
 function columnsGeoJson(columns: readonly Column[], day: number, main?: { route: Route; km: number }): { lines: GeoJSON.FeatureCollection; balls: GeoJSON.FeatureCollection } {
   const lines: GeoJSON.Feature[] = [];
   const balls: GeoJSON.Feature[] = [];
+  // the main force and the column of Uspallata, once they march together, carry one text (at the head of the main force)
+  const headOfMain = main ? coordAtKm(main.route, main.km) : null;
+  const together = new Set<string>();
+  if (main && headOfMain) {
+    for (const c of columns) {
+      const at = positionOfColumn(c, day);
+      if (c.id === 'las-heras' && at && distanceKm(headOfMain.lon, headOfMain.lat, at.lon, at.lat) < MERGE_KM) together.add(c.id);
+    }
+  }
   for (const c of columns) {
     const properties = { id: c.id, label: forceLabel(c.id), short: forceShortLabel(c.id), color: columnColor(c.id) };
     lines.push({ type: 'Feature', properties, geometry: { type: 'LineString', coordinates: c.route.points.map((p) => [p.lon, p.lat]) } });
     const at = positionOfColumn(c, day);
-    if (at) balls.push({ type: 'Feature', properties, geometry: { type: 'Point', coordinates: [at.lon, at.lat] } });
+    if (at && !together.has(c.id)) balls.push({ type: 'Feature', properties, geometry: { type: 'Point', coordinates: [at.lon, at.lat] } });
   }
   // the main force carries its text too, at the head of its group
   if (main) {
     const head = coordAtKm(main.route, main.km);
-    balls.push({ type: 'Feature', properties: { id: MAIN_FORCE_ID, label: forceLabel(MAIN_FORCE_ID), short: forceShortLabel(MAIN_FORCE_ID), color: MAIN_COLOR }, geometry: { type: 'Point', coordinates: [head.lon, head.lat] } });
+    const ids = [MAIN_FORCE_ID, ...together];
+    balls.push({ type: 'Feature', properties: { id: MAIN_FORCE_ID, label: joinedLabel(ids), short: joinedShortLabel(ids), color: MAIN_COLOR }, geometry: { type: 'Point', coordinates: [head.lon, head.lat] } });
   }
   return { lines: { type: 'FeatureCollection', features: lines }, balls: { type: 'FeatureCollection', features: balls } };
 }
@@ -597,7 +611,13 @@ export function MapLibreRenderer({ route, columns, day, selectedId, camera, grap
       ballsRef.current = balls;
       map.addLayer(balls, 'columns-label');
       // the names of the places are the most important text of the map: they go over everything else, the names of the groups and the 3D models included
+      // the battle of Chacabuco: a red dot with a halo, over the dot of its place
+      map.addSource('battle', { type: 'geojson', data: battleFeature(route) });
+      map.addLayer({ id: 'battle-halo', type: 'circle', source: 'battle', paint: { 'circle-radius': 17, 'circle-color': BATTLE_COLOR, 'circle-opacity': 0.3 } });
+      map.addLayer({ id: 'battle-dot', type: 'circle', source: 'battle', paint: { 'circle-radius': 8, 'circle-color': BATTLE_COLOR, 'circle-stroke-color': '#ffffff', 'circle-stroke-width': 2.5 } });
       map.moveLayer('places-dot');
+      map.moveLayer('battle-halo');
+      map.moveLayer('battle-dot');
       map.moveLayer('places-label');
       readyRef.current = true;
       syncArmyRef.current();

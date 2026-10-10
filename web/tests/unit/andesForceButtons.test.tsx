@@ -10,12 +10,13 @@ afterEach(() => cleanup());
 describe('forceChip and forceFullName', () => {
   it('has a short name for the button and a whole name for the hover', () => {
     expect(forceChip('main')).toBe('Principal');
-    expect(forceChip('las-heras')).toBe('Logística');
+    expect(forceChip('las-heras')).toBe('Las Heras');
     expect(forceChip('cabot')).toBe('Cabot');
     expect(forceFullName('main')).toContain('Fuerza principal');
     expect(forceFullName('main')).toContain('Los Patos');
-    expect(forceFullName('las-heras')).toContain('Artillería y logística');
-    expect(forceFullName('lemos')).toContain('Flanco sur');
+    expect(forceFullName('las-heras')).toContain('Columna de Uspallata');
+    expect(forceFullName('las-heras')).toContain('artillería y parque');
+    expect(forceFullName('lemos')).toContain('Columna secundaria del sur');
     for (const f of FORCES) expect(forceFullName(f.id).length).toBeGreaterThan(forceChip(f.id).length);
   });
 });
@@ -36,7 +37,7 @@ describe('ForceButtons', () => {
     const main = within(group).getByRole('button', { name: /Fuerza principal/ });
     expect(main.textContent).toBe('Principal');
     expect(main.getAttribute('data-full')).toContain('Fuerza principal');
-    expect(within(group).getByRole('button', { name: /Artillería y logística/ }).textContent).toBe('Logística');
+    expect(within(group).getByRole('button', { name: /Columna de Uspallata/ }).textContent).toBe('Las Heras');
     expect(within(group).getByRole('button', { name: /Cabot/ }).textContent).toBe('Cabot');
   });
 
@@ -50,7 +51,7 @@ describe('ForceButtons', () => {
   it('calls onGo with the id of the force that was clicked', () => {
     const onGo = vi.fn();
     render(<ForceButtons active={null} onGo={onGo} />);
-    fireEvent.click(screen.getByRole('button', { name: /Artillería y logística/ }));
+    fireEvent.click(screen.getByRole('button', { name: /Columna de Uspallata/ }));
     expect(onGo).toHaveBeenCalledWith('las-heras');
     fireEvent.click(screen.getByRole('button', { name: /Zelada/ }));
     expect(onGo).toHaveBeenLastCalledWith('zelada');

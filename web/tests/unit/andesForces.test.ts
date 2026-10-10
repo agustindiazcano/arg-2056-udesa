@@ -9,6 +9,9 @@ import {
   FORCES,
   FORCE_FACTS,
   forceLabel,
+  joinedLabel,
+  joinedShortLabel,
+  MERGE_KM,
   forceShortLabel,
   figureMen,
   SPOTLIGHT_END_MS,
@@ -44,11 +47,11 @@ const ev = (men: number | null, name = 'x', day = 0, range?: { min: number; max:
 });
 
 describe('FORCES', () => {
-  it('names the main force, the artillery and logistics, and the four others as a flank in distraction', () => {
+  it('names the main force, the column of Uspallata, and the four others as secondary columns of the north and of the south', () => {
     expect(FORCES.map((f) => f.id)).toEqual(['main', 'las-heras', 'cabot', 'zelada', 'freire', 'lemos']);
     expect(FORCES[0]!.title).toBe('Fuerza principal');
-    expect(FORCES[1]!.title).toBe('Artillería y logística');
-    expect(FORCES.slice(2).map((f) => f.title)).toEqual(['Flanco norte · distracción', 'Flanco norte · distracción', 'Flanco sur · distracción', 'Flanco sur · distracción']);
+    expect(FORCES[1]!.title).toBe('Columna de Uspallata');
+    expect(FORCES.slice(2).map((f) => f.title)).toEqual(['Columna secundaria del norte', 'Columna secundaria del norte', 'Columna secundaria del sur', 'Columna secundaria del sur']);
   });
 
   it('has a force for every column of the data', () => {
@@ -281,7 +284,8 @@ describe('forceLabel', () => {
 
   it('says the main force and the artillery and logistics by their role', () => {
     expect(forceLabel('main')).toContain('Fuerza principal');
-    expect(forceLabel('las-heras')).toContain('Artillería y logística');
+    expect(forceLabel('las-heras')).toContain('Columna de Uspallata');
+    expect(forceLabel('las-heras')).toContain('artillería y parque');
   });
 
   it('gives the infantry of the ones that have it and says nothing of it for the ones that do not', () => {
@@ -341,7 +345,7 @@ describe('ballPositions', () => {
 describe('forceShortLabel', () => {
   it('is only the role of the group, without commanders or units, so it is short from far away', () => {
     expect(forceShortLabel('main')).toBe('Fuerza principal');
-    expect(forceShortLabel('las-heras')).toBe('Artillería y logística');
+    expect(forceShortLabel('las-heras')).toBe('Columna de Uspallata');
     expect(forceShortLabel('nobody')).toBe('');
     for (const f of FORCES) expect(forceShortLabel(f.id)).not.toContain('\n');
   });
@@ -362,5 +366,36 @@ describe('figureMen', () => {
 
   it('is null when there is nothing', () => {
     expect(figureMen('cabot', null)).toBeNull();
+  });
+});
+
+describe('joinedLabel and joinedShortLabel', () => {
+  it('is one text for forces that march together: the roles joined, and every commander and unit once', () => {
+    const lines = joinedLabel(['main', 'las-heras']).split('\n');
+    expect(lines).toHaveLength(4);
+    expect(lines[0]).toBe('Fuerza principal + Columna de Uspallata');
+    expect(lines[1]).toContain("San Martín");
+    expect(lines[1]).toContain('Las Heras');
+    expect(lines[1]).toContain('Beltrán');
+    expect(lines[2]).toContain('3.987');
+    expect(lines[2]).toContain('770 a 1.700');
+    expect(lines[2]).toContain('hombres');
+    expect(lines[3]).toContain('Batallones 1');
+    expect(lines[3]).toContain('Batallón 11');
+  });
+
+  it('has a short version with only the roles', () => {
+    expect(joinedShortLabel(['main', 'las-heras'])).toBe('Fuerza principal + Columna de Uspallata');
+  });
+
+  it('is the text of the force itself when it is alone, and empty for none', () => {
+    expect(joinedLabel(['cabot'])).toBe(forceLabel('cabot'));
+    expect(joinedShortLabel(['cabot'])).toBe(forceShortLabel('cabot'));
+    expect(joinedLabel([])).toBe('');
+  });
+
+  it('merges the texts of forces that are within a few kilometers of each other', () => {
+    expect(MERGE_KM).toBeGreaterThan(2);
+    expect(MERGE_KM).toBeLessThan(40);
   });
 });

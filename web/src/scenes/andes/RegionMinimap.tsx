@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { Map as MapLibreMap } from 'maplibre-gl';
 import type { GeoJSONSource } from 'maplibre-gl';
 import type { Column } from './columns';
-import { REGION_BOUNDS, minimapData } from './regionMap';
+import { BATTLE_COLOR, REGION_BOUNDS, minimapData } from './regionMap';
 import type { Route } from './timeline';
 
 const EMPTY: GeoJSON.FeatureCollection = { type: 'FeatureCollection', features: [] };
@@ -42,6 +42,7 @@ export function RegionMinimap({ main, route, km, columns, day, styleUrl, onGo }:
     const data = minimapData(d.route, d.km, d.columns, d.day);
     (map.getSource('mm-routes') as GeoJSONSource | undefined)?.setData(data.routes);
     (map.getSource('mm-heads') as GeoJSONSource | undefined)?.setData(data.heads);
+    (map.getSource('mm-battle') as GeoJSONSource | undefined)?.setData(data.battle);
   };
   const drawRef = useRef(draw);
   drawRef.current = draw;
@@ -62,8 +63,10 @@ export function RegionMinimap({ main, route, km, columns, day, styleUrl, onGo }:
       map.addSource('mm-routes', { type: 'geojson', data: EMPTY });
       map.addSource('mm-heads', { type: 'geojson', data: EMPTY });
       map.addSource('mm-view', { type: 'geojson', data: EMPTY });
+      map.addSource('mm-battle', { type: 'geojson', data: EMPTY });
       map.addLayer({ id: 'mm-routes', type: 'line', source: 'mm-routes', paint: { 'line-color': ['get', 'color'], 'line-width': 2 } });
       map.addLayer({ id: 'mm-heads', type: 'circle', source: 'mm-heads', paint: { 'circle-radius': 4, 'circle-color': '#2f7bff', 'circle-stroke-color': '#ffffff', 'circle-stroke-width': 1.2 } });
+      map.addLayer({ id: 'mm-battle', type: 'circle', source: 'mm-battle', paint: { 'circle-radius': 5, 'circle-color': BATTLE_COLOR, 'circle-stroke-color': '#ffffff', 'circle-stroke-width': 1.5 } });
       map.addLayer({ id: 'mm-view', type: 'circle', source: 'mm-view', paint: { 'circle-radius': 9, 'circle-color': '#ffffff', 'circle-opacity': 0.12, 'circle-stroke-color': '#ffffff', 'circle-stroke-width': 2 } });
       readyRef.current = true;
       drawRef.current();

@@ -14,15 +14,16 @@ export interface ForceInfo {
 /**
  * The six forces in the order the spotlight lights them. The roles follow the sources (UNCuyo, Historia virtual): the main column and the column
  * of Las Heras, with the artillery and the supplies, were the two real attacks; the four others, two to the north (Guana, Come-Caballos) and
- * two to the south (Portillo, Planchón), crossed to make the royalists divide their forces.
+ * two to the south (Portillo, Planchón), crossed to make the royalists divide their forces. They are called secondary columns (the word of the sources:
+ * «columnas secundarias», «destacamentos secundarios») and not flanks: they did not guard the sides of the army, they crossed hundreds of kilometers away from it.
  */
 export const FORCES: readonly ForceInfo[] = [
   { id: 'main', title: 'Fuerza principal', detail: 'Columna de Los Patos' },
-  { id: 'las-heras', title: 'Artillería y logística', detail: 'Columna de Las Heras · Uspallata' },
-  { id: 'cabot', title: 'Flanco norte · distracción', detail: 'Cabot · paso de Guana' },
-  { id: 'zelada', title: 'Flanco norte · distracción', detail: 'Zelada · paso de Come-Caballos' },
-  { id: 'freire', title: 'Flanco sur · distracción', detail: 'Freire · paso del Planchón' },
-  { id: 'lemos', title: 'Flanco sur · distracción', detail: 'Lemos · paso del Portillo' }
+  { id: 'las-heras', title: 'Columna de Uspallata', detail: 'Las Heras · artillería y parque' },
+  { id: 'cabot', title: 'Columna secundaria del norte', detail: 'Cabot · paso de Guana' },
+  { id: 'zelada', title: 'Columna secundaria del norte', detail: 'Zelada · paso de Come-Caballos' },
+  { id: 'freire', title: 'Columna secundaria del sur', detail: 'Freire · paso del Planchón' },
+  { id: 'lemos', title: 'Columna secundaria del sur', detail: 'Lemos · paso del Portillo' }
 ];
 
 export const MAIN_FORCE_ID = 'main';
@@ -47,6 +48,8 @@ export interface ForceFacts {
 /**
  * The battalions of the main force and of Las Heras follow the order of battle of Chacabuco (the municipality of Chacabuco, by report: battalions 1, 7, 8 and 11 and
  * the squadrons of Granaderos), not a list of the crossing; the small columns were detachments and the sources give the kind of men, not battalions.
+ * The column of Uspallata is named by its road and its commander: it was the infantry column of Las Heras (Battalion 11, 30 mounted grenadiers and two pieces); the artillery
+ * and the parque (munitions and supplies, the word of the time) of fray Luis Beltrán left a day later and followed the same road. «Logística» is a modern word the sources do not use.
  * Commanders and numbers of each force, from the sources of `docs/references.md` (UNCuyo, Wikipedia «Rutas sanmartinianas», the municipality of Chacabuco,
  * the Estado general of 1816-12-31). The sources give the animals and the artillery for the whole army, not by column, and the split between infantry and
  * cavalry only for some of the small ones: what they do not give is left out, never written as zero.
@@ -69,10 +72,10 @@ export const FORCE_FACTS: Readonly<Record<string, ForceFacts>> = {
     goal: 'Cruzar por Los Patos y atacar en el valle de Putaendo'
   },
   'las-heras': {
-    short: 'Artillería y logística',
+    short: 'Columna de Uspallata',
     men: '770 a 1.700',
     leaders: "Las Heras · Martínez · Beltrán",
-    battalions: "Batallón 11 · artillería y parque",
+    battalions: "Batallón 11 · 30 granaderos a caballo · artillería y parque",
     infantry: '683 en el Batallón 11',
     commanders: ['Juan Gregorio de Las Heras · jefe', 'Enrique Martínez · segundo', 'fray Luis Beltrán · parque y maestranza'],
     units: [
@@ -80,10 +83,10 @@ export const FORCE_FACTS: Readonly<Record<string, ForceFacts>> = {
       ['Batallón 11', '683'],
       ['Carga', 'el parque y la artillería de la expedición']
     ],
-    goal: 'Cruzar por Uspallata con la artillería y la logística, y reunirse con la fuerza principal'
+    goal: 'Cruzar por Uspallata (la artillería y el parque de fray Luis Beltrán salieron un día después por el mismo camino) y reunirse con la fuerza principal'
   },
   cabot: {
-    short: 'Flanco norte · Cabot',
+    short: 'Columna del norte · Cabot',
     men: '140',
     leaders: "Cabot",
     battalions: "Destacamento con 20 granaderos a caballo",
@@ -96,7 +99,7 @@ export const FORCE_FACTS: Readonly<Record<string, ForceFacts>> = {
     goal: 'Cruzar por Guana, tomar La Serena y Coquimbo y distraer al enemigo por el norte'
   },
   zelada: {
-    short: 'Flanco norte · Zelada',
+    short: 'Columna del norte · Zelada',
     men: '130',
     leaders: "Zelada · Dávila",
     battalions: "Destacamento: 50 infantes y 80 milicianos",
@@ -110,7 +113,7 @@ export const FORCE_FACTS: Readonly<Record<string, ForceFacts>> = {
     goal: 'Cruzar por Come-Caballos, ocupar Copiapó y distraer al enemigo por el norte'
   },
   freire: {
-    short: 'Flanco sur · Freire',
+    short: 'Columna del sur · Freire',
     men: '100 a 110',
     leaders: "Freire",
     battalions: "Destacamento: 75 a 80 infantes y 25 a 30 granaderos a caballo",
@@ -124,7 +127,7 @@ export const FORCE_FACTS: Readonly<Record<string, ForceFacts>> = {
     goal: 'Cruzar por el Planchón, tomar Talca y Curicó y distraer al enemigo por el sur'
   },
   lemos: {
-    short: 'Flanco sur · Lemos',
+    short: 'Columna del sur · Lemos',
     men: '55',
     leaders: "Lemos",
     battalions: "Destacamento: 25 blandengues y 30 milicianos",
@@ -150,7 +153,7 @@ export function forceLabel(id: string): string {
   return `${facts.short}\n${facts.leaders}\n${numbers}\n${facts.battalions}`;
 }
 
-const CHIPS: Readonly<Record<string, string>> = { main: 'Principal', 'las-heras': 'Logística', cabot: 'Cabot', zelada: 'Zelada', freire: 'Freire', lemos: 'Lemos' };
+const CHIPS: Readonly<Record<string, string>> = { main: 'Principal', 'las-heras': 'Las Heras', cabot: 'Cabot', zelada: 'Zelada', freire: 'Freire', lemos: 'Lemos' };
 
 /** The short name on the round button of a force. */
 export function forceChip(id: string): string {
@@ -161,6 +164,31 @@ export function forceChip(id: string): string {
 export function forceFullName(id: string): string {
   const f = FORCES.find((x) => x.id === id);
   return f ? `${f.title} · ${f.detail}` : '';
+}
+
+/** Two forces closer than this (km) march as one on the map: their texts are one. */
+export const MERGE_KM = 12;
+
+/** The short text of forces that march together: their roles joined. */
+export function joinedShortLabel(ids: readonly string[]): string {
+  return ids.map(forceShortLabel).filter(Boolean).join(' + ');
+}
+
+/**
+ * The text of forces that march together (the main force and the column of Uspallata from Curimón on), in the same four lines as one force: the roles joined,
+ * the commanders of all, the men of each added up in words, and all the units.
+ */
+export function joinedLabel(ids: readonly string[]): string {
+  const facts = ids.map((id) => FORCE_FACTS[id]).filter((f): f is ForceFacts => Boolean(f));
+  if (facts.length === 0) return '';
+  if (facts.length === 1) return forceLabel(ids[0]!);
+  const unique = (parts: string[]) => [...new Set(parts)].join(' · ');
+  return [
+    facts.map((f) => f.short).join(' + '),
+    unique(facts.flatMap((f) => f.leaders.split(' · '))),
+    `${facts.map((f) => f.men).join(' + ')} hombres`,
+    unique(facts.flatMap((f) => f.battalions.split(' · ')))
+  ].join('\n');
 }
 
 /** Just the role of the group: what shows on the map from far away, where the commanders and the units would pile up. */
