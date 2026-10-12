@@ -293,7 +293,7 @@ export default function Scene() {
 
       {tunerOpen && <CameraTuner api={cameraApi} view={camView} day={day} onGo={() => setCamera('free')} />}
 
-      {selected?.outcome && <BattleReport event={selected} />}
+      {selected?.outcome && <BattleReport key={selected.id} event={selected} />}
 
       <footer className="andes-foot">
         <button type="button" className="andes-foot-btn" aria-label="Créditos, fuentes y aclaraciones" aria-describedby="andes-foot-tip">

@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { cleanup, render, screen, within } from '@testing-library/react';
+import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
@@ -51,6 +51,23 @@ describe('BattleReport', () => {
       expect(event.outcome?.summary?.length ?? 0).toBeGreaterThan(80);
       expect(event.outcome?.place).toBeTruthy();
     }
+  });
+
+  it('has a toggle that folds the report to its heading and opens it again', () => {
+    render(<BattleReport event={named(/Batalla/)} />);
+    const report = screen.getByRole('region', { name: /Resultado: Batalla de Chacabuco/ });
+    const toggle = within(report).getByRole('button', { name: /Ocultar el detalle/ });
+    expect(toggle.getAttribute('aria-expanded')).toBe('true');
+    expect(within(report).getAllByRole('rowheader', { name: 'Muertos' })).toHaveLength(2);
+    fireEvent.click(toggle);
+    expect(toggle.getAttribute('aria-expanded')).toBe('false');
+    expect(toggle.getAttribute('aria-label')).toMatch(/Mostrar el detalle/);
+    expect(within(report).queryByRole('rowheader', { name: 'Muertos' })).toBeNull();
+    expect(report.querySelector('.andes-report-summary')).toBeNull();
+    expect(within(report).getByText('Victoria patriota')).toBeTruthy();
+    expect(within(report).getByRole('heading', { level: 2 })).toBeTruthy();
+    fireEvent.click(toggle);
+    expect(within(report).getAllByRole('rowheader', { name: 'Muertos' }).length).toBe(2);
   });
 
   it('says «sin dato» for what the sources do not give, never 0', () => {

@@ -426,6 +426,25 @@
   line-height: 1.35;
 }
 
+.andes-report-toggle {
+  position: absolute;
+  top: 4px;
+  right: 6px;
+  width: 1.6rem;
+  height: 1.6rem;
+  padding: 0;
+  color: var(--ink-2);
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm, 6px);
+  cursor: pointer;
+}
+
+.andes-report-toggle:hover,
+.andes-report-toggle:focus-visible {
+  color: var(--ink);
+}
+
 .andes-report-head {
   display: flex;
   flex-direction: column;

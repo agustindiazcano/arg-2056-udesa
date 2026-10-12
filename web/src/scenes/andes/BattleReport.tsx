@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { formatDate } from '../../charts/format';
 import { rangeText } from './data';
 import type { AndesEvent, AndesSideReport } from './data';
@@ -40,10 +40,20 @@ function Flag({ royalist }: { royalist: boolean }) {
  */
 export function BattleReport({ event }: { event: AndesEvent }) {
   const outcome = event.outcome;
+  const [open, setOpen] = useState(true);
   if (!outcome) return null;
   const winner = /patriota/i.test(outcome.result) ? false : /realista/i.test(outcome.result) ? true : null;
   return (
     <section className="andes-report andes-glass" aria-label={`Resultado: ${event.name}`}>
+      <button
+        type="button"
+        className="andes-report-toggle"
+        aria-expanded={open}
+        aria-label={open ? 'Ocultar el detalle del combate' : 'Mostrar el detalle del combate'}
+        onClick={() => setOpen(!open)}
+      >
+        <span aria-hidden="true">{open ? '▾' : '▴'}</span>
+      </button>
       <header className="andes-report-head">
         <time className="andes-report-date" dateTime={event.date}>
           {formatDate(event.date)}
@@ -54,9 +64,9 @@ export function BattleReport({ event }: { event: AndesEvent }) {
           {winner !== null && <Flag royalist={winner} />}
           <strong>{outcome.result}</strong>
         </p>
-        {outcome.summary && <p className="andes-report-summary">{outcome.summary}</p>}
+        {open && outcome.summary && <p className="andes-report-summary">{outcome.summary}</p>}
       </header>
-      <div className="andes-report-sides">
+      {open && <div className="andes-report-sides">
         {outcome.sides.map((side, i) => (
           <div key={side.side} className="andes-report-side">
             <h3>
@@ -76,7 +86,7 @@ export function BattleReport({ event }: { event: AndesEvent }) {
             {side.note && <p className="andes-report-note">{side.note}</p>}
           </div>
         ))}
-      </div>
+      </div>}
     </section>
   );
 }
