@@ -12,6 +12,7 @@ import { columnColor, positionOfColumn } from './columns';
 import { BattleCard } from './BattleCard';
 import { eventOfRedBall } from './battleHover';
 import { ForceBubbles } from './ForceBubbles';
+import { DEM_URL, EXAGGERATION, MAPTILER_KEY, STYLE_URL } from './mapStyle';
 import { VictoryBanners } from './VictoryBanners';
 import { EffectsLayer } from './EffectsLayer';
 import { combatSites, victoryBanners } from './effects';
@@ -66,11 +67,6 @@ import './mapLibre.css';
 // the worker is a file of the build (the CSP only lets scripts come from this origin)
 setWorkerUrl(workerUrl);
 
-const MAPTILER_KEY: string = import.meta.env.VITE_MAPTILER_KEY ?? '';
-const STYLE_URL = `https://api.maptiler.com/maps/satellite/style.json?key=${MAPTILER_KEY}`;
-const DEM_URL = `https://api.maptiler.com/tiles/terrain-rgb-v2/tiles.json?key=${MAPTILER_KEY}`;
-/** The relief is drawn as it is (a mountain of 6,900 m looks like one at a glance); a little over 1 helps at the low pitch of the far views. */
-const EXAGGERATION = 1.2;
 /** How tall a figure stands on the screen, in pixels, while the column is a miniature. */
 const FIGURE_PX = 22;
 /** The column spans at most this many units behind the leader (`column.ts` MAX_LENGTH is 6); the window of the local path covers it with margin. */

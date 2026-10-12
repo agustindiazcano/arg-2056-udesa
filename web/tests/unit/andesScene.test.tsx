@@ -209,6 +209,21 @@ describe('Andes scene', () => {
     expect(screen.getByRole('button', { name: /Río de los Patos/ }).getAttribute('aria-pressed')).toBe('true');
   });
 
+  it('offers «Ver batalla» only once the army is at Chacabuco, and opens the 3D recreation with its notice', async () => {
+    vi.stubEnv('VITE_MAPTILER_KEY', '');
+    stubFetch();
+    renderScene();
+    await screen.findByTestId('andes-renderer');
+    expect(screen.queryByRole('button', { name: 'Ver batalla' })).toBeNull();
+    fireEvent.click(screen.getByRole('button', { name: 'Batalla de Chacabuco' }));
+    fireEvent.click(await screen.findByRole('button', { name: 'Ver batalla' }));
+    const scene = await screen.findByRole('dialog', { name: /Batalla de Chacabuco/ });
+    expect(within(scene).getByText('Recreación')).toBeTruthy();
+    fireEvent.click(within(scene).getByRole('button', { name: 'Volver al mapa' }));
+    expect(screen.queryByRole('dialog', { name: /Batalla de Chacabuco/ })).toBeNull();
+    vi.unstubAllEnvs();
+  });
+
   it('is one big stage with floating controls: the title is a heading and there is no carousel', async () => {
     stubFetch();
     renderScene();
