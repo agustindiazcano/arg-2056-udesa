@@ -148,15 +148,15 @@ describe('Andes scene', () => {
     expect(within(screen.getByTestId('andes-day')).getByText('27')).toBeTruthy();
   });
 
-  it('shows the panel of the chosen event with its forces, and an unknown count says so instead of 0', async () => {
+  it('choosing an event selects it on the map and marks its button; there is no detail popup', async () => {
     stubFetch();
     renderScene();
     await screen.findByTestId('andes-renderer');
     openEvents();
     fireEvent.click(screen.getByRole('button', { name: /Manantiales/ }));
-    const panel = screen.getByRole('region', { name: /Evento: Manantiales/ });
-    expect(within(panel).getByText(/Ejército de los Andes: 3\.987/)).toBeTruthy();
     expect(screen.getByTestId('andes-renderer').getAttribute('data-selected')).toBe('andes-05');
+    expect(screen.getByRole('button', { name: /Manantiales/ }).getAttribute('aria-pressed')).toBe('true');
+    expect(screen.queryByRole('region', { name: /Evento:/ })).toBeNull();
   });
 
   it('shows the report of a battle at the bottom only when a battle is chosen', async () => {
@@ -172,17 +172,7 @@ describe('Andes scene', () => {
     expect(within(report).getByText('Victoria patriota')).toBeTruthy();
   });
 
-  it('says the altitude is unknown when the event has none', async () => {
-    stubFetch((events as Array<Record<string, unknown>>).map((e) => (e.id === 'andes-03' ? { ...e, elevation_m: null, note: 'sin dato de altitud' } : e)));
-    renderScene();
-    await screen.findByTestId('andes-renderer');
-    openEvents();
-    fireEvent.click(screen.getByRole('button', { name: /Valle de Calingasta/ }));
-    const panel = screen.getByRole('region', { name: /Evento: Valle de Calingasta/ });
-    expect(within(panel).getByText('sin dato')).toBeTruthy();
-  });
-
-  it('closes the panel with Escape and gives the focus back to the button that opened it', async () => {
+  it('deselects the event with Escape and gives the focus back to the button that opened it', async () => {
     stubFetch();
     renderScene();
     await screen.findByTestId('andes-renderer');
@@ -190,13 +180,13 @@ describe('Andes scene', () => {
     const opener = screen.getByRole('button', { name: /Río de los Patos/ });
     opener.focus();
     fireEvent.click(opener);
-    expect(screen.getByRole('region', { name: /Evento: Río de los Patos/ })).toBeTruthy();
+    expect(opener.getAttribute('aria-pressed')).toBe('true');
     fireEvent.keyDown(document.body, { key: 'Escape' });
-    expect(screen.queryByRole('region', { name: /Evento: Río de los Patos/ })).toBeNull();
+    expect(opener.getAttribute('aria-pressed')).toBe('false');
     expect(document.activeElement).toBe(opener);
   });
 
-  it('does not take the Escape key when no panel is open', async () => {
+  it('does not take the Escape key when no event is selected', async () => {
     stubFetch();
     renderScene();
     await screen.findByTestId('andes-renderer');
@@ -207,7 +197,7 @@ describe('Andes scene', () => {
     expect(seen).toHaveBeenCalled();
   });
 
-  it('without WebGL2 shows the message and keeps the list and the panel working', async () => {
+  it('without WebGL2 shows the message and keeps the list working', async () => {
     stubFetch();
     renderScene(false);
     await screen.findByText(/necesita WebGL2/);
@@ -216,7 +206,7 @@ describe('Andes scene', () => {
     expect(screen.queryByTestId('andes-renderer')).toBeNull();
     expect(screen.getByText(/necesita WebGL2/)).toBeTruthy();
     fireEvent.click(screen.getByRole('button', { name: /Río de los Patos/ }));
-    expect(screen.getByRole('region', { name: /Evento: Río de los Patos/ })).toBeTruthy();
+    expect(screen.getByRole('button', { name: /Río de los Patos/ }).getAttribute('aria-pressed')).toBe('true');
   });
 
   it('is one big stage with floating controls: the title is a heading and there is no carousel', async () => {

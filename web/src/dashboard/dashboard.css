@@ -639,49 +639,6 @@
   font-size: var(--font-sm);
 }
 
-.andes-panel {
-  padding: var(--space-sm);
-  background: var(--glass-strong);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  font-size: var(--font-sm);
-}
-
-.andes-panel-head {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-sm);
-}
-
-.andes-facts {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 2px var(--space-sm);
-  margin: var(--space-xs) 0;
-}
-
-.andes-facts dt {
-  color: var(--muted);
-}
-
-.andes-facts dd {
-  margin: 0;
-}
-
-.andes-sub {
-  margin: var(--space-xs) 0 2px;
-  font-size: var(--font-sm);
-  color: var(--ink-2);
-}
-
-.andes-note,
-.andes-source {
-  margin: var(--space-xs) 0 0;
-  color: var(--ink-2);
-}
-
 /* ---- Stage mode: one big view with floating controls --------------------------------------------------------- */
 
 .dash--stage {
@@ -854,21 +811,6 @@
 
 .andes-canvas .chart3d {
   cursor: grab;
-}
-
-.andes-detail {
-  position: absolute;
-  right: calc(var(--side-w, 0px) + var(--space-md));
-  bottom: calc(var(--bar-h, 0px) + 4rem);
-  z-index: 4;
-  width: min(380px, 45%);
-  max-height: calc(100% - 9rem - var(--chrome-h, 0px) - var(--bar-h, 0px));
-  overflow: hidden;
-}
-
-.andes-detail .andes-panel {
-  background: none;
-  border: 0;
 }
 
 /* ---- the Andes as an immersive stage: the canvas under everything, the interface in glass over it ---------------- */
