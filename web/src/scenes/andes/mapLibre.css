@@ -616,30 +616,41 @@
   }
 }
 
-/* ---- the 3D recreation of the battle, over the map -------------------------------------------------------------------- */
+/* ---- the 3D recreation of the battle: the diorama takes the whole screen ------------------------------------------------ */
 
 .andes-b3d {
-  position: absolute;
-  top: calc(var(--chrome-h, 0px) + var(--space-md));
-  right: calc(var(--side-w, 0px) + var(--space-md));
-  bottom: calc(var(--bar-h, 0px) + var(--space-md));
-  left: var(--space-md);
-  z-index: 7;
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-xs);
-  padding: var(--space-sm);
-  border: 1.5px solid var(--border);
-  border-radius: var(--radius-md, 12px);
+  --glass: color-mix(in srgb, var(--surface) 55%, transparent);
+  --glass-strong: color-mix(in srgb, var(--surface) 68%, transparent);
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  overflow: hidden;
+  background: var(--andes-c1);
   color: var(--ink);
   font-size: var(--font-sm);
+}
+
+.andes-b3d-canvas {
+  position: absolute;
+  inset: 0;
+}
+
+.andes-b3d .andes-glass {
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-md, 12px);
+  background: var(--glass);
   backdrop-filter: blur(10px);
 }
 
 .andes-b3d-head {
+  position: absolute;
+  top: var(--space-md);
+  left: var(--space-md);
+  right: var(--space-md);
   display: flex;
   align-items: center;
   gap: var(--space-sm);
+  padding: var(--space-xs) var(--space-sm);
 }
 
 .andes-b3d-head > div {
@@ -668,37 +679,46 @@
   text-transform: uppercase;
 }
 
-.andes-b3d-body {
-  display: grid;
-  flex: 1;
-  grid-template-columns: minmax(0, 1fr) minmax(220px, 300px);
-  gap: var(--space-sm);
-  min-height: 0;
+.andes-b3d-views {
+  position: absolute;
+  bottom: 3.6rem;
+  left: 50%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-xs);
+  max-width: calc(100% - 2 * var(--space-md));
+  padding: var(--space-xs) var(--space-sm);
+  transform: translateX(-50%);
 }
 
-.andes-b3d-map {
-  position: relative;
-  min-height: 240px;
-  overflow: hidden;
-  border-radius: var(--radius-sm, 8px);
-  background: var(--andes-c1);
+.andes-b3d-legend {
+  position: absolute;
+  top: 4.6rem;
+  right: var(--space-md);
+  bottom: 7.6rem;
+  display: flex;
+  width: min(300px, 38vw);
+  flex-direction: column;
+  gap: var(--space-sm);
+  overflow-y: auto;
+  padding: var(--space-xs) var(--space-sm);
+}
+
+.andes-b3d-legend-toggle {
+  align-self: flex-end;
 }
 
 .andes-b3d-problem {
   position: absolute;
-  inset: auto var(--space-sm) var(--space-sm);
+  top: 5rem;
+  left: var(--space-md);
   z-index: 1;
+  max-width: 420px;
   margin: 0;
   padding: var(--space-xs) var(--space-sm);
   border-radius: var(--radius-sm, 8px);
   background: var(--glass-strong);
-}
-
-.andes-b3d-legend {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-sm);
-  overflow-y: auto;
 }
 
 .andes-b3d-side h3 {
@@ -739,14 +759,24 @@
 }
 
 .andes-b3d-notice {
+  position: absolute;
+  bottom: var(--space-md);
+  left: var(--space-md);
+  right: var(--space-md);
   margin: 0;
+  padding: var(--space-xs) var(--space-sm);
   color: var(--ink-2);
   font-size: 0.72rem;
+  text-align: center;
 }
 
 @media (max-width: 900px) {
-  .andes-b3d-body {
-    grid-template-columns: 1fr;
-    grid-template-rows: minmax(200px, 1fr) auto;
+  .andes-b3d-legend {
+    top: auto;
+    bottom: 8.6rem;
+    left: var(--space-md);
+    right: var(--space-md);
+    width: auto;
+    max-height: 28vh;
   }
 }

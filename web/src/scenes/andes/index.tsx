@@ -78,6 +78,8 @@ export default function Scene() {
   const [battleShow, setBattleShow] = useState(0);
   /** the 3D recreation of the battle of Chacabuco is open */
   const [battle3d, setBattle3d] = useState(false);
+  /** the view of the big map when the battle took the screen: the map is built again from there when the reader comes back */
+  const [resumeView, setResumeView] = useState<CameraView | undefined>(undefined);
   const tourCount = useRef(0);
   const playTour = useCallback(() => {
     setIntroOn(true);
@@ -161,6 +163,13 @@ export default function Scene() {
     dispatch({ type: 'setYear', year: pace.yearAt(1) });
     setBattleShow((n) => n + 1);
   };
+  /** The battle in 3D takes the whole screen: the big map is taken off (it is the heavy part) after saving where it looks, and nothing that would replay on the way back is left set. */
+  const openBattle = () => {
+    setResumeView(cameraApi.current?.get());
+    setFocus(null);
+    setBattleShow(0);
+    setBattle3d(true);
+  };
   /** The camera stops following a force and goes back to the reader's hands. */
   const freeCamera = () => {
     setFollowId(null);
@@ -189,6 +198,7 @@ export default function Scene() {
           onTourEnd={() => setTourPlay(0)}
           onIntroEnd={() => setIntroOn(false)}
           battleShow={battleShow}
+          initialView={resumeView}
           onView={tunerOpen ? setCamView : undefined}
           label={label}
         />
@@ -206,7 +216,7 @@ export default function Scene() {
       <AndesIntro ready={mapReady} skip={skipIntro} onDone={(skipped) => {
           if (!skipped) playTour();
         }} />
-      <div className="andes-canvas">{map}</div>
+      <div className="andes-canvas">{battle3d ? null : map}</div>
 
       <div className="andes-forces-top">
         <ForceButtons
@@ -244,7 +254,7 @@ export default function Scene() {
           Batalla de Chacabuco
         </button>
         {battleReached && (
-          <button type="button" className="chip" onClick={() => setBattle3d(true)}>
+          <button type="button" className="chip" onClick={openBattle}>
             Ver batalla
           </button>
         )}

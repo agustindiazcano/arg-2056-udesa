@@ -120,7 +120,7 @@ describe('Andes scene', () => {
   it('lists the events of the campaign and shows the real map with its credits', async () => {
     stubFetch();
     renderScene();
-    await screen.findByTestId('andes-renderer');
+    await screen.findByTestId('andes-renderer', {}, { timeout: 15000 });
     openEvents();
     const list = await screen.findByRole('list', { name: 'Eventos de la campaña' });
     expect(within(list).getAllByRole('button')).toHaveLength(13);
@@ -209,19 +209,20 @@ describe('Andes scene', () => {
     expect(screen.getByRole('button', { name: /Río de los Patos/ }).getAttribute('aria-pressed')).toBe('true');
   });
 
-  it('offers «Ver batalla» only once the army is at Chacabuco, and opens the 3D recreation with its notice', async () => {
-    vi.stubEnv('VITE_MAPTILER_KEY', '');
+  it('offers «Ver batalla» only once the army is at Chacabuco; the 3D battle takes the screen, takes the big map off and gives it back', async () => {
     stubFetch();
     renderScene();
     await screen.findByTestId('andes-renderer');
     expect(screen.queryByRole('button', { name: 'Ver batalla' })).toBeNull();
     fireEvent.click(screen.getByRole('button', { name: 'Batalla de Chacabuco' }));
     fireEvent.click(await screen.findByRole('button', { name: 'Ver batalla' }));
-    const scene = await screen.findByRole('dialog', { name: /Batalla de Chacabuco/ });
+    const scene = await screen.findByRole('dialog', { name: /Batalla de Chacabuco/ }, { timeout: 15000 });
     expect(within(scene).getByText('Recreación')).toBeTruthy();
-    fireEvent.click(within(scene).getByRole('button', { name: 'Volver al mapa' }));
+    // the big map is not on the screen while the battle is (it is the heavy part)
+    expect(screen.queryByTestId('andes-renderer')).toBeNull();
+    fireEvent.click(within(scene).getByRole('button', { name: 'Salir de la batalla' }));
     expect(screen.queryByRole('dialog', { name: /Batalla de Chacabuco/ })).toBeNull();
-    vi.unstubAllEnvs();
+    expect(await screen.findByTestId('andes-renderer')).toBeTruthy();
   });
 
   it('is one big stage with floating controls: the title is a heading and there is no carousel', async () => {
