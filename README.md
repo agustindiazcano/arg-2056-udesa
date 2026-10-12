@@ -50,16 +50,20 @@ La lista completa, con qué dato sale de cada fuente y qué falta verificar, est
 14. Wikipedia, «Cruce de los Andes». <https://es.wikipedia.org/wiki/Cruce_de_los_Andes>
 15. Resolución 258/2013 de SENASA (altura del Espinacito). <https://www.argentina.gob.ar/normativa/nacional/norma-216719/texto>
 16. El Bibliote, «Logística del Ejército de los Andes». <https://elbibliote.com/resources/Temas/html/1468.php>
+17. Felipe Pigna, «12 de febrero de 1817: la batalla de Chacabuco», El Historiador (con el parte de San Martín). <https://elhistoriador.com.ar/12-de-febrero-de-1817-la-batalla-de-chacabuco/>
+18. Museo Histórico Nacional, «La batalla de Chacabuco». <https://museohistoriconacional.cultura.gob.ar/noticia/la-batalla-de-chacabuco/>
+19. Academia de Historia Militar de Chile, «Batalla de Chacabuco». <https://www.academiahistoriamilitar.cl/academia/batalla-de-chacabuco/>
+20. Infobae, «Batalla de Chacabuco: la urgencia de San Martín, el arriesgado ataque de O'Higgins y la carga letal de los Granaderos» (12-02-2026). <https://www.infobae.com/historia/2026/02/12/batalla-de-chacabuco-la-urgencia-de-san-martin-el-arriesgado-ataque-de-ohiggins-y-la-carga-letal-de-los-granaderos>
 
-Las fuentes marcadas «por informe» en [`docs/references.md`](docs/references.md) todavía no se verificaron en el original.
+Las cifras de bajas de Chacabuco no coinciden entre las fuentes 5, 10, 17, 18, 19 y 20: la pantalla usa las del parte de San Martín y dice cuáles son las otras. Las fuentes marcadas «por informe» en [`docs/references.md`](docs/references.md) todavía no se verificaron en el original.
 
 ### Mapa y terreno
 
-17. MapTiler: imágenes satelitales, modelo de elevación Terrain-RGB v2 y geocodificador. <https://www.maptiler.com>
-18. © OpenStreetMap contributors (nombres y posiciones de los lugares). <https://www.openstreetmap.org/copyright>
+21. MapTiler: imágenes satelitales, modelo de elevación Terrain-RGB v2 y geocodificador. <https://www.maptiler.com>
+22. © OpenStreetMap contributors (nombres y posiciones de los lugares). <https://www.openstreetmap.org/copyright>
 
 ### Marco conceptual
 
-19. Schwab, K. (2016). *La Cuarta Revolución Industrial*. Foro Económico Mundial.
+23. Schwab, K. (2016). *La Cuarta Revolución Industrial*. Foro Económico Mundial.
 
 > Las posiciones de los lugares son aproximadas, las fechas intermedias entre las documentadas son estimaciones marcadas como tales, y las cifras de efectivos varían según la fuente. Todo está señalado en [`docs/references.md`](docs/references.md).
