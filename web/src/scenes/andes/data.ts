@@ -17,6 +17,8 @@ export interface AndesSideReport {
   killed: number | null;
   wounded: number | null;
   prisoners: number | null;
+  /** the losses in words when the sources do not agree on dead and wounded apart, e.g. «menos de 100 (parte de San Martín)»; it replaces the two rows */
+  casualties_text?: string;
   note?: string;
 }
 

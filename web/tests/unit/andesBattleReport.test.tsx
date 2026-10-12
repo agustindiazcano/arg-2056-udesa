@@ -22,8 +22,8 @@ describe('BattleReport', () => {
     expect(within(report).getAllByRole('img', { name: 'Bandera del Ejército de los Andes' })).toHaveLength(2);
     expect(within(report).getByRole('img', { name: /Bandera realista/ })).toBeTruthy();
     const patriots = within(report).getByRole('heading', { name: /Ejército de los Andes/ }).parentElement!;
-    expect(within(patriots).getByRole('rowheader', { name: 'Muertos' }).nextElementSibling?.textContent).toBe('sin dato');
-    expect(within(patriots).getByRole('rowheader', { name: 'Heridos' }).nextElementSibling?.textContent).toBe('sin dato');
+    expect(within(patriots).getByRole('rowheader', { name: 'Bajas (muertos y heridos)' }).nextElementSibling?.textContent).toBe('menos de 100 (parte de San Martín)');
+    expect(within(patriots).queryByRole('rowheader', { name: 'Muertos' })).toBeNull();
     expect(patriots.querySelector('.andes-report-note')?.textContent).toMatch(/no alcanza a cien/);
     expect(within(patriots).getByRole('rowheader', { name: 'Fuerzas en combate' }).nextElementSibling?.textContent).toBe('3.500');
     const royalists = within(report).getByRole('heading', { name: /Fuerzas realistas/ }).parentElement!;
@@ -59,16 +59,16 @@ describe('BattleReport', () => {
     const report = screen.getByRole('region', { name: /Resultado: Batalla de Chacabuco/ });
     const toggle = within(report).getByRole('button', { name: /Ocultar el detalle/ });
     expect(toggle.getAttribute('aria-expanded')).toBe('true');
-    expect(within(report).getAllByRole('rowheader', { name: 'Muertos' })).toHaveLength(2);
+    expect(within(report).getAllByRole('rowheader', { name: 'Prisioneros' })).toHaveLength(2);
     fireEvent.click(toggle);
     expect(toggle.getAttribute('aria-expanded')).toBe('false');
     expect(toggle.getAttribute('aria-label')).toMatch(/Mostrar el detalle/);
-    expect(within(report).queryByRole('rowheader', { name: 'Muertos' })).toBeNull();
+    expect(within(report).queryByRole('rowheader', { name: 'Prisioneros' })).toBeNull();
     expect(report.querySelector('.andes-report-summary')).toBeNull();
     expect(within(report).getByText('Victoria patriota')).toBeTruthy();
     expect(within(report).getByRole('heading', { level: 2 })).toBeTruthy();
     fireEvent.click(toggle);
-    expect(within(report).getAllByRole('rowheader', { name: 'Muertos' }).length).toBe(2);
+    expect(within(report).getAllByRole('rowheader', { name: 'Prisioneros' }).length).toBe(2);
   });
 
   it('says «sin dato» for what the sources do not give, never 0', () => {

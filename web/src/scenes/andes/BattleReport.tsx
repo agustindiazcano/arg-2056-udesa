@@ -14,8 +14,9 @@ export function sideRows(event: AndesEvent, side: AndesSideReport, royalist: boo
   return [
     ['Fuerzas en combate', men],
     ['Unidades', side.units],
-    ['Muertos', count(side.killed)],
-    ['Heridos', count(side.wounded)],
+    ...(side.casualties_text && side.killed === null && side.wounded === null
+      ? ([['Bajas (muertos y heridos)', side.casualties_text]] as Array<[string, string]>)
+      : ([['Muertos', count(side.killed)], ['Heridos', count(side.wounded)]] as Array<[string, string]>)),
     ['Prisioneros', count(side.prisoners)]
   ];
 }
