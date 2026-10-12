@@ -22,10 +22,11 @@ test.describe('references page', () => {
     await expect(page).toHaveURL(/\/references\.html$/);
     await expect(page.getByRole('heading', { name: 'Fuentes y atribuciones', level: 1 })).toBeVisible();
   });
-  test('has a Visitas section (empty until the first weekly archive is merged)', async ({ page }) => {
+  test('has a Visitas section: the empty message before the first archive, the totals and the table once there is one', async ({ page }) => {
     await page.goto('/references.html');
     const visits = page.getByRole('region', { name: 'Visitas' });
     await expect(visits).toBeVisible();
-    await expect(visits.getByText('Todavía no se archivaron visitas.')).toBeVisible();
+    await expect(visits.getByText('Todavía no se archivaron visitas.').or(visits.getByRole('table', { name: 'Visitas por país' }))).toBeVisible();
+    await expect(visits.getByText('El conteo de visitas no está disponible.')).toHaveCount(0);
   });
 });
