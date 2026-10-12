@@ -6,6 +6,13 @@ import type { Page } from '@playwright/test';
  * errors, failed or error-status requests, and any request that leaves the preview server (no external tiles,
  * fonts or scripts). Each list must be empty when the test ends.
  */
+/**
+ * The one outside origin the app is allowed to talk to: the satellite imagery, relief and fonts of the Andes map (the CSP allows it, see `headers.config.json`).
+ * It is only reached when the build has a `VITE_MAPTILER_KEY`. Its requests are not counted as leaving the server, and a tile or style that the service refuses
+ * (a key restricted to another origin, no network) is not a failure of the app, so those errors are ignored; every other origin still fails the test.
+ */
+const MAP_ORIGIN = 'https://api.maptiler.com';
+
 export const test = base.extend({
   page: async ({ page, baseURL }, use) => {
     const origin = new URL(baseURL ?? 'http://localhost').origin;
@@ -15,19 +22,20 @@ export const test = base.extend({
     const foreignRequests: string[] = [];
 
     page.on('console', (message) => {
-      if (message.type() === 'error') consoleErrors.push(message.text());
+      if (message.type() === 'error' && !message.location().url.startsWith(MAP_ORIGIN)) consoleErrors.push(message.text());
     });
     page.on('pageerror', (error) => pageErrors.push(error.message));
     page.on('requestfailed', (request) => {
+      if (request.url().startsWith(MAP_ORIGIN)) return;
       failedRequests.push(`${request.method()} ${request.url()}: ${request.failure()?.errorText ?? 'failed'}`);
     });
     page.on('response', (response) => {
-      if (response.status() >= 400) failedRequests.push(`${response.request().method()} ${response.url()}: HTTP ${response.status()}`);
+      if (response.status() >= 400 && !response.url().startsWith(MAP_ORIGIN)) failedRequests.push(`${response.request().method()} ${response.url()}: HTTP ${response.status()}`);
     });
     page.on('request', (request) => {
       const url = new URL(request.url());
       // data: and blob: URLs are in-page; only http(s) can leave the server
-      if ((url.protocol === 'http:' || url.protocol === 'https:') && url.origin !== origin) {
+      if ((url.protocol === 'http:' || url.protocol === 'https:') && url.origin !== origin && url.origin !== MAP_ORIGIN) {
         foreignRequests.push(request.url());
       }
     });

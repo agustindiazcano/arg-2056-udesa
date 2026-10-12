@@ -533,3 +533,85 @@
   color: var(--ink-2);
   font-size: 0.68rem;
 }
+
+/* ---- the banner «Victoria patriota» over a place the army has won -------------------------------------------------- */
+
+.andes-victories {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.andes-victories[hidden] {
+  display: none;
+}
+
+.andes-victory {
+  position: absolute;
+  top: 0;
+  left: 0;
+  will-change: transform;
+}
+
+.andes-victory-card {
+  position: absolute;
+  bottom: 30px;
+  left: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: max-content;
+  max-width: 240px;
+  padding: 4px 10px 4px 6px;
+  transform: translateX(-50%);
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  background: var(--glass-strong);
+  color: var(--ink);
+  font-size: 0.78rem;
+  line-height: 1.25;
+  backdrop-filter: blur(8px);
+  animation: andes-victory-in 0.5s ease-out;
+}
+
+.andes-victory-card::after {
+  content: '';
+  position: absolute;
+  bottom: -7px;
+  left: 50%;
+  width: 10px;
+  height: 10px;
+  transform: translateX(-50%) rotate(45deg);
+  border-right: 1.5px solid var(--border);
+  border-bottom: 1.5px solid var(--border);
+  background: var(--glass-strong);
+}
+
+.andes-victory-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.andes-victory-text small {
+  color: var(--ink-2);
+  font-size: 0.68rem;
+}
+
+@keyframes andes-victory-in {
+  from {
+    opacity: 0;
+    margin-bottom: -8px;
+  }
+  to {
+    opacity: 1;
+    margin-bottom: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .andes-victory-card {
+    animation: none;
+  }
+}

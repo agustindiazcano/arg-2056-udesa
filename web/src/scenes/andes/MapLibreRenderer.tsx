@@ -12,6 +12,9 @@ import { columnColor, positionOfColumn } from './columns';
 import { BattleCard } from './BattleCard';
 import { eventOfRedBall } from './battleHover';
 import { ForceBubbles } from './ForceBubbles';
+import { VictoryBanners } from './VictoryBanners';
+import { EffectsLayer } from './EffectsLayer';
+import { combatSites, victoryBanners } from './effects';
 import { RegionMinimap } from './RegionMinimap';
 import { BATTLE_COLOR, battleFeature, combatFeature } from './regionMap';
 import { SlotPortal } from '../../dashboard/SlotPortal';
@@ -577,6 +580,7 @@ export function MapLibreRenderer({ route, columns, day, selectedId, camera, grap
   /** the royalists of the skirmishes (Las Achupallas, Las Coimas): their figures, on the place of the combat while it lasts */
   const skirmishArmiesRef = useRef<Array<{ id: string; layer: ArmyLayer }>>([]);
   const ballsRef = useRef<BallsLayer | null>(null);
+  const effectsRef = useRef<EffectsLayer | null>(null);
   const readyRef = useRef(false);
   const dayRef = useRef(day);
   const cameraRef = useRef(camera);
@@ -664,6 +668,7 @@ export function MapLibreRenderer({ route, columns, day, selectedId, camera, grap
   kmRef.current = km;
   followRef.current = followId;
   const bubbles = useMemo(() => bubblesFor(route, km, columns, day), [route, km, columns, day]);
+  const victories = useMemo(() => victoryBanners(route, day), [route, day]);
 
   const syncArmy = () => {
     const map = mapRef.current;
@@ -714,6 +719,8 @@ export function MapLibreRenderer({ route, columns, day, selectedId, camera, grap
     // a force that shows its figures has no balls
     const balls = forceBalls(route, k, columnsRef.current, dayRef.current, zoom, centre.lat);
     ballsRef.current?.setBalls(balls.filter((ball) => !withFigures.has(ball.id)));
+    // clouds over the cordillera (not on a weak device) and the smoke and flashes of the combat being fought
+    effectsRef.current?.setState({ sites: combatSites(route, dayRef.current), clouds: graphics.tier !== 'low', still: reduced });
     map.triggerRepaint();
   };
   const syncArmyRef = useRef(syncArmy);
@@ -813,6 +820,9 @@ export function MapLibreRenderer({ route, columns, day, selectedId, camera, grap
       const balls = new BallsLayer();
       ballsRef.current = balls;
       map.addLayer(balls);
+      const effects = new EffectsLayer();
+      effectsRef.current = effects;
+      map.addLayer(effects);
       // the names of the places are the most important text of the map: they go over everything else, the names of the groups and the 3D models included
       // the battle of Chacabuco: a red dot with a halo, over the dot of its place
       map.addSource('battle', { type: 'geojson', data: battleFeature(route) });
@@ -1379,6 +1389,7 @@ export function MapLibreRenderer({ route, columns, day, selectedId, camera, grap
         </p>
       )}
       <ForceBubbles map={mainMap} items={bubbles} visible={bubblesOn} />
+      <VictoryBanners map={mainMap} items={victories} visible={bubblesOn} />
       <SlotPortal slot="minimap">
       <RegionMinimap
         main={mainMap}
