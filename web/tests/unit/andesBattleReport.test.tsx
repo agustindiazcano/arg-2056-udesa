@@ -22,11 +22,12 @@ describe('BattleReport', () => {
     expect(within(report).getAllByRole('img', { name: 'Bandera del Ejército de los Andes' })).toHaveLength(2);
     expect(within(report).getByRole('img', { name: /Bandera realista/ })).toBeTruthy();
     const patriots = within(report).getByRole('heading', { name: /Ejército de los Andes/ }).parentElement!;
-    expect(within(patriots).getByRole('rowheader', { name: 'Muertos' }).nextElementSibling?.textContent).toBe('12');
-    expect(within(patriots).getByRole('rowheader', { name: 'Heridos' }).nextElementSibling?.textContent).toBe('120');
+    expect(within(patriots).getByRole('rowheader', { name: 'Muertos' }).nextElementSibling?.textContent).toBe('sin dato');
+    expect(within(patriots).getByRole('rowheader', { name: 'Heridos' }).nextElementSibling?.textContent).toBe('sin dato');
+    expect(patriots.querySelector('.andes-report-note')?.textContent).toMatch(/no alcanza a cien/);
     expect(within(patriots).getByRole('rowheader', { name: 'Fuerzas en combate' }).nextElementSibling?.textContent).toBe('3.500');
     const royalists = within(report).getByRole('heading', { name: /Fuerzas realistas/ }).parentElement!;
-    expect(within(royalists).getByRole('rowheader', { name: 'Muertos' }).nextElementSibling?.textContent).toBe('500');
+    expect(within(royalists).getByRole('rowheader', { name: 'Muertos' }).nextElementSibling?.textContent).toBe('450');
     expect(within(royalists).getByRole('rowheader', { name: 'Prisioneros' }).nextElementSibling?.textContent).toBe('600');
     expect(within(royalists).getByRole('rowheader', { name: 'Fuerzas en combate' }).nextElementSibling?.textContent).toMatch(/2\.080/);
   });

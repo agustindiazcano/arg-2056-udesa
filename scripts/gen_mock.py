@@ -183,10 +183,10 @@ ANDES_OUTCOMES = {
     "Batalla de Chacabuco": {
         "result": "Victoria patriota",
         "place": "Hacienda de Chacabuco",
-        "summary": "El ejército patriota avanzó en dos divisiones: la de Soler por la derecha y la de O'Higgins por la izquierda. El primer choque duró unos 15 minutos y terminó con la derrota de los realistas. Perdieron unos 500 muertos y 600 prisioneros; los patriotas, 12 muertos y 120 heridos.",
+        "summary": "La división de O'Higgins atacó primero y fue detenida; la de Soler bajó por los cerros de la derecha sobre el flanco izquierdo realista y, con los Cazadores y los Granaderos a caballo, rompió la línea. Según el parte de San Martín, los realistas tuvieron 450 muertos y 600 prisioneros (30 oficiales) y las bajas patriotas no llegaron a cien; otras fuentes dan cifras distintas.",
         "sides": [
-            {"side": "Ejército de los Andes", "units": "Batallones 1 (Cazadores), 7, 8 y 11 · Granaderos a Caballo · artillería", "killed": 12, "wounded": 120, "prisoners": None, "note": "12 muertos y 120 heridos (Wikipedia, por informe)"},
-            {"side": "Fuerzas realistas", "units": "Talavera, Chiloé y Valdivia · caballería de la Concordia y de Abascal · artillería", "killed": 500, "wounded": None, "prisoners": 600, "note": "500 muertos y 600 prisioneros (Wikipedia, por informe)"},
+            {"side": "Ejército de los Andes", "units": "Batallones 1 (Cazadores), 7, 8 y 11 · Granaderos a Caballo · artillería", "killed": None, "wounded": None, "prisoners": None, "note": "Cifra en disputa: el parte de San Martín dice que la pérdida «no alcanza a cien hombres»; la Academia de Historia Militar de Chile, no más de 150 entre muertos y heridos; Wikipedia, 12 muertos y 120 heridos; Infobae, 132 muertos y 174 heridos"},
+            {"side": "Fuerzas realistas", "units": "Talavera, Chiloé y Valdivia · caballería de la Concordia y de Abascal · artillería", "killed": 450, "wounded": None, "prisoners": 600, "note": "450 muertos y 600 prisioneros, entre ellos 30 oficiales (parte de San Martín); la Academia de Historia Militar de Chile dice más de 500 muertos y más de 600 prisioneros; Infobae, unos 600 muertos y 550 prisioneros; las fuentes no dan heridos"},
         ],
     },
 }
