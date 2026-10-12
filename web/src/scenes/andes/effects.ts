@@ -157,3 +157,8 @@ export function victoryBanners(route: Route, day: number): VictoryBanner[] {
     .filter((p) => p.outcome && /patriota/i.test(p.outcome.result) && day >= p.day_of_campaign)
     .map((p) => ({ id: p.id, name: p.name, lon: p.lon, lat: p.lat, text: 'Victoria patriota' }));
 }
+
+/** The width on the screen, in pixels, of a puff of `radiusM` meters where a pixel is `metersPerPixel` meters: never under `minPx`, so it reads from far away. */
+export function puffSizePx(radiusM: number, metersPerPixel: number, minPx: number): number {
+  return Math.max(minPx, (2 * radiusM) / metersPerPixel);
+}

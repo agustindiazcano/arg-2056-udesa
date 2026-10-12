@@ -31,6 +31,8 @@ import { buildRoute, campaignDateText, paceClock, paceProgress, positionAt } fro
 
 // MapLibre and Three.js live in their own chunk: it loads only when the scene is opened.
 const AndesRenderer = lazy(() => import('./MapLibreRenderer.js'));
+// the 3D recreation of the battle has its own map: it loads when the reader asks for it
+const BattleScene = lazy(() => import('./BattleScene.js').then((m) => ({ default: m.BattleScene })));
 
 /** A screen this wide or narrower is a laptop. */
 const LAPTOP_QUERY = '(max-width: 1600px)';
@@ -56,6 +58,11 @@ export default function Scene() {
   const day = clock(yearFloat);
   const crossed = pace.progress(yearFloat);
   const percent = Math.round(crossed * 100);
+  /** the army has reached the field of Chacabuco: from then on the battle can be watched in 3D */
+  const battleReached = useMemo(() => {
+    const battle = route.points.find((p) => /Batalla/i.test(p.name));
+    return battle !== undefined && day >= battle.day_of_campaign;
+  }, [route, day]);
   const dispatch = useStore((s) => s.dispatch);
   const setTimeScale = useStore((s) => s.setTimeScale);
   const [mapReady, setMapReady] = useState(false);
@@ -69,6 +76,8 @@ export default function Scene() {
   const [skipIntro, setSkipIntro] = useState(false);
   /** grows each time the button of the battle of Chacabuco is pressed */
   const [battleShow, setBattleShow] = useState(0);
+  /** the 3D recreation of the battle of Chacabuco is open */
+  const [battle3d, setBattle3d] = useState(false);
   const tourCount = useRef(0);
   const playTour = useCallback(() => {
     setIntroOn(true);
@@ -234,6 +243,11 @@ export default function Scene() {
         <button type="button" className="chip" onClick={showBattle}>
           Batalla de Chacabuco
         </button>
+        {battleReached && (
+          <button type="button" className="chip" onClick={() => setBattle3d(true)}>
+            Ver batalla
+          </button>
+        )}
         {CAMERA_BUTTONS.map(({ mode, text }) => (
           <button key={mode} type="button" className="chip" aria-pressed={camera === mode} onClick={() => {
               setFollowId(null);
@@ -294,6 +308,12 @@ export default function Scene() {
       {tunerOpen && <CameraTuner api={cameraApi} view={camView} day={day} onGo={() => setCamera('free')} />}
 
       {selected?.outcome && <BattleReport key={selected.id} event={selected} />}
+
+      {battle3d && (
+        <Suspense fallback={null}>
+          <BattleScene onClose={() => setBattle3d(false)} />
+        </Suspense>
+      )}
 
       <footer className="andes-foot">
         <button type="button" className="andes-foot-btn" aria-label="Créditos, fuentes y aclaraciones" aria-describedby="andes-foot-tip">
