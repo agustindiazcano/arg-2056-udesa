@@ -139,3 +139,21 @@ export function wasdDelta(keys: ReadonlySet<string>, pixels: number): [number, n
   const k = pixels / Math.hypot(x, y);
   return [x * k, y * k];
 }
+
+/** The most levels of zoom one wheel event changes. */
+const MAX_WHEEL_ZOOM = 1.5;
+
+/**
+ * How much the zoom changes for one wheel event: up zooms in, down zooms out, in proportion to the turn. A wheel that scrolls by lines or pages counts as that many
+ * pixels, and a pinch on a trackpad (it arrives as a wheel with ctrl) is faster. Used while a force is followed, where the map's own wheel zoom is off.
+ */
+export function wheelZoomDelta(deltaY: number, deltaMode: number, ctrlKey: boolean): number {
+  const pixels = deltaMode === 1 ? deltaY * 16 : deltaMode === 2 ? deltaY * 400 : deltaY;
+  const perPixel = ctrlKey ? 0.01 : 0.0022;
+  return Math.max(-MAX_WHEEL_ZOOM, Math.min(MAX_WHEEL_ZOOM, -pixels * perPixel));
+}
+
+/** A zoom kept inside the limits of the map. */
+export function clampZoom(zoom: number, min: number, max: number): number {
+  return Math.min(max, Math.max(min, zoom));
+}

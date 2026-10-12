@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { puffSizePx } from '../../src/scenes/andes/effects';
 import { buildRoute, campaignDateText } from '../../src/scenes/andes/timeline';
 import type { AndesEvent } from '../../src/scenes/andes/data';
 import {
@@ -19,7 +20,9 @@ import {
   metersPerPixel,
   metersPerUnit,
   mixHex,
-  wasdDelta
+  wasdDelta,
+  wheelZoomDelta,
+  clampZoom
 } from '../../src/scenes/andes/mapGeo';
 
 const ev = (id: string, day: number, lon: number, lat: number): AndesEvent => ({
@@ -213,5 +216,38 @@ describe('campaignDateText', () => {
     expect(campaignDateText(12.9)).toBe('31 de enero');
     expect(campaignDateText(-14)).toBe('5 de enero');
     expect(campaignDateText(-400)).toBe(campaignDateText(-30));
+  });
+});
+
+describe('wheelZoomDelta', () => {
+  it('zooms in when the wheel goes up (negative deltaY) and out when it goes down, in proportion to the turn', () => {
+    expect(wheelZoomDelta(-100, 0, false)).toBeGreaterThan(0);
+    expect(wheelZoomDelta(100, 0, false)).toBeLessThan(0);
+    expect(wheelZoomDelta(-200, 0, false)).toBeCloseTo(2 * wheelZoomDelta(-100, 0, false), 6);
+  });
+
+  it('never jumps more than a level and a half in one event, however hard the wheel turns', () => {
+    expect(wheelZoomDelta(-100000, 0, false)).toBe(1.5);
+    expect(wheelZoomDelta(100000, 0, false)).toBe(-1.5);
+  });
+
+  it('counts a line of a wheel that scrolls by lines as many pixels, and a pinch (ctrl) as a faster zoom', () => {
+    expect(Math.abs(wheelZoomDelta(3, 1, false))).toBeGreaterThan(Math.abs(wheelZoomDelta(3, 0, false)));
+    expect(Math.abs(wheelZoomDelta(5, 0, true))).toBeGreaterThan(Math.abs(wheelZoomDelta(5, 0, false)));
+  });
+});
+
+describe('clampZoom', () => {
+  it('keeps the zoom inside the limits of the map', () => {
+    expect(clampZoom(20, 2, 17.5)).toBe(17.5);
+    expect(clampZoom(-1, 2, 17.5)).toBe(2);
+    expect(clampZoom(9, 2, 17.5)).toBe(9);
+  });
+});
+
+describe('puffSizePx', () => {
+  it('is the width on the screen of a puff of that radius, never smaller than the minimum so it reads from far away', () => {
+    expect(puffSizePx(100, 10, 8)).toBe(20);
+    expect(puffSizePx(1, 100, 8)).toBe(8);
   });
 });

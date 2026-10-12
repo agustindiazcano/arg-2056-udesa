@@ -23,7 +23,7 @@ import type { CameraMode } from './camera';
 import { createFigureColumn } from './figures3d';
 import type { FigureColumn } from './figures3d';
 import type { Graphics } from './graphics';
-import { cameraFor, coordAtKm, figuresVisible, gaitAmount, gaitPhaseAt, metersPerPixel, metersPerUnit, mixHex, timeScaleForZoom, WASD_SHIFT_FACTOR, WASD_SPEED_PX, wasdDelta } from './mapGeo';
+import { cameraFor, clampZoom, coordAtKm, figuresVisible, gaitAmount, gaitPhaseAt, metersPerPixel, metersPerUnit, mixHex, timeScaleForZoom, WASD_SHIFT_FACTOR, WASD_SPEED_PX, wasdDelta, wheelZoomDelta } from './mapGeo';
 import { arcAt, buildPath, sampleAlongExtended } from './pathAlong';
 import { distanceKm } from './timeline';
 import { useReducedMotion } from '../../runtime/useReducedMotion';
@@ -726,6 +726,33 @@ export function MapLibreRenderer({ route, columns, day, selectedId, camera, grap
   const syncArmyRef = useRef(syncArmy);
   syncArmyRef.current = syncArmy;
 
+  /** Following a force the clock moves the center on every tick with `jumpTo`, which would cancel an eased zoom at once, so the zoom (wheel or buttons) is stepped by hand with `jumpTo` too. */
+  const zoomAnimRef = useRef(0);
+  const zoomFollowing = (delta: number, ms: number) => {
+    const map = mapRef.current;
+    if (!map) return;
+    window.cancelAnimationFrame(zoomAnimRef.current);
+    const from = map.getZoom();
+    const to = clampZoom(from + delta, map.getMinZoom(), map.getMaxZoom());
+    if (reduced || ms <= 0) {
+      map.jumpTo({ zoom: to });
+      return;
+    }
+    const t0 = performance.now();
+    const step = (now: number) => {
+      const t = Math.min(1, (now - t0) / ms);
+      map.jumpTo({ zoom: from + (to - from) * (1 - (1 - t) ** 3) });
+      if (t < 1) zoomAnimRef.current = window.requestAnimationFrame(step);
+    };
+    zoomAnimRef.current = window.requestAnimationFrame(step);
+  };
+  const isFollowing = () => cameraRef.current === 'follow' || followRef.current !== null;
+  const zoomButton = (delta: number) => {
+    if (isFollowing()) zoomFollowing(delta, 400);
+    else if (delta > 0) mapRef.current?.zoomIn({ duration: 400 });
+    else mapRef.current?.zoomOut({ duration: 400 });
+  };
+
   const aim = (mode: CameraMode, duration: number) => {
     const map = mapRef.current;
     if (!map) return;
@@ -986,7 +1013,13 @@ export function MapLibreRenderer({ route, columns, day, selectedId, camera, grap
     if (!map || (camera !== 'follow' && !followId)) return undefined;
     const canvas = map.getCanvas();
     map.dragPan.disable();
-    map.scrollZoom.enable({ around: 'center' });
+    // the map's own wheel zoom is an animation that the clock's `jumpTo` of the center cancels on every tick: the wheel zooms by hand here
+    map.scrollZoom.disable();
+    const wheel = (e: WheelEvent) => {
+      e.preventDefault();
+      zoomFollowing(wheelZoomDelta(e.deltaY, e.deltaMode, e.ctrlKey), 120);
+    };
+    canvas.addEventListener('wheel', wheel, { passive: false });
     let last: { x: number; y: number } | null = null;
     const down = (e: PointerEvent) => {
       if (e.button === 0) last = { x: e.clientX, y: e.clientY };
@@ -1008,6 +1041,8 @@ export function MapLibreRenderer({ route, columns, day, selectedId, camera, grap
     window.addEventListener('pointermove', move);
     window.addEventListener('pointerup', up);
     return () => {
+      canvas.removeEventListener('wheel', wheel);
+      window.cancelAnimationFrame(zoomAnimRef.current);
       canvas.removeEventListener('pointerdown', down);
       window.removeEventListener('pointermove', move);
       window.removeEventListener('pointerup', up);
@@ -1406,8 +1441,8 @@ export function MapLibreRenderer({ route, columns, day, selectedId, camera, grap
       />
       </SlotPortal>
       <NavControls
-        onZoomIn={() => mapRef.current?.zoomIn({ duration: 400 })}
-        onZoomOut={() => mapRef.current?.zoomOut({ duration: 400 })}
+        onZoomIn={() => zoomButton(1)}
+        onZoomOut={() => zoomButton(-1)}
         onReset={() => mapRef.current?.easeTo({ ...cameraFor('map', coordAtKm(route, 0))!, duration: 1200 })}
       />
     </div>
