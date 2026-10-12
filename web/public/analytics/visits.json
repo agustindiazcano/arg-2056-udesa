@@ -1,6 +1,35 @@
 {
   "source": "Vercel Web Analytics API (visits/aggregate by country, one request per day)",
-  "retrieved_at": null,
-  "note": "Empty until the first weekly run of .github/workflows/visits.yml is merged.",
-  "days": {}
+  "retrieved_at": "2026-10-12",
+  "note": "Visitors are as Vercel counts them per day: someone who returns on another day is counted again, so the total of visitors is the sum of the daily visitors, not a count of distinct people.",
+  "days": {
+    "2026-09-14": {},
+    "2026-09-15": {},
+    "2026-09-16": {},
+    "2026-09-17": {},
+    "2026-09-18": {},
+    "2026-09-19": {},
+    "2026-09-20": {},
+    "2026-09-21": {},
+    "2026-09-22": {},
+    "2026-09-23": {},
+    "2026-09-24": {},
+    "2026-09-25": {},
+    "2026-09-26": {},
+    "2026-09-27": {},
+    "2026-09-28": {},
+    "2026-09-29": {},
+    "2026-09-30": {},
+    "2026-10-01": {},
+    "2026-10-02": {},
+    "2026-10-03": {},
+    "2026-10-04": {},
+    "2026-10-05": {},
+    "2026-10-06": {},
+    "2026-10-07": {},
+    "2026-10-08": {},
+    "2026-10-09": {},
+    "2026-10-10": {},
+    "2026-10-11": {}
+  }
 }
