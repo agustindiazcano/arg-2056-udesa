@@ -426,12 +426,51 @@
   line-height: 1.35;
 }
 
-.andes-report-result {
-  margin: 0 0 var(--space-xs);
+.andes-report-head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  margin-bottom: var(--space-xs);
+  text-align: center;
+}
+
+.andes-report-date {
+  color: var(--ink-2);
+  font-size: 0.68rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.andes-report-title {
+  margin: 0;
   color: var(--ink);
   font-size: var(--font-sm);
   font-weight: 600;
-  text-align: center;
+}
+
+.andes-report-result {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin: 0;
+  color: var(--ink);
+  font-size: var(--font-sm);
+}
+
+.andes-report-result span:first-child {
+  color: var(--ink-2);
+}
+
+.andes-report-summary {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin: 4px 0 0;
+  color: var(--ink-2);
+  line-height: 1.4;
 }
 
 .andes-report-sides {

@@ -182,6 +182,7 @@
     "name": "Las Achupallas (combate)",
     "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto. Combate de la vanguardia, no de todo el ejército.",
     "outcome": {
+      "place": "Valle de Putaendo",
       "result": "Victoria patriota",
       "sides": [
         {
@@ -200,7 +201,8 @@
           "units": "Guarnición de San Felipe",
           "wounded": null
         }
-      ]
+      ],
+      "summary": "La guarnición de San Felipe, con más de 100 hombres, atacó la avanzada del sargento mayor Antonio Arcos, de 200 granaderos. El teniente Juan Lavalle llegó a tiempo con 25 granaderos y los realistas se retiraron. Fue el primer triunfo de la campaña."
     },
     "retrieved_at": "2026-10-08",
     "source": "UNCuyo, Historia virtual de Mendoza, «Cruce de los Andes»; Diario de Cuyo, «Crónica de una epopeya» (2017); Wikipedia, «Rutas sanmartinianas» y «Paso de Los Patos»; coordenadas: MapTiler Geocoding (OpenStreetMap) y lista oficial de pasos (argentina.gob.ar); altitud: MapTiler Terrain-RGB v2"
@@ -228,6 +230,7 @@
     "name": "Las Coimas (combate)",
     "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto. Combate de la vanguardia, no de todo el ejército.",
     "outcome": {
+      "place": "Valle de Aconcagua, cerca de San Felipe",
       "result": "Victoria patriota",
       "sides": [
         {
@@ -246,7 +249,8 @@
           "units": "Caballería e infantería con 2 piezas",
           "wounded": null
         }
-      ]
+      ],
+      "summary": "Los Granaderos a Caballo de Mariano Necochea enfrentaron a una fuerza realista de caballería e infantería con 2 piezas. Necochea los atrajo con una falsa retirada y los derrotó. Murieron unos 30 realistas y el resto se retiró hacia Santiago."
     },
     "retrieved_at": "2026-10-08",
     "source": "UNCuyo, Historia virtual de Mendoza, «Cruce de los Andes»; Diario de Cuyo, «Crónica de una epopeya» (2017); Wikipedia, «Rutas sanmartinianas» y «Paso de Los Patos»; coordenadas: MapTiler Geocoding (OpenStreetMap) y lista oficial de pasos (argentina.gob.ar); altitud: MapTiler Terrain-RGB v2"
@@ -318,6 +322,7 @@
     "name": "Batalla de Chacabuco",
     "note": "Posición aproximada; la altitud es la del modelo de elevación en ese punto.",
     "outcome": {
+      "place": "Hacienda de Chacabuco",
       "result": "Victoria patriota",
       "sides": [
         {
@@ -336,7 +341,8 @@
           "units": "Talavera, Chiloé y Valdivia · caballería de la Concordia y de Abascal · artillería",
           "wounded": null
         }
-      ]
+      ],
+      "summary": "El ejército patriota avanzó en dos divisiones: la de Soler por la derecha y la de O'Higgins por la izquierda. El primer choque duró unos 15 minutos y terminó con la derrota de los realistas. Perdieron unos 500 muertos y 600 prisioneros; los patriotas, 12 muertos y 120 heridos."
     },
     "retrieved_at": "2026-10-08",
     "source": "UNCuyo, Historia virtual de Mendoza, «Cruce de los Andes»; Diario de Cuyo, «Crónica de una epopeya» (2017); Wikipedia, «Rutas sanmartinianas» y «Paso de Los Patos»; coordenadas: MapTiler Geocoding (OpenStreetMap) y lista oficial de pasos (argentina.gob.ar); altitud: MapTiler Terrain-RGB v2"

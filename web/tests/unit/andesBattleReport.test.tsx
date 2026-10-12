@@ -19,7 +19,7 @@ describe('BattleReport', () => {
     render(<BattleReport event={named(/Batalla/)} />);
     const report = screen.getByRole('region', { name: /Resultado: Batalla de Chacabuco/ });
     expect(within(report).getByText('Victoria patriota')).toBeTruthy();
-    expect(within(report).getByRole('img', { name: 'Bandera del Ejército de los Andes' })).toBeTruthy();
+    expect(within(report).getAllByRole('img', { name: 'Bandera del Ejército de los Andes' })).toHaveLength(2);
     expect(within(report).getByRole('img', { name: /Bandera realista/ })).toBeTruthy();
     const patriots = within(report).getByRole('heading', { name: /Ejército de los Andes/ }).parentElement!;
     expect(within(patriots).getByRole('rowheader', { name: 'Muertos' }).nextElementSibling?.textContent).toBe('12');
@@ -29,6 +29,28 @@ describe('BattleReport', () => {
     expect(within(royalists).getByRole('rowheader', { name: 'Muertos' }).nextElementSibling?.textContent).toBe('500');
     expect(within(royalists).getByRole('rowheader', { name: 'Prisioneros' }).nextElementSibling?.textContent).toBe('600');
     expect(within(royalists).getByRole('rowheader', { name: 'Fuerzas en combate' }).nextElementSibling?.textContent).toMatch(/2\.080/);
+  });
+
+  it('heads the report with the small date, the place and the battle, the result with the flag of the winner and a short account', () => {
+    render(<BattleReport event={named(/Batalla/)} />);
+    const report = screen.getByRole('region', { name: /Resultado: Batalla de Chacabuco/ });
+    expect(within(report).getByText('12 de febrero de 1817')).toBeTruthy();
+    expect(within(report).getByRole('heading', { level: 2, name: /Batalla de Chacabuco.*hacienda de Chacabuco/i })).toBeTruthy();
+    const result = within(report).getByText(/^Resultado:/).parentElement!;
+    expect(within(result).getByText('Victoria patriota')).toBeTruthy();
+    expect(within(result).getByRole('img', { name: 'Bandera del Ejército de los Andes' })).toBeTruthy();
+    expect(within(report).getAllByRole('img', { name: /Bandera del Ejército de los Andes/ })).toHaveLength(2);
+    const account = report.querySelector('.andes-report-summary')!;
+    expect(account.textContent!.length).toBeGreaterThan(80);
+    expect(account.textContent).toMatch(/Soler/);
+  });
+
+  it('has an account for every combat too', () => {
+    for (const re of [/Achupallas/, /Coimas/]) {
+      const event = named(re);
+      expect(event.outcome?.summary?.length ?? 0).toBeGreaterThan(80);
+      expect(event.outcome?.place).toBeTruthy();
+    }
   });
 
   it('says «sin dato» for what the sources do not give, never 0', () => {

@@ -1,4 +1,5 @@
 import React from 'react';
+import { formatDate } from '../../charts/format';
 import { rangeText } from './data';
 import type { AndesEvent, AndesSideReport } from './data';
 
@@ -34,15 +35,27 @@ function Flag({ royalist }: { royalist: boolean }) {
 }
 
 /**
- * The report of a battle or a combat, at the bottom of the map when it is chosen: the flag of each side, the forces in combat, the units, who won, and what each side
+ * The report of a battle or a combat, at the bottom of the map when it is chosen: its date, place and title, the result with the flag of the winner, a short account, the flag of each side, the forces in combat, the units, who won, and what each side
  * lost (dead, wounded, prisoners). What the sources do not give says «sin dato» and is never written as zero.
  */
 export function BattleReport({ event }: { event: AndesEvent }) {
   const outcome = event.outcome;
   if (!outcome) return null;
+  const winner = /patriota/i.test(outcome.result) ? false : /realista/i.test(outcome.result) ? true : null;
   return (
     <section className="andes-report andes-glass" aria-label={`Resultado: ${event.name}`}>
-      <p className="andes-report-result">{outcome.result}</p>
+      <header className="andes-report-head">
+        <time className="andes-report-date" dateTime={event.date}>
+          {formatDate(event.date)}
+        </time>
+        <h2 className="andes-report-title">{outcome.place ? `${event.name} · ${outcome.place}` : event.name}</h2>
+        <p className="andes-report-result">
+          <span>Resultado:</span>
+          {winner !== null && <Flag royalist={winner} />}
+          <strong>{outcome.result}</strong>
+        </p>
+        {outcome.summary && <p className="andes-report-summary">{outcome.summary}</p>}
+      </header>
       <div className="andes-report-sides">
         {outcome.sides.map((side, i) => (
           <div key={side.side} className="andes-report-side">
