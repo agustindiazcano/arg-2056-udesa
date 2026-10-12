@@ -13,7 +13,7 @@ import { startingMen } from './column.js';
 import { MAIN_FORCE_ID } from './forces.js';
 import { campaignEndDay, splitColumns } from './columns.js';
 import { figuresNote, parseAndesEvents } from './data.js';
-import { EventList, EventPanel } from './Panel.js';
+import { EventList } from './Panel.js';
 import type { CameraMode } from './camera.js';
 import { AltitudeProfile } from './AltitudeProfile.js';
 import { BattleReport } from './BattleReport.js';
@@ -293,13 +293,7 @@ export default function Scene() {
 
       {tunerOpen && <CameraTuner api={cameraApi} view={camView} day={day} onGo={() => setCamera('free')} />}
 
-      {selected && (
-        <div className="andes-detail andes-glass">
-          <EventPanel event={selected} onClose={close} />
-        </div>
-      )}
-
-      {selected?.outcome && <BattleReport event={selected} />}
+      {selected?.outcome && <BattleReport key={selected.id} event={selected} />}
 
       <footer className="andes-foot">
         <button type="button" className="andes-foot-btn" aria-label="Créditos, fuentes y aclaraciones" aria-describedby="andes-foot-tip">

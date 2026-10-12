@@ -22,3 +22,6 @@ web/e2e/screenshots/
 web/playwright-report/
 web/test-results/
 .env.local
+
+# Annotated reference screenshots (local only)
+test/*.png

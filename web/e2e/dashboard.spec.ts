@@ -208,7 +208,7 @@ test.describe('andes scene', () => {
   // the map is MapLibre: its zoom is published on the host (data-zoom)
   const zoom = async (host: Locator) => Number(await host.getAttribute('data-zoom'));
 
-  test('shows the campaign on the real map, a panel per event, and moves the army with the clock', async ({ page }) => {
+  test('shows the campaign on the real map, selects an event with the camera flying to it, and moves the army with the clock', async ({ page }) => {
     await page.goto('/?quality=high');
     await openTab(page, 'Andes');
     const host = page.locator('[data-chart3d="andes"]');
@@ -222,14 +222,15 @@ test.describe('andes scene', () => {
 
     await page.getByRole('button', { name: /^Eventos del cruce/ }).click(); // the dates and events are a dropdown
     await page.getByRole('button', { name: /Manantiales/ }).click();
-    const panel = page.getByRole('region', { name: /Evento: Manantiales/ });
-    await expect(panel).toBeVisible();
+    const chosen = page.getByRole('button', { name: /Manantiales/ });
+    await expect(chosen).toHaveAttribute('aria-pressed', 'true');
+    await expect(page.getByRole('region', { name: /Evento:/ })).toHaveCount(0); // no detail popup
     // the camera flew to the event
     await expect.poll(() => zoom(host)).toBeGreaterThan(11);
 
     await page.keyboard.press('Escape');
-    await expect(panel).toHaveCount(0);
-    await expect(page.getByRole('button', { name: /Manantiales/ })).toBeFocused();
+    await expect(chosen).toHaveAttribute('aria-pressed', 'false');
+    await expect(chosen).toBeFocused();
 
     const day = page.getByTestId('andes-day');
     const before = await day.innerText();

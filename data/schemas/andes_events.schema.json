@@ -46,6 +46,8 @@
         "type": "object",
         "properties": {
           "result": { "type": "string", "minLength": 1 },
+          "place": { "type": "string", "minLength": 1 },
+          "summary": { "type": "string", "minLength": 1 },
           "sides": {
             "type": "array",
             "minItems": 2,
@@ -57,6 +59,7 @@
                 "killed": { "type": ["integer", "null"] },
                 "wounded": { "type": ["integer", "null"] },
                 "prisoners": { "type": ["integer", "null"] },
+                "casualties_text": { "type": "string", "minLength": 1 },
                 "note": { "type": "string" }
               },
               "required": ["side", "units", "killed", "wounded", "prisoners"],

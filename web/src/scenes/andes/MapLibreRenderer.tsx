@@ -2,10 +2,11 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { MercatorCoordinate, Map as MapLibreMap, setWorkerUrl } from 'maplibre-gl';
 import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?url';
 import type { CustomLayerInterface, CustomRenderMethodInput, GeoJSONSource, MapLayerMouseEvent } from 'maplibre-gl';
-import { AmbientLight, Color, DirectionalLight, InstancedMesh, Matrix4, MeshStandardMaterial, PerspectiveCamera, Quaternion, Scene, SphereGeometry, Vector3, WebGLRenderer } from 'three';
+import { AmbientLight, BufferAttribute, BufferGeometry, Color, DataTexture, DirectionalLight, InstancedMesh, Matrix4, MeshStandardMaterial, PerspectiveCamera, Points, PointsMaterial, Quaternion, RGBAFormat, Scene, SphereGeometry, Vector3, WebGLRenderer } from 'three';
 import { QUALITY_PRESETS } from '../../runtime/capabilities';
 import { NavControls } from '../../ui/NavControls';
-import { figureCount, startingMen } from './column';
+import { columnSlots, figureCount, startingMen } from './column';
+import { dustCount, fillDust } from './dust';
 import type { CameraApi, CameraView } from './cameraKeyframes';
 import { columnColor, positionOfColumn } from './columns';
 import { BattleCard } from './BattleCard';
@@ -20,7 +21,7 @@ import { createFigureColumn } from './figures3d';
 import type { FigureColumn } from './figures3d';
 import type { Graphics } from './graphics';
 import { cameraFor, coordAtKm, figuresVisible, gaitAmount, gaitPhaseAt, metersPerPixel, metersPerUnit, mixHex, timeScaleForZoom, WASD_SHIFT_FACTOR, WASD_SPEED_PX, wasdDelta } from './mapGeo';
-import { arcAt, buildPath } from './pathAlong';
+import { arcAt, buildPath, sampleAlongExtended } from './pathAlong';
 import { distanceKm } from './timeline';
 import { useReducedMotion } from '../../runtime/useReducedMotion';
 import { ANDES_FINAL_VIEW, ANDES_TOUR, BATTLE_VIEW, SPOT_VIEW, TOUR_HOLD_MS, tourDurationMs, tourPoseAt } from './tour';
@@ -53,7 +54,7 @@ import {
   spotlightStateAt
 } from './forces';
 import type { ForceInfo } from './forces';
-import type { Path } from './pathAlong';
+import type { Path, PathSample } from './pathAlong';
 import { eventDateText, positionAt } from './timeline';
 import type { Route } from './timeline';
 import 'maplibre-gl/dist/maplibre-gl.css';
@@ -357,6 +358,10 @@ class ArmyLayer implements CustomLayerInterface {
   private readonly scene = new Scene();
   private readonly camera = new PerspectiveCamera();
   private column: FigureColumn | null = null;
+  private dust: Points | null = null;
+  private dustCount = 0;
+  private readonly dustSlots: ReturnType<typeof columnSlots>;
+  private readonly dustSample: PathSample = { x: 0, y: 0, z: 0, heading: 0 };
   private path: Path | null = null;
   private pathKm0 = 0;
   private pathStepKm = 0;
@@ -373,6 +378,7 @@ class ArmyLayer implements CustomLayerInterface {
     private readonly palette?: Readonly<Record<string, string>>
   ) {
     this.id = id;
+    this.dustSlots = columnSlots(count);
   }
 
   onAdd(map: MapLibreMap, gl: WebGLRenderingContext | WebGL2RenderingContext): void {
@@ -387,9 +393,45 @@ class ArmyLayer implements CustomLayerInterface {
 
   onRemove(): void {
     this.column?.mesh.geometry.dispose();
+    this.disposeDust();
     this.renderer?.dispose();
     this.renderer = null;
     this.map = null;
+  }
+
+  private disposeDust(): void {
+    if (!this.dust) return;
+    this.scene.remove(this.dust);
+    this.dust.geometry.dispose();
+    const material = this.dust.material as PointsMaterial;
+    material.map?.dispose();
+    material.dispose();
+    this.dust = null;
+  }
+
+  /** The cloud of dust behind the column: soft round points, one buffer of positions and one of colors with alpha, filled every frame. */
+  private buildDust(): void {
+    this.disposeDust();
+    this.dustCount = dustCount(this.count, 1);
+    if (this.dustCount === 0) return;
+    const size = 32;
+    const texels = new Uint8Array(size * size * 4);
+    for (let y = 0; y < size; y += 1) {
+      for (let x = 0; x < size; x += 1) {
+        const d = Math.hypot(x - size / 2 + 0.5, y - size / 2 + 0.5) / (size / 2);
+        const a = Math.max(0, 1 - d);
+        texels.set([255, 255, 255, Math.round(255 * a * a)], (y * size + x) * 4);
+      }
+    }
+    const texture = new DataTexture(texels, size, size, RGBAFormat);
+    texture.needsUpdate = true;
+    const geometry = new BufferGeometry();
+    geometry.setAttribute('position', new BufferAttribute(new Float32Array(this.dustCount * 3), 3));
+    geometry.setAttribute('color', new BufferAttribute(new Float32Array(this.dustCount * 4), 4));
+    const material = new PointsMaterial({ size: 1.1, sizeAttenuation: true, vertexColors: true, transparent: true, depthWrite: false, map: texture });
+    this.dust = new Points(geometry, material);
+    this.dust.frustumCulled = false;
+    this.scene.add(this.dust);
   }
 
   /** Rebuilds the path around the army at this unit size and puts the column on it. */
@@ -432,6 +474,7 @@ class ArmyLayer implements CustomLayerInterface {
     this.column = createFigureColumn(this.count, this.path, groundAt, 1, this.palette);
     this.column.mesh.frustumCulled = false;
     this.scene.add(this.column.mesh);
+    this.buildDust();
   }
 
   render(_gl: WebGLRenderingContext | WebGL2RenderingContext, args: CustomRenderMethodInput): void {
@@ -454,6 +497,22 @@ class ArmyLayer implements CustomLayerInterface {
     const now = performance.now();
     const amount = gaitAmount(now, this.lastMovedMs);
     this.column.update(arcAt(this.path, index), gaitPhaseAt(now), amount, this.formation);
+    if (this.dust && this.path) {
+      const path = this.path;
+      const geometry = this.dust.geometry;
+      const position = geometry.getAttribute('position') as BufferAttribute;
+      const color = geometry.getAttribute('color') as BufferAttribute;
+      const sample = this.dustSample;
+      // no dust while the army stands in its battle line
+      fillDust({ position: position.array as Float32Array, color: color.array as Float32Array }, this.dustCount, this.dustSlots, arcAt(path, index), now, this.formation ? 0 : amount, (s, lateral, out) => {
+        sampleAlongExtended(path, s, sample);
+        out.x = sample.x + Math.cos(sample.heading) * lateral;
+        out.y = sample.y;
+        out.z = sample.z - Math.sin(sample.heading) * lateral;
+      });
+      position.needsUpdate = true;
+      color.needsUpdate = true;
+    }
     if (amount > 0) map.triggerRepaint(); // the legs keep moving while the army does
 
     const s = this.origin.scale * this.builtUnit;
