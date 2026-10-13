@@ -66,7 +66,6 @@
   font-weight: 800;
   color: var(--intro-light);
   text-shadow: 0 0 10px color-mix(in srgb, var(--intro-light) 55%, transparent);
-  transition: text-shadow 0.2s ease-out;
 }
 
 button.brand {
@@ -82,9 +81,9 @@ button.brand {
 .brand-a,
 .brand-n {
   transition:
-    color 0.25s ease-out,
-    text-shadow 0.25s ease-out,
-    filter 0.25s ease-out;
+    color 0.5s ease-in-out,
+    text-shadow 0.5s ease-in-out,
+    filter 0.5s ease-in-out;
 }
 
 button.brand:hover,

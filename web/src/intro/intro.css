@@ -191,12 +191,13 @@
 .intro-title .a,
 .intro-title .n {
   width: fit-content;
+  cursor: pointer;
   transition:
-    color 0.25s ease-out,
-    text-shadow 0.25s ease-out;
+    color 0.6s ease-in-out,
+    text-shadow 0.6s ease-in-out;
 }
 .intro-title {
-  transition: filter 0.25s ease-out;
+  transition: filter 0.6s ease-in-out;
 }
 /* hover on the title: "Argentina" turns gold, "2056" turns white and a gold aura glows around both (the same as the brand of the header) */
 .intro-title:has(.a:hover, .n:hover) {
@@ -207,7 +208,8 @@
 }
 .intro-title:has(.a:hover, .n:hover) .n {
   color: var(--intro-ink);
-  text-shadow: 0 0 14px color-mix(in srgb, var(--gold) 70%, transparent);
+  /* two layers like the resting state, so the shadow interpolates instead of jumping */
+  text-shadow: 0 0 14px color-mix(in srgb, var(--gold) 70%, transparent), 0 0 46px color-mix(in srgb, var(--gold) 35%, transparent);
 }
 .intro-title .a {
   display: block;
