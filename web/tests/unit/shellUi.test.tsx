@@ -43,7 +43,7 @@ afterEach(() => {
 const controls = () => screen.getByRole('region', { name: 'Controles' });
 
 describe('header', () => {
-  it('names the app and has the three sections in a navigation named Escenas', () => {
+  it('names the app and has the sections in a navigation named Escenas', () => {
     render(<App />);
     const brand = document.querySelector('.brand')!;
     expect(brand.textContent).toBe('Argentina 2056');
@@ -51,7 +51,7 @@ describe('header', () => {
     expect(brand.querySelector('.brand-a')?.textContent).toBe('Argentina');
     expect(brand.querySelector('.brand-n')?.textContent).toBe('2056');
     const nav = screen.getByRole('navigation', { name: 'Escenas' });
-    expect(within(nav).getAllByRole('tab').map((t) => t.textContent)).toEqual(['Andes', 'Data Dashboard', 'Recorrido']);
+    expect(within(nav).getAllByRole('tab').map((t) => t.textContent)).toEqual(['Andes', 'Data Dashboard', 'Recorrido', 'Simulador del PBI', 'Data']);
     expect(SCENE_LABELS.economy).toBe('Economía');
   });
 
@@ -59,7 +59,7 @@ describe('header', () => {
     window.localStorage.removeItem(SHOW_DASHBOARD_KEY);
     render(<App />);
     const nav = screen.getByRole('navigation', { name: 'Escenas' });
-    expect(within(nav).getAllByRole('tab').map((t) => t.textContent)).toEqual(['Andes', 'Recorrido']);
+    expect(within(nav).getAllByRole('tab').map((t) => t.textContent)).toEqual(['Andes', 'Recorrido', 'Simulador del PBI', 'Data']);
     expect(screen.queryByRole('tab', { name: 'Data Dashboard' })).toBeNull();
   });
 
@@ -266,7 +266,7 @@ describe('Recorrido step 1', () => {
     expect(await screen.findByRole('heading', { name: 'PBI de la Argentina' })).toBeTruthy();
     expect(screen.queryByRole('heading', { name: 'escena' })).toBeNull();
     cleanup();
-    useStore.setState({ section: 'tour', tourStep: 14 });
+    useStore.setState({ section: 'tour', tourStep: 15 });
     render(<App />);
     expect(screen.queryByRole('heading', { name: 'PBI de la Argentina' })).toBeNull();
     expect(screen.getByRole('heading', { name: 'escena' })).toBeTruthy();

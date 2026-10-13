@@ -5,41 +5,66 @@ import type { TimelineClock } from '../charts3d/types.js';
 /**
  * The clock of an animation that the visitor can drag: milliseconds since it began, updated on every animation frame, from 0 to
  * `FOLLOW_TOTAL_MS`; a run starts again from 0 when `run` changes. `seek` stops the clock at a moment (the visitor drags the
- * timeline). The same time is in `clock`, a plain object that the 3D charts read on every frame without a React render.
+ * timeline); `pause` and `play` stop it and run it on from where it stands. The same time is in `clock`, a plain object that the 3D charts read on every frame without a React render.
  */
-export function useTimeline(run: number, reduced: boolean): { elapsed: number; clock: TimelineClock; seek: (ms: number) => void } {
+export function useTimeline(
+  run: number,
+  reduced: boolean,
+  speed = 1
+): { elapsed: number; clock: TimelineClock; seek: (ms: number) => void; playing: boolean; play: () => void; pause: () => void } {
   const clock = useRef<TimelineClock>({ current: reduced ? FOLLOW_TOTAL_MS : 0 });
   const [elapsed, setElapsed] = useState(clock.current.current);
-  const frame = useRef(0);
+  const [playing, setPlaying] = useState(!reduced);
+
+  const speedRef = useRef(speed);
+  speedRef.current = speed;
 
   const set = useCallback((ms: number) => {
     clock.current.current = ms;
     setElapsed(ms);
   }, []);
 
+  // a new run (or reduced motion) puts the clock at its start, or at its end under reduced motion; this effect comes first so the loop below reads it
   useEffect(() => {
     if (reduced) {
       set(FOLLOW_TOTAL_MS);
+      setPlaying(false);
       return;
     }
-    const start = performance.now();
-    const tick = (now: number) => {
-      const ms = Math.min(FOLLOW_TOTAL_MS, now - start);
-      set(ms);
-      if (ms < FOLLOW_TOTAL_MS) frame.current = requestAnimationFrame(tick);
-    };
     set(0);
-    frame.current = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(frame.current);
+    setPlaying(true);
   }, [run, reduced, set]);
+
+  // while playing, the clock runs on from where it stands
+  useEffect(() => {
+    if (!playing) return;
+    let last = performance.now();
+    let frame = 0;
+    const tick = (now: number) => {
+      // the speed can change while it plays: advance by the time since the last frame times the speed of now
+      const ms = Math.min(FOLLOW_TOTAL_MS, clock.current.current + (now - last) * speedRef.current);
+      last = now;
+      set(ms);
+      if (ms < FOLLOW_TOTAL_MS) frame = requestAnimationFrame(tick);
+      else setPlaying(false);
+    };
+    frame = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(frame);
+  }, [playing, run, set]);
 
   const seek = useCallback(
     (ms: number) => {
-      cancelAnimationFrame(frame.current);
+      setPlaying(false);
       set(Math.min(FOLLOW_TOTAL_MS, Math.max(0, ms)));
     },
     [set]
   );
+  const pause = useCallback(() => setPlaying(false), []);
+  // at the end, play starts again from the beginning
+  const play = useCallback(() => {
+    if (clock.current.current >= FOLLOW_TOTAL_MS) set(0);
+    setPlaying(true);
+  }, [set]);
 
-  return { elapsed, clock: clock.current, seek };
+  return { elapsed, clock: clock.current, seek, playing, play, pause };
 }

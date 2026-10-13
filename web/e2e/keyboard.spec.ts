@@ -92,7 +92,7 @@ test.describe('keyboard', () => {
     await page.keyboard.press('ArrowRight');
 
     await expect.poll(() => slider.inputValue()).not.toBe(before);
-    await expect(page.getByRole('tab', { name: 'Simulador' })).toHaveAttribute('aria-selected', 'true');
+    await expect(page.getByRole('tab', { name: 'Simulador', exact: true })).toHaveAttribute('aria-selected', 'true');
     await expect(year).toHaveAttribute('data-value', yearBefore ?? '');
   });
 });

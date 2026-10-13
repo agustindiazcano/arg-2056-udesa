@@ -77,8 +77,42 @@ button.brand {
   cursor: pointer;
 }
 
-button.brand:hover .brand-n {
-  text-shadow: 0 0 16px var(--intro-light);
+/* hover on the logo: "Argentina" turns gold, "2056" turns white, and a gold aura glows around both */
+.brand,
+.brand-a,
+.brand-n {
+  transition:
+    color 0.25s ease-out,
+    text-shadow 0.25s ease-out,
+    filter 0.25s ease-out;
+}
+
+button.brand:hover,
+button.brand:focus-visible {
+  filter: drop-shadow(0 0 6px color-mix(in srgb, var(--gold) 80%, transparent)) drop-shadow(0 0 16px color-mix(in srgb, var(--gold) 55%, transparent));
+}
+
+button.brand:hover .brand-a,
+button.brand:focus-visible .brand-a {
+  color: var(--gold);
+}
+
+button.brand:hover .brand-n,
+button.brand:focus-visible .brand-n {
+  color: var(--ink);
+  text-shadow: 0 0 10px color-mix(in srgb, var(--gold) 70%, transparent);
+}
+
+.tab-icon {
+  width: 0.95em;
+  height: 0.95em;
+  margin-right: 0.4em;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  flex: none;
 }
 
 .header-end {
@@ -1193,4 +1227,468 @@ main.scene-container {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+}
+
+/* ---- Recorrido steps 1 and 2: the small box of indicators ---------------------------------------------------------- */
+
+.tour-indicators {
+  flex: 0 0 auto;
+  align-self: flex-start;
+  max-width: 100%;
+  padding: var(--space-2, 0.5rem) var(--space-3);
+  background: var(--glass);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  pointer-events: auto;
+}
+
+.tour-indicators ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1, 0.25rem) var(--space-md);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tour-indicators li {
+  display: flex;
+  flex-direction: column;
+  min-width: 6.5rem;
+}
+
+.tour-ind-label,
+.tour-ind-unit,
+.tour-ind-source {
+  color: var(--muted);
+  font-size: 0.7rem;
+}
+
+.tour-ind-value {
+  color: var(--ink);
+  font-size: 1.15rem;
+  font-weight: 300;
+}
+
+.tour-ind-source {
+  margin: var(--space-1, 0.25rem) 0 0;
+  color: var(--state-warning);
+}
+
+/* ---- Gráfico | Tabla switch of every chart of the Recorrido -------------------------------------------------------- */
+
+.tour-chart {
+  position: relative;
+}
+
+.tour-grid > .gdp-chart > .tour-chart > .tour-view-switch,
+.tour-view-switch {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 3;
+  width: auto;
+  height: auto;
+  pointer-events: auto;
+}
+
+.tour-table {
+  overflow: auto;
+  padding-top: 2.4rem;
+  box-sizing: border-box;
+  pointer-events: auto;
+}
+
+.tour-table table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+  color: var(--ink-2);
+}
+
+.tour-table thead th {
+  position: sticky;
+  top: 0;
+  background: color-mix(in srgb, var(--page) 88%, transparent);
+  color: var(--muted);
+  font-weight: 400;
+}
+
+.tour-table th,
+.tour-table td {
+  padding: 0.25rem var(--space-2, 0.5rem);
+  text-align: left;
+}
+
+.tour-table th:not(:first-child),
+.tour-table td:not(:first-child) {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+/* step 0: the big year sits at the top left, so the Gráfico | Tabla switch goes on the left under it and the table starts below both */
+.gdp-chart:has(> .world-year) .tour-view-switch {
+  top: 4rem;
+  right: auto;
+  left: 0;
+}
+
+.gdp-chart:has(> .world-year) .tour-table {
+  padding-top: 6.6rem;
+}
+
+/* ---- The Simulador section: a big chart and a bar of factors on the right ------------------------------------------ */
+
+.sim-grid {
+  flex: 1 1 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(16rem, 1.2fr);
+  gap: var(--space-3);
+  min-height: 0;
+}
+
+.sim-grid > .gdp-chart {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2, 0.5rem);
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.sim-chart > .tour-chart {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.sim-chart > .tour-chart > *:not(.tour-view-switch) {
+  width: 100%;
+  height: 100%;
+}
+
+.sim-panel {
+  overflow-y: auto;
+  pointer-events: auto;
+}
+
+.sim-results {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-3);
+}
+
+.sim-results > div {
+  display: flex;
+  flex-direction: column;
+}
+
+.sim-results strong {
+  font-size: 1.3rem;
+  font-weight: 300;
+  font-variant-numeric: tabular-nums;
+}
+
+.sim-label,
+.sim-help {
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+
+.sim-factors {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.sim-factor {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.sim-factor-head {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-2, 0.5rem);
+  font-size: 0.85rem;
+  color: var(--ink-2);
+}
+
+.sim-factor-head output {
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.sim-factor input[type='range'] {
+  width: 100%;
+  accent-color: var(--blue);
+  cursor: pointer;
+}
+
+@media (max-width: 900px) {
+  .sim-grid {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: minmax(16rem, 1fr) auto;
+    overflow-y: auto;
+  }
+}
+
+/* ---- Step 14 of the Recorrido: Productividad (chart on the left, text on the right) -------------------------------- */
+
+.prod-step .prod-unit {
+  color: var(--muted);
+}
+
+.prod-legend {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0;
+  background: none;
+  border: 0;
+  color: var(--ink-2);
+  font: inherit;
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.prod-legend[aria-pressed='false'] {
+  opacity: 0.45;
+  text-decoration: line-through;
+}
+
+.prod-text {
+  overflow-y: auto;
+  pointer-events: auto;
+}
+
+.prod-text h3 {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 400;
+}
+
+.prod-text p {
+  margin: 0;
+  color: var(--ink-2);
+  font-size: 0.9rem;
+}
+
+.prod-kicker {
+  color: var(--muted) !important;
+  font-size: 0.75rem !important;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.prod-text .prod-note {
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+
+.prod-text summary {
+  cursor: pointer;
+  color: var(--ink-2);
+  font-size: 0.85rem;
+}
+
+.prod-nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2, 0.5rem);
+  margin-top: auto;
+}
+
+.prod-tabs {
+  display: flex;
+  gap: 0.25rem;
+  margin-right: auto;
+}
+
+.prod-step .prov-map > .tour-chart + .tour-chart {
+  margin-top: var(--space-2, 0.5rem);
+}
+
+.prod-step a {
+  color: var(--blue);
+  pointer-events: auto;
+}
+
+/* Anterior / Siguiente and the step numbers show the hand when they can be pressed */
+.tour-steps .chip:not(:disabled),
+.prod-nav .btn:not(:disabled),
+.prod-nav .chip {
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+/* ---- The Data section: a scrolling page of tables, a selector of slide and the references ------------------------- */
+
+.data-page {
+  box-sizing: border-box;
+  height: 100%;
+  overflow-y: auto;
+  padding: var(--space-3) var(--space-md) var(--space-lg, 2rem);
+  pointer-events: auto;
+}
+
+.data-bar {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+  margin: 0 calc(var(--space-md) * -1) var(--space-3);
+  padding: var(--space-2, 0.5rem) var(--space-md);
+  background: var(--glass-strong);
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(14px);
+}
+
+.data-bar h2 {
+  margin: 0 auto 0 0;
+  font-size: var(--font-xl, 1.6rem);
+  font-weight: 300;
+}
+
+.data-select {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2, 0.5rem);
+  color: var(--ink-2);
+  font-size: 0.85rem;
+}
+
+.data-select select {
+  max-width: min(32rem, 60vw);
+  padding: var(--space-xs) var(--space-2);
+  background: var(--surface);
+  color: var(--ink);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  font: inherit;
+  cursor: pointer;
+}
+
+.data-intro {
+  margin: 0 0 var(--space-3);
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.data-slide {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin-bottom: var(--space-3);
+  padding: var(--space-md);
+  background: var(--glass);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  scroll-margin-top: 5rem;
+}
+
+.data-slide h3 {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 400;
+}
+
+.data-badge {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+
+.data-badge--mock {
+  color: var(--state-warning);
+}
+
+.data-table-block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2, 0.5rem);
+}
+
+.data-table-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.data-count {
+  margin-right: auto;
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+
+.data-scroll {
+  max-height: 16rem;
+  overflow: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+}
+
+.data-scroll table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+  color: var(--ink-2);
+}
+
+.data-scroll thead th {
+  position: sticky;
+  top: 0;
+  background: var(--surface);
+  color: var(--muted);
+  font-weight: 400;
+  text-align: left;
+}
+
+.data-scroll th,
+.data-scroll td {
+  padding: 0.25rem var(--space-2, 0.5rem);
+  text-align: left;
+  white-space: nowrap;
+}
+
+.data-scroll th:not(:first-child),
+.data-scroll td:not(:first-child) {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.data-refs,
+.data-reflist {
+  margin: 0;
+  color: var(--ink-2);
+  font-size: 0.85rem;
+}
+
+.data-reflist {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 0;
+  list-style: none;
+}
+
+.data-reflist li {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2, 0.5rem);
+}
+
+.data-status {
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+
+.data-page a {
+  color: var(--blue);
 }

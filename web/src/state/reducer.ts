@@ -76,11 +76,13 @@ export function reduce(state: State, action: Action, steps: StepsByScene = STEPS
   switch (action.type) {
     // in the Recorrido the left and right arrows walk its steps, not the scenes
     case 'nextScene': {
+      if (state.section === 'simulator' || state.section === 'data') return state;
       if (state.section === 'tour') return state.tourStep >= TOUR_STEPS ? state : { ...state, tourStep: state.tourStep + 1 };
       const ns = nextScene(state.scene);
       return ns === state.scene ? state : enterScene(state, ns, steps);
     }
     case 'prevScene': {
+      if (state.section === 'simulator' || state.section === 'data') return state;
       if (state.section === 'tour') return state.tourStep <= TOUR_FIRST_STEP ? state : { ...state, tourStep: state.tourStep - 1 };
       const ps = prevScene(state.scene);
       return ps === state.scene ? state : enterScene(state, ps, steps);

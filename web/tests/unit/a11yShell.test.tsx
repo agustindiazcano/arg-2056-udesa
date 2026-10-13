@@ -66,7 +66,7 @@ describe('skip link and landmarks', () => {
     render(<App />);
     const nav = screen.getByRole('navigation', { name: 'Escenas' });
     expect(within(nav).getByRole('tablist')).toBeTruthy();
-    expect(within(nav).getAllByRole('tab')).toHaveLength(3);
+    expect(within(nav).getAllByRole('tab')).toHaveLength(5);
   });
 });
 

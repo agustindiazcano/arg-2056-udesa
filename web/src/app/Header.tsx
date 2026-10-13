@@ -11,7 +11,7 @@ const BRAND = (
   </>
 );
 
-/** The brand (a way back to the intro), the sections (and the controls of the scene, to the right of them) and the link to the sources. */
+/** The brand (a way back to the intro), the sections (the steps of the Recorrido next to them, and the controls of the scene) and the link to the sources. */
 export function Header({ onHome }: { onHome?: () => void }) {
   const section = useStore((s) => s.section);
   const navRef = useCallback((el: HTMLDivElement | null) => useSlots.getState().set('nav', el), []);
@@ -26,15 +26,15 @@ export function Header({ onHome }: { onHome?: () => void }) {
           <span className="brand">{BRAND}</span>
         )}
         <SectionTabs />
+        {section === 'tour' && <TourSteps />}
         <div className="header-end">
           <a href="references.html">Fuentes y métodos</a>
         </div>
       </div>
-      {/* the second row: the scenes of the Data Dashboard, the controls of the Andes and the steps of the Recorrido */}
+      {/* the second row: the scenes of the Data Dashboard, and the controls of the Andes */}
       <div className="header-row header-row--sub">
         <SceneTabs />
         <div className="nav-slot" ref={navRef} />
-        {section === 'tour' && <TourSteps />}
       </div>
     </header>
   );

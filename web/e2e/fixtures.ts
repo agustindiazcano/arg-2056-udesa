@@ -90,5 +90,5 @@ export async function openTab(page: Page, name: string) {
     const dashboard = page.getByRole('tab', { name: 'Data Dashboard' });
     if ((await dashboard.getAttribute('aria-selected')) !== 'true') await dashboard.click();
   }
-  await page.getByRole('tab', { name }).click();
+  await page.getByRole('tab', { name, exact: true }).click();
 }

@@ -20,6 +20,10 @@ import { hasTourChart } from '../tour/chartSteps';
 /** The charts of the Recorrido draw with ECharts, which must stay out of the initial load. */
 const TourStep = lazy(() => import('../tour/TourStep').then((m) => ({ default: m.TourStep })));
 
+const Simulator = lazy(() => import('../tour/Simulator').then((m) => ({ default: m.Simulator })));
+
+const DataPage = lazy(() => import('../datasets/DataPage').then((m) => ({ default: m.DataPage })));
+
 /** `onHome` is the way back to the intro: the brand in the header calls it. */
 export function App({ onHome }: { onHome?: () => void }) {
   useKeyboard();
@@ -71,7 +75,15 @@ export function App({ onHome }: { onHome?: () => void }) {
         </div>
         
         <main id="main" tabIndex={-1} className="scene-container" data-testid="scene">
-          {section === 'tour' && hasTourChart(tourStep) ? (
+          {section === 'data' ? (
+            <Suspense fallback={<Spinner label="Cargando los datos..." />}>
+              <DataPage />
+            </Suspense>
+          ) : section === 'simulator' ? (
+            <Suspense fallback={<Spinner label="Cargando el simulador..." />}>
+              <Simulator />
+            </Suspense>
+          ) : section === 'tour' && hasTourChart(tourStep) ? (
             <Suspense fallback={<Spinner label="Cargando el gráfico..." />}>
               <TourStep step={tourStep} />
             </Suspense>
@@ -83,7 +95,7 @@ export function App({ onHome }: { onHome?: () => void }) {
         </main>
         
         <footer className="bottom-bar">
-          {section !== 'tour' && (
+          {section !== 'tour' && section !== 'simulator' && section !== 'data' && (
             <div className="controls-wrap">
               <Hud />
               <ProvinceFilter />

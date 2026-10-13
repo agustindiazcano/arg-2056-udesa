@@ -67,9 +67,23 @@ Every task below has a brief (`<slug>.md` in the repository root) and a prompt (
 14. [ ] `polish`: decisions taken (`D-polish-3` color still the human's); 3D items first (`D-3d-6`); by `AGENTS.md` section 8 it starts after the model and data tasks unless the human starts it earlier for the scenes that exist.
 15. [ ] `docs-submission` (draft brief) and `demo-video` (optional, draft brief): BLOCKED by the contest's rules.
 
+## Next on the Recorrido (human request 2026-10-12)
+
+| # | | Task | Notes |
+|---|---|---|---|
+| 1 | 🔴 | **`real-data-review`: put real data in every slide** and, for what cannot be reached or found, **the AI writes the list of pending URLs, data needed and links it could not open** (`docs/data-requests.md`) so the human brings the data by hand. Never fill or invent a value. | Seed list in `docs/data-requests.md` (D1 to D22). Step 0 first: wire `worldRealData.json` (see the line under Data to verify). |
+| 2 | 🟡 | **Natural resources, two slides with buttons instead of eight.** Today steps 2, 4, 7, 8, 9, 10, 11 and 13 touch the subject, all made-up, none with play or a resource filter. Plan: (A) *Minería e hidrocarburos*: buttons Minería / Hidrocarburos, a resource filter (oro, cobre, litio, petróleo, gas), measures production / exports / stock, a map + bars by province + province ranking + the national total as a line, projects by province, **play from 2025 to 2056**; (B) *Agro*: total production and its composition, exports, in tons and in dollars, same map, bars, ranking and play. | The mock contracts exist (`data/mock/resource_production.json` by province 1990-2025, `forecast_output.json` to 2056 with three scenarios, `projects.json`); real data are D12 to D18. |
+| 3 | 🟢 | Step 15 and the old scene at step 14's neighbour still show a data scene; the INDEC 2016-2025 series as an extra step of the productivity slide. | |
+
 ## Data to verify (human, against original source)
 
 - [ ] (empty; the app shows mock data only) Recorrido step 1 GDP chart: every number is made up (`web/src/tour/gdpMock.ts`, labelled "Datos de prueba"); replace with sourced GDP (INDEC / World Bank / Maddison) and the model's fan before release.
+
+- [ ] Recorrido steps 1 and 2 indicators box: the six figures (PBI, población, PBI per cápita, exportaciones totales, crecimiento, inversión) are made up (`web/src/tour/indicatorsMock.ts`, labelled "Datos de prueba"); replace with sourced values (INDEC / World Bank / BCRA) before release.
+
+- [ ] Recorrido step 14 «Productividad» (`web/src/tour/productivity.ts`, `productivityData.json`): PWT 11.0 via FRED, 1955-2023, four countries; the data come from the human's `productivity_slide_spec.html` and were not re-downloaded by us. Verify the 15 FRED series (IDs in `docs/references.md` P7), the Argentine hours anomaly in 2021-2023, and the AI estimates quoted in step 5 (Acemoglu, Anthropic: cited, not opened). The INDEC 2016-2025 figures are verified in the PDF (P1) but the charts end in 2023; an extra step with the INDEC series (cuadros 12 y 13) was offered. Baumann Fonay (P2) is not verified and contradicts INDEC on 2024.
+- [ ] Recorrido step 0 real data: `scripts/build_world_data.py` already writes the Maddison 2020 and the World Bank / FRED series (`worldRealData.json`, `worldReference.json`); **still to do: wire them into `worldData.ts`/`WorldStep`/`WorldTable` (the slide still draws made-up data), update `worldAnim.ts` (1900-2026) and the two world tests, and add the tables and links to the Data section.** Human: download the Maddison 2023 file by hand (Dataverse returned error 500, links in `docs/references.md` W2) to extend the series to 2022.
+- [ ] Simulador del PBI (`web/src/tour/simModel.ts`): plain arithmetic; every coefficient (AI ramp over 15 years, 0,1 pp per investment point, population around 0,5 %) and the 2025 GDP of 640 are made up; replace with the model's elasticities and sourced values and record them in `docs/assumptions.md`.
 
 ## Model assumptions (record in `docs/assumptions.md`)
 
@@ -105,6 +119,7 @@ Every task below has a brief (`<slug>.md` in the repository root) and a prompt (
 
 ## Done
 
+- [ ] `recorrido-graficos` (branch `task/recorrido-graficos`, worktree `arg-2056-udesa-recorrido`, local, not pushed): indicators box on steps 1 and 2, step buttons next to the Recorrido tab, play/pause icons and speed on step 0, a Gráfico | Tabla switch on every chart, step 14 «Productividad» (five steps, real PWT data) and the «Simulador del PBI» section; sources in README and `docs/references.md` 4.1; a Data section (`web/src/datasets/`) with the tables of every slide, CSV downloads and the references. Human: check the new lazy chunk against `budgets.json` (`npm run check:bundle`, not run locally). Waiting for review; not seen in a browser; unit tests only.
 - [ ] `tour-gdp-chart` (branch `task/tour-gdp-chart`): Recorrido step 1 shows a modern GDP chart (observed, projected to 2056, range) with 2D / 3D buttons, on made-up data. Waiting for CI and review; steps 2 to 15 still show the data scenes.
 - [x] `F4` (branch `task/motion-story`): gsap 3.15.0; scene transition, counters, series draw-in, story panel redesigned; the 18 steps are now drafts (no figures, no sources) that keep `placeholder: true`.
 - [x] `F3` (branch `task/filters-province-map`): one filter bar (scenario and AI only in the control bar), province geometry committed (`D-3d-3` decided by the agent: Natural Earth admin-1), Recursos follows the province, Economía shows a national note.

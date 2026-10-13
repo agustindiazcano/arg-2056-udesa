@@ -12,6 +12,7 @@ import type { ProvinceId } from '../types/province.js';
 import { PRODUCTION_UNIT, mapValuesOf } from './provinceMock.js';
 import { CHART_STEP_LIST, TOUR_CHARTS } from './tourCharts.js';
 import { Spinner } from '../ui/Spinner.js';
+import { TourIndicators } from './TourIndicators.js';
 import { useTourLayout } from './useTourLayout.js';
 import type { TourCount } from './useTourLayout.js';
 import type { TourChartDef } from './tourCharts.js';
@@ -142,6 +143,7 @@ export function ChartStep({ step }: { step: number }) {
           />
         </div>
       </header>
+      {step === 1 && <TourIndicators />}
       <div className="tour-grid" data-count={shown.length} data-layout={focus ? 'focus' : 'grid'}>
         {shown.map((s, i) => {
           const d = TOUR_CHARTS[s]!;

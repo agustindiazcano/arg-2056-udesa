@@ -15,6 +15,7 @@ import { Spinner } from '../ui/Spinner.js';
 import type { Map3DSpec } from '../charts3d/types.js';
 import type { ProvinceId } from '../types/province.js';
 import { MOCK_SOURCE } from './tourData.js';
+import { TourIndicators } from './TourIndicators.js';
 import { PRODUCTION_UNIT, SECTOR_LABELS, SECTOR_VALUES, mapValuesOf, rankedProvinces } from './provinceMock.js';
 import type { Sector } from './provinceMock.js';
 
@@ -104,6 +105,7 @@ export function ProvinceStep() {
           />
         </div>
       </header>
+      <TourIndicators />
 
       <div className="prov-grid">
         <Reveal k="map" className="gdp-chart prov-map">
