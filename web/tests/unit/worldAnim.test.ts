@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { FOLLOW_MS, FOLLOW_TOTAL_MS, followFrame } from '../../src/charts3d/followAnim';
 import { FOLLOW_WINDOW_YEARS, niceTop, seriesFrame, valueAt } from '../../src/tour/worldAnim';
-import { FIRST_YEAR, HOME, LAST_YEAR, argentinaNominal, regionCountries, regionValuesAt, worldRankingAt } from '../../src/tour/worldData';
+import { FIRST_YEAR, HOME, LAST_YEAR, argentinaReal, regionCountries, regionValuesAt, worldRankingAt } from '../../src/tour/worldData';
 
 describe('followFrame', () => {
   it('draws the line at a steady pace and then pulls back', () => {
@@ -16,16 +16,16 @@ describe('followFrame', () => {
   });
 });
 
-describe('the nominal GDP of Argentina since 1960 (World Bank)', () => {
-  const { years, values } = argentinaNominal();
+describe('the real GDP of Argentina since 1960 (World Bank, constant 2015 dollars)', () => {
+  const { years, values } = argentinaReal();
 
-  it('has one value per year from 1960 to 2025, all positive, and the real figure of 2025', () => {
+  it('has one value per year from 1960 to 2025, all positive, and the figure of 2025', () => {
     expect(years[0]).toBe(FIRST_YEAR);
     expect(years.at(-1)).toBe(LAST_YEAR);
     expect(LAST_YEAR).toBe(2025);
     expect(values).toHaveLength(years.length);
     expect(values.every((v) => v > 0)).toBe(true);
-    expect(values.at(-1)).toBeCloseTo(683.1, 1); // World Bank 2025, billions of current USD (the IMF has 683.6)
+    expect(values.at(-1)).toBeCloseTo(609.2, 1); // World Bank 2025, billions of constant 2015 USD
   });
 
   it('interpolates between two years', () => {
@@ -70,6 +70,6 @@ describe('the rankings of 2025', () => {
     const values = regionValuesAt(LAST_YEAR);
     expect(countries[0]).toBe('Brasil');
     expect(countries.indexOf(HOME)).toBe(2);
-    expect(values[countries.indexOf(HOME)]).toBeCloseTo(683.1, 1);
+    expect(values[countries.indexOf(HOME)]).toBeCloseTo(609.2, 1);
   });
 });

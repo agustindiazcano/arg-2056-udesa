@@ -84,7 +84,7 @@ Commit format: `type(scope): imperative summary` (types: feat, fix, test, refact
 - Never invent, interpolate silently or "fill in" a figure. Gaps are explicit `null` with a `note`.
 - Historical figures with disagreement between historians (Andes crossing: columns, dates, troop and mule counts) use one primary source, mark the range and list alternatives in `docs/sources.md`.
 - Every number you add that will appear in the UI is listed under "Data to verify" in `PENDING.md` until a human confirms it against the original source.
-- Preferred sources: Secretaria de Energia, Secretaria de Mineria, MAGyP, INDEC, BCRA, World Bank, UN WPP, Maddison Project, IMF, USGS, UNDP (HDI).
+- Preferred sources: Secretaria de Energia, Secretaria de Mineria, MAGyP, INDEC, BCRA, World Bank, UN WPP, IMF, USGS, UNDP (HDI).
 
 ## 7. Model rules
 

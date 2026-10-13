@@ -14,7 +14,7 @@ describe('the indicators box of the Recorrido', () => {
       expect(i.label.length).toBeGreaterThan(0);
       expect(i.value.length).toBeGreaterThan(0);
     }
-    expect(TOUR_INDICATORS.map((i) => i.label)).toEqual(expect.arrayContaining(['PBI nominal', 'Población', 'PBI per cápita nominal', 'Exportaciones totales']));
+    expect(TOUR_INDICATORS.map((i) => i.label)).toEqual(expect.arrayContaining(['PBI real', 'Población', 'PBI per cápita real', 'Exportaciones totales']));
   });
 
   it('renders a labelled list with the six values and the source', () => {

@@ -1,7 +1,7 @@
 # Task: `data-economy-population`
 
 Branch: `task/data-economy-population`. One PR per dataset if the diff is large (`economy_series`, `population`, `composition`, then the age-structured files). Read `AGENTS.md` (section 6, data rules), `LASTCONTEXT.md`, `PENDING.md`, `docs/data-pipeline.md`, `docs/data-dictionary.md`, `docs/model-design.md` sections 2.1, 2.2 and 5 (what the model and the backtest need from these files, and the table "Series needed for 1990-2025"), `docs/assumptions.md`, the schemas `economy_series`, `population`, `composition` and the four age-structured schemas of `population-age-contract` in `data/schemas/`, their mocks in `data/mock/`, `scripts/datapipe/`, `scripts/dataset_checks.py`, `scripts/validate_data.py` and the research files under `data/raw/research/` (economy and population) first.
-Prerequisites: `data-pipeline`, `references-page` and `population-age-contract` are merged. **Human input before the task starts, otherwise stop and tell me what is missing:** the research sessions for economy and population done, their files in `data/raw/research/<scope>/`, the human's verification of 10 URLs and 3 numbers per scope, and the human's answer to `D-gdp-1` (the GDP basis: constant USD and its base year, market versus PPP), because it fixes every level and unit.
+Prerequisites: `data-pipeline`, `references-page` and `population-age-contract` are merged. **Human input before the task starts, otherwise stop and tell me what is missing:** the research sessions for economy and population done, their files in `data/raw/research/<scope>/`, the human's verification of 10 URLs and 3 numbers per scope, and the human's answer to `D-gdp-1` (the GDP basis: constant USD and its base year), because it fixes every level and unit.
 
 ## Goal
 
@@ -11,7 +11,7 @@ Strict TDD for each adapter. Atomic commits. Before every push run `python scrip
 
 ## Out of scope (do NOT do)
 
-- **No invented, interpolated or "filled" figure.** A gap is `null` with a `note`. Never splice two series silently: if a long series needs two sources (different base years, different definitions), keep both as separate records with their own `source` and say in `docs/sources.md` where they overlap; any rescaling is exact arithmetic written in the adapter, tested and documented, and the human approves it. Never mix PPP and market values.
+- **No invented, interpolated or "filled" figure.** A gap is `null` with a `note`. Never splice two series silently: if a long series needs two sources (different base years, different definitions), keep both as separate records with their own `source` and say in `docs/sources.md` where they overlap; any rescaling is exact arithmetic written in the adapter, tested and documented, and the human approves it.
 - **The test window is data like any other here**: the adapter does not know about the 2005 split (the slicing belongs to the backtest code). Do not smooth, revise or "clean" observations after 2005.
 - No network access (adapters and tests). No schema change (if the schema cannot hold something, stop and tell me). No mock change. No UI. No new dependency. Do not choose between conflicting sources: record the one the human names as primary and list the others in `docs/sources.md`.
 - Do not edit `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`. Do not fake CI. Do not silence any checker.

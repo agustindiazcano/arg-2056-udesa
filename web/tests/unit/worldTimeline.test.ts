@@ -3,13 +3,13 @@ import { SIDE_PHI } from '../../src/charts3d/camera';
 import { FOLLOW_MS, FOLLOW_TOTAL_MS } from '../../src/charts3d/followAnim';
 import { DEFAULT_BARS_VIEW, barsFocus, barsOpeningAngles } from '../../src/charts3d/followAnim';
 import { elapsedForYear, yearAtElapsed } from '../../src/tour/worldAnim';
-import { FIRST_YEAR, HOME, LAST_YEAR, argentinaNominal, gdpAtYear, gdpPerCapitaAt, populationAt, rankingTable, regionCountries, regionValuesAt, worldRankingAt } from '../../src/tour/worldData';
+import { FIRST_YEAR, HOME, LAST_YEAR, argentinaReal, gdpAtYear, gdpPerCapitaAt, populationAt, rankingTable, regionCountries, regionValuesAt, worldRankingAt } from '../../src/tour/worldData';
 
-describe('the nominal GDP of every country, year by year (World Bank)', () => {
-  it('has the real values of 2025: the United States first, Argentina with 683 billion', () => {
-    expect(gdpAtYear('Estados Unidos', LAST_YEAR)).toBeCloseTo(30769.7, 1);
-    expect(gdpAtYear(HOME, LAST_YEAR)).toBeCloseTo(683.1, 1);
-    expect(argentinaNominal().values.at(-1)).toBeCloseTo(683.1, 1);
+describe('the real GDP of every country, year by year (World Bank, constant 2015 dollars)', () => {
+  it('has the values of 2025: the United States first, Argentina with 609 billion 2015 dollars', () => {
+    expect(gdpAtYear('Estados Unidos', LAST_YEAR)).toBeCloseTo(23222.8, 1);
+    expect(gdpAtYear(HOME, LAST_YEAR)).toBeCloseTo(609.2, 1);
+    expect(argentinaReal().values.at(-1)).toBeCloseTo(609.2, 1);
   });
 
   it('is interpolated between two years and held outside the range', () => {
@@ -21,7 +21,7 @@ describe('the nominal GDP of every country, year by year (World Bank)', () => {
   });
 
   it('uses the series of Argentina for Argentina', () => {
-    const { years, values } = argentinaNominal();
+    const { years, values } = argentinaReal();
     expect(gdpAtYear(HOME, 1990)).toBe(values[years.indexOf(1990)]);
   });
 });
@@ -49,7 +49,7 @@ describe('the region in a year', () => {
     expect(countries).toHaveLength(11);
     expect(countries).toContain('Uruguay');
     expect(regionValuesAt(1990)).toHaveLength(countries.length);
-    expect(regionValuesAt(LAST_YEAR)[countries.indexOf(HOME)]).toBeCloseTo(argentinaNominal().values.at(-1)!, 6);
+    expect(regionValuesAt(LAST_YEAR)[countries.indexOf(HOME)]).toBeCloseTo(argentinaReal().values.at(-1)!, 6);
     expect(regionValuesAt(2000).every((v) => v > 0)).toBe(true);
   });
 
@@ -57,7 +57,7 @@ describe('the region in a year', () => {
     const countries = regionCountries();
     const i = countries.indexOf(HOME);
     expect(regionValuesAt(2025, 'population')[i]).toBeCloseTo(46.387, 3); // INDEC, Censo 2022 projection (World Bank 45.85, IMF 47.47)
-    expect(regionValuesAt(2025, 'percapita')[i]).toBeCloseTo((683.1 * 1000) / 46.387, -1);
+    expect(regionValuesAt(2025, 'percapita')[i]).toBeCloseTo((609.2 * 1000) / 46.387, -1);
   });
 });
 
@@ -120,8 +120,8 @@ describe('the two tables of the ranking', () => {
         for (let i = 1; i < others.length; i += 1) expect(others[i]!.value).toBeLessThanOrEqual(others[i - 1]!.value);
       }
     }
-    expect(rankingTable(2025, 'gdp', 20).home.rank).toBe(24); // among every country of the World Bank
-    expect(rankingTable(2025, 'gdp', 20).home.value).toBeCloseTo(683.1, 1);
+    expect(rankingTable(2025, 'gdp', 20).home.rank).toBe(22); // among every country of the World Bank
+    expect(rankingTable(2025, 'gdp', 20).home.value).toBeCloseTo(609.2, 1);
   });
 
   it('ranks by the GDP per capita when asked to', () => {

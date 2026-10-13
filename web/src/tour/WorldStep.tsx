@@ -13,7 +13,7 @@ import { elapsedForYear, seriesFrame, valueAt, yearAtElapsed } from './worldAnim
 import { SPEEDS } from '../state/reducer.js';
 import { useTimeline } from './useTimeline.js';
 import { WorldTable } from './WorldTable.js';
-import { FIRST_YEAR, HOME, LAST_YEAR, REGION_METRICS, WORLD_SOURCE, WORLD_UNIT, argentinaNominal, regionCountries, regionValuesAt } from './worldData.js';
+import { FIRST_YEAR, HOME, LAST_YEAR, REGION_METRICS, WORLD_SOURCE, WORLD_UNIT, argentinaReal, regionCountries, regionValuesAt } from './worldData.js';
 import type { RegionMetric } from './worldData.js';
 
 const VIEWS = [
@@ -34,7 +34,7 @@ const PauseIcon = () => (
 const speedFormat = new Intl.NumberFormat('es-AR', { maximumFractionDigits: 2 });
 
 const TITLE = `El PBI de Argentina desde ${FIRST_YEAR}`;
-const SERIES_NAME = 'PBI nominal de Argentina';
+const SERIES_NAME = 'PBI real de Argentina';
 const REGION_OPTIONS = [
   { value: 'gdp', label: 'PBI' },
   { value: 'percapita', label: 'PBI per cápita' },
@@ -42,7 +42,7 @@ const REGION_OPTIONS = [
 ] as const;
 
 /**
- * Step 0 of the Recorrido: the nominal GDP of Argentina from 1960 to 2025 as a line that draws itself year by year while the view
+ * Step 0 of the Recorrido: the real GDP of Argentina from 1960 to 2025 as a line that draws itself year by year while the view
  * follows it, and pulls back when it reaches the last year (in 2D and in 3D); on the right the top 20 of the world's economies
  * and the largest economies of the region. Made-up values.
  */
@@ -55,7 +55,7 @@ export function WorldStep() {
   const { elapsed, clock, seek, playing, play, pause } = useTimeline(run, reduced, speed);
   const stepSpeed = (by: 1 | -1) => setSpeed((v) => SPEEDS[Math.min(SPEEDS.length - 1, Math.max(0, SPEEDS.indexOf(v) + by))] ?? v);
 
-  const series = useMemo(argentinaNominal, []);
+  const series = useMemo(argentinaReal, []);
   const today = series.values.at(-1) ?? 0;
   const regionNames = useMemo(regionCountries, []);
   // the bars of the region show one of three values, chosen by clicking their title
@@ -174,8 +174,8 @@ export function WorldStep() {
               <strong>Ranking mundial en {shownYear}</strong>
             </div>
             <div className="world-ranks">
-              <WorldTable metric="gdp" title="PBI nominal" unit={WORLD_UNIT} year={frame.year} />
-              <WorldTable metric="percapita" title="PBI per cápita nominal" unit="USD corrientes por persona" year={frame.year} />
+              <WorldTable metric="gdp" title="PBI real" unit={WORLD_UNIT} year={frame.year} />
+              <WorldTable metric="percapita" title="PBI per cápita real" unit="USD de 2015 por persona" year={frame.year} />
             </div>
           </Reveal>
 

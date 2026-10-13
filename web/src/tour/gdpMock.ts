@@ -1,7 +1,7 @@
 import { linesSpec } from '../charts3d/specs';
 import type { Lines3DSpec } from '../charts3d/types';
 import { tokens } from '../styles/tokens';
-import { ARG_GDP_2026, ARG_NOMINAL, GDP_SOURCE_2026, GDP_SOURCE_HISTORY, GDP_UNIT } from './gdpFacts';
+import { ARG_GDP_2026, ARG_REAL, GDP_SOURCE_2026, GDP_SOURCE_HISTORY, GDP_UNIT } from './gdpFacts';
 
 /** The last year of the history; the projection starts from it. */
 export const LAST_OBSERVED_YEAR = 2025;
@@ -16,7 +16,7 @@ export interface BandLabels {
   range: string;
 }
 
-export const GDP_SOURCE = `PBI nominal. Historia 1990-2025: ${GDP_SOURCE_HISTORY}. 2026: ${GDP_SOURCE_2026}. Desde 2027 y el rango: datos de prueba (inventados)`;
+export const GDP_SOURCE = `PBI real. Historia 1990-2025: ${GDP_SOURCE_HISTORY}. ${GDP_SOURCE_2026}. Desde 2027 y el rango: datos de prueba (inventados)`;
 
 export const GDP_LABELS: BandLabels = { subject: 'PBI de Argentina', history: 'PBI observado', expected: 'Proyección esperada', range: 'Rango' };
 
@@ -52,7 +52,7 @@ function build(): GdpData {
   for (let year = FIRST_YEAR; year <= LAST_YEAR; year += 1) {
     years.push(year);
     if (year <= LAST_OBSERVED_YEAR) {
-      const rounded = round1(ARG_NOMINAL[year]!);
+      const rounded = round1(ARG_REAL[year]!);
       history.push(rounded);
       expected.push(year === LAST_OBSERVED_YEAR ? rounded : null);
       low.push(rounded);

@@ -36,7 +36,7 @@ describe('step 0 of the Recorrido', () => {
     expect(slider.getAttribute('aria-valuetext')).toBe('Año 1990');
     expect(screen.getByText('Ranking mundial en 1990')).toBeTruthy();
     expect(screen.getByText('Mayores economías de la región en 1990')).toBeTruthy();
-    for (const name of ['PBI nominal', 'PBI per cápita nominal']) {
+    for (const name of ['PBI real', 'PBI per cápita real']) {
       expect(screen.getByRole('table', { name }).querySelectorAll('tbody tr')).toHaveLength(20);
     }
     act(() => {
@@ -61,13 +61,13 @@ describe('step 0 of the Recorrido', () => {
   it('shows two tables side by side, with Argentina in its own light-blue cell that does not move: its place and its value', () => {
     render(<WorldStep />);
     const slider = screen.getByRole('slider', { name: 'Línea de tiempo' }) as HTMLInputElement;
-    const places: Record<string, string[]> = { 'PBI nominal': [], 'PBI per cápita nominal': [] };
+    const places: Record<string, string[]> = { 'PBI real': [], 'PBI per cápita real': [] };
     for (const year of ['1960', '1990', '2025']) {
       act(() => {
         fireEvent.change(slider, { target: { value: year } });
       });
-      for (const name of ['PBI nominal', 'PBI per cápita nominal']) {
-        const home = screen.getByTestId(`home-${name === 'PBI nominal' ? 'gdp' : 'percapita'}`);
+      for (const name of ['PBI real', 'PBI per cápita real']) {
+        const home = screen.getByTestId(`home-${name === 'PBI real' ? 'gdp' : 'percapita'}`);
         expect(home.textContent).toContain('Argentina');
         expect(home.textContent).toMatch(/\d/);
         expect(home.getAttribute('data-home')).toBe('true');
@@ -77,8 +77,8 @@ describe('step 0 of the Recorrido', () => {
       }
     }
     // its place and its value change with the year, the cell stays
-    expect(new Set(places['PBI nominal']).size).toBeGreaterThan(1);
-    expect(new Set(places['PBI per cápita nominal']).size).toBeGreaterThan(1);
+    expect(new Set(places['PBI real']).size).toBeGreaterThan(1);
+    expect(new Set(places['PBI per cápita real']).size).toBeGreaterThan(1);
   });
 
   it('has a play / pause button in the controls: it starts playing, pauses, plays again, and stops when the timeline is dragged', () => {

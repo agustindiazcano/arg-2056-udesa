@@ -84,8 +84,8 @@ Confirmed as recommended: D-scen-1, D-res-1, D-ai-1, D-prov-1, D-bt-1, D-pop-1, 
 
 ## D-gdp-1: GDP basis
 - Context: every GDP level and every `v_r` needs one basis.
-- Options: market-rate constant USD of the source's base year; PPP; another base year.
-- Decision: market-rate constant USD of the source's base year, stated next to every GDP figure.
+- Options: market-rate constant USD of the source's base year; another base year.
+- Decision: market-rate constant USD of the source's base year, stated next to every GDP figure. The Recorrido uses constant 2015 USD (human, 2026-10-13); no other basis is used anywhere in the project.
 - Consequences: `data-economy-population` and the `v_r` units use this basis; the exact base year is the one of the registered source and is written in `docs/sources.md`.
 
 ## D-hdi-1: Provincial HDI

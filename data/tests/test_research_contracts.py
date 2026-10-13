@@ -173,7 +173,7 @@ valid_base_rate = {
     "unit": "pct",
     "definition": "Average 10-year growth",
     "source_id": "economy:B01",
-    "source": "Maddison",
+    "source": "World Bank WDI",
     "source_url": None,
     "locator": None,
     "snippet": None,

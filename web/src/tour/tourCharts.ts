@@ -16,6 +16,7 @@ import {
   GDP_COMPOSITION,
   INVESTOR_SCORES,
   MINING,
+  MINING_SOURCE,
   MOCK_SOURCE,
   RESOURCE_STOCK,
   RULE70_HIGHLIGHT,
@@ -114,18 +115,18 @@ const largest = (rows: Array<{ label: string; value: number }>): string => [...r
 
 const mining = (): BuiltChart => {
   const m = MINING;
-  const summary = `Minería, hoy y proyectos con su rango (datos de prueba): ${list(
-    m.categories.map((c, i) => `${c} hoy ${formatValue(m.today[i]!, m.unit)}, proyectos ${formatValue(m.project[i]!, m.unit)} entre ${formatValue(m.low[i]!, '')}y ${formatValue(m.high[i]!, m.unit)}`)
+  const summary = `Exportaciones mineras en 2024 y proyección de la Secretaría de Minería para 2035: ${list(
+    m.categories.map((c, i) => `${c} en 2024 ${formatValue(m.today[i]!, m.unit)}, proyección para 2035 ${formatValue(m.project[i]!, m.unit)}`)
   )}`;
   const { option } = buildColumns(
     m.categories,
     [
-      { name: 'Hoy', values: m.today, color: GREY },
-      { name: 'Proyectos', values: m.project, color: BLUE, range: { low: m.low, high: m.high } }
+      { name: 'Hoy (2024)', values: m.today, color: GREY },
+      { name: 'Proyección 2035', values: m.project, color: BLUE, ...(m.low && m.high ? { range: { low: m.low, high: m.high } } : {}) }
     ],
     { unit: m.unit, summary }
   );
-  return { option, summary, spec: pairedBars('Minería: hoy y proyectos', m.unit, m.categories, ['hoy', 'proyectos'], m.today, m.project, { low: m.low, high: m.high }) };
+  return { option, summary, spec: pairedBars('Minería: 2024 y proyección 2035', m.unit, m.categories, ['2024', '2035'], m.today, m.project, m.low && m.high ? { low: m.low, high: m.high } : undefined) };
 };
 
 const hydrocarbons = (): BuiltChart => {
@@ -167,7 +168,7 @@ export const TOUR_CHARTS: Record<number, TourChartDef> = {
   3: {
     step: 3,
     title: 'Cuarta revolución industrial: el impacto de la IA en la economía',
-    subtitle: 'PBI con y sin la revolución de la IA, 2026 a 2056, PBI nominal',
+    subtitle: 'PBI real con y sin la revolución de la IA, 2026 a 2056, miles de millones de USD de 2015',
     source: MOCK_SOURCE,
     legend: [
       { label: 'Sin revolución de la IA', color: GREY },
@@ -203,12 +204,12 @@ export const TOUR_CHARTS: Record<number, TourChartDef> = {
   7: { step: 7, title: 'Mapa productivo por provincia', subtitle: 'valor productivo por provincia, millones de USD', source: MOCK_SOURCE, kind: 'map', build: NONE },
   8: {
     step: 8,
-    title: 'Minería: hoy vs proyecto (con rangos)',
-    subtitle: 'miles de millones de USD por año; la línea vertical es el rango de los proyectos',
-    source: MOCK_SOURCE,
+    title: 'Minería: hoy vs proyecto',
+    subtitle: 'exportaciones mineras, miles de millones de USD por año: 2024 y proyección de la Secretaría de Minería para 2035',
+    source: MINING_SOURCE,
     legend: [
-      { label: 'Hoy', color: GREY },
-      { label: 'Proyectos', color: BLUE }
+      { label: '2024', color: GREY },
+      { label: 'Proyección 2035', color: BLUE }
     ],
     kind: 'chart',
     build: mining
