@@ -1,7 +1,7 @@
 """Builds web/src/tour/worldGdp.json: REAL GDP (constant 2015 US dollars, "precios constantes") and population of the world's economies, 1960 to the
 last year, from the World Bank WDI API (NY.GDP.MKTP.KD, SP.POP.TOTL). It feeds step 0 of the Recorrido (the world ranking and the region).
 
-Real GDP at constant prices is the one the project uses (human decision of 2026-10-13; never current-dollar nominal and never PPP). The file keeps the countries that were among the 25 largest economies, or among the 25 richest per
+Real GDP at constant prices is the one the project uses (human decision of 2026-10-13). The file keeps the countries that were among the 25 largest economies, or among the 25 richest per
 person (with at least one million people), in any year, plus the ten largest of Latin America and the Caribbean today and Uruguay; and, for Argentina, its place
 among every country of the World Bank in each year, computed here.
 

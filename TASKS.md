@@ -1662,7 +1662,7 @@ Rules:
 - Create branch `task/data-economy-population`. Never touch `main`, never merge, never push to `main`.
 - If the research files or my verification are missing, stop and tell me what is missing. D-gdp-1 is decided (docs/decisions.md).
 - Strict TDD for each adapter. No network access.
-- No invented, interpolated or filled figure. Never splice two series silently and never mix PPP and market values: keep them as separate records and document the overlap. Do not touch observations after 2005: the split belongs to the backtest code.
+- No invented, interpolated or filled figure. Never splice two series silently: keep them as separate records and document the overlap. Do not touch observations after 2005: the split belongs to the backtest code.
 - Never hand-edit data/processed/. No schema change. If the age-structured files exceed the data budget, stop and tell me. No new dependency. List every number for the UI under Data to verify in PENDING.md.
 - Do not edit AGENTS.md, CLAUDE.md or GEMINI.md.
 - Before every push run `python scripts/precheck.py`. Never push if it fails.

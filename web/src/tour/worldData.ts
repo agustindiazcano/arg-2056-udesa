@@ -1,7 +1,7 @@
 import data from './worldGdp.json';
 
 /**
- * Step 0 of the Recorrido: the REAL GDP (constant 2015 US dollars, never nominal and never PPP) of Argentina and of the world's economies from 1960 to 2025,
+ * Step 0 of the Recorrido: the REAL GDP (constant 2015 US dollars) of Argentina and of the world's economies from 1960 to 2025,
  * from the World Bank (WDI `NY.GDP.MKTP.KD`, `SP.POP.TOTL`). Built by `scripts/build_world_gdp.py`; the growth is checked against the IMF in `scripts/imf_compare.py`.
  * The last observed year is 2025: 2026 is an estimate and is not drawn here.
  */

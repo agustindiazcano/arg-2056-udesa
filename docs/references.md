@@ -155,22 +155,23 @@ El gráfico del paso 14 y el simulador usan hoy **datos de prueba** (`web/src/to
 - Los gráficos de la PWT (P6, P7) terminan en 2023: no incluyen 2024 ni 2025, que sí están en P1 y P2.
 - La serie de horas anuales de Argentina de la PWT repite valores en 2021-2023 (1612,12; 1528,56; 1612,12), una anomalía de la fuente: el último nivel del producto por hora de Argentina es sensible a eso.
 
-### 4.2 PBI de Argentina y ranking mundial (paso 0 del Recorrido)
+### 4.2 PBI real de Argentina y ranking mundial (paso 0 del Recorrido)
 
-El paso 0 todavía dibuja **datos de prueba**. Los datos reales ya están preparados por `scripts/build_world_data.py` (`web/src/tour/worldRealData.json` y `worldReference.json`) y falta conectarlos a la diapositiva.
+El paso 0 usa el PBI real, a precios constantes (dólares de 2015), de todos los países de 1960 a 2025. Reglas de cifras: sección 0b de [`data-requests.md`](data-requests.md).
 
 | # | Fuente | Qué se usa | Estado |
 |---|---|---|---|
-| W1 | Bolt, J. y van Zanden, J. L. (2020), *Maddison style estimates of the evolution of the world economy. A new 2020 update*, Maddison Project Database 2020, Groningen Growth and Development Centre. <https://www.rug.nl/ggdc/historicaldevelopment/maddison/releases/maddison-project-database-2020> (archivo <https://www.rug.nl/ggdc/historicaldevelopment/maddison/data/mpd2020.xlsx>) | PBI per cápita (dólares internacionales de 2011) y población, 1900-2018. PBI = PBI per cápita × población. Argentina tiene el dato todos los años; antes de 1950 solo unos 40 a 70 países tienen dato anual | **leída** (el Excel se descargó y procesó el 2026-10-12); a verificar contra la publicación |
-| W2 | Maddison Project Database 2023 (hasta 2022). Archivo en Dataverse: <https://dataverse.nl/api/access/datafile/421302> (Excel) y <https://dataverse.nl/api/access/datafile/421303> (Stata); DOI <https://doi.org/10.34894/INZBF2>; página <https://www.rug.nl/ggdc/historicaldevelopment/maddison/releases/maddison-project-database-2023> | Habría extendido la serie hasta 2022 | **no accedida**: Dataverse devolvió el error 500 (`HazelcastInstanceNotActiveException`) en varios intentos. Descarga manual pendiente |
-| W3 | Banco Mundial, WDI, Argentina: PBI constante (<https://api.worldbank.org/v2/country/ARG/indicator/NY.GDP.MKTP.KD>), PBI per cápita (`NY.GDP.PCAP.KD`) y población (`SP.POP.TOTL`) | Series 1960-2024 en dólares constantes de 2015, para comparar con W1 | **leída** (API, 2026-10-12) |
-| W4 | FRED / Penn World Table 11.0, *Real GDP at Constant National Prices for Argentina*, `RGDPNAARA666NRUG`. <https://fred.stlouisfed.org/series/RGDPNAARA666NRUG> | PBI real, 1950-2023, millones de dólares de 2021 | **leída** (página de datos, 2026-10-12) |
+| W5 | Banco Mundial, WDI, todos los países: PBI en dólares constantes de 2015 (`NY.GDP.MKTP.KD`) y población (`SP.POP.TOTL`). <https://api.worldbank.org/v2/country/all/indicator/NY.GDP.MKTP.KD> | Ranking mundial, ranking per cápita y barras de la región, 1960-2025 (`scripts/build_world_gdp.py`) | **leída** (API, 2026-10-13) |
+| I1 | INDEC, *Estimaciones y proyecciones de población 2022-2040* (Censo 2022). <https://www.indec.gob.ar/ftp/cuadros/publicaciones/proyecciones_nacionales_2022_2040.pdf> | Población de Argentina de 2022 a 2025 (46.387.098 en 2025) | **leída** (2026-10-13) |
+| F1 | FMI, *World Economic Outlook* (API SDMX), crecimiento real. <https://www.imf.org/external/datamapper/NGDP_RPCH@WEO/ARG> | Crecimiento real de 2026 (2,06 %) y comparación del crecimiento de cada país | **leída** (2026-10-13) |
+
+**Reglas del ranking:** cada año se ordenan los países con dato ese año; el ranking por habitante cuenta solo países de un millón de personas o más; el puesto de Argentina (22.º en 2025 por PBI real, 49.º por habitante) se calcula entre todos los países del Banco Mundial.
 
 ### 4.3 Indicadores de Argentina (pasos 1 y 2 del Recorrido)
 
 | # | Fuente | Qué se usa | Estado |
 |---|---|---|---|
-| W3 | Banco Mundial, WDI, Argentina: `NY.GDP.MKTP.CD` (PBI), `SP.POP.TOTL` (población), `NY.GDP.PCAP.CD` (per cápita), `NE.EXP.GNFS.CD` (exportaciones de bienes y servicios), `NY.GDP.MKTP.KD.ZG` (crecimiento), `NE.GDI.TOTL.ZS` (formación bruta de capital). <https://api.worldbank.org/v2/country/ARG/indicator/> | Cuadro de seis indicadores, año 2025: 683.097.891.619 USD; 45.851.378 personas; 14.898 USD; 106.260.393.151 USD; 4,37 %; 16,11 % | **leída** (API, 2026-10-12; datos actualizados el 2026-10-08) |
+| W3 | Banco Mundial, WDI, Argentina: `NY.GDP.MKTP.KD` (PBI real, dólares de 2015), `SP.POP.TOTL` (población), `NE.EXP.GNFS.CD` (exportaciones de bienes y servicios), `NY.GDP.MKTP.KD.ZG` (crecimiento), `NE.GDI.TOTL.ZS` (formación bruta de capital). <https://api.worldbank.org/v2/country/ARG/indicator/> | Cuadro de seis indicadores, año 2025: 683.097.891.619 USD; 45.851.378 personas; 14.898 USD; 106.260.393.151 USD; 4,37 %; 16,11 % | **leída** (API, 2026-10-12; datos actualizados el 2026-10-08) |
 
 Pendiente para el resto de las diapositivas (INDEC, Secretarías de Energía y de Minería, MAGyP, USGS): ver [`data-requests.md`](data-requests.md), secciones 0 y 2.
 
@@ -184,8 +185,6 @@ Pendiente para el resto de las diapositivas (INDEC, Secretarías de Energía y d
 | E4 | IAE, *Vaca Muerta: análisis 2025* (con datos de la Secretaría de Energía). <https://www.iae.org.ar/wp-content/uploads/2026/03/Vaca-Muerta_analisis-2025_vmo_260330_155248.pdf> | Producción anual de petróleo y gas de Vaca Muerta 2010-2025; 62 % del petróleo y 53 % del gas de 2025; paso 9 | **leída** (2026-10-12) |
 | E5 | USGS, *Mineral Commodity Summaries 2026*. <https://pubs.usgs.gov/periodicals/mcs2026/mcs2026-lithium.pdf> | Recursos de litio de Argentina: 28 millones de toneladas | **leída en parte**: las tablas de reservas salen desordenadas |
 | R1 a R11 | Prensa sobre el RIGI y los proyectos de gran escala (iProfesional, Shale24, La Nación, Infobae, LM Neuquén, El Cronista, Diario Crónica): enlaces en `web/src/datasets/references.ts` | Lista de proyectos mineros y de petróleo y gas con su inversión (`web/src/tour/rigiProjects.ts`), pasos 8 y 9 | **secundarias, sin verificar**: las fuentes se contradicen (ver `data-requests.md`, D23) |
-
-**Reglas del ranking:** cada año se ordenan los países con dato ese año (44 en 1900, 69 en 1913, 145 en 1950, 166 en 2018); la Unión Soviética, Checoslovaquia y Yugoslavia cuentan como una economía hasta que se disuelven y desde entonces cuentan sus sucesores (para no contar dos veces la misma economía). Los PBI de W1 son en dólares internacionales de 2011 (paridad de poder adquisitivo), no en dólares corrientes.
 
 ## Para verificar antes de publicar
 
