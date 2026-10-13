@@ -1,11 +1,13 @@
 # Referencias
 
-Lista completa de las fuentes del proyecto *Argentina 2056: del Cruce de los Andes a la Cuarta Revolución Industrial*. Enlazada desde el [README](../README.md). Última actualización: 2026-10-09.
+Lista completa de las fuentes del proyecto *Argentina 2056: del Cruce de los Andes a la Cuarta Revolución Industrial*. Enlazada desde el [README](../README.md). Última actualización: 2026-10-12.
 
 Estado de cada fuente:
 - **leída**: el texto completo lo leímos nosotros (o lo pegó el equipo) al armar los datos.
 - **vista en fragmento**: solo vimos un resumen de la búsqueda; no se usa para ninguna cifra salvo que se diga.
 - **por informe**: la cita sale de un informe de una IA de búsqueda que no pudimos reabrir; el dato se usa pero debe verificarse en el original.
+- **citada**: la cita aparece dentro de otra fuente o de un informe; no abrimos la página original.
+- **contexto / descartada**: se miró como contexto sin usar ninguna cifra, o se descartó (con el motivo).
 - **a verificar**: un humano debe contrastarla con la fuente original antes de publicar.
 
 ## 1. Cruce de los Andes (1817)
@@ -124,12 +126,53 @@ La escena 3D de Chacabuco (`battleField.ts`) dibuja cada unidad como un bloque s
 
 ## 4. Datos económicos, de recursos, población y pronóstico
 
-Pendiente. Esas escenas todavía usan datos de prueba (cada gráfico lo dice con «Datos de prueba»). Cuando se reemplacen por datos reales, cada fuente se agrega acá con su URL, fecha de consulta y qué cifra aporta, y se registra en `data/processed/sources.json` (que alimenta la página de Fuentes de la aplicación). Las reglas están en la sección 6 de [`AGENTS.md`](../AGENTS.md).
+Pendiente, salvo la productividad (4.1). Esas escenas todavía usan datos de prueba (cada gráfico lo dice con «Datos de prueba»). Cuando se reemplacen por datos reales, cada fuente se agrega acá con su URL, fecha de consulta y qué cifra aporta, y se registra en `data/processed/sources.json` (que alimenta la página de Fuentes de la aplicación). Las reglas están en la sección 6 de [`AGENTS.md`](../AGENTS.md).
+
+### 4.1 Productividad (paso 14 del Recorrido)
+
+El gráfico del paso 14 y el simulador usan hoy **datos de prueba** (`web/src/tour/tourData.ts`, `simModel.ts`). Estas son las fuentes con las que se reemplazan, y qué cifra aporta cada una.
+
+| # | Fuente | Qué se usa | Estado |
+|---|---|---|---|
+| P1 | INDEC, Documento de trabajo N.º 52, *Productividad y stock de capital* (2016-2025). <https://www.indec.gob.ar/ftp/cuadros/economia/productividad_stock_capital_10_26.pdf> | PTF −0,9 % promedio anual 2016-2025 y productividad laboral (VAB por hora trabajada) −0,8 % promedio anual; en 2025 el VAB sube 3,6 % (0,6 p.p. capital, 0,2 p.p. trabajo, 2,8 p.p. PTF) y la productividad laboral 3,3 % (0,5 p.p. de capital por hora y 2,8 p.p. de PTF); índices 2016=100 que terminan en 92,5 (PTF) y 93,1 (productividad laboral), cuadros 12 y 13; serie de PTF 2016-2025 (2016=100): 100,0; 100,4; 96,8; 94,5; 96,7; 95,6; 95,6; 91,9; 90,0 (2024, provisorio); 92,5 (2025, preliminar); coherente con los promedios (92,5^(1/9) = −0,86 % y 93,1^(1/9) = −0,78 % anual) | **leída**: los textos y los cuadros 12 y 13 se leyeron en el PDF (sección 10.1) el 2026-10-12. No se verificó el 0,3 % anual del VAB 2016-2025 (el PDF dice «nulo crecimiento») |
+| P2 | Baumann Fonay, I. (2026-05-03), «PTF y PIB potencial de Argentina, 1990-2025». <https://macroargentina.substack.com/p/ptf-y-pib-potencial-de-argentina> | PTF +4,2 % en 2025 y +7,7 % desde el piso de 2023 (segundo año de mejora, la mayor desde 1996, después de una caída casi continua desde el pico de 2007); inversión +9,6 % en 2025; calidad del empleo −2,0 %; PIB 1,0 % por debajo del potencial | texto pegado por el equipo; **no verificada** por la fuente: la página no cargó al reabrirla y su perfil contradice al INDEC (ver abajo). A verificar contra la serie de P3 |
+| P3 | Baumann Fonay, serie en Alphacast, *Potential GDP, output gap, TFP*. <https://www.alphacast.io/datasets/potential-gross-domestic-product-output-gap-tfp-53419> | Serie de PTF y PIB potencial 1990-2025 | citada (por informe); no abierta |
+| P4 | Baumann Fonay en X. <https://x.com/ivanfbf/status/2050931628965278028> | Confirma el dato de P2 | citada; no abierta |
+| P5 | Ministerio de Hacienda (2018), *Crecimiento económico, PTF y PIB potencial en Argentina*, Documento de trabajo n.º 1; e INDEC, gacetilla «El INDEC retomará la estimación de la productividad de la Argentina» | Metodología de P2 y anuncio de que el INDEC retoma la serie | citadas por P2; no abiertas, sin URL |
+| P6 | Penn World Table 11.0 (Groningen Growth and Development Centre). <https://www.rug.nl/ggdc/productivity/pwt/> | Base de las series de productividad por país (Argentina, EE. UU., Chile, Brasil), 1955-2023 | **usada** en los gráficos del paso 14; a verificar |
+| P7 | FRED, series de la PWT 11.0, una por URL `https://fred.stlouisfed.org/data/<ID>.txt`: PTF `RTFPNA{ARA,USA,CLA,BRA}632NRUG`; PIB real `RGDPNA{ARA,USA,CLA,BRA}666NRUG`; personas empleadas `EMPENG{USA,CLA,BRA}148NRUG`; horas anuales promedio `AVHWPE{ARA,USA,CLA,BRA}065NRUG`. Empleo de Argentina: FRED devolvió el error 429, se usó el CSV que pasó el equipo de la serie `EMPENGARA148NRUG` <https://fred.stlouisfed.org/series/EMPENGARA148NRUG> (1950-2023) | Descarga de las series de P6 (15 en total) | **usada**; datos de `web/src/tour/productivityData.json`, armados por el ejemplo `productivity_slide_spec.html` |
+| P8 | Acemoglu, D. (2024), «The Simple Macroeconomics of AI», NBER Working Paper 32487. <https://www.nber.org/papers/w32487> | Efecto de la IA sobre la PTF: hasta 0,66 % en diez años | citada; no abierta |
+| P9 | Anthropic, «Estimating productivity gains». <https://www.anthropic.com/research/estimating-productivity-gains> | Estimación de +1,8 % anual de productividad laboral y +1,08 % anual de PTF | citada; no abierta |
+| P10 | METR, ensayo con desarrolladores con experiencia (19 % más lentos con herramientas de IA), por fuentes secundarias: <https://www.infoq.com/news/2025/07/ai-productivity> y <https://www.eweek.com/news/news-ai-tools-slow-developer-productivity-study/> | Literatura sobre la IA | citada solo por fuentes secundarias; la página original de METR no se abrió |
+| P11 | Contexto, sin cifras en los gráficos: BID/INTAL <https://www.iadb.org/es/noticias/inteligencia-artificial-trae-amplios-beneficios-america-latina-y-el-caribe-estudio-bid>; FGV IBRE <https://blogdoibre.fgv.br/node/2057> (productividad de Brasil 2024 de +0,1 %, que sirvió para descartar P12); BLS <https://www.bls.gov/news.release/prod2.nr0.htm>; OECD <https://www.oecd.org/es/data/indicators/gdp-per-hour-worked.html>; DBnomics, espejo de la PWT 10 <https://db.nomics.world/GGDC/penn10>; ABC (Paraguay) sobre la productividad regional <https://www.abc.com.py/economia/2026/07/31/la-productividad-regional-cayo-04-anual-la-ia-busca-revertir-la-tendencia/> | Contexto | contexto |
+| P12 | The Conference Board, TED summary tables. <https://www.conference-board.org/pdf_free/TED-SummaryTables-Charts-sep2025.pdf> | Daba +6,8 % de productividad de Brasil en 2024, que contradice a FGV | **descartada** |
+| P13 | Prensa sobre el documento del INDEC: El Observador (Uruguay) <https://www.elobservador.com.uy/argentina/economia-y-negocios/la-productividad-argentina-crecio-al-ritmo-mas-alto-1996-pero-cae-la-calidad-del-empleo-n6042872> y Derecha Diario <https://derechadiario.com.ar/economia/productividad-registro-en-2025-mayor-avance-en-20-anos-bajo-gobierno-milei> | Repiten las cifras de P1 | secundarias, no se usan: las cifras salen de P1 |
+
+**Cifras que no coinciden y hay que explicar:**
+- Baumann (P2) habla de un piso en 2023 y de dos años seguidos de mejora; el INDEC (P1) muestra la PTF **cayendo en 2024** (91,9 a 90,0) y subiendo 2,8 % en 2025. Son series con métodos y períodos distintos; en la pantalla no se mezclan.
+- La PTF de 2025 es **+2,8 % en el INDEC (P1)** y **+4,2 % en Baumann (P2)**: usan métodos y supuestos distintos (ajuste por intensidad del capital y calidad del trabajo). La pantalla debe mostrar una y decir cuál es.
+- En P1 el capital aporta 0,6 p.p. al crecimiento del VAB de 2025, 0,5 p.p. a la productividad laboral de 2025 (capital por hora) y 0,1 p.p. al promedio anual 2016-2025 de la productividad laboral: son tres medidas distintas.
+- Los gráficos de la PWT (P6, P7) terminan en 2023: no incluyen 2024 ni 2025, que sí están en P1 y P2.
+- La serie de horas anuales de Argentina de la PWT repite valores en 2021-2023 (1612,12; 1528,56; 1612,12), una anomalía de la fuente: el último nivel del producto por hora de Argentina es sensible a eso.
+
+### 4.2 PBI de la Argentina y ranking mundial (paso 0 del Recorrido)
+
+El paso 0 todavía dibuja **datos de prueba**. Los datos reales ya están preparados por `scripts/build_world_data.py` (`web/src/tour/worldRealData.json` y `worldReference.json`) y falta conectarlos a la diapositiva.
+
+| # | Fuente | Qué se usa | Estado |
+|---|---|---|---|
+| W1 | Bolt, J. y van Zanden, J. L. (2020), *Maddison style estimates of the evolution of the world economy. A new 2020 update*, Maddison Project Database 2020, Groningen Growth and Development Centre. <https://www.rug.nl/ggdc/historicaldevelopment/maddison/releases/maddison-project-database-2020> (archivo <https://www.rug.nl/ggdc/historicaldevelopment/maddison/data/mpd2020.xlsx>) | PBI per cápita (dólares internacionales de 2011) y población, 1900-2018. PBI = PBI per cápita × población. Argentina tiene el dato todos los años; antes de 1950 solo unos 40 a 70 países tienen dato anual | **leída** (el Excel se descargó y procesó el 2026-10-12); a verificar contra la publicación |
+| W2 | Maddison Project Database 2023 (hasta 2022). Archivo en Dataverse: <https://dataverse.nl/api/access/datafile/421302> (Excel) y <https://dataverse.nl/api/access/datafile/421303> (Stata); DOI <https://doi.org/10.34894/INZBF2>; página <https://www.rug.nl/ggdc/historicaldevelopment/maddison/releases/maddison-project-database-2023> | Habría extendido la serie hasta 2022 | **no accedida**: Dataverse devolvió el error 500 (`HazelcastInstanceNotActiveException`) en varios intentos. Descarga manual pendiente |
+| W3 | Banco Mundial, WDI, Argentina: PBI constante (<https://api.worldbank.org/v2/country/ARG/indicator/NY.GDP.MKTP.KD>), PBI per cápita (`NY.GDP.PCAP.KD`) y población (`SP.POP.TOTL`) | Series 1960-2024 en dólares constantes de 2015, para comparar con W1 | **leída** (API, 2026-10-12) |
+| W4 | FRED / Penn World Table 11.0, *Real GDP at Constant National Prices for Argentina*, `RGDPNAARA666NRUG`. <https://fred.stlouisfed.org/series/RGDPNAARA666NRUG> | PBI real, 1950-2023, millones de dólares de 2021 | **leída** (página de datos, 2026-10-12) |
+
+**Reglas del ranking:** cada año se ordenan los países con dato ese año (44 en 1900, 69 en 1913, 145 en 1950, 166 en 2018); la Unión Soviética, Checoslovaquia y Yugoslavia cuentan como una economía hasta que se disuelven y desde entonces cuentan sus sucesores (para no contar dos veces la misma economía). Los PBI de W1 son en dólares internacionales de 2011 (paridad de poder adquisitivo), no en dólares corrientes.
 
 ## Para verificar antes de publicar
 
 - Cada fecha, lugar y cifra de la sección 1 contra una fuente primaria o académica; las marcadas «por informe» contra el original (Espejo, Mitre, Barros Arana, Encina y Castedo, Instituto Nacional Sanmartiniano, Academia de Historia Militar de Chile).
 - Las URL que dicen «a confirmar».
+- Las cifras de productividad de la sección 4.1: la publicación de Baumann (P2) contra su serie, y las series de la PWT (P6, P7) contra FRED.
 - Las posiciones de los pasos de Valle Hermoso, Mercedario, Portillo y Come-Caballos, y el trazado por los valles.
 - Si la reunión de las columnas fue el 08 o el 09 de febrero, y dónde.
 - El nombre de pila de Cabot (Juan Manuel o Juan Carlos) y sus efectivos al salir (65 o 140).
