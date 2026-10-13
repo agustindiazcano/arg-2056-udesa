@@ -67,6 +67,14 @@ Every task below has a brief (`<slug>.md` in the repository root) and a prompt (
 14. [ ] `polish`: decisions taken (`D-polish-3` color still the human's); 3D items first (`D-3d-6`); by `AGENTS.md` section 8 it starts after the model and data tasks unless the human starts it earlier for the scenes that exist.
 15. [ ] `docs-submission` (draft brief) and `demo-video` (optional, draft brief): BLOCKED by the contest's rules.
 
+## Next on the Recorrido (human request 2026-10-12)
+
+| # | | Task | Notes |
+|---|---|---|---|
+| 1 | 🔴 | **`real-data-review`: put real data in every slide** and, for what cannot be reached or found, **the AI writes the list of pending URLs, data needed and links it could not open** (`docs/data-requests.md`) so the human brings the data by hand. Never fill or invent a value. | Seed list in `docs/data-requests.md` (D1 to D22). Step 0 first: wire `worldRealData.json` (see the line under Data to verify). |
+| 2 | 🟡 | **Natural resources, two slides with buttons instead of eight.** Today steps 2, 4, 7, 8, 9, 10, 11 and 13 touch the subject, all made-up, none with play or a resource filter. Plan: (A) *Minería e hidrocarburos*: buttons Minería / Hidrocarburos, a resource filter (oro, cobre, litio, petróleo, gas), measures production / exports / stock, a map + bars by province + province ranking + the national total as a line, projects by province, **play from 2025 to 2056**; (B) *Agro*: total production and its composition, exports, in tons and in dollars, same map, bars, ranking and play. | The mock contracts exist (`data/mock/resource_production.json` by province 1990-2025, `forecast_output.json` to 2056 with three scenarios, `projects.json`); real data are D12 to D18. |
+| 3 | 🟢 | Step 15 and the old scene at step 14's neighbour still show a data scene; the INDEC 2016-2025 series as an extra step of the productivity slide. | |
+
 ## Data to verify (human, against original source)
 
 - [ ] (empty; the app shows mock data only) Recorrido step 1 GDP chart: every number is made up (`web/src/tour/gdpMock.ts`, labelled "Datos de prueba"); replace with sourced GDP (INDEC / World Bank / Maddison) and the model's fan before release.

@@ -32,7 +32,7 @@ Sin `VITE_MAPTILER_KEY` la escena de los Andes muestra un aviso y un fondo liso.
 
 ## Referencias
 
-La lista completa, con qué dato sale de cada fuente y qué falta verificar, está en [`docs/references.md`](docs/references.md).
+La lista completa, con qué dato sale de cada fuente y qué falta verificar, está en [`docs/references.md`](docs/references.md). Los enlaces a los que no se pudo entrar y los datos que faltan traer están en [`docs/data-requests.md`](docs/data-requests.md).
 
 ### Cruce de los Andes (1817)
 
