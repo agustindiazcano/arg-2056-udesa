@@ -122,7 +122,7 @@ export function ChartStep({ step }: { step: number }) {
         <Reveal k={String(step)} className="gdp-title">
           <h2>{def.title}</h2>
           <p className="gdp-sub">
-            {def.subtitle} · <span className="gdp-mock">{def.source}</span>
+            {def.subtitle} · <span className={/prueba/i.test(def.source) ? 'gdp-mock' : 'gdp-source'}>{def.source}</span>
           </p>
           <Legend def={def} />
         </Reveal>

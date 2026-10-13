@@ -7,5 +7,7 @@
 - Step 0 stays on test data: the real series (Maddison 2020) ends in 2018 and the slide runs to 2026; it needs the Maddison 2023 download (H5) and a refactor of `tour/worldData.ts`.
 - Tests run locally: `tourCharts`, `dataSection`, `tourIndicators` (pass); `tsc --noEmit` clean. The rest goes to CI.
 
+- **Side panel on every chart step (0 to 13)** (human request 2026-10-12): `tour/TourSidebar.tsx` (text, how to read it, a data badge real / partly real / test, and the references as links), the texts in `tour/stepInfo.ts`, the layout in `TourStep.tsx` (`.tour-frame`); open by default, the button «Ocultar texto» hides it and a vertical tab «Mostrar texto» brings it back; the choice (`sideOpen` in `useTourLayout`) stays when the step changes. Step 14 keeps its own text panel. The source line under a chart is amber only when the data is test data.
+
 ## Next
 - The human does H1 to H5 (see the doc); then wire the production by province (steps 2 and 7) and the hydrocarbons (step 9) and replace the RIGI press table with the official list.
