@@ -66,7 +66,6 @@
   font-weight: 800;
   color: var(--intro-light);
   text-shadow: 0 0 10px color-mix(in srgb, var(--intro-light) 55%, transparent);
-  transition: text-shadow 0.2s ease-out;
 }
 
 button.brand {
@@ -77,19 +76,13 @@ button.brand {
   cursor: pointer;
 }
 
-/* hover on the logo: "Argentina" turns gold, "2056" turns white, and a gold aura glows around both */
+/* hover on the logo: "Argentina" turns gold and "2056" turns white (only the color changes) */
 .brand,
 .brand-a,
 .brand-n {
   transition:
-    color 0.25s ease-out,
-    text-shadow 0.25s ease-out,
-    filter 0.25s ease-out;
-}
-
-button.brand:hover,
-button.brand:focus-visible {
-  filter: drop-shadow(0 0 6px color-mix(in srgb, var(--gold) 80%, transparent)) drop-shadow(0 0 16px color-mix(in srgb, var(--gold) 55%, transparent));
+    color 0.5s ease-in-out,
+    text-shadow 0.5s ease-in-out;
 }
 
 button.brand:hover .brand-a,
@@ -100,7 +93,6 @@ button.brand:focus-visible .brand-a {
 button.brand:hover .brand-n,
 button.brand:focus-visible .brand-n {
   color: var(--ink);
-  text-shadow: 0 0 10px color-mix(in srgb, var(--gold) 70%, transparent);
 }
 
 .tab-icon {
@@ -841,6 +833,32 @@ main.scene-container {
   overflow: hidden;
 }
 
+/* The Data section is a long page: it flows in the document, so the window is the only vertical scroll (the nav stays on top, the footer follows the tables). */
+.app-screen:has(.data-page) {
+  height: auto;
+  min-height: 100dvh;
+  overflow: visible;
+}
+.app-screen:has(.data-page) #overlay {
+  position: relative;
+  height: auto;
+  min-height: 100dvh;
+}
+.app-screen:has(.data-page) .chrome {
+  position: sticky;
+  top: 0;
+}
+.app-screen:has(.data-page) main.scene-container {
+  overflow: visible;
+}
+.app-screen:has(.data-page) .data-page {
+  height: auto;
+  overflow: visible;
+}
+.app-screen:has(.data-page) .data-bar {
+  top: var(--chrome-h, 0px);
+}
+
 .site-footer {
   display: flex;
   flex-direction: column;
@@ -1530,7 +1548,7 @@ main.scene-container {
   box-sizing: border-box;
   height: 100%;
   overflow-y: auto;
-  padding: var(--space-3) var(--space-md) var(--space-lg, 2rem);
+  padding: 0 var(--space-md) var(--space-lg, 2rem); /* no top gap: the bar sits right under the site nav */
   pointer-events: auto;
 }
 
@@ -1606,6 +1624,21 @@ main.scene-container {
 
 .data-badge--mock {
   color: var(--state-warning);
+}
+
+.data-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 24rem), 1fr));
+  gap: var(--space-3);
+  align-items: start;
+}
+
+.data-cards > .data-table-block {
+  min-width: 0;
+  padding: var(--space-3);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
 }
 
 .data-table-block {

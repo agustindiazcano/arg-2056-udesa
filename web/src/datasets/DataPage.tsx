@@ -91,9 +91,11 @@ export function DataPage() {
         <article key={s.id} id={`data-slide-${s.id}`} className="data-slide" aria-labelledby={`data-title-${s.id}`}>
           <h3 id={`data-title-${s.id}`}>{s.label}</h3>
           <p className={s.mock ? 'data-badge data-badge--mock' : 'data-badge'}>{s.mock ? 'Datos de prueba (inventados)' : 'Datos reales, sin verificar por una persona'}</p>
-          {s.tables.map((t) => (
-            <Table key={t.id} slide={s} table={t} />
-          ))}
+          <div className="data-cards">
+            {s.tables.map((t) => (
+              <Table key={t.id} slide={s} table={t} />
+            ))}
+          </div>
           {s.refs.length > 0 && (
             <p className="data-refs">
               Fuentes:{' '}
