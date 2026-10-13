@@ -69,7 +69,7 @@ Projections of AI's impact on productivity, employment, and economic growth.
 - **Compounding Rule**: The only acceptable arithmetic during validation is verifying that a compounded annualized percentage point (PP) figure correctly compounds to the reported cumulative figure over the stated horizon. Other conversions (e.g. GDP level to growth) are not allowed.
 
 ### dataset_catalog
-Registry of foundational datasets (e.g., UN WPP, Maddison Project) tracking access status, versions, and recommended use.
+Registry of foundational datasets (e.g., UN WPP) tracking access status, versions, and recommended use.
 
 ### macro_assumptions
 Underlying macroeconomic assumptions (e.g., target capital expenditure, population trends) that inform the forecast models.

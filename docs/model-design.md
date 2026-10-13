@@ -316,7 +316,7 @@ Order is dependency order. `can_start_now` means it works with mock data or decl
 | D-ai-2 | Admissible quantity | TFP growth pp/year only (+ exact compounding) / also productivity | TFP growth | adding labor productivity would mix different quantities |
 | D-prov-1 | Provincial proxy and the 18-of-24 rule | equal core GDPpc / other proxy | equal core GDPpc with the limit stated | another proxy needs a new dataset |
 | D-res-3 | Number of value-added constants `v_r` | nine (without `other`) / ten (with `other`) | ten | DECIDED (human, 2026-10-04): ten. Nine would leave `other` out of `R_t = sum_r v_r q_r` and out of the `forecast_output` resource list |
-| D-gdp-1 | GDP basis (constant USD base year, market vs PPP) | needs the human to choose | market-rate constant USD of the source's base year | affects every level and `v_r` units |
+| D-gdp-1 | GDP basis (constant USD base year) | decided (2026-10-13): constant 2015 USD | market-rate constant USD of the source's base year | affects every level and `v_r` units |
 | D-bt-1 | Success criteria numbers (1.25, 8 of 12) | as written / stricter | as written | stricter lowers the pass probability of a calibrated model (section 5) |
 | D-growth-1 | Human capital omitted in v1 | omitted / included | omitted | included adds 2 parameters and a series |
 | D-pop-1 | Negative cohorts | raise error / clamp at zero and record | raise error | clamping hides inconsistent migration inputs |

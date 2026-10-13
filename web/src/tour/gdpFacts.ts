@@ -4,7 +4,7 @@ import world from './worldGdp.json';
 /**
  * The one place where the GDP of Argentina comes from, so that no chart, table or text of the project says one figure here and another there.
  *
- * Always REAL GDP at constant prices, in billions of 2015 US dollars (human decision of 2026-10-13: never nominal in current dollars, never PPP):
+ * Always REAL GDP at constant prices, in billions of 2015 US dollars (human decision of 2026-10-13):
  * - up to 2025, observed: World Bank (WDI `NY.GDP.MKTP.KD`), `worldGdp.json` (scripts/build_world_gdp.py).
  * - 2026, an estimate: the 2025 value grown by the real growth that the IMF projects for 2026 (World Economic Outlook, `imfWeo.json`,
  *   scripts/imf_compare.py; update of 2026-09-30), because the IMF does not publish the real GDP in constant dollars.
