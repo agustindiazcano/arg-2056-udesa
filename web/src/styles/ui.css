@@ -1522,7 +1522,7 @@ main.scene-container {
   box-sizing: border-box;
   height: 100%;
   overflow-y: auto;
-  padding: var(--space-3) var(--space-md) var(--space-lg, 2rem);
+  padding: 0 var(--space-md) var(--space-lg, 2rem); /* no top gap: the bar sits right under the site nav */
   pointer-events: auto;
 }
 
