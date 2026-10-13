@@ -97,7 +97,7 @@ Ordenado por prioridad: 🔴 bloquea una diapositiva, 🟡 mejora lo que ya hay,
 | H9 | 🟡 | Estimaciones agrícolas: abrir <https://datosestimaciones.magyp.gob.ar> y pasar la serie de soja, maíz, trigo y girasol por campaña (toneladas) | Abrir | D16 |
 | H10 | 🟢 | Reservas: abrir el PDF del USGS por mineral <https://pubs.usgs.gov/periodicals/mcs2026/mcs2026-lithium.pdf> (cambiar «lithium» por «copper», «gold», «silver») y las reservas de petróleo y gas de la Secretaría de Energía | Abrir | D18 |
 | H11 | 🟢 | Dar de baja las cifras de prensa en cuanto exista la fuente oficial | Vos | D23 |
-| H12 | 🔴 | Confirmar el PBI nominal de Argentina de 2026: abrir <https://www.imf.org/external/datamapper/NGDPD@WEO/ARG> y ver qué dice (la API da 768,2; el equipo encontró 688,4); si es otro, correr `python scripts/imf_compare.py` y avisar cuál es la edición correcta | Vos | todos los gráficos con 2026 |
+| H12 | ✅ | HECHO (2026-10-12): el equipo confirmó 768,21 en la página del FMI. Antes decía: confirmar el PBI nominal de Argentina de 2026: abrir <https://www.imf.org/external/datamapper/NGDPD@WEO/ARG> y ver qué dice (la API da 768,2; el equipo encontró 688,4); si es otro, correr `python scripts/imf_compare.py` y avisar cuál es la edición correcta | Vos | todos los gráficos con 2026 |
 | H13 | 🟡 | Decidir qué cifra de inversión mostrar (Banco Mundial 16,1 %, FMI 13,1 %, INDEC) y buscar la formación bruta de capital fija a precios corrientes del INDEC | Vos / otra IA | D9 |
 
 ### Prompts listos para otra IA
@@ -117,7 +117,7 @@ Fuente: FMI, *World Economic Outlook*, por la API SDMX (`https://api.imf.org/ext
 | Dato | Banco Mundial | FMI | INDEC | Qué se usa | Veredicto |
 |---|---|---|---|---|---|
 | PBI nominal de Argentina 2025 (miles de millones de USD) | 683,1 | 683,6 | — | 683,1 | **coinciden** (0,07 %) |
-| PBI nominal de Argentina 2026 | — | 768,2 (estimación) | — | 768,2, en el paso 1, en el 3 y en el simulador | **a confirmar (H12)**: el equipo encontró 688,4 en otra consulta; no se pudo reproducir con la API del FMI, puede ser una edición anterior |
+| PBI nominal de Argentina 2026 | — | 768,2 (estimación) | — | 768,2, en el paso 1, en el 3 y en el simulador | **confirmado el 2026-10-12**: la página del FMI (DataMapper) muestra 768,21 y la API 768,206; el 688,4 que apareció en una consulta con IA no sale de la edición vigente (puede ser una edición anterior o un error de esa respuesta) |
 | Población de Argentina 2025 (millones) | 45,85 | 47,47 | **46,387** (Censo 2022) | 46,387 | no coinciden: el FMI usa la proyección anterior al censo (47.473.760, la del INDEC 2010-2040); el Banco Mundial usa la de las Naciones Unidas |
 | Población de Argentina 2026 | — | 47,95 | 46,467 | no se muestra | el FMI sobreestima por la misma razón |
 | PBI per cápita nominal de Argentina 2025 (USD) | 14.898 (con su población) | 14.399 (con la suya) | — | 14.726 (683,1 / 46,387) | tres cifras por tres poblaciones; se usa la del INDEC |

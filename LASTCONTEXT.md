@@ -12,7 +12,7 @@
 
 - **One figure for the GDP and the population** (human request 2026-10-12): everything is nominal GDP in current USD (never PPA). Step 0 now draws the World Bank nominal GDP of every country 1960 to 2025 (`tour/worldNominal.json`, `scripts/build_world_nominal.py`), with the ranking, the per-capita ranking, and the bars of the region (the ten largest of Latin America and Uruguay) that sort themselves by value and switch between PBI, PBI per cápita and Población with three buttons under «En la región». `tour/gdpFacts.ts` is the single source: World Bank to 2025, IMF estimate for 2026 (768.2, `imfWeo.json`, `scripts/imf_compare.py`, SDMX API of the IMF), shared by step 1, step 3 and the simulator; `tests/unit/gdpConsistency.test.ts` guards it. Argentina's population is the INDEC's (46.387 M in 2025). Comparison with the IMF in section 5 of `docs/data-requests.md`.
 - UI: values above the bars (also in the sorted 3D bars of step 0), thin scrollbars in the site colors, zoom buttons of the 3D bars of step 0 work (they take the camera from the clock), the camera is farther away, «la Argentina» became «Argentina» everywhere.
-- To confirm (H12): IMF 2026 GDP is 768.2 in its API; the team found 688.4 elsewhere.
+- H12 done: the IMF page shows 768.21 for Argentina 2026 (the team confirmed); the 688.4 from an AI answer is not the current edition.
 
 ## Next
 - The human does H1 to H5 (see the doc); then wire the production by province (steps 2 and 7) and the hydrocarbons (step 9) and replace the RIGI press table with the official list.
