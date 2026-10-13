@@ -11,6 +11,7 @@ import {
   EXPORTS_BY_SECTOR,
   EXPORTS_SOURCE,
   GDP_COMPOSITION_SOURCE,
+  HYDROCARBONS_SOURCE,
   EXPORT_COMPOSITION,
   GDP_COMPOSITION,
   INVESTOR_SCORES,
@@ -72,7 +73,7 @@ function pairedBars(
 }
 
 const HYDROCARBON_LABELS: BandLabels = {
-  subject: 'Producción de hidrocarburos',
+  subject: 'Petróleo de Vaca Muerta',
   history: 'Producción observada',
   expected: 'Proyección esperada',
   range: 'Rango entre el piso y el techo'
@@ -215,8 +216,8 @@ export const TOUR_CHARTS: Record<number, TourChartDef> = {
   9: {
     step: 9,
     title: 'Hidrocarburos: Vaca Muerta define el piso y el techo',
-    subtitle: 'miles de barriles equivalentes por día, 2015 a 2056',
-    source: MOCK_SOURCE,
+    subtitle: 'miles de barriles de petróleo por día de Vaca Muerta, 2015 a 2056',
+    source: HYDROCARBONS_SOURCE,
     kind: 'chart',
     build: hydrocarbons
   },

@@ -17,8 +17,8 @@ export function aiImpactData(): { unit: string; years: number[]; series: LineSer
   const years: number[] = [];
   const without: number[] = [];
   const withAi: number[] = [];
-  let a = 650;
-  let b = 650;
+  let a = 609.2;
+  let b = 609.2;
   for (let year = 2025; year <= 2056; year += 1) {
     years.push(year);
     without.push(round1(a));
@@ -101,7 +101,16 @@ export const MINING: RangedGroups = {
   high: [8.5, 10, 3.2, 1.8]
 };
 
-/** Step 9: hydrocarbons, 2015 to 2056, with the floor and the ceiling that Vaca Muerta sets (made up). */
+/**
+ * Oil of the Vaca Muerta formation in millions of barrels a year, 2015 to 2025. Real: IAE, "Vaca Muerta: análisis 2025", with data of the
+ * Secretaría de Energía (table "Producción anual de Vaca Muerta"), read on 2026-10-12. The 2025 average, 499 thousand barrels a day, matches the 499,061 of the report.
+ */
+const VACA_MUERTA_OIL_MMBO: Readonly<Record<number, number>> = { 2015: 8.3, 2016: 10.9, 2017: 13.7, 2018: 20.8, 2019: 32.9, 2020: 41.4, 2021: 59.4, 2022: 88.6, 2023: 111.5, 2024: 141.6, 2025: 182.2 };
+const daysIn = (year: number): number => (year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0) ? 366 : 365);
+
+export const HYDROCARBONS_SOURCE = 'Historia 2015-2025: IAE con datos de la Secretaría de Energía; proyección y rango: datos de prueba (inventados)';
+
+/** Step 9: oil of Vaca Muerta in thousands of barrels a day, 2015 to 2056: real until 2025, then a made-up projection with the floor and the ceiling that Vaca Muerta sets. */
 export const HYDROCARBONS_LAST_OBSERVED = 2025;
 export function hydrocarbonsData(): GdpData {
   const years: number[] = [];
@@ -109,11 +118,11 @@ export function hydrocarbonsData(): GdpData {
   const expected: Array<number | null> = [];
   const low: number[] = [];
   const high: number[] = [];
-  let value = 640;
+  let value = 0;
   for (let year = 2015; year <= 2056; year += 1) {
     years.push(year);
     if (year <= HYDROCARBONS_LAST_OBSERVED) {
-      if (year > 2015) value *= year <= 2019 ? 1.0 : year === 2020 ? 0.93 : 1.055;
+      value = (VACA_MUERTA_OIL_MMBO[year]! * 1000) / daysIn(year);
       const v = round1(value);
       history.push(v);
       expected.push(year === HYDROCARBONS_LAST_OBSERVED ? v : null);
@@ -125,12 +134,12 @@ export function hydrocarbonsData(): GdpData {
       const v = round1(value);
       history.push(null);
       expected.push(v);
-      // the floor flattens (the conventional wells decline), the ceiling is Vaca Muerta at full speed
+      // the floor flattens, the ceiling is Vaca Muerta at full speed (made up)
       low.push(round1(v * (1 - 0.1 - 0.012 * k)));
       high.push(round1(v * (1 + 0.04 * k ** 0.9)));
     }
   }
-  return { unit: 'miles de barriles equivalentes por día', source: MOCK_SOURCE, years, history, expected, low, high, lastObserved: HYDROCARBONS_LAST_OBSERVED };
+  return { unit: 'miles de barriles de petróleo por día (Vaca Muerta)', source: HYDROCARBONS_SOURCE, years, history, expected, low, high, lastObserved: HYDROCARBONS_LAST_OBSERVED };
 }
 
 export interface PairedGroups {

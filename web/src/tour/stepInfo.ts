@@ -36,12 +36,12 @@ export const STEP_INFO: Record<number, StepInfo> = {
   1: {
     heading: 'El PBI de la Argentina, de 1990 a 2056',
     paragraphs: [
-      'La línea muestra el PBI observado hasta hoy y la proyección esperada hasta 2056, con un abanico que va del escenario más bajo al más alto.',
+      'La línea muestra el PBI observado de 1990 a 2025 y la proyección esperada hasta 2056, con un abanico que va del escenario más bajo al más alto. En la historia se ven las crisis de 1995, 2001-2002, 2009 y 2020.',
       'El cuadro de indicadores resume la economía hoy: PBI, población, PBI por habitante, exportaciones, crecimiento e inversión, con los últimos valores publicados por el Banco Mundial.'
     ],
     how: 'Mirá primero la línea de la proyección y después el ancho del abanico: cuanto más ancho, más incierto es el futuro. El abanico no es un pronóstico de lo que va a pasar sino de lo que podría pasar.',
     data: 'parcial',
-    note: 'Los seis indicadores son reales (Banco Mundial, 2025). La serie del PBI y la proyección siguen siendo de prueba hasta que se conecten las cuentas nacionales del INDEC y el modelo.',
+    note: 'La historia de 1990 a 2025 y los seis indicadores son reales (Banco Mundial; la línea está en dólares constantes de 2015, por eso el PBI de 609 mil millones difiere de los 683 mil millones en dólares corrientes del cuadro). La proyección y el abanico siguen siendo de prueba hasta que esté el modelo.',
     refs: ['W3']
   },
   2: {
@@ -59,11 +59,11 @@ export const STEP_INFO: Record<number, StepInfo> = {
     heading: 'La inteligencia artificial y el PBI',
     paragraphs: [
       'Dos líneas del PBI desde 2025: una sin la revolución de la inteligencia artificial y otra con ella. La diferencia entre ambas es lo que la IA podría agregar al producto.',
-      'Los estudios más citados dan un efecto moderado: hasta 0,66 % de productividad total en diez años según Acemoglu, y alrededor de 1,1 % anual según una estimación de Anthropic.'
+      'Los estudios dan resultados muy distintos. Acemoglu (2024) calcula un aumento de la productividad total de no más de 0,66 % en diez años (menos de 0,53 % si se descuentan las tareas difíciles de aprender). Anthropic (2025) estima, para Estados Unidos y suponiendo adopción universal en diez años, 1,8 % anual de productividad laboral y 1,08 % anual de productividad total.'
     ],
     how: 'Compará la distancia entre las dos líneas en 2056. No es una predicción: depende de cuánto de la economía se adapta y de qué tan rápido.',
     data: 'prueba',
-    note: 'Las dos líneas son de prueba. Las cifras de los estudios están citadas pero no se abrieron las páginas originales (ver Data).',
+    note: 'Las dos líneas son de prueba (parten del PBI de 2025 del Banco Mundial). Los dos estudios se leyeron el 12-10-2026; Anthropic aclara que su cifra no es una predicción y que usa supuestos fuertes. Ninguno es sobre la Argentina.',
     refs: ['P8', 'P9', 'P10a']
   },
   4: {
@@ -124,12 +124,12 @@ export const STEP_INFO: Record<number, StepInfo> = {
   9: {
     heading: 'Hidrocarburos: el piso y el techo',
     paragraphs: [
-      'La producción de petróleo promedió unos 860.000 barriles por día en 2025, 13 % más que el año anterior, y Vaca Muerta aportó el 62 % del petróleo y el 53 % del gas.',
+      'Vaca Muerta produjo 182 millones de barriles de petróleo en 2025, 28,7 % más que en 2024, y llegó a un récord de 589 mil barriles por día en diciembre. Aportó el 62 % del petróleo y el 53 % del gas del país; el promedio diario de la Argentina fue de unos 800 mil barriles.',
       'Hay un oleoducto (Vaca Muerta Sur) con cerca de 80 % de obra y proyectos de gas natural licuado y de ampliación de la producción, varios dentro del RIGI.'
     ],
-    how: 'La línea es la producción esperada; la franja es el piso y el techo según cuánto se desarrolle Vaca Muerta. Los proyectos están en la tabla de la sección Data.',
-    data: 'prueba',
-    note: 'La línea y la franja son de prueba. Las cifras de producción y proyectos vienen de prensa y de un informe del IAE que todavía no se leyó completo.',
+    how: 'La línea llena es la producción de petróleo de Vaca Muerta, en miles de barriles por día; después de 2025 la línea punteada es la esperada y la franja es el piso y el techo según cuánto se desarrolle la formación. Los proyectos están en la tabla de la sección Data.',
+    data: 'parcial',
+    note: 'La historia de 2015 a 2025 es real (IAE, con datos de la Secretaría de Energía). La proyección y la franja son de prueba. Los proyectos son de prensa y no están verificados.',
     refs: ['E4', 'R2', 'R3', 'R6', 'R8', 'R10']
   },
   10: {
@@ -168,7 +168,7 @@ export const STEP_INFO: Record<number, StepInfo> = {
   13: {
     heading: 'Cuánto valen los recursos que hay bajo la tierra',
     paragraphs: [
-      'El stock de recursos es lo que está en el suelo y todavía no se produjo. La Secretaría de Minería estima recursos de litio por 122 millones de toneladas de carbonato equivalente (21 millones como reservas) y de cobre por 116,7 millones de toneladas.',
+      'El stock de recursos es lo que está en el suelo y todavía no se produjo. La Secretaría de Minería estima recursos de litio por 122 millones de toneladas de carbonato equivalente (21 millones como reservas) y de cobre por 116,7 millones de toneladas. El USGS (2026) calcula 28 millones de toneladas de litio contenido como recursos argentinos, los mayores del mundo.',
       'También hay 105 millones de onzas de oro y 3.216 millones de onzas de plata. Valuarlos depende del precio y de cuánto se pueda extraer a un costo razonable.'
     ],
     how: 'Cada barra es el valor del stock de un recurso, en miles de millones de dólares. Recurso no es lo mismo que reserva: la reserva es la parte que hoy se puede extraer con ganancia.',

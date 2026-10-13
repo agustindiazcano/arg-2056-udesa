@@ -2,7 +2,7 @@ import { linesSpec } from '../charts3d/specs';
 import type { Lines3DSpec } from '../charts3d/types';
 import { tokens } from '../styles/tokens';
 
-/** The last year of the (made-up) history; the projection starts from it. */
+/** The last year of the history; the projection starts from it. */
 export const LAST_OBSERVED_YEAR = 2025;
 const FIRST_YEAR = 1990;
 const LAST_YEAR = 2056;
@@ -14,6 +14,8 @@ export interface BandLabels {
   expected: string;
   range: string;
 }
+
+export const GDP_SOURCE = 'Historia 1990-2025: Banco Mundial (dólares constantes de 2015); proyección y rango: datos de prueba (inventados)';
 
 export const GDP_LABELS: BandLabels = { subject: 'PBI de la Argentina', history: 'PBI observado', expected: 'Proyección esperada', range: 'Rango' };
 
@@ -32,16 +34,16 @@ export interface GdpData {
   high: number[];
 }
 
-/** Made-up growth by year, in %: a shape with booms and crises, not a measurement. */
-function growth(year: number): number {
-  if (year <= 1998) return 4.5;
-  if (year <= 2002) return -4;
-  if (year <= 2011) return 6;
-  if (year <= 2019) return 0.5;
-  if (year === 2020) return -9;
-  if (year <= 2023) return 4;
-  return 1.5;
-}
+/**
+ * The GDP of Argentina 1990 to 2025 in billions of constant 2015 US dollars. Real: World Bank, WDI `NY.GDP.MKTP.KD`
+ * (<https://api.worldbank.org/v2/country/ARG/indicator/NY.GDP.MKTP.KD>), read on 2026-10-12.
+ */
+const OBSERVED: Readonly<Record<number, number>> = {
+  1990: 265.8, 1991: 290.1, 1992: 313.1, 1993: 338.8, 1994: 358.6, 1995: 348.4, 1996: 367.6, 1997: 397.5, 1998: 412.8, 1999: 398.8,
+  2000: 395.6, 2001: 378.2, 2002: 337.0, 2003: 366.8, 2004: 399.9, 2005: 435.3, 2006: 470.3, 2007: 512.7, 2008: 533.5, 2009: 501.9,
+  2010: 552.7, 2011: 585.9, 2012: 579.9, 2013: 593.9, 2014: 578.9, 2015: 594.7, 2016: 582.4, 2017: 598.8, 2018: 583.1, 2019: 571.5,
+  2020: 514.9, 2021: 568.6, 2022: 602.9, 2023: 591.7, 2024: 583.7, 2025: 609.2
+};
 
 /** Made-up expected growth of the projection, in %. */
 const PROJECTED_GROWTH = 2.6;
@@ -56,12 +58,11 @@ function build(): GdpData {
   const expected: Array<number | null> = [];
   const low: number[] = [];
   const high: number[] = [];
-  let value = 280;
+  let value = OBSERVED[LAST_OBSERVED_YEAR]!;
   for (let year = FIRST_YEAR; year <= LAST_YEAR; year += 1) {
     years.push(year);
     if (year <= LAST_OBSERVED_YEAR) {
-      if (year > FIRST_YEAR) value *= 1 + growth(year) / 100;
-      const rounded = round1(value);
+      const rounded = OBSERVED[year]!;
       history.push(rounded);
       expected.push(year === LAST_OBSERVED_YEAR ? rounded : null);
       low.push(rounded);
@@ -76,7 +77,7 @@ function build(): GdpData {
       high.push(round1(rounded * spread));
     }
   }
-  return { unit: 'miles de millones de USD', source: 'Datos de prueba (inventados)', years, history, expected, low, high };
+  return { unit: 'miles de millones de USD de 2015', source: GDP_SOURCE, years, history, expected, low, high };
 }
 
 export const GDP_MOCK: GdpData = build();
