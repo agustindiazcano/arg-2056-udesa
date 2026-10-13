@@ -8,7 +8,7 @@ import { TourIndicators } from '../../src/tour/TourIndicators';
 afterEach(cleanup);
 
 describe('the indicators box of the Recorrido', () => {
-  it('has six indicators, each with a label, a value and a unit, and says the numbers are test data', () => {
+  it('has six indicators, each with a label, a value and a unit, and names the World Bank as the source', () => {
     expect(TOUR_INDICATORS).toHaveLength(6);
     for (const i of TOUR_INDICATORS) {
       expect(i.label.length).toBeGreaterThan(0);
@@ -17,10 +17,10 @@ describe('the indicators box of the Recorrido', () => {
     expect(TOUR_INDICATORS.map((i) => i.label)).toEqual(expect.arrayContaining(['PBI', 'Población', 'PBI per cápita', 'Exportaciones totales']));
   });
 
-  it('renders a labelled list with the six values and the test-data notice', () => {
+  it('renders a labelled list with the six values and the source', () => {
     render(<TourIndicators />);
     const list = screen.getByRole('list', { name: 'Indicadores de la Argentina' });
     expect(within(list).getAllByRole('listitem')).toHaveLength(6);
-    expect(screen.getByText(/Datos de prueba/)).toBeTruthy();
+    expect(screen.getByText(/Banco Mundial/)).toBeTruthy();
   });
 });

@@ -1,6 +1,6 @@
 import { PROVINCES } from '../types/province.js';
 import { GDP_MOCK } from '../tour/gdpMock.js';
-import { TOUR_INDICATORS } from '../tour/indicatorsMock.js';
+import { INDICATORS_YEAR, TOUR_INDICATORS } from '../tour/indicatorsMock.js';
 import { COUNTRIES, cumulative2011, seriesOf } from '../tour/productivity.js';
 import { PRODUCTION_UNIT, SECTOR_LABELS, SECTOR_VALUES } from '../tour/provinceMock.js';
 import type { Sector } from '../tour/provinceMock.js';
@@ -14,8 +14,8 @@ import type { DataTable, SlideData } from './types.js';
 const indicators = (): DataTable => ({
   id: 'indicators',
   title: 'Indicadores de la Argentina',
-  columns: ['Indicador', 'Valor', 'Unidad'],
-  rows: TOUR_INDICATORS.map((i) => [i.label, i.value, i.unit])
+  columns: ['Indicador', 'Valor', 'Unidad', 'Año', 'Fuente'],
+  rows: TOUR_INDICATORS.map((i) => [i.label, i.value, i.unit, INDICATORS_YEAR, 'Banco Mundial (WDI)'])
 });
 
 function slide(id: string, title: string, tables: DataTable[], mock = true, refs: string[] = []): SlideData {
@@ -81,8 +81,8 @@ export function buildSlides(): SlideData[] {
         rows: GDP_MOCK.years.map((y, i) => [y, GDP_MOCK.history[i] ?? null, GDP_MOCK.expected[i] ?? null, GDP_MOCK.low[i] ?? null, GDP_MOCK.high[i] ?? null])
       },
       indicators()
-    ]),
-    slide('2', 'Producción por provincia', [provinces(), indicators()]),
+    ], true, ['W3']),
+    slide('2', 'Producción por provincia', [provinces(), indicators()], true, ['W3']),
     ...[3, 4, 5, 6].map((s) => slide(String(s), TOUR_CHARTS[s]!.title, [chartTable(s)], s !== 5)),
     slide('7', TOUR_CHARTS[7]!.title, [
       { id: 'provinces-value', title: `Valor productivo por provincia (${PRODUCTION_UNIT})`, columns: ['Provincia', 'Valor'], rows: PROVINCES.map((p, i) => [p.name, PROVINCE_VALUES[i] ?? null]) }

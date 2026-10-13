@@ -22,6 +22,7 @@ export const REFERENCES: readonly Reference[] = [
   { id: 'P12', group: 'Productividad', status: 'descartada', label: 'The Conference Board, TED summary tables (daba +6,8 % para Brasil en 2024, contradice a FGV)', url: 'https://www.conference-board.org/pdf_free/TED-SummaryTables-Charts-sep2025.pdf' },
   { id: 'P13a', group: 'Productividad', status: 'secundaria', label: 'El Observador (Uruguay) sobre el documento del INDEC', url: 'https://www.elobservador.com.uy/argentina/economia-y-negocios/la-productividad-argentina-crecio-al-ritmo-mas-alto-1996-pero-cae-la-calidad-del-empleo-n6042872' },
   { id: 'P13b', group: 'Productividad', status: 'secundaria', label: 'Derecha Diario sobre el documento del INDEC', url: 'https://derechadiario.com.ar/economia/productividad-registro-en-2025-mayor-avance-en-20-anos-bajo-gobierno-milei' },
+  { id: 'W3', group: 'Economía', status: 'leída', label: 'Banco Mundial, WDI, Argentina (PBI, población, PBI per cápita, exportaciones, crecimiento, formación de capital), API consultada el 2026-10-12', url: 'https://api.worldbank.org/v2/country/ARG/indicator/' },
   { id: 'M1', group: 'Mapa', status: 'usada', label: 'MapTiler, imágenes satelitales', url: 'https://www.maptiler.com/cloud/' },
   { id: 'M2', group: 'Mapa', status: 'usada', label: 'MapTiler, modelo de elevación Terrain-RGB v2', url: 'https://docs.maptiler.com/cloud/api/tiles/' },
   { id: 'M3', group: 'Mapa', status: 'usada', label: 'MapTiler Geocoding', url: 'https://docs.maptiler.com/cloud/api/geocoding/' },

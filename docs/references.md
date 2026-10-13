@@ -166,6 +166,14 @@ El paso 0 todavía dibuja **datos de prueba**. Los datos reales ya están prepar
 | W3 | Banco Mundial, WDI, Argentina: PBI constante (<https://api.worldbank.org/v2/country/ARG/indicator/NY.GDP.MKTP.KD>), PBI per cápita (`NY.GDP.PCAP.KD`) y población (`SP.POP.TOTL`) | Series 1960-2024 en dólares constantes de 2015, para comparar con W1 | **leída** (API, 2026-10-12) |
 | W4 | FRED / Penn World Table 11.0, *Real GDP at Constant National Prices for Argentina*, `RGDPNAARA666NRUG`. <https://fred.stlouisfed.org/series/RGDPNAARA666NRUG> | PBI real, 1950-2023, millones de dólares de 2021 | **leída** (página de datos, 2026-10-12) |
 
+### 4.3 Indicadores de la Argentina (pasos 1 y 2 del Recorrido)
+
+| # | Fuente | Qué se usa | Estado |
+|---|---|---|---|
+| W3 | Banco Mundial, WDI, Argentina: `NY.GDP.MKTP.CD` (PBI), `SP.POP.TOTL` (población), `NY.GDP.PCAP.CD` (per cápita), `NE.EXP.GNFS.CD` (exportaciones de bienes y servicios), `NY.GDP.MKTP.KD.ZG` (crecimiento), `NE.GDI.TOTL.ZS` (formación bruta de capital). <https://api.worldbank.org/v2/country/ARG/indicator/> | Cuadro de seis indicadores, año 2025: 683.097.891.619 USD; 45.851.378 personas; 14.898 USD; 106.260.393.151 USD; 4,37 %; 16,11 % | **leída** (API, 2026-10-12; datos actualizados el 2026-10-08) |
+
+Pendiente para el resto de las diapositivas (INDEC, Secretarías de Energía y de Minería, MAGyP, USGS): ver [`data-requests.md`](data-requests.md), secciones 0 y 2.
+
 **Reglas del ranking:** cada año se ordenan los países con dato ese año (44 en 1900, 69 en 1913, 145 en 1950, 166 en 2018); la Unión Soviética, Checoslovaquia y Yugoslavia cuentan como una economía hasta que se disuelven y desde entonces cuentan sus sucesores (para no contar dos veces la misma economía). Los PBI de W1 son en dólares internacionales de 2011 (paridad de poder adquisitivo), no en dólares corrientes.
 
 ## Para verificar antes de publicar
