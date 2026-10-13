@@ -15,7 +15,7 @@ import { reduce } from '../../src/state/reducer';
 import { useStore } from '../../src/state/store';
 
 describe('the GDP simulation', () => {
-  it('starts at the GDP of 2025 and has one value per year to 2056', () => {
+  it('starts at the estimate of the IMF for 2026 and has one value per year to 2056', () => {
     const s = simulate(DEFAULT_SIM);
     expect(s.years[0]).toBe(SIM_START);
     expect(s.years.at(-1)).toBe(SIM_END);
@@ -35,10 +35,10 @@ describe('the GDP simulation', () => {
     expect(end({ productivity: 1 })).toBeGreaterThan(base);
   });
 
-  it('brings the AI in little by little: no effect in 2025, the full effect from 2040', () => {
-    const none = growthAt({ ...DEFAULT_SIM, ai: 0 }, 2025);
-    expect(growthAt(DEFAULT_SIM, 2025)).toBeCloseTo(none, 10);
-    expect(growthAt(DEFAULT_SIM, 2040)).toBeCloseTo(none + DEFAULT_SIM.ai, 10);
+  it('brings the AI in little by little: no effect in 2026, the full effect from 2041', () => {
+    const none = growthAt({ ...DEFAULT_SIM, ai: 0 }, 2026);
+    expect(growthAt(DEFAULT_SIM, 2026)).toBeCloseTo(none, 10);
+    expect(growthAt(DEFAULT_SIM, 2041)).toBeCloseTo(none + DEFAULT_SIM.ai, 10);
     expect(growthAt(DEFAULT_SIM, 2056)).toBeCloseTo(none + DEFAULT_SIM.ai, 10);
   });
 

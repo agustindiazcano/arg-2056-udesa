@@ -47,7 +47,7 @@ export interface BarsView {
 }
 
 /** The view the human chose with the tuner (turn 0°, tilt 89°, near 0.46, end 0.32, height -0.3, lens 32°). */
-export const DEFAULT_BARS_VIEW: BarsView = { theta: 0, phi: (89 * Math.PI) / 180, near: 0.46, end: 0.32, height: -0.3, fov: 32 };
+export const DEFAULT_BARS_VIEW: BarsView = { theta: 0, phi: (89 * Math.PI) / 180, near: 0.8, end: 0.8, height: -0.3, fov: 32 };
 
 /** The angles every 3D bar chart opens at: facing it, from almost the side (the chosen view); the side view of the Recorrido keeps its own. */
 export function barsOpeningAngles(side: boolean): { theta: number; phi: number } {

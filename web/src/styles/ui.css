@@ -1047,6 +1047,29 @@ main.scene-container {
   height: 100%;
 }
 
+/* the Gráfico | Tabla switch of the region sits above the chart, in the flow, so it does not cover the bars */
+.prov-bars > .tour-chart {
+  display: flex;
+  flex-direction: column;
+}
+
+.prov-bars > .tour-chart > .tour-view-switch {
+  position: static;
+  flex: 0 0 auto;
+  width: auto;
+  height: auto;
+  margin-bottom: var(--space-1, 0.25rem);
+}
+
+.prov-bars > .tour-chart > :not(.tour-view-switch) {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.prov-bars .tour-table {
+  padding-top: 0;
+}
+
 /* ---- Recorrido step 0: the GDP since 1900 and the rankings ----------------------------------------------------------- */
 
 .world-year {
@@ -1724,4 +1747,165 @@ main.scene-container {
 
 .data-page a {
   color: var(--blue);
+}
+
+/* ---- The side panel of the charts of the Recorrido (text, how to read it, references) ---------------------------------- */
+
+.tour-frame {
+  position: relative;
+  display: flex;
+  height: 100%;
+  pointer-events: none;
+}
+
+.tour-frame > .gdp-step {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.tour-side {
+  box-sizing: border-box;
+  flex: 0 0 min(22rem, 32vw);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2, 0.5rem);
+  margin: var(--space-3) var(--space-md) var(--space-3) 0;
+  padding: var(--space-md);
+  overflow-y: auto;
+  background: var(--glass);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  pointer-events: auto;
+}
+
+.tour-side h3 {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 400;
+}
+
+.tour-side p {
+  margin: 0;
+  color: var(--ink-2);
+  font-size: 0.9rem;
+}
+
+.tour-side summary {
+  cursor: pointer;
+  color: var(--ink-2);
+  font-size: 0.85rem;
+}
+
+.tour-side .tour-side-note {
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+
+.tour-side-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2, 0.5rem);
+}
+
+.tour-side-badge {
+  padding: 0.1rem 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--muted);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.tour-side-badge--real {
+  color: var(--ink);
+  border-color: var(--ink-2);
+}
+
+.tour-side-badge--prueba {
+  color: var(--state-warning);
+  border-color: var(--state-warning);
+}
+
+.tour-side-refs ul {
+  margin: var(--space-1, 0.25rem) 0 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.8rem;
+}
+
+.tour-side-refs a {
+  color: var(--blue);
+}
+
+.tour-side-status {
+  margin-left: 0.4rem;
+  color: var(--muted);
+  font-size: 0.7rem;
+}
+
+.tour-side-open {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  z-index: 3;
+  transform: translateY(-50%);
+  padding: 0.8rem 0.35rem;
+  background: var(--glass-strong);
+  color: var(--ink);
+  border: 1px solid var(--border);
+  border-right: 0;
+  border-radius: var(--radius-md) 0 0 var(--radius-md);
+  font: inherit;
+  font-size: 0.8rem;
+  writing-mode: vertical-rl;
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.gdp-source {
+  color: var(--muted);
+}
+
+@media (max-width: 900px) {
+  .tour-frame {
+    flex-direction: column;
+    overflow-y: auto;
+    pointer-events: auto;
+  }
+  .tour-side {
+    flex: 0 0 auto;
+    margin: 0 var(--space-md) var(--space-md);
+  }
+}
+
+/* the three values of the bars of the region (step 0): a small subtitle and the buttons */
+.world-metric-pick {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2, 0.5rem);
+  margin-top: var(--space-1, 0.25rem);
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.prov-bars .tour-caption {
+  flex-wrap: wrap;
+  row-gap: var(--space-1, 0.25rem);
+}
+
+.prov-bars .tour-caption > strong {
+  flex: 1 1 100%;
+  white-space: normal;
+}
+
+.prov-bars .world-metric-pick {
+  flex: 1 1 100%;
+  margin-top: 0;
 }

@@ -109,10 +109,10 @@ describe('the Data page', () => {
     render(<DataPage />);
     const select = screen.getByRole('combobox', { name: 'Diapositiva' }) as HTMLSelectElement;
     const options = within(select).getAllByRole('option').map((o) => o.textContent);
-    expect(options[0]).toBe('0 · El PBI de la Argentina desde 1900');
+    expect(options[0]).toBe('0 · El PBI de Argentina desde 1960');
     expect(options).toContain('14 · Productividad');
     expect(options.at(-1)).toMatch(/^Simulador/);
-    expect(screen.getByRole('heading', { name: '0 · El PBI de la Argentina desde 1900' })).toBeTruthy();
+    expect(screen.getByRole('heading', { name: '0 · El PBI de Argentina desde 1960' })).toBeTruthy();
     expect(screen.getByRole('heading', { name: 'Referencias' })).toBeTruthy();
     const link = screen.getAllByRole('link', { name: /INDEC/ })[0] as HTMLAnchorElement;
     expect(link.href).toContain('indec.gob.ar');
@@ -127,10 +127,10 @@ describe('the Data page', () => {
     fireEvent.change(select, { target: { value: '14' } });
     expect(screen.getByRole('heading', { name: '14 · Productividad' })).toBeTruthy();
     expect(screen.getAllByRole('table')).toHaveLength(5);
-    expect(screen.queryByRole('heading', { name: '0 · El PBI de la Argentina desde 1900' })).toBeNull();
+    expect(screen.queryByRole('heading', { name: '0 · El PBI de Argentina desde 1960' })).toBeNull();
     fireEvent.change(select, { target: { value: '1' } });
     expect(screen.getAllByRole('table')).toHaveLength(2);
-    expect(screen.getAllByRole('heading', { level: 3 }).map((h) => h.textContent)).toEqual(['1 · PBI de la Argentina', 'Referencias']);
+    expect(screen.getAllByRole('heading', { level: 3 }).map((h) => h.textContent)).toEqual(['1 · PBI de Argentina', 'Referencias']);
   });
 
   it('downloads the CSV of the slide chosen in the selector, and one table at a time', () => {

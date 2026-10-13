@@ -7,7 +7,7 @@ import { render, screen, cleanup, fireEvent, within } from '@testing-library/rea
 import { useStore } from '../../src/state/store';
 
 // The charts of the Recorrido draw with ECharts, which needs a canvas that jsdom does not have; its own test is gdpTour.test.tsx.
-vi.mock('../../src/tour/TourStep', () => ({ TourStep: () => <h2>PBI de la Argentina</h2> }));
+vi.mock('../../src/tour/TourStep', () => ({ TourStep: () => <h2>PBI de Argentina</h2> }));
 
 // The real scenes load charts and maps; the shell is what is under test here. The labels stay the real ones.
 vi.mock('../../src/scenes/registry', async (importOriginal) => {
@@ -263,18 +263,18 @@ describe('Recorrido step 1', () => {
   it('shows the GDP chart on step 1 and the scene on the other steps', async () => {
     useStore.setState({ section: 'tour', tourStep: 1 });
     render(<App />);
-    expect(await screen.findByRole('heading', { name: 'PBI de la Argentina' })).toBeTruthy();
+    expect(await screen.findByRole('heading', { name: 'PBI de Argentina' })).toBeTruthy();
     expect(screen.queryByRole('heading', { name: 'escena' })).toBeNull();
     cleanup();
     useStore.setState({ section: 'tour', tourStep: 15 });
     render(<App />);
-    expect(screen.queryByRole('heading', { name: 'PBI de la Argentina' })).toBeNull();
+    expect(screen.queryByRole('heading', { name: 'PBI de Argentina' })).toBeNull();
     expect(screen.getByRole('heading', { name: 'escena' })).toBeTruthy();
   });
 
   it('does not show the GDP chart in the other sections', () => {
     useStore.setState({ section: 'dashboard', tourStep: 1 });
     render(<App />);
-    expect(screen.queryByRole('heading', { name: 'PBI de la Argentina' })).toBeNull();
+    expect(screen.queryByRole('heading', { name: 'PBI de Argentina' })).toBeNull();
   });
 });

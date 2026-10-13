@@ -1,6 +1,6 @@
 # Argentina 2056: del Cruce de los Andes a la Cuarta Revolución Industrial
 
-Un relato interactivo, con datos, que une el Cruce de los Andes (1817) con el desafío de la Argentina hacia 2056: recursos, economía, población y el impacto de la inteligencia artificial y la automatización (la «Cuarta Revolución Industrial» en el sentido de Klaus Schwab, Foro Económico Mundial).
+Un relato interactivo, con datos, que une el Cruce de los Andes (1817) con el desafío de Argentina hacia 2056: recursos, economía, población y el impacto de la inteligencia artificial y la automatización (la «Cuarta Revolución Industrial» en el sentido de Klaus Schwab, Foro Económico Mundial).
 
 - **Los Andes**: mapa 3D con satélite y relieve reales; la marcha de la columna principal del Ejército de los Andes, las otras columnas del cruce y el encuentro de las fuerzas, con figuras en miniatura.
 - **Recorrido al 2056**: una presentación guiada con gráficos 2D y 3D (cada gráfico tiene su tabla). Incluye la diapositiva de **productividad** (PTF y producto por hora, Argentina, EE. UU., Chile y Brasil, con datos de la Penn World Table).

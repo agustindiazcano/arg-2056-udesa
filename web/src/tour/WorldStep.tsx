@@ -13,7 +13,8 @@ import { elapsedForYear, seriesFrame, valueAt, yearAtElapsed } from './worldAnim
 import { SPEEDS } from '../state/reducer.js';
 import { useTimeline } from './useTimeline.js';
 import { WorldTable } from './WorldTable.js';
-import { FIRST_YEAR, HOME, LAST_YEAR, MOCK_SOURCE, WORLD_UNIT, argentinaSince1900, regionCountries, regionValuesAt } from './worldData.js';
+import { FIRST_YEAR, HOME, LAST_YEAR, REGION_METRICS, WORLD_SOURCE, WORLD_UNIT, argentinaNominal, regionCountries, regionValuesAt } from './worldData.js';
+import type { RegionMetric } from './worldData.js';
 
 const VIEWS = [
   { value: '2d', label: '2D' },
@@ -32,11 +33,16 @@ const PauseIcon = () => (
 );
 const speedFormat = new Intl.NumberFormat('es-AR', { maximumFractionDigits: 2 });
 
-const TITLE = `El PBI de la Argentina desde ${FIRST_YEAR}`;
-const SERIES_NAME = 'PBI de la Argentina';
+const TITLE = `El PBI de Argentina desde ${FIRST_YEAR}`;
+const SERIES_NAME = 'PBI nominal de Argentina';
+const REGION_OPTIONS = [
+  { value: 'gdp', label: 'PBI' },
+  { value: 'percapita', label: 'PBI per cápita' },
+  { value: 'population', label: 'Población' }
+] as const;
 
 /**
- * Step 0 of the Recorrido: the GDP of Argentina from 1900 to today as a line that draws itself year by year while the view
+ * Step 0 of the Recorrido: the nominal GDP of Argentina from 1960 to 2025 as a line that draws itself year by year while the view
  * follows it, and pulls back when it reaches the last year (in 2D and in 3D); on the right the top 20 of the world's economies
  * and the largest economies of the region. Made-up values.
  */
@@ -49,11 +55,14 @@ export function WorldStep() {
   const { elapsed, clock, seek, playing, play, pause } = useTimeline(run, reduced, speed);
   const stepSpeed = (by: 1 | -1) => setSpeed((v) => SPEEDS[Math.min(SPEEDS.length - 1, Math.max(0, SPEEDS.indexOf(v) + by))] ?? v);
 
-  const series = useMemo(argentinaSince1900, []);
+  const series = useMemo(argentinaNominal, []);
   const today = series.values.at(-1) ?? 0;
   const regionNames = useMemo(regionCountries, []);
+  // the bars of the region show one of three values, chosen by clicking their title
+  const [regionMetric, setRegionMetric] = useState<RegionMetric>('gdp');
+  const metricInfo = REGION_METRICS[regionMetric];
 
-  const summary = `${SERIES_NAME} de ${FIRST_YEAR} a ${LAST_YEAR} (datos de prueba): de ${formatValue(series.values[0] ?? null, WORLD_UNIT)} a ${formatValue(today, WORLD_UNIT)}`;
+  const summary = `${SERIES_NAME} de ${FIRST_YEAR} a ${LAST_YEAR}: de ${formatValue(series.values[0] ?? null, WORLD_UNIT)} a ${formatValue(today, WORLD_UNIT)}`;
   const frame = useMemo(() => seriesFrame(elapsed, series.years, series.values), [elapsed, series]);
   const flat = useMemo(() => buildFollowedSeries(series.years, series.values, frame, { unit: WORLD_UNIT, name: SERIES_NAME, summary }), [series, frame, summary]);
   // a new object on every run: the 3D chart draws itself again
@@ -72,25 +81,25 @@ export function WorldStep() {
   const lineSpec = useMemo(() => ({ ...spec, clock }), [spec, clock]);
 
   // the table and the bars of the region show the year the line has reached
-  const regionValues = regionValuesAt(frame.year);
-  const regionText = `Las mayores economías de la región, en miles de millones de USD (datos de prueba), de ${FIRST_YEAR} a ${LAST_YEAR}: ${regionNames.map((c, i) => `${c} ${formatValue(regionValuesAt(LAST_YEAR)[i] ?? null, WORLD_UNIT)} en ${LAST_YEAR}`).join(', ')}`;
-  // the values change with the year: one option per frame, like the line
-  const regionFlat = buildColumns(regionNames, [{ name: 'PBI', values: regionValues, color: tokens.muted }], {
-    unit: WORLD_UNIT,
-    highlight: HOME,
-    summary: regionText,
-    dense: { barWidth: 22, rotate: 35 }
-  }).option;
-  // the bars in 3D keep their order and read the clock: the heights come from the year, the camera stays on the bar of Argentina
+  const regionValues = regionValuesAt(frame.year, regionMetric);
+  const regionText = `Las mayores economías de la región, ${metricInfo.label} (${metricInfo.unit}), de ${FIRST_YEAR} a ${LAST_YEAR}: ${regionNames.map((c, i) => `${c} ${formatValue(regionValuesAt(LAST_YEAR, regionMetric)[i] ?? null, metricInfo.unit)} en ${LAST_YEAR}`).join(', ')}`;
+  // the values change with the year: one option per frame, like the line; the bars are sorted from the largest to the smallest of the year the line has reached
+  const regionOrder = regionNames.map((_, i) => i).sort((a, b) => (regionValues[b] ?? 0) - (regionValues[a] ?? 0));
+  const regionFlat = buildColumns(
+    regionOrder.map((i) => regionNames[i]!),
+    [{ name: metricInfo.label, values: regionOrder.map((i) => regionValues[i] ?? 0), color: tokens.muted }],
+    { unit: metricInfo.unit, highlight: HOME, summary: regionText, dense: { barWidth: 22, rotate: 35 } }
+  ).option;
+  // the bars in 3D read the clock too: the heights come from the year, they trade places as the order changes, the camera stays on the bar of Argentina
   const regionSpec = useMemo(
     () => ({
       ...barsSpec(
-        regionNames.map((c, i) => ({ label: c, value: regionValuesAt(LAST_YEAR)[i] ?? 0 })),
-        { title: 'Mayores economías de la región', unit: WORLD_UNIT, highlight: HOME, summary: regionText }
+        regionNames.map((c, i) => ({ label: c, value: regionValuesAt(LAST_YEAR, regionMetric)[i] ?? 0 })),
+        { title: `Mayores economías de la región: ${metricInfo.label}`, unit: metricInfo.unit, highlight: HOME, summary: regionText }
       ),
-      timeline: { clock, yearAt: yearAtElapsed, valuesAt: regionValuesAt, focus: regionNames.indexOf(HOME) }
+      timeline: { clock, yearAt: yearAtElapsed, valuesAt: (year: number) => regionValuesAt(year, regionMetric), focus: regionNames.indexOf(HOME), sorted: true }
     }),
-    [regionNames, regionText, clock]
+    [regionNames, regionText, regionMetric, metricInfo, clock]
   );
 
   const shownYear = Math.floor(frame.year + 1e-6);
@@ -102,7 +111,7 @@ export function WorldStep() {
         <Reveal k="head" className="gdp-title">
           <h2>{TITLE}</h2>
           <p className="gdp-sub">
-            {WORLD_UNIT}, {FIRST_YEAR} a {LAST_YEAR} · <span className="gdp-mock">{MOCK_SOURCE}</span>
+            {WORLD_UNIT}, {FIRST_YEAR} a {LAST_YEAR} · <span className="gdp-source">{WORLD_SOURCE}</span>
           </p>
         </Reveal>
         <div className="tour-controls">
@@ -165,14 +174,18 @@ export function WorldStep() {
               <strong>Ranking mundial en {shownYear}</strong>
             </div>
             <div className="world-ranks">
-              <WorldTable metric="gdp" title="PBI" unit={WORLD_UNIT} year={frame.year} />
-              <WorldTable metric="percapita" title="PBI per cápita" unit="USD por persona" year={frame.year} />
+              <WorldTable metric="gdp" title="PBI nominal" unit={WORLD_UNIT} year={frame.year} />
+              <WorldTable metric="percapita" title="PBI per cápita nominal" unit="USD corrientes por persona" year={frame.year} />
             </div>
           </Reveal>
 
           <Reveal k="region" delay={0.14} className="gdp-chart prov-bars" role="region" aria-label="Mayores economías de la región">
             <div className="tour-caption">
               <strong>Mayores economías de la región en {shownYear}</strong>
+              <div className="world-metric-pick">
+                <span>En la región</span>
+                <Segmented label="Dato de la región" options={REGION_OPTIONS} value={regionMetric} onChange={setRegionMetric} />
+              </div>
             </div>
             <div className="tour-chart">
               <TourChart spec={regionSpec}>

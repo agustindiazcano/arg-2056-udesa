@@ -1,11 +1,18 @@
 # Last Context
 
 ## State
-- **UI polish on `task/hover-transitions`** (human requests 2026-10-12):
-  - The hover of the "Argentina 2056" title (intro and nav logo) only changes color (Argentina gold, 2056 white), with a slow `ease-in-out` transition (0.6 s intro, 0.5 s nav) and no glow; the intro title has `cursor: pointer`.
-  - Data section: the bar sits flush under the site nav; the page flows in the document (`.app-screen:has(.data-page)` in `ui.css`), so the window is the only page scroll, the nav (`.chrome`) and the Data bar are sticky; the tables are cards in a grid (`.data-cards`, min 24rem) that fit the screen width; each table keeps its own inner scroll (max 16rem).
-- Not run locally (tests go to CI). Checked by hand in Chromium at 1366x768.
+- **Real data of the Recorrido** (`task/real-data-recorrido`, human request 2026-10-12): real and sourced now: steps 1 and 2 indicators (World Bank WDI 2025, ref `W3`), step 4 and 11 (INDEC ICA, exports by great item, January to July 2026, ref `E1`), step 12 (INDEC value added by sector 2025 at 2004 prices, ref `E2`), step 14 (before). Test data remains in 0, 1 (series), 2 (provinces), 3, 6, 8, 9, 10, 13 and the simulator.
+- Steps 8 and 9 have, in Data, a table of RIGI and large mining / oil and gas projects from the press (`web/src/tour/rigiProjects.ts`, refs `R1` to `R11`), **unverified**: the sources disagree on amounts and counts and each row notes the discrepancy.
+- `docs/data-requests.md`: section 0 (state per slide), new requests D23 to D27, section 3 with the human tasks H1 to H11 (priority, who, for which request) and ready prompts for another AI. `docs/references.md` section 4.3 and 4.4.
+- Step 0 stays on test data: the real series (Maddison 2020) ends in 2018 and the slide runs to 2026; it needs the Maddison 2023 download (H5) and a refactor of `tour/worldData.ts`.
+- Tests run locally: `tourCharts`, `dataSection`, `tourIndicators` (pass); `tsc --noEmit` clean. The rest goes to CI.
 
-## Open
-- The story caption ("Paso 1 de 3") floats over the Data page and covers content; hide it in Data (human to confirm).
-- The intro title is not clickable, only shows the hand cursor; the human may want a target.
+- **Side panel on every chart step (0 to 13)** (human request 2026-10-12): `tour/TourSidebar.tsx` (text, how to read it, a data badge real / partly real / test, and the references as links), the texts in `tour/stepInfo.ts`, the layout in `TourStep.tsx` (`.tour-frame`); open by default, the button «Ocultar texto» hides it and a vertical tab «Mostrar texto» brings it back; the choice (`sideOpen` in `useTourLayout`) stays when the step changes. Step 14 keeps its own text panel. The source line under a chart is amber only when the data is test data.
+- Second pass of real data (same day): step 1 history 1990-2025 is real (World Bank constant 2015 USD, in `tour/gdpMock.ts`), step 9 history 2015-2025 is real (Vaca Muerta oil, IAE with Secretaría de Energía data, in `tour/tourData.ts`); Acemoglu and Anthropic read and cited in step 3; USGS lithium resources (28 Mt) in step 13 text. Projections and ranges stay made up and the chart sources say so.
+
+- **One figure for the GDP and the population** (human request 2026-10-12): everything is nominal GDP in current USD (never PPA). Step 0 now draws the World Bank nominal GDP of every country 1960 to 2025 (`tour/worldNominal.json`, `scripts/build_world_nominal.py`), with the ranking, the per-capita ranking, and the bars of the region (the ten largest of Latin America and Uruguay) that sort themselves by value and switch between PBI, PBI per cápita and Población with three buttons under «En la región». `tour/gdpFacts.ts` is the single source: World Bank to 2025, IMF estimate for 2026 (768.2, `imfWeo.json`, `scripts/imf_compare.py`, SDMX API of the IMF), shared by step 1, step 3 and the simulator; `tests/unit/gdpConsistency.test.ts` guards it. Argentina's population is the INDEC's (46.387 M in 2025). Comparison with the IMF in section 5 of `docs/data-requests.md`.
+- UI: values above the bars (also in the sorted 3D bars of step 0), thin scrollbars in the site colors, zoom buttons of the 3D bars of step 0 work (they take the camera from the clock), the camera is farther away, «la Argentina» became «Argentina» everywhere.
+- H12 done: the IMF page shows 768.21 for Argentina 2026 (the team confirmed); the 688.4 from an AI answer is not the current edition.
+
+## Next
+- The human does H1 to H5 (see the doc); then wire the production by province (steps 2 and 7) and the hydrocarbons (step 9) and replace the RIGI press table with the official list.

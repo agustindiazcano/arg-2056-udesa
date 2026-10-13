@@ -18,11 +18,11 @@ describe('step 0 of the Recorrido', () => {
     expect(button.classList.contains('btn')).toBe(true);
   });
 
-  it('has a bar next to Repetir to move along the timeline from 1900 to 2026', () => {
+  it('has a bar next to Repetir to move along the timeline from 1960 to 2025', () => {
     render(<WorldStep />);
     const slider = screen.getByRole('slider', { name: 'Línea de tiempo' }) as HTMLInputElement;
-    expect(slider.min).toBe('1900');
-    expect(slider.max).toBe('2026');
+    expect(slider.min).toBe('1960');
+    expect(slider.max).toBe('2025');
     const replay = screen.getByRole('button', { name: 'Repetir' });
     expect(replay.parentElement).toBe(slider.closest('.tour-controls'));
   });
@@ -31,21 +31,21 @@ describe('step 0 of the Recorrido', () => {
     render(<WorldStep />);
     const slider = screen.getByRole('slider', { name: 'Línea de tiempo' }) as HTMLInputElement;
     act(() => {
-      fireEvent.change(slider, { target: { value: '1950' } });
+      fireEvent.change(slider, { target: { value: '1990' } });
     });
-    expect(slider.getAttribute('aria-valuetext')).toBe('Año 1950');
-    expect(screen.getByText('Ranking mundial en 1950')).toBeTruthy();
-    expect(screen.getByText('Mayores economías de la región en 1950')).toBeTruthy();
-    for (const name of ['PBI', 'PBI per cápita']) {
+    expect(slider.getAttribute('aria-valuetext')).toBe('Año 1990');
+    expect(screen.getByText('Ranking mundial en 1990')).toBeTruthy();
+    expect(screen.getByText('Mayores economías de la región en 1990')).toBeTruthy();
+    for (const name of ['PBI nominal', 'PBI per cápita nominal']) {
       expect(screen.getByRole('table', { name }).querySelectorAll('tbody tr')).toHaveLength(20);
     }
     act(() => {
-      fireEvent.change(slider, { target: { value: '2026' } });
+      fireEvent.change(slider, { target: { value: '2025' } });
     });
-    expect(screen.getByText('Ranking mundial en 2026')).toBeTruthy();
+    expect(screen.getByText('Ranking mundial en 2025')).toBeTruthy();
   });
 
-  it('Repetir starts again from 1900', () => {
+  it('Repetir starts again from 1960', () => {
     render(<WorldStep />);
     const slider = screen.getByRole('slider', { name: 'Línea de tiempo' }) as HTMLInputElement;
     act(() => {
@@ -55,19 +55,19 @@ describe('step 0 of the Recorrido', () => {
     act(() => {
       fireEvent.click(screen.getByRole('button', { name: 'Repetir' }));
     });
-    expect(screen.getByText('Ranking mundial en 1900')).toBeTruthy();
+    expect(screen.getByText('Ranking mundial en 1960')).toBeTruthy();
   });
 
   it('shows two tables side by side, with Argentina in its own light-blue cell that does not move: its place and its value', () => {
     render(<WorldStep />);
     const slider = screen.getByRole('slider', { name: 'Línea de tiempo' }) as HTMLInputElement;
-    const places: Record<string, string[]> = { PBI: [], 'PBI per cápita': [] };
-    for (const year of ['1900', '1960', '2026']) {
+    const places: Record<string, string[]> = { 'PBI nominal': [], 'PBI per cápita nominal': [] };
+    for (const year of ['1960', '1990', '2025']) {
       act(() => {
         fireEvent.change(slider, { target: { value: year } });
       });
-      for (const name of ['PBI', 'PBI per cápita']) {
-        const home = screen.getByTestId(`home-${name === 'PBI' ? 'gdp' : 'percapita'}`);
+      for (const name of ['PBI nominal', 'PBI per cápita nominal']) {
+        const home = screen.getByTestId(`home-${name === 'PBI nominal' ? 'gdp' : 'percapita'}`);
         expect(home.textContent).toContain('Argentina');
         expect(home.textContent).toMatch(/\d/);
         expect(home.getAttribute('data-home')).toBe('true');
@@ -77,8 +77,8 @@ describe('step 0 of the Recorrido', () => {
       }
     }
     // its place and its value change with the year, the cell stays
-    expect(new Set(places.PBI).size).toBeGreaterThan(1);
-    expect(new Set(places['PBI per cápita']).size).toBeGreaterThan(1);
+    expect(new Set(places['PBI nominal']).size).toBeGreaterThan(1);
+    expect(new Set(places['PBI per cápita nominal']).size).toBeGreaterThan(1);
   });
 
   it('has a play / pause button in the controls: it starts playing, pauses, plays again, and stops when the timeline is dragged', () => {
@@ -95,7 +95,7 @@ describe('step 0 of the Recorrido', () => {
     });
     expect(screen.getByRole('button', { name: 'Pausar' })).toBeTruthy();
     act(() => {
-      fireEvent.change(screen.getByRole('slider', { name: 'Línea de tiempo' }), { target: { value: '1950' } });
+      fireEvent.change(screen.getByRole('slider', { name: 'Línea de tiempo' }), { target: { value: '1990' } });
     });
     expect(screen.getByRole('button', { name: 'Reproducir' })).toBeTruthy();
   });

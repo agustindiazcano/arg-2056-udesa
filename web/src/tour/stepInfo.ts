@@ -1,0 +1,179 @@
+/**
+ * The text of the side panel of each chart of the Recorrido (steps 0 to 13; step 14 has its own text): what the chart shows, how to read it,
+ * how real its data is and which references (ids of `REFERENCES`) it comes from. Where the data is still made up the panel says so; the
+ * state of every slide is in `docs/data-requests.md`, section 0.
+ */
+export type StepData = 'real' | 'parcial' | 'prueba';
+
+export interface StepInfo {
+  heading: string;
+  paragraphs: string[];
+  how: string;
+  data: StepData;
+  /** one line on where the numbers come from and what is missing */
+  note: string;
+  refs: string[];
+}
+
+export const DATA_LABEL: Record<StepData, string> = {
+  real: 'Datos reales',
+  parcial: 'Datos en parte reales',
+  prueba: 'Datos de prueba'
+};
+
+export const STEP_INFO: Record<number, StepInfo> = {
+  0: {
+    heading: 'Dónde estuvo y dónde está Argentina',
+    paragraphs: [
+      'Este gráfico sigue el PBI nominal de Argentina, en dólares corrientes (no en paridad de poder adquisitivo), año por año de 1960 a 2025, frente al resto del mundo y frente a la región. En 2025 fue de 683.100 millones de dólares, la economía número 24 del mundo según el Banco Mundial.',
+      'El PBI nominal es lo que vale la producción de un país al tipo de cambio del año; es el que usan los rankings de tamaño de la economía. El PBI per cápita es ese valor dividido por la población. Los botones de abajo cambian el gráfico de barras de la región entre PBI, PBI per cápita y población.'
+    ],
+    how: 'Mové el control del año para ver cómo cambia el ranking. Las barras de la región se reordenan de mayor a menor en cada año. El ranking de PBI per cápita cuenta solo países de un millón de habitantes o más.',
+    data: 'real',
+    note: 'Banco Mundial (WDI), PBI nominal en dólares corrientes, 1960 a 2025; algunos países no tienen dato en los primeros años. La población de Argentina de 2022 a 2025 es la proyección oficial del INDEC (Censo 2022); el resto, del Banco Mundial. El año 2026 no se dibuja porque todavía no es un dato observado: el FMI lo estima en 768.200 millones.',
+    refs: ['W5', 'I1', 'F1']
+  },
+  1: {
+    heading: 'El PBI de Argentina, de 1990 a 2056',
+    paragraphs: [
+      'La línea muestra el PBI nominal observado de 1990 a 2025 y la proyección esperada hasta 2056, con un abanico que va del escenario más bajo al más alto. En la historia se ven las crisis de 1995, 2001-2002, 2009 y 2020.',
+      'El cuadro de indicadores resume la economía en 2025: PBI nominal, población, PBI por habitante, exportaciones, crecimiento e inversión.'
+    ],
+    how: 'Mirá primero la línea de la proyección y después el ancho del abanico: cuanto más ancho, más incierto es el futuro. El abanico no es un pronóstico de lo que va a pasar sino de lo que podría pasar.',
+    data: 'parcial',
+    note: 'La historia es real (Banco Mundial, PBI nominal en dólares corrientes). El valor de 2026 es la estimación del FMI (768.200 millones, actualización del 30-09-2026) y es el mismo en todos los gráficos del sitio. Desde 2027 la proyección y el abanico son de prueba hasta que esté el modelo. Población: INDEC; el Banco Mundial tiene 45,9 millones y el FMI 47,5 (usa la proyección anterior al censo).',
+    refs: ['W3', 'W5', 'I1', 'F1']
+  },
+  2: {
+    heading: 'Qué produce cada provincia',
+    paragraphs: [
+      'El mapa colorea cada provincia según su producción. Al elegir un sector (minería, agro o hidrocarburos) el mapa cambia para mostrar quién aporta más.',
+      'Argentina no es un solo país económico: la producción se concentra en pocas provincias y cada una vive de recursos distintos.'
+    ],
+    how: 'Tocá una provincia para ver su valor. El color más intenso es el valor más alto.',
+    data: 'prueba',
+    note: 'Los valores por provincia son de prueba. Los indicadores de arriba sí son reales (Banco Mundial, 2025). Falta traer la producción por provincia de la Secretaría de Energía, Minería y MAGyP.',
+    refs: ['W3']
+  },
+  3: {
+    heading: 'La inteligencia artificial y el PBI',
+    paragraphs: [
+      'Dos líneas del PBI desde 2025: una sin la revolución de la inteligencia artificial y otra con ella. La diferencia entre ambas es lo que la IA podría agregar al producto.',
+      'Los estudios dan resultados muy distintos. Acemoglu (2024) calcula un aumento de la productividad total de no más de 0,66 % en diez años (menos de 0,53 % si se descuentan las tareas difíciles de aprender). Anthropic (2025) estima, para Estados Unidos y suponiendo adopción universal en diez años, 1,8 % anual de productividad laboral y 1,08 % anual de productividad total.'
+    ],
+    how: 'Compará la distancia entre las dos líneas en 2056. No es una predicción: depende de cuánto de la economía se adapta y de qué tan rápido.',
+    data: 'prueba',
+    note: 'Las dos líneas son de prueba; parten de la estimación del FMI para 2026 (768.200 millones de dólares corrientes), el mismo valor del gráfico del PBI. Los dos estudios se leyeron el 12-10-2026; Anthropic aclara que su cifra no es una predicción y que usa supuestos fuertes. Ninguno es sobre Argentina.',
+    refs: ['P8', 'P9', 'P10a']
+  },
+  4: {
+    heading: 'De qué viven las exportaciones',
+    paragraphs: [
+      'Las exportaciones de bienes de enero a julio de 2026 sumaron 58.365 millones de dólares, 22,9 % más que un año antes.',
+      'Las manufacturas de origen agropecuario son el rubro más grande (18.911 millones), seguidas por las manufacturas industriales (15.554), los productos primarios (14.749) y los combustibles y la energía (9.151), que crecieron 49,9 %.'
+    ],
+    how: 'Cada barra es un gran rubro del INDEC, en miles de millones de dólares, acumulado de enero a julio. La barra más alta es la que más aporta.',
+    data: 'real',
+    note: 'INDEC, informe de agosto de 2026. Es un acumulado de siete meses, no un año completo. Los complejos exportadores de 2025 (soja, petróleo y gas, minería) están pendientes.',
+    refs: ['E1']
+  },
+  5: {
+    heading: 'La regla del 70',
+    paragraphs: [
+      'Una forma rápida de saber cuánto tarda una economía en duplicarse: se divide 70 por la tasa de crecimiento anual. A 3 % por año, tarda unos 23 años.',
+      'Parece un detalle, pero define el horizonte de este trabajo: a 2 % por año el PBI se duplica en 35 años; a 4 %, en 17,5.'
+    ],
+    how: 'Cada barra son los años que tarda en duplicarse el PBI con una tasa de crecimiento. Más crecimiento, menos años.',
+    data: 'real',
+    note: 'No es una medición: es una cuenta (70 dividido la tasa), por eso no tiene fuente de datos.',
+    refs: []
+  },
+  6: {
+    heading: 'Qué miran los inversores',
+    paragraphs: [
+      'Los capitales se mueven hacia donde ven reglas claras, estabilidad y retornos. Este gráfico ordena los factores que pesan en esa decisión.',
+      'No es una encuesta publicada: es un esquema para ordenar la discusión.'
+    ],
+    how: 'Cada barra es el puntaje de 0 a 10 de un factor. Una barra baja es un obstáculo para invertir.',
+    data: 'prueba',
+    note: 'Los puntajes son de prueba. Falta una fuente que los publique, o sacar esta diapositiva.',
+    refs: []
+  },
+  7: {
+    heading: 'El mapa productivo',
+    paragraphs: [
+      'Cada provincia pintada según su valor productivo anual, en millones de dólares.',
+      'Es la misma información del paso 2 vista como un solo número por provincia.'
+    ],
+    how: 'Tocá una provincia para destacarla. El tono más oscuro es el valor más alto.',
+    data: 'prueba',
+    note: 'Los valores son de prueba hasta que se traiga la producción por provincia.',
+    refs: []
+  },
+  8: {
+    heading: 'Minería: lo que hay y lo que viene',
+    paragraphs: [
+      'La minería exportó 4.673 millones de dólares en 2024 y la Secretaría de Minería tenía 316 operaciones y proyectos en cartera en mayo de 2025, de los cuales solo 25 producían.',
+      'Una parte importante de lo que viene pasa por el Régimen de Incentivo para Grandes Inversiones (RIGI): la prensa cuenta 13 proyectos mineros aprobados por unos 25.000 millones de dólares, con Vicuña (San Juan), Agua Rica (Catamarca) y Rincón (Salta) a la cabeza.'
+    ],
+    how: 'La barra gris es lo que produce hoy y la azul lo que podrían producir los proyectos; la línea vertical es el rango de incertidumbre. Los proyectos RIGI están en la tabla de la sección Data.',
+    data: 'prueba',
+    note: 'Las barras son de prueba. La cartera y las exportaciones de 2024 vienen de la Secretaría de Minería; la lista de proyectos RIGI es de prensa y las fuentes no coinciden en montos: todavía no está verificada contra el Boletín Oficial.',
+    refs: ['E3', 'E5', 'R1', 'R2', 'R3']
+  },
+  9: {
+    heading: 'Hidrocarburos: el piso y el techo',
+    paragraphs: [
+      'Vaca Muerta produjo 182 millones de barriles de petróleo en 2025, 28,7 % más que en 2024, y llegó a un récord de 589 mil barriles por día en diciembre. Aportó el 62 % del petróleo y el 53 % del gas del país; el promedio diario de Argentina fue de unos 800 mil barriles.',
+      'Hay un oleoducto (Vaca Muerta Sur) con cerca de 80 % de obra y proyectos de gas natural licuado y de ampliación de la producción, varios dentro del RIGI.'
+    ],
+    how: 'La línea llena es la producción de petróleo de Vaca Muerta, en miles de barriles por día; después de 2025 la línea punteada es la esperada y la franja es el piso y el techo según cuánto se desarrolle la formación. Los proyectos están en la tabla de la sección Data.',
+    data: 'parcial',
+    note: 'La historia de 2015 a 2025 es real (IAE, con datos de la Secretaría de Energía). La proyección y la franja son de prueba. Los proyectos son de prensa y no están verificados.',
+    refs: ['E4', 'R2', 'R3', 'R6', 'R8', 'R10']
+  },
+  10: {
+    heading: 'Agro: lo que se produce y lo que se podría',
+    paragraphs: [
+      'El campo es la base histórica de las exportaciones argentinas. Cada grupo de barras compara la producción de hoy con la que podría alcanzarse con más tecnología, riego o superficie.',
+      'El potencial no es una promesa: depende de precios, clima y reglas de exportación.'
+    ],
+    how: 'La barra gris es la producción actual y la azul la potencial. La diferencia entre ellas es el margen de crecimiento.',
+    data: 'prueba',
+    note: 'Los valores son de prueba. Falta la serie por cultivo del MAGyP (toneladas por campaña) y un estudio de potencial.',
+    refs: []
+  },
+  11: {
+    heading: 'Cómo se reparte lo que exportamos',
+    paragraphs: [
+      'El mismo total de exportaciones del paso 4, ahora como porcentaje de lo exportado entre enero y julio de 2026.',
+      'Las manufacturas de origen agropecuario son el 32,4 %; las industriales, el 26,6 %; los productos primarios, el 25,3 %; y los combustibles y la energía, el 15,7 %.'
+    ],
+    how: 'Cada barra es la parte del total que corresponde a un rubro. Las cuatro suman 100 %.',
+    data: 'real',
+    note: 'INDEC, informe de agosto de 2026, acumulado de enero a julio. Para ver soja, petróleo o minería por separado hacen falta los complejos exportadores de 2025.',
+    refs: ['E1']
+  },
+  12: {
+    heading: 'De qué se compone el PBI',
+    paragraphs: [
+      'El valor agregado de 2025 por sector: la industria manufacturera aporta el 18,0 %, el comercio el 15,2 %, las actividades inmobiliarias y empresariales el 13,9 % y la agricultura y ganadería el 8,5 %.',
+      'Más de la mitad del producto son servicios; los sectores que más exportan (agro, minería, energía) pesan menos en el PBI que en las exportaciones.'
+    ],
+    how: 'Cada barra es la parte del valor agregado total que aporta un sector. Están ordenados de mayor a menor.',
+    data: 'real',
+    note: 'INDEC, cuadro 4 del informe de avance del nivel de actividad del segundo trimestre de 2026: precios de 2004, datos preliminares. A precios corrientes las proporciones cambian.',
+    refs: ['E2']
+  },
+  13: {
+    heading: 'Cuánto valen los recursos que hay bajo la tierra',
+    paragraphs: [
+      'El stock de recursos es lo que está en el suelo y todavía no se produjo. La Secretaría de Minería estima recursos de litio por 122 millones de toneladas de carbonato equivalente (21 millones como reservas) y de cobre por 116,7 millones de toneladas. El USGS (2026) calcula 28 millones de toneladas de litio contenido como recursos argentinos, los mayores del mundo.',
+      'También hay 105 millones de onzas de oro y 3.216 millones de onzas de plata. Valuarlos depende del precio y de cuánto se pueda extraer a un costo razonable.'
+    ],
+    how: 'Cada barra es el valor del stock de un recurso, en miles de millones de dólares. Recurso no es lo mismo que reserva: la reserva es la parte que hoy se puede extraer con ganancia.',
+    data: 'prueba',
+    note: 'Las barras son de prueba. Las cantidades físicas vienen de la Secretaría de Minería (ARMINERA 2025, a verificar); falta valuarlas y sumar petróleo, gas, tierra y agua.',
+    refs: ['E3', 'E5']
+  }
+};

@@ -1,8 +1,9 @@
 import { linesSpec } from '../charts3d/specs';
 import type { Lines3DSpec } from '../charts3d/types';
 import { tokens } from '../styles/tokens';
+import { ARG_GDP_2026, ARG_NOMINAL, GDP_SOURCE_2026, GDP_SOURCE_HISTORY, GDP_UNIT } from './gdpFacts';
 
-/** The last year of the (made-up) history; the projection starts from it. */
+/** The last year of the history; the projection starts from it. */
 export const LAST_OBSERVED_YEAR = 2025;
 const FIRST_YEAR = 1990;
 const LAST_YEAR = 2056;
@@ -15,7 +16,9 @@ export interface BandLabels {
   range: string;
 }
 
-export const GDP_LABELS: BandLabels = { subject: 'PBI de la Argentina', history: 'PBI observado', expected: 'Proyección esperada', range: 'Rango' };
+export const GDP_SOURCE = `PBI nominal. Historia 1990-2025: ${GDP_SOURCE_HISTORY}. 2026: ${GDP_SOURCE_2026}. Desde 2027 y el rango: datos de prueba (inventados)`;
+
+export const GDP_LABELS: BandLabels = { subject: 'PBI de Argentina', history: 'PBI observado', expected: 'Proyección esperada', range: 'Rango' };
 
 export interface GdpData {
   /** the last observed year when it is not `LAST_OBSERVED_YEAR` (another series of the Recorrido) */
@@ -32,17 +35,6 @@ export interface GdpData {
   high: number[];
 }
 
-/** Made-up growth by year, in %: a shape with booms and crises, not a measurement. */
-function growth(year: number): number {
-  if (year <= 1998) return 4.5;
-  if (year <= 2002) return -4;
-  if (year <= 2011) return 6;
-  if (year <= 2019) return 0.5;
-  if (year === 2020) return -9;
-  if (year <= 2023) return 4;
-  return 1.5;
-}
-
 /** Made-up expected growth of the projection, in %. */
 const PROJECTED_GROWTH = 2.6;
 /** Made-up widening of the range per year away from the last observed one. */
@@ -56,18 +48,18 @@ function build(): GdpData {
   const expected: Array<number | null> = [];
   const low: number[] = [];
   const high: number[] = [];
-  let value = 280;
+  let value = ARG_GDP_2026;
   for (let year = FIRST_YEAR; year <= LAST_YEAR; year += 1) {
     years.push(year);
     if (year <= LAST_OBSERVED_YEAR) {
-      if (year > FIRST_YEAR) value *= 1 + growth(year) / 100;
-      const rounded = round1(value);
+      const rounded = round1(ARG_NOMINAL[year]!);
       history.push(rounded);
       expected.push(year === LAST_OBSERVED_YEAR ? rounded : null);
       low.push(rounded);
       high.push(rounded);
     } else {
-      value *= 1 + PROJECTED_GROWTH / 100;
+      // 2026 is the estimate of the IMF; from 2027 the growth is made up
+      if (year > LAST_OBSERVED_YEAR + 1) value *= 1 + PROJECTED_GROWTH / 100;
       const rounded = round1(value);
       const spread = 1 + SPREAD_PER_YEAR * (year - LAST_OBSERVED_YEAR) ** 1.25;
       history.push(null);
@@ -76,7 +68,7 @@ function build(): GdpData {
       high.push(round1(rounded * spread));
     }
   }
-  return { unit: 'miles de millones de USD', source: 'Datos de prueba (inventados)', years, history, expected, low, high };
+  return { unit: GDP_UNIT, source: GDP_SOURCE, years, history, expected, low, high };
 }
 
 export const GDP_MOCK: GdpData = build();

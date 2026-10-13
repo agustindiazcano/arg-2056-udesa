@@ -1,21 +1,25 @@
 import { PROVINCES } from '../types/province.js';
 import { GDP_MOCK } from '../tour/gdpMock.js';
-import { TOUR_INDICATORS } from '../tour/indicatorsMock.js';
+import imf from '../tour/imfWeo.json';
+import world from '../tour/worldNominal.json';
+import { INDICATORS_YEAR, TOUR_INDICATORS } from '../tour/indicatorsMock.js';
 import { COUNTRIES, cumulative2011, seriesOf } from '../tour/productivity.js';
 import { PRODUCTION_UNIT, SECTOR_LABELS, SECTOR_VALUES } from '../tour/provinceMock.js';
 import type { Sector } from '../tour/provinceMock.js';
 import { DEFAULT_SIM, SIM_FIELDS, simulate } from '../tour/simModel.js';
 import { specRaw } from '../tour/specTable.js';
+import { RIGI_MINING, RIGI_OIL_GAS } from '../tour/rigiProjects.js';
+import type { RigiProject } from '../tour/rigiProjects.js';
 import { TOUR_CHARTS } from '../tour/tourCharts.js';
 import { PROVINCE_VALUES } from '../tour/tourData.js';
-import { LAST_YEAR as WORLD_LAST, WORLD_UNIT, argentinaSince1900, regionCountries, regionValuesAt } from '../tour/worldData.js';
+import { FIRST_YEAR as WORLD_FIRST, LAST_YEAR as WORLD_LAST, WORLD_UNIT, argentinaNominal, regionCountries, regionValuesAt } from '../tour/worldData.js';
 import type { DataTable, SlideData } from './types.js';
 
 const indicators = (): DataTable => ({
   id: 'indicators',
-  title: 'Indicadores de la Argentina',
-  columns: ['Indicador', 'Valor', 'Unidad'],
-  rows: TOUR_INDICATORS.map((i) => [i.label, i.value, i.unit])
+  title: 'Indicadores de Argentina',
+  columns: ['Indicador', 'Valor', 'Unidad', 'Año', 'Fuente'],
+  rows: TOUR_INDICATORS.map((i) => [i.label, i.value, i.unit, INDICATORS_YEAR, 'Banco Mundial (WDI)'])
 });
 
 function slide(id: string, title: string, tables: DataTable[], mock = true, refs: string[] = []): SlideData {
@@ -30,6 +34,29 @@ function chartTable(step: number): DataTable {
   const raw = specRaw(spec);
   return { id: `chart-${step}`, title: def.title, ...raw };
 }
+
+const rigiTable = (id: string, title: string, projects: readonly RigiProject[]): DataTable => ({
+  id,
+  title,
+  columns: ['Proyecto', 'Empresa', 'Provincia', 'Tipo', 'Inversión (millones de USD)', 'Estado', 'Nota (sin verificar)'],
+  rows: projects.map((p) => [p.name, p.company, p.province, p.kind, p.investment, p.status, p.note || '—'])
+});
+
+/** The nominal GDP of 2025 of the World Bank (what the app draws) against the IMF (WEO, update of 2026-09-30), and the IMF estimate for 2026. */
+const imfComparison = (): DataTable => {
+  const idx = world.years.indexOf(2025);
+  return {
+    id: 'imf',
+    title: 'PBI nominal de 2025: Banco Mundial contra FMI, y estimación del FMI para 2026 (miles de millones de USD corrientes)',
+    columns: ['País', 'Banco Mundial 2025', 'FMI 2025', 'Diferencia (%)', 'FMI 2026 (estimación)'],
+    rows: world.region.map((code) => {
+      const c = world.countries.find((x) => x.code === code)!;
+      const bm = c.gdp[idx] ?? null;
+      const f = (imf.gdp as Record<string, { '2025': number; '2026': number }>)[code];
+      return [c.name, bm, f?.['2025'] ?? null, bm !== null && f ? Math.round(((f['2025'] - bm) / bm) * 1000) / 10 : null, f?.['2026'] ?? null];
+    })
+  };
+};
 
 function productivityTables(): DataTable[] {
   const wide = (metric: 'tfp' | 'oph', kind: 'level' | 'change', id: string, title: string): DataTable => {
@@ -57,9 +84,11 @@ function productivityTables(): DataTable[] {
 
 /** The data behind each slide of the Recorrido (steps 0 to 14) and the simulator, as tables ready to read and to download. Step 15 has no chart yet. */
 export function buildSlides(): SlideData[] {
-  const world = argentinaSince1900();
+  const argentina = argentinaNominal();
   const region = regionCountries();
   const regionNow = regionValuesAt(WORLD_LAST);
+  const regionPerCapita = regionValuesAt(WORLD_LAST, 'percapita');
+  const regionPopulation = regionValuesAt(WORLD_LAST, 'population');
   const provinces = (): DataTable => ({
     id: 'provinces',
     title: `Producción por provincia (${PRODUCTION_UNIT})`,
@@ -69,25 +98,45 @@ export function buildSlides(): SlideData[] {
   const sim = simulate(DEFAULT_SIM);
 
   return [
-    slide('0', 'El PBI de la Argentina desde 1900', [
-      { id: 'gdp-1900', title: `PBI de la Argentina (${WORLD_UNIT})`, columns: ['Año', 'PBI'], rows: world.years.map((y, i) => [y, world.values[i] ?? null]) },
-      { id: 'region', title: `Mayores economías de la región en ${WORLD_LAST} (${WORLD_UNIT})`, columns: ['País', 'PBI'], rows: region.map((c, i) => [c, regionNow[i] ?? null]) }
-    ]),
-    slide('1', 'PBI de la Argentina', [
+    slide(
+      '0',
+      `El PBI de Argentina desde ${WORLD_FIRST}`,
+      [
+        { id: 'gdp-nominal', title: `PBI nominal de Argentina (${WORLD_UNIT})`, columns: ['Año', 'PBI nominal'], rows: argentina.years.map((y, i) => [y, argentina.values[i] ?? null]) },
+        {
+          id: 'region',
+          title: `Mayores economías de la región en ${WORLD_LAST}`,
+          columns: ['País', 'PBI nominal (miles de millones de USD corrientes)', 'PBI per cápita nominal (USD corrientes)', 'Población (millones)'],
+          rows: region.map((c, i) => [c, regionNow[i] ?? null, regionPerCapita[i] ?? null, regionPopulation[i] ?? null])
+        },
+        imfComparison()
+      ],
+      false,
+      ['W5', 'I1', 'F1']
+    ),
+    slide('1', 'PBI de Argentina', [
       {
         id: 'gdp',
-        title: `PBI de la Argentina (${GDP_MOCK.unit})`,
+        title: `PBI de Argentina (${GDP_MOCK.unit})`,
         columns: ['Año', 'PBI observado', 'Proyección esperada', 'Rango, mínimo', 'Rango, máximo'],
         rows: GDP_MOCK.years.map((y, i) => [y, GDP_MOCK.history[i] ?? null, GDP_MOCK.expected[i] ?? null, GDP_MOCK.low[i] ?? null, GDP_MOCK.high[i] ?? null])
       },
       indicators()
-    ]),
-    slide('2', 'Producción por provincia', [provinces(), indicators()]),
-    ...[3, 4, 5, 6].map((s) => slide(String(s), TOUR_CHARTS[s]!.title, [chartTable(s)], s !== 5)),
+    ], true, ['W3', 'W5', 'I1', 'F1']),
+    slide('2', 'Producción por provincia', [provinces(), indicators()], true, ['W3']),
+    slide('3', TOUR_CHARTS[3]!.title, [chartTable(3)]),
+    slide('4', TOUR_CHARTS[4]!.title, [chartTable(4)], false, ['E1']),
+    slide('5', TOUR_CHARTS[5]!.title, [chartTable(5)], false),
+    slide('6', TOUR_CHARTS[6]!.title, [chartTable(6)]),
     slide('7', TOUR_CHARTS[7]!.title, [
       { id: 'provinces-value', title: `Valor productivo por provincia (${PRODUCTION_UNIT})`, columns: ['Provincia', 'Valor'], rows: PROVINCES.map((p, i) => [p.name, PROVINCE_VALUES[i] ?? null]) }
     ]),
-    ...[8, 9, 10, 11, 12, 13].map((s) => slide(String(s), TOUR_CHARTS[s]!.title, [chartTable(s)])),
+    slide('8', TOUR_CHARTS[8]!.title, [chartTable(8), rigiTable('rigi-mining', 'Proyectos mineros del RIGI y otros en evaluación (prensa, sin verificar)', RIGI_MINING)], true, ['E3', 'E5', 'R1', 'R2', 'R3', 'R4', 'R5', 'R9']),
+    slide('9', TOUR_CHARTS[9]!.title, [chartTable(9), rigiTable('rigi-oil-gas', 'Proyectos de petróleo y gas del RIGI y otros en evaluación (prensa, sin verificar)', RIGI_OIL_GAS)], true, ['E4', 'R2', 'R3', 'R6', 'R7', 'R8', 'R10', 'R11']),
+    slide('10', TOUR_CHARTS[10]!.title, [chartTable(10)]),
+    slide('11', TOUR_CHARTS[11]!.title, [chartTable(11)], false, ['E1']),
+    slide('12', TOUR_CHARTS[12]!.title, [chartTable(12)], false, ['E2']),
+    slide('13', TOUR_CHARTS[13]!.title, [chartTable(13)], true, ['E3', 'E5']),
     slide('14', 'Productividad', productivityTables(), false, ['P6', 'P7', 'P7b', 'P1', 'P8', 'P9']),
     slide('sim', 'Simulador del PBI', [
       { id: 'factors', title: 'Factores del escenario de referencia', columns: ['Factor', 'Valor', 'Unidad'], rows: SIM_FIELDS.map((f) => [f.label, DEFAULT_SIM[f.key], f.unit]) },

@@ -119,7 +119,7 @@ export const PRODUCTIVITY_STEPS: readonly ProductivityStepDef[] = [
     unit: 'índice, 1955 = 100',
     heading: 'En 2023 la PTF argentina está por debajo de la de 1955',
     paragraphs: [
-      `La productividad total de los factores (PTF) es lo que queda del crecimiento cuando se descuentan el trabajo y el capital. En ${LAST_YEAR} el índice de la Argentina es ${num(levelIn('tfp', 'AR', LAST_YEAR))} (1955 = 100); Estados Unidos ${num(levelIn('tfp', 'US', LAST_YEAR))}, Chile ${num(levelIn('tfp', 'CL', LAST_YEAR))} y Brasil ${num(levelIn('tfp', 'BR', LAST_YEAR))}.`,
+      `La productividad total de los factores (PTF) es lo que queda del crecimiento cuando se descuentan el trabajo y el capital. En ${LAST_YEAR} el índice de Argentina es ${num(levelIn('tfp', 'AR', LAST_YEAR))} (1955 = 100); Estados Unidos ${num(levelIn('tfp', 'US', LAST_YEAR))}, Chile ${num(levelIn('tfp', 'CL', LAST_YEAR))} y Brasil ${num(levelIn('tfp', 'BR', LAST_YEAR))}.`,
       'Cada país se compara contra sí mismo: los niveles entre países no son comparables, las pendientes sí.'
     ],
     note: 'La PTF es un residuo: no mide la tecnología de forma directa y se mueve con el ciclo.',
@@ -132,7 +132,7 @@ export const PRODUCTIVITY_STEPS: readonly ProductivityStepDef[] = [
     unit: '% sobre el año anterior',
     heading: 'La PTF argentina es la que más se mueve de un año a otro',
     paragraphs: [
-      `Entre 1956 y ${LAST_YEAR}, el desvío de la variación anual de la PTF es de ${num(Math.round(annualSd('AR') * 10) / 10)} puntos en la Argentina, ${num(Math.round(annualSd('CL') * 10) / 10)} en Chile, ${num(Math.round(annualSd('BR') * 10) / 10)} en Brasil y ${num(Math.round(annualSd('US') * 10) / 10)} en Estados Unidos.`,
+      `Entre 1956 y ${LAST_YEAR}, el desvío de la variación anual de la PTF es de ${num(Math.round(annualSd('AR') * 10) / 10)} puntos en Argentina, ${num(Math.round(annualSd('CL') * 10) / 10)} en Chile, ${num(Math.round(annualSd('BR') * 10) / 10)} en Brasil y ${num(Math.round(annualSd('US') * 10) / 10)} en Estados Unidos.`,
       `Desde 2011 la caída es sostenida, no un derrumbe: la PTF argentina acumula ${num(cumulative2011('tfp', 'AR'))} % entre 2011 y ${LAST_YEAR}.`
     ],
     note: 'Variación anual en %, redondeada a 0,1.',
@@ -145,10 +145,10 @@ export const PRODUCTIVITY_STEPS: readonly ProductivityStepDef[] = [
     unit: 'índice, 1955 = 100',
     heading: `El producto por hora argentino no superó su máximo de ${peakYear('oph', 'AR').year}`,
     paragraphs: [
-      `En ${LAST_YEAR} el índice del producto por hora de la Argentina es ${num(levelIn('oph', 'AR', LAST_YEAR))} (1955 = 100), contra ${num(levelIn('oph', 'US', LAST_YEAR))} en Estados Unidos, ${num(levelIn('oph', 'CL', LAST_YEAR))} en Chile y ${num(levelIn('oph', 'BR', LAST_YEAR))} en Brasil. El máximo argentino fue en ${peakYear('oph', 'AR').year} (${num(peakYear('oph', 'AR').value)}).`,
+      `En ${LAST_YEAR} el índice del producto por hora de Argentina es ${num(levelIn('oph', 'AR', LAST_YEAR))} (1955 = 100), contra ${num(levelIn('oph', 'US', LAST_YEAR))} en Estados Unidos, ${num(levelIn('oph', 'CL', LAST_YEAR))} en Chile y ${num(levelIn('oph', 'BR', LAST_YEAR))} en Brasil. El máximo argentino fue en ${peakYear('oph', 'AR').year} (${num(peakYear('oph', 'AR').value)}).`,
       'El producto por hora es el PBI real dividido por las personas empleadas y las horas anuales de cada una. Sube con más capital por hora y con más PTF.'
     ],
-    note: 'La serie de horas de la Argentina repite valores en 2021-2023: el último nivel es sensible a esa anomalía de la fuente.',
+    note: 'La serie de horas de Argentina repite valores en 2021-2023: el último nivel es sensible a esa anomalía de la fuente.',
     how: 'Cada línea es un país con base 1955 = 100. Una línea más empinada es un país que produce cada vez más por cada hora trabajada.'
   },
   {
@@ -158,8 +158,8 @@ export const PRODUCTIVITY_STEPS: readonly ProductivityStepDef[] = [
     unit: '% sobre el año anterior',
     heading: 'El producto por hora argentino cae en 2023',
     paragraphs: [
-      `En ${LAST_YEAR} el producto por hora cambió ${signed(changeIn('oph', 'AR', LAST_YEAR))} % en la Argentina, ${signed(changeIn('oph', 'CL', LAST_YEAR))} % en Chile, ${signed(changeIn('oph', 'BR', LAST_YEAR))} % en Brasil y ${signed(changeIn('oph', 'US', LAST_YEAR))} % en Estados Unidos.`,
-      'La caída de 2023 en la Argentina está influida por la anomalía de la serie de horas, que repite valores entre 2021 y 2023.'
+      `En ${LAST_YEAR} el producto por hora cambió ${signed(changeIn('oph', 'AR', LAST_YEAR))} % en Argentina, ${signed(changeIn('oph', 'CL', LAST_YEAR))} % en Chile, ${signed(changeIn('oph', 'BR', LAST_YEAR))} % en Brasil y ${signed(changeIn('oph', 'US', LAST_YEAR))} % en Estados Unidos.`,
+      'La caída de 2023 en Argentina está influida por la anomalía de la serie de horas, que repite valores entre 2021 y 2023.'
     ],
     note: 'Variación anual en %, redondeada a 0,1.',
     how: 'Cada punto es el cambio respecto del año anterior. Los saltos de 2020 y 2021 vienen de la pandemia.'

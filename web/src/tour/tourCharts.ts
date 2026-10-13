@@ -9,6 +9,9 @@ import type { BandLabels } from './gdpMock.js';
 import {
   AGRO,
   EXPORTS_BY_SECTOR,
+  EXPORTS_SOURCE,
+  GDP_COMPOSITION_SOURCE,
+  HYDROCARBONS_SOURCE,
   EXPORT_COMPOSITION,
   GDP_COMPOSITION,
   INVESTOR_SCORES,
@@ -70,7 +73,7 @@ function pairedBars(
 }
 
 const HYDROCARBON_LABELS: BandLabels = {
-  subject: 'Producción de hidrocarburos',
+  subject: 'Petróleo de Vaca Muerta',
   history: 'Producción observada',
   expected: 'Proyección esperada',
   range: 'Rango entre el piso y el techo'
@@ -84,7 +87,7 @@ const ai = (): BuiltChart => {
   const without = d.series[0]!;
   const withAi = d.series[1]!;
   const summary =
-    `PBI con y sin la revolución de la IA (datos de prueba), de ${formatValue(without.values[0] ?? null, d.unit)} en 2025 ` +
+    `PBI con y sin la revolución de la IA (datos de prueba), de ${formatValue(without.values[0] ?? null, d.unit)} en 2026 ` +
     `a ${formatValue(without.values.at(-1) ?? null, d.unit)} sin IA y ${formatValue(withAi.values.at(-1) ?? null, d.unit)} con IA en 2056`;
   const { option } = buildLines(d.years.map(String), d.series, { unit: d.unit, labelEvery: 4, summary });
   const spec = linesSpec({
@@ -145,8 +148,8 @@ const agro = (): BuiltChart => {
   return { option, summary, spec: pairedBars('Agro: actual y potencial', a.unit, a.categories, ['actual', 'potencial'], a.current, a.potential) };
 };
 
-function shares(title: string, data: { unit: string; rows: Array<{ label: string; value: number }> }): BuiltChart {
-  const summary = `${title}, en % del total (datos de prueba): ${list(data.rows.map((r) => `${r.label} ${formatValue(r.value, data.unit)}`))}`;
+function shares(title: string, data: { unit: string; rows: Array<{ label: string; value: number }> }, note = 'datos de prueba'): BuiltChart {
+  const summary = `${title}, en % del total (${note}): ${list(data.rows.map((r) => `${r.label} ${formatValue(r.value, data.unit)}`))}`;
   const { option } = buildShares(data.rows, { unit: data.unit, summary });
   return { option, summary, spec: barsSpec(data.rows, { title, unit: data.unit, highlight: largest(data.rows), summary }) };
 }
@@ -155,7 +158,7 @@ function shares(title: string, data: { unit: string; rows: Array<{ label: string
 export const TOUR_CHARTS: Record<number, TourChartDef> = {
   1: {
     step: 1,
-    title: 'PBI de la Argentina',
+    title: 'PBI de Argentina',
     subtitle: `${GDP_MOCK.unit}, 1990 a 2056`,
     source: GDP_MOCK.source,
     kind: 'chart',
@@ -164,7 +167,7 @@ export const TOUR_CHARTS: Record<number, TourChartDef> = {
   3: {
     step: 3,
     title: 'Cuarta revolución industrial: el impacto de la IA en la economía',
-    subtitle: 'PBI con y sin la revolución de la IA, 2025 a 2056',
+    subtitle: 'PBI con y sin la revolución de la IA, 2026 a 2056, PBI nominal',
     source: MOCK_SOURCE,
     legend: [
       { label: 'Sin revolución de la IA', color: GREY },
@@ -176,10 +179,10 @@ export const TOUR_CHARTS: Record<number, TourChartDef> = {
   4: {
     step: 4,
     title: 'Recursos naturales: exportaciones por sector',
-    subtitle: 'miles de millones de USD por año',
-    source: MOCK_SOURCE,
+    subtitle: 'miles de millones de USD, acumulado de enero a julio de 2026',
+    source: EXPORTS_SOURCE,
     kind: 'chart',
-    build: () => ranking('Exportaciones por sector', 'Exportaciones', EXPORTS_BY_SECTOR, largest(EXPORTS_BY_SECTOR.rows), 'Exportaciones por sector (datos de prueba)')
+    build: () => ranking('Exportaciones por sector', 'Exportaciones', EXPORTS_BY_SECTOR, largest(EXPORTS_BY_SECTOR.rows), 'Exportaciones por grandes rubros, enero a julio de 2026 (INDEC)')
   },
   5: {
     step: 5,
@@ -213,8 +216,8 @@ export const TOUR_CHARTS: Record<number, TourChartDef> = {
   9: {
     step: 9,
     title: 'Hidrocarburos: Vaca Muerta define el piso y el techo',
-    subtitle: 'miles de barriles equivalentes por día, 2015 a 2056',
-    source: MOCK_SOURCE,
+    subtitle: 'miles de barriles de petróleo por día de Vaca Muerta, 2015 a 2056',
+    source: HYDROCARBONS_SOURCE,
     kind: 'chart',
     build: hydrocarbons
   },
@@ -230,8 +233,8 @@ export const TOUR_CHARTS: Record<number, TourChartDef> = {
     kind: 'chart',
     build: agro
   },
-  11: { step: 11, title: 'Composición de las exportaciones', subtitle: 'porcentaje del total exportado', source: MOCK_SOURCE, kind: 'chart', build: () => shares('Composición de las exportaciones', EXPORT_COMPOSITION) },
-  12: { step: 12, title: 'Composición del PBI', subtitle: 'porcentaje del PBI por sector', source: MOCK_SOURCE, kind: 'chart', build: () => shares('Composición del PBI', GDP_COMPOSITION) },
+  11: { step: 11, title: 'Composición de las exportaciones', subtitle: 'porcentaje del total exportado, enero a julio de 2026', source: EXPORTS_SOURCE, kind: 'chart', build: () => shares('Composición de las exportaciones', EXPORT_COMPOSITION, 'INDEC') },
+  12: { step: 12, title: 'Composición del PBI', subtitle: 'porcentaje del valor agregado por sector, 2025', source: GDP_COMPOSITION_SOURCE, kind: 'chart', build: () => shares('Composición del PBI', GDP_COMPOSITION, 'INDEC') },
   13: {
     step: 13,
     title: 'El stock de recursos naturales',
