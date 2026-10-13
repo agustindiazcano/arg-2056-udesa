@@ -138,7 +138,7 @@ El gráfico del paso 14 y el simulador usan hoy **datos de prueba** (`web/src/to
 | P2 | Baumann Fonay, I. (2026-05-03), «PTF y PIB potencial de Argentina, 1990-2025». <https://macroargentina.substack.com/p/ptf-y-pib-potencial-de-argentina> | PTF +4,2 % en 2025 y +7,7 % desde el piso de 2023 (segundo año de mejora, la mayor desde 1996, después de una caída casi continua desde el pico de 2007); inversión +9,6 % en 2025; calidad del empleo −2,0 %; PIB 1,0 % por debajo del potencial | texto pegado por el equipo; **no verificada** por la fuente: la página no cargó al reabrirla y su perfil contradice al INDEC (ver abajo). A verificar contra la serie de P3 |
 | P3 | Baumann Fonay, serie en Alphacast, *Potential GDP, output gap, TFP*. <https://www.alphacast.io/datasets/potential-gross-domestic-product-output-gap-tfp-53419> | Serie de PTF y PIB potencial 1990-2025 | citada (por informe); no abierta |
 | P4 | Baumann Fonay en X. <https://x.com/ivanfbf/status/2050931628965278028> | Confirma el dato de P2 | citada; no abierta |
-| P5 | Ministerio de Hacienda (2018), *Crecimiento económico, PTF y PIB potencial en Argentina*, Documento de trabajo n.º 1; e INDEC, gacetilla «El INDEC retomará la estimación de la productividad de la Argentina» | Metodología de P2 y anuncio de que el INDEC retoma la serie | citadas por P2; no abiertas, sin URL |
+| P5 | Ministerio de Hacienda (2018), *Crecimiento económico, PTF y PIB potencial en Argentina*, Documento de trabajo n.º 1; e INDEC, gacetilla «El INDEC retomará la estimación de la productividad de Argentina» | Metodología de P2 y anuncio de que el INDEC retoma la serie | citadas por P2; no abiertas, sin URL |
 | P6 | Penn World Table 11.0 (Groningen Growth and Development Centre). <https://www.rug.nl/ggdc/productivity/pwt/> | Base de las series de productividad por país (Argentina, EE. UU., Chile, Brasil), 1955-2023 | **usada** en los gráficos del paso 14; a verificar |
 | P7 | FRED, series de la PWT 11.0, una por URL `https://fred.stlouisfed.org/data/<ID>.txt`: PTF `RTFPNA{ARA,USA,CLA,BRA}632NRUG`; PIB real `RGDPNA{ARA,USA,CLA,BRA}666NRUG`; personas empleadas `EMPENG{USA,CLA,BRA}148NRUG`; horas anuales promedio `AVHWPE{ARA,USA,CLA,BRA}065NRUG`. Empleo de Argentina: FRED devolvió el error 429, se usó el CSV que pasó el equipo de la serie `EMPENGARA148NRUG` <https://fred.stlouisfed.org/series/EMPENGARA148NRUG> (1950-2023) | Descarga de las series de P6 (15 en total) | **usada**; datos de `web/src/tour/productivityData.json`, armados por el ejemplo `productivity_slide_spec.html` |
 | P8 | Acemoglu, D. (2024), «The Simple Macroeconomics of AI», NBER Working Paper 32487. <https://www.nber.org/papers/w32487> | Efecto de la IA sobre la PTF: no más de 0,66 % en diez años (menos de 0,53 % descontando las tareas difíciles de aprender) | **leída** (2026-10-12) |
@@ -155,7 +155,7 @@ El gráfico del paso 14 y el simulador usan hoy **datos de prueba** (`web/src/to
 - Los gráficos de la PWT (P6, P7) terminan en 2023: no incluyen 2024 ni 2025, que sí están en P1 y P2.
 - La serie de horas anuales de Argentina de la PWT repite valores en 2021-2023 (1612,12; 1528,56; 1612,12), una anomalía de la fuente: el último nivel del producto por hora de Argentina es sensible a eso.
 
-### 4.2 PBI de la Argentina y ranking mundial (paso 0 del Recorrido)
+### 4.2 PBI de Argentina y ranking mundial (paso 0 del Recorrido)
 
 El paso 0 todavía dibuja **datos de prueba**. Los datos reales ya están preparados por `scripts/build_world_data.py` (`web/src/tour/worldRealData.json` y `worldReference.json`) y falta conectarlos a la diapositiva.
 
@@ -166,7 +166,7 @@ El paso 0 todavía dibuja **datos de prueba**. Los datos reales ya están prepar
 | W3 | Banco Mundial, WDI, Argentina: PBI constante (<https://api.worldbank.org/v2/country/ARG/indicator/NY.GDP.MKTP.KD>), PBI per cápita (`NY.GDP.PCAP.KD`) y población (`SP.POP.TOTL`) | Series 1960-2024 en dólares constantes de 2015, para comparar con W1 | **leída** (API, 2026-10-12) |
 | W4 | FRED / Penn World Table 11.0, *Real GDP at Constant National Prices for Argentina*, `RGDPNAARA666NRUG`. <https://fred.stlouisfed.org/series/RGDPNAARA666NRUG> | PBI real, 1950-2023, millones de dólares de 2021 | **leída** (página de datos, 2026-10-12) |
 
-### 4.3 Indicadores de la Argentina (pasos 1 y 2 del Recorrido)
+### 4.3 Indicadores de Argentina (pasos 1 y 2 del Recorrido)
 
 | # | Fuente | Qué se usa | Estado |
 |---|---|---|---|
@@ -182,7 +182,7 @@ Pendiente para el resto de las diapositivas (INDEC, Secretarías de Energía y d
 | E2 | INDEC, *Informe de avance del nivel de actividad*, 2.º trimestre de 2026. <https://www.indec.gob.ar/uploads/informesdeprensa/pib_09_26065D6A3612.pdf> | Cuadro 4: valor agregado bruto de 2025 por sector, a precios de 2004, preliminar. Paso 12 | **leída**; las columnas salen desalineadas al convertir el PDF: el orden se verificó porque la suma da el total |
 | E3 | Secretaría de Minería, *Minería en Argentina: un año de gestión* (ARMINERA 2025). <https://www.argentina.gob.ar/sites/default/files/mayo_2025_-_arminera.pdf> | Cartera de 316 proyectos, exportaciones mineras de 2024 (4.673 millones de USD), recursos y reservas | **leída en parte**: las tablas son imágenes |
 | E4 | IAE, *Vaca Muerta: análisis 2025* (con datos de la Secretaría de Energía). <https://www.iae.org.ar/wp-content/uploads/2026/03/Vaca-Muerta_analisis-2025_vmo_260330_155248.pdf> | Producción anual de petróleo y gas de Vaca Muerta 2010-2025; 62 % del petróleo y 53 % del gas de 2025; paso 9 | **leída** (2026-10-12) |
-| E5 | USGS, *Mineral Commodity Summaries 2026*. <https://pubs.usgs.gov/periodicals/mcs2026/mcs2026-lithium.pdf> | Recursos de litio de la Argentina: 28 millones de toneladas | **leída en parte**: las tablas de reservas salen desordenadas |
+| E5 | USGS, *Mineral Commodity Summaries 2026*. <https://pubs.usgs.gov/periodicals/mcs2026/mcs2026-lithium.pdf> | Recursos de litio de Argentina: 28 millones de toneladas | **leída en parte**: las tablas de reservas salen desordenadas |
 | R1 a R11 | Prensa sobre el RIGI y los proyectos de gran escala (iProfesional, Shale24, La Nación, Infobae, LM Neuquén, El Cronista, Diario Crónica): enlaces en `web/src/datasets/references.ts` | Lista de proyectos mineros y de petróleo y gas con su inversión (`web/src/tour/rigiProjects.ts`), pasos 8 y 9 | **secundarias, sin verificar**: las fuentes se contradicen (ver `data-requests.md`, D23) |
 
 **Reglas del ranking:** cada año se ordenan los países con dato ese año (44 en 1900, 69 en 1913, 145 en 1950, 166 en 2018); la Unión Soviética, Checoslovaquia y Yugoslavia cuentan como una economía hasta que se disuelven y desde entonces cuentan sus sucesores (para no contar dos veces la misma economía). Los PBI de W1 son en dólares internacionales de 2011 (paridad de poder adquisitivo), no en dólares corrientes.

@@ -1,3 +1,5 @@
+import { ARG_GDP_2026 } from './gdpFacts';
+
 /**
  * The GDP simulator of the Simulador section: plain arithmetic, not the forecast model. The yearly growth is the base rate plus the
  * effect of each factor around its default (population, investment, productivity) and the AI, which comes in over 15 years. Every
@@ -18,10 +20,10 @@ export interface SimParams {
 
 export type SimKey = keyof SimParams;
 
-export const SIM_START = 2025;
+export const SIM_START = 2026;
 export const SIM_END = 2056;
-/** GDP of 2025, thousand million USD (made up, as the indicators box of the Recorrido). */
-export const SIM_START_GDP = 640;
+/** Nominal GDP of 2026, billion current USD: the estimate of the IMF, the same figure as in the GDP chart (the made-up part starts after it). */
+export const SIM_START_GDP = Math.round(ARG_GDP_2026 * 10) / 10;
 /** years for the AI to reach its full effect */
 export const AI_RAMP_YEARS = 15;
 /** percentage points of growth for each point of investment over the default */

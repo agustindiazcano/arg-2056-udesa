@@ -58,6 +58,12 @@ export function Bars3D({ spec, projection, free = false }: { spec: Bars3DSpec; p
   const quality = useQualityOptional();
   const pixelRatioCap = QUALITY_PRESETS[quality?.tier ?? 'medium'].pixelRatioCap;
   const { stageRef, poseRef, chartControls } = useCameraNav();
+  // a press on the buttons of the zoom or the reset takes the camera away from the clock: a count the loop of a timeline compares with the last one it saw
+  const pressesRef = useRef(0);
+  const pressed = (action: () => void) => () => {
+    pressesRef.current += 1;
+    action();
+  };
   // in the Recorrido it opens from the side with the wheel left to the page; `free` gives it the camera of the dashboard
   const side = useSideView() && !free;
   // seen from almost the side the chart is a flat picture: the camera stands where it fills the view (the ones that follow a clock and the projection test have their own distance)
@@ -136,12 +142,11 @@ export function Bars3D({ spec, projection, free = false }: { spec: Bars3DSpec; p
       mesh.position.set(item.x, 0, 0);
       scene.add(mesh);
       const value = textSprite(item.short, item.highlight ? tokens.ink : tokens.ink2, 0.36, item.highlight);
-      value.visible = !spec.timeline; // the values change with the clock: the axis and the tooltip carry them
       scene.add(value);
       const name = fitLabel(item.label, item.width + GAP, item.highlight ? tokens.ink : tokens.ink2, 0.32, item.highlight);
       name.position.set(item.x, -X_LABEL_DROP - (name.scale.y - 0.32) / 2, item.depth / 2 + 0.6);
       scene.add(name);
-      return { item, mesh, material, value };
+      return { item, mesh, material, value, name, shown: item.short };
     });
 
     const setGrowth = (t: number) => {
@@ -162,11 +167,23 @@ export function Bars3D({ spec, projection, free = false }: { spec: Bars3DSpec; p
       const base = { ...stage.pose };
       let lastSet = { ...base };
       let handedOver = false;
+      let seenPresses = pressesRef.current;
       let lastElapsed = timeline.clock.current;
       let top = -1;
+      // sorted bars: the places (x) of the chart in order, and what each bar is going to now; a bar glides to its place
+      const slots = bars.map((b) => b.item.x);
+      let lastFrameAt = performance.now();
+      let lastLabelAt = 0;
       cancel = stage.loop(() => {
+        const now = performance.now();
+        const dt = Math.min((now - lastFrameAt) / 1000, 0.1);
+        lastFrameAt = now;
         const elapsed = timeline.clock.current;
         if (Math.abs(elapsed - lastElapsed) > CLOCK_JUMP_MS) handedOver = false;
+        if (pressesRef.current !== seenPresses) {
+          seenPresses = pressesRef.current;
+          handedOver = true; // the visitor zooms with the buttons: the camera is theirs until the clock jumps
+        }
         lastElapsed = elapsed;
         const values = timeline.valuesAt(timeline.yearAt(elapsed));
         const nextTop = niceCeil(Math.max(...values));
@@ -174,10 +191,40 @@ export function Bars3D({ spec, projection, free = false }: { spec: Bars3DSpec; p
           top = nextTop;
           drawAxis([0, 1, 2, 3, 4].map((i) => ({ value: (top * i) / 4, height: (MAX_HEIGHT * i) / 4 })));
         }
+        const rank = values.map(() => 0);
+        if (timeline.sorted) {
+          values
+            .map((v, i) => i)
+            .sort((a, b) => (values[b] ?? 0) - (values[a] ?? 0))
+            .forEach((barIndex, place) => {
+              rank[barIndex] = place;
+            });
+        }
+        const redrawLabels = now - lastLabelAt > 120;
+        if (redrawLabels) lastLabelAt = now;
         bars.forEach((b, i) => {
           const h = Math.max(((values[i] ?? 0) / top) * MAX_HEIGHT, 0.03);
           b.mesh.scale.y = h;
           b.mesh.position.y = h / 2;
+          if (redrawLabels) {
+            // the number above the bar is drawn again (a few times a second) when the value changes
+            const text = formatAxisNumber(values[i] ?? 0);
+            if (text !== b.shown) {
+              scene.remove(b.value);
+              b.value.material.map?.dispose();
+              b.value.material.dispose();
+              b.value = textSprite(text, b.item.highlight ? tokens.ink : tokens.ink2, 0.36, b.item.highlight);
+              scene.add(b.value);
+              b.shown = text;
+            }
+          }
+          b.value.position.set(b.mesh.position.x, h + 0.38, 0);
+          if (timeline.sorted) {
+            const target = slots[rank[i]!]!;
+            const x = reduced || Math.abs(timeline.clock.current - lastElapsed) > CLOCK_JUMP_MS ? target : b.mesh.position.x + (target - b.mesh.position.x) * (1 - Math.exp(-dt * 9));
+            b.mesh.position.x = x;
+            b.name.position.x = x;
+          }
         });
         if (!focus) return;
         if (!handedOver) {
@@ -185,7 +232,7 @@ export function Bars3D({ spec, projection, free = false }: { spec: Bars3DSpec; p
           handedOver = ['x', 'y', 'z', 'theta', 'phi', 'radius'].some((k) => Math.abs((p as never)[k] - (lastSet as never)[k]) > 1e-4);
         }
         if (!handedOver) {
-          stage.nav.setPose(barsFocus(base, { x: focus.item.x, top: focus.mesh.scale.y }, followFrame(elapsed).out, DEFAULT_BARS_VIEW));
+          stage.nav.setPose(barsFocus(base, { x: focus.mesh.position.x, top: focus.mesh.scale.y }, followFrame(elapsed).out, DEFAULT_BARS_VIEW));
           lastSet = { ...stage.pose };
         }
       });
@@ -263,7 +310,7 @@ export function Bars3D({ spec, projection, free = false }: { spec: Bars3DSpec; p
       <div ref={hostRef} className="chart3d" role="img" aria-label={spec.summary} data-chart3d={spec.kind}>
         <div ref={tipRef} className="chart3d-tip" hidden />
       </div>
-      <NavControls {...chartControls} />
+      <NavControls onZoomIn={pressed(chartControls.onZoomIn)} onZoomOut={pressed(chartControls.onZoomOut)} onReset={pressed(chartControls.onReset)} />
     </div>
   );
 }

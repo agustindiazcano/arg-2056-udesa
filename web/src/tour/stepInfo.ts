@@ -23,32 +23,32 @@ export const DATA_LABEL: Record<StepData, string> = {
 
 export const STEP_INFO: Record<number, StepInfo> = {
   0: {
-    heading: 'Dónde estuvo y dónde está la Argentina',
+    heading: 'Dónde estuvo y dónde está Argentina',
     paragraphs: [
-      'Este gráfico sigue el producto de la Argentina y su lugar en el ranking, año por año desde 1900, frente al resto del mundo y frente a la región.',
-      'El producto se mide en dólares internacionales de 2011, que corrigen las diferencias de precios entre países, de modo que un dólar compra lo mismo en todos lados.'
+      'Este gráfico sigue el PBI nominal de Argentina, en dólares corrientes (no en paridad de poder adquisitivo), año por año de 1960 a 2025, frente al resto del mundo y frente a la región. En 2025 fue de 683.100 millones de dólares, la economía número 24 del mundo según el Banco Mundial.',
+      'El PBI nominal es lo que vale la producción de un país al tipo de cambio del año; es el que usan los rankings de tamaño de la economía. El PBI per cápita es ese valor dividido por la población. Los botones de abajo cambian el gráfico de barras de la región entre PBI, PBI per cápita y población.'
     ],
-    how: 'Mové el control del año para ver cómo cambia el ranking. Alterná entre el PBI total y el PBI por habitante: el primero depende del tamaño del país; el segundo, del nivel de vida.',
-    data: 'prueba',
-    note: 'Los datos reales ya están procesados (Proyecto Maddison 2020, de 1900 a 2018), pero esta pantalla todavía dibuja datos de prueba hasta que se extiendan hasta 2026.',
-    refs: ['W1']
+    how: 'Mové el control del año para ver cómo cambia el ranking. Las barras de la región se reordenan de mayor a menor en cada año. El ranking de PBI per cápita cuenta solo países de un millón de habitantes o más.',
+    data: 'real',
+    note: 'Banco Mundial (WDI), PBI nominal en dólares corrientes, 1960 a 2025; algunos países no tienen dato en los primeros años. La población de Argentina de 2022 a 2025 es la proyección oficial del INDEC (Censo 2022); el resto, del Banco Mundial. El año 2026 no se dibuja porque todavía no es un dato observado: el FMI lo estima en 768.200 millones.',
+    refs: ['W5', 'I1', 'F1']
   },
   1: {
-    heading: 'El PBI de la Argentina, de 1990 a 2056',
+    heading: 'El PBI de Argentina, de 1990 a 2056',
     paragraphs: [
-      'La línea muestra el PBI observado de 1990 a 2025 y la proyección esperada hasta 2056, con un abanico que va del escenario más bajo al más alto. En la historia se ven las crisis de 1995, 2001-2002, 2009 y 2020.',
-      'El cuadro de indicadores resume la economía hoy: PBI, población, PBI por habitante, exportaciones, crecimiento e inversión, con los últimos valores publicados por el Banco Mundial.'
+      'La línea muestra el PBI nominal observado de 1990 a 2025 y la proyección esperada hasta 2056, con un abanico que va del escenario más bajo al más alto. En la historia se ven las crisis de 1995, 2001-2002, 2009 y 2020.',
+      'El cuadro de indicadores resume la economía en 2025: PBI nominal, población, PBI por habitante, exportaciones, crecimiento e inversión.'
     ],
     how: 'Mirá primero la línea de la proyección y después el ancho del abanico: cuanto más ancho, más incierto es el futuro. El abanico no es un pronóstico de lo que va a pasar sino de lo que podría pasar.',
     data: 'parcial',
-    note: 'La historia de 1990 a 2025 y los seis indicadores son reales (Banco Mundial; la línea está en dólares constantes de 2015, por eso el PBI de 609 mil millones difiere de los 683 mil millones en dólares corrientes del cuadro). La proyección y el abanico siguen siendo de prueba hasta que esté el modelo.',
-    refs: ['W3']
+    note: 'La historia es real (Banco Mundial, PBI nominal en dólares corrientes). El valor de 2026 es la estimación del FMI (768.200 millones, actualización del 30-09-2026) y es el mismo en todos los gráficos del sitio. Desde 2027 la proyección y el abanico son de prueba hasta que esté el modelo. Población: INDEC; el Banco Mundial tiene 45,9 millones y el FMI 47,5 (usa la proyección anterior al censo).',
+    refs: ['W3', 'W5', 'I1', 'F1']
   },
   2: {
     heading: 'Qué produce cada provincia',
     paragraphs: [
       'El mapa colorea cada provincia según su producción. Al elegir un sector (minería, agro o hidrocarburos) el mapa cambia para mostrar quién aporta más.',
-      'La Argentina no es un solo país económico: la producción se concentra en pocas provincias y cada una vive de recursos distintos.'
+      'Argentina no es un solo país económico: la producción se concentra en pocas provincias y cada una vive de recursos distintos.'
     ],
     how: 'Tocá una provincia para ver su valor. El color más intenso es el valor más alto.',
     data: 'prueba',
@@ -63,7 +63,7 @@ export const STEP_INFO: Record<number, StepInfo> = {
     ],
     how: 'Compará la distancia entre las dos líneas en 2056. No es una predicción: depende de cuánto de la economía se adapta y de qué tan rápido.',
     data: 'prueba',
-    note: 'Las dos líneas son de prueba (parten del PBI de 2025 del Banco Mundial). Los dos estudios se leyeron el 12-10-2026; Anthropic aclara que su cifra no es una predicción y que usa supuestos fuertes. Ninguno es sobre la Argentina.',
+    note: 'Las dos líneas son de prueba; parten de la estimación del FMI para 2026 (768.200 millones de dólares corrientes), el mismo valor del gráfico del PBI. Los dos estudios se leyeron el 12-10-2026; Anthropic aclara que su cifra no es una predicción y que usa supuestos fuertes. Ninguno es sobre Argentina.',
     refs: ['P8', 'P9', 'P10a']
   },
   4: {
@@ -124,7 +124,7 @@ export const STEP_INFO: Record<number, StepInfo> = {
   9: {
     heading: 'Hidrocarburos: el piso y el techo',
     paragraphs: [
-      'Vaca Muerta produjo 182 millones de barriles de petróleo en 2025, 28,7 % más que en 2024, y llegó a un récord de 589 mil barriles por día en diciembre. Aportó el 62 % del petróleo y el 53 % del gas del país; el promedio diario de la Argentina fue de unos 800 mil barriles.',
+      'Vaca Muerta produjo 182 millones de barriles de petróleo en 2025, 28,7 % más que en 2024, y llegó a un récord de 589 mil barriles por día en diciembre. Aportó el 62 % del petróleo y el 53 % del gas del país; el promedio diario de Argentina fue de unos 800 mil barriles.',
       'Hay un oleoducto (Vaca Muerta Sur) con cerca de 80 % de obra y proyectos de gas natural licuado y de ampliación de la producción, varios dentro del RIGI.'
     ],
     how: 'La línea llena es la producción de petróleo de Vaca Muerta, en miles de barriles por día; después de 2025 la línea punteada es la esperada y la franja es el piso y el techo según cuánto se desarrolle la formación. Los proyectos están en la tabla de la sección Data.',

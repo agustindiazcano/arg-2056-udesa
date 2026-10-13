@@ -33,6 +33,8 @@ export interface Bars3DSpec {
     yearAt: (elapsedMs: number) => number;
     valuesAt: (year: number) => number[];
     focus: number;
+    /** the bars trade places so that the largest value is always first (they glide to their new place instead of jumping) */
+    sorted?: boolean;
   };
 }
 

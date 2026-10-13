@@ -14,12 +14,12 @@ describe('the indicators box of the Recorrido', () => {
       expect(i.label.length).toBeGreaterThan(0);
       expect(i.value.length).toBeGreaterThan(0);
     }
-    expect(TOUR_INDICATORS.map((i) => i.label)).toEqual(expect.arrayContaining(['PBI', 'Población', 'PBI per cápita', 'Exportaciones totales']));
+    expect(TOUR_INDICATORS.map((i) => i.label)).toEqual(expect.arrayContaining(['PBI nominal', 'Población', 'PBI per cápita nominal', 'Exportaciones totales']));
   });
 
   it('renders a labelled list with the six values and the source', () => {
     render(<TourIndicators />);
-    const list = screen.getByRole('list', { name: 'Indicadores de la Argentina' });
+    const list = screen.getByRole('list', { name: 'Indicadores de Argentina' });
     expect(within(list).getAllByRole('listitem')).toHaveLength(6);
     expect(screen.getByText(/Banco Mundial/)).toBeTruthy();
   });

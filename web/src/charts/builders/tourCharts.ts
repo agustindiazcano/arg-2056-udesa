@@ -128,8 +128,9 @@ export function buildColumns(categories: string[], series: ColumnSeries[], opts:
   };
   if (opts.dense) {
     option.xAxis.axisLabel = { ...option.xAxis.axisLabel, rotate: opts.dense.rotate, interval: 0, fontSize: 11 } as never;
+    // many bars: the number stays above each one, smaller
     option.series.forEach((s) => {
-      if (s.type === 'bar') (s as { label: { show: boolean } }).label.show = false;
+      if (s.type === 'bar') Object.assign((s as { label: object }).label, { fontSize: 10 });
     });
   }
   return { option, summary: opts.summary };

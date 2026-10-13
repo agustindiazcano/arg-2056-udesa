@@ -1,6 +1,7 @@
 import { linesSpec } from '../charts3d/specs';
 import type { Lines3DSpec } from '../charts3d/types';
 import { tokens } from '../styles/tokens';
+import { ARG_GDP_2026, ARG_NOMINAL, GDP_SOURCE_2026, GDP_SOURCE_HISTORY, GDP_UNIT } from './gdpFacts';
 
 /** The last year of the history; the projection starts from it. */
 export const LAST_OBSERVED_YEAR = 2025;
@@ -15,9 +16,9 @@ export interface BandLabels {
   range: string;
 }
 
-export const GDP_SOURCE = 'Historia 1990-2025: Banco Mundial (dólares constantes de 2015); proyección y rango: datos de prueba (inventados)';
+export const GDP_SOURCE = `PBI nominal. Historia 1990-2025: ${GDP_SOURCE_HISTORY}. 2026: ${GDP_SOURCE_2026}. Desde 2027 y el rango: datos de prueba (inventados)`;
 
-export const GDP_LABELS: BandLabels = { subject: 'PBI de la Argentina', history: 'PBI observado', expected: 'Proyección esperada', range: 'Rango' };
+export const GDP_LABELS: BandLabels = { subject: 'PBI de Argentina', history: 'PBI observado', expected: 'Proyección esperada', range: 'Rango' };
 
 export interface GdpData {
   /** the last observed year when it is not `LAST_OBSERVED_YEAR` (another series of the Recorrido) */
@@ -34,17 +35,6 @@ export interface GdpData {
   high: number[];
 }
 
-/**
- * The GDP of Argentina 1990 to 2025 in billions of constant 2015 US dollars. Real: World Bank, WDI `NY.GDP.MKTP.KD`
- * (<https://api.worldbank.org/v2/country/ARG/indicator/NY.GDP.MKTP.KD>), read on 2026-10-12.
- */
-const OBSERVED: Readonly<Record<number, number>> = {
-  1990: 265.8, 1991: 290.1, 1992: 313.1, 1993: 338.8, 1994: 358.6, 1995: 348.4, 1996: 367.6, 1997: 397.5, 1998: 412.8, 1999: 398.8,
-  2000: 395.6, 2001: 378.2, 2002: 337.0, 2003: 366.8, 2004: 399.9, 2005: 435.3, 2006: 470.3, 2007: 512.7, 2008: 533.5, 2009: 501.9,
-  2010: 552.7, 2011: 585.9, 2012: 579.9, 2013: 593.9, 2014: 578.9, 2015: 594.7, 2016: 582.4, 2017: 598.8, 2018: 583.1, 2019: 571.5,
-  2020: 514.9, 2021: 568.6, 2022: 602.9, 2023: 591.7, 2024: 583.7, 2025: 609.2
-};
-
 /** Made-up expected growth of the projection, in %. */
 const PROJECTED_GROWTH = 2.6;
 /** Made-up widening of the range per year away from the last observed one. */
@@ -58,17 +48,18 @@ function build(): GdpData {
   const expected: Array<number | null> = [];
   const low: number[] = [];
   const high: number[] = [];
-  let value = OBSERVED[LAST_OBSERVED_YEAR]!;
+  let value = ARG_GDP_2026;
   for (let year = FIRST_YEAR; year <= LAST_YEAR; year += 1) {
     years.push(year);
     if (year <= LAST_OBSERVED_YEAR) {
-      const rounded = OBSERVED[year]!;
+      const rounded = round1(ARG_NOMINAL[year]!);
       history.push(rounded);
       expected.push(year === LAST_OBSERVED_YEAR ? rounded : null);
       low.push(rounded);
       high.push(rounded);
     } else {
-      value *= 1 + PROJECTED_GROWTH / 100;
+      // 2026 is the estimate of the IMF; from 2027 the growth is made up
+      if (year > LAST_OBSERVED_YEAR + 1) value *= 1 + PROJECTED_GROWTH / 100;
       const rounded = round1(value);
       const spread = 1 + SPREAD_PER_YEAR * (year - LAST_OBSERVED_YEAR) ** 1.25;
       history.push(null);
@@ -77,7 +68,7 @@ function build(): GdpData {
       high.push(round1(rounded * spread));
     }
   }
-  return { unit: 'miles de millones de USD de 2015', source: GDP_SOURCE, years, history, expected, low, high };
+  return { unit: GDP_UNIT, source: GDP_SOURCE, years, history, expected, low, high };
 }
 
 export const GDP_MOCK: GdpData = build();

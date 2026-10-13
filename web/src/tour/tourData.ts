@@ -1,3 +1,4 @@
+import { ARG_GDP_2026, GDP_UNIT } from './gdpFacts.js';
 import type { GdpData } from './gdpMock.js';
 
 /** The label every made-up chart of the Recorrido carries. */
@@ -12,23 +13,24 @@ export interface LineSeriesData {
   dashed?: boolean;
 }
 
-/** Step 3: the GDP with and without the AI revolution, 2025 to 2056 (made up). */
+/** Step 3: the nominal GDP with and without the AI revolution, 2026 to 2056: both start at the estimate of the IMF for 2026, the rest is made up. */
 export function aiImpactData(): { unit: string; years: number[]; series: LineSeriesData[] } {
   const years: number[] = [];
   const without: number[] = [];
   const withAi: number[] = [];
-  let a = 609.2;
-  let b = 609.2;
-  for (let year = 2025; year <= 2056; year += 1) {
+  // both lines start from the estimate of the IMF for 2026 (the same figure as the GDP chart and the simulator) and part from there
+  let a = ARG_GDP_2026;
+  let b = ARG_GDP_2026;
+  for (let year = 2026; year <= 2056; year += 1) {
     years.push(year);
     without.push(round1(a));
     withAi.push(round1(b));
     // without AI the economy grows 1.8 % a year; with AI the rate climbs to 3.8 % by 2042 and stays there
     a *= 1.018;
-    b *= 1 + Math.min(0.018 + ((year - 2025) / 17) * 0.02, 0.038);
+    b *= 1 + Math.min(0.018 + ((year - 2026) / 17) * 0.02, 0.038);
   }
   return {
-    unit: 'miles de millones de USD',
+    unit: GDP_UNIT,
     years,
     series: [
       { name: 'Sin revolución de la IA', values: without, color: '#898781' },

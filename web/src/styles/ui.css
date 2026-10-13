@@ -1860,3 +1860,29 @@ main.scene-container {
     margin: 0 var(--space-md) var(--space-md);
   }
 }
+
+/* the three values of the bars of the region (step 0): a small subtitle and the buttons */
+.world-metric-pick {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2, 0.5rem);
+  margin-top: var(--space-1, 0.25rem);
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.prov-bars .tour-caption {
+  flex-wrap: wrap;
+  row-gap: var(--space-1, 0.25rem);
+}
+
+.prov-bars .tour-caption > strong {
+  flex: 1 1 100%;
+  white-space: normal;
+}
+
+.prov-bars .world-metric-pick {
+  flex: 1 1 100%;
+  margin-top: 0;
+}

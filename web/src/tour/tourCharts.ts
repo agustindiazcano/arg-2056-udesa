@@ -87,7 +87,7 @@ const ai = (): BuiltChart => {
   const without = d.series[0]!;
   const withAi = d.series[1]!;
   const summary =
-    `PBI con y sin la revolución de la IA (datos de prueba), de ${formatValue(without.values[0] ?? null, d.unit)} en 2025 ` +
+    `PBI con y sin la revolución de la IA (datos de prueba), de ${formatValue(without.values[0] ?? null, d.unit)} en 2026 ` +
     `a ${formatValue(without.values.at(-1) ?? null, d.unit)} sin IA y ${formatValue(withAi.values.at(-1) ?? null, d.unit)} con IA en 2056`;
   const { option } = buildLines(d.years.map(String), d.series, { unit: d.unit, labelEvery: 4, summary });
   const spec = linesSpec({
@@ -158,7 +158,7 @@ function shares(title: string, data: { unit: string; rows: Array<{ label: string
 export const TOUR_CHARTS: Record<number, TourChartDef> = {
   1: {
     step: 1,
-    title: 'PBI de la Argentina',
+    title: 'PBI de Argentina',
     subtitle: `${GDP_MOCK.unit}, 1990 a 2056`,
     source: GDP_MOCK.source,
     kind: 'chart',
@@ -167,7 +167,7 @@ export const TOUR_CHARTS: Record<number, TourChartDef> = {
   3: {
     step: 3,
     title: 'Cuarta revolución industrial: el impacto de la IA en la economía',
-    subtitle: 'PBI con y sin la revolución de la IA, 2025 a 2056',
+    subtitle: 'PBI con y sin la revolución de la IA, 2026 a 2056, PBI nominal',
     source: MOCK_SOURCE,
     legend: [
       { label: 'Sin revolución de la IA', color: GREY },

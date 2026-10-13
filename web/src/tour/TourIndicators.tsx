@@ -5,7 +5,7 @@ import { INDICATORS_SOURCE, TOUR_INDICATORS } from './indicatorsMock';
 export function TourIndicators() {
   return (
     <aside className="tour-indicators">
-      <ul aria-label="Indicadores de la Argentina">
+      <ul aria-label="Indicadores de Argentina">
         {TOUR_INDICATORS.map((i) => (
           <li key={i.label}>
             <span className="tour-ind-label">{i.label}</span>

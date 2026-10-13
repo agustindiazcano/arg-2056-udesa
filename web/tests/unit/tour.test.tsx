@@ -5,7 +5,7 @@ import { render, screen, cleanup, fireEvent, within, act } from '@testing-librar
 import { useStore } from '../../src/state/store';
 
 // The charts of the Recorrido draw with ECharts, which needs a canvas that jsdom does not have.
-vi.mock('../../src/tour/TourStep', () => ({ TourStep: () => <h2>PBI de la Argentina</h2> }));
+vi.mock('../../src/tour/TourStep', () => ({ TourStep: () => <h2>PBI de Argentina</h2> }));
 
 // The real scenes load charts; the shell is what is under test here. The labels stay the real ones.
 vi.mock('../../src/scenes/registry', async (importOriginal) => {
