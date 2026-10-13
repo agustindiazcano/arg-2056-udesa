@@ -1047,6 +1047,29 @@ main.scene-container {
   height: 100%;
 }
 
+/* the Gráfico | Tabla switch of the region sits above the chart, in the flow, so it does not cover the bars */
+.prov-bars > .tour-chart {
+  display: flex;
+  flex-direction: column;
+}
+
+.prov-bars > .tour-chart > .tour-view-switch {
+  position: static;
+  flex: 0 0 auto;
+  width: auto;
+  height: auto;
+  margin-bottom: var(--space-1, 0.25rem);
+}
+
+.prov-bars > .tour-chart > :not(.tour-view-switch) {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.prov-bars .tour-table {
+  padding-top: 0;
+}
+
 /* ---- Recorrido step 0: the GDP since 1900 and the rankings ----------------------------------------------------------- */
 
 .world-year {
