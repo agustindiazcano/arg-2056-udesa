@@ -107,6 +107,8 @@ export interface MapLibreRendererProps {
   /** the whole intro (the tour and the spotlight over each force) is over, because it ended or because the reader took the camera */
   onIntroEnd?: () => void;
   label: string;
+  /** where the map starts when it is built again (after the 3D battle took the screen); without it, the far view of the tour */
+  initialView?: CameraView;
 }
 
 /** The sky by day and in the dark of the spotlight (the map and the sky dim while the lights go on). */
@@ -566,7 +568,7 @@ function createLight(map: MapLibreMap, svg: SVGSVGElement) {
 /** How long the light over the battle takes to come up, stays, and goes (ms): the camera leaves for the battle when it starts to go. */
 const BATTLE_LIGHT = { in: 1100, hold: 3600, out: 4300 };
 
-export function MapLibreRenderer({ route, columns, day, selectedId, camera, graphics, followId = null, onSelect, onTimeScale, onReady, cameraApi, onView, tourPlay = 0, onTourEnd, onIntroEnd, battleShow = 0, focusForce = null, onFocusForce, label }: MapLibreRendererProps) {
+export function MapLibreRenderer({ initialView, route, columns, day, selectedId, camera, graphics, followId = null, onSelect, onTimeScale, onReady, cameraApi, onView, tourPlay = 0, onTourEnd, onIntroEnd, battleShow = 0, focusForce = null, onFocusForce, label }: MapLibreRendererProps) {
   const reduced = useReducedMotion();
   const hostRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<MapLibreMap | null>(null);
@@ -759,7 +761,7 @@ export function MapLibreRenderer({ route, columns, day, selectedId, camera, grap
   useEffect(() => {
     const host = hostRef.current;
     if (!host) return undefined;
-    const overview = ANDES_TOUR[0]!;
+    const overview = initialView ?? ANDES_TOUR[0]!;
     const map = new MapLibreMap({
       container: host,
       style: missingKey ? { version: 8, sources: {}, layers: [{ id: 'bg', type: 'background', paint: { 'background-color': '#1b2733' } }] } : STYLE_URL,

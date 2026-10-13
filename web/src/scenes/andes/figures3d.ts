@@ -29,9 +29,11 @@ export function createFigureColumn(
   path: Path,
   ground: (x: number, z: number) => number | null,
   figureScale = 1,
-  palette?: Readonly<Record<string, string>>
+  palette?: Readonly<Record<string, string>>,
+  /** the figures to draw, when they are not the usual marching mix (the units of the diorama of the battle) */
+  slotList?: readonly Slot[]
 ): FigureColumn {
-  const slots: Slot[] = columnSlots(count);
+  const slots: Slot[] = slotList ? [...slotList] : columnSlots(count);
   const mesh = new InstancedMesh(new BoxGeometry(1, 1, 1), new MeshStandardMaterial({ roughness: 0.9, metalness: 0 }), Math.max(1, instanceCount(slots)));
   mesh.frustumCulled = false;
   const color = new Color();
