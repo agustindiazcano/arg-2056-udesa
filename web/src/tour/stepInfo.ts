@@ -113,12 +113,12 @@ export const STEP_INFO: Record<number, StepInfo> = {
   8: {
     heading: 'Minería: lo que hay y lo que viene',
     paragraphs: [
-      'La minería exportó 4.673 millones de dólares en 2024 y la Secretaría de Minería tenía 316 operaciones y proyectos en cartera en mayo de 2025, de los cuales solo 25 producían.',
-      'Una parte importante de lo que viene pasa por el Régimen de Incentivo para Grandes Inversiones (RIGI): la prensa cuenta 13 proyectos mineros aprobados por unos 25.000 millones de dólares, con Vicuña (San Juan), Agua Rica (Catamarca) y Rincón (Salta) a la cabeza.'
+      'La minería exportó 4.673 millones de dólares en 2024: oro 3.141 (67 %), plata 652, litio 645 y el resto 235. En mayo de 2025 la Secretaría de Minería tenía 316 operaciones y proyectos en cartera, solo 25 en producción.',
+      'La Secretaría proyecta exportaciones de 25.500 millones de dólares en 2035: 11.700 de cobre, 11.300 de litio y unos 2.500 de oro y plata. Para lograrlo calcula inversiones por 30.200 millones entre 2025 y 2031, con el pico en 2026 (7.510 millones). Una parte pasa por el RIGI: la prensa cuenta 13 proyectos mineros aprobados por unos 25.000 millones.'
     ],
-    how: 'La barra gris es lo que produce hoy y la azul lo que podrían producir los proyectos; la línea vertical es el rango de incertidumbre. Los proyectos RIGI están en la tabla de la sección Data.',
-    data: 'prueba',
-    note: 'Las barras son de prueba. La cartera y las exportaciones de 2024 vienen de la Secretaría de Minería; la lista de proyectos RIGI es de prensa y las fuentes no coinciden en montos: todavía no está verificada contra el Boletín Oficial.',
+    how: 'La barra gris son las exportaciones de 2024 y la azul la proyección para 2035, por mineral. Los proyectos de litio y de cobre, con su capacidad, y los del RIGI están en las tablas de la sección Data.',
+    data: 'real',
+    note: 'Secretaría de Minería, ARMINERA 2025: los números se leyeron a mano de imágenes del documento. «Cobre y resto» de 2024 es el «resto» que el gráfico no desglosa. El oro y la plata de 2035 son lo que resta del total (25,5 − 11,7 − 11,3). La proyección es de la Secretaría, no de este proyecto. La lista de proyectos del RIGI es de prensa y no está verificada.',
     refs: ['E3', 'E5', 'R1', 'R2', 'R3']
   },
   9: {

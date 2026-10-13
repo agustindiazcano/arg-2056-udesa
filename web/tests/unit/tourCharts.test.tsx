@@ -31,7 +31,7 @@ describe('the charts of the Recorrido', () => {
     expect(TOUR_CHARTS[5]!.title).toBe('Regla del 70: cuánto tarda en duplicarse el PBI');
     expect(TOUR_CHARTS[6]!.title).toBe('Qué miran los inversores');
     expect(TOUR_CHARTS[7]!.title).toBe('Mapa productivo por provincia');
-    expect(TOUR_CHARTS[8]!.title).toBe('Minería: hoy vs proyecto (con rangos)');
+    expect(TOUR_CHARTS[8]!.title).toBe('Minería: hoy vs proyecto');
     expect(TOUR_CHARTS[9]!.title).toBe('Hidrocarburos: Vaca Muerta define el piso y el techo');
     expect(TOUR_CHARTS[10]!.title).toBe('Agro: producción actual y potencial');
     expect(TOUR_CHARTS[11]!.title).toBe('Composición de las exportaciones');
@@ -57,10 +57,10 @@ describe('the charts of the Recorrido', () => {
     expect(rule70Rows().find((r) => r.label === '3 %')?.value).toBe(23.3);
   });
 
-  it('draws the range of the mining projects as a whisker and the hydrocarbons with a floor and a ceiling', () => {
+  it('draws the mining bars without a made-up range and the hydrocarbons with a floor and a ceiling', () => {
     const mining = TOUR_CHARTS[8]!.build().option as { series: Array<{ type: string }> };
     expect(mining.series.filter((s) => s.type === 'bar')).toHaveLength(2);
-    expect(mining.series.filter((s) => s.type === 'custom')).toHaveLength(1);
+    expect(mining.series.filter((s) => s.type === 'custom')).toHaveLength(0);
     const h = hydrocarbonsData();
     h.years.forEach((_, i) => {
       if (h.expected[i] === null) return;
@@ -94,7 +94,7 @@ describe('ChartStep', () => {
 
   it('has the same buttons on every step: the number of charts and 2D / 3D', () => {
     render(<ChartStep step={8} />);
-    expect(screen.getByRole('heading', { name: 'Minería: hoy vs proyecto (con rangos)' })).toBeTruthy();
+    expect(screen.getByRole('heading', { name: 'Minería: hoy vs proyecto' })).toBeTruthy();
     expect(screen.getByRole('group', { name: 'Gráficos en pantalla' })).toBeTruthy();
     expect(screen.getByRole('group', { name: 'Vista' })).toBeTruthy();
     expect(screen.getAllByTestId('echart')).toHaveLength(1);

@@ -10,6 +10,7 @@ import { PRODUCTION_UNIT, SECTOR_LABELS, SECTOR_VALUES } from '../tour/provinceM
 import type { Sector } from '../tour/provinceMock.js';
 import { DEFAULT_SIM, SIM_FIELDS, simulate } from '../tour/simModel.js';
 import { specRaw } from '../tour/specTable.js';
+import { COPPER_PROJECTS, LITHIUM_PROJECTS, MINING_CAPEX, MINING_EXPORTS_2024, MINING_EXPORTS_BY_YEAR, MINING_PROJECTION } from '../tour/miningArminera.js';
 import { RIGI_MINING, RIGI_OIL_GAS } from '../tour/rigiProjects.js';
 import type { RigiProject } from '../tour/rigiProjects.js';
 import { TOUR_CHARTS } from '../tour/tourCharts.js';
@@ -121,6 +122,26 @@ const agroTable = (): DataTable => ({
   rows: Object.entries(agro.crops).flatMap(([crop, list]) => list.slice(-6).map((r) => [crop, `${r.campaign}/${String(r.campaign + 1).slice(2)}`, r.sown_ha, r.harvested_ha, r.production_t, r.yield_kg_ha]))
 });
 
+/** The tables of the Secretaría de Minería (ARMINERA 2025), transcribed from images: exports, projection, capex and the advanced lithium and copper projects. */
+const miningTables = (): DataTable[] => [
+  { id: 'mining-exports', title: 'Exportaciones mineras de Argentina (miles de millones de USD; Secretaría de Minería)', columns: ['Período', 'Total'], rows: MINING_EXPORTS_BY_YEAR.map(([p, v]) => [p, v]) },
+  { id: 'mining-2024', title: 'Principales productos mineros exportados en 2024 (millones de USD y % del total)', columns: ['Producto', 'Millones de USD', '% del total'], rows: MINING_EXPORTS_2024.map(([p, v, share]) => [p, v, share]) },
+  { id: 'mining-projection', title: 'Proyección de exportaciones mineras 2024-2035 (miles de millones de USD; solo se leen el total y lo que el gráfico rotula)', columns: ['Año', 'Total', 'Litio', 'Cobre'], rows: MINING_PROJECTION.map((r) => [r.year, r.total, r.lithium, r.copper]) },
+  { id: 'mining-capex', title: 'Gastos de capital proyectados 2025-2031 (millones de USD)', columns: ['Año', 'Total'], rows: MINING_CAPEX.map(([y, v]) => [y, v]) },
+  {
+    id: 'lithium-projects',
+    title: 'Proyectos de litio en estado avanzado (mayo de 2025)',
+    columns: ['Proyecto', 'Accionista principal', 'País', 'Provincia', 'Capacidad por año', 'Producción 2024', 'Estado'],
+    rows: LITHIUM_PROJECTS.map((r) => [...r])
+  },
+  {
+    id: 'copper-projects',
+    title: 'Proyectos de cobre en estado avanzado (mayo de 2025; kt = miles de toneladas, koz = miles de onzas)',
+    columns: ['Proyecto', 'Accionista principal', 'País', 'Provincia', 'Capacidad por año', 'Estado'],
+    rows: COPPER_PROJECTS.map((r) => [...r])
+  }
+];
+
 function productivityTables(): DataTable[] {
   const wide = (metric: 'tfp' | 'oph', kind: 'level' | 'change', id: string, title: string): DataTable => {
     const years = seriesOf(metric, kind, 'AR').years;
@@ -195,7 +216,7 @@ export function buildSlides(): SlideData[] {
       { id: 'provinces-value', title: `Valor productivo por provincia (${PRODUCTION_UNIT})`, columns: ['Provincia', 'Valor'], rows: PROVINCES.map((p, i) => [p.name, PROVINCE_VALUES[i] ?? null]) },
       hydrocarbonProvinces()
     ], true, ['E6']),
-    slide('8', TOUR_CHARTS[8]!.title, [chartTable(8), rigiTable('rigi-mining', 'Proyectos mineros del RIGI y otros en evaluación (prensa, sin verificar)', RIGI_MINING)], true, ['E3', 'E5', 'R1', 'R2', 'R3', 'R4', 'R5', 'R9']),
+    slide('8', TOUR_CHARTS[8]!.title, [chartTable(8), ...miningTables(), rigiTable('rigi-mining', 'Proyectos mineros del RIGI y otros en evaluación (prensa, sin verificar)', RIGI_MINING)], false, ['E3', 'E5', 'R1', 'R2', 'R3', 'R4', 'R5', 'R9']),
     slide('9', TOUR_CHARTS[9]!.title, [chartTable(9), nationalProduction(), oilSince1950(), rigiTable('rigi-oil-gas', 'Proyectos de petróleo y gas del RIGI y otros en evaluación (prensa, sin verificar)', RIGI_OIL_GAS)], true, ['E6', 'E4', 'R2', 'R3', 'R6', 'R7', 'R8', 'R10', 'R11']),
     slide('10', TOUR_CHARTS[10]!.title, [chartTable(10), agroTable()], true, ['E8']),
     slide('11', TOUR_CHARTS[11]!.title, [chartTable(11)], false, ['E7']),
