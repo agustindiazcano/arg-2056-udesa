@@ -82,7 +82,7 @@ describe('GdpStep', () => {
   it('shows the title, the test-data label and the chart', () => {
     render(<GdpStep />);
     expect(screen.getByRole('heading', { name: /PBI de la Argentina/ })).toBeTruthy();
-    expect(screen.getByText(/datos de prueba/i)).toBeTruthy();
+    expect(screen.getAllByText(/datos de prueba/i).length).toBeGreaterThan(0);
     expect(screen.getByTestId('echart')).toBeTruthy();
   });
 

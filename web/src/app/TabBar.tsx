@@ -13,11 +13,23 @@ export function SectionTabs() {
       <div role="tablist" className="tabs">
         {visibleSections(SECTIONS).map((s) => (
           <button key={s} type="button" role="tab" className="tab" aria-selected={section === s} onClick={() => dispatch({ type: 'setSection', section: s })}>
+            {s === 'data' && <DatabaseIcon />}
             {SECTION_LABELS[s]}
           </button>
         ))}
       </div>
     </nav>
+  );
+}
+
+/** The cylinder that stands for a database, next to the Data tab. */
+function DatabaseIcon() {
+  return (
+    <svg className="tab-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+      <ellipse cx="8" cy="3.5" rx="5.5" ry="2" />
+      <path d="M2.5 3.5v9c0 1.1 2.46 2 5.5 2s5.5-.9 5.5-2v-9" />
+      <path d="M2.5 8c0 1.1 2.46 2 5.5 2s5.5-.9 5.5-2" />
+    </svg>
   );
 }
 

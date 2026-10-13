@@ -1,21 +1,72 @@
-import React, { Suspense, lazy } from 'react';
+import React, { Suspense, lazy, useState } from 'react';
 import type { Chart3DSpec } from '../charts3d/types';
 import { useQualityOptional } from '../runtime/CapabilityProvider';
 import { useStore } from '../state/store';
+import { Segmented } from '../ui/Segmented';
 import { Spinner } from '../ui/Spinner';
+import { specTable } from './specTable';
 
 const TourChart3D = lazy(() => import('../tour3d/TourChart3D'));
 
-/** `Chart2D3D` of the Recorrido: the same flat chart or its 3D version, loaded behind a spinner (see `tour3d/TourChart3D`). */
-export function TourChart({ spec, children }: { spec?: Chart3DSpec; children: React.ReactNode }) {
+const VIEWS = [
+  { value: 'chart', label: 'Gráfico' },
+  { value: 'table', label: 'Tabla' }
+] as const;
+
+type View = (typeof VIEWS)[number]['value'];
+
+function DataTable({ spec }: { spec: Chart3DSpec }) {
+  const t = specTable(spec);
+  return (
+    <div className="tour-table">
+      <table aria-label={t.title}>
+        <thead>
+          <tr>
+            {t.columns.map((c) => (
+              <th key={c} scope="col">
+                {c}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {t.rows.map((r, i) => (
+            <tr key={i}>
+              {r.map((cell, j) => (
+                <td key={j}>{cell}</td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+/**
+ * `Chart2D3D` of the Recorrido: the same flat chart or its 3D version, loaded behind a spinner (see `tour3d/TourChart3D`), with a
+ * Gráfico | Tabla switch (the chart first, unless `defaultView` says table) when there is a spec to make the table from.
+ */
+export function TourChart({ spec, defaultView = 'chart', children }: { spec?: Chart3DSpec; defaultView?: View; children: React.ReactNode }) {
   const mode = useStore((s) => s.mode);
   const quality = useQualityOptional();
-  if (mode === '3d' && spec && quality?.caps.webgl2) {
-    return (
-      <Suspense fallback={<Spinner label="Cargando la vista 3D..." />}>
-        <TourChart3D spec={spec} />
-      </Suspense>
-    );
-  }
-  return <>{children}</>;
+  const [view, setView] = useState<View>(defaultView);
+  return (
+    <>
+      {spec && (
+        <div className="tour-view-switch">
+          <Segmented label="Contenido" options={VIEWS} value={view} onChange={setView} />
+        </div>
+      )}
+      {spec && view === 'table' ? (
+        <DataTable spec={spec} />
+      ) : mode === '3d' && spec && quality?.caps.webgl2 ? (
+        <Suspense fallback={<Spinner label="Cargando la vista 3D..." />}>
+          <TourChart3D spec={spec} />
+        </Suspense>
+      ) : (
+        children
+      )}
+    </>
+  );
 }

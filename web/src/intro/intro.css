@@ -188,6 +188,27 @@
   text-transform: uppercase;
   line-height: 0.98;
 }
+.intro-title .a,
+.intro-title .n {
+  width: fit-content;
+  transition:
+    color 0.25s ease-out,
+    text-shadow 0.25s ease-out;
+}
+.intro-title {
+  transition: filter 0.25s ease-out;
+}
+/* hover on the title: "Argentina" turns gold, "2056" turns white and a gold aura glows around both (the same as the brand of the header) */
+.intro-title:has(.a:hover, .n:hover) {
+  filter: drop-shadow(0 0 calc(var(--u) * 0.8) color-mix(in srgb, var(--gold) 80%, transparent)) drop-shadow(0 0 calc(var(--u) * 2.4) color-mix(in srgb, var(--gold) 55%, transparent));
+}
+.intro-title:has(.a:hover, .n:hover) .a {
+  color: var(--gold);
+}
+.intro-title:has(.a:hover, .n:hover) .n {
+  color: var(--intro-ink);
+  text-shadow: 0 0 14px color-mix(in srgb, var(--gold) 70%, transparent);
+}
 .intro-title .a {
   display: block;
   font-weight: 200;

@@ -10,6 +10,7 @@ import { useStore } from '../state/store.js';
 import { tokens } from '../styles/tokens.js';
 import { Segmented } from '../ui/Segmented.js';
 import { elapsedForYear, seriesFrame, valueAt, yearAtElapsed } from './worldAnim.js';
+import { SPEEDS } from '../state/reducer.js';
 import { useTimeline } from './useTimeline.js';
 import { WorldTable } from './WorldTable.js';
 import { FIRST_YEAR, HOME, LAST_YEAR, MOCK_SOURCE, WORLD_UNIT, argentinaSince1900, regionCountries, regionValuesAt } from './worldData.js';
@@ -18,6 +19,18 @@ const VIEWS = [
   { value: '2d', label: '2D' },
   { value: '3d', label: '3D' }
 ] as const;
+
+const PlayIcon = () => (
+  <svg viewBox="0 0 14 14" aria-hidden="true" focusable="false">
+    <path d="M3 1.5v11l9-5.5z" />
+  </svg>
+);
+const PauseIcon = () => (
+  <svg viewBox="0 0 14 14" aria-hidden="true" focusable="false">
+    <path d="M3 1.5h3v11H3zM8 1.5h3v11H8z" />
+  </svg>
+);
+const speedFormat = new Intl.NumberFormat('es-AR', { maximumFractionDigits: 2 });
 
 const TITLE = `El PBI de la Argentina desde ${FIRST_YEAR}`;
 const SERIES_NAME = 'PBI de la Argentina';
@@ -32,7 +45,9 @@ export function WorldStep() {
   const dispatch = useStore((s) => s.dispatch);
   const reduced = useReducedMotion();
   const [run, setRun] = useState(0);
-  const { elapsed, clock, seek } = useTimeline(run, reduced);
+  const [speed, setSpeed] = useState(1);
+  const { elapsed, clock, seek, playing, play, pause } = useTimeline(run, reduced, speed);
+  const stepSpeed = (by: 1 | -1) => setSpeed((v) => SPEEDS[Math.min(SPEEDS.length - 1, Math.max(0, SPEEDS.indexOf(v) + by))] ?? v);
 
   const series = useMemo(argentinaSince1900, []);
   const today = series.values.at(-1) ?? 0;
@@ -91,6 +106,18 @@ export function WorldStep() {
           </p>
         </Reveal>
         <div className="tour-controls">
+          <button type="button" className="btn btn--icon world-replay" aria-label={playing ? 'Pausar' : 'Reproducir'} onClick={playing ? pause : play}>
+            {playing ? <PauseIcon /> : <PlayIcon />}
+          </button>
+          <div role="group" aria-label="Velocidad" className="control-group">
+            <button type="button" className="btn btn--icon" aria-label="Más lento" onClick={() => stepSpeed(-1)}>
+              −
+            </button>
+            <span className="speed">{speedFormat.format(speed)}×</span>
+            <button type="button" className="btn btn--icon" aria-label="Más rápido" onClick={() => stepSpeed(1)}>
+              +
+            </button>
+          </div>
           <button type="button" className="btn world-replay" onClick={() => setRun((n) => n + 1)}>
             Repetir
           </button>

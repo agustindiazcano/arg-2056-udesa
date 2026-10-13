@@ -14,9 +14,11 @@ export function visibleSections(sections: readonly Section[]): Section[] {
   return sections.filter((s) => s !== 'dashboard' || shown);
 }
 
-/** The names of the three sections in the top navigation. */
+/** The names of the sections in the top navigation. */
 export const SECTION_LABELS: Record<Section, string> = {
   andes: 'Andes',
   dashboard: 'Data Dashboard',
-  tour: 'Recorrido'
+  tour: 'Recorrido',
+  simulator: 'Simulador del PBI',
+  data: 'Data'
 };

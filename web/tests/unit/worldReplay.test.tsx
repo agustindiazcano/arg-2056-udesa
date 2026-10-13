@@ -80,4 +80,48 @@ describe('step 0 of the Recorrido', () => {
     expect(new Set(places.PBI).size).toBeGreaterThan(1);
     expect(new Set(places['PBI per cápita']).size).toBeGreaterThan(1);
   });
+
+  it('has a play / pause button in the controls: it starts playing, pauses, plays again, and stops when the timeline is dragged', () => {
+    render(<WorldStep />);
+    const controls = screen.getByRole('slider', { name: 'Línea de tiempo' }).closest('.tour-controls');
+    const pause = screen.getByRole('button', { name: 'Pausar' });
+    expect(pause.parentElement).toBe(controls);
+    act(() => {
+      fireEvent.click(pause);
+    });
+    expect(screen.getByRole('button', { name: 'Reproducir' })).toBeTruthy();
+    act(() => {
+      fireEvent.click(screen.getByRole('button', { name: 'Reproducir' }));
+    });
+    expect(screen.getByRole('button', { name: 'Pausar' })).toBeTruthy();
+    act(() => {
+      fireEvent.change(screen.getByRole('slider', { name: 'Línea de tiempo' }), { target: { value: '1950' } });
+    });
+    expect(screen.getByRole('button', { name: 'Reproducir' })).toBeTruthy();
+  });
+
+  it('has icons (no text) for play and pause, and a speed control next to them that steps through 0,25× to 8×', () => {
+    render(<WorldStep />);
+    const pause = screen.getByRole('button', { name: 'Pausar' });
+    expect(pause.textContent).toBe('');
+    expect(pause.querySelector('svg')).toBeTruthy();
+    const group = screen.getByRole('group', { name: 'Velocidad' });
+    expect(group.parentElement).toBe(pause.parentElement);
+    expect(group.textContent).toContain('1×');
+    act(() => {
+      fireEvent.click(screen.getByRole('button', { name: 'Más rápido' }));
+    });
+    expect(group.textContent).toContain('2×');
+    act(() => {
+      fireEvent.click(screen.getByRole('button', { name: 'Más lento' }));
+      fireEvent.click(screen.getByRole('button', { name: 'Más lento' }));
+    });
+    expect(group.textContent).toContain('0,5×');
+    for (let n = 0; n < 5; n++) {
+      act(() => {
+        fireEvent.click(screen.getByRole('button', { name: 'Más lento' }));
+      });
+    }
+    expect(group.textContent).toContain('0,25×');
+  });
 });
