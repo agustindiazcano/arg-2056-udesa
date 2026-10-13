@@ -1620,7 +1620,8 @@ main.scene-container {
 }
 
 .data-scroll {
-  overflow-x: auto; /* only sideways: the page is the one vertical scroll */
+  max-height: 16rem;
+  overflow: auto;
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
 }
