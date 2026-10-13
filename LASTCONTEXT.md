@@ -14,5 +14,7 @@
 - UI: values above the bars (also in the sorted 3D bars of step 0), thin scrollbars in the site colors, zoom buttons of the 3D bars of step 0 work (they take the camera from the clock), the camera is farther away, «la Argentina» became «Argentina» everywhere.
 - H12 done: the IMF page shows 768.21 for Argentina 2026 (the team confirmed); the 688.4 from an AI answer is not the current edition.
 
+- **Official data without the human** (`task/energy-official-data`, 2026-10-13): `scripts/build_energy_data.py` reads the CKAN API of the Secretaría de Energía (national and provincial oil and gas 2009-2025, oil since 1950, reserves at 31-12-2025) into `tour/energyArgentina.json`; step 9 now draws the real national oil production 2015-2025 (793.7 thousand barrels a day in 2025); Data has the provinces of steps 2 and 7 (hydrocarbons), the national series, the series since 1950 and the reserves (step 13). `scripts/build_agro_data.py` reads the MAGyP national series (soy, maize, wheat, sunflower) into `tour/agroArgentina.json` (Data table of step 10). Steps 4 and 11 now use the INDEC report «Complejos exportadores, año 2025» (exports 87,111 million USD by complex, `tour/tourData.ts`).
+
 ## Next
 - The human does H1 to H5 (see the doc); then wire the production by province (steps 2 and 7) and the hydrocarbons (step 9) and replace the RIGI press table with the official list.

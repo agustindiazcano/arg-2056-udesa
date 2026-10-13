@@ -1,4 +1,5 @@
 import { ARG_GDP_2026, GDP_UNIT } from './gdpFacts.js';
+import energy from './energyArgentina.json';
 import type { GdpData } from './gdpMock.js';
 
 /** The label every made-up chart of the Recorrido carries. */
@@ -44,11 +45,32 @@ export interface ColumnRow {
   value: number;
 }
 
-/** The INDEC source of steps 4 and 11 (Intercambio comercial argentino, informe de agosto de 2026). */
-export const EXPORTS_SOURCE = 'INDEC, Intercambio comercial argentino (informe de agosto de 2026), acumulado de enero a julio de 2026';
+/** The INDEC source of steps 4 and 11: "Complejos exportadores, año 2025" (informe técnico, Comercio exterior vol. 10, n.º 4, March 2026). */
+export const EXPORTS_SOURCE = 'INDEC, Complejos exportadores, año 2025 (informe de marzo de 2026, datos provisorios), exportaciones de bienes';
+export const EXPORTS_TOTAL_2025 = 87111;
 
-/** Step 4: exports by great item (grandes rubros), in billions of USD, accumulated January to July 2026. Real: INDEC, read on 2026-10-12. */
-export const EXPORTS_BY_SECTOR = {
+/**
+ * Exports of goods by exporting complex, millions of USD, 2025 and 2024 (provisional). Real: INDEC, table 1 of the report, read on 2026-10-13.
+ * The ten main complexes add up to 77.7 % of the total, as the report says; "Otros complejos" and "Resto de exportaciones" close it (87,111).
+ */
+export const EXPORT_COMPLEXES: ReadonlyArray<{ label: string; y2025: number; y2024: number }> = [
+  { label: 'Complejo soja', y2025: 21442, y2024: 19628 },
+  { label: 'Petrolero-petroquímico', y2025: 11772, y2024: 10435 },
+  { label: 'Automotriz', y2025: 8784, y2024: 9010 },
+  { label: 'Maicero', y2025: 6660, y2024: 7264 },
+  { label: 'Oro y plata', y2025: 4886, y2024: 3827 },
+  { label: 'Carne y cuero bovinos', y2025: 4727, y2024: 3804 },
+  { label: 'Triguero', y2025: 3649, y2024: 2764 },
+  { label: 'Girasol', y2025: 2175, y2024: 1453 },
+  { label: 'Pesquero', y2025: 2091, y2024: 2013 },
+  { label: 'Lácteo', y2025: 1522, y2024: 1281 },
+  { label: 'Otros complejos', y2025: 13346, y2024: 12755 },
+  { label: 'Resto de exportaciones', y2025: 6055, y2024: 5469 }
+];
+
+/** The great items (grandes rubros) of January to July 2026, billions of USD, from the report of the ICA of August 2026 (another table, shown in Data). */
+export const EXPORTS_GREAT_ITEMS_SOURCE = 'INDEC, Intercambio comercial argentino (informe de agosto de 2026), acumulado de enero a julio de 2026';
+export const EXPORTS_GREAT_ITEMS = {
   unit: 'miles de millones de USD',
   rows: [
     { label: 'Productos primarios', value: 14.749 },
@@ -56,6 +78,12 @@ export const EXPORTS_BY_SECTOR = {
     { label: 'Manufacturas de origen industrial', value: 15.554 },
     { label: 'Combustibles y energía', value: 9.151 }
   ] satisfies ColumnRow[]
+};
+
+/** Step 4: exports by exporting complex in 2025, in billions of USD. Real: INDEC. */
+export const EXPORTS_BY_SECTOR = {
+  unit: 'miles de millones de USD',
+  rows: EXPORT_COMPLEXES.map((c) => ({ label: c.label, value: Math.round(c.y2025 / 100) / 10 })) satisfies ColumnRow[]
 };
 
 /** The year the Rule of 70 example highlights (the made-up expected growth). */
@@ -104,17 +132,16 @@ export const MINING: RangedGroups = {
 };
 
 /**
- * Oil of the Vaca Muerta formation in millions of barrels a year, 2015 to 2025. Real: IAE, "Vaca Muerta: análisis 2025", with data of the
- * Secretaría de Energía (table "Producción anual de Vaca Muerta"), read on 2026-10-12. The 2025 average, 499 thousand barrels a day, matches the 499,061 of the report.
+ * National oil production in thousand barrels a day, 2015 to 2025: the average of the twelve monthly daily averages of each year, from the open data
+ * of the Secretaría de Energía (`energyArgentina.json`, built by `scripts/build_energy_data.py`). 2025 is 793.7 (the IAE report has 800.2 with the same
+ * source; the 860 that the press gave is not in the official series).
  */
-const VACA_MUERTA_OIL_MMBO: Readonly<Record<number, number>> = { 2015: 8.3, 2016: 10.9, 2017: 13.7, 2018: 20.8, 2019: 32.9, 2020: 41.4, 2021: 59.4, 2022: 88.6, 2023: 111.5, 2024: 141.6, 2025: 182.2 };
-const daysIn = (year: number): number => (year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0) ? 366 : 365);
+export const HYDROCARBONS_SOURCE = 'Historia 2015-2025: Secretaría de Energía (datos abiertos); proyección y rango: datos de prueba (inventados)';
 
-export const HYDROCARBONS_SOURCE = 'Historia 2015-2025: IAE con datos de la Secretaría de Energía; proyección y rango: datos de prueba (inventados)';
-
-/** Step 9: oil of Vaca Muerta in thousands of barrels a day, 2015 to 2056: real until 2025, then a made-up projection with the floor and the ceiling that Vaca Muerta sets. */
+/** Step 9: national oil production in thousands of barrels a day, 2015 to 2056: real until 2025, then a made-up projection with the floor and the ceiling that Vaca Muerta sets. */
 export const HYDROCARBONS_LAST_OBSERVED = 2025;
 export function hydrocarbonsData(): GdpData {
+  const national = energy.national as Record<string, { oil_kbd: number }>;
   const years: number[] = [];
   const history: Array<number | null> = [];
   const expected: Array<number | null> = [];
@@ -124,7 +151,7 @@ export function hydrocarbonsData(): GdpData {
   for (let year = 2015; year <= 2056; year += 1) {
     years.push(year);
     if (year <= HYDROCARBONS_LAST_OBSERVED) {
-      value = (VACA_MUERTA_OIL_MMBO[year]! * 1000) / daysIn(year);
+      value = national[String(year)]!.oil_kbd;
       const v = round1(value);
       history.push(v);
       expected.push(year === HYDROCARBONS_LAST_OBSERVED ? v : null);
@@ -141,7 +168,7 @@ export function hydrocarbonsData(): GdpData {
       high.push(round1(v * (1 + 0.04 * k ** 0.9)));
     }
   }
-  return { unit: 'miles de barriles de petróleo por día (Vaca Muerta)', source: HYDROCARBONS_SOURCE, years, history, expected, low, high, lastObserved: HYDROCARBONS_LAST_OBSERVED };
+  return { unit: 'miles de barriles de petróleo por día', source: HYDROCARBONS_SOURCE, years, history, expected, low, high, lastObserved: HYDROCARBONS_LAST_OBSERVED };
 }
 
 export interface PairedGroups {
@@ -161,10 +188,10 @@ export const AGRO: PairedGroups = {
 
 const pct1 = (value: number, total: number): number => Math.round((value / total) * 1000) / 10;
 
-/** Step 11: composition of the exports by great item, in % of the total of January to July 2026 (58.365 million USD). Real: INDEC (same source as step 4). */
+/** Step 11: composition of the exports by exporting complex, in % of the total of 2025 (87,111 million USD). Real: INDEC (same source as step 4). */
 export const EXPORT_COMPOSITION = {
   unit: '%',
-  rows: EXPORTS_BY_SECTOR.rows.map((r) => ({ label: r.label, value: pct1(r.value, 58.365) })) satisfies ColumnRow[]
+  rows: EXPORT_COMPLEXES.map((c) => ({ label: c.label, value: pct1(c.y2025, EXPORTS_TOTAL_2025) })) satisfies ColumnRow[]
 };
 
 /** The INDEC source of step 12 (Informe de avance del nivel de actividad, 2.º trimestre de 2026). */

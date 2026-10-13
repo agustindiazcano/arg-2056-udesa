@@ -73,7 +73,7 @@ function pairedBars(
 }
 
 const HYDROCARBON_LABELS: BandLabels = {
-  subject: 'Petróleo de Vaca Muerta',
+  subject: 'Producción de petróleo',
   history: 'Producción observada',
   expected: 'Proyección esperada',
   range: 'Rango entre el piso y el techo'
@@ -179,10 +179,10 @@ export const TOUR_CHARTS: Record<number, TourChartDef> = {
   4: {
     step: 4,
     title: 'Recursos naturales: exportaciones por sector',
-    subtitle: 'miles de millones de USD, acumulado de enero a julio de 2026',
+    subtitle: 'miles de millones de USD en 2025, por complejo exportador',
     source: EXPORTS_SOURCE,
     kind: 'chart',
-    build: () => ranking('Exportaciones por sector', 'Exportaciones', EXPORTS_BY_SECTOR, largest(EXPORTS_BY_SECTOR.rows), 'Exportaciones por grandes rubros, enero a julio de 2026 (INDEC)')
+    build: () => ranking('Exportaciones por sector', 'Exportaciones', EXPORTS_BY_SECTOR, largest(EXPORTS_BY_SECTOR.rows), 'Exportaciones por complejo exportador en 2025 (INDEC)')
   },
   5: {
     step: 5,
@@ -216,7 +216,7 @@ export const TOUR_CHARTS: Record<number, TourChartDef> = {
   9: {
     step: 9,
     title: 'Hidrocarburos: Vaca Muerta define el piso y el techo',
-    subtitle: 'miles de barriles de petróleo por día de Vaca Muerta, 2015 a 2056',
+    subtitle: 'miles de barriles de petróleo por día de todo el país, 2015 a 2056',
     source: HYDROCARBONS_SOURCE,
     kind: 'chart',
     build: hydrocarbons
@@ -233,7 +233,7 @@ export const TOUR_CHARTS: Record<number, TourChartDef> = {
     kind: 'chart',
     build: agro
   },
-  11: { step: 11, title: 'Composición de las exportaciones', subtitle: 'porcentaje del total exportado, enero a julio de 2026', source: EXPORTS_SOURCE, kind: 'chart', build: () => shares('Composición de las exportaciones', EXPORT_COMPOSITION, 'INDEC') },
+  11: { step: 11, title: 'Composición de las exportaciones', subtitle: 'porcentaje del total exportado en 2025, por complejo exportador', source: EXPORTS_SOURCE, kind: 'chart', build: () => shares('Composición de las exportaciones', EXPORT_COMPOSITION, 'INDEC') },
   12: { step: 12, title: 'Composición del PBI', subtitle: 'porcentaje del valor agregado por sector, 2025', source: GDP_COMPOSITION_SOURCE, kind: 'chart', build: () => shares('Composición del PBI', GDP_COMPOSITION, 'INDEC') },
   13: {
     step: 13,
