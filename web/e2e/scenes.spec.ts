@@ -10,14 +10,14 @@ test.describe('scenes', () => {
 
       // by tab click
       await openTab(page, entry.tab);
-      await expect(page.getByRole('tab', { name: entry.tab })).toHaveAttribute('aria-selected', 'true');
+      await expect(page.getByRole('tab', { name: entry.tab, exact: true })).toHaveAttribute('aria-selected', 'true');
       await expectSceneShown(page, entry);
 
       // by keyboard: go back to the first scene, then step right to this one with ArrowRight
       await openTab(page, SCENE_TABS[0].tab);
       await releaseFocus(page);
       for (let i = 0; i < index; i += 1) await page.keyboard.press('ArrowRight');
-      await expect(page.getByRole('tab', { name: entry.tab })).toHaveAttribute('aria-selected', 'true');
+      await expect(page.getByRole('tab', { name: entry.tab, exact: true })).toHaveAttribute('aria-selected', 'true');
       await expectSceneShown(page, entry);
 
       // only the active tab of each tab list is selected (the sections and, in the Data Dashboard, the scenes)
