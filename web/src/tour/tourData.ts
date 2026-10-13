@@ -14,7 +14,7 @@ export interface LineSeriesData {
   dashed?: boolean;
 }
 
-/** Step 3: the nominal GDP with and without the AI revolution, 2026 to 2056: both start at the estimate of the IMF for 2026, the rest is made up. */
+/** Step 3: the real GDP with and without the AI revolution, 2026 to 2056: both start at the real GDP of 2026 (same figure as the GDP chart), the rest is made up. */
 export function aiImpactData(): { unit: string; years: number[]; series: LineSeriesData[] } {
   const years: number[] = [];
   const without: number[] = [];
@@ -117,18 +117,19 @@ export interface RangedGroups {
   categories: string[];
   today: number[];
   project: number[];
-  low: number[];
-  high: number[];
+  /** the range of the projects (the whisker); without it the chart draws no whisker */
+  low?: number[];
+  high?: number[];
 }
 
-/** Step 8: mining today against the projects, with the range of the projects (made up). */
+/** Step 8: mining exports today against the projection of the Secretaría de Minería for 2035. Real (transcribed from the images of ARMINERA 2025). */
+export const MINING_SOURCE = 'Secretaría de Minería, ARMINERA 2025: exportaciones de 2024 y proyección para 2035 (transcrito de imágenes)';
 export const MINING: RangedGroups = {
   unit: 'miles de millones de USD',
-  categories: ['Litio', 'Cobre', 'Oro', 'Plata'],
-  today: [1.2, 0.1, 1.1, 0.5],
-  project: [6, 7.5, 2.4, 1.3],
-  low: [4, 5, 1.8, 0.9],
-  high: [8.5, 10, 3.2, 1.8]
+  // 2024: gold 3,141 + silver 652, lithium 645, the rest 235 (copper is inside "resto"); 2035: lithium 11.3, copper 11.7, gold and silver the rest of 25.5
+  categories: ['Oro y plata', 'Litio', 'Cobre y resto'],
+  today: [3.793, 0.645, 0.235],
+  project: [2.5, 11.3, 11.7]
 };
 
 /**

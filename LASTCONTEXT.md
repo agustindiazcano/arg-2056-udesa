@@ -16,5 +16,7 @@
 
 - **Official data without the human** (`task/energy-official-data`, 2026-10-13): `scripts/build_energy_data.py` reads the CKAN API of the Secretaría de Energía (national and provincial oil and gas 2009-2025, oil since 1950, reserves at 31-12-2025) into `tour/energyArgentina.json`; step 9 now draws the real national oil production 2015-2025 (793.7 thousand barrels a day in 2025); Data has the provinces of steps 2 and 7 (hydrocarbons), the national series, the series since 1950 and the reserves (step 13). `scripts/build_agro_data.py` reads the MAGyP national series (soy, maize, wheat, sunflower) into `tour/agroArgentina.json` (Data table of step 10). Steps 4 and 11 now use the INDEC report «Complejos exportadores, año 2025» (exports 87,111 million USD by complex, `tour/tourData.ts`).
 
+- **REAL GDP (constant 2015 USD) everywhere** (human request 2026-10-13, replaces the nominal decision of 2026-10-12): `scripts/build_world_gdp.py` -> `tour/worldGdp.json` (World Bank `NY.GDP.MKTP.KD`), `tour/gdpFacts.ts` is the single source (2025 observed 609.2; 2026 = 2025 x the IMF real growth 2.06 % = 621.8, shared by steps 1, 3 and the simulator), step 0 ranks and region bars are real, Data compares real growth with the IMF (`scripts/imf_compare.py`). Exports stay in current USD (a flow) and say so. `docs/data-requests.md` sections 0b and 5 rewritten.
+
 ## Next
 - The human does H1 to H5 (see the doc); then wire the production by province (steps 2 and 7) and the hydrocarbons (step 9) and replace the RIGI press table with the official list.

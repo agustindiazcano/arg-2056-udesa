@@ -25,23 +25,23 @@ export const STEP_INFO: Record<number, StepInfo> = {
   0: {
     heading: 'Dónde estuvo y dónde está Argentina',
     paragraphs: [
-      'Este gráfico sigue el PBI nominal de Argentina, en dólares corrientes (no en paridad de poder adquisitivo), año por año de 1960 a 2025, frente al resto del mundo y frente a la región. En 2025 fue de 683.100 millones de dólares, la economía número 24 del mundo según el Banco Mundial.',
-      'El PBI nominal es lo que vale la producción de un país al tipo de cambio del año; es el que usan los rankings de tamaño de la economía. El PBI per cápita es ese valor dividido por la población. Los botones de abajo cambian el gráfico de barras de la región entre PBI, PBI per cápita y población.'
+      'Este gráfico sigue el PBI real de Argentina, a precios constantes (dólares de 2015), año por año de 1960 a 2025, frente al resto del mundo y frente a la región. En 2025 fue de 609.200 millones de dólares de 2015, el puesto 22 del mundo según el Banco Mundial.',
+      'El PBI real quita el efecto de los precios: mide cuánto se produce, no cuánto vale a los precios del año; por eso sirve para comparar épocas. El PBI per cápita real es ese valor dividido por la población. Los botones de abajo cambian el gráfico de barras de la región entre PBI, PBI per cápita y población.'
     ],
     how: 'Mové el control del año para ver cómo cambia el ranking. Las barras de la región se reordenan de mayor a menor en cada año. El ranking de PBI per cápita cuenta solo países de un millón de habitantes o más.',
     data: 'real',
-    note: 'Banco Mundial (WDI), PBI nominal en dólares corrientes, 1960 a 2025; algunos países no tienen dato en los primeros años. La población de Argentina de 2022 a 2025 es la proyección oficial del INDEC (Censo 2022); el resto, del Banco Mundial. El año 2026 no se dibuja porque todavía no es un dato observado: el FMI lo estima en 768.200 millones.',
+    note: 'Banco Mundial (WDI), PBI real en dólares constantes de 2015, 1960 a 2025; algunos países no tienen dato en los primeros años. La población de Argentina de 2022 a 2025 es la proyección oficial del INDEC (Censo 2022); el resto, del Banco Mundial. El año 2026 no se dibuja porque todavía no es un dato observado.',
     refs: ['W5', 'I1', 'F1']
   },
   1: {
     heading: 'El PBI de Argentina, de 1990 a 2056',
     paragraphs: [
-      'La línea muestra el PBI nominal observado de 1990 a 2025 y la proyección esperada hasta 2056, con un abanico que va del escenario más bajo al más alto. En la historia se ven las crisis de 1995, 2001-2002, 2009 y 2020.',
-      'El cuadro de indicadores resume la economía en 2025: PBI nominal, población, PBI por habitante, exportaciones, crecimiento e inversión.'
+      'La línea muestra el PBI real observado de 1990 a 2025, en dólares constantes de 2015, y la proyección esperada hasta 2056, con un abanico que va del escenario más bajo al más alto. En la historia se ven las crisis de 1995, 2001-2002, 2009 y 2020.',
+      'El cuadro de indicadores resume la economía en 2025: PBI real, población, PBI por habitante real, exportaciones, crecimiento e inversión.'
     ],
     how: 'Mirá primero la línea de la proyección y después el ancho del abanico: cuanto más ancho, más incierto es el futuro. El abanico no es un pronóstico de lo que va a pasar sino de lo que podría pasar.',
     data: 'parcial',
-    note: 'La historia es real (Banco Mundial, PBI nominal en dólares corrientes). El valor de 2026 es la estimación del FMI (768.200 millones, actualización del 30-09-2026) y es el mismo en todos los gráficos del sitio. Desde 2027 la proyección y el abanico son de prueba hasta que esté el modelo. Población: INDEC; el Banco Mundial tiene 45,9 millones y el FMI 47,5 (usa la proyección anterior al censo).',
+    note: 'La historia es real (Banco Mundial, PBI real en dólares constantes de 2015). El valor de 2026 es el de 2025 por el crecimiento real que proyecta el FMI (2,06 %, actualización del 30-09-2026) y es el mismo en todos los gráficos del sitio. Desde 2027 la proyección y el abanico son de prueba hasta que esté el modelo. Población: INDEC; el Banco Mundial tiene 45,9 millones y el FMI 47,5 (usa la proyección anterior al censo).',
     refs: ['W3', 'W5', 'I1', 'F1']
   },
   2: {
@@ -63,7 +63,7 @@ export const STEP_INFO: Record<number, StepInfo> = {
     ],
     how: 'Compará la distancia entre las dos líneas en 2056. No es una predicción: depende de cuánto de la economía se adapta y de qué tan rápido.',
     data: 'prueba',
-    note: 'Las dos líneas son de prueba; parten de la estimación del FMI para 2026 (768.200 millones de dólares corrientes), el mismo valor del gráfico del PBI. Los dos estudios se leyeron el 12-10-2026; Anthropic aclara que su cifra no es una predicción y que usa supuestos fuertes. Ninguno es sobre Argentina.',
+    note: 'Las dos líneas son de prueba; parten del PBI real de 2026 (el mismo valor del gráfico del PBI, en dólares de 2015). Los dos estudios se leyeron el 12-10-2026; Anthropic aclara que su cifra no es una predicción y que usa supuestos fuertes. Ninguno es sobre Argentina.',
     refs: ['P8', 'P9', 'P10a']
   },
   4: {
@@ -113,12 +113,12 @@ export const STEP_INFO: Record<number, StepInfo> = {
   8: {
     heading: 'Minería: lo que hay y lo que viene',
     paragraphs: [
-      'La minería exportó 4.673 millones de dólares en 2024 y la Secretaría de Minería tenía 316 operaciones y proyectos en cartera en mayo de 2025, de los cuales solo 25 producían.',
-      'Una parte importante de lo que viene pasa por el Régimen de Incentivo para Grandes Inversiones (RIGI): la prensa cuenta 13 proyectos mineros aprobados por unos 25.000 millones de dólares, con Vicuña (San Juan), Agua Rica (Catamarca) y Rincón (Salta) a la cabeza.'
+      'La minería exportó 4.673 millones de dólares en 2024: oro 3.141 (67 %), plata 652, litio 645 y el resto 235. En mayo de 2025 la Secretaría de Minería tenía 316 operaciones y proyectos en cartera, solo 25 en producción.',
+      'La Secretaría proyecta exportaciones de 25.500 millones de dólares en 2035: 11.700 de cobre, 11.300 de litio y unos 2.500 de oro y plata. Para lograrlo calcula inversiones por 30.200 millones entre 2025 y 2031, con el pico en 2026 (7.510 millones). Una parte pasa por el RIGI: la prensa cuenta 13 proyectos mineros aprobados por unos 25.000 millones.'
     ],
-    how: 'La barra gris es lo que produce hoy y la azul lo que podrían producir los proyectos; la línea vertical es el rango de incertidumbre. Los proyectos RIGI están en la tabla de la sección Data.',
-    data: 'prueba',
-    note: 'Las barras son de prueba. La cartera y las exportaciones de 2024 vienen de la Secretaría de Minería; la lista de proyectos RIGI es de prensa y las fuentes no coinciden en montos: todavía no está verificada contra el Boletín Oficial.',
+    how: 'La barra gris son las exportaciones de 2024 y la azul la proyección para 2035, por mineral. Los proyectos de litio y de cobre, con su capacidad, y los del RIGI están en las tablas de la sección Data.',
+    data: 'real',
+    note: 'Secretaría de Minería, ARMINERA 2025: los números se leyeron a mano de imágenes del documento. «Cobre y resto» de 2024 es el «resto» que el gráfico no desglosa. El oro y la plata de 2035 son lo que resta del total (25,5 − 11,7 − 11,3). La proyección es de la Secretaría, no de este proyecto. La lista de proyectos del RIGI es de prensa y no está verificada.',
     refs: ['E3', 'E5', 'R1', 'R2', 'R3']
   },
   9: {

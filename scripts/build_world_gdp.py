@@ -1,18 +1,18 @@
-"""Builds web/src/tour/worldNominal.json: nominal GDP (current US dollars) and population of the world's economies, 1960 to the last year, from the
-World Bank WDI API (NY.GDP.MKTP.CD, SP.POP.TOTL). It feeds step 0 of the Recorrido (the world ranking and the region).
+"""Builds web/src/tour/worldGdp.json: REAL GDP (constant 2015 US dollars, "precios constantes") and population of the world's economies, 1960 to the
+last year, from the World Bank WDI API (NY.GDP.MKTP.KD, SP.POP.TOTL). It feeds step 0 of the Recorrido (the world ranking and the region).
 
-Nominal GDP is the one the project uses (never PPP). The file keeps the countries that were among the 25 largest economies, or among the 25 richest per
+Real GDP at constant prices is the one the project uses (human decision of 2026-10-13; never current-dollar nominal and never PPP). The file keeps the countries that were among the 25 largest economies, or among the 25 richest per
 person (with at least one million people), in any year, plus the ten largest of Latin America and the Caribbean today and Uruguay; and, for Argentina, its place
 among every country of the World Bank in each year, computed here.
 
-Run: python scripts/build_world_nominal.py
+Run: python scripts/build_world_gdp.py
 """
 import json
 import urllib.request
 from datetime import date
 from pathlib import Path
 
-OUT = Path(__file__).resolve().parent.parent / 'web' / 'src' / 'tour' / 'worldNominal.json'
+OUT = Path(__file__).resolve().parent.parent / 'web' / 'src' / 'tour' / 'worldGdp.json'
 FIRST, LAST = 1960, 2025
 API = 'https://api.worldbank.org/v2'
 
@@ -61,7 +61,7 @@ def series(indicator):
 def main():
     meta = fetch('country?format=json&per_page=400')[1]
     countries = {c['id']: c for c in meta if c['region']['id'] != 'NA'}  # the aggregates (World, regions, income groups) have region "NA"
-    gdp_all = series('NY.GDP.MKTP.CD')
+    gdp_all = series('NY.GDP.MKTP.KD')
     pop_all = series('SP.POP.TOTL')
     gdp = {c: v for c, v in gdp_all.items() if c in countries}
     pop = {c: v for c, v in pop_all.items() if c in countries}
@@ -96,10 +96,10 @@ def main():
         })
     missing = [c['name'] for c in out_countries if c['code'] not in ES]
     OUT.write_text(json.dumps({
-        'source': 'Banco Mundial, WDI: NY.GDP.MKTP.CD (PBI en dólares corrientes) y SP.POP.TOTL (población)',
-        'url': 'https://api.worldbank.org/v2/country/all/indicator/NY.GDP.MKTP.CD',
+        'source': 'Banco Mundial, WDI: NY.GDP.MKTP.KD (PBI en dólares constantes de 2015) y SP.POP.TOTL (población)',
+        'url': 'https://api.worldbank.org/v2/country/all/indicator/NY.GDP.MKTP.KD',
         'retrieved_at': date.today().isoformat(),
-        'unit': 'miles de millones de USD corrientes',
+        'unit': 'miles de millones de USD de 2015 (PBI real, a precios constantes)',
         'argentinaPopulationSource': 'INDEC, Estimaciones y proyecciones de población 2022-2040 (Censo 2022), 2022 a 2025; antes, Banco Mundial',
         'firstYear': FIRST, 'lastYear': LAST, 'years': years,
         'region': region,
