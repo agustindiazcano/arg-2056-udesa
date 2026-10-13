@@ -168,7 +168,7 @@ export const TOUR_CHARTS: Record<number, TourChartDef> = {
   3: {
     step: 3,
     title: 'Cuarta revolución industrial: el impacto de la IA en la economía',
-    subtitle: 'PBI con y sin la revolución de la IA, 2026 a 2056, PBI nominal',
+    subtitle: 'PBI real con y sin la revolución de la IA, 2026 a 2056, miles de millones de USD de 2015',
     source: MOCK_SOURCE,
     legend: [
       { label: 'Sin revolución de la IA', color: GREY },

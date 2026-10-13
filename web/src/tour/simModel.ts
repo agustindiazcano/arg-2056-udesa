@@ -22,7 +22,7 @@ export type SimKey = keyof SimParams;
 
 export const SIM_START = 2026;
 export const SIM_END = 2056;
-/** Nominal GDP of 2026, billion current USD: the estimate of the IMF, the same figure as in the GDP chart (the made-up part starts after it). */
+/** Real GDP of 2026, billion 2015 USD: the same figure as in the GDP chart (the made-up part starts after it). */
 export const SIM_START_GDP = Math.round(ARG_GDP_2026 * 10) / 10;
 /** years for the AI to reach its full effect */
 export const AI_RAMP_YEARS = 15;

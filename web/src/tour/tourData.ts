@@ -14,7 +14,7 @@ export interface LineSeriesData {
   dashed?: boolean;
 }
 
-/** Step 3: the nominal GDP with and without the AI revolution, 2026 to 2056: both start at the estimate of the IMF for 2026, the rest is made up. */
+/** Step 3: the real GDP with and without the AI revolution, 2026 to 2056: both start at the real GDP of 2026 (same figure as the GDP chart), the rest is made up. */
 export function aiImpactData(): { unit: string; years: number[]; series: LineSeriesData[] } {
   const years: number[] = [];
   const without: number[] = [];

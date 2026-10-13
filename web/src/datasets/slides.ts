@@ -3,7 +3,7 @@ import { GDP_MOCK } from '../tour/gdpMock.js';
 import agro from '../tour/agroArgentina.json';
 import energy from '../tour/energyArgentina.json';
 import imf from '../tour/imfWeo.json';
-import world from '../tour/worldNominal.json';
+import world from '../tour/worldGdp.json';
 import { INDICATORS_YEAR, TOUR_INDICATORS } from '../tour/indicatorsMock.js';
 import { COUNTRIES, cumulative2011, seriesOf } from '../tour/productivity.js';
 import { PRODUCTION_UNIT, SECTOR_LABELS, SECTOR_VALUES } from '../tour/provinceMock.js';
@@ -15,7 +15,7 @@ import { RIGI_MINING, RIGI_OIL_GAS } from '../tour/rigiProjects.js';
 import type { RigiProject } from '../tour/rigiProjects.js';
 import { TOUR_CHARTS } from '../tour/tourCharts.js';
 import { EXPORTS_GREAT_ITEMS, EXPORTS_GREAT_ITEMS_SOURCE, EXPORTS_TOTAL_2025, EXPORT_COMPLEXES, PROVINCE_VALUES } from '../tour/tourData.js';
-import { FIRST_YEAR as WORLD_FIRST, LAST_YEAR as WORLD_LAST, WORLD_UNIT, argentinaNominal, regionCountries, regionValuesAt } from '../tour/worldData.js';
+import { FIRST_YEAR as WORLD_FIRST, LAST_YEAR as WORLD_LAST, WORLD_UNIT, argentinaReal, regionCountries, regionValuesAt } from '../tour/worldData.js';
 import type { DataTable, SlideData } from './types.js';
 
 const indicators = (): DataTable => ({
@@ -45,18 +45,22 @@ const rigiTable = (id: string, title: string, projects: readonly RigiProject[]):
   rows: projects.map((p) => [p.name, p.company, p.province, p.kind, p.investment, p.status, p.note || '—'])
 });
 
-/** The nominal GDP of 2025 of the World Bank (what the app draws) against the IMF (WEO, update of 2026-09-30), and the IMF estimate for 2026. */
+/** The real growth of 2025 that the World Bank series implies against the IMF (WEO, update of 2026-09-30), and the IMF estimate for 2026. */
 const imfComparison = (): DataTable => {
   const idx = world.years.indexOf(2025);
+  const growth = imf.growth as Record<string, Record<string, number>>;
+  const round1 = (v: number) => Math.round(v * 10) / 10;
   return {
     id: 'imf',
-    title: 'PBI nominal de 2025: Banco Mundial contra FMI, y estimación del FMI para 2026 (miles de millones de USD corrientes)',
-    columns: ['País', 'Banco Mundial 2025', 'FMI 2025', 'Diferencia (%)', 'FMI 2026 (estimación)'],
+    title: 'Crecimiento real del PBI en 2025: Banco Mundial (calculado de la serie en dólares de 2015) contra FMI, y estimación del FMI para 2026 (%)',
+    columns: ['País', 'Banco Mundial 2025', 'FMI 2025', 'Diferencia (puntos)', 'FMI 2026 (estimación)'],
     rows: world.region.map((code) => {
       const c = world.countries.find((x) => x.code === code)!;
-      const bm = c.gdp[idx] ?? null;
-      const f = (imf.gdp as Record<string, { '2025': number; '2026': number }>)[code];
-      return [c.name, bm, f?.['2025'] ?? null, bm !== null && f ? Math.round(((f['2025'] - bm) / bm) * 1000) / 10 : null, f?.['2026'] ?? null];
+      const a = c.gdp[idx];
+      const b = c.gdp[idx - 1];
+      const bm = a !== null && a !== undefined && b !== null && b !== undefined ? round1((a / b - 1) * 100) : null;
+      const f = growth[code];
+      return [c.name, bm, f?.['2025'] ?? null, bm !== null && f ? round1(f['2025']! - bm) : null, f?.['2026'] ?? null];
     })
   };
 };
@@ -168,7 +172,7 @@ function productivityTables(): DataTable[] {
 
 /** The data behind each slide of the Recorrido (steps 0 to 14) and the simulator, as tables ready to read and to download. Step 15 has no chart yet. */
 export function buildSlides(): SlideData[] {
-  const argentina = argentinaNominal();
+  const argentina = argentinaReal();
   const region = regionCountries();
   const regionNow = regionValuesAt(WORLD_LAST);
   const regionPerCapita = regionValuesAt(WORLD_LAST, 'percapita');
@@ -186,11 +190,11 @@ export function buildSlides(): SlideData[] {
       '0',
       `El PBI de Argentina desde ${WORLD_FIRST}`,
       [
-        { id: 'gdp-nominal', title: `PBI nominal de Argentina (${WORLD_UNIT})`, columns: ['Año', 'PBI nominal'], rows: argentina.years.map((y, i) => [y, argentina.values[i] ?? null]) },
+        { id: 'gdp-real', title: `PBI real de Argentina (${WORLD_UNIT})`, columns: ['Año', 'PBI real'], rows: argentina.years.map((y, i) => [y, argentina.values[i] ?? null]) },
         {
           id: 'region',
           title: `Mayores economías de la región en ${WORLD_LAST}`,
-          columns: ['País', 'PBI nominal (miles de millones de USD corrientes)', 'PBI per cápita nominal (USD corrientes)', 'Población (millones)'],
+          columns: ['País', 'PBI real (miles de millones de USD de 2015)', 'PBI per cápita real (USD de 2015)', 'Población (millones)'],
           rows: region.map((c, i) => [c, regionNow[i] ?? null, regionPerCapita[i] ?? null, regionPopulation[i] ?? null])
         },
         imfComparison()

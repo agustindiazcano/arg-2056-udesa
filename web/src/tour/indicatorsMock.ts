@@ -13,13 +13,13 @@ export interface TourIndicator {
 const num = (value: number, digits: number): string => value.toLocaleString('es-AR', { minimumFractionDigits: digits, maximumFractionDigits: digits });
 
 export const TOUR_INDICATORS: readonly TourIndicator[] = [
-  { label: 'PBI nominal', value: num(ARG_GDP_LAST, 1), unit: 'miles de millones de USD corrientes (no PPA)' },
+  { label: 'PBI real', value: num(ARG_GDP_LAST, 1), unit: 'miles de millones de USD de 2015 (precios constantes)' },
   { label: 'Población', value: num(ARG_POPULATION_LAST, 1), unit: 'millones (INDEC)' },
-  { label: 'PBI per cápita nominal', value: num((ARG_GDP_LAST * 1000) / ARG_POPULATION_LAST, 0).replace(/^(\d)(\d{3})$/, '$1.$2'), unit: 'USD corrientes' },
+  { label: 'PBI per cápita real', value: num((ARG_GDP_LAST * 1000) / ARG_POPULATION_LAST, 0).replace(/^(\d)(\d{3})$/, '$1.$2'), unit: 'USD de 2015' },
   { label: 'Exportaciones totales', value: '106,3', unit: 'miles de millones de USD (bienes y servicios)' },
   { label: 'Crecimiento del PBI', value: '4,4', unit: '% anual' },
   { label: 'Inversión', value: '16,1', unit: '% del PBI (formación bruta de capital)' }
 ];
 
-export const INDICATORS_SOURCE = 'PBI y exportaciones: Banco Mundial (WDI), 2025, consultado el 12-10-2026; población: INDEC, proyección al 30 de junio de 2025 (Censo 2022). Según el FMI el PBI de 2025 es 683,6 (misma cifra).';
+export const INDICATORS_SOURCE = 'PBI real (a precios constantes de 2015): Banco Mundial (WDI), 2025, consultado el 12-10-2026; población: INDEC, proyección al 30 de junio de 2025 (Censo 2022); exportaciones y crecimiento: Banco Mundial (las exportaciones están en dólares corrientes). El FMI da 4,5 % de crecimiento en 2025.';
 export const INDICATORS_YEAR = 2025;

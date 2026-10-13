@@ -1,12 +1,12 @@
-import data from './worldNominal.json';
+import data from './worldGdp.json';
 
 /**
- * Step 0 of the Recorrido: the nominal GDP (current US dollars, never PPP) of Argentina and of the world's economies from 1960 to 2025, from the World
- * Bank (WDI `NY.GDP.MKTP.CD`, `SP.POP.TOTL`). Built by `scripts/build_world_nominal.py`; checked against the IMF in `scripts/imf_compare.py`.
- * The last observed year is 2025: 2026 is an estimate of the IMF and is not drawn here.
+ * Step 0 of the Recorrido: the REAL GDP (constant 2015 US dollars, never nominal and never PPP) of Argentina and of the world's economies from 1960 to 2025,
+ * from the World Bank (WDI `NY.GDP.MKTP.KD`, `SP.POP.TOTL`). Built by `scripts/build_world_gdp.py`; the growth is checked against the IMF in `scripts/imf_compare.py`.
+ * The last observed year is 2025: 2026 is an estimate and is not drawn here.
  */
-export const WORLD_UNIT = 'miles de millones de USD corrientes (PBI nominal)';
-export const WORLD_SOURCE = 'Banco Mundial (WDI), PBI nominal en dólares corrientes';
+export const WORLD_UNIT = 'miles de millones de USD de 2015 (PBI real, a precios constantes)';
+export const WORLD_SOURCE = 'Banco Mundial (WDI), PBI real en dólares constantes de 2015';
 export const FIRST_YEAR: number = data.firstYear;
 export const LAST_YEAR: number = data.lastYear;
 export const HOME = 'Argentina';
@@ -14,7 +14,7 @@ export const HOME = 'Argentina';
 interface CountryRow {
   code: string;
   name: string;
-  /** nominal GDP in billions of current USD, one per year from `FIRST_YEAR` (null where the World Bank has no value) */
+  /** real GDP in billions of constant 2015 USD, one per year from `FIRST_YEAR` (null where the World Bank has no value) */
   gdp: Array<number | null>;
   /** population in millions */
   pop: Array<number | null>;
@@ -43,8 +43,8 @@ export type RegionMetric = 'gdp' | 'percapita' | 'population';
 
 /** What each metric of the bars of the region is called and measured in. */
 export const REGION_METRICS: Record<RegionMetric, { label: string; unit: string }> = {
-  gdp: { label: 'PBI nominal', unit: 'miles de millones de USD corrientes' },
-  percapita: { label: 'PBI per cápita nominal', unit: 'USD corrientes por persona' },
+  gdp: { label: 'PBI real', unit: 'miles de millones de USD de 2015' },
+  percapita: { label: 'PBI per cápita real', unit: 'USD de 2015 por persona' },
   population: { label: 'Población', unit: 'millones de personas' }
 };
 
@@ -60,13 +60,13 @@ function at(values: Array<number | null>, year: number): number | null {
   return a + (b - a) * (t - i);
 }
 
-/** The nominal GDP of Argentina, 1960 to 2025, in billions of current USD. */
-export function argentinaNominal(): LongSeries {
+/** The real GDP of Argentina, 1960 to 2025, in billions of constant 2015 USD. */
+export function argentinaReal(): LongSeries {
   const arg = BY_NAME.get(HOME)!;
   return { years: Array.from({ length: YEAR_COUNT }, (_, i) => FIRST_YEAR + i), values: arg.gdp.map((v) => v ?? 0) };
 }
 
-/** The nominal GDP of a country at a (fractional) year, in billions of USD (null without data). */
+/** The real GDP of a country at a (fractional) year, in billions of 2015 USD (null without data). */
 export function gdpAtYear(country: string, year: number): number | null {
   const c = BY_NAME.get(country);
   return c ? at(c.gdp, year) : null;
@@ -78,7 +78,7 @@ export function populationAt(country: string, year: number): number | null {
   return c ? at(c.pop, year) : null;
 }
 
-/** The nominal GDP per person of a country at a (fractional) year, in current USD (null without data). */
+/** The real GDP per person of a country at a (fractional) year, in 2015 USD (null without data). */
 export function gdpPerCapitaAt(country: string, year: number): number | null {
   const g = gdpAtYear(country, year);
   const p = populationAt(country, year);

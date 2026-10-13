@@ -10,8 +10,8 @@ Una fila por diapositiva (paso del Recorrido). «Real» = con fuente y consultad
 
 | Paso | Diapositiva | Estado | Pedidos | Qué falta |
 |---|---|---|---|---|
-| 0 | PBI nominal de Argentina desde 1960 y ranking | **real** (Banco Mundial, PBI nominal en dólares corrientes, 1960-2025; población de Argentina del INDEC; comparado con el FMI) | D1, D11 | Nada para el gráfico. El Maddison (PPA) ya no se usa: el proyecto usa PBI nominal |
-| 1 | PBI hasta 2056 (con abanico) | parcial: indicadores y serie 1990-2025 reales (Banco Mundial, PBI nominal en dólares corrientes); 2026 es la estimación del FMI (768,2); desde 2027 la proyección y el abanico son de prueba | D9 y D10 (serie, hecho) | La proyección del modelo; confirmar la cifra de 2026 (tarea H12) |
+| 0 | PBI real de Argentina desde 1960 y ranking | **real** (Banco Mundial, PBI real en dólares constantes de 2015, 1960-2025; población de Argentina del INDEC; el crecimiento se comparó con el FMI) | D1, D11 | Nada para el gráfico. El Maddison (PPA) no se usa |
+| 1 | PBI hasta 2056 (con abanico) | parcial: indicadores y serie 1990-2025 reales (Banco Mundial, PBI real en dólares de 2015); 2026 es 2025 por el crecimiento real que proyecta el FMI (2,06 %); desde 2027 la proyección y el abanico son de prueba | D9 y D10 (serie, hecho) | La proyección del modelo |
 | 2 | Producción por provincia | parcial: indicadores reales; hidrocarburos por provincia reales (Secretaría de Energía, 2025, en Data); minería y agro por provincia de prueba | D9 (hecho), D12 | Minería y agro por provincia |
 | 3 | Impacto de la IA en el PBI | prueba (las dos líneas); los estudios de Acemoglu y Anthropic ya se leyeron | D19 | Un rango para Argentina: ambos estudios son de Estados Unidos |
 | 4 | Recursos naturales: exportaciones por sector | **real** (INDEC, exportaciones de bienes por complejo exportador, 2025, provisorio; en Data también el acumulado enero a julio de 2026 por gran rubro) | D13 | Exportaciones de servicios (D26) |
@@ -27,12 +27,12 @@ Una fila por diapositiva (paso del Recorrido). «Real» = con fuente y consultad
 | 14 | Productividad | real (INDEC, PWT/FRED); falta verificar | D2 a D8, D21, D22 | Verificar fuentes citadas |
 | sim | Simulador del PBI | prueba (coeficientes inventados) | D10, D19 | Elasticidades del modelo |
 
-## 0b. Regla de las cifras del PBI y de la población (2026-10-12)
+## 0b. Regla de las cifras del PBI y de la población (decisión del 2026-10-13)
 
 Pedido del equipo: el PBI de cada país, y sobre todo el de Argentina en 2026, no puede decir una cifra en un lado y otra en otro. Reglas:
 
-1. **Siempre PBI nominal, en dólares corrientes** (nunca PPA ni dólares constantes); cada gráfico y cada tabla lo dice en el título, la unidad o la fuente.
-2. **Una sola fuente por dato**, en `web/src/tour/gdpFacts.ts`: hasta 2025, observado, el Banco Mundial (`worldNominal.json`, armado por `scripts/build_world_nominal.py`); 2026, la estimación del FMI (`imfWeo.json`, armado por `scripts/imf_compare.py`). Los gráficos del PBI (paso 1), de la IA (paso 3) y el simulador arrancan del mismo valor de 2026; el test `web/tests/unit/gdpConsistency.test.ts` falla si dejan de coincidir.
+1. **Siempre PBI real, a precios constantes** (dólares constantes de 2015, «términos reales»): nunca nominal en dólares corrientes ni PPA. (El 12-10 se había decidido nominal; el 13-10 el equipo pidió precios constantes y se migró todo.) Cada gráfico y cada tabla lo dice en el título, la unidad o la fuente. Las exportaciones son un flujo en dólares corrientes y lo dicen.
+2. **Una sola fuente por dato**, en `web/src/tour/gdpFacts.ts`: hasta 2025, observado, el Banco Mundial (`NY.GDP.MKTP.KD`, `worldGdp.json`, armado por `scripts/build_world_gdp.py`); 2026 es el valor de 2025 por el crecimiento real que proyecta el FMI (2,06 %, `imfWeo.json`, `scripts/imf_compare.py`), porque el FMI no publica el PBI real en dólares constantes. Los gráficos del PBI (paso 1), de la IA (paso 3) y el simulador arrancan del mismo valor de 2026 (621,8 miles de millones de dólares de 2015); el test `web/tests/unit/gdpConsistency.test.ts` falla si dejan de coincidir.
 3. **Población de Argentina: la del INDEC** (proyección con base en el Censo 2022, publicada en octubre de 2025: 46.387.098 en 2025 y 46.466.688 en 2026). Para los otros países, el Banco Mundial.
 4. El año 2026 no se dibuja como dato observado en el paso 0: el último año observado es 2025.
 
@@ -53,7 +53,7 @@ Pedido del equipo: el PBI de cada país, y sobre todo el de Argentina en 2026, n
 
 | # | Diapositiva | Dato | Fuente a consultar | Estado | Qué traer |
 |---|---|---|---|---|---|
-| D9 | 1 y 2 (indicadores), simulador | PBI, población, PBI per cápita, exportaciones totales, crecimiento, inversión de 2025 | Banco Mundial (WDI), API <https://api.worldbank.org/v2/country/ARG/indicator/>; INDEC (población); FMI (comparación) | **hecho el 2026-10-12**: PBI nominal 683,1 mil millones de USD corrientes; población 46,4 millones (INDEC; el Banco Mundial tiene 45,85 y el FMI 47,47); PBI per cápita nominal 14.726 USD (683,1 / 46,387); exportaciones de bienes y servicios 106,3 mil millones de USD; crecimiento 4,4 % (FMI: 4,5 %); formación bruta de capital 16,1 % del PBI (el FMI da 13,1 % de inversión total: **no coinciden**, ver la sección 5) | Decidir la cifra de exportaciones (tarea H6) y la de inversión (H13) |
+| D9 | 1 y 2 (indicadores), simulador | PBI, población, PBI per cápita, exportaciones totales, crecimiento, inversión de 2025 | Banco Mundial (WDI), API <https://api.worldbank.org/v2/country/ARG/indicator/>; INDEC (población); FMI (comparación) | **hecho**: PBI real 609,2 mil millones de USD de 2015 (el Banco Mundial; en dólares corrientes sería 683,1); población 46,4 millones (INDEC; el Banco Mundial tiene 45,85 y el FMI 47,47); PBI per cápita real 13.134 USD de 2015 (609,2 / 46,387); exportaciones de bienes y servicios 106,3 mil millones de USD corrientes; crecimiento real 4,4 % (FMI: 4,5 %); formación bruta de capital 16,1 % del PBI (el FMI da 13,1 % de inversión total: **no coinciden**, ver la sección 5) | Decidir la cifra de exportaciones (tarea H6) y la de inversión (H13) |
 | D10 | 1 (PBI hasta 2056) | Serie histórica oficial y la proyección con abanico | Banco Mundial (`NY.GDP.MKTP.KD`, dólares constantes de 2015, 1990-2025); INDEC (cuentas nacionales); el modelo del repo (`model/`) para la proyección | **serie hecha el 2026-10-12** (Banco Mundial, 36 años en `web/src/tour/gdpMock.ts`); la proyección sigue bloqueada por el modelo | La proyección y los parámetros del modelo; contrastar la serie con el INDEC (pesos a precios de 2004) |
 | D11 | 0 (extensión 2019-2026) | PBI y población 2019-2026 de los países del ranking | Maddison 2023 (D1) o Banco Mundial | a traer | Ver D1 |
 | D12 | 2, 7 | Producción por provincia de minería, agro e hidrocarburos | Secretaría de Energía, datos abiertos <https://datos.energia.gob.ar> (API CKAN `https://datos.energia.gob.ar/api/3/action/package_show?id=produccion-de-petroleo-y-gas-tablas-dinamicas`); MAGyP (datos.gob.ar, series nacionales); minería: sin conjunto por provincia | **hidrocarburos hecho el 2026-10-13** (`scripts/build_energy_data.py`): 2025, petróleo (miles de barriles por día): Neuquén 513,6; Chubut 123,9; Santa Cruz 61,3; Mendoza 53,0; Río Negro 20,6; La Pampa 11,3; Tierra del Fuego 3,0; Salta 1,8 (64,7 % Neuquén). Gas: Neuquén 97,0 millones de m³ por día (68,6 %). **Agro por provincia y minería: pendientes** (las series nacionales del MAGyP están en D16; las provinciales están en el portal `datosestimaciones.magyp.gob.ar`, que no abre con un script) | Minería por provincia (SIACAM de la Secretaría de Minería) y agro por provincia; el mapa de los pasos 2 y 7 necesita los tres sectores en la misma unidad (USD) |
@@ -98,7 +98,7 @@ Ordenado por prioridad: 🔴 bloquea una diapositiva, 🟡 mejora lo que ya hay,
 | H9 | 🟡 | Agro por provincia: abrir <https://datosestimaciones.magyp.gob.ar> (no abre con un script) y pasar la producción por provincia de soja, maíz, trigo y girasol. Las series nacionales ya están (D16) | Abrir | D12 |
 | H10 | 🟢 | Reservas: abrir el PDF del USGS por mineral <https://pubs.usgs.gov/periodicals/mcs2026/mcs2026-lithium.pdf> (cambiar «lithium» por «copper», «gold», «silver») y las reservas de petróleo y gas de la Secretaría de Energía | Abrir | D18 |
 | H11 | 🟢 | Dar de baja las cifras de prensa en cuanto exista la fuente oficial | Vos | D23 |
-| H12 | ✅ | HECHO (2026-10-12): el equipo confirmó 768,21 en la página del FMI. Antes decía: confirmar el PBI nominal de Argentina de 2026: abrir <https://www.imf.org/external/datamapper/NGDPD@WEO/ARG> y ver qué dice (la API da 768,2; el equipo encontró 688,4); si es otro, correr `python scripts/imf_compare.py` y avisar cuál es la edición correcta | Vos | todos los gráficos con 2026 |
+| H12 | ✅ | HECHO: ya no hace falta. Se había confirmado que el FMI da 768,21 de PBI nominal en 2026; desde el 13-10 el proyecto usa PBI real y el valor de 2026 sale del crecimiento real proyectado (2,06 %) | — | — |
 | H13 | 🟡 | Decidir qué cifra de inversión mostrar (Banco Mundial 16,1 %, FMI 13,1 %, INDEC) y buscar la formación bruta de capital fija a precios corrientes del INDEC | Vos / otra IA | D9 |
 
 ### Prompts listos para otra IA
@@ -111,24 +111,21 @@ Pegar tal cual; pedir siempre que cada dato traiga su enlace y que diga si el en
 4. **Servicios (D26)**: «Dame las exportaciones argentinas de servicios de 2025 por tipo (viajes, servicios basados en conocimiento, software, transporte), en millones de USD, con enlace al INDEC o al BCRA.»
 5. **Inversores (H8)**: «Qué encuestas o índices con puntajes miden qué factores pesan en la decisión de invertir en Argentina (por ejemplo la encuesta Fraser de minería, el índice de riesgo país, la encuesta de la AmCham) y dónde se bajan los puntajes por factor.»
 
-## 5. Comparación con el FMI (2026-10-12)
+## 5. Comparación con el FMI (2026-10-13)
 
-Fuente: FMI, *World Economic Outlook*, por la API SDMX (`https://api.imf.org/external/sdmx/2.1/data/WEO/`, actualización del 2026-09-30), leída por `scripts/imf_compare.py`. Se compara con lo que usa el proyecto.
+Fuente: FMI, *World Economic Outlook*, por la API SDMX (`https://api.imf.org/external/sdmx/2.1/data/WEO/`, actualización del 2026-09-30), leída por `scripts/imf_compare.py`. Como el proyecto usa PBI real y el FMI no lo publica en dólares constantes, se compara el **crecimiento real** y los demás datos de Argentina.
 
 | Dato | Banco Mundial | FMI | INDEC | Qué se usa | Veredicto |
 |---|---|---|---|---|---|
-| PBI nominal de Argentina 2025 (miles de millones de USD) | 683,1 | 683,6 | — | 683,1 | **coinciden** (0,07 %) |
-| PBI nominal de Argentina 2026 | — | 768,2 (estimación) | — | 768,2, en el paso 1, en el 3 y en el simulador | **confirmado el 2026-10-12**: la página del FMI (DataMapper) muestra 768,21 y la API 768,206; el 688,4 que apareció en una consulta con IA no sale de la edición vigente (puede ser una edición anterior o un error de esa respuesta) |
+| PBI real de Argentina 2025 (miles de millones de USD de 2015) | 609,23 | no lo publica | — | 609,23 | — |
+| Crecimiento real de Argentina 2025 | 4,37 % | 4,48 % | — | 4,4 % | coinciden (0,1 puntos) |
+| Crecimiento real de Argentina 2026 | — | 2,06 % (estimación) | — | 2,06 %: PBI real de 2026 = 609,23 × 1,0206 = 621,8, en el paso 1, en el 3 y en el simulador | estimación del FMI |
 | Población de Argentina 2025 (millones) | 45,85 | 47,47 | **46,387** (Censo 2022) | 46,387 | no coinciden: el FMI usa la proyección anterior al censo (47.473.760, la del INDEC 2010-2040); el Banco Mundial usa la de las Naciones Unidas |
-| Población de Argentina 2026 | — | 47,95 | 46,467 | no se muestra | el FMI sobreestima por la misma razón |
-| PBI per cápita nominal de Argentina 2025 (USD) | 14.898 (con su población) | 14.399 (con la suya) | — | 14.726 (683,1 / 46,387) | tres cifras por tres poblaciones; se usa la del INDEC |
-| Crecimiento real de Argentina 2025 | 4,37 % | 4,48 % | — | 4,4 % | coinciden |
-| Crecimiento real de Argentina 2026 | — | 2,06 % | — | no se muestra | — |
+| PBI per cápita real de Argentina 2025 (USD de 2015) | 13.287 (con 45,85 millones) | — | — | 13.134 (609,23 / 46,387) | dos cifras por dos poblaciones; se usa la del INDEC |
 | Inversión de Argentina 2025 (% del PBI) | 16,1 (formación bruta de capital) | 13,1 (inversión total) | FBCF a precios constantes de 2004: 19,4 (otra medida) | 16,1 | **no coinciden**: definiciones y precios distintos (H13) |
-| PBI nominal 2025 de otros países | Estados Unidos 30.769,7; China 19.498,0; Alemania 5.050,9; Japón 4.435,2; Brasil 2.279,9; México 1.832,6 | 30.861,3; 19.626,2; 5.115,6; 4.453,1; 2.279,9; 1.835,0 | — | Banco Mundial | coinciden en 0,3 % o menos para las grandes economías; Irlanda es la mayor diferencia (BM 721,7; FMI 680,4, por el efecto de las multinacionales) |
-| PBI nominal anterior a 1990 | p. ej. Argentina 1980: 77,0 | 233,7 | — | Banco Mundial | **no coinciden**: en los años de tipo de cambio múltiple y de hiperinflación el valor en dólares depende de qué tipo de cambio se use; se muestra el del Banco Mundial y está dicho en el texto |
+| Crecimiento real de otros países 2015-2025 | calculado de la serie en dólares de 2015 | `NGDP_RPCH` | — | Banco Mundial | coinciden en 0,5 puntos o menos en casi todos (Estados Unidos 2,2 contra 2,3; India 7,6 contra 7,8; Brasil, México, Chile en la tabla de Data); las mayores diferencias: Irlanda 2025 (12,3 contra 8,0), Australia 2021 (2,0 contra 5,4), Emiratos 2024 (4,0 contra 6,6), Libia 2025, Irán 2016 |
 
-El FMI de 2025 a 2031 para Argentina (PBI nominal): 683,6; 768,2; 762,3; 761,0; 784,3; 822,1; 855,4 (miles de millones de USD): el FMI espera que el PBI nominal en dólares se estanque después de 2026.
+Referencia, en dólares **corrientes** (ya no se usa en los gráficos): el PBI de Argentina de 2025 es 683,1 (Banco Mundial) y 683,6 (FMI); para 2026 el FMI estima 768,2 (confirmado en su página; una respuesta de IA había dado 688,4, que no sale de la edición vigente). Entre 1980 y 1990 el valor en dólares corrientes de Argentina cambia mucho según el tipo de cambio que se use (1980: 77 contra 234), otra razón para usar el PBI real.
 
 ## 4. Cómo se usa esta lista
 

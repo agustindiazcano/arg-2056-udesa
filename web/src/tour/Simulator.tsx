@@ -16,7 +16,7 @@ const VIEWS = [
   { value: '3d', label: '3D' }
 ] as const;
 
-const UNIT = 'miles de millones de USD corrientes (PBI nominal)';
+const UNIT = 'miles de millones de USD de 2015 (PBI real)';
 const TITLE = `Simulador: evolución del PBI hasta ${SIM_END}`;
 const REFERENCE = 'Escenario de referencia';
 const YOURS = 'Tu escenario';
