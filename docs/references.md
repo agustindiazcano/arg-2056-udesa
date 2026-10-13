@@ -174,6 +174,17 @@ El paso 0 todavía dibuja **datos de prueba**. Los datos reales ya están prepar
 
 Pendiente para el resto de las diapositivas (INDEC, Secretarías de Energía y de Minería, MAGyP, USGS): ver [`data-requests.md`](data-requests.md), secciones 0 y 2.
 
+### 4.4 Exportaciones, PBI por sector, minería y petróleo y gas (pasos 4, 8, 9, 11 y 12)
+
+| # | Fuente | Qué se usa | Estado |
+|---|---|---|---|
+| E1 | INDEC, *Intercambio comercial argentino*, informe de agosto de 2026. <https://www.indec.gob.ar/uploads/informesdeprensa/ica_08_26E158B1D119.pdf> | Exportaciones por grandes rubros, acumulado de enero a julio de 2026: 58.365 millones de USD (productos primarios 14.749; manufacturas de origen agropecuario 18.911; de origen industrial 15.554; combustibles y energía 9.151). Pasos 4 y 11 | **leída** (2026-10-12) |
+| E2 | INDEC, *Informe de avance del nivel de actividad*, 2.º trimestre de 2026. <https://www.indec.gob.ar/uploads/informesdeprensa/pib_09_26065D6A3612.pdf> | Cuadro 4: valor agregado bruto de 2025 por sector, a precios de 2004, preliminar. Paso 12 | **leída**; las columnas salen desalineadas al convertir el PDF: el orden se verificó porque la suma da el total |
+| E3 | Secretaría de Minería, *Minería en Argentina: un año de gestión* (ARMINERA 2025). <https://www.argentina.gob.ar/sites/default/files/mayo_2025_-_arminera.pdf> | Cartera de 316 proyectos, exportaciones mineras de 2024 (4.673 millones de USD), recursos y reservas | **leída en parte**: las tablas son imágenes |
+| E4 | IAE, *Vaca Muerta: análisis 2025*. <https://www.iae.org.ar/wp-content/uploads/2026/03/Vaca-Muerta_analisis-2025_vmo_260330_155248.pdf> | 62 % del petróleo y 53 % del gas de 2025 (por un resumen de prensa) | **citada**; no leída |
+| E5 | USGS, *Mineral Commodity Summaries 2026*. <https://pubs.usgs.gov/periodicals/mcs2026/mcs2026-lithium.pdf> | Reservas de litio (la prensa cita 13 % del mundo, 3.er lugar) | **citada**; no leída |
+| R1 a R11 | Prensa sobre el RIGI y los proyectos de gran escala (iProfesional, Shale24, La Nación, Infobae, LM Neuquén, El Cronista, Diario Crónica): enlaces en `web/src/datasets/references.ts` | Lista de proyectos mineros y de petróleo y gas con su inversión (`web/src/tour/rigiProjects.ts`), pasos 8 y 9 | **secundarias, sin verificar**: las fuentes se contradicen (ver `data-requests.md`, D23) |
+
 **Reglas del ranking:** cada año se ordenan los países con dato ese año (44 en 1900, 69 en 1913, 145 en 1950, 166 en 2018); la Unión Soviética, Checoslovaquia y Yugoslavia cuentan como una economía hasta que se disuelven y desde entonces cuentan sus sucesores (para no contar dos veces la misma economía). Los PBI de W1 son en dólares internacionales de 2011 (paridad de poder adquisitivo), no en dólares corrientes.
 
 ## Para verificar antes de publicar

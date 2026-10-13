@@ -9,6 +9,8 @@ import type { BandLabels } from './gdpMock.js';
 import {
   AGRO,
   EXPORTS_BY_SECTOR,
+  EXPORTS_SOURCE,
+  GDP_COMPOSITION_SOURCE,
   EXPORT_COMPOSITION,
   GDP_COMPOSITION,
   INVESTOR_SCORES,
@@ -145,8 +147,8 @@ const agro = (): BuiltChart => {
   return { option, summary, spec: pairedBars('Agro: actual y potencial', a.unit, a.categories, ['actual', 'potencial'], a.current, a.potential) };
 };
 
-function shares(title: string, data: { unit: string; rows: Array<{ label: string; value: number }> }): BuiltChart {
-  const summary = `${title}, en % del total (datos de prueba): ${list(data.rows.map((r) => `${r.label} ${formatValue(r.value, data.unit)}`))}`;
+function shares(title: string, data: { unit: string; rows: Array<{ label: string; value: number }> }, note = 'datos de prueba'): BuiltChart {
+  const summary = `${title}, en % del total (${note}): ${list(data.rows.map((r) => `${r.label} ${formatValue(r.value, data.unit)}`))}`;
   const { option } = buildShares(data.rows, { unit: data.unit, summary });
   return { option, summary, spec: barsSpec(data.rows, { title, unit: data.unit, highlight: largest(data.rows), summary }) };
 }
@@ -176,10 +178,10 @@ export const TOUR_CHARTS: Record<number, TourChartDef> = {
   4: {
     step: 4,
     title: 'Recursos naturales: exportaciones por sector',
-    subtitle: 'miles de millones de USD por año',
-    source: MOCK_SOURCE,
+    subtitle: 'miles de millones de USD, acumulado de enero a julio de 2026',
+    source: EXPORTS_SOURCE,
     kind: 'chart',
-    build: () => ranking('Exportaciones por sector', 'Exportaciones', EXPORTS_BY_SECTOR, largest(EXPORTS_BY_SECTOR.rows), 'Exportaciones por sector (datos de prueba)')
+    build: () => ranking('Exportaciones por sector', 'Exportaciones', EXPORTS_BY_SECTOR, largest(EXPORTS_BY_SECTOR.rows), 'Exportaciones por grandes rubros, enero a julio de 2026 (INDEC)')
   },
   5: {
     step: 5,
@@ -230,8 +232,8 @@ export const TOUR_CHARTS: Record<number, TourChartDef> = {
     kind: 'chart',
     build: agro
   },
-  11: { step: 11, title: 'Composición de las exportaciones', subtitle: 'porcentaje del total exportado', source: MOCK_SOURCE, kind: 'chart', build: () => shares('Composición de las exportaciones', EXPORT_COMPOSITION) },
-  12: { step: 12, title: 'Composición del PBI', subtitle: 'porcentaje del PBI por sector', source: MOCK_SOURCE, kind: 'chart', build: () => shares('Composición del PBI', GDP_COMPOSITION) },
+  11: { step: 11, title: 'Composición de las exportaciones', subtitle: 'porcentaje del total exportado, enero a julio de 2026', source: EXPORTS_SOURCE, kind: 'chart', build: () => shares('Composición de las exportaciones', EXPORT_COMPOSITION, 'INDEC') },
+  12: { step: 12, title: 'Composición del PBI', subtitle: 'porcentaje del valor agregado por sector, 2025', source: GDP_COMPOSITION_SOURCE, kind: 'chart', build: () => shares('Composición del PBI', GDP_COMPOSITION, 'INDEC') },
   13: {
     step: 13,
     title: 'El stock de recursos naturales',

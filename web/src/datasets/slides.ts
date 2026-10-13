@@ -6,6 +6,8 @@ import { PRODUCTION_UNIT, SECTOR_LABELS, SECTOR_VALUES } from '../tour/provinceM
 import type { Sector } from '../tour/provinceMock.js';
 import { DEFAULT_SIM, SIM_FIELDS, simulate } from '../tour/simModel.js';
 import { specRaw } from '../tour/specTable.js';
+import { RIGI_MINING, RIGI_OIL_GAS } from '../tour/rigiProjects.js';
+import type { RigiProject } from '../tour/rigiProjects.js';
 import { TOUR_CHARTS } from '../tour/tourCharts.js';
 import { PROVINCE_VALUES } from '../tour/tourData.js';
 import { LAST_YEAR as WORLD_LAST, WORLD_UNIT, argentinaSince1900, regionCountries, regionValuesAt } from '../tour/worldData.js';
@@ -30,6 +32,13 @@ function chartTable(step: number): DataTable {
   const raw = specRaw(spec);
   return { id: `chart-${step}`, title: def.title, ...raw };
 }
+
+const rigiTable = (id: string, title: string, projects: readonly RigiProject[]): DataTable => ({
+  id,
+  title,
+  columns: ['Proyecto', 'Empresa', 'Provincia', 'Tipo', 'Inversión (millones de USD)', 'Estado', 'Nota (sin verificar)'],
+  rows: projects.map((p) => [p.name, p.company, p.province, p.kind, p.investment, p.status, p.note || '—'])
+});
 
 function productivityTables(): DataTable[] {
   const wide = (metric: 'tfp' | 'oph', kind: 'level' | 'change', id: string, title: string): DataTable => {
@@ -83,11 +92,19 @@ export function buildSlides(): SlideData[] {
       indicators()
     ], true, ['W3']),
     slide('2', 'Producción por provincia', [provinces(), indicators()], true, ['W3']),
-    ...[3, 4, 5, 6].map((s) => slide(String(s), TOUR_CHARTS[s]!.title, [chartTable(s)], s !== 5)),
+    slide('3', TOUR_CHARTS[3]!.title, [chartTable(3)]),
+    slide('4', TOUR_CHARTS[4]!.title, [chartTable(4)], false, ['E1']),
+    slide('5', TOUR_CHARTS[5]!.title, [chartTable(5)], false),
+    slide('6', TOUR_CHARTS[6]!.title, [chartTable(6)]),
     slide('7', TOUR_CHARTS[7]!.title, [
       { id: 'provinces-value', title: `Valor productivo por provincia (${PRODUCTION_UNIT})`, columns: ['Provincia', 'Valor'], rows: PROVINCES.map((p, i) => [p.name, PROVINCE_VALUES[i] ?? null]) }
     ]),
-    ...[8, 9, 10, 11, 12, 13].map((s) => slide(String(s), TOUR_CHARTS[s]!.title, [chartTable(s)])),
+    slide('8', TOUR_CHARTS[8]!.title, [chartTable(8), rigiTable('rigi-mining', 'Proyectos mineros del RIGI y otros en evaluación (prensa, sin verificar)', RIGI_MINING)], true, ['E3', 'E5', 'R1', 'R2', 'R3', 'R4', 'R5', 'R9']),
+    slide('9', TOUR_CHARTS[9]!.title, [chartTable(9), rigiTable('rigi-oil-gas', 'Proyectos de petróleo y gas del RIGI y otros en evaluación (prensa, sin verificar)', RIGI_OIL_GAS)], true, ['E4', 'R2', 'R3', 'R6', 'R7', 'R8', 'R10', 'R11']),
+    slide('10', TOUR_CHARTS[10]!.title, [chartTable(10)]),
+    slide('11', TOUR_CHARTS[11]!.title, [chartTable(11)], false, ['E1']),
+    slide('12', TOUR_CHARTS[12]!.title, [chartTable(12)], false, ['E2']),
+    slide('13', TOUR_CHARTS[13]!.title, [chartTable(13)], true, ['E3', 'E5']),
     slide('14', 'Productividad', productivityTables(), false, ['P6', 'P7', 'P7b', 'P1', 'P8', 'P9']),
     slide('sim', 'Simulador del PBI', [
       { id: 'factors', title: 'Factores del escenario de referencia', columns: ['Factor', 'Valor', 'Unidad'], rows: SIM_FIELDS.map((f) => [f.label, DEFAULT_SIM[f.key], f.unit]) },

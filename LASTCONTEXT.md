@@ -1,10 +1,11 @@
 # Last Context
 
 ## State
-- **Real data of the Recorrido, first pass** (`task/real-data-recorrido`, human request 2026-10-12): the indicators box of steps 1 and 2 now shows World Bank WDI 2025 values (PBI 683,1; población 45,9 M; per cápita 14.898; exportaciones de bienes y servicios 106,3; crecimiento 4,4 %; inversión 16,1 %) with reference `W3` in the Data section; the indicators table in Data has year and source columns.
-- `docs/data-requests.md` has a new section 0 (state of each slide, request ids) and links found and opened for D12 to D18 (INDEC ICA and PIB reports, datos.energia.gob.ar, ARMINERA 2025, IAE Vaca Muerta, USGS MCS 2026, MAGyP mirrors); section 2b lists what was not found. `docs/references.md` section 4.3 records W3.
-- Slides 1 and 2 are still flagged as test data (their GDP series and province table are made up); the indicators table inside them is real.
-- Only `tourIndicators` and `dataSection` unit tests were run locally; the rest goes to CI.
+- **Real data of the Recorrido** (`task/real-data-recorrido`, human request 2026-10-12): real and sourced now: steps 1 and 2 indicators (World Bank WDI 2025, ref `W3`), step 4 and 11 (INDEC ICA, exports by great item, January to July 2026, ref `E1`), step 12 (INDEC value added by sector 2025 at 2004 prices, ref `E2`), step 14 (before). Test data remains in 0, 1 (series), 2 (provinces), 3, 6, 8, 9, 10, 13 and the simulator.
+- Steps 8 and 9 have, in Data, a table of RIGI and large mining / oil and gas projects from the press (`web/src/tour/rigiProjects.ts`, refs `R1` to `R11`), **unverified**: the sources disagree on amounts and counts and each row notes the discrepancy.
+- `docs/data-requests.md`: section 0 (state per slide), new requests D23 to D27, section 3 with the human tasks H1 to H11 (priority, who, for which request) and ready prompts for another AI. `docs/references.md` section 4.3 and 4.4.
+- Step 0 stays on test data: the real series (Maddison 2020) ends in 2018 and the slide runs to 2026; it needs the Maddison 2023 download (H5) and a refactor of `tour/worldData.ts`.
+- Tests run locally: `tourCharts`, `dataSection`, `tourIndicators` (pass); `tsc --noEmit` clean. The rest goes to CI.
 
 ## Next
-- Read the opened PDFs and fill D13 (exports by complex, INDEC), D17 (GDP by sector), D14 (mining projects), then connect slide 0 to `worldRealData.json`.
+- The human does H1 to H5 (see the doc); then wire the production by province (steps 2 and 7) and the hydrocarbons (step 9) and replace the RIGI press table with the official list.

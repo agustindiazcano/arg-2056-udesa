@@ -42,15 +42,17 @@ export interface ColumnRow {
   value: number;
 }
 
-/** Step 4: exports by sector, in billions of USD a year (made up). */
+/** The INDEC source of steps 4 and 11 (Intercambio comercial argentino, informe de agosto de 2026). */
+export const EXPORTS_SOURCE = 'INDEC, Intercambio comercial argentino (informe de agosto de 2026), acumulado de enero a julio de 2026';
+
+/** Step 4: exports by great item (grandes rubros), in billions of USD, accumulated January to July 2026. Real: INDEC, read on 2026-10-12. */
 export const EXPORTS_BY_SECTOR = {
   unit: 'miles de millones de USD',
   rows: [
-    { label: 'Agro y alimentos', value: 38 },
-    { label: 'Industria', value: 12 },
-    { label: 'Energía', value: 9 },
-    { label: 'Minería', value: 6.5 },
-    { label: 'Servicios', value: 8 }
+    { label: 'Productos primarios', value: 14.749 },
+    { label: 'Manufacturas de origen agropecuario', value: 18.911 },
+    { label: 'Manufacturas de origen industrial', value: 15.554 },
+    { label: 'Combustibles y energía', value: 9.151 }
   ] satisfies ColumnRow[]
 };
 
@@ -146,32 +148,42 @@ export const AGRO: PairedGroups = {
   potential: [21, 16, 6.5, 3.2, 11]
 };
 
-/** Step 11: composition of the exports, in % of the total (made up). */
+const pct1 = (value: number, total: number): number => Math.round((value / total) * 1000) / 10;
+
+/** Step 11: composition of the exports by great item, in % of the total of January to July 2026 (58.365 million USD). Real: INDEC (same source as step 4). */
 export const EXPORT_COMPOSITION = {
   unit: '%',
-  rows: [
-    { label: 'Complejo sojero', value: 24 },
-    { label: 'Maíz y cereales', value: 16 },
-    { label: 'Petróleo y gas', value: 10 },
-    { label: 'Automotriz', value: 8 },
-    { label: 'Minería', value: 7 },
-    { label: 'Carnes y lácteos', value: 9 },
-    { label: 'Servicios', value: 14 },
-    { label: 'Otros', value: 12 }
-  ] satisfies ColumnRow[]
+  rows: EXPORTS_BY_SECTOR.rows.map((r) => ({ label: r.label, value: pct1(r.value, 58.365) })) satisfies ColumnRow[]
 };
 
-/** Step 12: composition of the GDP, in % of the total (made up). */
+/** The INDEC source of step 12 (Informe de avance del nivel de actividad, 2.º trimestre de 2026). */
+export const GDP_COMPOSITION_SOURCE = 'INDEC, Informe de avance del nivel de actividad, 2.º trimestre de 2026 (cuadro 4, valor agregado bruto de 2025, datos preliminares)';
+
+/** Value added by sector in 2025, millions of pesos at 2004 prices (the "Total" column of table 4 of the INDEC report; they add up to 608.097). */
+const VAB_2025: ReadonlyArray<readonly [string, number]> = [
+  ['Agricultura, ganadería y silvicultura', 51908],
+  ['Pesca', 2327],
+  ['Minas y canteras', 29876],
+  ['Industria manufacturera', 109207],
+  ['Electricidad, gas y agua', 13035],
+  ['Construcción', 19442],
+  ['Comercio mayorista y minorista', 92346],
+  ['Hoteles y restaurantes', 12134],
+  ['Transporte y comunicaciones', 55544],
+  ['Intermediación financiera', 29449],
+  ['Inmobiliarias y empresariales', 84346],
+  ['Administración pública y defensa', 34818],
+  ['Enseñanza', 29390],
+  ['Salud y servicios sociales', 24487],
+  ['Otros servicios', 15720],
+  ['Hogares con servicio doméstico', 4068]
+];
+const VAB_TOTAL = VAB_2025.reduce((t, [, v]) => t + v, 0);
+
+/** Step 12: composition of the value added by sector, in % of the total (real, INDEC, 2025 at 2004 prices). */
 export const GDP_COMPOSITION = {
   unit: '%',
-  rows: [
-    { label: 'Servicios', value: 53 },
-    { label: 'Industria', value: 17 },
-    { label: 'Comercio', value: 13 },
-    { label: 'Agro', value: 8 },
-    { label: 'Construcción', value: 4 },
-    { label: 'Energía y minería', value: 5 }
-  ] satisfies ColumnRow[]
+  rows: [...VAB_2025].sort((x, y) => y[1] - x[1]).map(([label, v]) => ({ label, value: pct1(v, VAB_TOTAL) })) satisfies ColumnRow[]
 };
 
 /** Step 13: the stock of natural resources, valued in billions of USD (made up). */
