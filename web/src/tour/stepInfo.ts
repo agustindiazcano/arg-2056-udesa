@@ -69,13 +69,13 @@ export const STEP_INFO: Record<number, StepInfo> = {
   4: {
     heading: 'De qué viven las exportaciones',
     paragraphs: [
-      'Las exportaciones de bienes de enero a julio de 2026 sumaron 58.365 millones de dólares, 22,9 % más que un año antes.',
-      'Las manufacturas de origen agropecuario son el rubro más grande (18.911 millones), seguidas por las manufacturas industriales (15.554), los productos primarios (14.749) y los combustibles y la energía (9.151), que crecieron 49,9 %.'
+      'Argentina exportó bienes por 87.111 millones de dólares en 2025, 9,3 % más que en 2024 (datos provisorios). El INDEC los agrupa en complejos exportadores, que reúnen la materia prima con los productos elaborados de una misma cadena.',
+      'El complejo soja es el primero (21.442 millones, uno de cada cuatro dólares), seguido por el petrolero-petroquímico (11.772, un récord desde 2002), el automotriz (8.784) y el maicero (6.660). Los diez principales complejos juntan el 77,7 % de lo exportado.'
     ],
-    how: 'Cada barra es un gran rubro del INDEC, en miles de millones de dólares, acumulado de enero a julio. La barra más alta es la que más aporta.',
+    how: 'Cada barra es un complejo exportador, en miles de millones de dólares de 2025. «Otros complejos» reúne a los 27 restantes y «Resto de exportaciones» a lo que no entra en ningún complejo.',
     data: 'real',
-    note: 'INDEC, informe de agosto de 2026. Es un acumulado de siete meses, no un año completo. Los complejos exportadores de 2025 (soja, petróleo y gas, minería) están pendientes.',
-    refs: ['E1']
+    note: 'INDEC, «Complejos exportadores, año 2025» (marzo de 2026, datos provisorios), solo bienes: no incluye servicios. En Data está también el acumulado de enero a julio de 2026 por gran rubro (58.365 millones, 22,9 % más que un año antes).',
+    refs: ['E7', 'E1']
   },
   5: {
     heading: 'La regla del 70',
@@ -124,35 +124,35 @@ export const STEP_INFO: Record<number, StepInfo> = {
   9: {
     heading: 'Hidrocarburos: el piso y el techo',
     paragraphs: [
-      'Vaca Muerta produjo 182 millones de barriles de petróleo en 2025, 28,7 % más que en 2024, y llegó a un récord de 589 mil barriles por día en diciembre. Aportó el 62 % del petróleo y el 53 % del gas del país; el promedio diario de Argentina fue de unos 800 mil barriles.',
-      'Hay un oleoducto (Vaca Muerta Sur) con cerca de 80 % de obra y proyectos de gas natural licuado y de ampliación de la producción, varios dentro del RIGI.'
+      'Argentina produjo en 2025 un promedio de 793,7 mil barriles de petróleo por día, 13 % más que en 2024 (700,7), y 141,4 millones de metros cúbicos de gas por día. En 2015 eran 532,4 mil barriles y 117,5 millones de m³.',
+      'Vaca Muerta explica el salto: 182 millones de barriles en 2025 (28,7 % más que en 2024), con un récord de 589 mil barriles por día en diciembre; aportó el 62 % del petróleo y el 53 % del gas. Hay un oleoducto (Vaca Muerta Sur) con cerca de 80 % de obra y proyectos de gas natural licuado y de ampliación, varios dentro del RIGI.'
     ],
-    how: 'La línea llena es la producción de petróleo de Vaca Muerta, en miles de barriles por día; después de 2025 la línea punteada es la esperada y la franja es el piso y el techo según cuánto se desarrolle la formación. Los proyectos están en la tabla de la sección Data.',
+    how: 'La línea llena es la producción nacional de petróleo, en miles de barriles por día; después de 2025 la línea punteada es la esperada y la franja es el piso y el techo según cuánto se desarrolle Vaca Muerta. Los proyectos y la serie desde 1950 están en la tabla de la sección Data.',
     data: 'parcial',
-    note: 'La historia de 2015 a 2025 es real (IAE, con datos de la Secretaría de Energía). La proyección y la franja son de prueba. Los proyectos son de prensa y no están verificados.',
-    refs: ['E4', 'R2', 'R3', 'R6', 'R8', 'R10']
+    note: 'La historia de 2015 a 2025 es real (Secretaría de Energía, datos abiertos: promedio de los doce meses de cada año; el IAE da 800,2 con la misma fuente). La proyección y la franja son de prueba. Los proyectos son de prensa y no están verificados.',
+    refs: ['E6', 'E4', 'R2', 'R3', 'R6', 'R8', 'R10']
   },
   10: {
     heading: 'Agro: lo que se produce y lo que se podría',
     paragraphs: [
-      'El campo es la base histórica de las exportaciones argentinas. Cada grupo de barras compara la producción de hoy con la que podría alcanzarse con más tecnología, riego o superficie.',
-      'El potencial no es una promesa: depende de precios, clima y reglas de exportación.'
+      'El campo es la base histórica de las exportaciones argentinas. En la campaña 2024/25 se produjeron 51,1 millones de toneladas de soja, 51,7 de maíz, y 5,5 de girasol; la última campaña de trigo publicada (2025/26) dio 27,9 millones.',
+      'El gráfico compara la producción de hoy con la que podría alcanzarse con más tecnología, riego o superficie. El potencial no es una promesa: depende de precios, clima y reglas de exportación.'
     ],
-    how: 'La barra gris es la producción actual y la azul la potencial. La diferencia entre ellas es el margen de crecimiento.',
+    how: 'La barra gris es la producción actual y la azul la potencial. La diferencia entre ellas es el margen de crecimiento. En Data están las toneladas, la superficie y el rendimiento de cada cultivo por campaña.',
     data: 'prueba',
-    note: 'Los valores son de prueba. Falta la serie por cultivo del MAGyP (toneladas por campaña) y un estudio de potencial.',
-    refs: []
+    note: 'Las barras del gráfico son de prueba (están en dólares). Las toneladas por cultivo son reales (MAGyP, series nacionales) y están en Data. Falta un estudio de potencial y valuar la producción.',
+    refs: ['E8']
   },
   11: {
     heading: 'Cómo se reparte lo que exportamos',
     paragraphs: [
-      'El mismo total de exportaciones del paso 4, ahora como porcentaje de lo exportado entre enero y julio de 2026.',
-      'Las manufacturas de origen agropecuario son el 32,4 %; las industriales, el 26,6 %; los productos primarios, el 25,3 %; y los combustibles y la energía, el 15,7 %.'
+      'El mismo total del paso 4, ahora como porcentaje de las exportaciones de bienes de 2025.',
+      'La soja es el 24,6 %; el petróleo y la petroquímica, el 13,5 %; los autos, el 10,1 %; y el maíz, el 7,6 %. El oro y la plata (5,6 %) crecieron 27,7 % y el trigo (4,2 %) 32,0 % respecto de 2024.'
     ],
-    how: 'Cada barra es la parte del total que corresponde a un rubro. Las cuatro suman 100 %.',
+    how: 'Cada barra es la parte del total que corresponde a un complejo. Todas las barras suman 100 %.',
     data: 'real',
-    note: 'INDEC, informe de agosto de 2026, acumulado de enero a julio. Para ver soja, petróleo o minería por separado hacen falta los complejos exportadores de 2025.',
-    refs: ['E1']
+    note: 'INDEC, «Complejos exportadores, año 2025» (datos provisorios). Los porcentajes son sobre las exportaciones de bienes.',
+    refs: ['E7']
   },
   12: {
     heading: 'De qué se compone el PBI',

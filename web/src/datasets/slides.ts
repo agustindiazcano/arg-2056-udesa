@@ -1,5 +1,7 @@
 import { PROVINCES } from '../types/province.js';
 import { GDP_MOCK } from '../tour/gdpMock.js';
+import agro from '../tour/agroArgentina.json';
+import energy from '../tour/energyArgentina.json';
 import imf from '../tour/imfWeo.json';
 import world from '../tour/worldNominal.json';
 import { INDICATORS_YEAR, TOUR_INDICATORS } from '../tour/indicatorsMock.js';
@@ -11,7 +13,7 @@ import { specRaw } from '../tour/specTable.js';
 import { RIGI_MINING, RIGI_OIL_GAS } from '../tour/rigiProjects.js';
 import type { RigiProject } from '../tour/rigiProjects.js';
 import { TOUR_CHARTS } from '../tour/tourCharts.js';
-import { PROVINCE_VALUES } from '../tour/tourData.js';
+import { EXPORTS_GREAT_ITEMS, EXPORTS_GREAT_ITEMS_SOURCE, EXPORTS_TOTAL_2025, EXPORT_COMPLEXES, PROVINCE_VALUES } from '../tour/tourData.js';
 import { FIRST_YEAR as WORLD_FIRST, LAST_YEAR as WORLD_LAST, WORLD_UNIT, argentinaNominal, regionCountries, regionValuesAt } from '../tour/worldData.js';
 import type { DataTable, SlideData } from './types.js';
 
@@ -57,6 +59,67 @@ const imfComparison = (): DataTable => {
     })
   };
 };
+
+/** The real production of oil and gas by province in 2025 (Secretaría de Energía): the only sector of steps 2 and 7 with real data so far. */
+const hydrocarbonProvinces = (): DataTable => ({
+  id: 'hydrocarbons-provinces',
+  title: 'Petróleo y gas por provincia en 2025 (Secretaría de Energía, promedio diario del año)',
+  columns: ['Provincia', 'Petróleo (miles de barriles por día)', 'Gas (millones de m³ por día)'],
+  rows: energy.provinces2025.map((p) => [p.province, p.oil_kbd, p.gas_mmm3d])
+});
+
+const nationalProduction = (): DataTable => ({
+  id: 'oil-gas-national',
+  title: 'Producción nacional de petróleo y gas, promedio diario de cada año (Secretaría de Energía)',
+  columns: ['Año', 'Petróleo (miles de barriles por día)', 'Gas (millones de m³ por día)'],
+  rows: Object.entries(energy.national).map(([y, v]) => [Number(y), v.oil_kbd, v.gas_mmm3d])
+});
+
+const oilSince1950 = (): DataTable => ({
+  id: 'oil-since-1950',
+  title: 'Producción anual de petróleo desde 1950, total del país (miles de m³; Secretaría de Energía). Es otra serie: en 2015 da 31.973 mil m³ y la de arriba, unos 30.900',
+  columns: ['Año', 'Petróleo (miles de m³)'],
+  rows: energy.oilSince1950Mm3.map((p) => [p[0] ?? null, p[1] ?? null])
+});
+
+const reservesTable = (): DataTable => {
+  const r = energy.reserves;
+  const bbl = (mm3: number) => Math.round((mm3 * 6.28981) / 1000); // thousand m3 to million barrels
+  return {
+    id: 'reserves',
+    title: `Reservas de petróleo y gas al ${r.date}, ${r.basis} (Secretaría de Energía)`,
+    columns: ['Categoría', 'Petróleo (miles de m³)', 'Petróleo (millones de barriles)', 'Gas (millones de m³)'],
+    rows: [
+      ['Comprobadas', r.proved.oil_mm3, bbl(r.proved.oil_mm3), r.proved.gas_mmm3],
+      ['Probables', r.probable.oil_mm3, bbl(r.probable.oil_mm3), r.probable.gas_mmm3],
+      ['Posibles', r.possible.oil_mm3, bbl(r.possible.oil_mm3), r.possible.gas_mmm3],
+      ['Comprobadas, convencional', r.proved_conventional.oil_mm3, bbl(r.proved_conventional.oil_mm3), r.proved_conventional.gas_mmm3],
+      ['Comprobadas, no convencional (Vaca Muerta y otras)', r.proved_non_conventional.oil_mm3, bbl(r.proved_non_conventional.oil_mm3), r.proved_non_conventional.gas_mmm3]
+    ]
+  };
+};
+
+const complexesTable = (): DataTable => ({
+  id: 'complexes',
+  title: 'Exportaciones de bienes por complejo exportador, 2025 y 2024 (millones de USD, datos provisorios; INDEC)',
+  columns: ['Complejo', '2025', '2024', 'Variación (%)', 'Participación 2025 (%)'],
+  rows: EXPORT_COMPLEXES.map((c) => [c.label, c.y2025, c.y2024, Math.round((c.y2025 / c.y2024 - 1) * 1000) / 10, Math.round((c.y2025 / EXPORTS_TOTAL_2025) * 1000) / 10])
+});
+
+const greatItemsTable = (): DataTable => ({
+  id: 'great-items',
+  title: `Exportaciones por gran rubro, acumulado de enero a julio de 2026 (${EXPORTS_GREAT_ITEMS.unit}; ${EXPORTS_GREAT_ITEMS_SOURCE})`,
+  columns: ['Gran rubro', 'Valor'],
+  rows: EXPORTS_GREAT_ITEMS.rows.map((r) => [r.label, r.value])
+});
+
+/** The real production of the four main crops by campaign (MAGyP): the current side of step 10, in tons (the chart of the step is still in made-up USD). */
+const agroTable = (): DataTable => ({
+  id: 'agro-production',
+  title: 'Producción de los cuatro cultivos principales por campaña (MAGyP; el año es el de inicio de la campaña)',
+  columns: ['Cultivo', 'Campaña', 'Superficie sembrada (ha)', 'Superficie cosechada (ha)', 'Producción (toneladas)', 'Rendimiento (kg por ha)'],
+  rows: Object.entries(agro.crops).flatMap(([crop, list]) => list.slice(-6).map((r) => [crop, `${r.campaign}/${String(r.campaign + 1).slice(2)}`, r.sown_ha, r.harvested_ha, r.production_t, r.yield_kg_ha]))
+});
 
 function productivityTables(): DataTable[] {
   const wide = (metric: 'tfp' | 'oph', kind: 'level' | 'change', id: string, title: string): DataTable => {
@@ -123,20 +186,21 @@ export function buildSlides(): SlideData[] {
       },
       indicators()
     ], true, ['W3', 'W5', 'I1', 'F1']),
-    slide('2', 'Producción por provincia', [provinces(), indicators()], true, ['W3']),
+    slide('2', 'Producción por provincia', [provinces(), hydrocarbonProvinces(), indicators()], true, ['W3', 'E6']),
     slide('3', TOUR_CHARTS[3]!.title, [chartTable(3)]),
-    slide('4', TOUR_CHARTS[4]!.title, [chartTable(4)], false, ['E1']),
+    slide('4', TOUR_CHARTS[4]!.title, [chartTable(4), complexesTable(), greatItemsTable()], false, ['E7', 'E1']),
     slide('5', TOUR_CHARTS[5]!.title, [chartTable(5)], false),
     slide('6', TOUR_CHARTS[6]!.title, [chartTable(6)]),
     slide('7', TOUR_CHARTS[7]!.title, [
-      { id: 'provinces-value', title: `Valor productivo por provincia (${PRODUCTION_UNIT})`, columns: ['Provincia', 'Valor'], rows: PROVINCES.map((p, i) => [p.name, PROVINCE_VALUES[i] ?? null]) }
-    ]),
+      { id: 'provinces-value', title: `Valor productivo por provincia (${PRODUCTION_UNIT})`, columns: ['Provincia', 'Valor'], rows: PROVINCES.map((p, i) => [p.name, PROVINCE_VALUES[i] ?? null]) },
+      hydrocarbonProvinces()
+    ], true, ['E6']),
     slide('8', TOUR_CHARTS[8]!.title, [chartTable(8), rigiTable('rigi-mining', 'Proyectos mineros del RIGI y otros en evaluación (prensa, sin verificar)', RIGI_MINING)], true, ['E3', 'E5', 'R1', 'R2', 'R3', 'R4', 'R5', 'R9']),
-    slide('9', TOUR_CHARTS[9]!.title, [chartTable(9), rigiTable('rigi-oil-gas', 'Proyectos de petróleo y gas del RIGI y otros en evaluación (prensa, sin verificar)', RIGI_OIL_GAS)], true, ['E4', 'R2', 'R3', 'R6', 'R7', 'R8', 'R10', 'R11']),
-    slide('10', TOUR_CHARTS[10]!.title, [chartTable(10)]),
-    slide('11', TOUR_CHARTS[11]!.title, [chartTable(11)], false, ['E1']),
+    slide('9', TOUR_CHARTS[9]!.title, [chartTable(9), nationalProduction(), oilSince1950(), rigiTable('rigi-oil-gas', 'Proyectos de petróleo y gas del RIGI y otros en evaluación (prensa, sin verificar)', RIGI_OIL_GAS)], true, ['E6', 'E4', 'R2', 'R3', 'R6', 'R7', 'R8', 'R10', 'R11']),
+    slide('10', TOUR_CHARTS[10]!.title, [chartTable(10), agroTable()], true, ['E8']),
+    slide('11', TOUR_CHARTS[11]!.title, [chartTable(11)], false, ['E7']),
     slide('12', TOUR_CHARTS[12]!.title, [chartTable(12)], false, ['E2']),
-    slide('13', TOUR_CHARTS[13]!.title, [chartTable(13)], true, ['E3', 'E5']),
+    slide('13', TOUR_CHARTS[13]!.title, [chartTable(13), reservesTable()], true, ['E3', 'E5', 'E6']),
     slide('14', 'Productividad', productivityTables(), false, ['P6', 'P7', 'P7b', 'P1', 'P8', 'P9']),
     slide('sim', 'Simulador del PBI', [
       { id: 'factors', title: 'Factores del escenario de referencia', columns: ['Factor', 'Valor', 'Unidad'], rows: SIM_FIELDS.map((f) => [f.label, DEFAULT_SIM[f.key], f.unit]) },
