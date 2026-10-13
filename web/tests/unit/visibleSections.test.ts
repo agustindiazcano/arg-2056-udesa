@@ -8,7 +8,7 @@ afterEach(() => window.localStorage.clear());
 describe('visibleSections', () => {
   it('hides the deprecated Data Dashboard by default, keeping the order of the others', () => {
     expect(visibleSections(SECTIONS)).toEqual(SECTIONS.filter((s) => s !== 'dashboard'));
-    expect(visibleSections(SECTIONS)).toEqual(['andes', 'tour']);
+    expect(visibleSections(SECTIONS)).toEqual(['andes', 'tour', 'simulator', 'data']);
   });
 
   it('shows it again when the flag is set (the end-to-end tests and the developers still reach it)', () => {
@@ -20,7 +20,7 @@ describe('visibleSections', () => {
     const original = Object.getOwnPropertyDescriptor(window, 'localStorage')!;
     Object.defineProperty(window, 'localStorage', { get: () => { throw new Error('blocked'); }, configurable: true });
     try {
-      expect(visibleSections(SECTIONS)).toEqual(['andes', 'tour']);
+      expect(visibleSections(SECTIONS)).toEqual(['andes', 'tour', 'simulator', 'data']);
     } finally {
       Object.defineProperty(window, 'localStorage', original);
     }
