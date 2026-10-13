@@ -76,19 +76,13 @@ button.brand {
   cursor: pointer;
 }
 
-/* hover on the logo: "Argentina" turns gold, "2056" turns white, and a gold aura glows around both */
+/* hover on the logo: "Argentina" turns gold and "2056" turns white (only the color changes) */
 .brand,
 .brand-a,
 .brand-n {
   transition:
     color 0.5s ease-in-out,
-    text-shadow 0.5s ease-in-out,
-    filter 0.5s ease-in-out;
-}
-
-button.brand:hover,
-button.brand:focus-visible {
-  filter: drop-shadow(0 0 6px color-mix(in srgb, var(--gold) 80%, transparent)) drop-shadow(0 0 16px color-mix(in srgb, var(--gold) 55%, transparent));
+    text-shadow 0.5s ease-in-out;
 }
 
 button.brand:hover .brand-a,
@@ -99,7 +93,6 @@ button.brand:focus-visible .brand-a {
 button.brand:hover .brand-n,
 button.brand:focus-visible .brand-n {
   color: var(--ink);
-  text-shadow: 0 0 10px color-mix(in srgb, var(--gold) 70%, transparent);
 }
 
 .tab-icon {
