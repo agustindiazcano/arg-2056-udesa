@@ -60,8 +60,6 @@ def main():
     prod = resources('produccion-de-petroleo-y-gas-tablas-dinamicas')
     oil_prov = rows(find(prod, 'petr', 'promedio diaria por provincia'))
     gas_prov = rows(find(prod, 'gas', 'promedio diaria por provincia'))
-    oil_y = year_average(oil_prov, 'produccion_petroleo_promedio_dia_m3')
-    gas_y = year_average(gas_prov, 'produccion_gas_promedio_dia_mm3')
     oil_by_prov = year_average(oil_prov, 'produccion_petroleo_promedio_dia_m3', 'provincia')
     gas_by_prov = year_average(gas_prov, 'produccion_gas_promedio_dia_mm3', 'provincia')
 

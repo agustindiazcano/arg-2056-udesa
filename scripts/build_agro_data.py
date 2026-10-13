@@ -22,7 +22,7 @@ def get(url, tries=10):
     for _ in range(tries):
         try:
             return urllib.request.urlopen(urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'}), timeout=90).read()
-        except Exception:
+        except (OSError, ValueError):  # network errors (urllib raises OSError subclasses) and truncated answers
             time.sleep(6)
     raise SystemExit(f'could not read {url}')
 
