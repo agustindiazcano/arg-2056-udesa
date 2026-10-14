@@ -15,8 +15,8 @@ import { useTourLayout } from '../../src/tour/useTourLayout';
 import { useStore } from '../../src/state/store';
 
 describe('the charts of the Recorrido', () => {
-  it('has a chart for step 1 and for steps 3 to 13, and the shell also knows steps 0 and 2', () => {
-    expect(CHART_STEP_LIST).toEqual([1, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]);
+  it('has a chart for step 1 and for steps 3 to 13 except 6 (the investor slide was removed), and the shell also knows steps 0 and 2', () => {
+    expect(CHART_STEP_LIST).toEqual([1, 3, 4, 5, 7, 8, 9, 10, 11, 12, 13]);
     // step 2 is the map of production by province: its own component, not one of the charts that go side by side
     expect([...CHART_STEPS].sort((a, b) => a - b)).toEqual([0, 1, 2, ...CHART_STEP_LIST.slice(1), 14]);
     expect(hasTourChart(0)).toBe(true);
@@ -29,7 +29,7 @@ describe('the charts of the Recorrido', () => {
     expect(TOUR_CHARTS[3]!.title).toBe('Cuarta revolución industrial: el impacto de la IA en la economía');
     expect(TOUR_CHARTS[4]!.title).toBe('Recursos naturales: exportaciones por sector');
     expect(TOUR_CHARTS[5]!.title).toBe('Regla del 70: cuánto tarda en duplicarse el PBI');
-    expect(TOUR_CHARTS[6]!.title).toBe('Qué miran los inversores');
+    expect(TOUR_CHARTS[6]).toBeUndefined();
     expect(TOUR_CHARTS[7]!.title).toBe('Mapa productivo por provincia');
     expect(TOUR_CHARTS[8]!.title).toBe('Minería: hoy vs proyecto');
     expect(TOUR_CHARTS[9]!.title).toBe('Hidrocarburos: Vaca Muerta define el piso y el techo');
@@ -50,7 +50,7 @@ describe('the charts of the Recorrido', () => {
   });
 
   it('labels the made-up data and not the arithmetic of the Rule of 70', () => {
-    expect(TOUR_CHARTS[6]!.source).toMatch(/datos de prueba/i);
+    expect(TOUR_CHARTS[3]!.source).toMatch(/datos de prueba/i);
     expect(TOUR_CHARTS[4]!.source).toMatch(/INDEC/);
     expect(TOUR_CHARTS[12]!.source).toMatch(/INDEC/);
     expect(TOUR_CHARTS[5]!.source).not.toMatch(/datos de prueba/i);
@@ -80,7 +80,7 @@ describe('visibleSteps', () => {
   it('shows the step and the next ones, and slides back at the end of the list', () => {
     expect(visibleSteps(1, 1)).toEqual([1]);
     expect(visibleSteps(1, 4)).toEqual([1, 3, 4, 5]);
-    expect(visibleSteps(6, 3)).toEqual([6, 7, 8]);
+    expect(visibleSteps(5, 3)).toEqual([5, 7, 8]);
     expect(visibleSteps(13, 4)).toEqual([10, 11, 12, 13]);
   });
 });
@@ -101,7 +101,8 @@ describe('ChartStep', () => {
   });
 
   it('shows as many charts as the number chosen', () => {
-    render(<ChartStep step={3} />);
+    // from step 8 the next three are charts too (step 7 is the map, which is not an ECharts chart)
+    render(<ChartStep step={8} />);
     for (const n of [2, 3, 4]) {
       fireEvent.click(screen.getByRole('button', { name: new RegExp(`^${n}$`) }));
       expect(screen.getAllByTestId('echart')).toHaveLength(n);
@@ -110,19 +111,19 @@ describe('ChartStep', () => {
   });
 
   it('has a 1/3 layout: three small charts that are buttons, and the big one is the chart of the step', () => {
-    useStore.setState({ tourStep: 3 });
-    render(<ChartStep step={3} />);
+    useStore.setState({ tourStep: 8 });
+    render(<ChartStep step={8} />);
     fireEvent.click(screen.getByRole('button', { name: '1/3' }));
     expect(screen.getAllByTestId('echart')).toHaveLength(4);
     const picks = screen.getAllByRole('button', { name: /^Ver grande: / });
     expect(picks.map((b) => b.getAttribute('aria-label'))).toEqual([
-      'Ver grande: Recursos naturales: exportaciones por sector',
-      'Ver grande: Regla del 70: cuánto tarda en duplicarse el PBI',
-      'Ver grande: Qué miran los inversores'
+      'Ver grande: Hidrocarburos: Vaca Muerta define el piso y el techo',
+      'Ver grande: Agro: producción actual y potencial',
+      'Ver grande: Composición de las exportaciones'
     ]);
     expect(document.querySelector('.tour-grid')?.getAttribute('data-layout')).toBe('focus');
-    expect(document.querySelector('[data-size="big"]')?.getAttribute('data-step')).toBe('3');
+    expect(document.querySelector('[data-size="big"]')?.getAttribute('data-step')).toBe('8');
     fireEvent.click(picks[2]!);
-    expect(useStore.getState().tourStep).toBe(6);
+    expect(useStore.getState().tourStep).toBe(11);
   });
 });

@@ -6,11 +6,15 @@ import type { ProvinceId } from '../types/province';
 import { YEAR_MAX, YEAR_MIN } from '../types/year';
 import { STEPS } from '../content/steps';
 import { applyFocus } from '../story/focus';
+import { CHART_STEPS } from '../tour/chartSteps';
 import type { StepsByScene } from '../story/types';
 
 /** The first and the last step of the Recorrido (the numbered buttons of the navbar): the steps go from 0 to TOUR_STEPS. */
 export const TOUR_FIRST_STEP = 0;
-export const TOUR_STEPS = 15;
+export const TOUR_STEPS = 14;
+
+/** The steps that exist, in order: 0 to TOUR_STEPS without the ones that were removed (6, the investor slide). */
+export const TOUR_STEP_LIST: readonly number[] = [...CHART_STEPS].sort((a, b) => a - b);
 
 export interface State {
   scene: Scene;
@@ -77,13 +81,19 @@ export function reduce(state: State, action: Action, steps: StepsByScene = STEPS
     // in the Recorrido the left and right arrows walk its steps, not the scenes
     case 'nextScene': {
       if (state.section === 'simulator' || state.section === 'data') return state;
-      if (state.section === 'tour') return state.tourStep >= TOUR_STEPS ? state : { ...state, tourStep: state.tourStep + 1 };
+      if (state.section === 'tour') {
+        const next = TOUR_STEP_LIST[TOUR_STEP_LIST.indexOf(state.tourStep) + 1];
+        return next === undefined ? state : { ...state, tourStep: next };
+      }
       const ns = nextScene(state.scene);
       return ns === state.scene ? state : enterScene(state, ns, steps);
     }
     case 'prevScene': {
       if (state.section === 'simulator' || state.section === 'data') return state;
-      if (state.section === 'tour') return state.tourStep <= TOUR_FIRST_STEP ? state : { ...state, tourStep: state.tourStep - 1 };
+      if (state.section === 'tour') {
+        const prev = TOUR_STEP_LIST[TOUR_STEP_LIST.indexOf(state.tourStep) - 1];
+        return prev === undefined ? state : { ...state, tourStep: prev };
+      }
       const ps = prevScene(state.scene);
       return ps === state.scene ? state : enterScene(state, ps, steps);
     }
@@ -138,7 +148,7 @@ export function reduce(state: State, action: Action, steps: StepsByScene = STEPS
     case 'setScene':
       return action.scene === state.scene ? { ...state, scene: action.scene } : enterScene(state, action.scene, steps);
     case 'tourSet':
-      return Number.isInteger(action.step) && action.step >= TOUR_FIRST_STEP && action.step <= TOUR_STEPS ? { ...state, tourStep: action.step } : state;
+      return TOUR_STEP_LIST.includes(action.step) ? { ...state, tourStep: action.step } : state;
     case 'setSpeed':
       return SPEEDS.includes(action.speed) ? { ...state, speed: action.speed } : state;
     case 'setSection': {

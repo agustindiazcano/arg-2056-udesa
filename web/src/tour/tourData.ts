@@ -94,19 +94,6 @@ export function rule70Rows(): ColumnRow[] {
   return [1, 2, 3, 4, 5, 6, 7, 8].map((g) => ({ label: `${g} %`, value: round1(70 / g) }));
 }
 
-/** Step 6: what the investors look at, scored 0 to 10 (made up). */
-export const INVESTOR_SCORES = {
-  unit: 'puntos (0 a 10)',
-  rows: [
-    { label: 'Estabilidad macro', value: 4.5 },
-    { label: 'Riesgo país', value: 3.8 },
-    { label: 'Reglas de juego', value: 4.2 },
-    { label: 'Infraestructura', value: 5.5 },
-    { label: 'Capital humano', value: 6.8 },
-    { label: 'Recursos naturales', value: 8.6 }
-  ] satisfies ColumnRow[]
-};
-
 /** Step 7: a made-up productive value by province, in millions of USD (in the order of `PROVINCES`). */
 export const PROVINCE_VALUES: ReadonlyArray<number> = [
   3200, 41000, 9800, 1400, 5200, 900, 2100, 1800, 3600, 1500, 2300, 6400, 2000, 700, 7800, 2700, 21000, 1600, 4800, 1200, 2200, 19500, 1300, 5600

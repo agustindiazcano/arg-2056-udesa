@@ -11,6 +11,7 @@
 
 - **Consolidation Task 2 (`task/shared-components-schema`)**: `DataQuality`, `TabbedChart`, `MetricToggle` (on `Segmented`, which now takes `disabled`/`hint`), `YearSelector`; series schema `web/src/data/series.ts`; `web/src/datasets/quality.ts` gives every Data table a quality, source and retrieval date; `TourChart` draws the badge (and a mark over placeholders). `tests/fixtures/dataTables.main.json` (from main) + `dataMigration.test.ts` assert no cell changed. Slide G (investors) was dropped by the human; its removal is Task 9 of the plan.
 - **Story caption hidden** (`task/hide-story-caption`): the draft pop-up ("Punto de partida / Borrador") of `StoryCaption` no longer shows over the simulator, the Recorrido or Data; only over the Andes and the dashboard (`web/src/story/visibility.ts`).
+- **Also in the Task 2 PR (human requests of 2026-10-14)**: step 15 removed (`TOUR_STEPS = 14`); step 6 (investors) removed, the other steps keep their numbers and the navigation skips 6 (`TOUR_STEP_LIST` in `reducer.ts`; final renumbering is Task 10); the header link «Fuentes y métodos» is gone and the Data button is at the top right (`DataButton`; `references.html` still exists because it hosts Visitas and the Andes sources: deleting it is a separate decision); productivity step 4 (yearly change of output per hour) opens with Argentina only.
 
 ## Next
 - Approve the consolidation plan (PR #81).

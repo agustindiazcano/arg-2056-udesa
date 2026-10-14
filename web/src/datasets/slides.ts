@@ -194,7 +194,7 @@ function productivityTables(): DataTable[] {
   ];
 }
 
-/** The data behind each slide of the Recorrido (steps 0 to 14) and the simulator, as tables ready to read and to download. Step 15 has no chart yet. */
+/** The data behind each slide of the Recorrido (steps 0 to 14) and the simulator, as tables ready to read and to download. */
 export function buildSlides(): SlideData[] {
   const argentina = argentinaReal();
   const region = regionCountries();
@@ -240,7 +240,6 @@ export function buildSlides(): SlideData[] {
     slide('3', TOUR_CHARTS[3]!.title, [chartTable(3)]),
     slide('4', TOUR_CHARTS[4]!.title, [chartTable(4), complexesTable(), greatItemsTable()], false, ['E7', 'E1']),
     slide('5', TOUR_CHARTS[5]!.title, [chartTable(5)], false),
-    slide('6', TOUR_CHARTS[6]!.title, [chartTable(6)]),
     slide('7', TOUR_CHARTS[7]!.title, [
       { id: 'provinces-value', title: `Valor productivo por provincia (${PRODUCTION_UNIT})`, columns: ['Provincia', 'Valor'], rows: PROVINCES.map((p, i) => [p.name, PROVINCE_VALUES[i] ?? null]) },
       hydrocarbonProvinces()

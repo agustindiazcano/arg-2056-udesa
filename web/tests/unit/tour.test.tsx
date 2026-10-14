@@ -64,14 +64,17 @@ describe('Recorrido steps in the navbar', () => {
     expect(document.querySelector('.app-header')?.contains(screen.getByRole('group', { name: 'Pasos del Recorrido' }))).toBe(true);
   });
 
-  it('keeps the current step in the middle of the three numbers, held inside 0 to 15', () => {
+  it('keeps the current step in the middle of the three numbers, held inside 0 to 14', () => {
     expect(stepWindow(0)).toEqual([0, 1, 2]);
     expect(stepWindow(1)).toEqual([0, 1, 2]);
     expect(stepWindow(2)).toEqual([1, 2, 3]);
     expect(stepWindow(3)).toEqual([2, 3, 4]);
     expect(stepWindow(8)).toEqual([7, 8, 9]);
-    expect(stepWindow(14)).toEqual([13, 14, 15]);
-    expect(stepWindow(15)).toEqual([13, 14, 15]);
+    // step 6 does not exist any more: the numbers go 4 5 7
+    expect(stepWindow(5)).toEqual([4, 5, 7]);
+    expect(stepWindow(7)).toEqual([5, 7, 8]);
+    expect(stepWindow(13)).toEqual([12, 13, 14]);
+    expect(stepWindow(14)).toEqual([12, 13, 14]);
   });
 
   it('Anterior and Siguiente move one step, and the last step disables Siguiente', () => {
@@ -83,7 +86,7 @@ describe('Recorrido steps in the navbar', () => {
     expect(steps().getAllByRole('button').map((b) => b.textContent)).toEqual(['Anterior', '2', '3', '4', 'Siguiente']);
     fireEvent.click(steps().getByRole('button', { name: 'Anterior' }));
     expect(useStore.getState().tourStep).toBe(2);
-    act(() => useStore.setState({ tourStep: 15 }));
+    act(() => useStore.setState({ tourStep: 14 }));
     expect((steps().getByRole('button', { name: 'Siguiente' }) as HTMLButtonElement).disabled).toBe(true);
   });
 

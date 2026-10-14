@@ -10,11 +10,15 @@ import { validateMeta } from '../../src/data/series';
 describe('the Data page after the series migration', () => {
   const slides = buildSlides();
 
-  it('keeps every slide of main', () => {
-    expect(slides.map((s) => s.id)).toEqual(fixture.map((s) => s.id));
+  // Slide 6 ("Qué miran los inversores", made-up 0-10 scores with no source) was removed by the human on 2026-10-14.
+  const REMOVED = ['6'];
+  const kept = fixture.filter((s) => !REMOVED.includes(s.id));
+
+  it('keeps every slide of main except the removed ones', () => {
+    expect(slides.map((s) => s.id)).toEqual(kept.map((s) => s.id));
   });
 
-  it.each(fixture.map((s) => [s.id, s] as const))('slide %s keeps its tables cell by cell', (_id, old) => {
+  it.each(kept.map((s) => [s.id, s] as const))('slide %s keeps its tables cell by cell', (_id, old) => {
     const now = slides.find((s) => s.id === old.id)!;
     expect(now.refs).toEqual(old.refs);
     expect(now.tables.map((t) => t.id)).toEqual(old.tables.map((t) => t.id));
@@ -55,7 +59,7 @@ describe('the Data page after the series migration', () => {
 
   it('marks as placeholder the tables that are made up and as real the ones that are not', () => {
     const q = (id: string) => slides.flatMap((s) => s.tables).find((t) => t.id === id)!.quality;
-    for (const id of ['provinces', 'provinces-value', 'chart-3', 'chart-6', 'chart-10', 'chart-13', 'factors']) expect(q(id), id).toBe('placeholder');
+    for (const id of ['provinces', 'provinces-value', 'chart-3', 'chart-10', 'chart-13', 'factors']) expect(q(id), id).toBe('placeholder');
     for (const id of ['gdp-real', 'hydrocarbons-provinces', 'complexes', 'oil-gas-national', 'agro-production', 'reserves', 'external-oecd']) expect(q(id), id).toBe('real');
   });
 });

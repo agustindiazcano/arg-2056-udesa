@@ -40,7 +40,6 @@ export const TABLE_META: Readonly<Record<string, TableMeta>> = {
   complexes: meta('real', INDEC_X, '2026-10-13'),
   'great-items': meta('real', 'INDEC, Intercambio comercial argentino (informe de agosto de 2026)', '2026-10-13'),
   'chart-5': meta('real', 'Cálculo propio: 70 dividido la tasa de crecimiento, sin dato externo', '2026-10-14'),
-  'chart-6': made(),
   'provinces-value': made(),
   'chart-8': meta('partial', ARMINERA, '2026-10-13'),
   'mining-exports': meta('partial', ARMINERA, '2026-10-13'),

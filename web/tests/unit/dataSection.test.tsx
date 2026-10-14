@@ -52,7 +52,7 @@ describe('the slides with data', () => {
   const slides = buildSlides();
 
   it('has a slide per step with data, in order, each with a number, a title and tables', () => {
-    expect(slides.map((s) => s.id)).toEqual(['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', 'sim']);
+    expect(slides.map((s) => s.id)).toEqual(['0', '1', '2', '3', '4', '5', '7', '8', '9', '10', '11', '12', '13', '14', 'sim']);
     for (const s of slides) {
       expect(s.title.length).toBeGreaterThan(0);
       expect(s.label.startsWith(s.id === 'sim' ? 'Simulador' : s.id)).toBe(true);

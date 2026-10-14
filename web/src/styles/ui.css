@@ -126,6 +126,16 @@ button.brand:focus-visible .brand-n {
   border-bottom-color: var(--intro-light);
 }
 
+.header-end .data-button[aria-pressed='true'] {
+  color: var(--intro-light);
+  border-bottom-color: var(--intro-light);
+}
+
+.header-end .data-button {
+  display: inline-flex;
+  align-items: center;
+}
+
 /* ---- tabs --------------------------------------------------------------------------------------------------- */
 
 .tabs {

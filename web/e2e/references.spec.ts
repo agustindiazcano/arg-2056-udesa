@@ -16,12 +16,6 @@ test.describe('references page', () => {
     await expect(page.getByRole('tab', { name: 'Andes' })).toBeVisible();
   });
 
-  test('the shell footer link opens it', async ({ page }) => {
-    await page.goto('/');
-    await page.getByRole('link', { name: 'Fuentes y métodos' }).click();
-    await expect(page).toHaveURL(/\/references\.html$/);
-    await expect(page.getByRole('heading', { name: 'Fuentes y atribuciones', level: 1 })).toBeVisible();
-  });
   test('has a Visitas section: the empty message before the first archive, the totals and the table once there is one', async ({ page }) => {
     await page.goto('/references.html');
     const visits = page.getByRole('region', { name: 'Visitas' });
