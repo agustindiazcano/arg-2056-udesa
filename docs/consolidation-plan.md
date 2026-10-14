@@ -1,17 +1,19 @@
 # Consolidation plan: 15 slides + simulator -> 7 slides (A-G)
 
-Status: proposal for approval (Phase 0, no code changed). Written 2026-10-14 from a read of `web/src/tour`, `web/src/tour3d`, `web/src/datasets`, `web/tests/unit`, `web/e2e` and `.github/workflows/ci.yml`.
+Status: Phase 0, updated with the human decisions of 2026-10-14 (no code changed). Written 2026-10-14 from a read of `web/src/tour`, `web/src/tour3d`, `web/src/datasets`, `web/tests/unit`, `web/e2e` and `.github/workflows/ci.yml`.
 
-## 0. Decisions needed from the human before Task 2
+## 0. Decisions (resolved by the human on 2026-10-14)
 
-| # | Question | Why it matters | Recommendation |
-|---|---|---|---|
-| Q1 | The brief says "8 slides + simulator" but the target table has 7 slides (A-G) and folds the simulator into B. Which is it? | Changes the nav count (`TOUR_STEPS`) and the Data selector. | 7 slides, simulator inside B. The "simulator" stops being a separate app section. |
-| Q2 | Branch prefix: the brief says `feat/<task>`, `AGENTS.md` section 5 says `task/<slug>`. | Convention conflict. | Follow the brief (`feat/`), and update `AGENTS.md` and `CLAUDE.md` in Task 2. Until you confirm, this PR uses `feat/consolidation-plan`. |
-| Q3 | Slide G (investor view): which option? See section 6. | The 0-10 score has no source. | Option G2 (sovereign risk spread) if a source can be fetched; otherwise G3 (drop). |
-| Q4 | Slide B: the brief asks for the AI scenario as "a second line on the same chart and fan" and also as "an explicit simulator parameter, not a curve". | Two different designs. | One engine: AI is a simulator parameter (`ai` already exists in `simModel.ts`); the "With AI" tab draws the base line and the same line with the parameter on, over the same fan. No hand-made curve. |
-| Q5 | Slide B fan: Task 7 asks for a bootstrap on 1960-2025 volatility, while `PENDING.md` has the model tasks (`model-montecarlo`, `model-growth-core`) producing the real fan. | Two sources for the same fan. | Task 7 ships the bootstrap fan as the interim, labeled `partial`, and is replaced by `model-montecarlo` output when it lands. |
-| Q6 | Slide D year selector 2015-2025: the repo has exports by complex for 2024 and 2025 only. | See section 4. | Ship the selector with the years that exist (2024, 2025) and list the INDEC history as a data request. |
+| # | Question | Decision |
+|---|---|---|
+| Q1 | 7 or 8 slides | 7 slides (A-G). The simulator is folded into B and stops being a separate app section. |
+| Q2 | Branch prefix | `task/<slug>`, as in `AGENTS.md` and `CLAUDE.md`. No change to those files. (This PR keeps its original branch name `feat/consolidation-plan` because renaming would close it; every later PR uses `task/`.) |
+| Q3 | Slide G | Short spike on the coverage of a sovereign-spread series (G2) and World Bank B-READY (G3). If neither can be fetched, drop the slide (G4). The 0-10 score is never migrated. The human decides after the spike. |
+| Q4 | AI in slide B | One engine: AI is a simulator parameter (`ai` in `simModel.ts`). The "With AI" tab shows the same projection with the parameter on, over the same fan. No hand-drawn curve. |
+| Q5 | Fan of slide B | Interim bootstrap on 1960-2025 World Bank volatility, tagged `partial`, replaced by `model-montecarlo` output when it lands. |
+| Q6 | Exports year range | Ship with the years that exist (2024, 2025); the INDEC 2015-2023 series is a data request. |
+| Q7 | Slide C without provincial data | Ship with the placeholder badge inside the chart and the list of missing data. |
+| Q8 | Task order | The order of section 8. |
 
 ## 1. Current state (what exists today)
 
@@ -107,22 +109,22 @@ Recommendation: investigate G2 and G3 coverage in a short spike at Task 9; if ne
 
 ## 8. Task list, ordered by dependency
 
-| # | Task (branch `feat/...`) | Depends on | Blocked by | Output |
+| # | Task (branch `task/...`) | Depends on | Blocked by | Output |
 |---|---|---|---|---|
 | 1 | `consolidation-plan` (this PR) | none | approval | This document |
-| 2 | `shared-components-schema`: `DataQuality`, `TabbedChart`, `MetricToggle`, `YearSelector`, series types + no-value-change migration; update `AGENTS.md` branch convention if Q2 confirmed | 1 | Q2 | Components, adapter, tests |
+| 2 | `shared-components-schema`: `DataQuality`, `TabbedChart`, `MetricToggle` (on top of `ui/Segmented.tsx`), `YearSelector`, series types + no-value-change migration | 1 | none | Components, adapter, tests |
 | 3 | `slide-exports` (D) | 2 | none (data real) | Slide D; old 4 and 11 removed |
 | 4a | `slide-resources-hydrocarbons-agro` (E part 1) | 2 | none (agro tonnes, oil and gas real) | E tabs Hydrocarbons and Agro |
 | 4b | `slide-resources-mining` (E part 2) | 4a | H3b (verify ARMINERA transcription) | E tab Mining |
 | 4c | `slide-resources-stock` (E part 3), then remove old 8, 9, 10, 13 | 4b | stock value is placeholder | E tab Stock |
 | 5 | `slide-productivity` (F) | 2 | D21 re-download of sources | Slide F; discrepancy report in PR |
-| 6 | `slide-structure` (C) | 2, 3 (for the composition panel) | provincial data (section 5) | Slide C with placeholder badge; data list |
-| 7 | `slide-gdp` (B): tabs Base / With AI / Simulator, rule of 70 panel, bootstrap fan, visible assumptions; the simulator section is removed from the app nav | 2 | Q4, Q5 | Slide B; old 1, 3, 5 and `sim` removed |
+| 6 | `slide-structure` (C) | 2, 3 (for the composition panel) | provincial data (section 5); ships with the placeholder badge | Slide C with placeholder badge; data list |
+| 7 | `slide-gdp` (B): tabs Base / With AI / Simulator, rule of 70 panel, bootstrap fan, visible assumptions; the simulator section is removed from the app nav | 2 | none (Q4, Q5 decided) | Slide B; old 1, 3, 5 and `sim` removed |
 | 8 | `slide-world` (A) | 2 | none | Slide A; old 0 removed |
-| 9 | `slide-investor` (G) | 2 | Q3 | Per decision |
+| 9 | `slide-investor` (G) | 2 | spike result and human decision (Q3) | Per decision |
 | 10 | `nav-cleanup`: `TOUR_STEPS`, nav buttons, Data selector, `README.md`, `docs/data-requests.md`, `LASTCONTEXT.md`, `PENDING.md` | all slides | all | Final structure |
 
-Order differs from the brief only in two places, both for dependency reasons: A and B come after D/E/F because B and A touch the most shared state (nav and the simulator section), and `nav-cleanup` is explicit so each slide PR can leave the old steps in place until its replacement is complete. If you prefer the brief's order (B then A then G), say so; nothing blocks it except that the nav will show old and new slides together longer.
+Each slide PR leaves the old steps in place until the new slide covers all their real data; Task 10 renumbers the navigation once. After every PR the work stops until the human approves.
 
 ## 9. Risks
 
@@ -137,3 +139,14 @@ Order differs from the brief only in two places, both for dependency reasons: A 
 ## 10. Sidebar and references
 
 Each new slide gets one `STEP_INFO`-style entry (heading, text, `how`, note, refs) merged from the old ones, with the quality shown per series. References (`datasets/references.ts`, `docs/references.md`) are carried over unchanged; new ones are added only with their source read. Nothing is dropped.
+
+## 11. Working rules for every task PR
+
+- One branch `task/<slug>` and one PR per task; never commit or push to `main`; stop after each PR and wait for explicit human approval.
+- TDD; tests run in CI; locally only the touched tests plus `python scripts/precheck.py` before each push; never report CI green without reading the run.
+- Never weaken or delete value assertions of existing tests; if a test is wrong, say so in the PR.
+- Code, commits, comments and README in English; UI, Data and reference texts in Spanish.
+- No invented numbers; every series carries `quality`, `source`, `retrieved_at`; placeholder data is labeled inside the chart.
+- Permanent project rules: all GDP real at constant 2015 USD (World Bank), no PPP, every number of the Recorrido in Data with its reference (`references.ts`, `docs/references.md`), human data tasks in `docs/data-requests.md`.
+- Budgets: `web/budgets.json` and `scripts/check_data_budget.py`; no new dependency without a justification in the PR.
+- At the end of each task: overwrite `LASTCONTEXT.md` and update `PENDING.md`. Each PR description lists what changed, the data sources touched, what stays placeholder and what a human must verify.

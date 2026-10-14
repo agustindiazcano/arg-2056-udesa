@@ -7,8 +7,8 @@
 
 - **Model inputs (`task/model-data-real`)**: first real dataset of the pipeline, `external_forecasts_macro` -> `data/processed/external_forecasts.json` (IMF WEO growth/investment/population 2025-2031 for Argentina and ten peers; OECD EO 117 long-term scenarios for Argentina to 2056, no PPP measures; UN WPP 2024 for Argentina to 2056). `scripts/fetch_external_forecasts.py` downloads (network), the adapter `scripts/datapipe/adapters/external_forecasts.py` builds (pure). `validate_data.py` and `sync-data.mjs` now skip `_provenance.json`. Status of every model series: `docs/model-data-status.md`; what the human must find: `docs/data-requests.md` section 6 (M1-M7).
 
-- **Consolidation (`feat/consolidation-plan`, Phase 0)**: `docs/consolidation-plan.md` maps the 15 slides + simulator to 7 slides (A-G), lists shared components, the series schema (`quality`, `source`, `retrieved_at`), tests and the task order. No code changed. Waiting for the human's approval and answers to Q1-Q6 (section 0 of the plan) before Task 2.
+- **Consolidation (`feat/consolidation-plan`, Phase 0)**: `docs/consolidation-plan.md` maps the 15 slides + simulator to 7 slides (A-G), lists shared components, the series schema (`quality`, `source`, `retrieved_at`), tests and the task order. No code changed. Q1-Q8 decided by the human on 2026-10-14; waiting for approval of the plan (PR #81) before Task 2.
 
 ## Next
-- Approve the consolidation plan; answer Q1-Q6.
+- Approve the consolidation plan (PR #81).
 - The human: choose the OECD scenario that equals "expected" (M1), old WEO editions (M3), 2005 projections (M4); RIGI list (H1), mining and agro by province (H9), years of step 0 and the investment figure; check the mining transcription (H3b). Model and parameters for the projections from 2027.
