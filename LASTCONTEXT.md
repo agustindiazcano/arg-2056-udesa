@@ -10,6 +10,7 @@
 - **Consolidation (`feat/consolidation-plan`, Phase 0)**: `docs/consolidation-plan.md` maps the 15 slides + simulator to 7 slides (A-G), lists shared components, the series schema (`quality`, `source`, `retrieved_at`), tests and the task order. No code changed. Q1-Q8 decided by the human on 2026-10-14; waiting for approval of the plan (PR #81) before Task 2.
 
 - **Consolidation Task 2 (`task/shared-components-schema`)**: `DataQuality`, `TabbedChart`, `MetricToggle` (on `Segmented`, which now takes `disabled`/`hint`), `YearSelector`; series schema `web/src/data/series.ts`; `web/src/datasets/quality.ts` gives every Data table a quality, source and retrieval date; `TourChart` draws the badge (and a mark over placeholders). `tests/fixtures/dataTables.main.json` (from main) + `dataMigration.test.ts` assert no cell changed. Slide G (investors) was dropped by the human; its removal is Task 9 of the plan.
+- **Story caption hidden** (`task/hide-story-caption`): the draft pop-up ("Punto de partida / Borrador") of `StoryCaption` no longer shows over the simulator, the Recorrido or Data; only over the Andes and the dashboard (`web/src/story/visibility.ts`).
 
 ## Next
 - Approve the consolidation plan (PR #81).
