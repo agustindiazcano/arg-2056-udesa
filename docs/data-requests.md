@@ -124,6 +124,28 @@ Fuente: FMI, *World Economic Outlook*, por la API SDMX (`https://api.imf.org/ext
 
 Referencia, en dólares **corrientes** (ya no se usa en los gráficos): el PBI de Argentina de 2025 es 683,1 (Banco Mundial) y 683,6 (FMI); para 2026 el FMI estima 768,2 (confirmado en su página; una respuesta de IA había dado 688,4, que no sale de la edición vigente). Entre 1980 y 1990 el valor en dólares corrientes de Argentina cambia mucho según el tipo de cambio que se use (1980: 77 contra 234), otra razón para usar el PBI real.
 
+## 6. Datos para el modelo del PBI a 2056 (2026-10-14)
+
+Cargados con el pipeline (`scripts/fetch_external_forecasts.py` baja los archivos; el adaptador `external_forecasts` los convierte; salida `data/processed/external_forecasts.json`, 1.287 registros; estado completo en [`model-data-status.md`](model-data-status.md)):
+
+| Fuente | Qué trae | Cobertura |
+|---|---|---|
+| FMI, WEO (actualización 2026-09-30) | crecimiento real, inversión total, población | Argentina y diez países (Brasil, Chile, México, Colombia, Uruguay, Estados Unidos, China, India, Corea, España), 2025-2031 |
+| OCDE, *Economic Outlook 117 long-term scenarios* | PBI real (moneda nacional, precios constantes), PBI potencial, población, población en edad de trabajar | Argentina, 2025-2056, seis escenarios (el crecimiento medio 2026-2056 va de 1,53 % a 1,94 %) |
+| ONU, *World Population Prospects 2024* | población, fecundidad, esperanza de vida | Argentina, 2025-2056, variantes baja, media y alta (población 2056: 43,2; 48,0; 53,1 millones) |
+
+No se usó ninguna medida en PPA (la OCDE las publica y se descartaron). Para el tope de 1,5 MB por archivo de la app, la OCDE y la ONU son solo de Argentina y llegan a 2056.
+
+| # | Prioridad | Qué falta | Quién |
+|---|---|---|---|
+| M1 | 🔴 | Elegir cuál de los seis escenarios de la OCDE equivale a «esperado» en el modelo (quedaron como «no declarado»; la OCDE los distingue por transición energética y daño climático, no por optimismo) | Vos |
+| M2 | 🟡 | Por qué la inversión del FMI salta de 13,1 % (2025) a 20,5 % (2031); revisar la tabla en <https://www.imf.org/external/datamapper/NID_NGDP@WEO/ARG> | Abrir |
+| M3 | 🟡 | Ediciones viejas del WEO (abril y octubre de cada año) para medir cuánto se equivocaron los pronósticos de crecimiento de Argentina a 1, 3 y 5 años (`forecast_vintages`); la API solo da la edición actual | Vos, o otra IA |
+| M4 | 🟡 | Proyecciones de ~2005 (INDEC revisión 2005 y ONU WPP 2004) para probar el modelo de población | Vos, o otra IA |
+| M5 | 🟡 | Proyecciones del REM del BCRA (hasta 2 años), CEPAL, Banco Mundial *Global Economic Prospects* (2-3 años) y Consensus Forecasts: no tienen API abierta | Vos, o otra IA |
+| M6 | 🟢 | Los escenarios SSP (IIASA) de PBI y población por país hasta 2100: requieren registro | Vos |
+| M7 | 🟢 | Población por edad, tablas de mortalidad y fecundidad por edad 1990-2025 (la ONU las publica) | Yo, falta el contrato de datos |
+
 ## 4. Cómo se usa esta lista
 
 1. La IA intenta primero conseguir cada dato (API, descarga, lectura del documento) y lo agrega a `docs/references.md` con su estado.

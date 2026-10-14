@@ -37,6 +37,7 @@ export function syncData(mockDir, processedDir, destDir) {
   // 2. Overlay processed
   if (fs.existsSync(processedDir)) {
     for (const file of fs.readdirSync(processedDir)) {
+      if (file.startsWith('_')) continue; // _provenance.json is bookkeeping of the data pipeline, not a dataset
       // replace if exists
       const existing = manifestFiles.findIndex(m => m.name === file);
       if (existing !== -1) {
