@@ -9,6 +9,8 @@
 
 - **Consolidation (`feat/consolidation-plan`, Phase 0)**: `docs/consolidation-plan.md` maps the 15 slides + simulator to 7 slides (A-G), lists shared components, the series schema (`quality`, `source`, `retrieved_at`), tests and the task order. No code changed. Q1-Q8 decided by the human on 2026-10-14; waiting for approval of the plan (PR #81) before Task 2.
 
+- **Story caption hidden** (`task/hide-story-caption`): the draft pop-up ("Punto de partida / Borrador") of `StoryCaption` no longer shows over the simulator, the Recorrido or Data; only over the Andes and the dashboard (`web/src/story/visibility.ts`).
+
 ## Next
 - Approve the consolidation plan (PR #81).
 - The human: choose the OECD scenario that equals "expected" (M1), old WEO editions (M3), 2005 projections (M4); RIGI list (H1), mining and agro by province (H9), years of step 0 and the investment figure; check the mining transcription (H3b). Model and parameters for the projections from 2027.

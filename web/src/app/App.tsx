@@ -9,6 +9,7 @@ import { Header } from './Header';
 import { SiteFooter } from './SiteFooter';
 import { StoryCaption } from '../story/StoryCaption';
 import { StepRunner } from '../story/StepRunner';
+import { showsStory } from '../story/visibility';
 import { SceneHost } from './SceneHost';
 import { SceneTransition } from '../motion/SceneTransition';
 import { CapabilityProvider, QualityDebugLine } from '../runtime/CapabilityProvider';
@@ -104,8 +105,8 @@ export function App({ onHome }: { onHome?: () => void }) {
           <div className="filters-slot" ref={filtersRef} />
         </footer>
 
-        <StoryCaption />
-        <StepRunner />
+        {showsStory(section) && <StoryCaption />}
+        {showsStory(section) && <StepRunner />}
       </div>
       </div>
       <SiteFooter />
