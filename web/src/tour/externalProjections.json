@@ -1,0 +1,76 @@
+{
+ "source": "data/processed/external_forecasts.json (dataset external_forecasts_macro)",
+ "imf": {
+  "vintage": "2026-09-30",
+  "growth": {
+   "2026": 2.059754,
+   "2027": 3.461847,
+   "2028": 4.161877,
+   "2029": 3.848615,
+   "2030": 3.329179,
+   "2031": 3.00974
+  },
+  "investment": {
+   "2025": 13.107173,
+   "2031": 20.495243
+  }
+ },
+ "oecd": [
+  {
+   "scenario": "BAU1",
+   "description": "business-as-usual energy transition, median climate damage curve, no carbon mitigation costs",
+   "growth": 1.94,
+   "population2056": 49.985042
+  },
+  {
+   "scenario": "BAU2",
+   "description": "business-as-usual energy transition, high damage curve, no carbon mitigation costs",
+   "growth": 1.73,
+   "population2056": 49.985042
+  },
+  {
+   "scenario": "ET1",
+   "description": "accelerated energy transition, median damage curve, slow reduction in carbon mitigation costs",
+   "growth": 1.57,
+   "population2056": 49.985042
+  },
+  {
+   "scenario": "ET2",
+   "description": "accelerated energy transition, median damage curve, fast reduction in carbon mitigation costs",
+   "growth": 1.78,
+   "population2056": 49.985042
+  },
+  {
+   "scenario": "ET3",
+   "description": "accelerated energy transition, high damage curve, slow reduction in carbon mitigation costs",
+   "growth": 1.53,
+   "population2056": 49.985042
+  },
+  {
+   "scenario": "ET4",
+   "description": "accelerated energy transition, high damage curve, fast reduction in carbon mitigation costs",
+   "growth": 1.74,
+   "population2056": 49.985042
+  }
+ ],
+ "un": [
+  {
+   "variant": "Low",
+   "population2056": 43.224849,
+   "tfr2056": 1.0452,
+   "e0_2056": 82.2538
+  },
+  {
+   "variant": "Medium",
+   "population2056": 48.047358,
+   "tfr2056": 1.5452,
+   "e0_2056": 82.2538
+  },
+  {
+   "variant": "High",
+   "population2056": 53.05481,
+   "tfr2056": 2.0452,
+   "e0_2056": 82.2538
+  }
+ ]
+}

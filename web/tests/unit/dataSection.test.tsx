@@ -129,7 +129,7 @@ describe('the Data page', () => {
     expect(screen.getAllByRole('table')).toHaveLength(5);
     expect(screen.queryByRole('heading', { name: '0 · El PBI de Argentina desde 1960' })).toBeNull();
     fireEvent.change(select, { target: { value: '1' } });
-    expect(screen.getAllByRole('table')).toHaveLength(2);
+    expect(screen.getAllByRole('table')).toHaveLength(5);
     expect(screen.getAllByRole('heading', { level: 3 }).map((h) => h.textContent)).toEqual(['1 · PBI de Argentina', 'Referencias']);
   });
 
