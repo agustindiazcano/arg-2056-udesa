@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { EChart } from '../charts/EChart.js';
 import { formatValue } from '../charts/format.js';
+import { TABLE_META } from '../datasets/quality.js';
 import { TourChart } from './TourChart.js';
 import { ProvinceMap, useProvinces } from '../scenes/forecast/ProvinceMap.js';
 import { mapSummary } from '../scenes/forecast/mapSelectors.js';
@@ -16,6 +17,9 @@ import { TourIndicators } from './TourIndicators.js';
 import { useTourLayout } from './useTourLayout.js';
 import type { TourCount } from './useTourLayout.js';
 import type { TourChartDef } from './tourCharts.js';
+
+/** The entry of TABLE_META of the chart of a step (the map of step 7 is the table of values by province). */
+const metaOfStep = (step: number) => TABLE_META[step === 7 ? 'provinces-value' : `chart-${step}`];
 
 const VIEWS = [
   { value: '2d', label: '2D' },
@@ -55,7 +59,7 @@ export function visibleSteps(step: number, count: number): number[] {
 function ChartBody({ def }: { def: TourChartDef }) {
   const { option, summary, spec } = useMemo(() => def.build(), [def]);
   return (
-    <TourChart spec={spec}>
+    <TourChart spec={spec} meta={metaOfStep(def.step)}>
       <EChart option={option} aria-label={summary} />
     </TourChart>
   );
@@ -72,6 +76,7 @@ function MapBody({ def, small = false }: { def: TourChartDef; small?: boolean })
   const summary = mapSummary(values, 'level', 'valor productivo (datos de prueba)', 2025, UNIT);
   return (
     <TourChart
+      meta={metaOfStep(def.step)}
       spec={{
         kind: 'map',
         title: def.title,

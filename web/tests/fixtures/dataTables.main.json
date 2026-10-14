@@ -1,0 +1,6184 @@
+[
+ {
+  "id": "0",
+  "label": "0 · El PBI de Argentina desde 1960",
+  "title": "El PBI de Argentina desde 1960",
+  "mock": false,
+  "refs": [
+   "W5",
+   "I1",
+   "F1"
+  ],
+  "tables": [
+   {
+    "id": "gdp-real",
+    "title": "PBI real de Argentina (miles de millones de USD de 2015 (PBI real, a precios constantes))",
+    "columns": [
+     "Año",
+     "PBI real"
+    ],
+    "rows": [
+     [
+      1960,
+      150.8
+     ],
+     [
+      1961,
+      158.98
+     ],
+     [
+      1962,
+      157.63
+     ],
+     [
+      1963,
+      149.26
+     ],
+     [
+      1964,
+      164.38
+     ],
+     [
+      1965,
+      181.76
+     ],
+     [
+      1966,
+      180.56
+     ],
+     [
+      1967,
+      186.32
+     ],
+     [
+      1968,
+      195.31
+     ],
+     [
+      1969,
+      214.21
+     ],
+     [
+      1970,
+      220.73
+     ],
+     [
+      1971,
+      233.22
+     ],
+     [
+      1972,
+      237.02
+     ],
+     [
+      1973,
+      243.69
+     ],
+     [
+      1974,
+      257.17
+     ],
+     [
+      1975,
+      257.1
+     ],
+     [
+      1976,
+      251.91
+     ],
+     [
+      1977,
+      269.38
+     ],
+     [
+      1978,
+      257.24
+     ],
+     [
+      1979,
+      283.54
+     ],
+     [
+      1980,
+      287.84
+     ],
+     [
+      1981,
+      272.9
+     ],
+     [
+      1982,
+      270.9
+     ],
+     [
+      1983,
+      282.68
+     ],
+     [
+      1984,
+      287.12
+     ],
+     [
+      1985,
+      272.22
+     ],
+     [
+      1986,
+      288.97
+     ],
+     [
+      1987,
+      296.79
+     ],
+     [
+      1988,
+      293.55
+     ],
+     [
+      1989,
+      272.54
+     ],
+     [
+      1990,
+      265.82
+     ],
+     [
+      1991,
+      290.09
+     ],
+     [
+      1992,
+      313.12
+     ],
+     [
+      1993,
+      338.82
+     ],
+     [
+      1994,
+      358.59
+     ],
+     [
+      1995,
+      348.39
+     ],
+     [
+      1996,
+      367.64
+     ],
+     [
+      1997,
+      397.46
+     ],
+     [
+      1998,
+      412.77
+     ],
+     [
+      1999,
+      398.79
+     ],
+     [
+      2000,
+      395.65
+     ],
+     [
+      2001,
+      378.2
+     ],
+     [
+      2002,
+      337
+     ],
+     [
+      2003,
+      366.78
+     ],
+     [
+      2004,
+      399.9
+     ],
+     [
+      2005,
+      435.3
+     ],
+     [
+      2006,
+      470.33
+     ],
+     [
+      2007,
+      512.69
+     ],
+     [
+      2008,
+      533.49
+     ],
+     [
+      2009,
+      501.92
+     ],
+     [
+      2010,
+      552.74
+     ],
+     [
+      2011,
+      585.92
+     ],
+     [
+      2012,
+      579.91
+     ],
+     [
+      2013,
+      593.86
+     ],
+     [
+      2014,
+      578.94
+     ],
+     [
+      2015,
+      594.75
+     ],
+     [
+      2016,
+      582.38
+     ],
+     [
+      2017,
+      598.79
+     ],
+     [
+      2018,
+      583.12
+     ],
+     [
+      2019,
+      571.45
+     ],
+     [
+      2020,
+      514.87
+     ],
+     [
+      2021,
+      568.64
+     ],
+     [
+      2022,
+      602.87
+     ],
+     [
+      2023,
+      591.68
+     ],
+     [
+      2024,
+      583.74
+     ],
+     [
+      2025,
+      609.23
+     ]
+    ]
+   },
+   {
+    "id": "region",
+    "title": "Mayores economías de la región en 2025",
+    "columns": [
+     "País",
+     "PBI real (miles de millones de USD de 2015)",
+     "PBI per cápita real (USD de 2015)",
+     "Población (millones)"
+    ],
+    "rows": [
+     [
+      "Brasil",
+      2074.49,
+      9747.993534199197,
+      212.812
+     ],
+     [
+      "México",
+      1353.34,
+      10256.693975611419,
+      131.947
+     ],
+     [
+      "Argentina",
+      609.23,
+      13133.636579214004,
+      46.387
+     ],
+     [
+      "Colombia",
+      372.67,
+      6975.4426683637175,
+      53.426
+     ],
+     [
+      "Chile",
+      296.01,
+      14904.833836858006,
+      19.86
+     ],
+     [
+      "Perú",
+      238.27,
+      6890.996905457386,
+      34.577
+     ],
+     [
+      "Ecuador",
+      112.75,
+      6164.570803717879,
+      18.29
+     ],
+     [
+      "Rep. Dominicana",
+      106.99,
+      9287.326388888889,
+      11.52
+     ],
+     [
+      "Guatemala",
+      87.61,
+      4688.035102739726,
+      18.688
+     ],
+     [
+      "Costa Rica",
+      80.74,
+      15668.542596545703,
+      5.153
+     ],
+     [
+      "Uruguay",
+      65.58,
+      19373.70753323486,
+      3.385
+     ]
+    ]
+   },
+   {
+    "id": "imf",
+    "title": "Crecimiento real del PBI en 2025: Banco Mundial (calculado de la serie en dólares de 2015) contra FMI, y estimación del FMI para 2026 (%)",
+    "columns": [
+     "País",
+     "Banco Mundial 2025",
+     "FMI 2025",
+     "Diferencia (puntos)",
+     "FMI 2026 (estimación)"
+    ],
+    "rows": [
+     [
+      "Brasil",
+      2.3,
+      2.28557,
+      0,
+      2.182307
+     ],
+     [
+      "México",
+      0.6,
+      0.497028,
+      -0.1,
+      1.51527
+     ],
+     [
+      "Argentina",
+      4.4,
+      4.483245,
+      0.1,
+      2.059754
+     ],
+     [
+      "Colombia",
+      2.6,
+      2.56989,
+      0,
+      2.219762
+     ],
+     [
+      "Chile",
+      2.5,
+      2.459255,
+      0,
+      0.605295
+     ],
+     [
+      "Perú",
+      3.4,
+      3.430741,
+      0,
+      2.9968
+     ],
+     [
+      "Ecuador",
+      3.7,
+      3.725948,
+      0,
+      2.7
+     ],
+     [
+      "Rep. Dominicana",
+      2.1,
+      2.117143,
+      0,
+      4.61293
+     ],
+     [
+      "Guatemala",
+      4.3,
+      4.280032,
+      0,
+      3.951719
+     ],
+     [
+      "Costa Rica",
+      4.6,
+      4.560336,
+      0,
+      3.28018
+     ],
+     [
+      "Uruguay",
+      1.8,
+      1.784711,
+      0,
+      1.300099
+     ]
+    ]
+   }
+  ]
+ },
+ {
+  "id": "1",
+  "label": "1 · PBI de Argentina",
+  "title": "PBI de Argentina",
+  "mock": true,
+  "refs": [
+   "W3",
+   "W5",
+   "I1",
+   "F1",
+   "X1",
+   "X2",
+   "X3"
+  ],
+  "tables": [
+   {
+    "id": "gdp",
+    "title": "PBI de Argentina (miles de millones de USD de 2015)",
+    "columns": [
+     "Año",
+     "PBI observado",
+     "Proyección esperada",
+     "Rango, mínimo",
+     "Rango, máximo"
+    ],
+    "rows": [
+     [
+      1990,
+      265.8,
+      null,
+      265.8,
+      265.8
+     ],
+     [
+      1991,
+      290.1,
+      null,
+      290.1,
+      290.1
+     ],
+     [
+      1992,
+      313.1,
+      null,
+      313.1,
+      313.1
+     ],
+     [
+      1993,
+      338.8,
+      null,
+      338.8,
+      338.8
+     ],
+     [
+      1994,
+      358.6,
+      null,
+      358.6,
+      358.6
+     ],
+     [
+      1995,
+      348.4,
+      null,
+      348.4,
+      348.4
+     ],
+     [
+      1996,
+      367.6,
+      null,
+      367.6,
+      367.6
+     ],
+     [
+      1997,
+      397.5,
+      null,
+      397.5,
+      397.5
+     ],
+     [
+      1998,
+      412.8,
+      null,
+      412.8,
+      412.8
+     ],
+     [
+      1999,
+      398.8,
+      null,
+      398.8,
+      398.8
+     ],
+     [
+      2000,
+      395.7,
+      null,
+      395.7,
+      395.7
+     ],
+     [
+      2001,
+      378.2,
+      null,
+      378.2,
+      378.2
+     ],
+     [
+      2002,
+      337,
+      null,
+      337,
+      337
+     ],
+     [
+      2003,
+      366.8,
+      null,
+      366.8,
+      366.8
+     ],
+     [
+      2004,
+      399.9,
+      null,
+      399.9,
+      399.9
+     ],
+     [
+      2005,
+      435.3,
+      null,
+      435.3,
+      435.3
+     ],
+     [
+      2006,
+      470.3,
+      null,
+      470.3,
+      470.3
+     ],
+     [
+      2007,
+      512.7,
+      null,
+      512.7,
+      512.7
+     ],
+     [
+      2008,
+      533.5,
+      null,
+      533.5,
+      533.5
+     ],
+     [
+      2009,
+      501.9,
+      null,
+      501.9,
+      501.9
+     ],
+     [
+      2010,
+      552.7,
+      null,
+      552.7,
+      552.7
+     ],
+     [
+      2011,
+      585.9,
+      null,
+      585.9,
+      585.9
+     ],
+     [
+      2012,
+      579.9,
+      null,
+      579.9,
+      579.9
+     ],
+     [
+      2013,
+      593.9,
+      null,
+      593.9,
+      593.9
+     ],
+     [
+      2014,
+      578.9,
+      null,
+      578.9,
+      578.9
+     ],
+     [
+      2015,
+      594.8,
+      null,
+      594.8,
+      594.8
+     ],
+     [
+      2016,
+      582.4,
+      null,
+      582.4,
+      582.4
+     ],
+     [
+      2017,
+      598.8,
+      null,
+      598.8,
+      598.8
+     ],
+     [
+      2018,
+      583.1,
+      null,
+      583.1,
+      583.1
+     ],
+     [
+      2019,
+      571.5,
+      null,
+      571.5,
+      571.5
+     ],
+     [
+      2020,
+      514.9,
+      null,
+      514.9,
+      514.9
+     ],
+     [
+      2021,
+      568.6,
+      null,
+      568.6,
+      568.6
+     ],
+     [
+      2022,
+      602.9,
+      null,
+      602.9,
+      602.9
+     ],
+     [
+      2023,
+      591.7,
+      null,
+      591.7,
+      591.7
+     ],
+     [
+      2024,
+      583.7,
+      null,
+      583.7,
+      583.7
+     ],
+     [
+      2025,
+      609.2,
+      609.2,
+      609.2,
+      609.2
+     ],
+     [
+      2026,
+      null,
+      621.8,
+      614.4,
+      629.3
+     ],
+     [
+      2027,
+      null,
+      637.9,
+      620.2,
+      656.1
+     ],
+     [
+      2028,
+      null,
+      654.5,
+      624.9,
+      685.5
+     ],
+     [
+      2029,
+      null,
+      671.6,
+      628.9,
+      717.2
+     ],
+     [
+      2030,
+      null,
+      689,
+      632.3,
+      750.8
+     ],
+     [
+      2031,
+      null,
+      706.9,
+      635.3,
+      786.6
+     ],
+     [
+      2032,
+      null,
+      725.3,
+      638.1,
+      824.4
+     ],
+     [
+      2033,
+      null,
+      744.2,
+      640.7,
+      864.4
+     ],
+     [
+      2034,
+      null,
+      763.5,
+      643.2,
+      906.3
+     ],
+     [
+      2035,
+      null,
+      783.4,
+      645.6,
+      950.6
+     ],
+     [
+      2036,
+      null,
+      803.7,
+      647.9,
+      996.9
+     ],
+     [
+      2037,
+      null,
+      824.6,
+      650.3,
+      1045.6
+     ],
+     [
+      2038,
+      null,
+      846.1,
+      652.7,
+      1096.7
+     ],
+     [
+      2039,
+      null,
+      868.1,
+      655.2,
+      1150.2
+     ],
+     [
+      2040,
+      null,
+      890.6,
+      657.6,
+      1206.1
+     ],
+     [
+      2041,
+      null,
+      913.8,
+      660.3,
+      1264.7
+     ],
+     [
+      2042,
+      null,
+      937.6,
+      663,
+      1326
+     ],
+     [
+      2043,
+      null,
+      961.9,
+      665.7,
+      1389.9
+     ],
+     [
+      2044,
+      null,
+      986.9,
+      668.6,
+      1456.7
+     ],
+     [
+      2045,
+      null,
+      1012.6,
+      671.7,
+      1526.5
+     ],
+     [
+      2046,
+      null,
+      1038.9,
+      674.8,
+      1599.3
+     ],
+     [
+      2047,
+      null,
+      1065.9,
+      678.2,
+      1675.3
+     ],
+     [
+      2048,
+      null,
+      1093.7,
+      681.7,
+      1754.8
+     ],
+     [
+      2049,
+      null,
+      1122.1,
+      685.3,
+      1837.4
+     ],
+     [
+      2050,
+      null,
+      1151.3,
+      689.1,
+      1923.6
+     ],
+     [
+      2051,
+      null,
+      1181.2,
+      693,
+      2013.4
+     ],
+     [
+      2052,
+      null,
+      1211.9,
+      697.1,
+      2107
+     ],
+     [
+      2053,
+      null,
+      1243.4,
+      701.3,
+      2204.4
+     ],
+     [
+      2054,
+      null,
+      1275.7,
+      705.8,
+      2305.9
+     ],
+     [
+      2055,
+      null,
+      1308.9,
+      710.4,
+      2411.7
+     ],
+     [
+      2056,
+      null,
+      1342.9,
+      715.2,
+      2521.7
+     ]
+    ]
+   },
+   {
+    "id": "external-imf",
+    "title": "Crecimiento real del PBI de Argentina que proyecta el FMI (%, WEO 2026-09-30)",
+    "columns": [
+     "Año",
+     "Crecimiento real"
+    ],
+    "rows": [
+     [
+      2026,
+      2.059754
+     ],
+     [
+      2027,
+      3.461847
+     ],
+     [
+      2028,
+      4.161877
+     ],
+     [
+      2029,
+      3.848615
+     ],
+     [
+      2030,
+      3.329179
+     ],
+     [
+      2031,
+      3.00974
+     ]
+    ]
+   },
+   {
+    "id": "external-oecd",
+    "title": "Escenarios de largo plazo de la OCDE para Argentina: crecimiento real medio del PBI 2026-2056 (calculado de los niveles) y población en 2056",
+    "columns": [
+     "Escenario",
+     "Descripción (en inglés, de la fuente)",
+     "Crecimiento medio anual (%)",
+     "Población 2056 (millones)"
+    ],
+    "rows": [
+     [
+      "BAU1",
+      "business-as-usual energy transition, median climate damage curve, no carbon mitigation costs",
+      1.94,
+      49.99
+     ],
+     [
+      "BAU2",
+      "business-as-usual energy transition, high damage curve, no carbon mitigation costs",
+      1.73,
+      49.99
+     ],
+     [
+      "ET1",
+      "accelerated energy transition, median damage curve, slow reduction in carbon mitigation costs",
+      1.57,
+      49.99
+     ],
+     [
+      "ET2",
+      "accelerated energy transition, median damage curve, fast reduction in carbon mitigation costs",
+      1.78,
+      49.99
+     ],
+     [
+      "ET3",
+      "accelerated energy transition, high damage curve, slow reduction in carbon mitigation costs",
+      1.53,
+      49.99
+     ],
+     [
+      "ET4",
+      "accelerated energy transition, high damage curve, fast reduction in carbon mitigation costs",
+      1.74,
+      49.99
+     ]
+    ]
+   },
+   {
+    "id": "external-un",
+    "title": "Proyección de la ONU (World Population Prospects 2024) para Argentina en 2056, por variante",
+    "columns": [
+     "Variante",
+     "Población (millones)",
+     "Hijos por mujer",
+     "Esperanza de vida (años)"
+    ],
+    "rows": [
+     [
+      "Baja",
+      43.22,
+      1.0452,
+      82.2538
+     ],
+     [
+      "Media",
+      48.05,
+      1.5452,
+      82.2538
+     ],
+     [
+      "Alta",
+      53.05,
+      2.0452,
+      82.2538
+     ]
+    ]
+   },
+   {
+    "id": "indicators",
+    "title": "Indicadores de Argentina",
+    "columns": [
+     "Indicador",
+     "Valor",
+     "Unidad",
+     "Año",
+     "Fuente"
+    ],
+    "rows": [
+     [
+      "PBI real",
+      "609,2",
+      "miles de millones de USD de 2015 (precios constantes)",
+      2025,
+      "Banco Mundial (WDI)"
+     ],
+     [
+      "Población",
+      "46,4",
+      "millones (INDEC)",
+      2025,
+      "Banco Mundial (WDI)"
+     ],
+     [
+      "PBI per cápita real",
+      "13.134",
+      "USD de 2015",
+      2025,
+      "Banco Mundial (WDI)"
+     ],
+     [
+      "Exportaciones totales",
+      "106,3",
+      "miles de millones de USD (bienes y servicios)",
+      2025,
+      "Banco Mundial (WDI)"
+     ],
+     [
+      "Crecimiento del PBI",
+      "4,4",
+      "% anual",
+      2025,
+      "Banco Mundial (WDI)"
+     ],
+     [
+      "Inversión",
+      "16,1",
+      "% del PBI (formación bruta de capital)",
+      2025,
+      "Banco Mundial (WDI)"
+     ]
+    ]
+   }
+  ]
+ },
+ {
+  "id": "2",
+  "label": "2 · Producción por provincia",
+  "title": "Producción por provincia",
+  "mock": true,
+  "refs": [
+   "W3",
+   "E6"
+  ],
+  "tables": [
+   {
+    "id": "provinces",
+    "title": "Producción por provincia (millones de USD)",
+    "columns": [
+     "Provincia",
+     "Minería",
+     "Agro",
+     "Hidrocarburos"
+    ],
+    "rows": [
+     [
+      "Salta",
+      1800,
+      1500,
+      900
+     ],
+     [
+      "Buenos Aires",
+      350,
+      15500,
+      600
+     ],
+     [
+      "Ciudad Autónoma de Buenos Aires",
+      20,
+      30,
+      5
+     ],
+     [
+      "San Luis",
+      160,
+      1300,
+      20
+     ],
+     [
+      "Entre Ríos",
+      90,
+      3900,
+      5
+     ],
+     [
+      "La Rioja",
+      420,
+      250,
+      5
+     ],
+     [
+      "Santiago del Estero",
+      40,
+      2700,
+      5
+     ],
+     [
+      "Chaco",
+      10,
+      2100,
+      5
+     ],
+     [
+      "San Juan",
+      2600,
+      450,
+      10
+     ],
+     [
+      "Catamarca",
+      3200,
+      220,
+      5
+     ],
+     [
+      "La Pampa",
+      120,
+      2800,
+      400
+     ],
+     [
+      "Mendoza",
+      540,
+      2300,
+      4200
+     ],
+     [
+      "Misiones",
+      5,
+      1200,
+      5
+     ],
+     [
+      "Formosa",
+      5,
+      650,
+      5
+     ],
+     [
+      "Neuquén",
+      150,
+      300,
+      9800
+     ],
+     [
+      "Río Negro",
+      230,
+      1100,
+      2400
+     ],
+     [
+      "Santa Fe",
+      120,
+      12800,
+      5
+     ],
+     [
+      "Tucumán",
+      60,
+      1400,
+      5
+     ],
+     [
+      "Chubut",
+      380,
+      350,
+      4900
+     ],
+     [
+      "Tierra del Fuego, Antártida e Islas del Atlántico Sur",
+      20,
+      40,
+      1500
+     ],
+     [
+      "Corrientes",
+      8,
+      1700,
+      5
+     ],
+     [
+      "Córdoba",
+      280,
+      11800,
+      5
+     ],
+     [
+      "Jujuy",
+      1900,
+      450,
+      5
+     ],
+     [
+      "Santa Cruz",
+      2900,
+      280,
+      4100
+     ]
+    ]
+   },
+   {
+    "id": "hydrocarbons-provinces",
+    "title": "Petróleo y gas por provincia en 2025 (Secretaría de Energía, promedio diario del año)",
+    "columns": [
+     "Provincia",
+     "Petróleo (miles de barriles por día)",
+     "Gas (millones de m³ por día)"
+    ],
+    "rows": [
+     [
+      "Neuquén",
+      513.6,
+      96.95
+     ],
+     [
+      "Chubut",
+      123.9,
+      6.23
+     ],
+     [
+      "Santa Cruz",
+      61.3,
+      7.72
+     ],
+     [
+      "Mendoza",
+      53,
+      1.35
+     ],
+     [
+      "Río Negro",
+      20.6,
+      2.7
+     ],
+     [
+      "La Pampa",
+      11.3,
+      0.48
+     ],
+     [
+      "Estado Nacional",
+      4.5,
+      19.15
+     ],
+     [
+      "Tierra del Fuego",
+      3,
+      3.7
+     ],
+     [
+      "Salta",
+      1.8,
+      3.06
+     ],
+     [
+      "Formosa",
+      0.5,
+      0.01
+     ],
+     [
+      "Jujuy",
+      0.2,
+      0.01
+     ]
+    ]
+   },
+   {
+    "id": "indicators",
+    "title": "Indicadores de Argentina",
+    "columns": [
+     "Indicador",
+     "Valor",
+     "Unidad",
+     "Año",
+     "Fuente"
+    ],
+    "rows": [
+     [
+      "PBI real",
+      "609,2",
+      "miles de millones de USD de 2015 (precios constantes)",
+      2025,
+      "Banco Mundial (WDI)"
+     ],
+     [
+      "Población",
+      "46,4",
+      "millones (INDEC)",
+      2025,
+      "Banco Mundial (WDI)"
+     ],
+     [
+      "PBI per cápita real",
+      "13.134",
+      "USD de 2015",
+      2025,
+      "Banco Mundial (WDI)"
+     ],
+     [
+      "Exportaciones totales",
+      "106,3",
+      "miles de millones de USD (bienes y servicios)",
+      2025,
+      "Banco Mundial (WDI)"
+     ],
+     [
+      "Crecimiento del PBI",
+      "4,4",
+      "% anual",
+      2025,
+      "Banco Mundial (WDI)"
+     ],
+     [
+      "Inversión",
+      "16,1",
+      "% del PBI (formación bruta de capital)",
+      2025,
+      "Banco Mundial (WDI)"
+     ]
+    ]
+   }
+  ]
+ },
+ {
+  "id": "3",
+  "label": "3 · Cuarta revolución industrial: el impacto de la IA en la economía",
+  "title": "Cuarta revolución industrial: el impacto de la IA en la economía",
+  "mock": true,
+  "refs": [],
+  "tables": [
+   {
+    "id": "chart-3",
+    "title": "Cuarta revolución industrial: el impacto de la IA en la economía",
+    "columns": [
+     "Año",
+     "Sin revolución de la IA (miles de millones de USD de 2015)",
+     "Con revolución de la IA (miles de millones de USD de 2015)"
+    ],
+    "rows": [
+     [
+      "2026",
+      621.8,
+      621.8
+     ],
+     [
+      "2027",
+      633,
+      633
+     ],
+     [
+      "2028",
+      644.4,
+      645.1
+     ],
+     [
+      "2029",
+      656,
+      658.2
+     ],
+     [
+      "2030",
+      667.8,
+      672.4
+     ],
+     [
+      "2031",
+      679.8,
+      687.7
+     ],
+     [
+      "2032",
+      692,
+      704.1
+     ],
+     [
+      "2033",
+      704.5,
+      721.7
+     ],
+     [
+      "2034",
+      717.2,
+      740.7
+     ],
+     [
+      "2035",
+      730.1,
+      761
+     ],
+     [
+      "2036",
+      743.2,
+      782.7
+     ],
+     [
+      "2037",
+      756.6,
+      806
+     ],
+     [
+      "2038",
+      770.2,
+      831
+     ],
+     [
+      "2039",
+      784.1,
+      857.7
+     ],
+     [
+      "2040",
+      798.2,
+      886.2
+     ],
+     [
+      "2041",
+      812.6,
+      916.8
+     ],
+     [
+      "2042",
+      827.2,
+      949.5
+     ],
+     [
+      "2043",
+      842.1,
+      984.4
+     ],
+     [
+      "2044",
+      857.2,
+      1021.8
+     ],
+     [
+      "2045",
+      872.7,
+      1060.7
+     ],
+     [
+      "2046",
+      888.4,
+      1101
+     ],
+     [
+      "2047",
+      904.4,
+      1142.8
+     ],
+     [
+      "2048",
+      920.6,
+      1186.2
+     ],
+     [
+      "2049",
+      937.2,
+      1231.3
+     ],
+     [
+      "2050",
+      954.1,
+      1278.1
+     ],
+     [
+      "2051",
+      971.3,
+      1326.7
+     ],
+     [
+      "2052",
+      988.7,
+      1377.1
+     ],
+     [
+      "2053",
+      1006.5,
+      1429.4
+     ],
+     [
+      "2054",
+      1024.6,
+      1483.7
+     ],
+     [
+      "2055",
+      1043.1,
+      1540.1
+     ],
+     [
+      "2056",
+      1061.9,
+      1598.6
+     ]
+    ]
+   }
+  ]
+ },
+ {
+  "id": "4",
+  "label": "4 · Recursos naturales: exportaciones por sector",
+  "title": "Recursos naturales: exportaciones por sector",
+  "mock": false,
+  "refs": [
+   "E7",
+   "E1"
+  ],
+  "tables": [
+   {
+    "id": "chart-4",
+    "title": "Recursos naturales: exportaciones por sector",
+    "columns": [
+     "Exportaciones por sector",
+     "Valor (miles de millones de USD)"
+    ],
+    "rows": [
+     [
+      "Complejo soja",
+      21.4
+     ],
+     [
+      "Petrolero-petroquímico",
+      11.8
+     ],
+     [
+      "Automotriz",
+      8.8
+     ],
+     [
+      "Maicero",
+      6.7
+     ],
+     [
+      "Oro y plata",
+      4.9
+     ],
+     [
+      "Carne y cuero bovinos",
+      4.7
+     ],
+     [
+      "Triguero",
+      3.6
+     ],
+     [
+      "Girasol",
+      2.2
+     ],
+     [
+      "Pesquero",
+      2.1
+     ],
+     [
+      "Lácteo",
+      1.5
+     ],
+     [
+      "Otros complejos",
+      13.3
+     ],
+     [
+      "Resto de exportaciones",
+      6.1
+     ]
+    ]
+   },
+   {
+    "id": "complexes",
+    "title": "Exportaciones de bienes por complejo exportador, 2025 y 2024 (millones de USD, datos provisorios; INDEC)",
+    "columns": [
+     "Complejo",
+     "2025",
+     "2024",
+     "Variación (%)",
+     "Participación 2025 (%)"
+    ],
+    "rows": [
+     [
+      "Complejo soja",
+      21442,
+      19628,
+      9.2,
+      24.6
+     ],
+     [
+      "Petrolero-petroquímico",
+      11772,
+      10435,
+      12.8,
+      13.5
+     ],
+     [
+      "Automotriz",
+      8784,
+      9010,
+      -2.5,
+      10.1
+     ],
+     [
+      "Maicero",
+      6660,
+      7264,
+      -8.3,
+      7.6
+     ],
+     [
+      "Oro y plata",
+      4886,
+      3827,
+      27.7,
+      5.6
+     ],
+     [
+      "Carne y cuero bovinos",
+      4727,
+      3804,
+      24.3,
+      5.4
+     ],
+     [
+      "Triguero",
+      3649,
+      2764,
+      32,
+      4.2
+     ],
+     [
+      "Girasol",
+      2175,
+      1453,
+      49.7,
+      2.5
+     ],
+     [
+      "Pesquero",
+      2091,
+      2013,
+      3.9,
+      2.4
+     ],
+     [
+      "Lácteo",
+      1522,
+      1281,
+      18.8,
+      1.7
+     ],
+     [
+      "Otros complejos",
+      13346,
+      12755,
+      4.6,
+      15.3
+     ],
+     [
+      "Resto de exportaciones",
+      6055,
+      5469,
+      10.7,
+      7
+     ]
+    ]
+   },
+   {
+    "id": "great-items",
+    "title": "Exportaciones por gran rubro, acumulado de enero a julio de 2026 (miles de millones de USD; INDEC, Intercambio comercial argentino (informe de agosto de 2026), acumulado de enero a julio de 2026)",
+    "columns": [
+     "Gran rubro",
+     "Valor"
+    ],
+    "rows": [
+     [
+      "Productos primarios",
+      14.749
+     ],
+     [
+      "Manufacturas de origen agropecuario",
+      18.911
+     ],
+     [
+      "Manufacturas de origen industrial",
+      15.554
+     ],
+     [
+      "Combustibles y energía",
+      9.151
+     ]
+    ]
+   }
+  ]
+ },
+ {
+  "id": "5",
+  "label": "5 · Regla del 70: cuánto tarda en duplicarse el PBI",
+  "title": "Regla del 70: cuánto tarda en duplicarse el PBI",
+  "mock": false,
+  "refs": [],
+  "tables": [
+   {
+    "id": "chart-5",
+    "title": "Regla del 70: cuánto tarda en duplicarse el PBI",
+    "columns": [
+     "Años para duplicar el PBI",
+     "Valor (años)"
+    ],
+    "rows": [
+     [
+      "1 %",
+      70
+     ],
+     [
+      "2 %",
+      35
+     ],
+     [
+      "3 %",
+      23.3
+     ],
+     [
+      "4 %",
+      17.5
+     ],
+     [
+      "5 %",
+      14
+     ],
+     [
+      "6 %",
+      11.7
+     ],
+     [
+      "7 %",
+      10
+     ],
+     [
+      "8 %",
+      8.8
+     ]
+    ]
+   }
+  ]
+ },
+ {
+  "id": "6",
+  "label": "6 · Qué miran los inversores",
+  "title": "Qué miran los inversores",
+  "mock": true,
+  "refs": [],
+  "tables": [
+   {
+    "id": "chart-6",
+    "title": "Qué miran los inversores",
+    "columns": [
+     "Qué miran los inversores",
+     "Valor (puntos (0 a 10))"
+    ],
+    "rows": [
+     [
+      "Estabilidad macro",
+      4.5
+     ],
+     [
+      "Riesgo país",
+      3.8
+     ],
+     [
+      "Reglas de juego",
+      4.2
+     ],
+     [
+      "Infraestructura",
+      5.5
+     ],
+     [
+      "Capital humano",
+      6.8
+     ],
+     [
+      "Recursos naturales",
+      8.6
+     ]
+    ]
+   }
+  ]
+ },
+ {
+  "id": "7",
+  "label": "7 · Mapa productivo por provincia",
+  "title": "Mapa productivo por provincia",
+  "mock": true,
+  "refs": [
+   "E6"
+  ],
+  "tables": [
+   {
+    "id": "provinces-value",
+    "title": "Valor productivo por provincia (millones de USD)",
+    "columns": [
+     "Provincia",
+     "Valor"
+    ],
+    "rows": [
+     [
+      "Salta",
+      3200
+     ],
+     [
+      "Buenos Aires",
+      41000
+     ],
+     [
+      "Ciudad Autónoma de Buenos Aires",
+      9800
+     ],
+     [
+      "San Luis",
+      1400
+     ],
+     [
+      "Entre Ríos",
+      5200
+     ],
+     [
+      "La Rioja",
+      900
+     ],
+     [
+      "Santiago del Estero",
+      2100
+     ],
+     [
+      "Chaco",
+      1800
+     ],
+     [
+      "San Juan",
+      3600
+     ],
+     [
+      "Catamarca",
+      1500
+     ],
+     [
+      "La Pampa",
+      2300
+     ],
+     [
+      "Mendoza",
+      6400
+     ],
+     [
+      "Misiones",
+      2000
+     ],
+     [
+      "Formosa",
+      700
+     ],
+     [
+      "Neuquén",
+      7800
+     ],
+     [
+      "Río Negro",
+      2700
+     ],
+     [
+      "Santa Fe",
+      21000
+     ],
+     [
+      "Tucumán",
+      1600
+     ],
+     [
+      "Chubut",
+      4800
+     ],
+     [
+      "Tierra del Fuego, Antártida e Islas del Atlántico Sur",
+      1200
+     ],
+     [
+      "Corrientes",
+      2200
+     ],
+     [
+      "Córdoba",
+      19500
+     ],
+     [
+      "Jujuy",
+      1300
+     ],
+     [
+      "Santa Cruz",
+      5600
+     ]
+    ]
+   },
+   {
+    "id": "hydrocarbons-provinces",
+    "title": "Petróleo y gas por provincia en 2025 (Secretaría de Energía, promedio diario del año)",
+    "columns": [
+     "Provincia",
+     "Petróleo (miles de barriles por día)",
+     "Gas (millones de m³ por día)"
+    ],
+    "rows": [
+     [
+      "Neuquén",
+      513.6,
+      96.95
+     ],
+     [
+      "Chubut",
+      123.9,
+      6.23
+     ],
+     [
+      "Santa Cruz",
+      61.3,
+      7.72
+     ],
+     [
+      "Mendoza",
+      53,
+      1.35
+     ],
+     [
+      "Río Negro",
+      20.6,
+      2.7
+     ],
+     [
+      "La Pampa",
+      11.3,
+      0.48
+     ],
+     [
+      "Estado Nacional",
+      4.5,
+      19.15
+     ],
+     [
+      "Tierra del Fuego",
+      3,
+      3.7
+     ],
+     [
+      "Salta",
+      1.8,
+      3.06
+     ],
+     [
+      "Formosa",
+      0.5,
+      0.01
+     ],
+     [
+      "Jujuy",
+      0.2,
+      0.01
+     ]
+    ]
+   }
+  ]
+ },
+ {
+  "id": "8",
+  "label": "8 · Minería: hoy vs proyecto",
+  "title": "Minería: hoy vs proyecto",
+  "mock": false,
+  "refs": [
+   "E3",
+   "E5",
+   "R1",
+   "R2",
+   "R3",
+   "R4",
+   "R5",
+   "R9"
+  ],
+  "tables": [
+   {
+    "id": "chart-8",
+    "title": "Minería: hoy vs proyecto",
+    "columns": [
+     "Minería: 2024 y proyección 2035",
+     "Valor (miles de millones de USD)"
+    ],
+    "rows": [
+     [
+      "Oro y plata · 2024",
+      3.793
+     ],
+     [
+      "Oro y plata · 2035",
+      2.5
+     ],
+     [
+      "Litio · 2024",
+      0.645
+     ],
+     [
+      "Litio · 2035",
+      11.3
+     ],
+     [
+      "Cobre y resto · 2024",
+      0.235
+     ],
+     [
+      "Cobre y resto · 2035",
+      11.7
+     ]
+    ]
+   },
+   {
+    "id": "mining-exports",
+    "title": "Exportaciones mineras de Argentina (miles de millones de USD; Secretaría de Minería)",
+    "columns": [
+     "Período",
+     "Total"
+    ],
+    "rows": [
+     [
+      "2018",
+      3.45
+     ],
+     [
+      "2019",
+      3.248
+     ],
+     [
+      "2020",
+      2.621
+     ],
+     [
+      "2021",
+      3.243
+     ],
+     [
+      "2022",
+      3.858
+     ],
+     [
+      "2023",
+      4.061
+     ],
+     [
+      "2024",
+      4.673
+     ],
+     [
+      "Enero y febrero de 2024",
+      0.54
+     ],
+     [
+      "Enero y febrero de 2025",
+      0.782
+     ]
+    ]
+   },
+   {
+    "id": "mining-2024",
+    "title": "Principales productos mineros exportados en 2024 (millones de USD y % del total)",
+    "columns": [
+     "Producto",
+     "Millones de USD",
+     "% del total"
+    ],
+    "rows": [
+     [
+      "Oro",
+      3141,
+      67.2
+     ],
+     [
+      "Plata",
+      652,
+      14
+     ],
+     [
+      "Litio",
+      645,
+      13.8
+     ],
+     [
+      "Resto",
+      235,
+      5
+     ]
+    ]
+   },
+   {
+    "id": "mining-projection",
+    "title": "Proyección de exportaciones mineras 2024-2035 (miles de millones de USD; solo se leen el total y lo que el gráfico rotula)",
+    "columns": [
+     "Año",
+     "Total",
+     "Litio",
+     "Cobre"
+    ],
+    "rows": [
+     [
+      2024,
+      4.7,
+      0.6,
+      null
+     ],
+     [
+      2025,
+      4.9,
+      1.3,
+      null
+     ],
+     [
+      2026,
+      6,
+      2.6,
+      null
+     ],
+     [
+      2027,
+      6.6,
+      3.6,
+      null
+     ],
+     [
+      2028,
+      8.6,
+      6,
+      null
+     ],
+     [
+      2029,
+      13.9,
+      8,
+      3
+     ],
+     [
+      2030,
+      19.2,
+      9.7,
+      6.1
+     ],
+     [
+      2031,
+      23.4,
+      10.7,
+      9
+     ],
+     [
+      2032,
+      26.1,
+      11.3,
+      11.1
+     ],
+     [
+      2033,
+      26.4,
+      11.3,
+      11.7
+     ],
+     [
+      2034,
+      25.8,
+      11.3,
+      11.7
+     ],
+     [
+      2035,
+      25.5,
+      11.3,
+      11.7
+     ]
+    ]
+   },
+   {
+    "id": "mining-capex",
+    "title": "Gastos de capital proyectados 2025-2031 (millones de USD)",
+    "columns": [
+     "Año",
+     "Total"
+    ],
+    "rows": [
+     [
+      2025,
+      1388
+     ],
+     [
+      2026,
+      7510
+     ],
+     [
+      2027,
+      6664
+     ],
+     [
+      2028,
+      7029
+     ],
+     [
+      2029,
+      4501
+     ],
+     [
+      2030,
+      2360
+     ],
+     [
+      2031,
+      750
+     ]
+    ]
+   },
+   {
+    "id": "lithium-projects",
+    "title": "Proyectos de litio en estado avanzado (mayo de 2025)",
+    "columns": [
+     "Proyecto",
+     "Accionista principal",
+     "País",
+     "Provincia",
+     "Capacidad por año",
+     "Producción 2024",
+     "Estado"
+    ],
+    "rows": [
+     [
+      "Fénix",
+      "Rio Tinto Group",
+      "Reino Unido",
+      "Catamarca",
+      "20.600 t de LCE (carbonato) y 4.500 t (cloruro de litio)",
+      "25.000 t",
+      "Producción"
+     ],
+     [
+      "Hombre Muerto Oeste",
+      "Galan Litio",
+      "Australia",
+      "Catamarca",
+      "20.000 t de LCE",
+      "0 t",
+      "Construcción"
+     ],
+     [
+      "Sal de Vida",
+      "Rio Tinto Group",
+      "Reino Unido",
+      "Catamarca",
+      "15.000 t de LCE",
+      "0 t",
+      "Construcción"
+     ],
+     [
+      "Tres Quebradas",
+      "Zijin Mining",
+      "China",
+      "Catamarca",
+      "20.000 t de LCE",
+      "0 t",
+      "Construcción"
+     ],
+     [
+      "Sal de Oro",
+      "Posco",
+      "Corea",
+      "Catamarca y Salta",
+      "25.000 t (hidróxido de litio)",
+      "0,85 t",
+      "Producción"
+     ],
+     [
+      "Cauchari-Olaroz",
+      "Ganfeng Lithium, Lithium Argentina y JEMSE",
+      "China, Canadá y Argentina",
+      "Jujuy",
+      "40.000 t de LCE",
+      "25.000 t",
+      "Producción"
+     ],
+     [
+      "Olaroz",
+      "Rio Tinto Group",
+      "Reino Unido",
+      "Jujuy",
+      "20.000 t de LCE",
+      "20.000 t",
+      "Producción"
+     ],
+     [
+      "Mariana",
+      "Ganfeng Lithium",
+      "China",
+      "Salta",
+      "20.000 t de LCE (cloruro de litio)",
+      "0 t",
+      "Producción"
+     ],
+     [
+      "Centenario-Ratones",
+      "Eramet",
+      "Francia",
+      "Salta",
+      "24.000 t de LCE",
+      "0,1 t",
+      "Producción"
+     ],
+     [
+      "Rincón",
+      "Argosy Minerals",
+      "Australia",
+      "Salta",
+      "12.000 t de LCE",
+      "0 t",
+      "Construcción"
+     ],
+     [
+      "Sal de los Ángeles",
+      "Revotech Asia, Tibet Summit Resources y Leading Resources Global",
+      "China y Reino Unido",
+      "Salta",
+      "20.000 t de LCE",
+      "0 t",
+      "Construcción"
+     ],
+     [
+      "Salar del Rincón",
+      "Rio Tinto Group",
+      "Reino Unido",
+      "Salta",
+      "60.000 t de LCE",
+      "0 t",
+      "Factibilidad y construcción"
+     ]
+    ]
+   },
+   {
+    "id": "copper-projects",
+    "title": "Proyectos de cobre en estado avanzado (mayo de 2025; kt = miles de toneladas, koz = miles de onzas)",
+    "columns": [
+     "Proyecto",
+     "Accionista principal",
+     "País",
+     "Provincia",
+     "Capacidad por año",
+     "Estado"
+    ],
+    "rows": [
+     [
+      "Josemaría (Vicuña)",
+      "Lundin Mining y BHP",
+      "Canadá y Australia",
+      "San Juan",
+      "Cobre 131 kt; oro 224 koz; plata 1.048 koz",
+      "Construcción"
+     ],
+     [
+      "Filo del Sol (Vicuña)",
+      "Lundin Mining y BHP",
+      "Canadá y Australia",
+      "San Juan",
+      "Cobre 66 kt; oro 168 koz; plata 9.256 koz",
+      "Prefactibilidad"
+     ],
+     [
+      "Los Azules",
+      "McEwen Mining, Stellantis y Nuton",
+      "Canadá, Países Bajos y Australia",
+      "San Juan",
+      "Cobre 175 kt (cátodo); oro 4.600 koz; plata 100.000 koz",
+      "Evaluación económica preliminar"
+     ],
+     [
+      "Altar",
+      "Aldebaran Resources, Sibanye Stillwater y Nuton Holdings",
+      "Canadá, Sudáfrica y Reino Unido",
+      "San Juan",
+      "Cobre 127 kt; oro 24 koz",
+      "Exploración"
+     ],
+     [
+      "PSJ Cobre Mendocino (ex San Jorge)",
+      "Zonda Metals y Alberdi Energy",
+      "Suiza y Argentina",
+      "Mendoza",
+      "Cobre 40 kt",
+      "Prefactibilidad"
+     ],
+     [
+      "El Pachón",
+      "Glencore",
+      "Suiza",
+      "San Juan",
+      "Cobre 280 kt; plata 3.000 koz; molibdeno 9 kt",
+      "Factibilidad"
+     ],
+     [
+      "Taca Taca",
+      "First Quantum Minerals",
+      "Canadá",
+      "Salta",
+      "Cobre 227 kt; molibdeno 2.205 t; oro 106,3 koz",
+      "Factibilidad"
+     ],
+     [
+      "MARA (Agua Rica - Bajo La Alumbrera)",
+      "Glencore",
+      "Suiza",
+      "Catamarca",
+      "Equivale a 533 millones de libras de concentrado de cobre",
+      "Factibilidad"
+     ]
+    ]
+   },
+   {
+    "id": "rigi-mining",
+    "title": "Proyectos mineros del RIGI y otros en evaluación (prensa, sin verificar)",
+    "columns": [
+     "Proyecto",
+     "Empresa",
+     "Provincia",
+     "Tipo",
+     "Inversión (millones de USD)",
+     "Estado",
+     "Nota (sin verificar)"
+    ],
+    "rows": [
+     [
+      "Vicuña",
+      "BHP y Lundin Mining",
+      "San Juan",
+      "Cobre, oro y plata",
+      9737,
+      "aprobado",
+      "La Nación: 9.700; Shale24 lo da como pendiente (nota anterior)"
+     ],
+     [
+      "Alumbrera-Agua Rica (MARA)",
+      "Glencore",
+      "Catamarca",
+      "Cobre, oro, plata y molibdeno",
+      4000,
+      "aprobado",
+      "200.000 t de cobre por año; aprobado el 2026-10-02 según iProfesional; Shale24 da 3.806"
+     ],
+     [
+      "Rincón",
+      "Rio Tinto",
+      "Salta",
+      "Litio",
+      2744,
+      "aprobado",
+      "60.000 t de carbonato de litio por año (La Nación); otras notas dan 2.700 y 2.724"
+     ],
+     [
+      "Los Azules",
+      "McEwen Copper",
+      "San Juan",
+      "Cobre",
+      2672,
+      "aprobado",
+      "—"
+     ],
+     [
+      "Cauchari-Olaroz (ampliación)",
+      "Exar (Ganfeng)",
+      "Jujuy",
+      "Litio",
+      1241,
+      "aprobado",
+      "Aprobado en mayo de 2026 (Infobae)"
+     ],
+     [
+      "PSJ Cobre Mendocino",
+      "Minera San Jorge",
+      "Mendoza",
+      "Cobre (oro como subproducto)",
+      891,
+      "aprobado",
+      "Aprobado en mayo de 2026 (Infobae)"
+     ],
+     [
+      "Diablillos",
+      "AbraSilver",
+      "Salta y Catamarca",
+      "Oro y plata",
+      764,
+      "aprobado",
+      "Infobae: 760; Shale24 lo da como pendiente con 500"
+     ],
+     [
+      "Tres Quebradas (3Q)",
+      "Vinculada a Zijin Mining",
+      "Catamarca",
+      "Litio",
+      710,
+      "aprobado",
+      "—"
+     ],
+     [
+      "Gualcamayo (carbonatos profundos)",
+      "Minas Argentinas",
+      "San Juan",
+      "Oro y plata",
+      665,
+      "aprobado",
+      "Otras notas dan 655"
+     ],
+     [
+      "Sal de Oro II",
+      "Posco Argentina",
+      "Salta y Catamarca",
+      "Litio",
+      547,
+      "aprobado",
+      "Shale24 da 633 (en evaluación)"
+     ],
+     [
+      "Fénix (ampliación fase 1B)",
+      "Sin nombrar en la fuente",
+      "Catamarca",
+      "Potasio y litio",
+      531,
+      "aprobado",
+      "—"
+     ],
+     [
+      "Veladero (fases 8 y 9)",
+      "Barrick y Shandong Gold",
+      "San Juan",
+      "Oro",
+      436,
+      "aprobado",
+      "Infobae de febrero de 2026: 380"
+     ],
+     [
+      "Hombre Muerto Oeste (HMW)",
+      "Galán Lithium",
+      "Catamarca",
+      "Litio",
+      292,
+      "aprobado",
+      "Otras notas dan 217 (cloruro de litio de alta pureza)"
+     ],
+     [
+      "Pachón",
+      "Glencore",
+      "San Juan",
+      "Cobre",
+      9533,
+      "en evaluación",
+      "Shale24"
+     ],
+     [
+      "Sal de Vida",
+      "Rio Tinto",
+      "Catamarca",
+      "Litio",
+      818,
+      "en evaluación",
+      "Shale24"
+     ],
+     [
+      "Taca Taca",
+      "First Quantum",
+      "Salta",
+      "Cobre",
+      3583,
+      "en evaluación",
+      "Factibilidad (sin pedido de RIGI en lo leído); la empresa no figura en la nota"
+     ],
+     [
+      "Arenas de Cercanías",
+      "Minera del Mojotoro y Minera Orosmayo",
+      "Río Negro",
+      "Arena para fractura (frac sand)",
+      232,
+      "en evaluación",
+      "Shale24"
+     ]
+    ]
+   }
+  ]
+ },
+ {
+  "id": "9",
+  "label": "9 · Hidrocarburos: Vaca Muerta define el piso y el techo",
+  "title": "Hidrocarburos: Vaca Muerta define el piso y el techo",
+  "mock": true,
+  "refs": [
+   "E6",
+   "E4",
+   "R2",
+   "R3",
+   "R6",
+   "R7",
+   "R8",
+   "R10",
+   "R11"
+  ],
+  "tables": [
+   {
+    "id": "chart-9",
+    "title": "Hidrocarburos: Vaca Muerta define el piso y el techo",
+    "columns": [
+     "Año",
+     "Producción observada (miles de barriles de petróleo por día)",
+     "Proyección esperada (miles de barriles de petróleo por día)",
+     "Rango, mínimo (miles de barriles de petróleo por día)",
+     "Rango, máximo (miles de barriles de petróleo por día)"
+    ],
+    "rows": [
+     [
+      "2015",
+      532.4,
+      null,
+      532.4,
+      532.4
+     ],
+     [
+      "2016",
+      510.6,
+      null,
+      510.6,
+      510.6
+     ],
+     [
+      "2017",
+      479.7,
+      null,
+      479.7,
+      479.7
+     ],
+     [
+      "2018",
+      489.5,
+      null,
+      489.5,
+      489.5
+     ],
+     [
+      "2019",
+      508.7,
+      null,
+      508.7,
+      508.7
+     ],
+     [
+      "2020",
+      480.8,
+      null,
+      480.8,
+      480.8
+     ],
+     [
+      "2021",
+      513.5,
+      null,
+      513.5,
+      513.5
+     ],
+     [
+      "2022",
+      582.5,
+      null,
+      582.5,
+      582.5
+     ],
+     [
+      "2023",
+      635.3,
+      null,
+      635.3,
+      635.3
+     ],
+     [
+      "2024",
+      700.7,
+      null,
+      700.7,
+      700.7
+     ],
+     [
+      "2025",
+      793.7,
+      793.7,
+      793.7,
+      793.7
+     ],
+     [
+      "2026",
+      null,
+      821.5,
+      729.5,
+      854.4
+     ],
+     [
+      "2027",
+      null,
+      850.2,
+      744.8,
+      913.7
+     ],
+     [
+      "2028",
+      null,
+      880,
+      760.3,
+      974.6
+     ],
+     [
+      "2029",
+      null,
+      910.8,
+      776,
+      1037.7
+     ],
+     [
+      "2030",
+      null,
+      942.7,
+      791.9,
+      1103.2
+     ],
+     [
+      "2031",
+      null,
+      975.7,
+      807.9,
+      1171.5
+     ],
+     [
+      "2032",
+      null,
+      1009.8,
+      824,
+      1242.5
+     ],
+     [
+      "2033",
+      null,
+      1045.2,
+      840.3,
+      1316.9
+     ],
+     [
+      "2034",
+      null,
+      1081.7,
+      856.7,
+      1394.3
+     ],
+     [
+      "2035",
+      null,
+      1119.6,
+      873.3,
+      1475.3
+     ],
+     [
+      "2036",
+      null,
+      1158.8,
+      890,
+      1560
+     ],
+     [
+      "2037",
+      null,
+      1199.3,
+      906.7,
+      1648.3
+     ],
+     [
+      "2038",
+      null,
+      1241.3,
+      923.5,
+      1740.7
+     ],
+     [
+      "2039",
+      null,
+      1284.8,
+      940.5,
+      1837.4
+     ],
+     [
+      "2040",
+      null,
+      1329.7,
+      957.4,
+      1938.2
+     ],
+     [
+      "2041",
+      null,
+      1376.3,
+      974.4,
+      2043.8
+     ],
+     [
+      "2042",
+      null,
+      1424.4,
+      991.4,
+      2154
+     ],
+     [
+      "2043",
+      null,
+      1474.3,
+      1008.4,
+      2269.3
+     ],
+     [
+      "2044",
+      null,
+      1525.9,
+      1025.4,
+      2389.8
+     ],
+     [
+      "2045",
+      null,
+      1579.3,
+      1042.3,
+      2515.7
+     ],
+     [
+      "2046",
+      null,
+      1634.6,
+      1059.2,
+      2647.3
+     ],
+     [
+      "2047",
+      null,
+      1691.8,
+      1076,
+      2784.7
+     ],
+     [
+      "2048",
+      null,
+      1751,
+      1092.6,
+      2928.3
+     ],
+     [
+      "2049",
+      null,
+      1812.3,
+      1109.1,
+      3078.4
+     ],
+     [
+      "2050",
+      null,
+      1875.7,
+      1125.4,
+      3235.2
+     ],
+     [
+      "2051",
+      null,
+      1941.4,
+      1141.5,
+      3399
+     ],
+     [
+      "2052",
+      null,
+      2009.3,
+      1157.4,
+      3570
+     ],
+     [
+      "2053",
+      null,
+      2079.6,
+      1172.9,
+      3748.7
+     ],
+     [
+      "2054",
+      null,
+      2152.4,
+      1188.1,
+      3935.4
+     ],
+     [
+      "2055",
+      null,
+      2227.8,
+      1203,
+      4130.4
+     ],
+     [
+      "2056",
+      null,
+      2305.7,
+      1217.4,
+      4333.8
+     ]
+    ]
+   },
+   {
+    "id": "oil-gas-national",
+    "title": "Producción nacional de petróleo y gas, promedio diario de cada año (Secretaría de Energía)",
+    "columns": [
+     "Año",
+     "Petróleo (miles de barriles por día)",
+     "Gas (millones de m³ por día)"
+    ],
+    "rows": [
+     [
+      2009,
+      603.9,
+      132.7
+     ],
+     [
+      2010,
+      589.5,
+      129.1
+     ],
+     [
+      2011,
+      553.5,
+      124.7
+     ],
+     [
+      2012,
+      549.4,
+      120.6
+     ],
+     [
+      2013,
+      539.9,
+      114.3
+     ],
+     [
+      2014,
+      532.2,
+      113.7
+     ],
+     [
+      2015,
+      532.4,
+      117.5
+     ],
+     [
+      2016,
+      510.6,
+      122.9
+     ],
+     [
+      2017,
+      479.7,
+      122.3
+     ],
+     [
+      2018,
+      489.5,
+      128.8
+     ],
+     [
+      2019,
+      508.7,
+      135.2
+     ],
+     [
+      2020,
+      480.8,
+      123.2
+     ],
+     [
+      2021,
+      513.5,
+      124.1
+     ],
+     [
+      2022,
+      582.5,
+      132.8
+     ],
+     [
+      2023,
+      635.3,
+      131.9
+     ],
+     [
+      2024,
+      700.7,
+      138.6
+     ],
+     [
+      2025,
+      793.7,
+      141.4
+     ]
+    ]
+   },
+   {
+    "id": "oil-since-1950",
+    "title": "Producción anual de petróleo desde 1950, total del país (miles de m³; Secretaría de Energía). Es otra serie: en 2015 da 31.973 mil m³ y la de arriba, unos 30.900",
+    "columns": [
+     "Año",
+     "Petróleo (miles de m³)"
+    ],
+    "rows": [
+     [
+      1950,
+      3730
+     ],
+     [
+      1951,
+      3889.6
+     ],
+     [
+      1952,
+      3946
+     ],
+     [
+      1953,
+      4531.4
+     ],
+     [
+      1954,
+      4701.6
+     ],
+     [
+      1955,
+      4849.8
+     ],
+     [
+      1956,
+      4930.5
+     ],
+     [
+      1957,
+      5397.9
+     ],
+     [
+      1958,
+      5668.9
+     ],
+     [
+      1959,
+      7087.4
+     ],
+     [
+      1960,
+      10152.9
+     ],
+     [
+      1961,
+      13428.3
+     ],
+     [
+      1962,
+      15613.5
+     ],
+     [
+      1963,
+      15444.2
+     ],
+     [
+      1964,
+      15942.6
+     ],
+     [
+      1965,
+      15624.7
+     ],
+     [
+      1966,
+      16655.5
+     ],
+     [
+      1967,
+      18231.6
+     ],
+     [
+      1968,
+      19951.1
+     ],
+     [
+      1969,
+      20681.3
+     ],
+     [
+      1970,
+      22798.4
+     ],
+     [
+      1971,
+      24565.3
+     ],
+     [
+      1972,
+      25193.5
+     ],
+     [
+      1973,
+      24440.9
+     ],
+     [
+      1974,
+      24022.3
+     ],
+     [
+      1975,
+      22968.2
+     ],
+     [
+      1976,
+      23147.5
+     ],
+     [
+      1977,
+      25047.3
+     ],
+     [
+      1978,
+      26254.9
+     ],
+     [
+      1979,
+      27433.9
+     ],
+     [
+      1980,
+      28566.2
+     ],
+     [
+      1981,
+      28852.4
+     ],
+     [
+      1982,
+      28470.1
+     ],
+     [
+      1983,
+      28474.1
+     ],
+     [
+      1984,
+      27838.2
+     ],
+     [
+      1985,
+      26675.1
+     ],
+     [
+      1986,
+      25178.9
+     ],
+     [
+      1987,
+      24857.1
+     ],
+     [
+      1988,
+      26122.7
+     ],
+     [
+      1989,
+      26713.3
+     ],
+     [
+      1990,
+      28004
+     ],
+     [
+      1991,
+      28620.5
+     ],
+     [
+      1992,
+      32246.1
+     ],
+     [
+      1993,
+      34447.3
+     ],
+     [
+      1994,
+      38732.5
+     ],
+     [
+      1995,
+      41739.3
+     ],
+     [
+      1996,
+      45569.6
+     ],
+     [
+      1997,
+      48403
+     ],
+     [
+      1998,
+      49147.7
+     ],
+     [
+      1999,
+      44666.7
+     ],
+     [
+      2000,
+      43288.8
+     ],
+     [
+      2001,
+      44617
+     ],
+     [
+      2002,
+      43960.6
+     ],
+     [
+      2003,
+      42957.1
+     ],
+     [
+      2004,
+      40432.9
+     ],
+     [
+      2005,
+      38572.5
+     ],
+     [
+      2006,
+      38346.3
+     ],
+     [
+      2007,
+      37904.6
+     ],
+     [
+      2008,
+      37592.9
+     ],
+     [
+      2009,
+      36239.9
+     ],
+     [
+      2010,
+      35413.4
+     ],
+     [
+      2011,
+      33326.3
+     ],
+     [
+      2012,
+      33139.5
+     ],
+     [
+      2013,
+      32461.1
+     ],
+     [
+      2014,
+      31979.8
+     ],
+     [
+      2015,
+      31973.3
+     ]
+    ]
+   },
+   {
+    "id": "rigi-oil-gas",
+    "title": "Proyectos de petróleo y gas del RIGI y otros en evaluación (prensa, sin verificar)",
+    "columns": [
+     "Proyecto",
+     "Empresa",
+     "Provincia",
+     "Tipo",
+     "Inversión (millones de USD)",
+     "Estado",
+     "Nota (sin verificar)"
+    ],
+    "rows": [
+     [
+      "Argentina LNG (licuefacción en el golfo San Matías)",
+      "Southern Energy (PAE y Golar)",
+      "Río Negro",
+      "GNL, exportación",
+      6878,
+      "aprobado",
+      "La Nación da 15.156 (dos unidades flotantes)"
+     ],
+     [
+      "Oleoducto Vaca Muerta Sur (VMOS)",
+      "YPF, PAE, Vista, Pampa, Pluspetrol, Chevron y Shell",
+      "Neuquén y Río Negro",
+      "Oleoducto de 437 km (Allen a Punta Colorada)",
+      2900,
+      "aprobado",
+      "Otras notas dan 2.486, 2.500 y 2.720; con 51 % de avance de obra"
+     ],
+     [
+      "Gasoducto dedicado a San Matías",
+      "Southern Energy",
+      "Río Negro",
+      "Gasoducto de 27 millones de m³ por día",
+      1300,
+      "aprobado",
+      "—"
+     ],
+     [
+      "Los Toldos II Este",
+      "Tecpetrol",
+      "Neuquén",
+      "Producción no convencional (Vaca Muerta)",
+      6432,
+      "aprobado",
+      "Resolución 1771/2026, publicada el 2026-10-09"
+     ],
+     [
+      "Rincón de Aranda",
+      "Pampa Energía",
+      "Neuquén",
+      "Vaca Muerta: ductos y plantas de tratamiento",
+      4521,
+      "aprobado",
+      "La Nación: 4.521; Shale24: 295 (otra etapa)"
+     ],
+     [
+      "Los Toldos (primera etapa)",
+      "Tecpetrol",
+      "Neuquén",
+      "Infraestructura de hidrocarburos",
+      1006,
+      "en evaluación",
+      "Shale24; probablemente absorbida por Los Toldos II Este"
+     ],
+     [
+      "LNG del Plata",
+      "Camuzzi",
+      "Buenos Aires",
+      "GNL",
+      null,
+      "en evaluación",
+      "Pedido de estabilidad fiscal a presentar"
+     ],
+     [
+      "LLL Oil",
+      "YPF",
+      "Neuquén",
+      "Exportación de crudo: 1.152 pozos, 240.000 barriles por día desde 2032, en los bloques de La Angostura",
+      25000,
+      "en evaluación",
+      "YPF pidió adherir al RIGI en mayo de 2026; decisión final de inversión en la segunda mitad de 2026; sale por el VMOS"
+     ],
+     [
+      "La Angostura Sur I (inversión de 2026)",
+      "YPF",
+      "Neuquén",
+      "Desarrollo de Vaca Muerta",
+      1117,
+      "en evaluación",
+      "No es un proyecto RIGI: es el mayor compromiso de inversión de 2026 en Vaca Muerta"
+     ],
+     [
+      "GNL integrado de YPF, ENI y XRG",
+      "YPF, ENI y XRG",
+      "Río Negro",
+      "GNL",
+      null,
+      "en evaluación",
+      "Mencionado por La Nación; sin monto en lo leído"
+     ]
+    ]
+   }
+  ]
+ },
+ {
+  "id": "10",
+  "label": "10 · Agro: producción actual y potencial",
+  "title": "Agro: producción actual y potencial",
+  "mock": true,
+  "refs": [
+   "E8"
+  ],
+  "tables": [
+   {
+    "id": "chart-10",
+    "title": "Agro: producción actual y potencial",
+    "columns": [
+     "Agro: actual y potencial",
+     "Valor (miles de millones de USD)"
+    ],
+    "rows": [
+     [
+      "Soja · actual",
+      14
+     ],
+     [
+      "Soja · potencial",
+      21
+     ],
+     [
+      "Maíz · actual",
+      9
+     ],
+     [
+      "Maíz · potencial",
+      16
+     ],
+     [
+      "Trigo · actual",
+      3.5
+     ],
+     [
+      "Trigo · potencial",
+      6.5
+     ],
+     [
+      "Girasol · actual",
+      1.8
+     ],
+     [
+      "Girasol · potencial",
+      3.2
+     ],
+     [
+      "Carne y lácteos · actual",
+      6
+     ],
+     [
+      "Carne y lácteos · potencial",
+      11
+     ]
+    ]
+   },
+   {
+    "id": "agro-production",
+    "title": "Producción de los cuatro cultivos principales por campaña (MAGyP; el año es el de inicio de la campaña)",
+    "columns": [
+     "Cultivo",
+     "Campaña",
+     "Superficie sembrada (ha)",
+     "Superficie cosechada (ha)",
+     "Producción (toneladas)",
+     "Rendimiento (kg por ha)"
+    ],
+    "rows": [
+     [
+      "Soja",
+      "2019/20",
+      16918869,
+      16710793,
+      48780412,
+      2919.1
+     ],
+     [
+      "Soja",
+      "2020/21",
+      16650093,
+      16466714,
+      46217911,
+      2806.75
+     ],
+     [
+      "Soja",
+      "2021/22",
+      16094383,
+      15874266,
+      43861066,
+      2763.03
+     ],
+     [
+      "Soja",
+      "2022/23",
+      15978775,
+      14356924,
+      25044982,
+      1744.45
+     ],
+     [
+      "Soja",
+      "2023/24",
+      16564537,
+      16371093,
+      48213216,
+      2945.02
+     ],
+     [
+      "Soja",
+      "2024/25",
+      17994965,
+      17455116,
+      51107839,
+      2927.96
+     ],
+     [
+      "Maíz",
+      "2019/20",
+      9504473,
+      7730506,
+      58395811,
+      7553.94
+     ],
+     [
+      "Maíz",
+      "2020/21",
+      9742230,
+      8146596,
+      60525805,
+      7429.58
+     ],
+     [
+      "Maíz",
+      "2021/22",
+      10670126,
+      8768441,
+      59037179,
+      6732.92
+     ],
+     [
+      "Maíz",
+      "2022/23",
+      10533195,
+      8104641,
+      41409448,
+      5109.35
+     ],
+     [
+      "Maíz",
+      "2023/24",
+      11103250,
+      8736712,
+      57494500,
+      6580.79
+     ],
+     [
+      "Maíz",
+      "2024/25",
+      9234043,
+      7422500,
+      51690953,
+      6964.09
+     ],
+     [
+      "Trigo",
+      "2020/21",
+      6729898,
+      6394102,
+      17644277,
+      2759.46
+     ],
+     [
+      "Trigo",
+      "2021/22",
+      6751729,
+      6548477,
+      22150287,
+      3382.51
+     ],
+     [
+      "Trigo",
+      "2022/23",
+      5907287,
+      5488728,
+      12555860,
+      2287.57
+     ],
+     [
+      "Trigo",
+      "2023/24",
+      5916678,
+      5575352,
+      15853154,
+      2843.44
+     ],
+     [
+      "Trigo",
+      "2024/25",
+      6550169,
+      6341303,
+      18510280,
+      2919
+     ],
+     [
+      "Trigo",
+      "2025/26",
+      6958766,
+      6785397,
+      27862115,
+      4106.19
+     ],
+     [
+      "Girasol",
+      "2019/20",
+      1404768,
+      1381573,
+      2857413,
+      2068.23
+     ],
+     [
+      "Girasol",
+      "2020/21",
+      1636885,
+      1628002,
+      3247366,
+      1994.69
+     ],
+     [
+      "Girasol",
+      "2021/22",
+      1968907,
+      1958686,
+      4050362,
+      2067.9
+     ],
+     [
+      "Girasol",
+      "2022/23",
+      2465201,
+      2453245,
+      5018874,
+      2045.81
+     ],
+     [
+      "Girasol",
+      "2023/24",
+      1857963,
+      1842731,
+      3895161,
+      2113.8
+     ],
+     [
+      "Girasol",
+      "2024/25",
+      2413081,
+      2397165,
+      5531925,
+      2307.69
+     ]
+    ]
+   }
+  ]
+ },
+ {
+  "id": "11",
+  "label": "11 · Composición de las exportaciones",
+  "title": "Composición de las exportaciones",
+  "mock": false,
+  "refs": [
+   "E7"
+  ],
+  "tables": [
+   {
+    "id": "chart-11",
+    "title": "Composición de las exportaciones",
+    "columns": [
+     "Composición de las exportaciones",
+     "Valor (%)"
+    ],
+    "rows": [
+     [
+      "Complejo soja",
+      24.6
+     ],
+     [
+      "Petrolero-petroquímico",
+      13.5
+     ],
+     [
+      "Automotriz",
+      10.1
+     ],
+     [
+      "Maicero",
+      7.6
+     ],
+     [
+      "Oro y plata",
+      5.6
+     ],
+     [
+      "Carne y cuero bovinos",
+      5.4
+     ],
+     [
+      "Triguero",
+      4.2
+     ],
+     [
+      "Girasol",
+      2.5
+     ],
+     [
+      "Pesquero",
+      2.4
+     ],
+     [
+      "Lácteo",
+      1.7
+     ],
+     [
+      "Otros complejos",
+      15.3
+     ],
+     [
+      "Resto de exportaciones",
+      7
+     ]
+    ]
+   }
+  ]
+ },
+ {
+  "id": "12",
+  "label": "12 · Composición del PBI",
+  "title": "Composición del PBI",
+  "mock": false,
+  "refs": [
+   "E2"
+  ],
+  "tables": [
+   {
+    "id": "chart-12",
+    "title": "Composición del PBI",
+    "columns": [
+     "Composición del PBI",
+     "Valor (%)"
+    ],
+    "rows": [
+     [
+      "Industria manufacturera",
+      18
+     ],
+     [
+      "Comercio mayorista y minorista",
+      15.2
+     ],
+     [
+      "Inmobiliarias y empresariales",
+      13.9
+     ],
+     [
+      "Transporte y comunicaciones",
+      9.1
+     ],
+     [
+      "Agricultura, ganadería y silvicultura",
+      8.5
+     ],
+     [
+      "Administración pública y defensa",
+      5.7
+     ],
+     [
+      "Minas y canteras",
+      4.9
+     ],
+     [
+      "Intermediación financiera",
+      4.8
+     ],
+     [
+      "Enseñanza",
+      4.8
+     ],
+     [
+      "Salud y servicios sociales",
+      4
+     ],
+     [
+      "Construcción",
+      3.2
+     ],
+     [
+      "Otros servicios",
+      2.6
+     ],
+     [
+      "Electricidad, gas y agua",
+      2.1
+     ],
+     [
+      "Hoteles y restaurantes",
+      2
+     ],
+     [
+      "Hogares con servicio doméstico",
+      0.7
+     ],
+     [
+      "Pesca",
+      0.4
+     ]
+    ]
+   }
+  ]
+ },
+ {
+  "id": "13",
+  "label": "13 · El stock de recursos naturales",
+  "title": "El stock de recursos naturales",
+  "mock": true,
+  "refs": [
+   "E3",
+   "E5",
+   "E6"
+  ],
+  "tables": [
+   {
+    "id": "chart-13",
+    "title": "El stock de recursos naturales",
+    "columns": [
+     "El stock de recursos naturales",
+     "Valor (miles de millones de USD)"
+    ],
+    "rows": [
+     [
+      "Litio",
+      900
+     ],
+     [
+      "Cobre",
+      650
+     ],
+     [
+      "Oro y plata",
+      240
+     ],
+     [
+      "Petróleo y gas",
+      1500
+     ],
+     [
+      "Tierra agrícola",
+      2100
+     ],
+     [
+      "Agua dulce",
+      800
+     ]
+    ]
+   },
+   {
+    "id": "reserves",
+    "title": "Reservas de petróleo y gas al 2025-12-31, hasta el final de la vida útil de los yacimientos (Secretaría de Energía)",
+    "columns": [
+     "Categoría",
+     "Petróleo (miles de m³)",
+     "Petróleo (millones de barriles)",
+     "Gas (millones de m³)"
+    ],
+    "rows": [
+     [
+      "Comprobadas",
+      624718,
+      3929,
+      583219
+     ],
+     [
+      "Probables",
+      372312,
+      2342,
+      246175
+     ],
+     [
+      "Posibles",
+      248797,
+      1565,
+      192772
+     ],
+     [
+      "Comprobadas, convencional",
+      209691,
+      1319,
+      121094
+     ],
+     [
+      "Comprobadas, no convencional (Vaca Muerta y otras)",
+      415027,
+      2610,
+      462125
+     ]
+    ]
+   }
+  ]
+ },
+ {
+  "id": "14",
+  "label": "14 · Productividad",
+  "title": "Productividad",
+  "mock": false,
+  "refs": [
+   "P6",
+   "P7",
+   "P7b",
+   "P1",
+   "P8",
+   "P9"
+  ],
+  "tables": [
+   {
+    "id": "tfp-level",
+    "title": "PTF, índice 1955 = 100",
+    "columns": [
+     "Año",
+     "Argentina",
+     "Estados Unidos",
+     "Chile",
+     "Brasil"
+    ],
+    "rows": [
+     [
+      1955,
+      100,
+      100,
+      100,
+      100
+     ],
+     [
+      1956,
+      98.8,
+      99.5,
+      98.8,
+      99.5
+     ],
+     [
+      1957,
+      98.7,
+      100.6,
+      103.6,
+      103.7
+     ],
+     [
+      1958,
+      101.1,
+      100.8,
+      106.3,
+      105
+     ],
+     [
+      1959,
+      93,
+      103.7,
+      103.7,
+      106.7
+     ],
+     [
+      1960,
+      97.8,
+      104.2,
+      111.5,
+      109.2
+     ],
+     [
+      1961,
+      95.9,
+      105.2,
+      113.1,
+      118.7
+     ],
+     [
+      1962,
+      92.9,
+      107.5,
+      115.4,
+      119.2
+     ],
+     [
+      1963,
+      87.5,
+      109.1,
+      119,
+      122.2
+     ],
+     [
+      1964,
+      91.1,
+      110.7,
+      117.1,
+      122.4
+     ],
+     [
+      1965,
+      96.2,
+      112.6,
+      113.5,
+      125.4
+     ],
+     [
+      1966,
+      93.7,
+      114.3,
+      118.8,
+      124.4
+     ],
+     [
+      1967,
+      93.7,
+      113.8,
+      120.9,
+      126.3
+     ],
+     [
+      1968,
+      95.6,
+      115.4,
+      117.2,
+      133.9
+     ],
+     [
+      1969,
+      100.5,
+      114.6,
+      115.2,
+      133.5
+     ],
+     [
+      1970,
+      100,
+      114.1,
+      115.3,
+      139.5
+     ],
+     [
+      1971,
+      99.8,
+      116,
+      116.3,
+      145.2
+     ],
+     [
+      1972,
+      98.2,
+      117.5,
+      109.3,
+      151.7
+     ],
+     [
+      1973,
+      98.8,
+      118.9,
+      100.7,
+      155.7
+     ],
+     [
+      1974,
+      99.8,
+      115.6,
+      100.8,
+      158.7
+     ],
+     [
+      1975,
+      96.4,
+      115.6,
+      86,
+      157.3
+     ],
+     [
+      1976,
+      94.2,
+      117.8,
+      86.3,
+      163
+     ],
+     [
+      1977,
+      95.7,
+      118.4,
+      91.1,
+      156.6
+     ],
+     [
+      1978,
+      90,
+      119,
+      95.1,
+      155.1
+     ],
+     [
+      1979,
+      93.2,
+      118,
+      98.6,
+      161.2
+     ],
+     [
+      1980,
+      92,
+      115.8,
+      100.2,
+      171.5
+     ],
+     [
+      1981,
+      85.3,
+      116.4,
+      100.6,
+      155.3
+     ],
+     [
+      1982,
+      81.5,
+      114.1,
+      89,
+      147.7
+     ],
+     [
+      1983,
+      82.8,
+      116.2,
+      83.1,
+      139.8
+     ],
+     [
+      1984,
+      82.9,
+      118.7,
+      85.1,
+      142.3
+     ],
+     [
+      1985,
+      76.3,
+      119.6,
+      83.8,
+      145.4
+     ],
+     [
+      1986,
+      80.4,
+      120.8,
+      85.4,
+      149.1
+     ],
+     [
+      1987,
+      81,
+      120.8,
+      88.6,
+      147.4
+     ],
+     [
+      1988,
+      78.1,
+      121.9,
+      91.8,
+      141.4
+     ],
+     [
+      1989,
+      72.2,
+      122.5,
+      96.4,
+      142.9
+     ],
+     [
+      1990,
+      70.5,
+      123,
+      95.4,
+      132.7
+     ],
+     [
+      1991,
+      76.3,
+      122.5,
+      99.2,
+      130.7
+     ],
+     [
+      1992,
+      82.4,
+      125.3,
+      105.4,
+      126.6
+     ],
+     [
+      1993,
+      85.4,
+      125.3,
+      108.2,
+      129.6
+     ],
+     [
+      1994,
+      87.4,
+      126,
+      110.1,
+      132.8
+     ],
+     [
+      1995,
+      85.2,
+      125.9,
+      114.5,
+      133.3
+     ],
+     [
+      1996,
+      87.2,
+      127.2,
+      116.1,
+      132.7
+     ],
+     [
+      1997,
+      90.2,
+      128.6,
+      118.9,
+      132.6
+     ],
+     [
+      1998,
+      89.6,
+      130.1,
+      116.6,
+      129.7
+     ],
+     [
+      1999,
+      85.1,
+      132.2,
+      113.8,
+      124.9
+     ],
+     [
+      2000,
+      83.5,
+      133.7,
+      114.4,
+      124.9
+     ],
+     [
+      2001,
+      80.3,
+      133.8,
+      114.3,
+      123.2
+     ],
+     [
+      2002,
+      73.4,
+      135.6,
+      113.2,
+      122.4
+     ],
+     [
+      2003,
+      78.2,
+      137.9,
+      113.8,
+      120.6
+     ],
+     [
+      2004,
+      81.6,
+      140.2,
+      116,
+      121.9
+     ],
+     [
+      2005,
+      85,
+      141.4,
+      117.1,
+      121.6
+     ],
+     [
+      2006,
+      88.3,
+      141.2,
+      116.7,
+      121.5
+     ],
+     [
+      2007,
+      91.5,
+      141,
+      116.3,
+      125.2
+     ],
+     [
+      2008,
+      91.2,
+      140.4,
+      114.5,
+      126.3
+     ],
+     [
+      2009,
+      85,
+      140.6,
+      109.4,
+      123
+     ],
+     [
+      2010,
+      90,
+      143,
+      110.2,
+      125.5
+     ],
+     [
+      2011,
+      91.4,
+      142.6,
+      110.6,
+      123.6
+     ],
+     [
+      2012,
+      88.3,
+      142.8,
+      110.7,
+      121.9
+     ],
+     [
+      2013,
+      88,
+      143.2,
+      108.9,
+      120.2
+     ],
+     [
+      2014,
+      84.3,
+      143.5,
+      107.3,
+      116.6
+     ],
+     [
+      2015,
+      84.1,
+      144.2,
+      105.6,
+      111
+     ],
+     [
+      2016,
+      83.1,
+      144.2,
+      104.5,
+      107.2
+     ],
+     [
+      2017,
+      83.1,
+      144.9,
+      103.4,
+      107.6
+     ],
+     [
+      2018,
+      79.8,
+      145.7,
+      104.7,
+      106.8
+     ],
+     [
+      2019,
+      77.2,
+      146.6,
+      102.4,
+      104.5
+     ],
+     [
+      2020,
+      75,
+      147.9,
+      102.5,
+      107.8
+     ],
+     [
+      2021,
+      75.1,
+      152,
+      106.4,
+      103.3
+     ],
+     [
+      2022,
+      78,
+      149.6,
+      101.6,
+      100.2
+     ],
+     [
+      2023,
+      72.6,
+      151,
+      98.8,
+      100.9
+     ]
+    ]
+   },
+   {
+    "id": "tfp-change",
+    "title": "PTF, variación anual (%)",
+    "columns": [
+     "Año",
+     "Argentina",
+     "Estados Unidos",
+     "Chile",
+     "Brasil"
+    ],
+    "rows": [
+     [
+      1956,
+      -1.2,
+      -0.5,
+      -1.2,
+      -0.5
+     ],
+     [
+      1957,
+      -0.1,
+      1.1,
+      4.9,
+      4.3
+     ],
+     [
+      1958,
+      2.4,
+      0.2,
+      2.6,
+      1.3
+     ],
+     [
+      1959,
+      -8,
+      2.8,
+      -2.4,
+      1.6
+     ],
+     [
+      1960,
+      5.2,
+      0.5,
+      7.5,
+      2.4
+     ],
+     [
+      1961,
+      -1.9,
+      1,
+      1.5,
+      8.7
+     ],
+     [
+      1962,
+      -3.1,
+      2.2,
+      2,
+      0.4
+     ],
+     [
+      1963,
+      -5.9,
+      1.5,
+      3.1,
+      2.5
+     ],
+     [
+      1964,
+      4.1,
+      1.5,
+      -1.6,
+      0.2
+     ],
+     [
+      1965,
+      5.6,
+      1.7,
+      -3.1,
+      2.4
+     ],
+     [
+      1966,
+      -2.6,
+      1.6,
+      4.7,
+      -0.7
+     ],
+     [
+      1967,
+      0,
+      -0.4,
+      1.8,
+      1.5
+     ],
+     [
+      1968,
+      2.1,
+      1.4,
+      -3.1,
+      6
+     ],
+     [
+      1969,
+      5.1,
+      -0.6,
+      -1.7,
+      -0.3
+     ],
+     [
+      1970,
+      -0.4,
+      -0.5,
+      0.1,
+      4.5
+     ],
+     [
+      1971,
+      -0.2,
+      1.7,
+      0.9,
+      4.1
+     ],
+     [
+      1972,
+      -1.7,
+      1.3,
+      -6,
+      4.5
+     ],
+     [
+      1973,
+      0.6,
+      1.2,
+      -7.9,
+      2.7
+     ],
+     [
+      1974,
+      1,
+      -2.8,
+      0.1,
+      1.9
+     ],
+     [
+      1975,
+      -3.4,
+      0,
+      -14.6,
+      -0.9
+     ],
+     [
+      1976,
+      -2.3,
+      1.9,
+      0.3,
+      3.7
+     ],
+     [
+      1977,
+      1.7,
+      0.5,
+      5.6,
+      -3.9
+     ],
+     [
+      1978,
+      -6,
+      0.5,
+      4.4,
+      -1
+     ],
+     [
+      1979,
+      3.5,
+      -0.8,
+      3.7,
+      4
+     ],
+     [
+      1980,
+      -1.3,
+      -1.9,
+      1.6,
+      6.4
+     ],
+     [
+      1981,
+      -7.2,
+      0.5,
+      0.4,
+      -9.4
+     ],
+     [
+      1982,
+      -4.5,
+      -2,
+      -11.5,
+      -4.9
+     ],
+     [
+      1983,
+      1.7,
+      1.9,
+      -6.6,
+      -5.4
+     ],
+     [
+      1984,
+      0,
+      2.1,
+      2.3,
+      1.8
+     ],
+     [
+      1985,
+      -7.9,
+      0.8,
+      -1.6,
+      2.2
+     ],
+     [
+      1986,
+      5.4,
+      1,
+      1.9,
+      2.5
+     ],
+     [
+      1987,
+      0.7,
+      0,
+      3.7,
+      -1.1
+     ],
+     [
+      1988,
+      -3.6,
+      0.9,
+      3.7,
+      -4.1
+     ],
+     [
+      1989,
+      -7.5,
+      0.5,
+      5,
+      1.1
+     ],
+     [
+      1990,
+      -2.5,
+      0.4,
+      -1,
+      -7.2
+     ],
+     [
+      1991,
+      8.3,
+      -0.5,
+      3.9,
+      -1.5
+     ],
+     [
+      1992,
+      8,
+      2.3,
+      6.2,
+      -3.1
+     ],
+     [
+      1993,
+      3.6,
+      0,
+      2.7,
+      2.4
+     ],
+     [
+      1994,
+      2.4,
+      0.6,
+      1.7,
+      2.5
+     ],
+     [
+      1995,
+      -2.6,
+      -0.1,
+      4,
+      0.3
+     ],
+     [
+      1996,
+      2.4,
+      1.1,
+      1.4,
+      -0.4
+     ],
+     [
+      1997,
+      3.4,
+      1.1,
+      2.4,
+      -0.1
+     ],
+     [
+      1998,
+      -0.6,
+      1.2,
+      -2,
+      -2.2
+     ],
+     [
+      1999,
+      -5,
+      1.6,
+      -2.4,
+      -3.8
+     ],
+     [
+      2000,
+      -1.9,
+      1.2,
+      0.5,
+      0
+     ],
+     [
+      2001,
+      -3.9,
+      0.1,
+      -0.1,
+      -1.3
+     ],
+     [
+      2002,
+      -8.5,
+      1.3,
+      -0.9,
+      -0.7
+     ],
+     [
+      2003,
+      6.6,
+      1.7,
+      0.5,
+      -1.4
+     ],
+     [
+      2004,
+      4.3,
+      1.6,
+      2,
+      1.1
+     ],
+     [
+      2005,
+      4.1,
+      0.9,
+      0.9,
+      -0.3
+     ],
+     [
+      2006,
+      3.9,
+      -0.2,
+      -0.4,
+      0
+     ],
+     [
+      2007,
+      3.6,
+      -0.1,
+      -0.3,
+      3
+     ],
+     [
+      2008,
+      -0.3,
+      -0.5,
+      -1.5,
+      0.9
+     ],
+     [
+      2009,
+      -6.9,
+      0.2,
+      -4.5,
+      -2.6
+     ],
+     [
+      2010,
+      5.9,
+      1.7,
+      0.7,
+      2.1
+     ],
+     [
+      2011,
+      1.6,
+      -0.2,
+      0.4,
+      -1.5
+     ],
+     [
+      2012,
+      -3.4,
+      0.2,
+      0.1,
+      -1.4
+     ],
+     [
+      2013,
+      -0.4,
+      0.2,
+      -1.7,
+      -1.4
+     ],
+     [
+      2014,
+      -4.2,
+      0.2,
+      -1.4,
+      -3
+     ],
+     [
+      2015,
+      -0.3,
+      0.5,
+      -1.6,
+      -4.7
+     ],
+     [
+      2016,
+      -1.2,
+      0,
+      -1,
+      -3.5
+     ],
+     [
+      2017,
+      0,
+      0.5,
+      -1,
+      0.4
+     ],
+     [
+      2018,
+      -4,
+      0.5,
+      1.2,
+      -0.8
+     ],
+     [
+      2019,
+      -3.3,
+      0.6,
+      -2.2,
+      -2.2
+     ],
+     [
+      2020,
+      -2.8,
+      0.9,
+      0.1,
+      3.3
+     ],
+     [
+      2021,
+      0.1,
+      2.8,
+      3.8,
+      -4.2
+     ],
+     [
+      2022,
+      3.9,
+      -1.6,
+      -4.5,
+      -3
+     ],
+     [
+      2023,
+      -7,
+      0.9,
+      -2.8,
+      0.7
+     ]
+    ]
+   },
+   {
+    "id": "oph-level",
+    "title": "Producto por hora trabajada, índice 1955 = 100",
+    "columns": [
+     "Año",
+     "Argentina",
+     "Estados Unidos",
+     "Chile",
+     "Brasil"
+    ],
+    "rows": [
+     [
+      1955,
+      100,
+      100,
+      100,
+      100
+     ],
+     [
+      1956,
+      100.8,
+      100.5,
+      100.3,
+      100.1
+     ],
+     [
+      1957,
+      103.1,
+      103.6,
+      105.3,
+      106.5
+     ],
+     [
+      1958,
+      108.2,
+      106.6,
+      109.1,
+      109.4
+     ],
+     [
+      1959,
+      101.1,
+      110,
+      108.5,
+      113.8
+     ],
+     [
+      1960,
+      110.4,
+      112,
+      118.2,
+      118.3
+     ],
+     [
+      1961,
+      113,
+      115.6,
+      122.5,
+      131.5
+     ],
+     [
+      1962,
+      112.5,
+      119.6,
+      127.7,
+      134.7
+     ],
+     [
+      1963,
+      107.2,
+      123.8,
+      135.4,
+      139.5
+     ],
+     [
+      1964,
+      114.5,
+      127.5,
+      137.5,
+      141.4
+     ],
+     [
+      1965,
+      123.9,
+      131.2,
+      136.4,
+      147
+     ],
+     [
+      1966,
+      122.9,
+      135,
+      147.6,
+      148.6
+     ],
+     [
+      1967,
+      125.2,
+      137,
+      161.4,
+      152.6
+     ],
+     [
+      1968,
+      130.5,
+      141.1,
+      157.8,
+      164.8
+     ],
+     [
+      1969,
+      141.6,
+      142.1,
+      159,
+      170.2
+     ],
+     [
+      1970,
+      144.9,
+      145.1,
+      170.2,
+      183.1
+     ],
+     [
+      1971,
+      149.3,
+      150.7,
+      169.8,
+      193.4
+     ],
+     [
+      1972,
+      151.1,
+      154.5,
+      159.5,
+      206.1
+     ],
+     [
+      1973,
+      155.5,
+      158.1,
+      151,
+      211
+     ],
+     [
+      1974,
+      158.2,
+      156.6,
+      161,
+      223.8
+     ],
+     [
+      1975,
+      155.8,
+      160.9,
+      141.6,
+      230.3
+     ],
+     [
+      1976,
+      156.5,
+      164.8,
+      142.5,
+      248.3
+     ],
+     [
+      1977,
+      162.9,
+      166.7,
+      150.5,
+      238.5
+     ],
+     [
+      1978,
+      155.6,
+      168.4,
+      158.8,
+      242.6
+     ],
+     [
+      1979,
+      163.9,
+      169.1,
+      166.4,
+      264.7
+     ],
+     [
+      1980,
+      166.1,
+      169.5,
+      169.7,
+      298.2
+     ],
+     [
+      1981,
+      157.3,
+      172.9,
+      172.6,
+      274.3
+     ],
+     [
+      1982,
+      151,
+      172.7,
+      160.3,
+      261.4
+     ],
+     [
+      1983,
+      153.2,
+      177.2,
+      145.3,
+      250.8
+     ],
+     [
+      1984,
+      153.7,
+      180.8,
+      147,
+      256.4
+     ],
+     [
+      1985,
+      142.2,
+      183.9,
+      143.3,
+      260.8
+     ],
+     [
+      1986,
+      149.6,
+      188,
+      143,
+      270.3
+     ],
+     [
+      1987,
+      151.3,
+      188.9,
+      148.7,
+      269.4
+     ],
+     [
+      1988,
+      146.5,
+      191.5,
+      154.6,
+      260.3
+     ],
+     [
+      1989,
+      135.9,
+      193.4,
+      163.7,
+      269.4
+     ],
+     [
+      1990,
+      131.4,
+      196.6,
+      164.1,
+      251.8
+     ],
+     [
+      1991,
+      141.6,
+      199.2,
+      173.7,
+      253.6
+     ],
+     [
+      1992,
+      154.7,
+      206.6,
+      186.7,
+      250.7
+     ],
+     [
+      1993,
+      162.7,
+      207.8,
+      198.7,
+      262.3
+     ],
+     [
+      1994,
+      169,
+      209.6,
+      210.6,
+      275.2
+     ],
+     [
+      1995,
+      171.6,
+      211.2,
+      226.6,
+      284.3
+     ],
+     [
+      1996,
+      175.9,
+      215.8,
+      236.7,
+      291.9
+     ],
+     [
+      1997,
+      180.2,
+      220.1,
+      253.1,
+      299.6
+     ],
+     [
+      1998,
+      178.2,
+      225.8,
+      253,
+      301.7
+     ],
+     [
+      1999,
+      172.2,
+      232.9,
+      255.6,
+      291.9
+     ],
+     [
+      2000,
+      171.4,
+      239.3,
+      261.7,
+      293.9
+     ],
+     [
+      2001,
+      169.6,
+      244.4,
+      268.5,
+      295.7
+     ],
+     [
+      2002,
+      161.2,
+      251.8,
+      270.5,
+      295.9
+     ],
+     [
+      2003,
+      166.9,
+      259.8,
+      277.4,
+      295.9
+     ],
+     [
+      2004,
+      167.8,
+      266.6,
+      290.6,
+      299.9
+     ],
+     [
+      2005,
+      171.2,
+      271.6,
+      307.1,
+      302.7
+     ],
+     [
+      2006,
+      178.3,
+      273.7,
+      313.4,
+      306.1
+     ],
+     [
+      2007,
+      185.5,
+      276.8,
+      326.2,
+      323.4
+     ],
+     [
+      2008,
+      188.3,
+      280.3,
+      339.3,
+      334.2
+     ],
+     [
+      2009,
+      179,
+      289.6,
+      337.6,
+      334.2
+     ],
+     [
+      2010,
+      190.6,
+      296.7,
+      350.7,
+      346.5
+     ],
+     [
+      2011,
+      197.5,
+      296.3,
+      363.8,
+      351.6
+     ],
+     [
+      2012,
+      195,
+      297.1,
+      376.9,
+      357.5
+     ],
+     [
+      2013,
+      197.4,
+      298.8,
+      381.9,
+      361.2
+     ],
+     [
+      2014,
+      192.1,
+      300.1,
+      389.7,
+      358.2
+     ],
+     [
+      2015,
+      192.9,
+      302,
+      391.5,
+      350.3
+     ],
+     [
+      2016,
+      196.8,
+      303.4,
+      397.4,
+      346.8
+     ],
+     [
+      2017,
+      198.9,
+      306.6,
+      401.4,
+      355.9
+     ],
+     [
+      2018,
+      193.9,
+      309.1,
+      415.6,
+      357.6
+     ],
+     [
+      2019,
+      188.4,
+      312.9,
+      415,
+      353.1
+     ],
+     [
+      2020,
+      197.1,
+      327.3,
+      469,
+      397.5
+     ],
+     [
+      2021,
+      184.4,
+      332.3,
+      471.7,
+      366
+     ],
+     [
+      2022,
+      194.6,
+      330.8,
+      440.1,
+      349.5
+     ],
+     [
+      2023,
+      175.9,
+      336.5,
+      433.6,
+      357
+     ]
+    ]
+   },
+   {
+    "id": "oph-change",
+    "title": "Producto por hora trabajada, variación anual (%)",
+    "columns": [
+     "Año",
+     "Argentina",
+     "Estados Unidos",
+     "Chile",
+     "Brasil"
+    ],
+    "rows": [
+     [
+      1956,
+      0.8,
+      0.5,
+      0.3,
+      0.1
+     ],
+     [
+      1957,
+      2.3,
+      3.1,
+      5,
+      6.4
+     ],
+     [
+      1958,
+      4.9,
+      2.9,
+      3.6,
+      2.7
+     ],
+     [
+      1959,
+      -6.6,
+      3.2,
+      -0.5,
+      4
+     ],
+     [
+      1960,
+      9.2,
+      1.8,
+      8.9,
+      4
+     ],
+     [
+      1961,
+      2.4,
+      3.2,
+      3.6,
+      11.2
+     ],
+     [
+      1962,
+      -0.4,
+      3.5,
+      4.2,
+      2.4
+     ],
+     [
+      1963,
+      -4.7,
+      3.5,
+      6,
+      3.6
+     ],
+     [
+      1964,
+      6.8,
+      3,
+      1.6,
+      1.4
+     ],
+     [
+      1965,
+      8.2,
+      2.9,
+      -0.8,
+      4
+     ],
+     [
+      1966,
+      -0.8,
+      2.9,
+      8.2,
+      1.1
+     ],
+     [
+      1967,
+      1.9,
+      1.5,
+      9.3,
+      2.7
+     ],
+     [
+      1968,
+      4.2,
+      3,
+      -2.2,
+      8
+     ],
+     [
+      1969,
+      8.5,
+      0.7,
+      0.8,
+      3.3
+     ],
+     [
+      1970,
+      2.3,
+      2.1,
+      7,
+      7.6
+     ],
+     [
+      1971,
+      3,
+      3.9,
+      -0.2,
+      5.6
+     ],
+     [
+      1972,
+      1.2,
+      2.5,
+      -6.1,
+      6.6
+     ],
+     [
+      1973,
+      2.9,
+      2.3,
+      -5.3,
+      2.4
+     ],
+     [
+      1974,
+      1.7,
+      -0.9,
+      6.6,
+      6.1
+     ],
+     [
+      1975,
+      -1.5,
+      2.7,
+      -12,
+      2.9
+     ],
+     [
+      1976,
+      0.4,
+      2.4,
+      0.6,
+      7.8
+     ],
+     [
+      1977,
+      4.1,
+      1.2,
+      5.6,
+      -3.9
+     ],
+     [
+      1978,
+      -4.5,
+      1,
+      5.5,
+      1.7
+     ],
+     [
+      1979,
+      5.3,
+      0.4,
+      4.8,
+      9.1
+     ],
+     [
+      1980,
+      1.3,
+      0.2,
+      2,
+      12.7
+     ],
+     [
+      1981,
+      -5.3,
+      2,
+      1.7,
+      -8
+     ],
+     [
+      1982,
+      -4,
+      -0.1,
+      -7.1,
+      -4.7
+     ],
+     [
+      1983,
+      1.5,
+      2.6,
+      -9.4,
+      -4.1
+     ],
+     [
+      1984,
+      0.3,
+      2,
+      1.2,
+      2.2
+     ],
+     [
+      1985,
+      -7.5,
+      1.7,
+      -2.5,
+      1.7
+     ],
+     [
+      1986,
+      5.2,
+      2.2,
+      -0.2,
+      3.6
+     ],
+     [
+      1987,
+      1.1,
+      0.5,
+      4,
+      -0.3
+     ],
+     [
+      1988,
+      -3.2,
+      1.4,
+      4,
+      -3.4
+     ],
+     [
+      1989,
+      -7.2,
+      1,
+      5.9,
+      3.5
+     ],
+     [
+      1990,
+      -3.3,
+      1.7,
+      0.2,
+      -6.5
+     ],
+     [
+      1991,
+      7.8,
+      1.3,
+      5.9,
+      0.7
+     ],
+     [
+      1992,
+      9.3,
+      3.7,
+      7.5,
+      -1.1
+     ],
+     [
+      1993,
+      5.2,
+      0.6,
+      6.4,
+      4.6
+     ],
+     [
+      1994,
+      3.9,
+      0.9,
+      6,
+      4.9
+     ],
+     [
+      1995,
+      1.5,
+      0.8,
+      7.6,
+      3.3
+     ],
+     [
+      1996,
+      2.5,
+      2.2,
+      4.5,
+      2.7
+     ],
+     [
+      1997,
+      2.4,
+      2,
+      6.9,
+      2.6
+     ],
+     [
+      1998,
+      -1.1,
+      2.6,
+      0,
+      0.7
+     ],
+     [
+      1999,
+      -3.4,
+      3.1,
+      1,
+      -3.2
+     ],
+     [
+      2000,
+      -0.5,
+      2.7,
+      2.4,
+      0.7
+     ],
+     [
+      2001,
+      -1.1,
+      2.1,
+      2.6,
+      0.6
+     ],
+     [
+      2002,
+      -5,
+      3,
+      0.7,
+      0.1
+     ],
+     [
+      2003,
+      3.5,
+      3.2,
+      2.6,
+      0
+     ],
+     [
+      2004,
+      0.5,
+      2.6,
+      4.8,
+      1.4
+     ],
+     [
+      2005,
+      2,
+      1.9,
+      5.7,
+      0.9
+     ],
+     [
+      2006,
+      4.1,
+      0.8,
+      2.1,
+      1.1
+     ],
+     [
+      2007,
+      4,
+      1.1,
+      4.1,
+      5.7
+     ],
+     [
+      2008,
+      1.5,
+      1.3,
+      4,
+      3.3
+     ],
+     [
+      2009,
+      -4.9,
+      3.3,
+      -0.5,
+      0
+     ],
+     [
+      2010,
+      6.5,
+      2.5,
+      3.9,
+      3.7
+     ],
+     [
+      2011,
+      3.6,
+      -0.1,
+      3.7,
+      1.5
+     ],
+     [
+      2012,
+      -1.3,
+      0.3,
+      3.6,
+      1.7
+     ],
+     [
+      2013,
+      1.2,
+      0.6,
+      1.3,
+      1
+     ],
+     [
+      2014,
+      -2.7,
+      0.4,
+      2,
+      -0.8
+     ],
+     [
+      2015,
+      0.4,
+      0.6,
+      0.5,
+      -2.2
+     ],
+     [
+      2016,
+      2,
+      0.5,
+      1.5,
+      -1
+     ],
+     [
+      2017,
+      1.1,
+      1.1,
+      1,
+      2.6
+     ],
+     [
+      2018,
+      -2.5,
+      0.8,
+      3.5,
+      0.5
+     ],
+     [
+      2019,
+      -2.8,
+      1.2,
+      -0.1,
+      -1.3
+     ],
+     [
+      2020,
+      4.6,
+      4.6,
+      13,
+      12.6
+     ],
+     [
+      2021,
+      -6.4,
+      1.5,
+      0.6,
+      -7.9
+     ],
+     [
+      2022,
+      5.5,
+      -0.5,
+      -6.7,
+      -4.5
+     ],
+     [
+      2023,
+      -9.6,
+      1.7,
+      -1.5,
+      2.1
+     ]
+    ]
+   },
+   {
+    "id": "cumulative",
+    "title": "Variación acumulada 2011-2023 (%)",
+    "columns": [
+     "País",
+     "PTF",
+     "Producto por hora"
+    ],
+    "rows": [
+     [
+      "Argentina",
+      -20.6,
+      -11
+     ],
+     [
+      "Estados Unidos",
+      5.8,
+      13.6
+     ],
+     [
+      "Chile",
+      -10.6,
+      19.2
+     ],
+     [
+      "Brasil",
+      -18.4,
+      1.5
+     ]
+    ]
+   }
+  ]
+ },
+ {
+  "id": "sim",
+  "label": "Simulador del PBI",
+  "title": "Simulador del PBI",
+  "mock": true,
+  "refs": [],
+  "tables": [
+   {
+    "id": "factors",
+    "title": "Factores del escenario de referencia",
+    "columns": [
+     "Factor",
+     "Valor",
+     "Unidad"
+    ],
+    "rows": [
+     [
+      "Crecimiento anual base",
+      2.5,
+      "% anual"
+     ],
+     [
+      "Impacto de la IA",
+      0.6,
+      "pp por año"
+     ],
+     [
+      "Crecimiento de la población",
+      0.5,
+      "% anual"
+     ],
+     [
+      "Mejora de productividad",
+      0,
+      "pp por año"
+     ],
+     [
+      "Inversión",
+      17.5,
+      "% del PBI"
+     ]
+    ]
+   },
+   {
+    "id": "reference",
+    "title": "PBI del escenario de referencia (miles de millones de USD)",
+    "columns": [
+     "Año",
+     "PBI"
+    ],
+    "rows": [
+     [
+      2026,
+      621.8
+     ],
+     [
+      2027,
+      637.3
+     ],
+     [
+      2028,
+      653.5
+     ],
+     [
+      2029,
+      670.4
+     ],
+     [
+      2030,
+      688
+     ],
+     [
+      2031,
+      706.3
+     ],
+     [
+      2032,
+      725.3
+     ],
+     [
+      2033,
+      745.2
+     ],
+     [
+      2034,
+      765.9
+     ],
+     [
+      2035,
+      787.5
+     ],
+     [
+      2036,
+      810
+     ],
+     [
+      2037,
+      833.5
+     ],
+     [
+      2038,
+      858
+     ],
+     [
+      2039,
+      883.6
+     ],
+     [
+      2040,
+      910.3
+     ],
+     [
+      2041,
+      938.1
+     ],
+     [
+      2042,
+      967.2
+     ],
+     [
+      2043,
+      997.2
+     ],
+     [
+      2044,
+      1028.1
+     ],
+     [
+      2045,
+      1060
+     ],
+     [
+      2046,
+      1092.9
+     ],
+     [
+      2047,
+      1126.7
+     ],
+     [
+      2048,
+      1161.7
+     ],
+     [
+      2049,
+      1197.7
+     ],
+     [
+      2050,
+      1234.8
+     ],
+     [
+      2051,
+      1273.1
+     ],
+     [
+      2052,
+      1312.6
+     ],
+     [
+      2053,
+      1353.2
+     ],
+     [
+      2054,
+      1395.2
+     ],
+     [
+      2055,
+      1438.4
+     ],
+     [
+      2056,
+      1483
+     ]
+    ]
+   }
+  ]
+ }
+]

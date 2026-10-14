@@ -1,3 +1,4 @@
+import { withMeta } from './quality.js';
 import { PROVINCES } from '../types/province.js';
 import { GDP_MOCK } from '../tour/gdpMock.js';
 import agro from '../tour/agroArgentina.json';
@@ -27,7 +28,7 @@ const indicators = (): DataTable => ({
 });
 
 function slide(id: string, title: string, tables: DataTable[], mock = true, refs: string[] = []): SlideData {
-  return { id, label: id === 'sim' ? `Simulador del PBI` : `${id} · ${title}`, title, mock, tables, refs };
+  return { id, label: id === 'sim' ? `Simulador del PBI` : `${id} · ${title}`, title, mock, tables: tables.map(withMeta), refs };
 }
 
 /** The raw table of a chart of the Recorrido (bars or lines), from the same spec the 3D view and the Gráfico | Tabla switch use. */

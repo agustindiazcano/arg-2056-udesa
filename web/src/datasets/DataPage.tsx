@@ -1,5 +1,6 @@
 import React, { useMemo, useRef, useState } from 'react';
 import { formatDecimal } from '../charts/format.js';
+import { QUALITY_LABEL } from '../data/series.js';
 import { downloadCsv, referencesCsv, slideCsv, slug, tableCsv } from './csv.js';
 import { REFERENCES } from './references.js';
 import { buildSlides } from './slides.js';
@@ -13,6 +14,11 @@ function Table({ slide, table }: { slide: SlideData; table: DataTable }) {
     <div className="data-table-block">
       <div className="data-table-head">
         <strong>{table.title}</strong>
+        {table.quality && (
+          <span className={`data-quality data-quality--${table.quality}`} title={`${table.source ?? ''}${table.retrievedAt ? `. Consultado el ${table.retrievedAt}` : ''}`}>
+            {QUALITY_LABEL[table.quality]}
+          </span>
+        )}
         <span className="data-count">{`${table.rows.length} filas`}</span>
         <button type="button" className="btn" aria-label={`Descargar CSV: ${table.title}`} onClick={() => downloadCsv(`${fileOf(slide)}-${table.id}.csv`, tableCsv(table))}>
           Descargar CSV

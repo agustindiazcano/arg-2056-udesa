@@ -1,3 +1,5 @@
+import type { Quality } from '../data/series.js';
+
 export type Cell = string | number | null;
 
 export interface DataTable {
@@ -5,6 +7,10 @@ export interface DataTable {
   title: string;
   columns: string[];
   rows: Cell[][];
+  /** how real the table is, where it comes from and when it was read; set by `withMeta` */
+  quality?: Quality;
+  source?: string;
+  retrievedAt?: string | null;
 }
 
 export interface SlideData {
