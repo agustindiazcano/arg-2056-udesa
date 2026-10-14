@@ -1,0 +1,32 @@
+{
+  "dataset_id": "external_forecasts_macro",
+  "files": [
+    {
+      "path": "imf_weo_selected.csv",
+      "sha256": "30d4fa63595052759b18757c89f9edbc6745507acc561b17f447345e04e13c14",
+      "source": "IMF World Economic Outlook (SDMX API, actualizaci\u00f3n 2026-09-30)",
+      "source_url": "https://www.imf.org/en/Publications/WEO",
+      "retrieved_at": "2026-10-14",
+      "license_or_terms": "IMF terms of use",
+      "redistributable": true
+    },
+    {
+      "path": "oecd_ltb_selected.csv",
+      "sha256": "8be87588d4a39ad85d2c409e1c0160f25bae3d25dfb9c3d5a28c9cd0ba8e6be1",
+      "source": "OECD Economic Outlook 117 long-term scenarios (DSD_EO_LTB), Argentina",
+      "source_url": "https://sdmx.oecd.org/public/rest/dataflow/OECD.ECO.MAD/DSD_EO_LTB@DF_EO_LTB/1.0",
+      "retrieved_at": "2026-10-14",
+      "license_or_terms": "OECD terms and conditions",
+      "redistributable": true
+    },
+    {
+      "path": "un_wpp_selected.csv",
+      "sha256": "4fd03fa961c3a3dc008b6a215c4762a1945e4dab10a30aaaa2c22d426de6c006",
+      "source": "United Nations World Population Prospects 2024, Argentina",
+      "source_url": "https://population.un.org/wpp/downloads",
+      "retrieved_at": "2026-10-14",
+      "license_or_terms": "CC BY 3.0 IGO",
+      "redistributable": true
+    }
+  ]
+}

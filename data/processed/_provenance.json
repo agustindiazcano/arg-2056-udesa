@@ -1,0 +1,23 @@
+{
+  "outputs": {
+    "external_forecasts.json": {
+      "sha256": "33a307d2e1aa34d72e745fab49fbf86dd1a669a0ca8ad21b01449575e23bb0c7",
+      "dataset_id": "external_forecasts_macro",
+      "adapter": "datapipe.adapters.external_forecasts",
+      "inputs": [
+        {
+          "path": "imf_weo_selected.csv",
+          "sha256": "30d4fa63595052759b18757c89f9edbc6745507acc561b17f447345e04e13c14"
+        },
+        {
+          "path": "oecd_ltb_selected.csv",
+          "sha256": "8be87588d4a39ad85d2c409e1c0160f25bae3d25dfb9c3d5a28c9cd0ba8e6be1"
+        },
+        {
+          "path": "un_wpp_selected.csv",
+          "sha256": "4fd03fa961c3a3dc008b6a215c4762a1945e4dab10a30aaaa2c22d426de6c006"
+        }
+      ]
+    }
+  }
+}

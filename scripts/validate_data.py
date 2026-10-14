@@ -24,7 +24,9 @@ def main():
         
     has_errors = False
     
-    for data_file in processed_dir.glob("*.json"):
+    for data_file in sorted(processed_dir.glob("*.json")):
+        if data_file.name.startswith("_"):
+            continue  # _provenance.json is bookkeeping of the pipeline, not a dataset
         name = data_file.stem
         schema_path = schemas_dir / f"{name}.schema.json"
         
