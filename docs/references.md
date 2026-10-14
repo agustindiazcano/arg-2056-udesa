@@ -186,6 +186,16 @@ Pendiente para el resto de las diapositivas (INDEC, Secretarías de Energía y d
 | E5 | USGS, *Mineral Commodity Summaries 2026*. <https://pubs.usgs.gov/periodicals/mcs2026/mcs2026-lithium.pdf> | Recursos de litio de Argentina: 28 millones de toneladas | **leída en parte**: las tablas de reservas salen desordenadas |
 | R1 a R11 | Prensa sobre el RIGI y los proyectos de gran escala (iProfesional, Shale24, La Nación, Infobae, LM Neuquén, El Cronista, Diario Crónica): enlaces en `web/src/datasets/references.ts` | Lista de proyectos mineros y de petróleo y gas con su inversión (`web/src/tour/rigiProjects.ts`), pasos 8 y 9 | **secundarias, sin verificar**: las fuentes se contradicen (ver `data-requests.md`, D23) |
 
+### 4.4 Proyecciones de otros organismos (modelo del PBI a 2056)
+
+Cargadas el 2026-10-14 con el pipeline de datos (`scripts/fetch_external_forecasts.py`, dataset `external_forecasts_macro`, salida `data/processed/external_forecasts.json`). Estado de cada serie del modelo: [`model-data-status.md`](model-data-status.md).
+
+| # | Fuente | Qué se usa | Estado |
+|---|---|---|---|
+| X1 | OCDE, *Economic Outlook 117 long-term scenarios*. <https://sdmx.oecd.org/public/rest/dataflow/OECD.ECO.MAD/DSD_EO_LTB@DF_EO_LTB/1.0> | Argentina hasta 2056, seis escenarios: PBI real (moneda nacional, precios constantes), PBI potencial, población y población de 15 a 74 años. Las medidas en PPA se descartaron | **leída** (API, 2026-10-14) |
+| X2 | ONU, *World Population Prospects 2024*. <https://population.un.org/wpp/downloads> | Argentina hasta 2056: población, fecundidad y esperanza de vida, variantes baja, media y alta | **leída** (archivos CSV, 2026-10-14) |
+| X3 | FMI, *World Economic Outlook* (actualización del 2026-09-30). <https://www.imf.org/en/Publications/WEO> | Crecimiento real, inversión total y población 2025-2031, Argentina y diez países | **leída** (API SDMX, 2026-10-14) |
+
 ## Para verificar antes de publicar
 
 - Cada fecha, lugar y cifra de la sección 1 contra una fuente primaria o académica; las marcadas «por informe» contra el original (Espejo, Mitre, Barros Arana, Encina y Castedo, Instituto Nacional Sanmartiniano, Academia de Historia Militar de Chile).

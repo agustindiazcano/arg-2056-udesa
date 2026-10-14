@@ -6,6 +6,7 @@ Un relato interactivo, con datos, que une el Cruce de los Andes (1817) con el de
 - **Recorrido al 2056**: una presentación guiada con gráficos 2D y 3D (cada gráfico tiene su tabla). Incluye la diapositiva de **productividad** (PTF y producto por hora, Argentina, EE. UU., Chile y Brasil, con datos de la Penn World Table).
 - **Simulador del PBI**: un gráfico grande del PBI hasta 2056 y, a la derecha, factores que se pueden mover (crecimiento base, IA, población, productividad, inversión). Es una ilustración con aritmética simple, no el modelo.
 - **Data**: una página con scroll con los datos de cada diapositiva en tablas, un selector (número y título de la diapositiva) para descargar sus datos como CSV, la descarga de cada tabla y, al final, los enlaces de las referencias (también descargables en CSV).
+- **Proyecciones de otros organismos**: el FMI, la OCDE y la ONU están cargados con el pipeline de datos (`data/processed/external_forecasts.json`, `scripts/fetch_external_forecasts.py`) y se muestran en la página Data, en la diapositiva 1; el estado de cada serie del modelo está en [`docs/model-data-status.md`](docs/model-data-status.md).
 - **Data Dashboard** (oculto por ahora): economía, recursos, pronóstico 2056 con abanico de incertidumbre, revolución IA y simulador.
 
 La incertidumbre se muestra como abanico de percentiles; las cifras en disputa, como rangos; los vacíos, como «sin dato». Los supuestos y las reglas de datos están en [`AGENTS.md`](AGENTS.md) y [`docs/assumptions.md`](docs/assumptions.md).

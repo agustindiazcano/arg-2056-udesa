@@ -2,6 +2,7 @@ import { PROVINCES } from '../types/province.js';
 import { GDP_MOCK } from '../tour/gdpMock.js';
 import agro from '../tour/agroArgentina.json';
 import energy from '../tour/energyArgentina.json';
+import external from '../tour/externalProjections.json';
 import imf from '../tour/imfWeo.json';
 import world from '../tour/worldGdp.json';
 import { INDICATORS_YEAR, TOUR_INDICATORS } from '../tour/indicatorsMock.js';
@@ -64,6 +65,28 @@ const imfComparison = (): DataTable => {
     })
   };
 };
+
+/** The projections of other institutions for Argentina: IMF to 2031, OECD long-term scenarios and UN variants to 2056. */
+const externalTables = (): DataTable[] => [
+  {
+    id: 'external-imf',
+    title: `Crecimiento real del PBI de Argentina que proyecta el FMI (%, WEO ${external.imf.vintage})`,
+    columns: ['Año', 'Crecimiento real'],
+    rows: Object.entries(external.imf.growth).map(([y, v]) => [Number(y), v])
+  },
+  {
+    id: 'external-oecd',
+    title: 'Escenarios de largo plazo de la OCDE para Argentina: crecimiento real medio del PBI 2026-2056 (calculado de los niveles) y población en 2056',
+    columns: ['Escenario', 'Descripción (en inglés, de la fuente)', 'Crecimiento medio anual (%)', 'Población 2056 (millones)'],
+    rows: external.oecd.map((o) => [o.scenario, o.description, o.growth, Math.round(o.population2056 * 100) / 100])
+  },
+  {
+    id: 'external-un',
+    title: 'Proyección de la ONU (World Population Prospects 2024) para Argentina en 2056, por variante',
+    columns: ['Variante', 'Población (millones)', 'Hijos por mujer', 'Esperanza de vida (años)'],
+    rows: external.un.map((u) => [u.variant === 'Low' ? 'Baja' : u.variant === 'High' ? 'Alta' : 'Media', Math.round(u.population2056 * 100) / 100, u.tfr2056, u.e0_2056])
+  }
+];
 
 /** The real production of oil and gas by province in 2025 (Secretaría de Energía): the only sector of steps 2 and 7 with real data so far. */
 const hydrocarbonProvinces = (): DataTable => ({
@@ -209,8 +232,9 @@ export function buildSlides(): SlideData[] {
         columns: ['Año', 'PBI observado', 'Proyección esperada', 'Rango, mínimo', 'Rango, máximo'],
         rows: GDP_MOCK.years.map((y, i) => [y, GDP_MOCK.history[i] ?? null, GDP_MOCK.expected[i] ?? null, GDP_MOCK.low[i] ?? null, GDP_MOCK.high[i] ?? null])
       },
+      ...externalTables(),
       indicators()
-    ], true, ['W3', 'W5', 'I1', 'F1']),
+    ], true, ['W3', 'W5', 'I1', 'F1', 'X1', 'X2', 'X3']),
     slide('2', 'Producción por provincia', [provinces(), hydrocarbonProvinces(), indicators()], true, ['W3', 'E6']),
     slide('3', TOUR_CHARTS[3]!.title, [chartTable(3)]),
     slide('4', TOUR_CHARTS[4]!.title, [chartTable(4), complexesTable(), greatItemsTable()], false, ['E7', 'E1']),
