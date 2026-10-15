@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { EChart } from '../charts/EChart.js';
+import { addMilestones } from '../charts/builders/milestones.js';
 import { buildLines } from '../charts/builders/tourCharts.js';
 import { formatDecimal, formatValue } from '../charts/format.js';
 import { linesSpec } from '../charts3d/specs.js';
@@ -45,7 +46,9 @@ export function Simulator() {
       { name: REFERENCE, values: reference.gdp, color: tokens.muted, dashed: true },
       { name: YOURS, values: mine.gdp, color: tokens.blue }
     ];
-    const { option } = buildLines(xLabels, series, { unit: UNIT, labelEvery: 4, summary });
+    const lines = buildLines(xLabels, series, { unit: UNIT, labelEvery: 4, summary }).option;
+    // a dot and the year at which your GDP is twice, three and four times that of 2026
+    const option = addMilestones(lines, mine.years, [{ values: mine.gdp, color: tokens.blue }]);
     const spec = linesSpec({
       title: 'PBI simulado',
       unit: UNIT,

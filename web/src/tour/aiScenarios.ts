@@ -4,7 +4,8 @@ import { tokens } from '../styles/tokens.js';
  * The three scenarios of the slide "Cuarta revolución industrial: el impacto de la IA en la economía": growth accounting (capital, labor, TFP)
  * plus a boost to TFP from AI, as written in the report the human pasted on 2026-10-15 (an AI-written report, not verified against its
  * sources). The chart uses the MIDDLE of each range the report gives: 2027-2030 at the middle of its 2026-2030 average and 2031-2035 at the
- * middle of its 2031-2035 average. 2026 is the IMF estimate shared by every slide (`gdpFacts.ts`).
+ * middle of its 2031-2035 average. The report stops at 2035: from 2036 to 2056 (the human asked for the horizon of the project) each scenario goes on
+ * at the rate of its 2031-2035 period, an assumption and not a figure of the report. 2026 is the IMF estimate shared by every slide (`gdpFacts.ts`).
  */
 export interface AiScenario {
   id: 'base' | 'moderate' | 'optimistic';

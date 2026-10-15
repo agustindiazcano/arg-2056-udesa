@@ -84,7 +84,7 @@ const BLUE = tokens.blue;
 const ai = (): BuiltChart => {
   const d = aiImpactData();
   const summary =
-    `PBI real de Argentina en tres escenarios, de ${formatValue(d.series[0]!.values[0] ?? null, d.unit)} en 2026 a 2035: ` +
+    `PBI real de Argentina en tres escenarios, de ${formatValue(d.series[0]!.values[0] ?? null, d.unit)} en 2026 a 2056: ` +
     d.series.map((s) => `${s.name} ${formatValue(s.values.at(-1) ?? null, d.unit)}`).join(', ');
   const { option } = buildLines(d.years.map(String), d.series, { unit: d.unit, labelEvery: 1, summary });
   const spec = linesSpec({
@@ -153,7 +153,7 @@ export const TOUR_CHARTS: Record<number, TourChartDef> = {
   3: {
     step: 3,
     title: 'Cuarta revolución industrial: el impacto de la IA en la economía',
-    subtitle: 'PBI real de Argentina en tres escenarios, 2026 a 2035, miles de millones de USD de 2015',
+    subtitle: 'PBI real de Argentina en tres escenarios, 2026 a 2056, miles de millones de USD de 2015',
     source: '',
     legend: AI_SCENARIOS.map((s) => ({ label: s.name, color: s.color })),
     kind: 'chart',

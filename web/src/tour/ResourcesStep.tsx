@@ -7,6 +7,8 @@ import { formatValue } from '../charts/format.js';
 import { Reveal } from '../motion/Reveal.js';
 import { ProvinceMap, useProvinces } from '../scenes/forecast/ProvinceMap.js';
 import { tokens } from '../styles/tokens.js';
+import { PROVINCES } from '../types/province.js';
+import type { ProvinceId } from '../types/province.js';
 import { Segmented } from '../ui/Segmented.js';
 import { Spinner } from '../ui/Spinner.js';
 import { PRODUCTION_UNIT, SECTOR_LABELS, SECTOR_VALUES, mapValuesOf, rankedProvinces } from './provinceMock.js';
@@ -41,6 +43,13 @@ export const PRODUCER_MIN = 100;
 export function viewValues(view: View): number[] {
   if (view !== 'total') return [...SECTOR_VALUES[view]];
   return SECTOR_VALUES.mineria.map((_, i) => (['mineria', 'hidrocarburos', 'agro'] as const).reduce((sum, s) => sum + (SECTOR_VALUES[s][i] ?? 0), 0));
+}
+
+/** What one province produces, by sector, in million USD (the made-up table of the province slide); sectors with nothing to show are left out. */
+export function provinceParts(id: ProvinceId): Part[] {
+  const i = PROVINCES.findIndex((p) => p.id === id);
+  if (i < 0) return [];
+  return RESOURCE_SECTORS.map((s) => ({ label: s.label, value: SECTOR_VALUES[s.value][i] ?? 0 })).filter((p) => p.value >= PRODUCER_MIN);
 }
 
 /** The provinces that produce something of the view, from the highest. */
@@ -79,11 +88,14 @@ export function ResourcesStep() {
   const [form, setForm] = useState<Form>('treemap');
   const [view, setView] = useState<View>('mineria');
   const [part, setPart] = useState<Pane>('resources');
+  const [selected, setSelected] = useState<ProvinceId | null>(null);
   const label = view === 'total' ? 'Total' : SECTOR_LABELS[view];
-  const parts = useMemo(
-    () => (view === 'total' ? { title: 'Exportaciones de 2025 por sector', unit: 'miles de millones de USD', parts: sectorExports() } : breakdown(view)),
-    [view]
-  );
+  const provinceName = PROVINCES.find((p) => p.id === selected)?.name;
+  const parts = useMemo(() => {
+    if (selected && provinceName) return { title: `${provinceName}: qué produce`, unit: PRODUCTION_UNIT, parts: provinceParts(selected) };
+    return view === 'total' ? { title: 'Exportaciones de 2025 por sector', unit: 'miles de millones de USD', parts: sectorExports() } : breakdown(view);
+  }, [view, selected, provinceName]);
+  const select = useCallback((id: string | null) => setSelected((current) => (id === null || id === current ? null : (id as ProvinceId))), []);
   const rows = useMemo(() => producers(view), [view]);
   const tiles = useMemo(() => totals(view), [view]);
   const values = useMemo(() => mapValuesOf(viewValues(view)), [view]);
@@ -121,7 +133,7 @@ export function ResourcesStep() {
       <header className="gdp-head">
         <Reveal k="head" className="gdp-title">
           <h2>{RESOURCES_TITLE}</h2>
-          <p className="gdp-sub">Elegí un sector o el total; en el total, tocá un sector para verlo por dentro</p>
+          <p className="gdp-sub">Elegí un sector o el total; tocá una provincia del mapa para ver lo que produce</p>
         </Reveal>
         <div className="tour-controls">
           <Segmented label="Mostrar" options={PARTS} value={part} onChange={setPart} />
@@ -140,9 +152,16 @@ export function ResourcesStep() {
       </ul>
       <div className="res-grid">
         <div className="res-left">
-          <Reveal k={`parts-${view}-${form}`} className="gdp-chart">
-            <strong className="composition-title">{`${parts.title} (${parts.unit})`}</strong>
-            <Parts title={parts.title} unit={parts.unit} parts={parts.parts} form={form} onPick={view === 'total' ? pickSector : undefined} />
+          <Reveal k={`parts-${view}-${form}-${selected ?? 'all'}`} className="gdp-chart">
+            <strong className="composition-title">
+              {`${parts.title} (${parts.unit})`}
+              {selected && (
+                <button type="button" className="btn" onClick={() => setSelected(null)}>
+                  Todo el país
+                </button>
+              )}
+            </strong>
+            <Parts title={parts.title} unit={parts.unit} parts={parts.parts} form={form} onPick={view === 'total' && !selected ? pickSector : undefined} />
           </Reveal>
           <Reveal k={`bars-${view}`} delay={0.07} className="gdp-chart">
             <strong className="composition-title">{`${provinceBars.title} (${PRODUCTION_UNIT})`}</strong>
@@ -163,11 +182,11 @@ export function ResourcesStep() {
                 unit={PRODUCTION_UNIT}
                 indicatorLabel={`producción de ${label.toLowerCase()}`}
                 metric="level"
-                selectedId={null}
+                selectedId={selected}
                 year={2025}
                 observed
                 hideTitle
-                onSelect={() => {}}
+                onSelect={select}
               />
             )}
           </div>

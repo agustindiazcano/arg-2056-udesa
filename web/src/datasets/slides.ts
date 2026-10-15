@@ -82,7 +82,7 @@ const perCapitaTable = (): DataTable => {
 
 const aiPopulationTable = (): DataTable => {
   const pop = populationPath();
-  return { id: 'ai-population', title: 'Población de Argentina 2025-2035 (millones; INDEC 2025 y variación anual de la ONU, variante media)', columns: ['Año', 'Población'], rows: pop.years.map((y, i) => [y, Math.round(pop.values[i]! * 1000) / 1000]) };
+  return { id: 'ai-population', title: 'Población de Argentina 2025-2056 (millones; INDEC 2025 y variación anual de la ONU, variante media)', columns: ['Año', 'Población'], rows: pop.years.map((y, i) => [y, Math.round(pop.values[i]! * 1000) / 1000]) };
 };
 
 const rigiTable = (id: string, title: string, projects: readonly RigiProject[]): DataTable => ({

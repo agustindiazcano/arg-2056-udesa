@@ -4,33 +4,33 @@ import type { AiScenario } from './aiScenarios.js';
 import { aiImpactData } from './tourData.js';
 import un_ from './unPopulation.json';
 
-/** Population of Argentina 2025 to 2035: the INDEC figure of 2025 (the official one) grown by the yearly change of the UN medium variant. */
+/** Population of Argentina 2025 to 2056: the INDEC figure of 2025 (the official one) grown by the yearly change of the UN medium variant. */
 export function populationPath(): { years: number[]; values: number[] } {
   const un = un_.population as Record<string, number>;
   const years: number[] = [];
-  for (let y = 2025; y <= 2035; y += 1) years.push(y);
+  for (let y = 2025; y <= 2056; y += 1) years.push(y);
   return { years, values: years.map((y) => ARG_POPULATION_LAST * (un[String(y)]! / un['2025']!)) };
 }
 
 export interface ScenarioSummary {
   id: AiScenario['id'];
   name: string;
-  /** real GDP of 2026 and 2035, billion 2015 USD */
+  /** real GDP of 2026 and 2056, billion 2015 USD */
   gdp2026: number;
-  gdp2035: number;
-  /** change of the GDP between 2026 and 2035, % */
+  gdpLast: number;
+  /** change of the GDP between 2026 and 2056, % */
   gdpChange: number;
-  /** average yearly growth 2026-2035, % */
+  /** average yearly growth 2026-2056, % */
   averageGrowth: number;
-  /** GDP per person of 2026 and 2035, thousand 2015 USD */
+  /** GDP per person of 2026 and 2056, thousand 2015 USD */
   perCapita2026: number;
-  perCapita2035: number;
+  perCapitaLast: number;
   perCapitaChange: number;
   /** years to double the GDP at the average growth (rule of 70 exact: ln 2 / ln(1 + r)) */
   doublingYears: number;
 }
 
-/** GDP per person by scenario, 2026 to 2035, thousand 2015 USD: the GDP of the scenario over the population path. */
+/** GDP per person by scenario, 2026 to 2056, thousand 2015 USD: the GDP of the scenario over the population path. */
 export function perCapitaSeries(): { years: number[]; unit: string; series: Array<{ name: string; color: string; values: number[] }> } {
   const data = aiImpactData();
   const pop = populationPath();
@@ -54,11 +54,11 @@ export function summaries(): ScenarioSummary[] {
       id: s.id,
       name: s.name,
       gdp2026: g[0]!,
-      gdp2035: g[n]!,
+      gdpLast: g[n]!,
       gdpChange: (g[n]! / g[0]! - 1) * 100,
       averageGrowth: avg,
       perCapita2026: p[0]!,
-      perCapita2035: p[n]!,
+      perCapitaLast: p[n]!,
       perCapitaChange: (p[n]! / p[0]! - 1) * 100,
       doublingYears: Math.log(2) / Math.log(1 + avg / 100)
     };

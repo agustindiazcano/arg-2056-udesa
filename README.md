@@ -34,7 +34,7 @@ La presentación abre en una diapositiva con el título y el índice (la 0), y t
 3. La regla del 70 (calculadora, países reales, escenarios y proyecciones del FMI)
 4. Composición del PBI y exportaciones por complejo (con un botón para ver las exportaciones por año y complejo)
 5. Productividad
-6. Cuarta revolución industrial: el impacto de la IA en la economía (tres escenarios a 2035, PBI por habitante y población)
+6. Cuarta revolución industrial: el impacto de la IA en la economía (tres escenarios a 2056, PBI por habitante y población)
 
 ## Cómo correrlo
 

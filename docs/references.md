@@ -217,7 +217,7 @@ Cargadas el 2026-10-15 desde dos informes que pasó el responsable (escritos con
 | A9 | Penn Wharton Budget Model, «How AI could lift productivity and GDP growth». <https://knowledge.wharton.upenn.edu/articles/how-ai-could-lift-productivity-and-gdp-growth/> | Estimación del efecto de la IA en el PBI | **por informe** |
 | A10 | Forecasting Research Institute, efectos económicos de la IA. <https://forecastingresearch.org/economic-effects-of-ai> | Estimación del efecto de la IA en el PBI | **por informe** |
 
-El gráfico usa el punto medio de cada rango del informe (2027-2030 y 2031-2035) a partir del PBI de 2026, igual al de las demás diapositivas. El simulador toma de ese informe su crecimiento base (3,0 %) y el aporte de la IA (0,4 puntos por año, dentro de 0,1 a 0,7).
+El gráfico usa el punto medio de cada rango del informe (2027-2030 y 2031-2035) a partir del PBI de 2026, y de 2036 a 2056 mantiene el ritmo de 2031-2035 (un supuesto, no una cifra del informe), igual al de las demás diapositivas. El simulador toma de ese informe su crecimiento base (3,0 %) y el aporte de la IA (0,4 puntos por año, dentro de 0,1 a 0,7).
 
 ## Para verificar antes de publicar
 

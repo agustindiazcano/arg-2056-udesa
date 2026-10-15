@@ -13,12 +13,12 @@ export interface LineSeriesData {
 }
 
 /**
- * Step 3: the real GDP of Argentina in three scenarios (base, moderate with AI, optimistic), 2026 to 2035. All start at the 2026 figure shared by
+ * Step 3: the real GDP of Argentina in three scenarios (base, moderate with AI, optimistic), 2026 to 2056 (the report gives 2035; later years keep the rate of 2031-2035). All start at the 2026 figure shared by
  * every slide (`gdpFacts.ts`); after that each grows at the middle of the range its scenario gives (`aiScenarios.ts`).
  */
 export function aiImpactData(): { unit: string; years: number[]; series: LineSeriesData[] } {
   const years: number[] = [];
-  for (let year = 2026; year <= 2035; year += 1) years.push(year);
+  for (let year = 2026; year <= 2056; year += 1) years.push(year);
   const series = AI_SCENARIOS.map((s) => {
     let level = ARG_GDP_2026;
     const values = years.map((year) => {
