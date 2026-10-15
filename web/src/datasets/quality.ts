@@ -17,6 +17,7 @@ const CEI = 'CEI de la Cancillería, Análisis del comercio de servicios de la A
 const PRESS = 'Prensa, sin verificar';
 const PWT = 'Penn World Table 11.0 vía FRED, e INDEC (sin volver a descargar)';
 
+const REPORT = 'Informe de escenarios de crecimiento con IA pasado por el responsable (sin verificar); 2026 del FMI y el Banco Mundial';
 const CALC = 'Cálculo propio con t = ln 2 / ln(1 + r), sin dato externo';
 
 const made = (): TableMeta => ({ quality: 'placeholder', source: MADE_UP, retrievedAt: null });
@@ -38,7 +39,10 @@ export const TABLE_META: Readonly<Record<string, TableMeta>> = {
   indicators: meta('real', 'Banco Mundial (WDI) e INDEC (población), 2025', '2026-10-12'),
   provinces: made(),
   'hydrocarbons-provinces': meta('real', `${ENERGIA}, producción 2025 por provincia`, '2026-10-13'),
-  'chart-3': made(),
+  'chart-3': meta('partial', REPORT, '2026-10-15'),
+  'ai-scenarios': meta('partial', REPORT, '2026-10-15'),
+  'ai-us': meta('partial', REPORT, '2026-10-15'),
+  'ai-analysts': meta('partial', 'Informe pasado por el responsable con estimaciones de Anthropic, PwC, Goldman Sachs, Oxford Economics, OMC, CEPR, Acemoglu y Penn Wharton (sin verificar en los originales)', '2026-10-15'),
   'chart-4': meta('real', INDEC_X, '2026-10-13'),
   complexes: meta('real', INDEC_X, '2026-10-13'),
   'great-items': meta('real', 'INDEC, Intercambio comercial argentino (informe de agosto de 2026)', '2026-10-13'),
@@ -65,6 +69,7 @@ export const TABLE_META: Readonly<Record<string, TableMeta>> = {
   'oil-since-1950': meta('real', ENERGIA, '2026-10-13'),
   'rigi-oil-gas': meta('partial', PRESS, '2026-10-13'),
   'chart-10': made(),
+  'agro-tonnes': meta('real', 'MAGyP, series anuales nacionales (datos.gob.ar); millones de toneladas', '2026-10-13'),
   'agro-production': meta('real', 'MAGyP, series nacionales anuales (datos.gob.ar)', '2026-10-13'),
   'chart-11': meta('real', INDEC_X, '2026-10-13'),
   'exports-shares': meta('real', `${INDEC_X}; porcentajes calculados`, '2026-10-13'),
@@ -77,7 +82,7 @@ export const TABLE_META: Readonly<Record<string, TableMeta>> = {
   'oph-change': meta('partial', PWT, '2026-10-12'),
   cumulative: meta('partial', PWT, '2026-10-12'),
   factors: made(),
-  reference: meta('partial', 'Simulador: parte del PBI real de 2026 (Banco Mundial y FMI); el resto, de prueba', '2026-10-13')
+  reference: meta('partial', 'Simulador: parte del PBI real de 2026 (Banco Mundial y FMI); crecimiento base y aporte de la IA del informe de escenarios con IA (sin verificar); el resto, de prueba', '2026-10-15')
 };
 
 /** The table with its quality, source and retrieval date; throws if the registry does not know it, so a new table cannot go without them. */

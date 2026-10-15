@@ -176,7 +176,6 @@ export function buildLines(xLabels: string[], series: LineChartSeries[], opts: {
 /** A treemap of shares: every rectangle is a part of the whole, its area its share. */
 export function buildShares(rows: Array<{ label: string; value: number }>, opts: { unit: string; summary: string }) {
   const sorted = [...rows].sort((a, b) => b.value - a.value);
-  const blues = ['#3987e5', '#2f74c7', '#2a64ab', '#245690', '#1f4876', '#1a3b5f', '#163049', '#122638'];
   const option = {
     animation: false,
     backgroundColor: 'transparent',
@@ -204,7 +203,7 @@ export function buildShares(rows: Array<{ label: string; value: number }>, opts:
           formatter: (p: { name: string; value: number }) => `{n|${p.name}}\n{v|${formatValue(p.value, opts.unit)}}`,
           rich: { n: { fontSize: 15, fontWeight: 600, color: tokens.ink }, v: { fontSize: 13, color: tokens.ink2 } }
         },
-        data: sorted.map((r, i) => ({ name: r.label, value: r.value, itemStyle: { color: blues[Math.min(i, blues.length - 1)] } }))
+        data: sorted.map((r, i) => ({ name: r.label, value: r.value, itemStyle: { color: tokens.categorical[i % tokens.categorical.length] } }))
       }
     ]
   };

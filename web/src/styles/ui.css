@@ -2210,3 +2210,8 @@ main.scene-container {
   align-content: start;
   overflow: auto;
 }
+
+.composition-title {
+  margin: 0;
+  font-size: 1rem;
+}

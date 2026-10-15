@@ -52,7 +52,7 @@ describe('the slides with data', () => {
   const slides = buildSlides();
 
   it('has a slide per step with data, in order, each with a number, a title and tables', () => {
-    expect(slides.map((s) => s.id)).toEqual(['0', '1', '14', '2', '3', '4', '7', '8', '9', '10', '12', '13', '5', 'sim']);
+    expect(slides.map((s) => s.id)).toEqual(['0', '5', '12', '14', '2', '4', '8', '3', 'sim']);
     for (const [i, s] of slides.entries()) {
       expect(s.title.length).toBeGreaterThan(0);
       // the number of the label is the position of the slide (0, 1, 2...), not its id
@@ -66,7 +66,7 @@ describe('the slides with data', () => {
   });
 
   it('marks the made-up slides, and the productivity slide as real data with its references', () => {
-    expect(slides.find((s) => s.id === '1')!.mock).toBe(true);
+    expect(slides.find((s) => s.id === '12')!.mock).toBe(true);
     const prod = slides.find((s) => s.id === '14')!;
     expect(prod.mock).toBe(false);
     expect(prod.tables.map((t) => t.id)).toEqual(['tfp-level', 'tfp-change', 'oph-level', 'oph-change', 'cumulative']);
@@ -129,9 +129,8 @@ describe('the Data page', () => {
     expect(screen.getByRole('heading', { name: '3 · Productividad' })).toBeTruthy();
     expect(screen.getAllByRole('table')).toHaveLength(5);
     expect(screen.queryByRole('heading', { name: '1 · El PBI de Argentina desde 1960' })).toBeNull();
-    fireEvent.change(select, { target: { value: '1' } });
-    expect(screen.getAllByRole('table')).toHaveLength(5);
-    expect(screen.getAllByRole('heading', { level: 3 }).map((h) => h.textContent)).toEqual(['2 · PBI de Argentina', 'Referencias']);
+    fireEvent.change(select, { target: { value: '12' } });
+    expect(screen.getAllByRole('heading', { level: 3 })[0]!.textContent).toBe('3 · Composición del PBI y de las exportaciones');
   });
 
   it('downloads the CSV of the slide chosen in the selector, and one table at a time', () => {

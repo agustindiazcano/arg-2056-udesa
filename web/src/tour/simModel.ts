@@ -3,7 +3,8 @@ import { ARG_GDP_2026 } from './gdpFacts';
 /**
  * The GDP simulator of the Simulador section: plain arithmetic, not the forecast model. The yearly growth is the base rate plus the
  * effect of each factor around its default (population, investment, productivity) and the AI, which comes in over 15 years. Every
- * coefficient is a first value to be replaced by the model's elasticities (PENDING.md).
+ * coefficient is a first value to be replaced by the model's elasticities (PENDING.md). Since 2026-10-15 the base growth (3.0 %) and the AI
+ * boost (0.4 points a year, inside the 0.1 to 0.7 of the report) are the middle of the "base" and "moderate" scenarios of the AI slide (`aiScenarios.ts`).
  */
 export interface SimParams {
   /** growth of the GDP per year, % */
@@ -29,7 +30,7 @@ export const AI_RAMP_YEARS = 15;
 /** percentage points of growth for each point of investment over the default */
 export const INVESTMENT_PP_PER_POINT = 0.1;
 
-export const DEFAULT_SIM: SimParams = { baseGrowth: 2.5, ai: 0.6, population: 0.5, productivity: 0, investment: 17.5 };
+export const DEFAULT_SIM: SimParams = { baseGrowth: 3.0, ai: 0.4, population: 0.5, productivity: 0, investment: 17.5 };
 
 export interface SimField {
   key: SimKey;
@@ -43,7 +44,7 @@ export interface SimField {
 
 export const SIM_FIELDS: readonly SimField[] = [
   { key: 'baseGrowth', label: 'Crecimiento anual base', unit: '% anual', min: 0, max: 6, step: 0.1, help: 'La tasa a la que crece el PBI antes de los demás factores.' },
-  { key: 'ai', label: 'Impacto de la IA', unit: 'pp por año', min: 0, max: 3, step: 0.1, help: 'Crecimiento extra con la IA plenamente adoptada; llega en 15 años.' },
+  { key: 'ai', label: 'Impacto de la IA', unit: 'pp por año', min: 0, max: 3, step: 0.1, help: 'Crecimiento extra con la IA plenamente adoptada; llega en 15 años. Los escenarios de la diapositiva de la IA lo ubican entre 0,1 y 0,7.' },
   { key: 'population', label: 'Crecimiento de la población', unit: '% anual', min: -0.5, max: 2, step: 0.1, help: 'Más gente suma al PBI un punto por punto, medido contra el 0,5 % base.' },
   { key: 'productivity', label: 'Mejora de productividad', unit: 'pp por año', min: -1, max: 2, step: 0.1, help: 'Reformas que suben (o bajan) lo que produce cada trabajador.' },
   { key: 'investment', label: 'Inversión', unit: '% del PBI', min: 10, max: 30, step: 0.5, help: 'Cada punto sobre el 17,5 % suma una décima al crecimiento anual.' }

@@ -3,7 +3,6 @@
  * how real its data is and which references (ids of `REFERENCES`) it comes from. Where the data is still made up the panel says so; the
  * state of every slide is in `docs/data-requests.md`, section 0.
  */
-import { stepNumber } from './chartSteps.js';
 
 export type StepData = 'real' | 'parcial' | 'prueba';
 
@@ -29,17 +28,6 @@ export const STEP_INFO: Record<number, StepInfo> = {
     note: 'Banco Mundial (WDI), PBI real en dólares constantes de 2015, 1960 a 2025; algunos países no tienen dato en los primeros años. La población de Argentina de 2022 a 2025 es la proyección oficial del INDEC (Censo 2022); el resto, del Banco Mundial. El año 2026 no se dibuja porque todavía no es un dato observado.',
     refs: ['W5', 'I1', 'F1']
   },
-  1: {
-    heading: 'El PBI de Argentina, de 1990 a 2056',
-    paragraphs: [
-      'La línea muestra el PBI real observado de 1990 a 2025, en dólares constantes de 2015, y la proyección esperada hasta 2056, con un abanico que va del escenario más bajo al más alto. En la historia se ven las crisis de 1995, 2001-2002, 2009 y 2020.',
-      'El cuadro de indicadores resume la economía en 2025: PBI real, población, PBI por habitante real, exportaciones, crecimiento e inversión.'
-    ],
-    how: 'Mirá primero la línea de la proyección y después el ancho del abanico: cuanto más ancho, más incierto es el futuro. El abanico no es un pronóstico de lo que va a pasar sino de lo que podría pasar.',
-    data: 'parcial',
-    note: 'La historia es real (Banco Mundial, PBI real en dólares constantes de 2015). El valor de 2026 es el de 2025 por el crecimiento real que proyecta el FMI (2,06 %, actualización del 30-09-2026) y es el mismo en todos los gráficos del sitio. Desde 2027 la proyección y el abanico son de prueba hasta que esté el modelo. Población: INDEC; el Banco Mundial tiene 45,9 millones y el FMI 47,5 (usa la proyección anterior al censo).',
-    refs: ['W3', 'W5', 'I1', 'F1']
-  },
   2: {
     heading: 'Qué produce cada provincia',
     paragraphs: [
@@ -52,15 +40,17 @@ export const STEP_INFO: Record<number, StepInfo> = {
     refs: ['W3']
   },
   3: {
-    heading: 'La inteligencia artificial y el PBI',
+    heading: 'Cuarta revolución industrial: la IA y el PBI de Argentina',
     paragraphs: [
-      'Dos líneas del PBI desde 2025: una sin la revolución de la inteligencia artificial y otra con ella. La diferencia entre ambas es lo que la IA podría agregar al producto.',
-      'Los estudios dan resultados muy distintos. Acemoglu (2024) calcula un aumento de la productividad total de no más de 0,66 % en diez años (menos de 0,53 % si se descuentan las tareas difíciles de aprender). Anthropic (2025) estima, para Estados Unidos y suponiendo adopción universal en diez años, 1,8 % anual de productividad laboral y 1,08 % anual de productividad total.'
+      'Tres escenarios del PBI real de Argentina hasta 2035, con un modelo simple de contabilidad del crecimiento: capital, trabajo y productividad total de los factores (PTF), más un impulso de la inteligencia artificial a la PTF que empieza bajo y crece de a poco. Todos parten del PBI de 2026 (el mismo valor de las otras diapositivas).',
+      'Base, con poca IA: 2,8 a 3,2 % anual hasta 2030 y 2,5 a 3,0 % después; la IA suma 0,1 a 0,2 puntos por año. Moderado, con IA: 3,3 a 3,8 % y 3,0 a 3,5 %; la IA suma 0,3 a 0,4 puntos. Optimista: 4,0 a 4,8 % y 3,5 a 4,2 %; la IA suma 0,5 a 0,7 puntos. El gráfico usa el punto medio de cada rango.',
+      'Argentina parte con poca adopción de la IA en las empresas (alrededor de una de cada cinco) y detrás de Chile, México y Brasil en preparación. Por eso el impulso es menor y más lento que en Estados Unidos, donde los mismos escenarios suman entre 0,1 y 0,8 puntos por año.',
+      'Los analistas dan resultados muy distintos para el efecto de la IA en el nivel del PBI: de 1 a 1,8 % en diez años (Acemoglu) y 1,5 % a 2035 (Penn Wharton), a 7 % mundial en diez años (Goldman Sachs), hasta 15 % mundial a 2035 (PwC) y 8,3 o 32,4 % a 2030 en los escenarios sustancial y extremo de Anthropic. Todos suponen que los beneficios no son automáticos: dependen de energía, de que las empresas adopten la IA, de las habilidades y de las políticas.'
     ],
-    how: 'Compará la distancia entre las dos líneas en 2056. No es una predicción: depende de cuánto de la economía se adapta y de qué tan rápido.',
-    data: 'prueba',
-    note: 'Las dos líneas son de prueba; parten del PBI real de 2026 (el mismo valor del gráfico del PBI, en dólares de 2015). Los dos estudios se leyeron el 12-10-2026; Anthropic aclara que su cifra no es una predicción y que usa supuestos fuertes. Ninguno es sobre Argentina.',
-    refs: ['P8', 'P9', 'P10a']
+    how: 'Compará la distancia entre las tres líneas en 2035. La diferencia entre el escenario base y el optimista es lo que podrían sumar la IA, los recursos y la ejecución de proyectos juntos. Las tablas de Data traen los rangos completos, la comparación con Estados Unidos y las estimaciones de cada analista.',
+    data: 'parcial',
+    note: 'Los escenarios salen de un informe pasado por el responsable, con rangos de crecimiento, no de un modelo de este proyecto; el gráfico toma el punto medio. 2026 es el mismo valor de las otras diapositivas (crecimiento del FMI). Las estimaciones de los analistas y sus enlaces no se verificaron en los originales. Ninguna es una predicción.',
+    refs: ['P8', 'P9', 'A1', 'A2', 'A3', 'A4', 'A5', 'A6', 'A7', 'A8', 'A9', 'A10']
   },
   4: {
     heading: 'De qué viven las exportaciones',
@@ -87,70 +77,30 @@ export const STEP_INFO: Record<number, StepInfo> = {
     note: 'No es una medición: es una cuenta. Los datos son el PBI real y la población del Banco Mundial (de Argentina, la del INDEC), los mismos de los otros gráficos.',
     refs: ['W5', 'I1']
   },
-  7: {
-    heading: 'El mapa productivo',
-    paragraphs: [
-      'Cada provincia pintada según su valor productivo anual, en millones de dólares.',
-      `Es la misma información del paso ${stepNumber(2)} vista como un solo número por provincia.`
-    ],
-    how: 'Tocá una provincia para destacarla. El tono más oscuro es el valor más alto.',
-    data: 'prueba',
-    note: 'Los valores son de prueba hasta que se traiga la producción por provincia.',
-    refs: []
-  },
   8: {
-    heading: 'Minería: lo que hay y lo que viene',
+    heading: 'Recursos naturales: minería, hidrocarburos, agro y stock',
     paragraphs: [
       'La minería exportó 4.673 millones de dólares en 2024: oro 3.141 (67 %), plata 652, litio 645 y el resto 235. En mayo de 2025 la Secretaría de Minería tenía 316 operaciones y proyectos en cartera, solo 25 en producción.',
-      'La Secretaría proyecta exportaciones de 25.500 millones de dólares en 2035: 11.700 de cobre, 11.300 de litio y unos 2.500 de oro y plata. Para lograrlo calcula inversiones por 30.200 millones entre 2025 y 2031, con el pico en 2026 (7.510 millones). Una parte pasa por el RIGI: la prensa cuenta 13 proyectos mineros aprobados por unos 25.000 millones.'
-    ],
-    how: 'La barra gris son las exportaciones de 2024 y la azul la proyección para 2035, por mineral. Los proyectos de litio y de cobre, con su capacidad, y los del RIGI están en las tablas de la sección Data.',
-    data: 'real',
-    note: 'Secretaría de Minería, ARMINERA 2025: los números se leyeron a mano de imágenes del documento. «Cobre y resto» de 2024 es el «resto» que el gráfico no desglosa. El oro y la plata de 2035 son lo que resta del total (25,5 − 11,7 − 11,3). La proyección es de la Secretaría, no de este proyecto. La lista de proyectos del RIGI es de prensa y no está verificada.',
-    refs: ['E3', 'E5', 'R1', 'R2', 'R3']
-  },
-  9: {
-    heading: 'Hidrocarburos: el piso y el techo',
-    paragraphs: [
+      'La Secretaría proyecta exportaciones de 25.500 millones de dólares en 2035: 11.700 de cobre, 11.300 de litio y unos 2.500 de oro y plata. Para lograrlo calcula inversiones por 30.200 millones entre 2025 y 2031, con el pico en 2026 (7.510 millones). Una parte pasa por el RIGI: la prensa cuenta 13 proyectos mineros aprobados por unos 25.000 millones.',
       'Argentina produjo en 2025 un promedio de 793,7 mil barriles de petróleo por día, 13 % más que en 2024 (700,7), y 141,4 millones de metros cúbicos de gas por día. En 2015 eran 532,4 mil barriles y 117,5 millones de m³.',
-      'Vaca Muerta explica el salto: 182 millones de barriles en 2025 (28,7 % más que en 2024), con un récord de 589 mil barriles por día en diciembre; aportó el 62 % del petróleo y el 53 % del gas. Hay un oleoducto (Vaca Muerta Sur) con cerca de 80 % de obra y proyectos de gas natural licuado y de ampliación, varios dentro del RIGI.'
+      'El campo es la base histórica de las exportaciones argentinas. En la campaña 2024/25 se produjeron 51,1 millones de toneladas de soja, 51,7 de maíz y 5,5 de girasol; la última campaña de trigo publicada (2025/26) dio 27,9 millones. El gráfico las muestra en toneladas, no en dólares.',
+      'El stock de recursos es lo que está en el suelo y todavía no se produjo. La Secretaría de Minería estima recursos de litio por 122 millones de toneladas de carbonato equivalente (21 millones como reservas) y de cobre por 116,7 millones de toneladas. El USGS (2026) calcula 28 millones de toneladas de litio contenido como recursos argentinos, los mayores del mundo.'
     ],
-    how: 'La línea llena es la producción nacional de petróleo, en miles de barriles por día; después de 2025 la línea punteada es la esperada y la franja es el piso y el techo según cuánto se desarrolle Vaca Muerta. Los proyectos y la serie desde 1950 están en la tabla de la sección Data.',
+    how: 'Elegí la pestaña: Minería (barra gris 2024, azul la proyección a 2035), Hidrocarburos (línea llena la producción de petróleo; la punteada y la franja, lo esperado), Agro (toneladas por campaña de los cuatro cultivos) y Stock (valor de lo que hay bajo la tierra). Los proyectos, la serie desde 1950 y las toneladas, superficie y rendimiento por campaña están en las tablas de la sección Data.',
     data: 'parcial',
-    note: 'La historia de 2015 a 2025 es real (Secretaría de Energía, datos abiertos: promedio de los doce meses de cada año; el IAE da 800,2 con la misma fuente). La proyección y la franja son de prueba. Los proyectos son de prensa y no están verificados.',
-    refs: ['E6', 'E4', 'R2', 'R3', 'R6', 'R8', 'R10']
-  },
-  10: {
-    heading: 'Agro: lo que se produce y lo que se podría',
-    paragraphs: [
-      'El campo es la base histórica de las exportaciones argentinas. En la campaña 2024/25 se produjeron 51,1 millones de toneladas de soja, 51,7 de maíz, y 5,5 de girasol; la última campaña de trigo publicada (2025/26) dio 27,9 millones.',
-      'El gráfico compara la producción de hoy con la que podría alcanzarse con más tecnología, riego o superficie. El potencial no es una promesa: depende de precios, clima y reglas de exportación.'
-    ],
-    how: 'La barra gris es la producción actual y la azul la potencial. La diferencia entre ellas es el margen de crecimiento. En Data están las toneladas, la superficie y el rendimiento de cada cultivo por campaña.',
-    data: 'prueba',
-    note: 'Las barras del gráfico son de prueba (están en dólares). Las toneladas por cultivo son reales (MAGyP, series nacionales) y están en Data. Falta un estudio de potencial y valuar la producción.',
-    refs: ['E8']
+    note: 'Minería: Secretaría de Minería, ARMINERA 2025, leído a mano de imágenes; la proyección es de la Secretaría. Hidrocarburos: la historia de 2015 a 2025 es real (Secretaría de Energía, datos abiertos); la proyección y la franja son de prueba. Agro: toneladas reales del MAGyP (series nacionales). Stock: las barras son de prueba; las cantidades físicas vienen de ARMINERA 2025. Las listas de proyectos del RIGI son de prensa y no están verificadas.',
+    refs: ['E3', 'E4', 'E5', 'E6', 'E8', 'R1', 'R2', 'R3', 'R6', 'R8', 'R10']
   },
   12: {
-    heading: 'De qué se compone el PBI',
+    heading: 'De qué se compone el PBI y qué se exporta',
     paragraphs: [
       'El valor agregado de 2025 por sector: la industria manufacturera aporta el 18,0 %, el comercio el 15,2 %, las actividades inmobiliarias y empresariales el 13,9 % y la agricultura y ganadería el 8,5 %.',
-      'Más de la mitad del producto son servicios; los sectores que más exportan (agro, minería, energía) pesan menos en el PBI que en las exportaciones.'
+      'Más de la mitad del producto son servicios; los sectores que más exportan (agro, minería, energía) pesan menos en el PBI que en las exportaciones.',
+      'A la derecha, la composición de las exportaciones de bienes de 2025 por complejo exportador (INDEC): sirve para comparar lo que pesa cada sector en la producción con lo que pesa en lo que el país vende afuera.'
     ],
-    how: 'Cada barra es la parte del valor agregado total que aporta un sector. Están ordenados de mayor a menor.',
+    how: 'Cada barra es la parte del valor agregado total que aporta un sector (izquierda) o la parte de las exportaciones que explica un complejo (derecha). Están ordenados de mayor a menor.',
     data: 'real',
     note: 'INDEC, cuadro 4 del informe de avance del nivel de actividad del segundo trimestre de 2026: precios de 2004, datos preliminares. A precios corrientes las proporciones cambian.',
-    refs: ['E2']
+    refs: ['E2', 'E7']
   },
-  13: {
-    heading: 'Cuánto valen los recursos que hay bajo la tierra',
-    paragraphs: [
-      'El stock de recursos es lo que está en el suelo y todavía no se produjo. La Secretaría de Minería estima recursos de litio por 122 millones de toneladas de carbonato equivalente (21 millones como reservas) y de cobre por 116,7 millones de toneladas. El USGS (2026) calcula 28 millones de toneladas de litio contenido como recursos argentinos, los mayores del mundo.',
-      'También hay 105 millones de onzas de oro y 3.216 millones de onzas de plata. Valuarlos depende del precio y de cuánto se pueda extraer a un costo razonable.'
-    ],
-    how: 'Cada barra es el valor del stock de un recurso, en miles de millones de dólares. Recurso no es lo mismo que reserva: la reserva es la parte que hoy se puede extraer con ganancia.',
-    data: 'prueba',
-    note: 'Las barras son de prueba. Las cantidades físicas vienen de la Secretaría de Minería (ARMINERA 2025, a verificar); falta valuarlas y sumar petróleo, gas, tierra y agua.',
-    refs: ['E3', 'E5']
-  }
 };

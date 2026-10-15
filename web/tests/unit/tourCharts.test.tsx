@@ -9,16 +9,16 @@ vi.mock('../../src/charts/EChart.js', () => ({
 
 import { CHART_STEPS, hasTourChart } from '../../src/tour/chartSteps';
 import { ChartStep, visibleSteps } from '../../src/tour/ChartStep';
-import { CHART_STEP_LIST, TOUR_CHARTS } from '../../src/tour/tourCharts';
+import { AGRO_TONNES_CHART, AGRO_USD_CHART, CHART_STEP_LIST, HYDROCARBONS_CHART, STOCK_CHART, TOUR_CHARTS } from '../../src/tour/tourCharts';
 import { hydrocarbonsData, rule70Rows } from '../../src/tour/tourData';
 import { useTourLayout } from '../../src/tour/useTourLayout';
 import { useStore } from '../../src/state/store';
 
 describe('the charts of the Recorrido', () => {
   it('has a chart for step 1 and for steps 3 to 13 except 6 (the investor slide was removed), and the shell also knows steps 0 and 2', () => {
-    expect(CHART_STEP_LIST).toEqual([1, 3, 4, 5, 7, 8, 9, 10, 12, 13]);
+    expect(CHART_STEP_LIST).toEqual([3, 4, 5, 8, 12]);
     // step 2 is the map of production by province: its own component, not one of the charts that go side by side
-    expect([...CHART_STEPS].sort((a, b) => a - b)).toEqual([0, 1, 2, ...CHART_STEP_LIST.slice(1), 14, 20]); // 14 is Productividad and 20 the index: their own components
+    expect([...CHART_STEPS].sort((a, b) => a - b)).toEqual([0, 2, ...CHART_STEP_LIST, 14, 20]); // 14 is Productividad and 20 the index: their own components
     expect(hasTourChart(0)).toBe(true);
     expect(hasTourChart(2)).toBe(true);
     expect(hasTourChart(14)).toBe(true);
@@ -30,13 +30,17 @@ describe('the charts of the Recorrido', () => {
     expect(TOUR_CHARTS[4]!.title).toBe('Recursos naturales: exportaciones por sector');
     expect(TOUR_CHARTS[5]!.title).toBe('¿Cuánto hay que crecer por año para duplicar el PBI? La regla del 70');
     expect(TOUR_CHARTS[6]).toBeUndefined();
-    expect(TOUR_CHARTS[7]!.title).toBe('Mapa productivo por provincia');
+    expect(TOUR_CHARTS[7]).toBeUndefined(); // merged into the province slide (step 2)
     expect(TOUR_CHARTS[8]!.title).toBe('Minería: hoy vs proyecto');
-    expect(TOUR_CHARTS[9]!.title).toBe('Hidrocarburos: Vaca Muerta define el piso y el techo');
-    expect(TOUR_CHARTS[10]!.title).toBe('Agro: producción actual y potencial');
+    // steps 9, 10 and 13 are tabs of the Resources slide (step 8) now
+    expect(TOUR_CHARTS[9]).toBeUndefined();
+    expect(TOUR_CHARTS[10]).toBeUndefined();
+    expect(HYDROCARBONS_CHART.title).toBe('Hidrocarburos: Vaca Muerta define el piso y el techo');
+    expect(AGRO_USD_CHART.title).toBe('Agro: producción actual y potencial');
+    expect(AGRO_TONNES_CHART.title).toBe('Agro: toneladas producidas por campaña');
     expect(TOUR_CHARTS[11]).toBeUndefined(); // merged into the Exports slide (step 4)
     expect(TOUR_CHARTS[12]!.title).toBe('Composición del PBI');
-    expect(TOUR_CHARTS[13]!.title).toBe('El stock de recursos naturales');
+    expect(STOCK_CHART.title).toBe('El stock de recursos naturales');
   });
 
   it('builds every chart with a text alternative, and a 3D version except the map (drawn by its own component)', () => {
@@ -70,7 +74,7 @@ describe('the charts of the Recorrido', () => {
   });
 
   it('labels the paired 3D bars on two lines', () => {
-    const spec = TOUR_CHARTS[10]!.build().spec as { bars: Array<{ label: string }> };
+    const spec = AGRO_USD_CHART.build().spec as { bars: Array<{ label: string }> };
     expect(spec.bars[0]!.label).toBe('Soja\nactual');
     expect(spec.bars[1]!.label).toBe('Soja\npotencial');
   });
@@ -78,10 +82,10 @@ describe('the charts of the Recorrido', () => {
 
 describe('visibleSteps', () => {
   it('shows the step and the next ones, and slides back at the end of the list', () => {
-    expect(visibleSteps(1, 1)).toEqual([1]);
-    expect(visibleSteps(1, 4)).toEqual([1, 3, 4, 5]);
-    expect(visibleSteps(5, 3)).toEqual([5, 7, 8]);
-    expect(visibleSteps(13, 4)).toEqual([9, 10, 12, 13]);
+    expect(visibleSteps(3, 1)).toEqual([3]);
+    expect(visibleSteps(3, 4)).toEqual([3, 4, 5, 8]);
+    expect(visibleSteps(5, 3)).toEqual([5, 8, 12]);
+    expect(visibleSteps(12, 4)).toEqual([4, 5, 8, 12]);
   });
 });
 
@@ -117,19 +121,19 @@ describe('ChartStep', () => {
   });
 
   it('has a 1/3 layout: three small charts that are buttons, and the big one is the chart of the step', () => {
-    useStore.setState({ tourStep: 8 });
-    render(<ChartStep step={8} />);
+    useStore.setState({ tourStep: 3 });
+    render(<ChartStep step={3} />);
     fireEvent.click(screen.getByRole('button', { name: '1/3' }));
     expect(screen.getAllByTestId('echart')).toHaveLength(4);
     const picks = screen.getAllByRole('button', { name: /^Ver grande: / });
     expect(picks.map((b) => b.getAttribute('aria-label'))).toEqual([
-      'Ver grande: Hidrocarburos: Vaca Muerta define el piso y el techo',
-      'Ver grande: Agro: producción actual y potencial',
-      'Ver grande: Composición del PBI'
+      `Ver grande: ${TOUR_CHARTS[4]!.title}`,
+      `Ver grande: ${TOUR_CHARTS[5]!.title}`,
+      `Ver grande: ${TOUR_CHARTS[8]!.title}`
     ]);
     expect(document.querySelector('.tour-grid')?.getAttribute('data-layout')).toBe('focus');
-    expect(document.querySelector('[data-size="big"]')?.getAttribute('data-step')).toBe('8');
-    fireEvent.click(picks[2]!);
-    expect(useStore.getState().tourStep).toBe(12);
+    expect(document.querySelector('[data-size="big"]')?.getAttribute('data-step')).toBe('3');
+    fireEvent.click(picks[1]!);
+    expect(useStore.getState().tourStep).toBe(5);
   });
 });

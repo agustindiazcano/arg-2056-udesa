@@ -128,7 +128,7 @@ La escena 3D de Chacabuco es un **diorama de pantalla completa que no usa el map
 
 Pendiente, salvo la productividad (4.1). Esas escenas todavía usan datos de prueba (cada gráfico lo dice con «Datos de prueba»). Cuando se reemplacen por datos reales, cada fuente se agrega acá con su URL, fecha de consulta y qué cifra aporta, y se registra en `data/processed/sources.json` (que alimenta la página de Fuentes de la aplicación). Las reglas están en la sección 6 de [`AGENTS.md`](../AGENTS.md).
 
-### 4.1 Productividad (diapositiva 3 de «Hacia el 2056»; su id interno es 14)
+### 4.1 Productividad (diapositiva 4 de «Hacia el 2056»; su id interno es 14)
 
 El gráfico de la diapositiva de productividad y el simulador usan hoy **datos de prueba** (`web/src/tour/tourData.ts`, `simModel.ts`). Estas son las fuentes con las que se reemplazan, y qué cifra aporta cada una.
 
@@ -199,6 +199,25 @@ Cargadas el 2026-10-14 con el pipeline de datos (`scripts/fetch_external_forecas
 | X1 | OCDE, *Economic Outlook 117 long-term scenarios*. <https://sdmx.oecd.org/public/rest/dataflow/OECD.ECO.MAD/DSD_EO_LTB@DF_EO_LTB/1.0> | Argentina hasta 2056, seis escenarios: PBI real (moneda nacional, precios constantes), PBI potencial, población y población de 15 a 74 años. Las medidas en PPA se descartaron | **leída** (API, 2026-10-14) |
 | X2 | ONU, *World Population Prospects 2024*. <https://population.un.org/wpp/downloads> | Argentina hasta 2056: población, fecundidad y esperanza de vida, variantes baja, media y alta | **leída** (archivos CSV, 2026-10-14) |
 | X3 | FMI, *World Economic Outlook* (actualización del 2026-09-30). <https://www.imf.org/en/Publications/WEO> | Crecimiento real, inversión total y población 2025-2031, Argentina y diez países | **leída** (API SDMX, 2026-10-14) |
+
+### 4.5 Inteligencia artificial y el PBI (diapositiva 10 de «Hacia el 2056»; su id interno es 3)
+
+Cargadas el 2026-10-15 desde dos informes que pasó el responsable (escritos con IA). Los escenarios de Argentina y de EE.UU. y las estimaciones de los analistas están en las tablas `chart-3`, `ai-scenarios`, `ai-us` y `ai-analysts` de Data. Los enlaces **no se abrieron**: ninguna cifra se verificó en su original.
+
+| # | Fuente | Qué se usa | Estado |
+|---|---|---|---|
+| A1 | Anthropic / Korinek y otros (2026), escenarios de la IA a 2030 para EE.UU. <https://www.anthropic.com/features/econ-scenarios> | Estimación del efecto de la IA en el PBI | **por informe** |
+| A2 | PwC (2025), *Value in Motion*: hasta 15 puntos del PBI mundial hacia 2035. <https://www.pwccn.com/en/press-room/press-releases/pr-290425.html> | Estimación del efecto de la IA en el PBI | **por informe** |
+| A3 | Goldman Sachs, la IA podría empezar a sumar al PBI de EE.UU. en 2027. <https://www.goldmansachs.com/insights/articles/ai-may-start-to-boost-us-gdp-in-2027> | Estimación del efecto de la IA en el PBI | **por informe** |
+| A4 | Oxford Economics, modelado del impacto macroeconómico de la IA. <https://www.oxfordeconomics.com/resource/ai-macroeconomic-impact-modelling/> | Estimación del efecto de la IA en el PBI | **por informe** |
+| A5 | Reuters (2026-10-13), el FMI dice que la inversión en IA sostiene el crecimiento mundial. <https://www.reuters.com/world/china/imf-says-ai-investment-propping-up-global-growth-war-debt-threaten-outlook-2026-10-13/> | Estimación del efecto de la IA en el PBI | **por informe** |
+| A6 | OMC (2025), *World Trade Report*: PBI mundial +12-13 % hacia 2040. <https://www.wto.org/english/blogs_e/data_blog_e/blog_dta_29sep25_e.htm> | Estimación del efecto de la IA en el PBI | **por informe** |
+| A7 | CEPR, «Mind the gap: the global impact of AI». <https://cepr.org/voxeu/columns/global-impact-ai-mind-gap> | Estimación del efecto de la IA en el PBI | **por informe** |
+| A8 | Acemoglu, D. (MIT), «A new look at the economics of AI». <https://mitsloan.mit.edu/ideas-made-to-matter/a-new-look-economics-ai> | Estimación del efecto de la IA en el PBI | **por informe** |
+| A9 | Penn Wharton Budget Model, «How AI could lift productivity and GDP growth». <https://knowledge.wharton.upenn.edu/articles/how-ai-could-lift-productivity-and-gdp-growth/> | Estimación del efecto de la IA en el PBI | **por informe** |
+| A10 | Forecasting Research Institute, efectos económicos de la IA. <https://forecastingresearch.org/economic-effects-of-ai> | Estimación del efecto de la IA en el PBI | **por informe** |
+
+El gráfico usa el punto medio de cada rango del informe (2027-2030 y 2031-2035) a partir del PBI de 2026, igual al de las demás diapositivas. El simulador toma de ese informe su crecimiento base (3,0 %) y el aporte de la IA (0,4 puntos por año, dentro de 0,1 a 0,7).
 
 ## Para verificar antes de publicar
 

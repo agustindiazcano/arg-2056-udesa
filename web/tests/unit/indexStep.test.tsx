@@ -14,7 +14,7 @@ import { INDEX_STEP, TOUR_ORDER, stepNumber } from '../../src/tour/chartSteps';
 import { indexItems } from '../../src/tour/indexData';
 import { ExportsStep } from '../../src/tour/ExportsStep';
 import { Rule70Step } from '../../src/tour/Rule70Step';
-import { PRODUCTIVITY_TITLE, RULE70_TITLE } from '../../src/tour/slideTitles';
+import { COMPOSITION_TITLE, PRODUCTIVITY_TITLE, RULE70_TITLE } from '../../src/tour/slideTitles';
 import { TOUR_CHARTS } from '../../src/tour/tourCharts';
 import { useStore } from '../../src/state/store';
 import { useTourLayout } from '../../src/tour/useTourLayout';
@@ -47,20 +47,20 @@ describe('the first slide: the title and the index', () => {
     expect(list).toHaveLength(rest.length);
     expect(list.map((li) => li.textContent)).toEqual(indexItems().map((i) => `${i.number} · ${i.title}`));
     expect(list[0]!.textContent).toBe('1 · El PBI de Argentina desde 1960');
-    expect(list[2]!.textContent).toBe(`3 · ${PRODUCTIVITY_TITLE}`);
-    expect(list.at(-1)!.textContent).toBe(`${rest.length} · ${RULE70_TITLE}`);
+    expect(list[3]!.textContent).toBe(`4 · ${PRODUCTIVITY_TITLE}`);
+    expect(list.at(-1)!.textContent).toBe(`${rest.length} · ${TOUR_CHARTS[3]!.title}`);
   });
 
   it('uses the title each slide shows as its own heading', () => {
     const byId = new Map(indexItems().map((i) => [i.id, i.title]));
-    expect(byId.get(1)).toBe(TOUR_CHARTS[1]!.title);
+    expect(byId.get(12)).toBe(COMPOSITION_TITLE);
     expect(byId.get(5)).toBe(RULE70_TITLE);
     render(<Rule70Step />);
     expect(screen.getByRole('heading', { level: 2 }).textContent).toBe(byId.get(5));
     cleanup();
     render(<ExportsStep />);
     expect(screen.getByRole('heading', { level: 2 }).textContent).toBe(byId.get(4));
-    for (const id of [3, 7, 8, 9, 10, 12, 13]) expect(byId.get(id), `step ${id}`).toBe(TOUR_CHARTS[id]!.title);
+    for (const id of [3]) expect(byId.get(id), `step ${id}`).toBe(TOUR_CHARTS[id]!.title);
   });
 
   it('numbers the items as the buttons of the menu and the Data page do', () => {
