@@ -280,6 +280,7 @@ Legend: DONE = merged. READY = can start now. BLOCKED = needs the human input na
 | 30 | docs-submission | BLOCKED | the contest's rules (table in the brief); backtest-run |
 | 31 | demo-video (optional) | BLOCKED | what the contest requires |
 | 32 | development-indicators-maps | READY for source audit and contract design | verify indicator definitions, project/resource records and locations before publishing |
+| 33 | forecast-uncertainty | READY for evidence review and data-contract design | historical technology diffusion, AI cost/adoption evidence, macro forecast vintages, growth/development studies |
 
 8. docs/archived/references-page.md  [DONE - merged]
 
@@ -424,6 +425,26 @@ Rules:
 - Before push, run `python scripts/precheck.py`; never push if it fails. Never claim CI is green unless the run was checked.
 
 When finished, update `LASTCONTEXT.md`, `PENDING.md`, and the brief with the verified sources, remaining human checks, and a PR description stating what changed, what was verified, and what needs human review.
+
+---
+
+## forecast-uncertainty
+
+Before implementation, read `AGENTS.md`, `LASTCONTEXT.md`, `PENDING.md`, `forecast-uncertainty.md`, `docs/model-design.md`, `docs/assumptions.md`, `docs/sources.md` if present, `docs/data-requests.md`, `docs/references.md`, and the current AI/projection slide and model code.
+
+Execute the plan in `forecast-uncertainty.md`. First build a source and evidence inventory; do not present sourced-sounding draft copy, costs, innovation timelines, forecast accuracy claims, causal growth decompositions, or a negative AI scenario until its definitions and evidence pass review.
+
+Rules:
+- Create an implementation branch `task/forecast-uncertainty` only after this planning branch; never touch `main`, merge, or push to `main`.
+- Keep observed values, forecast vintages, revisions, scenarios and assumptions distinct. The forecast error sample must specify institution, variable, vintage, horizon, metric and coverage.
+- Do not assume model size, inference, compute hardware or robotics costs will keep declining; future reductions are sourced ranges/assumptions, and benchmarks must be comparable.
+- Define whether a negative AI effect means a negative contribution versus a no-AI counterfactual or a fall in the PBI level. Keep productivity, employment, wages, total PBI and PBI per capita separate.
+- Treat growth/development correlations and growth-accounting decompositions as non-causal unless the cited study identifies causal effects. Do not transfer estimates from another country or period without validation.
+- Any parameter/range goes in `docs/assumptions.md`; every displayed figure stays in `PENDING.md` under Data to verify until a human checks the source.
+- Respect the fan/percentile model principle; do not create an arbitrary pessimistic curve independent of the uncertainty distribution.
+- Follow strict TDD for logic. No fabricated data, silent interpolation, unnecessary dependencies, or checker suppression. Before push, run `python scripts/precheck.py`; never push if it fails.
+
+When finished, update `LASTCONTEXT.md`, `PENDING.md`, sources/assumptions, and this brief with evidence, limitations, remaining human checks and a PR description stating what changed, what was verified, and what needs human review.
  
 ---
  

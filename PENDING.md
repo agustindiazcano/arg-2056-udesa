@@ -67,6 +67,7 @@ Every task below has a brief (`<slug>.md` in the repository root) and a prompt (
 14. [ ] `polish`: decisions taken (`D-polish-3` color still the human's); 3D items first (`D-3d-6`); by `AGENTS.md` section 8 it starts after the model and data tasks unless the human starts it earlier for the scenes that exist.
 15. [ ] `docs-submission` (draft brief) and `demo-video` (optional, draft brief): BLOCKED by the contest's rules.
 16. [ ] `development-indicators-maps`: plan in `development-indicators-maps.md`; READY for source audit and data-contract design. Includes the Development slide and provincial resource/project explorer with 2D/3D province transitions. All displayed values and coordinates require source verification first.
+17. [ ] `forecast-uncertainty`: plan in `forecast-uncertainty.md`; READY for historical-innovation, AI-cost/adoption, forecast-vintage and growth/development evidence review. Includes a sourced adversarial AI scenario; do not invent a negative curve.
 
 ## Next on the Recorrido (human request 2026-10-12)
 
@@ -92,6 +93,7 @@ Every task below has a brief (`<slug>.md` in the repository root) and a prompt (
 - [ ] **Real data of the Recorrido, slide by slide**: the state of each slide is in section 0 of `docs/data-requests.md`; all GDP is real at constant 2015 prices (rules in section 0b). Human tasks (RIGI list, mining and agro by province, step 0 years, investment figure) are in section 3 of that file.
 - [ ] **Development slide** (`development-indicators-maps.md`): verify IDH, PISA scores by area/edition, university dropout definition, life expectancy, tertiary/STEM/postgraduate attainment, and Gini against original sources before publishing any figure. Candidate additions: schooling years, secondary completion, infant/healthy-life mortality, labor participation and digital access, subject to comparable series.
 - [ ] **Province resource/project explorer** (`development-indicators-maps.md`): verify project names, coordinates, status, resource/reserve/production/capacity quantities and units against primary sources. Keep estimates, resources, reserves, production and capacity distinct.
+- [ ] **Forecast uncertainty / AI slide** (`forecast-uncertainty.md`): source historical technology diffusion-to-productivity lags; model-size, inference and robotics hardware cost series; 6/12-month forecast vintages and errors; evidence connecting real PBI per capita, real wages and development outcomes; and studies decomposing growth into education/human capital and savings/investment. Verify the OpenAI/ChatGPT timeline. Define whether an adverse AI impact means negative incremental growth versus a no-AI counterfactual or a fall in the PBI level.
 
 - [ ] Recorrido step 14 «Productividad» (`web/src/tour/productivity.ts`, `productivityData.json`): PWT 11.0 via FRED, 1955-2023, four countries; the data come from the human's `productivity_slide_spec.html` and were not re-downloaded by us. Verify the 15 FRED series (IDs in `docs/references.md` P7), the Argentine hours anomaly in 2021-2023, and the AI estimates quoted in step 5 (Acemoglu, Anthropic: cited, not opened). The INDEC 2016-2025 figures are verified in the PDF (P1) but the charts end in 2023; an extra step with the INDEC series (cuadros 12 y 13) was offered. Baumann Fonay (P2) is not verified and contradicts INDEC on 2024.
 - [ ] Simulador del PBI (`web/src/tour/simModel.ts`): plain arithmetic; every coefficient (AI ramp over 15 years, 0,1 pp per investment point, population around 0,5 %) and the 2025 GDP of 640 are made up; replace with the model's elasticities and sourced values and record them in `docs/assumptions.md`.
@@ -128,6 +130,7 @@ Every task below has a brief (`<slug>.md` in the repository root) and a prompt (
 - [x] Acceptance item "arrows moving the year" dropped: `KEY_MAP` unchanged (2026-10-04).
 - [x] Open decisions D-scen-1 to D-data-1 of `docs/model-design.md` answered with the recommendations (2026-10-04); assumptions A10, A13, A15, A16, A24, A26, A31, A32, A33 accepted (A10, A15, A26 still need a source for their values).
 - [ ] `docs/sources.md` and `docs/research-prompts.md` do not exist; no parameter can have a `source_id` yet. `data-andes`, `data-resources` and `data-economy-population` create or extend `docs/sources.md`.
+- [ ] Adverse AI scenario: source/document ranges for adoption and training lags, labor displacement/reallocation, wage and demand effects, and distribution of productivity gains in `docs/assumptions.md`; distinguish contribution to growth relative to a no-AI counterfactual from a change in the PBI level.
 - [ ] `data/mock/` has no research mocks (`ai_estimates.json` and the other four are generated only in tests); `scene-ai-revolution` wires `ai_estimates.json`.
 
 ## Done

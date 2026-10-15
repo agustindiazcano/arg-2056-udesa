@@ -97,6 +97,14 @@ Legend: **core** = needed for the submission; **opt** = optional, cut first if t
 
 The plan and acceptance criteria are in the root brief `development-indicators-maps.md`; its implementation prompt is in `TASKS.md`. Scope: a Development slide (IDH, PISA, higher-education completion/dropout, life expectancy, STEM/postgraduate attainment and Gini, plus candidates subject to comparable sources), smooth 2D/3D province-selection transitions, and a province-level resource/project map with synchronized selectable list and sourced detail cards.
 
+## A8. Forecast uncertainty, AI adoption and development
+
+| # | Slug | Class | Blocked by |
+|---|---|---|---|
+| 52 | `forecast-uncertainty` | core | Historical diffusion/adoption, AI cost and capability data, forecast vintages, and growth/development evidence must be source-audited before any figures or claims are published. |
+
+Plan and acceptance criteria: `forecast-uncertainty.md`; implementation prompt: `TASKS.md`. Scope: explain long-horizon uncertainty; compare historical technology diffusion with measured productivity; show observed AI capability/cost trends and sourced cost scenarios; review forecast errors/revisions; define an adversarial AI pathway where productivity gains fail to become shared output/wage gains; connect PBI growth, per-capita growth, wages and development indicators carefully; show education/human capital and savings/investment contributions from studies without implying causation.
+
 ## B. Briefs still to write
 
 None. Every task of the roadmap has a brief. The UI redesign (F1 to F8 of the approved plan: believable mock, Spanish shell, filters, motion and story, 3D, Andes, live simulation, polish) is tracked in `LASTCONTEXT.md`; F1 (PR #36) and F2a (PR #37) are merged, F2b is next. The two **draft** briefs (`docs-submission`, `demo-video`) are complete in structure and list the human inputs they wait for; rewrite them in place when those inputs arrive.

@@ -39,7 +39,9 @@
 ## Current task (2026-10-15)
 - On separate worktree `C:\Users\agusd\.codex\worktrees\desarrollo-mapas\arg-2056-udesa`, branch `task/indicadores-desarrollo-mapas`.
 - Planning only: `development-indicators-maps.md` defines a Development slide and a province-level resource/project explorer, including smooth 2D/3D map transitions.
+- Added `forecast-uncertainty.md` as a second planned slide: projection uncertainty, historical technology diffusion, AI capability/cost evidence, an adverse adoption/employment scenario, forecast revisions, and why PBI growth is relevant to development indicators.
 - Added task 51 to `roadmap.md`, prompt/status to `TASKS.md`, and queue, data-verification and visual-debt entries to `PENDING.md`.
+- Added task 52 to `roadmap.md`, `TASKS.md` and `PENDING.md`; it explicitly blocks unsupported claims about forecast accuracy, historical innovation lags, cost declines and growth/development causality.
 - No data, code, tests, or sources have been added; no values/coordinates are treated as verified.
 - Next: human/source audit, agree indicator definitions and project-location coverage; then implement in separate small task branches.
 
