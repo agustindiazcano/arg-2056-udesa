@@ -1,5 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
+import { MALVINAS_FEATURE } from '../../src/geo/malvinas';
 import data from '../../src/intro/provinces.json';
 import { INTRO_MALVINAS_ID, MALVINAS_INTRO, introPoint, withMalvinas } from '../../src/intro/malvinasPath';
 
@@ -15,9 +16,9 @@ describe('the Malvinas on the sheet of the intro', () => {
     expect(data.provinces).toHaveLength(24); // the continental sheet is not touched
   });
 
-  it('has two closed sub-paths (the two islands), inside the sheet and off the coast of Santa Cruz', () => {
-    expect(MALVINAS_INTRO.d.match(/M/g)).toHaveLength(2);
-    expect(MALVINAS_INTRO.d.match(/Z/g)).toHaveLength(2);
+  it('has one closed sub-path per island of the outline, inside the sheet and off the coast of Santa Cruz', () => {
+    expect(MALVINAS_INTRO.d.match(/M/g)).toHaveLength(MALVINAS_FEATURE.geometry.coordinates.length);
+    expect(MALVINAS_INTRO.d.match(/Z/g)).toHaveLength(MALVINAS_FEATURE.geometry.coordinates.length);
     const v = nums(MALVINAS_INTRO.d);
     const xs = v.filter((_, i) => i % 2 === 0);
     const ys = v.filter((_, i) => i % 2 === 1);

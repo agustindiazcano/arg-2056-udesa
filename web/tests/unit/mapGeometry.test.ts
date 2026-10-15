@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { projectFeatures, provinceStyle } from '../../src/charts3d/mapGeometry';
 import type { ProvincesGeo } from '../../src/geo/provinces';
-import { MALVINAS_ID } from '../../src/geo/malvinas';
+import { MALVINAS_FEATURE, MALVINAS_ID } from '../../src/geo/malvinas';
 import { DIVERGING, NO_DATA, SEQUENTIAL_BLUE } from '../../src/styles/tokens';
 
 const square = (lon: number, lat: number, size: number): number[][] => [
@@ -43,7 +43,7 @@ describe('projectFeatures', () => {
   it('adds the Malvinas as decoration: apart from the provinces, flagged by its id, and without moving the map', () => {
     expect(out.decor).toHaveLength(1);
     expect(out.decor![0]!.id).toBe(MALVINAS_ID);
-    expect(out.decor![0]!.polygons).toHaveLength(2);
+    expect(out.decor![0]!.polygons).toHaveLength(MALVINAS_FEATURE.geometry.coordinates.length);
     expect(out.provinces.some((p) => p.id === MALVINAS_ID)).toBe(false);
     // the bounds are those of the provinces alone
     expect(out.bounds.width / out.bounds.height).toBeCloseTo((15 * Math.cos((35 * Math.PI) / 180)) / 10, 6);

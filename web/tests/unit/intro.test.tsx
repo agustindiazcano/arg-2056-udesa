@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs';
 // @vitest-environment jsdom
 import React from 'react';
 import { describe, it, expect, afterEach, vi } from 'vitest';
@@ -42,6 +43,14 @@ describe('Intro', () => {
       'Del Cruce de los Andes a la Cuarta Revolución Industrial: el desafío estratégico de 1817 como faro para el presente. Un análisis de los recursos de Argentina en 2026 y una proyección de su desarrollo hacia 2056 frente al impacto de la Inteligencia Artificial en la economía.',
       'Es una ventana al inicio de la lucha por nuestra libertad política y, a la vez, una hoja de ruta desde la actualidad hacia el desarrollo económico de las próximas tres décadas, explorada a través de datos, escenarios interactivos y modelos de incertidumbre.'
     ]);
+  });
+
+  it('puts the text on a translucent black panel, so it reads over the map', () => {
+    render(<Intro onStart={() => {}} />);
+    const panel = document.querySelector('.intro-text')!;
+    expect(panel).not.toBeNull();
+    expect(panel.querySelectorAll('.intro-sub')).toHaveLength(2);
+    expect(readFileSync('src/intro/intro.css', 'utf8')).toMatch(/\.intro-text\s*\{[^}]*background:\s*rgba\(0,\s*0,\s*0,\s*0\.\d+\)/);
   });
 
   it('gives the buttons of the sections the look the Comenzar button had', () => {
