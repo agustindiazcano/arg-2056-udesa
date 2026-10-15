@@ -1,5 +1,3 @@
-import { tokens } from '../../styles/tokens.js';
-
 export interface Milestone {
   /** the multiple of the first value: 2 for "x2" */
   multiple: number;
