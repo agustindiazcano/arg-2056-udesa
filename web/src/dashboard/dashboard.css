@@ -1312,14 +1312,14 @@
   flex: none;
 }
 
-/* the pop-up that explains how the crossing was made: centered over the map, closable */
+/* the pop-up that explains how the crossing was made: at the center of the left side of the map, closable */
 .andes-crossing {
   position: absolute;
   top: 50%;
-  left: 50%;
+  left: var(--space-md);
   z-index: 12;
-  transform: translate(-50%, -50%);
-  width: min(520px, calc(100% - 2 * var(--space-md)));
+  transform: translateY(-50%);
+  width: min(440px, calc(100% - var(--side-w, 0px) - 2 * var(--space-md)));
   max-height: calc(100% - 2 * var(--space-lg, 2rem));
   overflow-y: auto;
   padding: var(--space-md) var(--space-lg);

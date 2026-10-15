@@ -75,7 +75,9 @@ export default function Scene() {
   /** the intro (the clouds, the camera tour and the spotlight over each force) is going on: the button "Saltar intro" shows until it is over */
   const [introOn, setIntroOn] = useState(true);
   const [skipIntro, setSkipIntro] = useState(false);
-  /** the pop-up that explains how the crossing was made: it opens when the intro is over and the reader can close it */
+  /** the loading screen ("Cruce de los Andes 1817") has left: the camera starts to come closer */
+  const [loadingDone, setLoadingDone] = useState(false);
+  /** the pop-up that explains how the crossing was made: it opens as the camera starts to come closer and the reader can close it */
   const [crossingInfoOpen, setCrossingInfoOpen] = useState(true);
   const closeCrossingInfo = useCallback(() => setCrossingInfoOpen(false), []);
   /** grows each time the button of the battle of Chacabuco is pressed */
@@ -208,6 +210,7 @@ export default function Scene() {
   const stage = (
     <div className="andes-stage">
       <AndesIntro ready={mapReady} skip={skipIntro} onDone={(skipped) => {
+          setLoadingDone(true);
           if (!skipped) playTour();
         }} />
       <div className="andes-canvas">{battle3d ? null : map}</div>
@@ -293,7 +296,7 @@ export default function Scene() {
         </div>
       </div>
 
-      {crossingInfoOpen && !introOn && <CrossingInfo onClose={closeCrossingInfo} />}
+      {crossingInfoOpen && loadingDone && <CrossingInfo onClose={closeCrossingInfo} />}
 
       {<ForceInfo id={activeForce} onClose={() => setActiveForce(null)} />}
 
