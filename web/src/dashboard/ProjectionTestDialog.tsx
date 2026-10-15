@@ -40,7 +40,6 @@ export function ProjectionTestDialog({ onClose }: { onClose: () => void }) {
         <header className="projection-head">
           <div>
             <h2>Test proyección</h2>
-            <p>Datos de prueba: no son datos del modelo.</p>
           </div>
           <button type="button" className="chip" ref={closeRef} onClick={onClose}>
             Cerrar

@@ -87,10 +87,10 @@ describe('ReferencesPage: summary and states', () => {
     expect(screen.getByText('1 fuente respalda 1 archivo publicado. Consultadas entre 1 de diciembre de 2025 y 3 de febrero de 2026.')).toBeDefined();
   });
 
-  it('shows the empty state and the sample-data message when the data is mock', () => {
+  it('shows the empty state and no sample-data message when the data is mock', () => {
     render(<ReferencesPage references={empty(true)} />);
     expect(screen.getByText('Todavía no hay fuentes registradas.')).toBeDefined();
-    expect(screen.getByText('Datos de muestra: no son fuentes reales')).toBeDefined();
+    expect(screen.queryByText(/Datos de muestra/)).toBeNull();
     expect(screen.queryByRole('searchbox')).toBeNull();
   });
 
@@ -100,9 +100,10 @@ describe('ReferencesPage: summary and states', () => {
     expect(screen.queryByText(/Datos de muestra/)).toBeNull();
   });
 
-  it('shows the sample-data message next to real entries when mock is true', () => {
-    render(<ReferencesPage references={refs({ mock: true })} />);
-    expect(screen.getByText('Datos de muestra: no son fuentes reales')).toBeDefined();
+  it('does not show a sample-data message next to the entries when mock is true, nor talk about invented data', () => {
+    const { container } = render(<ReferencesPage references={refs({ mock: true })} />);
+    expect(screen.queryByText(/Datos de muestra/)).toBeNull();
+    expect(container.textContent).not.toMatch(/inventad|datos de prueba/i);
   });
 
   it('shows the records-without-link line only when it is greater than zero', () => {

@@ -40,7 +40,7 @@ export function Simulator() {
 
   const chart = useMemo(() => {
     const xLabels = mine.years.map(String);
-    const summary = `PBI simulado de ${SIM_START} a ${SIM_END} (ilustrativo): de ${formatValue(mine.gdp[0] ?? null, UNIT)} a ${formatValue(end, UNIT)} en tu escenario y ${formatValue(endRef, UNIT)} en el de referencia`;
+    const summary = `PBI simulado de ${SIM_START} a ${SIM_END}: de ${formatValue(mine.gdp[0] ?? null, UNIT)} a ${formatValue(end, UNIT)} en tu escenario y ${formatValue(endRef, UNIT)} en el de referencia`;
     const series = [
       { name: REFERENCE, values: reference.gdp, color: tokens.muted, dashed: true },
       { name: YOURS, values: mine.gdp, color: tokens.blue }
@@ -67,7 +67,7 @@ export function Simulator() {
         <Reveal k="head" className="gdp-title">
           <h2>{TITLE}</h2>
           <p className="gdp-sub">
-            {UNIT}, {SIM_START} a {SIM_END} · <span className="gdp-mock">Simulación ilustrativa con aritmética simple, no es el modelo</span>
+            {UNIT}, {SIM_START} a {SIM_END}
           </p>
         </Reveal>
         <div className="tour-controls">

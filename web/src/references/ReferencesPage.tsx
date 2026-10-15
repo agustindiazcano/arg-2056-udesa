@@ -75,7 +75,7 @@ function Entry({
 
 /** `extra` is shown after the sources, before the link back to the app (the visits section). */
 export function ReferencesPage({ references, extra }: { references: References; extra?: React.ReactNode }) {
-  const { sources, leads, attributions, stats, mock } = references;
+  const { sources, leads, attributions, stats } = references;
   const [query, setQuery] = useState('');
   const [types, setTypes] = useState<PublisherType[]>([]);
   const [copies, setCopies] = useState<Record<string, CopyState>>({});
@@ -129,7 +129,6 @@ export function ReferencesPage({ references, extra }: { references: References; 
         ) : (
           <p>{`${n} ${plural(n, 'fuente respalda', 'fuentes respaldan')} ${stats.published_files} ${plural(stats.published_files, 'archivo publicado', 'archivos publicados')}.${range}`}</p>
         )}
-        {mock && <p style={{ color: 'var(--state-warning)' }}>Datos de muestra: no son fuentes reales</p>}
         {stats.records_without_url > 0 && (
           <p style={{ color: 'var(--ink-2)' }}>
             {`${stats.records_without_url} de ${stats.records_total} registros no tienen enlace a una página de la fuente.`}
@@ -184,8 +183,7 @@ export function ReferencesPage({ references, extra }: { references: References; 
       <section aria-labelledby="metodologia">
         <h2 id="metodologia">Metodología</h2>
         <p>
-          Acá se va a publicar cómo se calculan los pronósticos: el modelo de población, el crecimiento de la economía y los escenarios con sus rangos. Mientras tanto, los gráficos que dicen «Datos de prueba» usan valores
-          inventados, que no son mediciones.
+          Acá se va a publicar cómo se calculan los pronósticos: el modelo de población, el crecimiento de la economía y los escenarios con sus rangos.
         </p>
       </section>
 

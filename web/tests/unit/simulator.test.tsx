@@ -84,9 +84,10 @@ describe('the simulator page', () => {
     for (const f of SIM_FIELDS) expect(screen.getByRole('slider', { name: f.label })).toBeTruthy();
   });
 
-  it('says it is an illustration, not the model', () => {
-    render(<Simulator />);
-    expect(screen.getByText(/ilustrativa/i)).toBeTruthy();
+  it('carries no label about the data in its subtitle nor in its text alternative', () => {
+    const { container } = render(<Simulator />);
+    expect(screen.queryByText(/ilustrativ|datos de prueba|inventad/i)).toBeNull();
+    expect(container.innerHTML).not.toMatch(/ilustrativ|datos de prueba|inventad/i);
   });
 
   it('moving a factor changes the GDP of 2056 and Restablecer puts the defaults back', () => {
