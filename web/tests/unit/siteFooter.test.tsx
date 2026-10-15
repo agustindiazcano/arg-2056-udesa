@@ -20,11 +20,10 @@ describe('SiteFooter', () => {
     }
   });
 
-  it('has the buttons Fuentes and MetodologÃ­a under the logos, going to the references page', () => {
+  it('has no Fuentes or Metodología buttons', () => {
     render(<SiteFooter />);
-    const nav = within(screen.getByRole('navigation', { name: 'Fuentes y metodologÃ­a' }));
-    expect(nav.getByRole('link', { name: 'Fuentes' }).getAttribute('href')).toBe('references.html');
-    expect(nav.getByRole('link', { name: 'MetodologÃ­a' }).getAttribute('href')).toBe('references.html#metodologia');
+    expect(screen.queryByRole('link', { name: 'Fuentes' })).toBeNull();
+    expect(screen.queryByRole('link', { name: 'Metodología' })).toBeNull();
   });
 
   it('is a footer landmark', () => {
