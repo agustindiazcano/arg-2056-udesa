@@ -4,17 +4,19 @@ import type { ECharts } from '../../charts/echarts.js';
 import { resetMap, zoomMap } from '../../charts/mapNav.js';
 import { clampCenter, clampZoom, geoBbox } from '../../charts/navState.js';
 import { NavControls } from '../../ui/NavControls.js';
-import { MAP_NAME, buildProvinceMap } from '../../charts/builders/provinceMap.js';
+import { MAP_NAME, buildDepartmentMap, buildProvinceMap } from '../../charts/builders/provinceMap.js';
 import { DataTable } from '../../charts/DataTable.js';
 import { EChart } from '../../charts/EChart.js';
 import type { ChartClickParams } from '../../charts/EChart.js';
 import { formatPercent, formatValue } from '../../charts/format.js';
 import { TableToggle } from '../../ui/TableToggle.js';
+import { loadDepartments } from '../../geo/departments.js';
+import type { DepartmentsGeo } from '../../geo/departments.js';
 import { geoWithMalvinas } from '../../geo/malvinas.js';
 import { loadProvinces } from '../../geo/provinces.js';
 import type { ProvincesGeo } from '../../geo/provinces.js';
 import type { GeoMeta } from '../../geo/meta.js';
-import { isProvinceId } from '../../types/province.js';
+import { isProvinceId, PROVINCES } from '../../types/province.js';
 import type { ProvinceId } from '../../types/province.js';
 import type { Scenario } from '../../types/scenario.js';
 import { smallestProvinces } from './mapSelectors.js';
@@ -96,8 +98,30 @@ export function ProvinceMap({
   onSelect
 }: ProvinceMapProps) {
   const [asTable, setAsTable] = useState(false);
+  const [deptGeo, setDeptGeo] = useState<DepartmentsGeo | null>(null);
   const apiRef = useRef<ECharts | null>(null);
   const bbox = useMemo(() => geoBbox(geo), [geo]);
+
+  useEffect(() => {
+    if (!selectedId) {
+      setDeptGeo(null);
+      return;
+    }
+    let active = true;
+    loadDepartments(selectedId).then((data) => {
+      if (!active || !data) return;
+      registerMap(`ar-dept-${selectedId}`, data as never);
+      setDeptGeo(data);
+    });
+    return () => {
+      active = false;
+    };
+  }, [selectedId]);
+
+  const selectedProvince = useMemo(
+    () => (selectedId ? PROVINCES.find((p) => p.id === selectedId) : null),
+    [selectedId]
+  );
 
   const centroids = useMemo(
     () => Object.fromEntries(geo.features.map((f) => [f.properties.id, f.properties.centroid])),
@@ -114,10 +138,15 @@ export function ProvinceMap({
     [geo, values, centroids, smallIds, unit, indicatorLabel, metric, selectedId, scenario, year, observed]
   );
 
-  // after the new option (the child's effect runs first), the view goes to the selected province
+  const deptBuilt = useMemo(() => {
+    if (!selectedId || !deptGeo) return null;
+    return buildDepartmentMap(deptGeo, selectedProvince?.name ?? selectedId);
+  }, [selectedId, deptGeo, selectedProvince]);
+
+  // after the new option (the child's effect runs first), the view goes to the selected province if still on national map
   useEffect(() => {
     const chart = apiRef.current;
-    if (!zoomToSelected || !chart) return;
+    if (!zoomToSelected || !chart || deptBuilt) return;
     const feature = selectedId ? geo.features.find((f) => f.properties.id === selectedId) : undefined;
     if (!feature) {
       resetMap(chart);
@@ -128,9 +157,10 @@ export function ProvinceMap({
     const zoom = clampZoom(0.75 * Math.min((bx1 - bx0) / Math.max(x1 - x0, 0.01), (by1 - by0) / Math.max(y1 - y0, 0.01)));
     const [cx, cy] = clampCenter([(x0 + x1) / 2, (y0 + y1) / 2], zoom, bbox);
     chart.setOption({ geo: { zoom, center: [cx, cy] } } as never);
-  }, [selectedId, zoomToSelected, geo, bbox]);
+  }, [selectedId, zoomToSelected, geo, bbox, deptBuilt]);
 
   const handleClick = (params: ChartClickParams) => {
+    if (deptBuilt) return;
     const id = params.data?.provinceId ?? params.name;
     if (!isProvinceId(id)) return; // for example the illustrative Malvinas region
     onSelect(id === selectedId ? null : id);
@@ -197,7 +227,28 @@ export function ProvinceMap({
           />
         ) : (
           <>
-            <EChart option={built.option} aria-label={built.summary} onClick={handleClick} roam={{ bbox }} apiRef={apiRef} />
+            {selectedProvince && (
+              <div className="map-breadcrumb-bar">
+                <button
+                  type="button"
+                  className="map-back-btn"
+                  onClick={() => onSelect(null)}
+                  title="Volver al mapa nacional"
+                >
+                  <span className="back-arrow">←</span> Argentina
+                </button>
+                <span className="breadcrumb-sep">›</span>
+                <span className="breadcrumb-current">{selectedProvince.name}</span>
+                {deptGeo && <span className="dept-badge">{deptGeo.features.length} departamentos</span>}
+              </div>
+            )}
+            <EChart
+              option={deptBuilt ? deptBuilt.option : built.option}
+              aria-label={deptBuilt ? deptBuilt.summary : built.summary}
+              onClick={handleClick}
+              roam={deptBuilt ? undefined : { bbox }}
+              apiRef={apiRef}
+            />
             <NavControls
               onZoomIn={() => apiRef.current && zoomMap(apiRef.current, 'in')}
               onZoomOut={() => apiRef.current && zoomMap(apiRef.current, 'out')}
