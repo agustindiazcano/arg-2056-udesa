@@ -21,7 +21,7 @@ describe('UI Components', () => {
     it('does not offer the deprecated Data Dashboard unless it is switched on', () => {
       window.localStorage.removeItem(SHOW_DASHBOARD_KEY);
       const { unmount } = render(<TabBar />);
-      expect(screen.getAllByRole('tab').map((t) => t.textContent)).toEqual(['Andes', 'Recorrido', 'Simulador del PBI']);
+      expect(screen.getAllByRole('tab').map((t) => t.textContent)).toEqual(['Andes', 'Hacia el 2056', 'Simulador del PBI']);
       unmount();
     });
 

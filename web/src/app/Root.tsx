@@ -19,7 +19,7 @@ function skipIntro(): boolean {
   }
 }
 
-/** The first screen is the intro; "Comenzar" opens the app in the Andes, and each button under it in its own section. */
+/** The first screen is the intro; each button opens the app in its own section (the crossing of the Andes, the tour to 2056) and the Enter key in the Andes. */
 export function Root() {
   const [started, setStarted] = useState(skipIntro);
   if (started) {

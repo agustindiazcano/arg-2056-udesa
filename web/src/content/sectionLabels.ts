@@ -3,7 +3,7 @@ import type { Section } from '../types/scene';
 /** Switches the deprecated Data Dashboard back on (`localStorage.setItem('arg2056.showDashboard', '1')`): the end-to-end tests and the developers use it. */
 export const SHOW_DASHBOARD_KEY = 'arg2056.showDashboard';
 
-/** The sections to offer (in the navigation and under Comenzar): the Data Dashboard is deprecated and stays hidden unless it is switched on. */
+/** The sections to offer (in the navigation and on the intro): the Data Dashboard is deprecated and stays hidden unless it is switched on. */
 export function visibleSections(sections: readonly Section[]): Section[] {
   let shown = false;
   try {
@@ -18,7 +18,7 @@ export function visibleSections(sections: readonly Section[]): Section[] {
 export const SECTION_LABELS: Record<Section, string> = {
   andes: 'Andes',
   dashboard: 'Data Dashboard',
-  tour: 'Recorrido',
+  tour: 'Hacia el 2056',
   simulator: 'Simulador del PBI',
   data: 'Data'
 };

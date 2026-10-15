@@ -74,11 +74,11 @@ test.describe('under the Content-Security-Policy', () => {
     });
   }
 
-  test('the intro screen loads under the policy and Comenzar opens the app', async ({ page }) => {
+  test('the intro screen loads under the policy and the Andes button opens the app', async ({ page }) => {
     await page.addInitScript(() => window.localStorage.removeItem('arg2056.skipIntro'));
     const problems = watch(page);
     await page.goto(server.url);
-    await page.getByRole('button', { name: 'Comenzar' }).click();
+    await page.getByRole('button', { name: 'Cruce de los Andes' }).click();
     await expect(page.getByRole('tab').first()).toBeVisible();
     expect(await violations(page)).toEqual([]);
     expect(problems).toEqual([]);

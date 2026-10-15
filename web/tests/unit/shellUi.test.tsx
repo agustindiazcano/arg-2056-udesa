@@ -51,7 +51,7 @@ describe('header', () => {
     expect(brand.querySelector('.brand-a')?.textContent).toBe('Argentina');
     expect(brand.querySelector('.brand-n')?.textContent).toBe('2056');
     const nav = screen.getByRole('navigation', { name: 'Escenas' });
-    expect(within(nav).getAllByRole('tab').map((t) => t.textContent)).toEqual(['Andes', 'Data Dashboard', 'Recorrido', 'Simulador del PBI']);
+    expect(within(nav).getAllByRole('tab').map((t) => t.textContent)).toEqual(['Andes', 'Data Dashboard', 'Hacia el 2056', 'Simulador del PBI']);
     expect(SCENE_LABELS.economy).toBe('Economía');
   });
 
@@ -59,7 +59,7 @@ describe('header', () => {
     window.localStorage.removeItem(SHOW_DASHBOARD_KEY);
     render(<App />);
     const nav = screen.getByRole('navigation', { name: 'Escenas' });
-    expect(within(nav).getAllByRole('tab').map((t) => t.textContent)).toEqual(['Andes', 'Recorrido', 'Simulador del PBI']);
+    expect(within(nav).getAllByRole('tab').map((t) => t.textContent)).toEqual(['Andes', 'Hacia el 2056', 'Simulador del PBI']);
     expect(screen.queryByRole('tab', { name: 'Data Dashboard' })).toBeNull();
   });
 
@@ -81,7 +81,7 @@ describe('header', () => {
     expect(within(sub).getAllByRole('tab').map((t) => t.textContent)).toEqual(names);
     expect(screen.getByRole('tab', { name: 'Data Dashboard' }).getAttribute('aria-selected')).toBe('true');
     expect(screen.getByRole('tab', { name: 'Economía' }).getAttribute('aria-selected')).toBe('true');
-    fireEvent.click(screen.getByRole('tab', { name: 'Recorrido' }));
+    fireEvent.click(screen.getByRole('tab', { name: 'Hacia el 2056' }));
     expect(screen.queryByRole('navigation', { name: 'Data Dashboard' })).toBeNull();
     fireEvent.click(screen.getByRole('tab', { name: 'Andes' }));
     expect(screen.queryByRole('navigation', { name: 'Data Dashboard' })).toBeNull();

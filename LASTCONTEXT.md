@@ -15,6 +15,8 @@
 - **Slide D, Exports (`task/slide-exports`, consolidation Task 3)**: step 4 is now `ExportsStep` (dollars or % of the total, year 2015-2025 with 2024 and 2025 enabled, filter by complex, 2D/3D, quality badge); step 11 was merged into it (its table `chart-11` stays in the Data slide 4, plus the new table `exports-shares`). INDEC has 2024 and 2025 only; the 2024 total for the shares is the sum of the complexes (the 2025 one is the published 87,111). Data of 2015-2023 is a data request. Rule of 70 (human decisions 2026-10-14): step 5 stays its own slide, all 8 functions of the pasted prompt, Maddison dropped (PPP), presets Argentina/China/Korea/India/US, and an Argentina preset that answers when and in which year GDP doubles at a given growth; it comes after this task.
 - **Rule of 70, R1 (`task/rule70-core`)**: `web/src/core/doubling.ts` (pure, tested with the vectors of the brief); the plan of R1-R6 is section 12 of `docs/consolidation-plan.md`.
 
+- **Rename (`task/rename-recorrido`)**: the section "Recorrido" is now "Hacia el 2056" in the tab, the intro button, the steps' accessible name and the README; the code, `docs/` and the dashboard mode "Recorrido" keep the old word. The intro has no Comenzar button any more: "Cruce de los Andes" and "Hacia el 2056" take its look (`.intro-start`); Enter still opens the Andes.
+
 ## Next
 - Approve the consolidation plan (PR #81).
 - The human: choose the OECD scenario that equals "expected" (M1), old WEO editions (M3), 2005 projections (M4); RIGI list (H1), mining and agro by province (H9), years of step 0 and the investment figure; check the mining transcription (H3b). Model and parameters for the projections from 2027.

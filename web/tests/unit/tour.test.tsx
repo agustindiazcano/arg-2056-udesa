@@ -53,7 +53,7 @@ describe('Recorrido', () => {
 });
 
 describe('Recorrido steps in the navbar', () => {
-  const steps = () => within(screen.getByRole('group', { name: 'Pasos del Recorrido' }));
+  const steps = () => within(screen.getByRole('group', { name: 'Pasos hacia el 2056' }));
 
   it('shows Anterior, three numbers and Siguiente in the header, step 0 pressed and Anterior disabled', () => {
     render(<App />);
@@ -61,7 +61,7 @@ describe('Recorrido steps in the navbar', () => {
     expect(buttons.map((b) => b.textContent)).toEqual(['Anterior', '0', '1', '2', 'Siguiente']);
     expect(buttons.map((b) => b.getAttribute('aria-pressed'))).toEqual([null, 'true', 'false', 'false', null]);
     expect((buttons[0] as HTMLButtonElement).disabled).toBe(true);
-    expect(document.querySelector('.app-header')?.contains(screen.getByRole('group', { name: 'Pasos del Recorrido' }))).toBe(true);
+    expect(document.querySelector('.app-header')?.contains(screen.getByRole('group', { name: 'Pasos hacia el 2056' }))).toBe(true);
   });
 
   it('keeps the current step in the middle of the three numbers, held inside 0 to 14', () => {
@@ -106,6 +106,6 @@ describe('Recorrido steps in the navbar', () => {
   it('is only in the Recorrido', () => {
     useStore.setState({ section: 'dashboard' });
     render(<App />);
-    expect(screen.queryByRole('group', { name: 'Pasos del Recorrido' })).toBeNull();
+    expect(screen.queryByRole('group', { name: 'Pasos hacia el 2056' })).toBeNull();
   });
 });

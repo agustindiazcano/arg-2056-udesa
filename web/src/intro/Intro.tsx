@@ -12,16 +12,16 @@ const LIGHT_SPEED = 0.8;
 const APPEAR_MS = 2300; // the provinces appear upright and centered, then the view tilts
 
 interface Props {
-  /** The section to open: Comenzar and the Enter key open the Andes. */
+  /** The section to open: the Enter key opens the Andes. */
   onStart: (section: Section) => void;
 }
 
 const provinces = data.provinces;
 
-/** The ways in under Comenzar: straight to a section (the Data Dashboard only when it is switched on: it is deprecated). */
+/** The ways in: straight to a section (the Data Dashboard only when it is switched on: it is deprecated). */
 const ALL_SHORTCUTS: ReadonlyArray<{ section: Section; label: string }> = [
   { section: 'andes', label: 'Cruce de los Andes' },
-  { section: 'tour', label: 'Recorrido al 2056' },
+  { section: 'tour', label: 'Hacia el 2056' },
   { section: 'dashboard', label: 'Data Dashboard' }
 ];
 
@@ -29,7 +29,7 @@ function viewBox(b: Box): string {
   return [b.x, b.y, b.w, b.h].map((v) => v.toFixed(1)).join(' ');
 }
 
-/** Intro screen: Argentina as a tilted, slowly turning map whose provinces light up at random, and a Comenzar button. */
+/** Intro screen: Argentina as a tilted, slowly turning map whose provinces light up at random, and the buttons that open a section. */
 export function Intro({ onStart }: Props) {
   const shortcuts = useMemo(() => {
     const shown = new Set(visibleSections(ALL_SHORTCUTS.map((s) => s.section)));
@@ -139,12 +139,9 @@ export function Intro({ onStart }: Props) {
           <span className="a">Argentina</span> <span className="n">2056</span>
         </h1>
         <p className="intro-sub">Del Cruce de los Andes a la Cuarta Revolución Industrial: El desafío estratégico de 1817 como faro para el presente. Un análisis de nuestros recursos en 2026 y una proyección de nuestro desarrollo a 30 años frente al impacto de la Inteligencia Artificial en la economía.</p>
-        <button type="button" className="intro-start" onClick={() => onStart('andes')}>
-          Comenzar
-        </button>
         <div role="group" aria-label="Ir directo a" className="intro-shortcuts">
           {shortcuts.map(({ section, label }) => (
-            <button key={section} type="button" className="intro-shortcut" onClick={() => onStart(section)}>
+            <button key={section} type="button" className="intro-start" onClick={() => onStart(section)}>
               {label}
             </button>
           ))}
