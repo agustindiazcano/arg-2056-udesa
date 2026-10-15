@@ -1,12 +1,19 @@
 name: CI
 
 on:
+  # a change that only touches documentation (text) does not run the suites: every job below tests code
   push:
     branches:
       - main
     tags:
       - 'v*'
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
   pull_request:
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
   workflow_dispatch:
 
 jobs:
