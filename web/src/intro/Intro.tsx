@@ -5,6 +5,7 @@ import { visibleSections } from '../content/sectionLabels';
 import type { Section } from '../types/scene';
 import './intro.css';
 import { INSTITUTIONS } from '../ui/institutions';
+import { withMalvinas } from './malvinasPath';
 
 const LAYERS = 3; // 2 sides and the top: fewer composited layers per province
 // speed of the lights (0.8): the prototype waits (350 to 1050 ms) / speed between changes
@@ -16,7 +17,8 @@ interface Props {
   onStart: (section: Section) => void;
 }
 
-const provinces = data.provinces;
+// the 24 provinces of the sheet and, after them, the illustrative Malvinas
+const provinces = withMalvinas(data.provinces);
 
 /** The ways in: straight to a section (the Data Dashboard only when it is switched on: it is deprecated). */
 const ALL_SHORTCUTS: ReadonlyArray<{ section: Section; label: string }> = [
@@ -138,7 +140,10 @@ export function Intro({ onStart }: Props) {
         <h1 className="intro-title">
           <span className="a">Argentina</span> <span className="n">2056</span>
         </h1>
-        <p className="intro-sub">Del Cruce de los Andes a la Cuarta Revolución Industrial: El desafío estratégico de 1817 como faro para el presente. Un análisis de nuestros recursos en 2026 y una proyección de nuestro desarrollo a 30 años frente al impacto de la Inteligencia Artificial en la economía.</p>
+        <div className="intro-text">
+          <p className="intro-sub">Del Cruce de los Andes a la Cuarta Revolución Industrial: el desafío estratégico de 1817 como faro para el presente. Un análisis de los recursos de Argentina en 2026 y una proyección de su desarrollo hacia 2056 frente al impacto de la Inteligencia Artificial en la economía.</p>
+          <p className="intro-sub">Es una ventana al inicio de la lucha por nuestra libertad política y, a la vez, una hoja de ruta desde la actualidad hacia el desarrollo económico de las próximas tres décadas, explorada a través de datos, escenarios interactivos y modelos de incertidumbre.</p>
+        </div>
         <div role="group" aria-label="Ir directo a" className="intro-shortcuts">
           {shortcuts.map(({ section, label }) => (
             <button key={section} type="button" className="intro-start" onClick={() => onStart(section)}>

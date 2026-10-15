@@ -217,6 +217,19 @@
   color: var(--intro-light);
   text-shadow: 0 0 14px var(--intro-light), 0 0 46px color-mix(in srgb, var(--intro-light) 55%, transparent);
 }
+/* a translucent black panel behind the text, so it reads over the lit map */
+.intro-text {
+  max-width: calc(var(--u) * 38);
+  margin: calc(var(--u) * 1.4) 0 calc(var(--u) * 2);
+  padding: calc(var(--u) * 1.2) calc(var(--u) * 1.6) calc(var(--u) * 0.4);
+  background: color-mix(in srgb, var(--intro-black) 60%, transparent);
+  border-radius: calc(var(--u) * 0.8);
+  backdrop-filter: blur(2px);
+}
+.intro-text .intro-sub {
+  margin: 0 0 calc(var(--u) * 1);
+  max-width: none;
+}
 .intro-sub {
   margin: calc(var(--u) * 1.4) 0 calc(var(--u) * 2);
   max-width: 34ch;
