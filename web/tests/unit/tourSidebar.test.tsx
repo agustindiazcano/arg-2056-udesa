@@ -15,7 +15,7 @@ afterEach(() => {
 describe('the side panel of the charts of the Recorrido', () => {
   it('has a text for every chart step (0 to 13) and its references exist', () => {
     const ids = new Set(REFERENCES.map((r) => r.id));
-    for (const step of [0, 1, 2, 3, 4, 5, 7, 8, 9, 10, 12, 13]) {
+    for (const step of [0, 2, 3, 4, 5, 8, 12]) {
       const info = STEP_INFO[step];
       expect(info, `step ${step}`).toBeDefined();
       expect(info!.paragraphs.length).toBeGreaterThan(0);

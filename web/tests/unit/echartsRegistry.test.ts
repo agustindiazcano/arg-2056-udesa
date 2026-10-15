@@ -1,5 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { REGISTERED_COMPONENTS, REGISTERED_SERIES } from '../../src/charts/echarts.js';
+import { addMilestones } from '../../src/charts/builders/milestones.js';
+import { buildPie } from '../../src/charts/builders/pie.js';
 import { buildDoublingCurve } from '../../src/charts/builders/doublingCurve.js';
 import { buildFan } from '../../src/charts/builders/fan.js';
 import { buildLongRun } from '../../src/charts/builders/longRun.js';
@@ -161,7 +163,9 @@ function everyBuilderOption(): unknown[] {
     buildSandboxPath(pathView, { year: 2027, effectivePct: 2.5 }).option,
     buildDoublingCurve({ ratePct: 2 }).option,
     buildProvinceMap(mapInput, { metric: 'level', selectedId: null, scenario: 'expected', year: 2027 }).option,
-    buildProvinceMap(mapInput, { metric: 'change', selectedId: 'AR-A', scenario: 'expected', year: 2027 }).option
+    buildProvinceMap(mapInput, { metric: 'change', selectedId: 'AR-A', scenario: 'expected', year: 2027 }).option,
+    buildPie([{ label: 'A', value: 1 }], { unit: 'u', summary: 's' }).option,
+    addMilestones({ series: [] }, [2026, 2027, 2028], [{ values: [1, 2, 3], color: 'red' }])
   ];
 }
 
@@ -170,7 +174,7 @@ describe('ECharts registry coverage', () => {
   collect(everyBuilderOption(), used);
 
   it('the builders use at least the chart types and components this test knows about (the collector is not empty)', () => {
-    expect([...used.types].sort()).toEqual(['bar', 'custom', 'line', 'map', 'scatter', 'treemap']);
+    expect([...used.types].sort()).toEqual(['bar', 'custom', 'effectScatter', 'line', 'map', 'pie', 'scatter', 'treemap']);
     for (const key of ['tooltip', 'grid', 'xAxis', 'yAxis', 'visualMap', 'geo', 'graphic', 'markLine', 'markArea']) {
       expect([...used.components], `component key ${key} is produced by some builder`).toContain(key);
     }

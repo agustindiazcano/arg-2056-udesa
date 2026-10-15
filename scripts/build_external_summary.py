@@ -66,4 +66,16 @@ imf_out = {
     'countries': countries,
 }
 (ROOT / 'web' / 'src' / 'tour' / 'imfCountries.json').write_text(json.dumps(imf_out, ensure_ascii=False, indent=1) + chr(10), encoding='utf-8')
+
+# the UN population of Argentina, 2025 to 2056, medium variant (the path the AI slide uses for the GDP per person; web/src/tour/unPopulation.json)
+un = sorted((r for r in recs if r['forecaster'] == 'UN' and r['geo'] == 'AR' and r['indicator'] == 'population' and r['variant'] == 'medium' and 2025 <= r['year'] <= 2056), key=lambda r: r['year'])
+assert [r['year'] for r in un] == list(range(2025, 2057))
+un_out = {
+    'source': 'ONU, World Population Prospects 2024, variante media, via data/processed/external_forecasts.json',
+    'url': 'https://population.un.org/wpp/downloads',
+    'retrieved_at': un[0]['retrieved_at'],
+    'unit': 'millions',
+    'population': {str(r['year']): r['value'] for r in un},
+}
+(ROOT / 'web' / 'src' / 'tour' / 'unPopulation.json').write_text(json.dumps(un_out, ensure_ascii=False, indent=1) + chr(10), encoding='utf-8')
 print('ok')

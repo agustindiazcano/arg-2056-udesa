@@ -27,21 +27,14 @@ Un proyecto de **ciencia de datos y visualización**: toma datos abiertos de org
 
 ## Las diapositivas de «Hacia el 2056»
 
-La presentación abre en una diapositiva con el título y el índice (la 0), y tiene 13 más:
+La presentación abre en una diapositiva con el título y el índice (la 0), y tiene 6 más:
 
 1. El PBI de Argentina desde 1960 (ranking mundial y de la región)
-2. PBI de Argentina
-3. Productividad
-4. Producción por provincia
-5. Cuarta revolución industrial: el impacto de la IA en la economía
-6. Exportaciones por complejo
-7. La regla del 70 (calculadora y países reales)
-8. Mapa productivo por provincia
-9. Minería: hoy vs proyecto
-10. Hidrocarburos: Vaca Muerta define el piso y el techo
-11. Agro: producción actual y potencial
-12. Composición del PBI
-13. El stock de recursos naturales
+2. Recursos naturales (minería, hidrocarburos, agro y total: totales, treemap, torta o barras, provincias productoras y mapa; un botón muestra la producción por provincia)
+3. La regla del 70 (calculadora, países reales, escenarios y proyecciones del FMI)
+4. Composición del PBI y exportaciones por complejo (con un botón para ver las exportaciones por año y complejo)
+5. Productividad
+6. Cuarta revolución industrial: el impacto de la IA en la economía (tres escenarios a 2056, PBI por habitante y población)
 
 ## Cómo correrlo
 
@@ -102,7 +95,7 @@ Las cifras de bajas de Chacabuco no coinciden entre las fuentes 5, 10, 17, 18, 1
 
 23. Schwab, K. (2016). *La Cuarta Revolución Industrial*. Foro Económico Mundial.
 
-### Productividad (diapositiva 3 de «Hacia el 2056», y el simulador)
+### Productividad (diapositiva 5 de «Hacia el 2056», y el simulador)
 
 24. INDEC, Documento de trabajo N.º 52, *Productividad y stock de capital* (PTF y productividad laboral 2016-2025). <https://www.indec.gob.ar/ftp/cuadros/economia/productividad_stock_capital_10_26.pdf>
 25. Baumann Fonay, I. (2026). «PTF y PIB potencial de Argentina, 1990-2025». <https://macroargentina.substack.com/p/ptf-y-pib-potencial-de-argentina>, y su serie en Alphacast <https://www.alphacast.io/datasets/potential-gross-domestic-product-output-gap-tfp-53419>
@@ -159,5 +152,20 @@ Todos los enlaces de los datos que usa la aplicación. La misma lista se ve en l
 55. LM Neuquén, proyectos mineros en construcción. <https://mase.lmneuquen.com/mineria/argentina-uno-uno-los-proyectos-mineros-que-ya-estan-construccion-n1246226>
 56. Infobae (2026-05-16), LLL Oil, YPF. <https://www.infobae.com/economia/2026/05/16/lll-oil-como-es-el-megaproyecto-de-ypf-en-vaca-muerta-que-busca-generar-mas-de-usd-100000-millones-en-exportaciones/>
 57. LM Neuquén, inversiones comprometidas en Vaca Muerta en 2026. <https://mase.lmneuquen.com/empresas/vaca-muerta-los-yacimientos-mayores-compromisos-inversiones-2026-n1242081>
+
+### Inteligencia artificial y el PBI (diapositiva 6 de «Hacia el 2056», y el simulador)
+
+Escenarios de crecimiento de Argentina con IA y estimaciones de otros analistas.
+
+58. Anthropic / Korinek y otros (2026), escenarios de la IA a 2030 para EE.UU. <https://www.anthropic.com/features/econ-scenarios>
+59. PwC (2025), *Value in Motion*: hasta 15 puntos del PBI mundial hacia 2035. <https://www.pwccn.com/en/press-room/press-releases/pr-290425.html>
+60. Goldman Sachs, la IA podría empezar a sumar al PBI de EE.UU. en 2027. <https://www.goldmansachs.com/insights/articles/ai-may-start-to-boost-us-gdp-in-2027>
+61. Oxford Economics, modelado del impacto macroeconómico de la IA. <https://www.oxfordeconomics.com/resource/ai-macroeconomic-impact-modelling/>
+62. Reuters (2026-10-13), el FMI dice que la inversión en IA sostiene el crecimiento mundial. <https://www.reuters.com/world/china/imf-says-ai-investment-propping-up-global-growth-war-debt-threaten-outlook-2026-10-13/>
+63. OMC (2025), *World Trade Report*: PBI mundial +12-13 % hacia 2040. <https://www.wto.org/english/blogs_e/data_blog_e/blog_dta_29sep25_e.htm>
+64. CEPR, «Mind the gap: the global impact of AI». <https://cepr.org/voxeu/columns/global-impact-ai-mind-gap>
+65. Acemoglu, D. (MIT), «A new look at the economics of AI». <https://mitsloan.mit.edu/ideas-made-to-matter/a-new-look-economics-ai>
+66. Penn Wharton Budget Model, «How AI could lift productivity and GDP growth». <https://knowledge.wharton.upenn.edu/articles/how-ai-could-lift-productivity-and-gdp-growth/>
+67. Forecasting Research Institute, efectos económicos de la IA. <https://forecastingresearch.org/economic-effects-of-ai>
 
 > Las posiciones de los lugares son aproximadas, las fechas intermedias entre las documentadas son estimaciones marcadas como tales, y las cifras de efectivos varían según la fuente. Todo está señalado en [`docs/references.md`](docs/references.md).

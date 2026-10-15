@@ -47,8 +47,10 @@ function DataTable({ spec }: { spec: Chart3DSpec }) {
  * `Chart2D3D` of the Recorrido: the same flat chart or its 3D version, loaded behind a spinner (see `tour3d/TourChart3D`), with a
  * Gráfico | Tabla switch (the chart first, unless `defaultView` says table) when there is a spec to make the table from.
  */
-export function TourChart({ spec, defaultView = 'chart', children }: { spec?: Chart3DSpec; defaultView?: View; children: React.ReactNode }) {
-  const mode = useStore((s) => s.mode);
+export function TourChart({ spec, defaultView = 'chart', mode: forced, children }: { spec?: Chart3DSpec; defaultView?: View; mode?: '2d' | '3d'; children: React.ReactNode }) {
+  const globalMode = useStore((s) => s.mode);
+  // a step that opens its maps flat passes its own mode; the others follow the global one
+  const mode = forced ?? globalMode;
   const quality = useQualityOptional();
   const [view, setView] = useState<View>(defaultView);
   return (

@@ -77,7 +77,7 @@ describe('the Data page', () => {
   it('shows no label about the data of a slide or of a table, and the intro does not talk about it', () => {
     const { container } = render(<DataPage />);
     const select = screen.getByRole('combobox', { name: 'Diapositiva' });
-    for (const slide of ['0', '1', '3', '8', '14']) {
+    for (const slide of ['0', '12', '3', '8', '14']) {
       fireEvent.change(select, { target: { value: slide } });
       expect(everyText(container), `slide ${slide}`).not.toMatch(/datos de prueba|datos en parte reales|datos reales|inventad/i);
       expect(container.querySelector('.data-badge')).toBeNull();

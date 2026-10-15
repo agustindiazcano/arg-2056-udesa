@@ -15,8 +15,10 @@ describe('the Data page after the series migration', () => {
   // Tables whose cells were corrected on purpose on 2026-10-14 (task/revalidate-sources): Taca Taca capex 3.583 -> 4.232 (NI 43-101) and
   // the RIGI approval of Bajo del Choique-La Invernada. Their columns are still compared; their rows are checked in the tests of the new data.
   const CORRECTED = ['rigi-mining', 'rigi-oil-gas'];
+  // the AI slide (3) has three scenarios instead of two made-up lines since 2026-10-15 (human order): its chart table changed on purpose
+  const REPLACED = ['chart-3', 'factors', 'reference']; // the simulator defaults changed on purpose (3.0 % and 0.4 points of AI)
   const REMOVED = ['6'];
-  const MOVED: Record<string, string> = { '11': '4' };
+  const MOVED: Record<string, string> = { '11': '12', '9': '8', '10': '8', '13': '8', '1': '12', '7': '8', '2': '8', '4': '12' }; // 9, 10 and 13 are tabs of the Resources slide (8)
   const kept = fixture.filter((s) => !REMOVED.includes(s.id));
   const remaining = kept.filter((s) => !(s.id in MOVED));
 
@@ -33,6 +35,7 @@ describe('the Data page after the series migration', () => {
       expect(n, `table ${t.id} of slide ${old.id}`).toBeDefined();
       // the rule of 70 slide was retitled on purpose on 2026-10-15 (human order): the title of its first table follows it
       if (t.id !== 'chart-5') expect(n!.title, t.id).toBe(t.title);
+      if (REPLACED.includes(t.id)) continue;
       expect(n!.columns, t.id).toEqual(t.columns);
       // the fixture is JSON, where -0 is written as 0 (same number): compare through the same serialization
       if (CORRECTED.includes(t.id)) continue;
@@ -70,7 +73,7 @@ describe('the Data page after the series migration', () => {
 
   it('marks as placeholder the tables that are made up and as real the ones that are not', () => {
     const q = (id: string) => slides.flatMap((s) => s.tables).find((t) => t.id === id)!.quality;
-    for (const id of ['provinces', 'provinces-value', 'chart-3', 'chart-10', 'chart-13', 'factors']) expect(q(id), id).toBe('placeholder');
+    for (const id of ['provinces', 'provinces-value', 'chart-10', 'chart-13', 'factors']) expect(q(id), id).toBe('placeholder');
     for (const id of ['gdp-real', 'hydrocarbons-provinces', 'complexes', 'oil-gas-national', 'agro-production', 'reserves', 'external-oecd']) expect(q(id), id).toBe('real');
   });
 });

@@ -263,9 +263,9 @@ it('the control bar of the Andes has only play, the progress and the speed', () 
   expect(within(controls()).queryByRole('button', { name: /^Provincia:/ })).toBeNull();
 });
 
-describe('Recorrido step 1', () => {
-  it('shows the GDP chart on step 1 and the scene on the other steps', async () => {
-    useStore.setState({ section: 'tour', tourStep: 1 });
+describe('Recorrido step 12', () => {
+  it('shows the composition charts on step 12 and the scene on the other steps', async () => {
+    useStore.setState({ section: 'tour', tourStep: 12 });
     render(<App />);
     expect(await screen.findByRole('heading', { name: 'PBI de Argentina' })).toBeTruthy();
     expect(screen.queryByRole('heading', { name: 'escena' })).toBeNull();
@@ -277,7 +277,7 @@ describe('Recorrido step 1', () => {
   });
 
   it('does not show the GDP chart in the other sections', () => {
-    useStore.setState({ section: 'dashboard', tourStep: 1 });
+    useStore.setState({ section: 'dashboard', tourStep: 12 });
     render(<App />);
     expect(screen.queryByRole('heading', { name: 'PBI de Argentina' })).toBeNull();
   });

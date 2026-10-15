@@ -1,4 +1,5 @@
 import { ARG_GDP_2026, GDP_UNIT } from './gdpFacts.js';
+import { AI_SCENARIOS, growthIn } from './aiScenarios.js';
 import energy from './energyArgentina.json';
 import type { GdpData } from './gdpMock.js';
 
@@ -11,30 +12,22 @@ export interface LineSeriesData {
   dashed?: boolean;
 }
 
-/** Step 3: the real GDP with and without the AI revolution, 2026 to 2056: both start at the real GDP of 2026 (same figure as the GDP chart), the rest is made up. */
+/**
+ * Step 3: the real GDP of Argentina in three scenarios (base, moderate with AI, optimistic), 2026 to 2056 (the report gives 2035; later years keep the rate of 2031-2035). All start at the 2026 figure shared by
+ * every slide (`gdpFacts.ts`); after that each grows at the middle of the range its scenario gives (`aiScenarios.ts`).
+ */
 export function aiImpactData(): { unit: string; years: number[]; series: LineSeriesData[] } {
   const years: number[] = [];
-  const without: number[] = [];
-  const withAi: number[] = [];
-  // both lines start from the estimate of the IMF for 2026 (the same figure as the GDP chart and the simulator) and part from there
-  let a = ARG_GDP_2026;
-  let b = ARG_GDP_2026;
-  for (let year = 2026; year <= 2056; year += 1) {
-    years.push(year);
-    without.push(round1(a));
-    withAi.push(round1(b));
-    // without AI the economy grows 1.8 % a year; with AI the rate climbs to 3.8 % by 2042 and stays there
-    a *= 1.018;
-    b *= 1 + Math.min(0.018 + ((year - 2026) / 17) * 0.02, 0.038);
-  }
-  return {
-    unit: GDP_UNIT,
-    years,
-    series: [
-      { name: 'Sin revolución de la IA', values: without, color: '#898781' },
-      { name: 'Con revolución de la IA', values: withAi, color: '#3987e5' }
-    ]
-  };
+  for (let year = 2026; year <= 2056; year += 1) years.push(year);
+  const series = AI_SCENARIOS.map((s) => {
+    let level = ARG_GDP_2026;
+    const values = years.map((year) => {
+      if (year > 2026) level *= 1 + growthIn(s, year) / 100;
+      return round1(level);
+    });
+    return { name: s.name, values, color: s.color };
+  });
+  return { unit: GDP_UNIT, years, series };
 }
 
 export interface ColumnRow {

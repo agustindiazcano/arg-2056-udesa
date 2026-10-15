@@ -4,6 +4,8 @@ import { formatAxisNumber, formatValue } from '../charts/format.js';
 import { barsSpec, linesSpec } from '../charts3d/specs.js';
 import type { Bars3DSpec, Chart3DSpec } from '../charts3d/types.js';
 import { tokens } from '../styles/tokens.js';
+import { AI_SCENARIOS } from './aiScenarios.js';
+import { agroTonnes, campaignLabel } from './resourcesData.js';
 import { GDP_MOCK, gdpLinesSpec } from './gdpMock.js';
 import type { BandLabels } from './gdpMock.js';
 import {
@@ -41,8 +43,6 @@ export interface TourChartDef {
   kind: 'chart' | 'map';
   build: () => BuiltChart;
 }
-
-const NONE: () => BuiltChart = () => ({ option: {}, summary: '' });
 
 const list = (items: string[]): string => items.join(', ');
 
@@ -83,20 +83,15 @@ const BLUE = tokens.blue;
 
 const ai = (): BuiltChart => {
   const d = aiImpactData();
-  const without = d.series[0]!;
-  const withAi = d.series[1]!;
   const summary =
-    `PBI con y sin la revolución de la IA, de ${formatValue(without.values[0] ?? null, d.unit)} en 2026 ` +
-    `a ${formatValue(without.values.at(-1) ?? null, d.unit)} sin IA y ${formatValue(withAi.values.at(-1) ?? null, d.unit)} con IA en 2056`;
-  const { option } = buildLines(d.years.map(String), d.series, { unit: d.unit, labelEvery: 4, summary });
+    `PBI real de Argentina en tres escenarios, de ${formatValue(d.series[0]!.values[0] ?? null, d.unit)} en 2026 a 2056: ` +
+    d.series.map((s) => `${s.name} ${formatValue(s.values.at(-1) ?? null, d.unit)}`).join(', ');
+  const { option } = buildLines(d.years.map(String), d.series, { unit: d.unit, labelEvery: 1, summary });
   const spec = linesSpec({
     title: 'Impacto de la IA en el PBI',
     unit: d.unit,
     xLabels: d.years.map(String),
-    series: [
-      { name: without.name, values: without.values, tone: 'muted' },
-      { name: withAi.name, values: withAi.values, tone: 'accent', color: BLUE }
-    ],
+    series: d.series.map((s) => ({ name: s.name, values: s.values, tone: 'muted' as const, color: s.color })),
     summary
   });
   return { option, summary, spec };
@@ -155,23 +150,12 @@ export function shares(title: string, data: { unit: string; rows: Array<{ label:
 
 /** The charts of the Recorrido by step (step 1, the GDP, has its own component; step 2 still shows a scene). */
 export const TOUR_CHARTS: Record<number, TourChartDef> = {
-  1: {
-    step: 1,
-    title: 'PBI de Argentina',
-    subtitle: `${GDP_MOCK.unit}, 1990 a 2056`,
-    source: GDP_MOCK.source,
-    kind: 'chart',
-    build: () => ({ ...buildGdp(GDP_MOCK), spec: gdpLinesSpec(GDP_MOCK) })
-  },
   3: {
     step: 3,
     title: 'Cuarta revolución industrial: el impacto de la IA en la economía',
-    subtitle: 'PBI real con y sin la revolución de la IA, 2026 a 2056, miles de millones de USD de 2015',
+    subtitle: 'PBI real de Argentina en tres escenarios, 2026 a 2056, miles de millones de USD de 2015',
     source: '',
-    legend: [
-      { label: 'Sin revolución de la IA', color: GREY },
-      { label: 'Con revolución de la IA', color: BLUE }
-    ],
+    legend: AI_SCENARIOS.map((s) => ({ label: s.name, color: s.color })),
     kind: 'chart',
     build: ai
   },
@@ -191,7 +175,6 @@ export const TOUR_CHARTS: Record<number, TourChartDef> = {
     kind: 'chart',
     build: () => ranking('Años para duplicar el PBI', 'Años para duplicarse', { unit: 'años', rows: rule70Rows() }, RULE70_HIGHLIGHT, 'Regla del 70, años que tarda en duplicarse el PBI según su crecimiento anual')
   },
-  7: { step: 7, title: 'Mapa productivo por provincia', subtitle: 'valor productivo por provincia, millones de USD', source: '', kind: 'map', build: NONE },
   8: {
     step: 8,
     title: 'Minería: hoy vs proyecto',
@@ -204,35 +187,7 @@ export const TOUR_CHARTS: Record<number, TourChartDef> = {
     kind: 'chart',
     build: mining
   },
-  9: {
-    step: 9,
-    title: 'Hidrocarburos: Vaca Muerta define el piso y el techo',
-    subtitle: 'miles de barriles de petróleo por día de todo el país, 2015 a 2056',
-    source: HYDROCARBONS_SOURCE,
-    kind: 'chart',
-    build: hydrocarbons
-  },
-  10: {
-    step: 10,
-    title: 'Agro: producción actual y potencial',
-    subtitle: 'miles de millones de USD por año',
-    source: '',
-    legend: [
-      { label: 'Actual', color: GREY },
-      { label: 'Potencial', color: BLUE }
-    ],
-    kind: 'chart',
-    build: agro
-  },
-  12: { step: 12, title: 'Composición del PBI', subtitle: 'porcentaje del valor agregado por sector, 2025', source: GDP_COMPOSITION_SOURCE, kind: 'chart', build: () => shares('Composición del PBI', GDP_COMPOSITION, 'INDEC') },
-  13: {
-    step: 13,
-    title: 'El stock de recursos naturales',
-    subtitle: 'valor del stock, miles de millones de USD',
-    source: '',
-    kind: 'chart',
-    build: () => ranking('El stock de recursos naturales', 'Stock', RESOURCE_STOCK, largest(RESOURCE_STOCK.rows), 'Stock de recursos naturales, valuado')
-  }
+  12: { step: 12, title: 'Composición del PBI', subtitle: 'porcentaje del valor agregado por sector, 2025', source: GDP_COMPOSITION_SOURCE, kind: 'chart', build: () => shares('Composición del PBI', GDP_COMPOSITION, 'INDEC') }
 };
 
 /** The steps that have a chart, in order. */
@@ -244,6 +199,72 @@ export const EXPORT_COMPOSITION_CHART: TourChartDef = {
   source: EXPORTS_SOURCE,
   kind: 'chart',
   build: () => shares('Composición de las exportaciones', EXPORT_COMPOSITION, 'INDEC')
+};
+
+/** The charts of the old steps 9, 10 and 13, now tabs of the Resources slide (step 8): kept to build the tabs and their tables of the Data page. */
+export const HYDROCARBONS_CHART: TourChartDef = {
+  step: 9,
+  title: 'Hidrocarburos: Vaca Muerta define el piso y el techo',
+  subtitle: 'miles de barriles de petróleo por día de todo el país, 2015 a 2056',
+  source: HYDROCARBONS_SOURCE,
+  kind: 'chart',
+  build: hydrocarbons
+};
+
+export const AGRO_USD_CHART: TourChartDef = {
+  step: 10,
+  title: 'Agro: producción actual y potencial',
+  subtitle: 'miles de millones de USD por año',
+  source: '',
+  legend: [
+    { label: 'Actual', color: GREY },
+    { label: 'Potencial', color: BLUE }
+  ],
+  kind: 'chart',
+  build: agro
+};
+
+export const STOCK_CHART: TourChartDef = {
+  step: 13,
+  title: 'El stock de recursos naturales',
+  subtitle: 'valor del stock, miles de millones de USD',
+  source: '',
+  kind: 'chart',
+  build: () => ranking('El stock de recursos naturales', 'Stock', RESOURCE_STOCK, largest(RESOURCE_STOCK.rows), 'Stock de recursos naturales, valuado')
+};
+
+const CROP_COLORS: Record<string, string> = { Soja: tokens.blue, Maíz: tokens.scenario.optimistic, Trigo: tokens.state.warning, Girasol: tokens.scenario.pessimistic };
+
+/** Production of the four main crops in million tonnes by campaign (MAGyP, real), the Agro tab of the Resources slide. */
+const agroTonnesChart = (): BuiltChart => {
+  const { campaigns, series } = agroTonnes();
+  const xLabels = campaigns.map(campaignLabel);
+  const lines = series.map((s) => ({ name: s.crop, values: s.values, color: CROP_COLORS[s.crop] ?? GREY }));
+  const summary = `Producción de los cuatro cultivos principales por campaña, millones de toneladas (MAGyP): ${series
+    .map((s) => `${s.crop} ${formatValue(s.values.findLast((v) => v !== null) ?? null, 'Mt')} en la última campaña publicada`)
+    .join(', ')}`;
+  const { option } = buildLines(xLabels, lines, { unit: 'Mt', labelEvery: 1, summary });
+  return { option, summary, spec: linesSpec({ title: 'Agro: toneladas por campaña', unit: 'Mt', xLabels, series: lines.map((l) => ({ ...l, tone: 'muted' as const })), summary }) };
+};
+
+export const AGRO_TONNES_CHART: TourChartDef = {
+  step: 10,
+  title: 'Agro: toneladas producidas por campaña',
+  subtitle: 'millones de toneladas de los cuatro cultivos principales (el año es el de inicio de la campaña)',
+  source: 'MAGyP, series anuales nacionales',
+  legend: Object.entries(CROP_COLORS).map(([label, color]) => ({ label, color })),
+  kind: 'chart',
+  build: agroTonnesChart
+};
+
+/** The old GDP slide (step 1), out of the Recorrido since 2026-10-15; kept to build its table of the Data page. */
+export const GDP_CHART: TourChartDef = {
+  step: 1,
+  title: 'PBI de Argentina',
+  subtitle: `${GDP_MOCK.unit}, 1990 a 2056`,
+  source: GDP_MOCK.source,
+  kind: 'chart',
+  build: () => ({ ...buildGdp(GDP_MOCK), spec: gdpLinesSpec(GDP_MOCK) })
 };
 
 export const CHART_STEP_LIST: number[] = Object.keys(TOUR_CHARTS).map(Number).sort((a, b) => a - b);

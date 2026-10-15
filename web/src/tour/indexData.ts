@@ -1,5 +1,5 @@
 import { INDEX_STEP, TOUR_ORDER, stepNumber } from './chartSteps.js';
-import { EXPORTS_TITLE, PRODUCTIVITY_TITLE, PROVINCE_TITLE, RULE70_TITLE, WORLD_TITLE } from './slideTitles.js';
+import { AI_TITLE, COMPOSITION_TITLE, EXPORTS_TITLE, PRODUCTIVITY_TITLE, PROVINCE_TITLE, RESOURCES_TITLE, RULE70_TITLE, WORLD_TITLE } from './slideTitles.js';
 import { TOUR_CHARTS } from './tourCharts.js';
 
 export interface IndexItem {
@@ -12,7 +12,7 @@ export interface IndexItem {
 }
 
 /** The title each slide shows as its heading. */
-const SPECIAL: Record<number, string> = { 0: WORLD_TITLE, 2: PROVINCE_TITLE, 4: EXPORTS_TITLE, 5: RULE70_TITLE, 14: PRODUCTIVITY_TITLE };
+const SPECIAL: Record<number, string> = { 0: WORLD_TITLE, 2: PROVINCE_TITLE, 4: EXPORTS_TITLE, 5: RULE70_TITLE, 8: RESOURCES_TITLE, 12: COMPOSITION_TITLE, 3: AI_TITLE, 14: PRODUCTIVITY_TITLE };
 
 export const titleOf = (id: number): string => SPECIAL[id] ?? TOUR_CHARTS[id]!.title;
 

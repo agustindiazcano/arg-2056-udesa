@@ -18,7 +18,10 @@ import { SBC_EXPORTS_2025, SERVICES_EXPORTS_2025 } from '../tour/servicesExports
 import { RIGI_MINING, RIGI_OIL_GAS } from '../tour/rigiProjects.js';
 import type { RigiProject } from '../tour/rigiProjects.js';
 import { stepNumber } from '../tour/chartSteps.js';
-import { EXPORT_COMPOSITION_CHART, TOUR_CHARTS } from '../tour/tourCharts.js';
+import { AGRO_TONNES_CHART, AGRO_USD_CHART, EXPORT_COMPOSITION_CHART, HYDROCARBONS_CHART, STOCK_CHART, TOUR_CHARTS } from '../tour/tourCharts.js';
+import { perCapitaSeries, populationPath } from '../tour/aiModel.js';
+import { AI_ANALYSTS, AI_SCENARIOS, US_SCENARIOS } from '../tour/aiScenarios.js';
+import { COMPOSITION_TITLE, RESOURCES_TITLE } from '../tour/slideTitles.js';
 import { exportRows } from '../tour/exportsData.js';
 import { countriesTable } from '../tour/rule70Countries.js';
 import { imfTable } from '../tour/rule70Imf.js';
@@ -47,6 +50,40 @@ function chartTable(step: number, def: TourChartDef = TOUR_CHARTS[step]!): DataT
   const raw = specRaw(spec);
   return { id: `chart-${step}`, title: def.title, ...raw };
 }
+
+const range = (r: readonly [number, number]): string => `${r[0]} a ${r[1]}`;
+
+/** The scenarios of the AI slide as the pasted report gives them (ranges), the same for the United States, and the estimates of the analysts. */
+const aiTables = (): DataTable[] => [
+  {
+    id: 'ai-scenarios',
+    title: 'Argentina: tres escenarios con IA (rangos del informe; el gráfico usa el punto medio)',
+    columns: ['Escenario', 'Crecimiento anual medio 2026-2030 (%)', 'Nivel del PBI 2030 contra 2025 (%)', 'Crecimiento anual medio 2031-2035 (%)', 'Aporte de la IA a la PTF (puntos por año)', 'Comentario'],
+    rows: AI_SCENARIOS.map((s) => [s.name, range(s.growth2030), range(s.level2030), range(s.growth2035), range(s.aiPoints), s.comment])
+  },
+  {
+    id: 'ai-us',
+    title: 'Estados Unidos: tres escenarios con IA, para comparar (rangos del informe)',
+    columns: ['Escenario', 'Crecimiento anual medio 2026-2030 (%)', 'Nivel del PBI 2030 contra 2025 (%)', 'Crecimiento anual medio 2031-2035 (%)', 'Aporte de la IA a la productividad (puntos por año)'],
+    rows: US_SCENARIOS.map((s) => [s.name, range(s.growth2030), range(s.level2030), range(s.growth2035), range(s.aiPoints)])
+  },
+  {
+    id: 'ai-analysts',
+    title: 'Estimaciones de analistas sobre el efecto de la IA en el PBI (ordenadas de menor a mayor; alcance y horizonte distintos)',
+    columns: ['Analista', 'Alcance', 'Horizonte', 'Efecto en el nivel del PBI (%)'],
+    rows: AI_ANALYSTS.map((a) => [a.who, a.scope, a.horizon, a.effect])
+  }
+];
+
+const perCapitaTable = (): DataTable => {
+  const pc = perCapitaSeries();
+  return { id: 'ai-per-capita', title: `PBI por habitante por escenario (${pc.unit}; PBI del escenario sobre la población de la ONU, variante media, apoyada en el INDEC de 2025)`, columns: ['Año', ...pc.series.map((s) => s.name)], rows: pc.years.map((y, i) => [y, ...pc.series.map((s) => s.values[i] ?? null)]) };
+};
+
+const aiPopulationTable = (): DataTable => {
+  const pop = populationPath();
+  return { id: 'ai-population', title: 'Población de Argentina 2025-2056 (millones; INDEC 2025 y variación anual de la ONU, variante media)', columns: ['Año', 'Población'], rows: pop.years.map((y, i) => [y, Math.round(pop.values[i]! * 1000) / 1000]) };
+};
 
 const rigiTable = (id: string, title: string, projects: readonly RigiProject[]): DataTable => ({
   id,
@@ -269,7 +306,14 @@ export function buildSlides(): SlideData[] {
       false,
       ['W5', 'I1', 'F1']
     ),
-    slide('1', 'PBI de Argentina', [
+    slide('8', RESOURCES_TITLE, [chartTable(8), ...miningTables(), rigiTable('rigi-mining', 'Proyectos mineros del RIGI y otros en evaluación (prensa, sin verificar)', RIGI_MINING), chartTable(9, HYDROCARBONS_CHART), nationalProduction(), oilSince1950(), rigiTable('rigi-oil-gas', 'Proyectos de petróleo y gas del RIGI y otros en evaluación (prensa, sin verificar)', RIGI_OIL_GAS), chartTable(10, AGRO_USD_CHART), agroTable(), { ...chartTable(10, AGRO_TONNES_CHART), id: 'agro-tonnes' }, chartTable(13, STOCK_CHART), reservesTable(),
+      provinces(),
+      { id: 'provinces-value', title: `Valor productivo por provincia (${PRODUCTION_UNIT})`, columns: ['Provincia', 'Valor'], rows: PROVINCES.map((p, i) => [p.name, PROVINCE_VALUES[i] ?? null]) },
+      hydrocarbonProvinces(),
+      indicators()], false, ['W3', 'E3', 'E5', 'E9', 'E11', 'R1', 'R2', 'R3', 'R4', 'R5', 'R9', 'R12', 'R13', 'E6', 'E4', 'R6', 'R7', 'R8', 'R10', 'R11', 'E8']),
+    slide('5', TOUR_CHARTS[5]!.title, [chartTable(5), errorTable(), argentinaTable(), countriesTable(), scenariosTable(), imfTable()], false),
+    slide('12', COMPOSITION_TITLE, [
+      chartTable(12),
       {
         id: 'gdp',
         title: `PBI de Argentina (${GDP_MOCK.unit})`,
@@ -277,22 +321,16 @@ export function buildSlides(): SlideData[] {
         rows: GDP_MOCK.years.map((y, i) => [y, GDP_MOCK.history[i] ?? null, GDP_MOCK.expected[i] ?? null, GDP_MOCK.low[i] ?? null, GDP_MOCK.high[i] ?? null])
       },
       ...externalTables(),
-      indicators()
-    ], true, ['W3', 'W5', 'I1', 'F1', 'X1', 'X2', 'X3']),
+      indicators(),
+      chartTable(4),
+      { ...chartTable(4, EXPORT_COMPOSITION_CHART), id: 'chart-11' },
+      complexesTable(),
+      exportSharesTable(),
+      greatItemsTable(),
+      ...servicesTables()
+    ], true, ['W3', 'W5', 'I1', 'F1', 'X1', 'X2', 'X3', 'E2', 'E7', 'E1', 'E10']),
     slide('14', 'Productividad', productivityTables(), false, ['P6', 'P7', 'P7b', 'P1', 'P8', 'P9']),
-    slide('2', 'Producción por provincia', [provinces(), hydrocarbonProvinces(), indicators()], true, ['W3', 'E6']),
-    slide('3', TOUR_CHARTS[3]!.title, [chartTable(3)]),
-    slide('4', TOUR_CHARTS[4]!.title, [chartTable(4), { ...chartTable(4, EXPORT_COMPOSITION_CHART), id: 'chart-11' }, complexesTable(), exportSharesTable(), greatItemsTable(), ...servicesTables()], false, ['E7', 'E1', 'E10']),
-    slide('7', TOUR_CHARTS[7]!.title, [
-      { id: 'provinces-value', title: `Valor productivo por provincia (${PRODUCTION_UNIT})`, columns: ['Provincia', 'Valor'], rows: PROVINCES.map((p, i) => [p.name, PROVINCE_VALUES[i] ?? null]) },
-      hydrocarbonProvinces()
-    ], true, ['E6']),
-    slide('8', TOUR_CHARTS[8]!.title, [chartTable(8), ...miningTables(), rigiTable('rigi-mining', 'Proyectos mineros del RIGI y otros en evaluación (prensa, sin verificar)', RIGI_MINING)], false, ['E3', 'E5', 'E9', 'E11', 'R1', 'R2', 'R3', 'R4', 'R5', 'R9', 'R12', 'R13']),
-    slide('9', TOUR_CHARTS[9]!.title, [chartTable(9), nationalProduction(), oilSince1950(), rigiTable('rigi-oil-gas', 'Proyectos de petróleo y gas del RIGI y otros en evaluación (prensa, sin verificar)', RIGI_OIL_GAS)], true, ['E6', 'E4', 'R2', 'R3', 'R6', 'R7', 'R8', 'R10', 'R11']),
-    slide('10', TOUR_CHARTS[10]!.title, [chartTable(10), agroTable()], true, ['E8']),
-    slide('12', TOUR_CHARTS[12]!.title, [chartTable(12)], false, ['E2']),
-    slide('13', TOUR_CHARTS[13]!.title, [chartTable(13), reservesTable()], true, ['E3', 'E5', 'E6']),
-    slide('5', TOUR_CHARTS[5]!.title, [chartTable(5), errorTable(), argentinaTable(), countriesTable(), scenariosTable(), imfTable()], false),
+    slide('3', TOUR_CHARTS[3]!.title, [chartTable(3), ...aiTables(), perCapitaTable(), aiPopulationTable()], true, ['A1', 'A2', 'A3', 'A4', 'A5', 'A6', 'A7', 'A8', 'A9', 'A10']),
     slide('sim', 'Simulador del PBI', [
       { id: 'factors', title: 'Factores del escenario de referencia', columns: ['Factor', 'Valor', 'Unidad'], rows: SIM_FIELDS.map((f) => [f.label, DEFAULT_SIM[f.key], f.unit]) },
       { id: 'reference', title: 'PBI del escenario de referencia (miles de millones de USD)', columns: ['Año', 'PBI'], rows: sim.years.map((y, i) => [y, sim.gdp[i] ?? null]) }

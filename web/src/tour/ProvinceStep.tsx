@@ -8,7 +8,6 @@ import { barsSpec } from '../charts3d/specs.js';
 import { Reveal } from '../motion/Reveal.js';
 import { ProvinceMap, useProvinces } from '../scenes/forecast/ProvinceMap.js';
 import { mapSummary } from '../scenes/forecast/mapSelectors.js';
-import { useStore } from '../state/store.js';
 import { tokens } from '../styles/tokens.js';
 import { Segmented } from '../ui/Segmented.js';
 import { PROVINCE_TITLE } from './slideTitles.js';
@@ -33,9 +32,9 @@ const TITLE = PROVINCE_TITLE;
  * (Minería, Agro or Hidrocarburos) and under it a chart of bars with what each province produces. A click on a province, in the
  * map, in the ranking or in the bars, selects it, and the map zooms to it. Made-up values.
  */
-export function ProvinceStep() {
-  const mode = useStore((s) => s.mode);
-  const dispatch = useStore((s) => s.dispatch);
+export function ProvinceStep({ embedded = false }: { embedded?: boolean } = {}) {
+  // the map of Argentina opens flat (human order of 2026-10-15); this slide keeps its own 2D / 3D choice
+  const [mode, setMode] = useState<'2d' | '3d'>('2d');
   const provinces = useProvinces();
   const [sector, setSector] = useState<Sector>('mineria');
   const [selected, setSelected] = useState<ProvinceId | null>(null);
@@ -89,7 +88,7 @@ export function ProvinceStep() {
     <section className="gdp-step prov-step" aria-label={TITLE}>
       <header className="gdp-head">
         <Reveal k="head" className="gdp-title">
-          <h2>{TITLE}</h2>
+          {embedded ? <h3 className="composition-title">{TITLE}</h3> : <h2>{TITLE}</h2>}
           <p className="gdp-sub">
             {PRODUCTION_UNIT} por año; elegí un sector y tocá una provincia
           </p>
@@ -99,9 +98,7 @@ export function ProvinceStep() {
             label="Vista"
             options={VIEWS}
             value={mode}
-            onChange={(next) => {
-              if (next !== mode) dispatch({ type: 'toggle3D' });
-            }}
+            onChange={setMode}
           />
         </div>
       </header>
@@ -113,7 +110,7 @@ export function ProvinceStep() {
             {provinces.status === 'loading' && <Spinner label="Cargando el mapa de las provincias..." />}
             {provinces.status === 'error' && <p style={{ color: 'var(--state-warning)' }}>{`La geometría de las provincias no está disponible: ${provinces.message}`}</p>}
             {provinces.status === 'success' && (
-              <TourChart spec={mapSpec ?? undefined}>
+              <TourChart spec={mapSpec ?? undefined} mode={mode}>
                 <ProvinceMap
                   geo={provinces.geo}
                   values={values}
@@ -156,7 +153,7 @@ export function ProvinceStep() {
               <strong>{`Producción de ${sectorLabel.toLowerCase()} por provincia`}</strong>
             </div>
             <div className="tour-chart">
-              <TourChart spec={bars.spec}>
+              <TourChart spec={bars.spec} mode={mode}>
                 <EChart option={bars.option} aria-label={bars.summary} onClick={onBarClick} />
               </TourChart>
             </div>

@@ -241,12 +241,16 @@ describe('Reducer', () => {
   describe('the steps of the Recorrido', () => {
     const tour: State = { ...initialState, scene: 'economy', section: 'tour' };
 
-    it('the arrow keys move the step, not the scene, in the order the slides are shown (1 then 14 then 2), and stop at the first and the last', () => {
-      let state = reduce({ ...tour, tourStep: 1 }, { type: 'nextScene' });
+    it('the arrow keys move the step, not the scene, in the order the slides are shown (12 then 14 then 3), and stop at the first and the last', () => {
+      let state = reduce({ ...tour, tourStep: 12 }, { type: 'nextScene' });
       expect(state).toMatchObject({ tourStep: 14, scene: 'economy' });
-      expect(reduce(state, { type: 'nextScene' }).tourStep).toBe(2);
+      expect(reduce(state, { type: 'nextScene' }).tourStep).toBe(3);
       state = reduce(state, { type: 'prevScene' });
-      expect(state.tourStep).toBe(1);
+      expect(state.tourStep).toBe(12);
+      state = reduce(state, { type: 'prevScene' });
+      expect(state.tourStep).toBe(5);
+      state = reduce(state, { type: 'prevScene' });
+      expect(state.tourStep).toBe(8);
       state = reduce(state, { type: 'prevScene' });
       expect(state.tourStep).toBe(0);
       state = reduce(state, { type: 'prevScene' });
@@ -257,13 +261,13 @@ describe('Reducer', () => {
     });
 
     it('skips step 6 (the investor slide was removed) going forward and back, and tourSet ignores it', () => {
-      expect(reduce({ ...tour, tourStep: 4 }, { type: 'nextScene' }).tourStep).toBe(7);
-      expect(reduce({ ...tour, tourStep: 7 }, { type: 'prevScene' }).tourStep).toBe(4);
+      expect(reduce({ ...tour, tourStep: 0 }, { type: 'nextScene' }).tourStep).toBe(8);
+      expect(reduce({ ...tour, tourStep: 8 }, { type: 'prevScene' }).tourStep).toBe(0);
       expect(reduce(tour, { type: 'tourSet', step: 6 })).toBe(tour);
     });
 
     it('tourSet picks a step of the list and ignores any other value', () => {
-      expect(reduce(tour, { type: 'tourSet', step: 7 }).tourStep).toBe(7);
+      expect(reduce(tour, { type: 'tourSet', step: 8 }).tourStep).toBe(8);
       expect(reduce({ ...tour, tourStep: 5 }, { type: 'tourSet', step: 0 }).tourStep).toBe(0);
       expect(reduce(tour, { type: 'tourSet', step: -1 })).toBe(tour);
       expect(reduce(tour, { type: 'tourSet', step: 99 })).toBe(tour);
