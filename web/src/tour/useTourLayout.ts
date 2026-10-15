@@ -17,7 +17,7 @@ interface TourLayout {
 /** What the visitor chose for the charts of the Recorrido; it stays when the step changes. */
 export const useTourLayout = create<TourLayout>((set) => ({
   count: 1,
-  focus: false,
+  focus: true,
   sideOpen: true,
   toggleSide: () => set((s) => ({ sideOpen: !s.sideOpen })),
   setCount: (count) => set({ count, focus: false }),

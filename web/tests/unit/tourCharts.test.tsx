@@ -85,6 +85,12 @@ describe('visibleSteps', () => {
   });
 });
 
+describe('the default layout of the charts', () => {
+  it('is the 1/3 layout (human order of 2026-10-15)', () => {
+    expect(useTourLayout.getInitialState().focus).toBe(true);
+  });
+});
+
 describe('ChartStep', () => {
   beforeEach(() => {
     useStore.setState({ mode: '2d' });
