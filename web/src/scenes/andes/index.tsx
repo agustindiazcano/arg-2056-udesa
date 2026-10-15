@@ -20,6 +20,7 @@ import { BattleReport } from './BattleReport.js';
 import { AndesIntro } from './AndesIntro.js';
 import { CameraTuner } from './CameraTuner.js';
 import { ForceButtons } from './ForceButtons.js';
+import { CrossingInfo } from './CrossingInfo.js';
 import { ForceInfo } from './ForceInfo.js';
 import type { CameraApi, CameraView } from './cameraKeyframes.js';
 import { loadToggles, resolveGraphics } from './graphics.js';
@@ -74,6 +75,9 @@ export default function Scene() {
   /** the intro (the clouds, the camera tour and the spotlight over each force) is going on: the button "Saltar intro" shows until it is over */
   const [introOn, setIntroOn] = useState(true);
   const [skipIntro, setSkipIntro] = useState(false);
+  /** the pop-up that explains how the crossing was made: it opens when the intro is over and the reader can close it */
+  const [crossingInfoOpen, setCrossingInfoOpen] = useState(true);
+  const closeCrossingInfo = useCallback(() => setCrossingInfoOpen(false), []);
   /** grows each time the button of the battle of Chacabuco is pressed */
   const [battleShow, setBattleShow] = useState(0);
   /** the 3D recreation of the battle of Chacabuco is open */
@@ -288,6 +292,8 @@ export default function Scene() {
           {eventsOpen && <EventList events={route.points} selectedId={selectedId} onSelect={select} />}
         </div>
       </div>
+
+      {crossingInfoOpen && !introOn && <CrossingInfo onClose={closeCrossingInfo} />}
 
       {<ForceInfo id={activeForce} onClose={() => setActiveForce(null)} />}
 

@@ -401,6 +401,29 @@ describe('Andes scene', () => {
     expect(screen.queryByRole('button', { name: 'Saltar intro' })).toBeNull();
   });
 
+  it('explains how the crossing was made in a pop-up that opens when the intro is over and closes with its button or Escape', async () => {
+    stubFetch();
+    renderScene();
+    await screen.findByTestId('andes-renderer');
+    expect(screen.queryByRole('dialog', { name: 'Cómo fue el cruce' })).toBeNull();
+    fireEvent.click(screen.getByRole('button', { name: 'Saltar intro' }));
+    const dialog = screen.getByRole('dialog', { name: 'Cómo fue el cruce' });
+    expect(within(dialog).getByText(/seis columnas/)).toBeTruthy();
+    expect(within(dialog).getByText(/Curimón/)).toBeTruthy();
+    fireEvent.click(within(dialog).getByRole('button', { name: 'Cerrar' }));
+    expect(screen.queryByRole('dialog', { name: 'Cómo fue el cruce' })).toBeNull();
+  });
+
+  it('closes the crossing pop-up with Escape', async () => {
+    stubFetch();
+    renderScene();
+    await screen.findByTestId('andes-renderer');
+    fireEvent.click(screen.getByRole('button', { name: 'Saltar intro' }));
+    expect(screen.getByRole('dialog', { name: 'Cómo fue el cruce' })).toBeTruthy();
+    fireEvent.keyDown(document, { key: 'Escape' });
+    expect(screen.queryByRole('dialog', { name: 'Cómo fue el cruce' })).toBeNull();
+  });
+
   it('has no "Batalla de Chacabuco" button in the control bar (removed by human request)', async () => {
     stubFetch();
     renderScene();
