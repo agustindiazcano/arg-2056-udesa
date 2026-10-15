@@ -1379,15 +1379,19 @@ main.scene-container {
   font-variant-numeric: tabular-nums;
 }
 
-/* step 0: the big year sits at the top left, so the Gráfico | Tabla switch goes on the left under it and the table starts below both */
+/* the big year and its value sit at the top right, with the Gráfico | Tabla switch in the corner and the year just to its left */
 .gdp-chart:has(> .world-year) .tour-view-switch {
-  top: 4rem;
-  right: auto;
-  left: 0;
+  top: 0;
+  right: 0;
+  left: auto;
+}
+
+.gdp-chart:has(> .world-year) > .world-year {
+  right: 11rem;
 }
 
 .gdp-chart:has(> .world-year) .tour-table {
-  padding-top: 6.6rem;
+  padding-top: 4rem;
 }
 
 /* ---- The Simulador section: a big chart and a bar of factors on the right ------------------------------------------ */

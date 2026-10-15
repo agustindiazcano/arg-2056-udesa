@@ -3,7 +3,9 @@ import { tokens } from '../styles/tokens.js';
 /**
  * The three scenarios of the slide "Cuarta revolución industrial: el impacto de la IA en la economía": growth accounting (capital, labor, TFP)
  * plus a boost to TFP from AI, as written in the report the human pasted on 2026-10-15 (an AI-written report, not verified against its
- * sources). The chart uses the MIDDLE of each range the report gives: 2027-2030 at the middle of its 2026-2030 average and 2031-2035 at the
+ * sources), except the optimistic one, which the human asked to make truly optimistic with the figures of the second report: the Anthropic / Korinek
+ * extreme case (+32.4 % on the level of GDP by 2030 over the base, which is about 10.5 % a year in 2027-2030 on top of a 3.0 % base) and then the
+ * Goldman Sachs +1.5 points of yearly productivity (4.25 % in 2031-2056). Both come from US studies and are not about Argentina. The chart uses the MIDDLE of each range: 2027-2030 at the middle of its 2026-2030 average and 2031-2035 at the
  * middle of its 2031-2035 average. The report stops at 2035: from 2036 to 2056 (the human asked for the horizon of the project) each scenario goes on
  * at the rate of its 2031-2035 period, an assumption and not a figure of the report. 2026 is the IMF estimate shared by every slide (`gdpFacts.ts`).
  */
@@ -47,11 +49,11 @@ export const AI_SCENARIOS: readonly AiScenario[] = [
     id: 'optimistic',
     name: 'Optimista',
     color: tokens.scenario.optimistic,
-    growth2030: [4.0, 4.8],
-    level2030: [22, 28],
-    growth2035: [3.5, 4.2],
-    aiPoints: [0.5, 0.7],
-    comment: 'Alta ejecución de proyectos y adopción acelerada de la IA'
+    growth2030: [10.0, 11.0],
+    level2030: [50, 55],
+    growth2035: [4.0, 4.5],
+    aiPoints: [1.5, 7.3],
+    comment: 'IA transformadora: el nivel del PBI sube 32,4 % hasta 2030 sobre el base (escenario extremo de Anthropic) y después la productividad suma 1,5 puntos por año (Goldman Sachs)'
   }
 ];
 
