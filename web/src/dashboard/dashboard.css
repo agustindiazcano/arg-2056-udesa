@@ -621,12 +621,13 @@
   list-style: none;
 }
 
+/* a long name wraps to a second line instead of being cut */
 .andes-events .chip {
   width: 100%;
   text-align: left;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  white-space: normal;
+  overflow: visible;
+  border-radius: var(--radius-md);
 }
 
 .andes-day {
@@ -739,7 +740,7 @@
   left: var(--space-md);
   max-height: calc(100% - 9rem - var(--chrome-h, 0px) - var(--bar-h, 0px));
   z-index: 4;
-  width: min(280px, 38%);
+  width: min(300px, 38%);
   padding: var(--space-xs);
   overflow-x: hidden;
   overflow-y: auto;
@@ -818,9 +819,19 @@
 #overlay[data-scene='andes'] {
   --chrome-h: 3.6rem;
   --bar-h: 5rem;
-  --side-w: min(340px, 30vw);
+  --side-full: min(340px, 30vw);
+  --side-w: var(--side-full);
+  /* the width of the folded panel: wide enough for the toggle and the abbreviated data */
+  --strip-w: 80px;
   --glass: color-mix(in srgb, var(--surface) 48%, transparent);
   --glass-strong: color-mix(in srgb, var(--surface) 58%, transparent);
+}
+
+/* on a laptop (the same width as LAPTOP_QUERY in scenes/andes/index.tsx) the panel of the right is 60 % of its size on a big screen */
+@media (max-width: 1600px) {
+  #overlay[data-scene='andes'] {
+    --side-full: min(204px, 18vw);
+  }
 }
 
 #overlay[data-scene='andes'] main.scene-container {
@@ -1022,53 +1033,41 @@
   font-size: var(--font-sm);
 }
 
-/* ---- the Andes: indicators in a strip over the map, minimap and altitude in the right panel, a shorter bottom bar ---- */
+/* ---- the Andes: the indicators, the minimap and the altitude profile are in the right panel, a shorter bottom bar ---- */
 
+/* the strip of the stage is empty: the indicators are in the panel */
 #overlay[data-scene='andes'] .dash-tiles--strip {
-  position: absolute;
-  top: calc(var(--chrome-h) + var(--space-md));
-  left: 37rem;
-  z-index: 5;
-  width: max-content;
-  max-width: calc(100% - 37rem - var(--space-md));
-  pointer-events: none;
-}
-
-/* the indicators are only as wide as what they say */
-#overlay[data-scene='andes'] .dash-tiles--strip .tile-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-xs);
-}
-
-#overlay[data-scene='andes'] .dash-tiles--strip .tile {
-  display: flex;
-  flex-direction: column;
-  padding: 2px var(--space-sm);
-  background: var(--glass-strong);
-  backdrop-filter: blur(10px);
-}
-
-#overlay[data-scene='andes'] .dash-tiles--strip .tile-label {
-  font-size: 0.66rem;
-  line-height: 1.15;
-  white-space: nowrap;
-}
-
-#overlay[data-scene='andes'] .dash-tiles--strip .tile-value {
-  font-size: 0.95rem;
-  line-height: 1.2;
-  white-space: nowrap;
-}
-
-#overlay[data-scene='andes'] .dash-tiles--strip .tile-note {
   display: none;
 }
 
-/* the panel starts under the strip and goes down to the bottom of the screen; the bottom bar stops at its left edge */
+#overlay[data-scene='andes'] .andes-side-tiles {
+  flex: 0 0 auto;
+}
+
+#overlay[data-scene='andes'] .andes-side-tiles .tile {
+  padding: var(--space-xs) var(--space-sm);
+}
+
+#overlay[data-scene='andes'] .andes-side-tiles .tile-label {
+  font-size: 0.7rem;
+  line-height: 1.15;
+}
+
+#overlay[data-scene='andes'] .andes-side-tiles .tile-value {
+  font-size: 1rem;
+  line-height: 1.2;
+}
+
+/* the panel of the right goes up to the navbar */
 #overlay[data-scene='andes'] .dash--stage .dash-side {
-  top: calc(var(--chrome-h) + var(--space-md) + 3.4rem);
-  bottom: var(--space-md);
+  top: calc(var(--chrome-h) + var(--space-sm));
+  /* it stops above the attribution of MapTiler and OpenStreetMap, the small «i» button of the map in the bottom right corner */
+  bottom: calc(var(--space-md) + 2.25rem);
+}
+
+/* the zoom and reset buttons live in the bottom bar, right after the progress */
+#overlay[data-scene='andes'] .mapnav-slot .nav-controls {
+  position: static;
 }
 
 /* the bottom bar is only as wide as its controls: play, the progress and the speed */
@@ -1089,11 +1088,6 @@
 
 .dash-minimap:empty {
   display: none;
-}
-
-/* the altitude profile goes to the bottom of the panel */
-#overlay[data-scene='andes'] .dash--stage .dash-side > :last-child:not(.dash-minimap):not(.dash-narrative) {
-  margin-top: auto;
 }
 
 /* ---- the round buttons of the forces, at the top of the map next to the title ----------------------------------- */
@@ -1253,17 +1247,17 @@
 /* ---- the panel of the right can be folded away: the stage takes its width ---------------------------------------- */
 
 #overlay[data-scene='andes']:has(.dash--side-hidden) {
-  --side-w: 2.75rem;
+  --side-w: calc(var(--strip-w) + var(--space-sm));
 }
 
 /* it is slid to the right and not removed, so the minimap keeps its size; only a thin strip, as wide as the toggle, stays */
 #overlay[data-scene='andes'] .dash--side-hidden .dash-side {
-  width: calc(min(340px, 30vw) - var(--space-md));
-  transform: translateX(calc(100% - 34px));
+  width: calc(var(--side-full) - var(--space-md));
+  transform: translateX(calc(100% - var(--strip-w)));
   overflow: hidden;
 }
 
-#overlay[data-scene='andes'] .dash--side-hidden .dash-side > :not(.andes-side-toggle) {
+#overlay[data-scene='andes'] .dash--side-hidden .dash-side > :not(.andes-side-toggle):not(.andes-side-mini) {
   visibility: hidden;
   pointer-events: none;
 }
@@ -1288,6 +1282,93 @@
   backdrop-filter: blur(8px);
 }
 
+/* the combats of the list of events: red, with the patriot flag against the Spanish one */
+.andes-events .andes-event--combat {
+  background: color-mix(in srgb, var(--state-critical) 40%, transparent);
+  border-color: var(--state-critical);
+  color: var(--ink);
+}
+
+.andes-events .andes-event--combat:hover,
+.andes-events .andes-event--combat[aria-pressed='true'] {
+  background: color-mix(in srgb, var(--state-critical) 65%, transparent);
+}
+
+.andes-events .andes-event--combat[aria-pressed='true'] {
+  border-color: var(--blue);
+}
+
+.andes-versus {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  margin-left: var(--space-xs);
+  vertical-align: middle;
+}
+
+.andes-event-flag {
+  width: 24px;
+  height: 16px;
+  border: 1px solid var(--border);
+  flex: none;
+}
+
+/* the pop-up that explains how the crossing was made: at the center of the left side of the map, closable */
+.andes-crossing {
+  position: absolute;
+  top: 50%;
+  left: var(--space-md);
+  z-index: 12;
+  transform: translateY(-50%);
+  width: min(440px, calc(100% - var(--side-w, 0px) - 2 * var(--space-md)));
+  max-height: calc(100% - 2 * var(--space-lg, 2rem));
+  overflow-y: auto;
+  padding: var(--space-md) var(--space-lg);
+  background: color-mix(in srgb, var(--surface) 92%, transparent);
+  color: var(--ink);
+  line-height: 1.45;
+}
+
+.andes-crossing header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+}
+
+.andes-crossing h2 {
+  margin: 0;
+  font-size: var(--font-lg);
+}
+
+.andes-crossing p,
+.andes-crossing ul {
+  margin: var(--space-sm) 0 0;
+}
+
+.andes-crossing ul {
+  padding-left: 1.2em;
+}
+
+.andes-crossing li + li {
+  margin-top: var(--space-xs);
+}
+
+.andes-crossing .chip {
+  flex: none;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  text-align: center;
+  font-size: 1.2rem;
+  line-height: 1;
+}
+
+/* development tools (the camera in numbers): off for now, remove this rule to bring them back */
+.andes-dev-only {
+  display: none;
+}
+
 .andes-side-toggle:hover {
   background: var(--selected);
 }
@@ -1295,5 +1376,44 @@
 /* folded: the toggle sits on the left edge of the strip, which is as wide as it is */
 #overlay[data-scene='andes'] .dash--side-hidden .andes-side-toggle {
   right: auto;
+  left: calc((var(--strip-w) - 32px) / 2);
+}
+
+/* the abbreviated data of the folded panel: name of the indicator small, the value under it */
+.andes-side-mini {
+  display: none;
+  margin: 0;
+}
+
+#overlay[data-scene='andes'] .dash--side-hidden .andes-side-mini {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  position: absolute;
+  top: calc(var(--space-xs) + 32px + var(--space-sm));
   left: 0;
+  width: var(--strip-w);
+  text-align: center;
+  pointer-events: none;
+}
+
+.andes-side-mini dt {
+  color: var(--ink-2);
+  font-size: 0.72rem;
+  line-height: 1.1;
+  text-transform: uppercase;
+}
+
+.andes-side-mini dd {
+  margin: 0;
+  color: var(--ink);
+  font-size: 0.95rem;
+  font-weight: 700;
+  line-height: 1.2;
+  font-variant-numeric: tabular-nums;
+}
+
+/* folded: a nearly solid background so the data read over the map */
+#overlay[data-scene='andes'] .dash--side-hidden .dash-side {
+  background: color-mix(in srgb, var(--surface) 92%, transparent);
 }

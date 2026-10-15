@@ -108,6 +108,33 @@
   border-color: var(--blue);
 }
 
+/* the text buttons look like the chips of the control bar; the dots keep their own look */
+.story button:not(.story-dot) {
+  padding: var(--space-xs) var(--space-md);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  background: var(--glass-strong);
+  color: var(--ink);
+  font: inherit;
+  font-size: var(--font-sm);
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.story button:not(.story-dot):hover:not(:disabled) {
+  background: var(--hover);
+}
+
+.story button[aria-pressed='true']:not(.story-dot) {
+  background: var(--selected);
+  border-color: var(--blue);
+}
+
+.story-controls {
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
 .story button:disabled {
   opacity: 0.4;
   cursor: default;

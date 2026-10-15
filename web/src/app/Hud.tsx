@@ -31,6 +31,7 @@ export function Hud() {
   const provinceName = PROVINCES.find((p) => p.id === province)?.name ?? 'Todas';
   const scene = useStore((s) => s.scene);
   const progressRef = useCallback((el: HTMLDivElement | null) => useSlots.getState().set('progress', el), []);
+  const mapNavRef = useCallback((el: HTMLDivElement | null) => useSlots.getState().set('mapnav', el), []);
   // in the Andes the bar is the progress of the crossing, in percent; the year stays in the page for the clock, out of sight
   const crossing = scene === 'andes';
 
@@ -42,6 +43,7 @@ export function Hud() {
       </button>
 
       {crossing && <div className="progress-slot" ref={progressRef} />}
+      {crossing && <div className="mapnav-slot" ref={mapNavRef} />}
       <div className={crossing ? 'year-block visually-hidden' : 'year-block'}>
         <span className="year" data-testid="hud-year" data-value={yearFloat}>
           {Math.floor(yearFloat)}

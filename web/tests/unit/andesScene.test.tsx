@@ -214,7 +214,8 @@ describe('Andes scene', () => {
     renderScene();
     await screen.findByTestId('andes-renderer');
     expect(screen.queryByRole('button', { name: 'Ver batalla' })).toBeNull();
-    fireEvent.click(screen.getByRole('button', { name: 'Batalla de Chacabuco' }));
+    // the "Batalla de Chacabuco" button was removed (human request); the army gets there with the clock
+    act(() => useStore.setState({ yearFloat: 2056 }));
     fireEvent.click(await screen.findByRole('button', { name: 'Ver batalla' }));
     const scene = await screen.findByRole('dialog', { name: /Batalla de Chacabuco/ }, { timeout: 15000 });
     expect(within(scene).getByText('Recreación')).toBeTruthy();
@@ -400,15 +401,43 @@ describe('Andes scene', () => {
     expect(screen.queryByRole('button', { name: 'Saltar intro' })).toBeNull();
   });
 
-  it('has a "Batalla de Chacabuco" button that moves the progress to 100 % and shows the battle', async () => {
+  it('explains how the crossing was made in a pop-up that opens when the loading screen leaves (the camera starts to come closer) and closes with its button or Escape', async () => {
     stubFetch();
     renderScene();
-    const renderer = await screen.findByTestId('andes-renderer');
-    expect(renderer.getAttribute('data-battle')).toBe('0');
-    fireEvent.click(screen.getByRole('button', { name: 'Batalla de Chacabuco' }));
-    expect(screen.getByTestId('andes-renderer').getAttribute('data-battle')).toBe('1');
-    expect(screen.getByTestId('andes-renderer').getAttribute('data-day')).toBe('27');
-    expect(screen.queryByRole('button', { name: 'Saltar intro' })).toBeNull();
+    await screen.findByTestId('andes-renderer');
+    expect(screen.queryByRole('dialog', { name: 'Cómo fue el cruce' })).toBeNull();
+    fireEvent.click(screen.getByRole('button', { name: 'Saltar intro' }));
+    const dialog = await screen.findByRole('dialog', { name: 'Cómo fue el cruce' }, { timeout: 5000 });
+    expect(within(dialog).getByText(/seis columnas/)).toBeTruthy();
+    expect(within(dialog).getByText(/Curimón/)).toBeTruthy();
+    fireEvent.click(within(dialog).getByRole('button', { name: 'Cerrar' }));
+    expect(screen.queryByRole('dialog', { name: 'Cómo fue el cruce' })).toBeNull();
+  });
+
+  it('does not take the focus when it opens (Space still plays and pauses)', async () => {
+    stubFetch();
+    renderScene();
+    await screen.findByTestId('andes-renderer');
+    fireEvent.click(screen.getByRole('button', { name: 'Saltar intro' }));
+    const dialog = await screen.findByRole('dialog', { name: 'Cómo fue el cruce' }, { timeout: 5000 });
+    expect(dialog.contains(document.activeElement)).toBe(false);
+  });
+
+  it('closes the crossing pop-up with Escape', async () => {
+    stubFetch();
+    renderScene();
+    await screen.findByTestId('andes-renderer');
+    fireEvent.click(screen.getByRole('button', { name: 'Saltar intro' }));
+    expect(await screen.findByRole('dialog', { name: 'Cómo fue el cruce' }, { timeout: 5000 })).toBeTruthy();
+    fireEvent.keyDown(document, { key: 'Escape' });
+    expect(screen.queryByRole('dialog', { name: 'Cómo fue el cruce' })).toBeNull();
+  });
+
+  it('has no "Batalla de Chacabuco" button in the control bar (removed by human request)', async () => {
+    stubFetch();
+    renderScene();
+    await screen.findByTestId('andes-renderer');
+    expect(screen.queryByRole('button', { name: 'Batalla de Chacabuco' })).toBeNull();
   });
 
   it('has a toggle for the panel of the right, open by default on a wide screen and folded away on a laptop', async () => {

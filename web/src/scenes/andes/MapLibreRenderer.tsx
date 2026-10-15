@@ -717,8 +717,8 @@ export function MapLibreRenderer({ initialView, route, columns, day, selectedId,
     // a force that shows its figures has no balls
     const balls = forceBalls(route, k, columnsRef.current, dayRef.current, zoom, centre.lat);
     ballsRef.current?.setBalls(balls.filter((ball) => !withFigures.has(ball.id)));
-    // clouds over the cordillera (not on a weak device) and the smoke and flashes of the combat being fought
-    effectsRef.current?.setState({ sites: combatSites(route, dayRef.current), clouds: graphics.tier !== 'low', still: reduced });
+    // the smoke and flashes of the combat being fought; the clouds over the cordillera are off (they looked wrong on the map)
+    effectsRef.current?.setState({ sites: combatSites(route, dayRef.current), clouds: false, still: reduced });
     map.triggerRepaint();
   };
   const syncArmyRef = useRef(syncArmy);
@@ -1067,7 +1067,7 @@ export function MapLibreRenderer({ initialView, route, columns, day, selectedId,
     const { drawBeam, setDim } = createLight(map, svg);
     // the bubbles stay out of the way while the spotlight names a force (the names of the places stay)
     const showOtherNames = (visible: boolean) => setBubblesOn(visible);
-    // the card with the force, its place, its commanders and its numbers, to the right of the light on a rounded box, so no other text gets in the way
+    // the small card with the commanders and the units of the force, to the right of the light and above its level, so it does not meet the name of the place under the light
     const drawCard = (at: [number, number] | null, o: number) => {
       const el = cardRef.current;
       const big = bigRef.current;
@@ -1085,7 +1085,7 @@ export function MapLibreRenderer({ initialView, route, columns, day, selectedId,
       const box = map.getContainer().getBoundingClientRect();
       const height = el.offsetHeight;
       const left = Math.min(box.width - el.offsetWidth - 12, p.x + SPOT_RADIUS_PX * 1.3 + 12);
-      const top = Math.min(box.height - height - 12, Math.max(12, p.y - height / 2));
+      const top = Math.min(box.height - height - 12, Math.max(12, p.y - height - 10));
       el.style.transform = `translate(${Math.max(12, left)}px, ${top}px)`;
     };
     showOtherNames(false);
@@ -1389,31 +1389,10 @@ export function MapLibreRenderer({ initialView, route, columns, day, selectedId,
       )}
       {card && (
         <aside ref={cardRef} className="andes-spot-card" aria-hidden="true" style={{ opacity: 0 }}>
-          <h3>{card.force.title}</h3>
-          <p className="andes-spot-detail">{card.force.detail}</p>
-          <p className="andes-spot-place">
-            <span>Lugar</span> {card.place}
+          <p className="andes-spot-leaders">{FORCE_FACTS[card.force.id]?.leaders}</p>
+          <p className="andes-spot-units">
+            {FORCE_FACTS[card.force.id]?.men} hombres · {FORCE_FACTS[card.force.id]?.battalions}
           </p>
-          <p className="andes-spot-section">Mando</p>
-          <ul>
-            {FORCE_FACTS[card.force.id]?.commanders.map((c) => (
-              <li key={c}>{c}</li>
-            ))}
-          </ul>
-          <p className="andes-spot-section">Fuerzas</p>
-          <dl>
-            <div>
-              <dt>Unidades</dt>
-              <dd>{FORCE_FACTS[card.force.id]?.battalions}</dd>
-            </div>
-            {FORCE_FACTS[card.force.id]?.units.map(([label, value]) => (
-              <div key={label}>
-                <dt>{label}</dt>
-                <dd>{value}</dd>
-              </div>
-            ))}
-          </dl>
-          <p className="andes-spot-goal">{FORCE_FACTS[card.force.id]?.goal}</p>
         </aside>
       )}
       {missingKey && (
@@ -1438,11 +1417,13 @@ export function MapLibreRenderer({ initialView, route, columns, day, selectedId,
         }}
       />
       </SlotPortal>
-      <NavControls
-        onZoomIn={() => zoomButton(1)}
-        onZoomOut={() => zoomButton(-1)}
-        onReset={() => mapRef.current?.easeTo({ ...cameraFor('map', coordAtKm(route, 0))!, duration: 1200 })}
-      />
+      <SlotPortal slot="mapnav">
+        <NavControls
+          onZoomIn={() => zoomButton(1)}
+          onZoomOut={() => zoomButton(-1)}
+          onReset={() => mapRef.current?.easeTo({ ...cameraFor('map', coordAtKm(route, 0))!, duration: 1200 })}
+        />
+      </SlotPortal>
     </div>
   );
 }

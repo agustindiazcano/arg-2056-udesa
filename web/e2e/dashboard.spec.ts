@@ -232,7 +232,11 @@ test.describe('andes scene', () => {
     await expect(chosen).toHaveAttribute('aria-pressed', 'false');
     await expect(chosen).toBeFocused();
 
+    // the indicators are in the panel of the right, which starts folded on a laptop screen (1440 px): the reader opens it
+    const panel = page.getByRole('button', { name: 'Panel lateral' });
+    if ((await panel.getAttribute('aria-expanded')) === 'false') await panel.click();
     const day = page.getByTestId('andes-day');
+    await expect(day).toBeVisible();
     const before = await day.innerText();
     await page.getByRole('slider').first().press('End');
     await expect.poll(async () => day.innerText()).not.toBe(before);
