@@ -21,7 +21,7 @@ const provinces = data.provinces;
 /** The ways in under Comenzar: straight to a section (the Data Dashboard only when it is switched on: it is deprecated). */
 const ALL_SHORTCUTS: ReadonlyArray<{ section: Section; label: string }> = [
   { section: 'andes', label: 'Cruce de los Andes' },
-  { section: 'tour', label: 'Recorrido al 2056' },
+  { section: 'tour', label: 'Hacia el 2056' },
   { section: 'dashboard', label: 'Data Dashboard' }
 ];
 

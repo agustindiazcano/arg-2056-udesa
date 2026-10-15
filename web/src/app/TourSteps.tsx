@@ -18,7 +18,7 @@ export function TourSteps() {
   const dispatch = useStore((s) => s.dispatch);
   const go = (step: number) => dispatch({ type: 'tourSet', step });
   return (
-    <div role="group" aria-label="Pasos del Recorrido" className="tour-steps">
+    <div role="group" aria-label="Pasos hacia el 2056" className="tour-steps">
       <button type="button" className="chip" disabled={tourStep <= TOUR_STEP_LIST[0]!} onClick={() => go(TOUR_STEP_LIST[TOUR_STEP_LIST.indexOf(tourStep) - 1]!)}>
         Anterior
       </button>

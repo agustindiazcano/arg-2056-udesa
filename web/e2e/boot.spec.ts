@@ -8,7 +8,7 @@ test.describe('boot', () => {
     await expect(page).toHaveTitle('Andes | Argentina 2056');
 
     const tabs = page.getByRole('tab');
-    await expect(tabs).toHaveText(['Andes', 'Data Dashboard', 'Recorrido', 'Simulador del PBI']);
+    await expect(tabs).toHaveText(['Andes', 'Data Dashboard', 'Hacia el 2056', 'Simulador del PBI']);
     await expect(tabs.first()).toHaveAttribute('aria-selected', 'true');
 
     // the scene tabs follow the order of the Scene union

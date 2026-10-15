@@ -18,7 +18,7 @@ export function visibleSections(sections: readonly Section[]): Section[] {
 export const SECTION_LABELS: Record<Section, string> = {
   andes: 'Andes',
   dashboard: 'Data Dashboard',
-  tour: 'Recorrido',
+  tour: 'Hacia el 2056',
   simulator: 'Simulador del PBI',
   data: 'Data'
 };

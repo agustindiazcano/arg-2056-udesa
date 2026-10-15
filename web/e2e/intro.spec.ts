@@ -23,8 +23,8 @@ test.describe('intro screen', () => {
 
   test('the buttons under Comenzar open the app in their section', async ({ page }) => {
     await page.goto('/');
-    await page.getByRole('button', { name: 'Recorrido al 2056' }).click();
-    await expect(page.getByRole('tab', { name: 'Recorrido' })).toHaveAttribute('aria-selected', 'true');
+    await page.getByRole('button', { name: 'Hacia el 2056' }).click();
+    await expect(page.getByRole('tab', { name: 'Hacia el 2056' })).toHaveAttribute('aria-selected', 'true');
     await expect(page.getByRole('heading', { name: 'PBI de Argentina' })).toBeVisible();
 
     await page.goto('/');

@@ -37,7 +37,7 @@ describe('Intro', () => {
     const onStart = vi.fn();
     render(<Intro onStart={onStart} />);
     const group = screen.getByRole('group', { name: 'Ir directo a' });
-    expect(Array.from(group.querySelectorAll('button')).map((b) => b.textContent)).toEqual(['Cruce de los Andes', 'Recorrido al 2056']);
+    expect(Array.from(group.querySelectorAll('button')).map((b) => b.textContent)).toEqual(['Cruce de los Andes', 'Hacia el 2056']);
     expect(screen.queryByRole('button', { name: 'Data Dashboard' })).toBeNull();
   });
 
@@ -48,11 +48,11 @@ describe('Intro', () => {
     const group = screen.getByRole('group', { name: 'Ir directo a' });
     expect(Array.from(group.querySelectorAll('button')).map((b) => b.textContent)).toEqual([
       'Cruce de los Andes',
-      'Recorrido al 2056',
+      'Hacia el 2056',
       'Data Dashboard'
     ]);
     fireEvent.click(screen.getByRole('button', { name: 'Cruce de los Andes' }));
-    fireEvent.click(screen.getByRole('button', { name: 'Recorrido al 2056' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Hacia el 2056' }));
     fireEvent.click(screen.getByRole('button', { name: 'Data Dashboard' }));
     expect(onStart.mock.calls).toEqual([['andes'], ['tour'], ['dashboard']]);
   });
@@ -96,7 +96,7 @@ describe('Intro', () => {
   it('Enter on a focused button leaves the choice to that button: it does not also open the Andes', () => {
     const onStart = vi.fn();
     render(<Intro onStart={onStart} />);
-    fireEvent.keyDown(screen.getByRole('button', { name: 'Recorrido al 2056' }), { key: 'Enter' });
+    fireEvent.keyDown(screen.getByRole('button', { name: 'Hacia el 2056' }), { key: 'Enter' });
     expect(onStart).not.toHaveBeenCalled();
   });
 
@@ -120,7 +120,7 @@ describe('Root', () => {
   it('opens the app in the section of the button that was chosen', async () => {
     useStore.setState({ section: 'andes', scene: 'andes' });
     render(<Root />);
-    fireEvent.click(await screen.findByRole('button', { name: 'Recorrido al 2056' }));
+    fireEvent.click(await screen.findByRole('button', { name: 'Hacia el 2056' }));
     expect(screen.getByText(/app view/)).toBeTruthy();
     expect(useStore.getState()).toMatchObject({ section: 'tour', scene: 'economy' });
   });
