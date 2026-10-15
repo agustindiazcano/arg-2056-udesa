@@ -173,6 +173,172 @@ export function buildLines(xLabels: string[], series: LineChartSeries[], opts: {
   return { option, summary: opts.summary };
 }
 
+/** Fluid animated lines plotted on a continuous numerical xAxis: smoothly interpolates data points at any fractional year. */
+export function buildFluidLines(
+  years: number[],
+  series: LineChartSeries[],
+  currentYear: number,
+  opts: {
+    unit: string;
+    labelEvery: number;
+    summary: string;
+    yMin?: number;
+    yMax?: number;
+    showHead?: boolean;
+    showGhost?: boolean;
+  }
+) {
+  const minYear = years[0]!;
+  const maxYear = years.at(-1)!;
+  const isComplete = currentYear >= maxYear;
+
+  const allValues = series.flatMap((s) => s.values.filter((v): v is number => v !== null && Number.isFinite(v)));
+  const yMin = opts.yMin ?? Math.floor(Math.min(...allValues) * 0.97);
+  const yMax = opts.yMax ?? Math.ceil(Math.max(...allValues) * 1.02);
+
+  const seriesData = series.map((s) => {
+    const drawn: Array<[number, number]> = [];
+    for (let i = 0; i < years.length; i++) {
+      const y = years[i]!;
+      const v = s.values[i];
+      if (y <= currentYear && v !== null && v !== undefined && Number.isFinite(v)) {
+        drawn.push([y, v]);
+      }
+    }
+    // Interpolate fractional tip if between years and not yet complete
+    if (!isComplete && currentYear > minYear && currentYear < maxYear) {
+      const i = years.findIndex((y, idx) => y <= currentYear && (years[idx + 1] ?? Infinity) > currentYear);
+      if (i >= 0 && i < years.length - 1) {
+        const y0 = years[i]!;
+        const y1 = years[i + 1]!;
+        const v0 = s.values[i];
+        const v1 = s.values[i + 1];
+        if (v0 !== null && v0 !== undefined && v1 !== null && v1 !== undefined) {
+          const t = (currentYear - y0) / (y1 - y0);
+          const interpolated = v0 + (v1 - v0) * t;
+          drawn.push([currentYear, interpolated]);
+        }
+      }
+    }
+    return {
+      name: s.name,
+      type: 'line',
+      data: drawn,
+      smooth: 0.25,
+      symbol: 'none',
+      z: 3,
+      lineStyle: {
+        width: 3,
+        color: s.color,
+        ...(s.dashed ? { type: 'dashed' } : {}),
+        shadowBlur: 12,
+        shadowColor: `${s.color}88`
+      },
+      itemStyle: { color: s.color },
+      areaStyle: { color: fade(s.color, '40', '00') }
+    };
+  });
+
+  const headDots: object[] = [];
+  if (opts.showHead && !isComplete && currentYear > minYear) {
+    for (const s of series) {
+      if (s.dashed) continue;
+      const i = years.findIndex((y, idx) => y <= currentYear && (years[idx + 1] ?? Infinity) > currentYear);
+      if (i >= 0 && i < years.length - 1) {
+        const y0 = years[i]!;
+        const y1 = years[i + 1]!;
+        const v0 = s.values[i];
+        const v1 = s.values[i + 1];
+        if (v0 !== null && v0 !== undefined && v1 !== null && v1 !== undefined) {
+          const t = (currentYear - y0) / (y1 - y0);
+          const headVal = v0 + (v1 - v0) * t;
+          headDots.push({
+            name: `${s.name} (cabeza)`,
+            type: 'line',
+            data: [[currentYear, headVal]],
+            symbol: 'circle',
+            symbolSize: 10,
+            z: 5,
+            silent: true,
+            lineStyle: { opacity: 0 },
+            itemStyle: {
+              color: s.color,
+              borderColor: tokens.ink,
+              borderWidth: 2,
+              shadowBlur: 14,
+              shadowColor: s.color
+            }
+          });
+        }
+      }
+    }
+  }
+
+  const ghostSeries: object[] = [];
+  if (opts.showGhost && !isComplete) {
+    for (const s of series) {
+      ghostSeries.push({
+        name: `${s.name} (proyección)`,
+        type: 'line',
+        data: years.map((y, i) => [y, s.values[i]]),
+        smooth: 0.25,
+        symbol: 'none',
+        z: 2,
+        silent: true,
+        lineStyle: {
+          width: 1.5,
+          color: s.color,
+          opacity: 0.28,
+          type: 'dashed'
+        }
+      });
+    }
+  }
+
+  const option = {
+    animation: false,
+    backgroundColor: 'transparent',
+    tooltip: {
+      ...TOOLTIP,
+      axisPointer: { type: 'line', lineStyle: { color: tokens.muted, type: 'dashed' } },
+      formatter: (params: Array<{ seriesName: string; value: [number, number]; color: string }>) => {
+        const first = params.find((p) => p.value && Array.isArray(p.value));
+        if (!first) return '';
+        const yr = Math.round(first.value[0]);
+        const valid = params.filter(
+          (p) => !p.seriesName.includes('(cabeza)') && !p.seriesName.includes('(proyección)')
+        );
+        return [
+          `<strong>${yr}</strong>`,
+          ...valid.map((p) => `${p.seriesName}: ${formatValue(p.value[1], opts.unit)}`)
+        ].join('<br/>');
+      }
+    },
+    grid: { left: 8, right: 24, top: 24, bottom: 8, containLabel: true },
+    xAxis: {
+      type: 'value',
+      min: minYear,
+      max: maxYear,
+      minInterval: 1,
+      interval: opts.labelEvery,
+      axisLine: { lineStyle: { color: tokens.baseline } },
+      axisTick: { show: false },
+      axisLabel: { color: tokens.ink2, hideOverlap: true, formatter: (v: number) => String(Math.round(v)) },
+      splitLine: { show: true, lineStyle: GRID_LINE }
+    },
+    yAxis: {
+      type: 'value',
+      min: yMin,
+      max: yMax,
+      splitLine: { lineStyle: GRID_LINE },
+      axisLabel: { color: tokens.muted, formatter: (v: number) => formatAxisNumber(v) }
+    },
+    series: [...ghostSeries, ...seriesData, ...headDots]
+  };
+
+  return { option, summary: opts.summary };
+}
+
 /** A treemap of shares: every rectangle is a part of the whole, its area its share. */
 export function buildShares(rows: Array<{ label: string; value: number }>, opts: { unit: string; summary: string }) {
   const sorted = [...rows].sort((a, b) => b.value - a.value);

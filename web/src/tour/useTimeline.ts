@@ -10,11 +10,13 @@ import type { TimelineClock } from '../charts3d/types.js';
 export function useTimeline(
   run: number,
   reduced: boolean,
-  speed = 1
+  speed = 1,
+  initialPlaying = true
 ): { elapsed: number; clock: TimelineClock; seek: (ms: number) => void; playing: boolean; play: () => void; pause: () => void } {
   const clock = useRef<TimelineClock>({ current: reduced ? FOLLOW_TOTAL_MS : 0 });
   const [elapsed, setElapsed] = useState(clock.current.current);
-  const [playing, setPlaying] = useState(!reduced);
+  const [playing, setPlaying] = useState(!reduced && initialPlaying);
+  const isFirstRun = useRef(true);
 
   const speedRef = useRef(speed);
   speedRef.current = speed;
@@ -32,8 +34,13 @@ export function useTimeline(
       return;
     }
     set(0);
-    setPlaying(true);
-  }, [run, reduced, set]);
+    if (isFirstRun.current) {
+      isFirstRun.current = false;
+      setPlaying(initialPlaying);
+    } else {
+      setPlaying(true);
+    }
+  }, [run, reduced, set, initialPlaying]);
 
   // while playing, the clock runs on from where it stands
   useEffect(() => {
