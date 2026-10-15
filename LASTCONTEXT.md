@@ -39,7 +39,8 @@
 ## Current task (2026-10-15)
 - New worktree `C:\Users\agusd\.codex\worktrees\intro-argentina-3d\arg-2056-udesa`, branch `task/intro-model-3d`, based on `task/borradores-slides-interactivas`.
 - Refined the intro's Argentina model in `web/src/intro/Intro.tsx` and `intro.css`: nine depth slices give smoother solid provincial sides, with clearer top faces, outline contrast, shadow and a soft ground light.
-- Ran Vite from this worktree at `http://127.0.0.1:5175/` and inspected the tilted intro in the browser. No tests run; this was a visual-only CSS/markup task.
+- Shortcut hover and keyboard focus highlight San Juan and Mendoza for «Cruce de los Andes», and all 24 jurisdictions plus Malvinas for «Hacia el 2056». The app's accessible tree confirms both buttons; `npm run typecheck` passes.
+- Ran Vite from this worktree at `http://127.0.0.1:5175/`; the intro remains open in the browser. Commit `d4170e6` contains the hover behavior and context/PENDING updates.
 - Next: human review of the preview; keep the 2D/3D province-map transitions and resource explorer in `PENDING.md`.
 
 ## Prior planning (2026-10-15)
