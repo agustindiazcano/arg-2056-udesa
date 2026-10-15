@@ -3,6 +3,7 @@
 ## Current task — chart styling
 - Branch `task/chart-aesthetics`, isolated worktree `C:\Users\agusd\.codex\worktrees\chart-aesthetics\arg-2056-udesa`.
 - CSS-only refinements in `web/src/styles/ui.css`: richer chart-card depth and focus state, clearer captions/legends, pill-style Gráfico | Tabla switch, more readable striped tables, and reduced-motion handling.
+- Follow-up for the simulator navbar: scoped matching glass header, title-case logo, and gold hover/selected tab treatments under `data-section='simulator'`.
 - No chart data or behavior changed. `git diff --check` passed. No tests run (CSS only).
 - Browser preview remains unverified: this checkout has no local `node_modules`; attempting to borrow dependencies from the primary checkout was blocked by worktree permissions. Primary checkout had pre-existing edits and was not altered by this task.
 - Next: inspect the chart in a browser with this branch's assets, then commit the style change.
