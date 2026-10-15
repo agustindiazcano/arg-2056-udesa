@@ -19,6 +19,7 @@ import { RIGI_MINING, RIGI_OIL_GAS } from '../tour/rigiProjects.js';
 import type { RigiProject } from '../tour/rigiProjects.js';
 import { stepNumber } from '../tour/chartSteps.js';
 import { AGRO_TONNES_CHART, AGRO_USD_CHART, EXPORT_COMPOSITION_CHART, HYDROCARBONS_CHART, STOCK_CHART, TOUR_CHARTS } from '../tour/tourCharts.js';
+import { perCapitaSeries, populationPath } from '../tour/aiModel.js';
 import { AI_ANALYSTS, AI_SCENARIOS, US_SCENARIOS } from '../tour/aiScenarios.js';
 import { COMPOSITION_TITLE, RESOURCES_TITLE } from '../tour/slideTitles.js';
 import { exportRows } from '../tour/exportsData.js';
@@ -73,6 +74,16 @@ const aiTables = (): DataTable[] => [
     rows: AI_ANALYSTS.map((a) => [a.who, a.scope, a.horizon, a.effect])
   }
 ];
+
+const perCapitaTable = (): DataTable => {
+  const pc = perCapitaSeries();
+  return { id: 'ai-per-capita', title: `PBI por habitante por escenario (${pc.unit}; PBI del escenario sobre la población de la ONU, variante media, apoyada en el INDEC de 2025)`, columns: ['Año', ...pc.series.map((s) => s.name)], rows: pc.years.map((y, i) => [y, ...pc.series.map((s) => s.values[i] ?? null)]) };
+};
+
+const aiPopulationTable = (): DataTable => {
+  const pop = populationPath();
+  return { id: 'ai-population', title: 'Población de Argentina 2025-2035 (millones; INDEC 2025 y variación anual de la ONU, variante media)', columns: ['Año', 'Población'], rows: pop.years.map((y, i) => [y, Math.round(pop.values[i]! * 1000) / 1000]) };
+};
 
 const rigiTable = (id: string, title: string, projects: readonly RigiProject[]): DataTable => ({
   id,
@@ -305,8 +316,14 @@ export function buildSlides(): SlideData[] {
         rows: GDP_MOCK.years.map((y, i) => [y, GDP_MOCK.history[i] ?? null, GDP_MOCK.expected[i] ?? null, GDP_MOCK.low[i] ?? null, GDP_MOCK.high[i] ?? null])
       },
       ...externalTables(),
-      indicators()
-    ], true, ['W3', 'W5', 'I1', 'F1', 'X1', 'X2', 'X3', 'E2']),
+      indicators(),
+      chartTable(4),
+      { ...chartTable(4, EXPORT_COMPOSITION_CHART), id: 'chart-11' },
+      complexesTable(),
+      exportSharesTable(),
+      greatItemsTable(),
+      ...servicesTables()
+    ], true, ['W3', 'W5', 'I1', 'F1', 'X1', 'X2', 'X3', 'E2', 'E7', 'E1', 'E10']),
     slide('14', 'Productividad', productivityTables(), false, ['P6', 'P7', 'P7b', 'P1', 'P8', 'P9']),
     slide('2', 'Producción por provincia', [
       provinces(),
@@ -314,9 +331,8 @@ export function buildSlides(): SlideData[] {
       hydrocarbonProvinces(),
       indicators()
     ], true, ['W3', 'E6']),
-    slide('4', TOUR_CHARTS[4]!.title, [chartTable(4), { ...chartTable(4, EXPORT_COMPOSITION_CHART), id: 'chart-11' }, complexesTable(), exportSharesTable(), greatItemsTable(), ...servicesTables()], false, ['E7', 'E1', 'E10']),
     slide('8', RESOURCES_TITLE, [chartTable(8), ...miningTables(), rigiTable('rigi-mining', 'Proyectos mineros del RIGI y otros en evaluación (prensa, sin verificar)', RIGI_MINING), chartTable(9, HYDROCARBONS_CHART), nationalProduction(), oilSince1950(), rigiTable('rigi-oil-gas', 'Proyectos de petróleo y gas del RIGI y otros en evaluación (prensa, sin verificar)', RIGI_OIL_GAS), chartTable(10, AGRO_USD_CHART), agroTable(), { ...chartTable(10, AGRO_TONNES_CHART), id: 'agro-tonnes' }, chartTable(13, STOCK_CHART), reservesTable()], false, ['E3', 'E5', 'E9', 'E11', 'R1', 'R2', 'R3', 'R4', 'R5', 'R9', 'R12', 'R13', 'E6', 'E4', 'R6', 'R7', 'R8', 'R10', 'R11', 'E8']),
-    slide('3', TOUR_CHARTS[3]!.title, [chartTable(3), ...aiTables()], true, ['A1', 'A2', 'A3', 'A4', 'A5', 'A6', 'A7', 'A8', 'A9', 'A10']),
+    slide('3', TOUR_CHARTS[3]!.title, [chartTable(3), ...aiTables(), perCapitaTable(), aiPopulationTable()], true, ['A1', 'A2', 'A3', 'A4', 'A5', 'A6', 'A7', 'A8', 'A9', 'A10']),
     slide('sim', 'Simulador del PBI', [
       { id: 'factors', title: 'Factores del escenario de referencia', columns: ['Factor', 'Valor', 'Unidad'], rows: SIM_FIELDS.map((f) => [f.label, DEFAULT_SIM[f.key], f.unit]) },
       { id: 'reference', title: 'PBI del escenario de referencia (miles de millones de USD)', columns: ['Año', 'PBI'], rows: sim.years.map((y, i) => [y, sim.gdp[i] ?? null]) }

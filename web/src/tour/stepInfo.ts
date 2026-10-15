@@ -47,7 +47,7 @@ export const STEP_INFO: Record<number, StepInfo> = {
       'Argentina parte con poca adopción de la IA en las empresas (alrededor de una de cada cinco) y detrás de Chile, México y Brasil en preparación. Por eso el impulso es menor y más lento que en Estados Unidos, donde los mismos escenarios suman entre 0,1 y 0,8 puntos por año.',
       'Los analistas dan resultados muy distintos para el efecto de la IA en el nivel del PBI: de 1 a 1,8 % en diez años (Acemoglu) y 1,5 % a 2035 (Penn Wharton), a 7 % mundial en diez años (Goldman Sachs), hasta 15 % mundial a 2035 (PwC) y 8,3 o 32,4 % a 2030 en los escenarios sustancial y extremo de Anthropic. Todos suponen que los beneficios no son automáticos: dependen de energía, de que las empresas adopten la IA, de las habilidades y de las políticas.'
     ],
-    how: 'Compará la distancia entre las tres líneas en 2035. La diferencia entre el escenario base y el optimista es lo que podrían sumar la IA, los recursos y la ejecución de proyectos juntos. Las tablas de Data traen los rangos completos, la comparación con Estados Unidos y las estimaciones de cada analista.',
+    how: 'Compará la distancia entre las tres líneas en 2035, en el PBI y en el PBI por habitante, y mirá la tabla con el crecimiento, la población y los años para duplicar el PBI. La diferencia entre el escenario base y el optimista es lo que podrían sumar la IA, los recursos y la ejecución de proyectos juntos. Las tablas de Data traen los rangos completos, la comparación con Estados Unidos y las estimaciones de cada analista.',
     data: 'parcial',
     note: 'Los escenarios salen de un informe pasado por el responsable, con rangos de crecimiento, no de un modelo de este proyecto; el gráfico toma el punto medio. 2026 es el mismo valor de las otras diapositivas (crecimiento del FMI). Las estimaciones de los analistas y sus enlaces no se verificaron en los originales. Ninguna es una predicción.',
     refs: ['P8', 'P9', 'A1', 'A2', 'A3', 'A4', 'A5', 'A6', 'A7', 'A8', 'A9', 'A10']
@@ -98,7 +98,7 @@ export const STEP_INFO: Record<number, StepInfo> = {
       'Más de la mitad del producto son servicios; los sectores que más exportan (agro, minería, energía) pesan menos en el PBI que en las exportaciones.',
       'A la derecha, la composición de las exportaciones de bienes de 2025 por complejo exportador (INDEC): sirve para comparar lo que pesa cada sector en la producción con lo que pesa en lo que el país vende afuera.'
     ],
-    how: 'Cada barra es la parte del valor agregado total que aporta un sector (izquierda) o la parte de las exportaciones que explica un complejo (derecha). Están ordenados de mayor a menor.',
+    how: 'Cada rectángulo es la parte del valor agregado total que aporta un sector (izquierda) o la parte de las exportaciones que explica un complejo (derecha); también podés verlos en barras o en torta. El botón «Exportaciones por año y complejo» muestra las exportaciones en dólares o en porcentaje, por año y por complejo.',
     data: 'real',
     note: 'INDEC, cuadro 4 del informe de avance del nivel de actividad del segundo trimestre de 2026: precios de 2004, datos preliminares. A precios corrientes las proporciones cambian.',
     refs: ['E2', 'E7']

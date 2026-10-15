@@ -267,18 +267,18 @@ describe('Recorrido step 12', () => {
   it('shows the composition charts on step 12 and the scene on the other steps', async () => {
     useStore.setState({ section: 'tour', tourStep: 12 });
     render(<App />);
-    expect(await screen.findByRole('heading', { name: 'Composición del PBI y de las exportaciones' })).toBeTruthy();
+    expect(await screen.findByRole('heading', { name: 'Composición del PBI y exportaciones por complejo' })).toBeTruthy();
     expect(screen.queryByRole('heading', { name: 'escena' })).toBeNull();
     cleanup();
     useStore.setState({ section: 'tour', tourStep: 15 });
     render(<App />);
-    expect(screen.queryByRole('heading', { name: 'Composición del PBI y de las exportaciones' })).toBeNull();
+    expect(screen.queryByRole('heading', { name: 'Composición del PBI y exportaciones por complejo' })).toBeNull();
     expect(screen.getByRole('heading', { name: 'escena' })).toBeTruthy();
   });
 
   it('does not show the GDP chart in the other sections', () => {
     useStore.setState({ section: 'dashboard', tourStep: 12 });
     render(<App />);
-    expect(screen.queryByRole('heading', { name: 'Composición del PBI y de las exportaciones' })).toBeNull();
+    expect(screen.queryByRole('heading', { name: 'Composición del PBI y exportaciones por complejo' })).toBeNull();
   });
 });

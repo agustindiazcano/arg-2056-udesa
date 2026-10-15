@@ -18,7 +18,7 @@ describe('the Data page after the series migration', () => {
   // the AI slide (3) has three scenarios instead of two made-up lines since 2026-10-15 (human order): its chart table changed on purpose
   const REPLACED = ['chart-3'];
   const REMOVED = ['6'];
-  const MOVED: Record<string, string> = { '11': '4', '9': '8', '10': '8', '13': '8', '1': '12', '7': '2' }; // 9, 10 and 13 are tabs of the Resources slide (8)
+  const MOVED: Record<string, string> = { '11': '4', '9': '8', '10': '8', '13': '8', '1': '12', '7': '2', '4': '12' }; // 9, 10 and 13 are tabs of the Resources slide (8)
   const kept = fixture.filter((s) => !REMOVED.includes(s.id));
   const remaining = kept.filter((s) => !(s.id in MOVED));
 

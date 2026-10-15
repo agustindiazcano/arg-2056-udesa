@@ -5,6 +5,7 @@ import { Reveal } from '../motion/Reveal.js';
 import { useStore } from '../state/store.js';
 import { tokens } from '../styles/tokens.js';
 import { Segmented } from '../ui/Segmented.js';
+import { ExportsStep } from './ExportsStep.js';
 import { TourChart } from './TourChart.js';
 import { COMPOSITION_TITLE } from './slideTitles.js';
 import { EXPORT_COMPOSITION_CHART, TOUR_CHARTS } from './tourCharts.js';
@@ -21,6 +22,13 @@ const VIEWS = [
 ] as const;
 
 type Form = (typeof FORMS)[number]['value'];
+
+const PARTS = [
+  { value: 'composition', label: 'Composición' },
+  { value: 'exports', label: 'Exportaciones por año y complejo' }
+] as const;
+
+type Part = (typeof PARTS)[number]['value'];
 
 /** The two charts of the slide: how the GDP is made up by sector (step 12) and how the exports are made up by complex (the old step 11). */
 export const COMPOSITION_CHARTS: ReadonlyArray<TourChartDef> = [TOUR_CHARTS[12]!, EXPORT_COMPOSITION_CHART];
@@ -59,6 +67,22 @@ export function CompositionStep() {
   const mode = useStore((s) => s.mode);
   const dispatch = useStore((s) => s.dispatch);
   const [form, setForm] = useState<Form>('treemap');
+  const [part, setPart] = useState<Part>('composition');
+  if (part === 'exports') {
+    return (
+      <section className="gdp-step" aria-label={COMPOSITION_TITLE}>
+        <header className="gdp-head">
+          <Reveal k="head" className="gdp-title">
+            <h2>{COMPOSITION_TITLE}</h2>
+          </Reveal>
+          <div className="tour-controls">
+            <Segmented label="Mostrar" options={PARTS} value={part} onChange={setPart} />
+          </div>
+        </header>
+        <ExportsStep embedded />
+      </section>
+    );
+  }
   return (
     <section className="gdp-step" aria-label={COMPOSITION_TITLE}>
       <header className="gdp-head">
@@ -66,6 +90,7 @@ export function CompositionStep() {
           <h2>{COMPOSITION_TITLE}</h2>
         </Reveal>
         <div className="tour-controls">
+          <Segmented label="Mostrar" options={PARTS} value={part} onChange={setPart} />
           <Segmented label="Gráfico" options={FORMS} value={form} onChange={setForm} />
           {form === 'bars' && (
             <Segmented

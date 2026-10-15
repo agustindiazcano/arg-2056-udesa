@@ -1,0 +1,19 @@
+{
+ "source": "ONU, World Population Prospects 2024, variante media, via data/processed/external_forecasts.json",
+ "url": "https://population.un.org/wpp/downloads",
+ "retrieved_at": "2026-10-14",
+ "unit": "millions",
+ "population": {
+  "2025": 45.851378,
+  "2026": 46.003734,
+  "2027": 46.153342,
+  "2028": 46.299946,
+  "2029": 46.443764,
+  "2030": 46.585022,
+  "2031": 46.723736,
+  "2032": 46.859877,
+  "2033": 46.993516,
+  "2034": 47.124535,
+  "2035": 47.251994
+ }
+}

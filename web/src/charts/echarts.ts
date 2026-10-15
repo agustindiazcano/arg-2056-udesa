@@ -1,5 +1,5 @@
 import * as echarts from 'echarts/core';
-import { BarChart, CustomChart, LineChart, MapChart, ScatterChart, TreemapChart } from 'echarts/charts';
+import { BarChart, CustomChart, LineChart, MapChart, PieChart, ScatterChart, TreemapChart } from 'echarts/charts';
 import {
   GeoComponent,
   GraphicComponent,
@@ -20,6 +20,7 @@ const SERIES = [
   { chart: CustomChart, type: 'custom' },
   { chart: LineChart, type: 'line' },
   { chart: MapChart, type: 'map' },
+  { chart: PieChart, type: 'pie' },
   { chart: ScatterChart, type: 'scatter' },
   { chart: TreemapChart, type: 'treemap' }
 ] as const;

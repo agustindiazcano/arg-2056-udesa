@@ -41,6 +41,8 @@ export const TABLE_META: Readonly<Record<string, TableMeta>> = {
   'hydrocarbons-provinces': meta('real', `${ENERGIA}, producción 2025 por provincia`, '2026-10-13'),
   'chart-3': meta('partial', REPORT, '2026-10-15'),
   'ai-scenarios': meta('partial', REPORT, '2026-10-15'),
+  'ai-per-capita': meta('partial', REPORT, '2026-10-15'),
+  'ai-population': meta('real', 'ONU, World Population Prospects 2024 (variante media), sobre la población del INDEC de 2025', '2026-10-14'),
   'ai-us': meta('partial', REPORT, '2026-10-15'),
   'ai-analysts': meta('partial', 'Informe pasado por el responsable con estimaciones de Anthropic, PwC, Goldman Sachs, Oxford Economics, OMC, CEPR, Acemoglu y Penn Wharton (sin verificar en los originales)', '2026-10-15'),
   'chart-4': meta('real', INDEC_X, '2026-10-13'),
