@@ -152,3 +152,16 @@ Each new slide gets one `STEP_INFO`-style entry (heading, text, `how`, note, ref
 - Permanent project rules: all GDP real at constant 2015 USD (World Bank), no PPP, every number of the Recorrido in Data with its reference (`references.ts`, `docs/references.md`), human data tasks in `docs/data-requests.md`.
 - Budgets: `web/budgets.json` and `scripts/check_data_budget.py`; no new dependency without a justification in the PR.
 - At the end of each task: overwrite `LASTCONTEXT.md` and update `PENDING.md`. Each PR description lists what changed, the data sources touched, what stays placeholder and what a human must verify.
+
+## 12. Rule of 70/72 slide (step 5), decided 2026-10-14
+
+Step 5 stays its own slide and grows into a full explorer of the doubling-time rule. Decisions of the human: all 8 features of the pasted brief, after Exports (Task 3), Maddison dropped (it is PPP), presets for countries, and an Argentina preset that answers "when would the GDP double, and in which year, if it grew at X %". Adapted to this project: ECharts instead of Chart.js, Spanish only, no new dependency, no runtime API (the Banco Mundial data is `worldGdp.json`, the IMF projections are `external_forecasts.json`), per-capita GDP = real GDP / population, `task/<slug>` branches, one PR each, stop for approval after each.
+
+| # | Task (branch) | Content | Depends on |
+|---|---|---|---|
+| R1 | `task/rule70-core` | Pure module `web/src/core/doubling.ts`: exact time, halving time, rules 69.3/70/72, rule error, multiplier, years to a multiple, calendar year reached, CAGR, log-linear fit (rate, R², residuals), rolling doubling time, growth decomposition. Test vectors of the brief | none |
+| R2 | `task/rule70-calculator` | Step 5 becomes the calculator: rate slider and field, exact vs 70 vs 72 with errors, error-vs-rate plot, compound growth visualizer (linear / log), Argentina preset (starting from the real GDP of 2026: years and calendar year to double at the chosen rate) | R1 |
+| R3 | `task/rule70-countries` | Country explorer on `worldGdp.json` (real GDP and GDP per capita): CAGR, fitted rate, doublings achieved, actual vs constant-rate path, rolling doubling time; presets Argentina, China 1979-2010, Korea 1960-1990, India, United States; check of the Korea vector against our series | R1, R2 |
+| R4 | `task/rule70-diagnostics` | Assumption panel (residuals, R², maximum deviation) with no pass/fail threshold; total vs per capita vs population | R3 |
+| R5 | `task/rule70-scenarios` | Two-rate comparison over N years and crossing time; IMF projections panel from `external_forecasts.json`, labeled as projections, with the India fiscal-year note | R3 |
+| R6 | `task/rule70-export` | CSV of every table with provenance columns; all tables also in Data with references; renumbering with the others in Task 10 | R2-R5 |
