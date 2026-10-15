@@ -50,7 +50,7 @@ describe('Intro', () => {
     const panel = document.querySelector('.intro-text')!;
     expect(panel).not.toBeNull();
     expect(panel.querySelectorAll('.intro-sub')).toHaveLength(2);
-    expect(readFileSync('src/intro/intro.css', 'utf8')).toMatch(/\.intro-text\s*\{[^}]*background:\s*rgba\(0,\s*0,\s*0,\s*0\.\d+\)/);
+    expect(readFileSync('src/intro/intro.css', 'utf8')).toMatch(/\.intro-text\s*\{[^}]*background:\s*color-mix\(in srgb,\s*var\(--intro-black\)\s*\d+%,\s*transparent\)/);
   });
 
   it('gives the buttons of the sections the look the Comenzar button had', () => {

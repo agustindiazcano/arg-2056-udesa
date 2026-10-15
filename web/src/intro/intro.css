@@ -222,7 +222,7 @@
   max-width: calc(var(--u) * 38);
   margin: calc(var(--u) * 1.4) 0 calc(var(--u) * 2);
   padding: calc(var(--u) * 1.2) calc(var(--u) * 1.6) calc(var(--u) * 0.4);
-  background: rgba(0, 0, 0, 0.6);
+  background: color-mix(in srgb, var(--intro-black) 60%, transparent);
   border-radius: calc(var(--u) * 0.8);
   backdrop-filter: blur(2px);
 }
