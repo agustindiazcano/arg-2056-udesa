@@ -22,8 +22,11 @@ export function milestones(years: number[], values: Array<number | null>, multip
 /** Adds the milestones of some lines to a line chart option: a dot on the line and the label "x2 · 2041". Only the milestones up to `upTo` show. */
 export function addMilestones(option: object, years: number[], lines: Array<{ values: Array<number | null>; color: string }>, upTo = Infinity): object {
   const dots = lines.map((line) => ({
-    type: 'scatter',
+    type: 'effectScatter',
     silent: true,
+    // the dot pulses: a ring that grows and fades, over and over
+    rippleEffect: { scale: 3.2, period: 3, brushType: 'stroke' },
+    showEffectOn: 'render',
     z: 6,
     symbolSize: 11,
     itemStyle: { color: line.color, borderColor: tokens.ink, borderWidth: 2 },

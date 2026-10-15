@@ -25,7 +25,7 @@ export interface AiScenario {
 export const AI_SCENARIOS: readonly AiScenario[] = [
   {
     id: 'base',
-    name: 'Base, con poca IA',
+    name: 'Base',
     color: tokens.scenario.pessimistic,
     growth2030: [2.8, 3.2],
     level2030: [15, 18],
@@ -35,7 +35,7 @@ export const AI_SCENARIOS: readonly AiScenario[] = [
   },
   {
     id: 'moderate',
-    name: 'Moderado, con IA',
+    name: 'Moderado',
     color: tokens.scenario.expected,
     growth2030: [3.3, 3.8],
     level2030: [18, 22],
@@ -45,7 +45,7 @@ export const AI_SCENARIOS: readonly AiScenario[] = [
   },
   {
     id: 'optimistic',
-    name: 'Optimista, con mucha IA',
+    name: 'Optimista',
     color: tokens.scenario.optimistic,
     growth2030: [4.0, 4.8],
     level2030: [22, 28],
@@ -77,6 +77,6 @@ export const AI_ANALYSTS: ReadonlyArray<{ who: string; scope: string; horizon: s
 /** The same scenarios for the United States, as the report gives them (a comparison, not a chart). */
 export const US_SCENARIOS = [
   { name: 'Base', growth2030: [2.0, 2.3], level2030: [11, 13], growth2035: [1.8, 2.1], aiPoints: [0.1, 0.3] },
-  { name: 'Moderado, con IA', growth2030: [2.5, 2.9], level2030: [14, 17], growth2035: [2.3, 2.7], aiPoints: [0.4, 0.7] },
+  { name: 'Moderado', growth2030: [2.5, 2.9], level2030: [14, 17], growth2035: [2.3, 2.7], aiPoints: [0.4, 0.7] },
   { name: 'Optimista', growth2030: [3.2, 4.0], level2030: [18, 25], growth2035: [2.8, 3.5], aiPoints: [0.4, 0.8] }
 ] as const;

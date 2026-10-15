@@ -3,7 +3,7 @@ import { EChart } from '../charts/EChart.js';
 import { addMilestones } from '../charts/builders/milestones.js';
 import { buildLines } from '../charts/builders/tourCharts.js';
 import { formatValue } from '../charts/format.js';
-import { FOLLOW_TOTAL_MS } from '../charts3d/followAnim.js';
+import { FOLLOW_MS, followFrame } from '../charts3d/followAnim.js';
 import { linesSpec } from '../charts3d/specs.js';
 import { Reveal } from '../motion/Reveal.js';
 import { useReducedMotion } from '../runtime/useReducedMotion.js';
@@ -68,7 +68,7 @@ export function AiStep() {
   const [speed, setSpeed] = useState(1);
   // the chart draws itself in 2D; the 3D view shows the whole path with a marker on the year on screen
   const [view, setView] = useState<'2d' | '3d'>('2d');
-  const { elapsed, seek, playing, play, pause } = useTimeline(run, reduced, speed);
+  const { elapsed, clock, seek, playing, play, pause } = useTimeline(run, reduced, speed);
   const stepSpeed = (by: 1 | -1) => setSpeed((v) => SPEEDS[Math.min(SPEEDS.length - 1, Math.max(0, SPEEDS.indexOf(v) + by))] ?? v);
 
   const gdp = useMemo(() => aiImpactData(), []);
@@ -76,7 +76,8 @@ export function AiStep() {
   const pop = useMemo(() => populationPath(), []);
   const rows = useMemo(() => summaries(), []);
 
-  const year = FIRST + (Math.min(elapsed, FOLLOW_TOTAL_MS) / FOLLOW_TOTAL_MS) * SPAN;
+  // the same clock as the first slide: the line is drawn in the first 10 seconds, then the 3D view pulls back
+  const year = FIRST + followFrame(elapsed).reveal * SPAN;
   const shownYear = Math.min(LAST, Math.floor(year + 1e-6));
   const at = shownYear - FIRST;
 
@@ -97,11 +98,13 @@ export function AiStep() {
         unit: gdp.unit,
         xLabels: gdp.years.map(String),
         series: gdpLines.map((s) => ({ ...s, tone: 'muted' as const })),
-        marker: at,
+        follow: true,
         summary: gdpSummary
       }),
-    [gdp, gdpLines, at, gdpSummary]
+    [gdp, gdpLines, gdpSummary]
   );
+  // a new clock object is part of the spec: the 3D chart draws itself from the same time as the flat one
+  const bigSpecTimed = useMemo(() => ({ ...bigSpec, clock }), [bigSpec, clock]);
   const popYears = pop.years;
   const popOption = useMemo(() => lineOption(popYears, popLines, Math.max(year, 2026), 'M', popSummary), [popYears, popLines, year, popSummary]);
 
@@ -140,7 +143,7 @@ export function AiStep() {
               value={year}
               aria-label="Línea de tiempo"
               aria-valuetext={`Año ${shownYear}`}
-              onChange={(e) => seek(((Number(e.target.value) - FIRST) / SPAN) * FOLLOW_TOTAL_MS)}
+              onChange={(e) => seek(((Number(e.target.value) - FIRST) / SPAN) * FOLLOW_MS)}
             />
             <span aria-hidden="true">{LAST}</span>
           </label>
@@ -154,7 +157,7 @@ export function AiStep() {
             <strong>{shownYear}</strong>
             <span>{formatValue(gdp.series[1]!.values[at] ?? null, gdp.unit)}</span>
           </div>
-          <div className="ai-key-row" role="list" aria-label="Escenarios">
+          <div className="ai-key-row ai-key-small" role="list" aria-label="Escenarios">
             {AI_SCENARIOS.map((s) => (
               <span key={s.id} role="listitem" className="ai-key">
                 <span className="tour-swatch" style={{ background: s.color }} aria-hidden="true" /> {s.name}
@@ -162,7 +165,7 @@ export function AiStep() {
             ))}
           </div>
           <div className="tour-chart">
-            <TourChart spec={bigSpec} mode={view}>
+            <TourChart spec={bigSpecTimed} mode={view} key={run}>
               <EChart option={big} aria-label={gdpSummary} />
             </TourChart>
           </div>
@@ -199,6 +202,12 @@ export function AiStep() {
                 </tr>
               </thead>
               <tbody>
+                <tr>
+                  <th scope="row">Crecimiento anual medio 2026-2056</th>
+                  {rows.map((r) => (
+                    <td key={r.id}>{pct(r.averageGrowth, 2)}</td>
+                  ))}
+                </tr>
                 <tr>
                   <th scope="row">PBI (miles de millones de USD)</th>
                   {gdp.series.map((s) => (
