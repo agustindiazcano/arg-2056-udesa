@@ -16,9 +16,9 @@ describe('the Data page after the series migration', () => {
   // the RIGI approval of Bajo del Choique-La Invernada. Their columns are still compared; their rows are checked in the tests of the new data.
   const CORRECTED = ['rigi-mining', 'rigi-oil-gas'];
   // the AI slide (3) has three scenarios instead of two made-up lines since 2026-10-15 (human order): its chart table changed on purpose
-  const REPLACED = ['chart-3'];
+  const REPLACED = ['chart-3', 'factors', 'reference']; // the simulator defaults changed on purpose (3.0 % and 0.4 points of AI)
   const REMOVED = ['6'];
-  const MOVED: Record<string, string> = { '11': '4', '9': '8', '10': '8', '13': '8', '1': '12', '7': '8', '2': '8', '4': '12' }; // 9, 10 and 13 are tabs of the Resources slide (8)
+  const MOVED: Record<string, string> = { '11': '12', '9': '8', '10': '8', '13': '8', '1': '12', '7': '8', '2': '8', '4': '12' }; // 9, 10 and 13 are tabs of the Resources slide (8)
   const kept = fixture.filter((s) => !REMOVED.includes(s.id));
   const remaining = kept.filter((s) => !(s.id in MOVED));
 

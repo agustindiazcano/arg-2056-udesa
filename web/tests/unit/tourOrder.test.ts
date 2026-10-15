@@ -23,7 +23,7 @@ describe('the order and the numbers of the slides of Hacia el 2056', () => {
     expect(stepNumber(14)).toBe(5);
     expect(stepNumber(2)).toBe(-1); // Producción por provincia is a view of the Recursos slide
     expect(stepNumber(4)).toBe(-1); // Exportaciones is a view of the Composición slide
-    expect(stepNumber(3)).toBe(7); // the AI slide is the last
+    expect(stepNumber(3)).toBe(6); // the AI slide is the last
   });
 
   it('puts the slides of the Data page in the same order, labelled with the same numbers (the index has no data)', () => {

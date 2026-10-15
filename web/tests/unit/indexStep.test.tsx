@@ -14,7 +14,7 @@ import { INDEX_STEP, TOUR_ORDER, stepNumber } from '../../src/tour/chartSteps';
 import { indexItems } from '../../src/tour/indexData';
 import { ExportsStep } from '../../src/tour/ExportsStep';
 import { Rule70Step } from '../../src/tour/Rule70Step';
-import { COMPOSITION_TITLE, PRODUCTIVITY_TITLE, RULE70_TITLE } from '../../src/tour/slideTitles';
+import { COMPOSITION_TITLE, EXPORTS_TITLE, PRODUCTIVITY_TITLE, RULE70_TITLE } from '../../src/tour/slideTitles';
 import { TOUR_CHARTS } from '../../src/tour/tourCharts';
 import { useStore } from '../../src/state/store';
 import { useTourLayout } from '../../src/tour/useTourLayout';
@@ -59,7 +59,7 @@ describe('the first slide: the title and the index', () => {
     expect(screen.getByRole('heading', { level: 2 }).textContent).toBe(byId.get(5));
     cleanup();
     render(<ExportsStep />);
-    expect(screen.getByRole('heading', { level: 2 }).textContent).toBe(byId.get(4));
+    expect(screen.getByRole('heading', { level: 2 }).textContent).toBe(EXPORTS_TITLE);
     for (const id of [3]) expect(byId.get(id), `step ${id}`).toBe(TOUR_CHARTS[id]!.title);
   });
 
