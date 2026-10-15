@@ -116,7 +116,7 @@ export function CountryExplorer() {
           </>
         ) : (
           <Reveal k="no-data" className="gdp-chart rule70-card">
-            <p role="alert">{result.ok ? '' : result.reason}</p>
+            <p role="status">{result.ok ? '' : result.reason}</p>
           </Reveal>
         )}
       </div>

@@ -104,7 +104,7 @@ describe('the country explorer', () => {
     openExplorer();
     fireEvent.change(country(), { target: { value: missing.code } });
     fireEvent.change(from(), { target: { value: String(missing.year) } });
-    expect(screen.getByRole('alert').textContent).toMatch(/sin dato/i);
+    expect(screen.getByRole('status').textContent).toMatch(/sin dato/i);
     expect(screen.queryByTestId('echart')).toBeNull();
   });
 
@@ -112,7 +112,7 @@ describe('the country explorer', () => {
     openExplorer();
     fireEvent.change(from(), { target: { value: '2024' } });
     fireEvent.change(to(), { target: { value: '2025' } });
-    expect(screen.getByRole('alert').textContent).toMatch(/al menos dos años/i);
+    expect(screen.getByRole('status').textContent).toMatch(/al menos dos años/i);
   });
 
   it('draws the real series against the constant-rate path and the fitted one, with a linear or logarithmic scale', () => {
