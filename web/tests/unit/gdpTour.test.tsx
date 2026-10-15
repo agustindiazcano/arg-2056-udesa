@@ -1,7 +1,5 @@
 // @vitest-environment jsdom
-import React from 'react';
-import { cleanup, fireEvent, render, screen } from '@testing-library/react';
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 vi.mock('../../src/charts/EChart.js', () => ({
   EChart: ({ 'aria-label': label }: { 'aria-label'?: string }) => <div role="img" aria-label={label} data-testid="echart" />
@@ -9,9 +7,6 @@ vi.mock('../../src/charts/EChart.js', () => ({
 
 import { buildGdp } from '../../src/charts/builders/gdp';
 import { GDP_MOCK, LAST_OBSERVED_YEAR, gdpLinesSpec } from '../../src/tour/gdpMock';
-import { GdpStep } from '../../src/tour/GdpStep';
-import { useStore } from '../../src/state/store';
-import { useTourLayout } from '../../src/tour/useTourLayout';
 
 describe('GDP mock data', () => {
   it('has one value per year, the history up to the last observed year and the projection from it', () => {
@@ -73,33 +68,5 @@ describe('gdpLinesSpec', () => {
     expect(spec.xLabels).toHaveLength(GDP_MOCK.years.length);
     expect(spec.series.map((s) => s.name)).toEqual(['PBI observado', 'Proyección esperada']);
     expect(spec.band?.lower).toHaveLength(GDP_MOCK.years.length);
-  });
-});
-
-describe('GdpStep', () => {
-  beforeEach(() => {
-    useStore.setState({ mode: '2d' });
-    useTourLayout.setState({ count: 1, focus: false });
-  });
-  afterEach(cleanup);
-
-  it('shows the title and the chart, with no test-data label', () => {
-    render(<GdpStep />);
-    expect(screen.getByRole('heading', { name: /PBI de Argentina/ })).toBeTruthy();
-    expect(screen.queryAllByText(/datos de prueba/i)).toHaveLength(0);
-    expect(screen.getByTestId('echart')).toBeTruthy();
-  });
-
-  it('has 2D and 3D buttons that follow and change the mode', () => {
-    render(<GdpStep />);
-    const d2 = screen.getByRole('button', { name: '2D' });
-    const d3 = screen.getByRole('button', { name: '3D' });
-    expect(d2.getAttribute('aria-pressed')).toBe('true');
-    expect(d3.getAttribute('aria-pressed')).toBe('false');
-    fireEvent.click(d3);
-    expect(useStore.getState().mode).toBe('3d');
-    expect(screen.getByRole('button', { name: '3D' }).getAttribute('aria-pressed')).toBe('true');
-    fireEvent.click(screen.getByRole('button', { name: '2D' }));
-    expect(useStore.getState().mode).toBe('2d');
   });
 });

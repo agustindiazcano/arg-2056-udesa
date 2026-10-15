@@ -32,7 +32,7 @@ const TITLE = PROVINCE_TITLE;
  * (Minería, Agro or Hidrocarburos) and under it a chart of bars with what each province produces. A click on a province, in the
  * map, in the ranking or in the bars, selects it, and the map zooms to it. Made-up values.
  */
-export function ProvinceStep() {
+export function ProvinceStep({ embedded = false }: { embedded?: boolean } = {}) {
   // the map of Argentina opens flat (human order of 2026-10-15); this slide keeps its own 2D / 3D choice
   const [mode, setMode] = useState<'2d' | '3d'>('2d');
   const provinces = useProvinces();
@@ -88,7 +88,7 @@ export function ProvinceStep() {
     <section className="gdp-step prov-step" aria-label={TITLE}>
       <header className="gdp-head">
         <Reveal k="head" className="gdp-title">
-          <h2>{TITLE}</h2>
+          {embedded ? <h3 className="composition-title">{TITLE}</h3> : <h2>{TITLE}</h2>}
           <p className="gdp-sub">
             {PRODUCTION_UNIT} por año; elegí un sector y tocá una provincia
           </p>

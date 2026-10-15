@@ -65,15 +65,14 @@ describe('Recorrido steps in the navbar', () => {
   });
 
   it('keeps the current step in the middle of the three numbers, held inside the steps that exist', () => {
-    // the ids go in the order they are shown: 20 0 8 5 12 14 2 3 (20 is the index, 14 Productividad; the buttons show 0 1 2 3...)
+    // the ids go in the order they are shown: 20 0 8 5 12 14 3 (20 is the index, 14 Productividad; the buttons show 0 1 2 3...)
     expect(stepWindow(20)).toEqual([20, 0, 8]);
     expect(stepWindow(0)).toEqual([20, 0, 8]);
     expect(stepWindow(8)).toEqual([0, 8, 5]);
     expect(stepWindow(5)).toEqual([8, 5, 12]);
     expect(stepWindow(12)).toEqual([5, 12, 14]);
-    expect(stepWindow(14)).toEqual([12, 14, 2]);
-    expect(stepWindow(2)).toEqual([14, 2, 3]);
-    expect(stepWindow(3)).toEqual([14, 2, 3]);
+    expect(stepWindow(14)).toEqual([12, 14, 3]);
+    expect(stepWindow(3)).toEqual([12, 14, 3]);
   });
 
   it('Anterior and Siguiente move one step, and the last step disables Siguiente', () => {

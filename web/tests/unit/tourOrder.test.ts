@@ -6,7 +6,7 @@ import { buildSlides } from '../../src/datasets/slides';
 // first slide is the index (id 20, the title "Argentina 2056" and the list of the others). The numbers are the position: 0, 1, 2...
 describe('the order and the numbers of the slides of Hacia el 2056', () => {
   it('opens with the index and shows Productividad right after the GDP slide', () => {
-    expect(TOUR_ORDER).toEqual([20, 0, 8, 5, 12, 14, 2, 3]);
+    expect(TOUR_ORDER).toEqual([20, 0, 8, 5, 12, 14, 3]);
     expect(TOUR_ORDER[0]).toBe(INDEX_STEP);
   });
 
@@ -21,7 +21,7 @@ describe('the order and the numbers of the slides of Hacia el 2056', () => {
     expect(stepNumber(8)).toBe(2); // Recursos naturales is the second slide
     expect(stepNumber(5)).toBe(3);
     expect(stepNumber(14)).toBe(5);
-    expect(stepNumber(2)).toBe(6);
+    expect(stepNumber(2)).toBe(-1); // Producción por provincia is a view of the Recursos slide
     expect(stepNumber(4)).toBe(-1); // Exportaciones is a view of the Composición slide
     expect(stepNumber(3)).toBe(7); // the AI slide is the last
   });

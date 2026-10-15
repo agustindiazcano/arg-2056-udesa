@@ -27,15 +27,14 @@ Un proyecto de **ciencia de datos y visualización**: toma datos abiertos de org
 
 ## Las diapositivas de «Hacia el 2056»
 
-La presentación abre en una diapositiva con el título y el índice (la 0), y tiene 7 más:
+La presentación abre en una diapositiva con el título y el índice (la 0), y tiene 6 más:
 
 1. El PBI de Argentina desde 1960 (ranking mundial y de la región)
-2. Recursos naturales (minería, hidrocarburos, agro y total: totales, treemap, torta o barras, provincias productoras y mapa)
+2. Recursos naturales (minería, hidrocarburos, agro y total: totales, treemap, torta o barras, provincias productoras y mapa; un botón muestra la producción por provincia)
 3. La regla del 70 (calculadora, países reales, escenarios y proyecciones del FMI)
 4. Composición del PBI y exportaciones por complejo (con un botón para ver las exportaciones por año y complejo)
 5. Productividad
-6. Producción por provincia
-7. Cuarta revolución industrial: el impacto de la IA en la economía (tres escenarios a 2035, PBI por habitante y población)
+6. Cuarta revolución industrial: el impacto de la IA en la economía (tres escenarios a 2035, PBI por habitante y población)
 
 ## Cómo correrlo
 
@@ -154,7 +153,7 @@ Todos los enlaces de los datos que usa la aplicación. La misma lista se ve en l
 56. Infobae (2026-05-16), LLL Oil, YPF. <https://www.infobae.com/economia/2026/05/16/lll-oil-como-es-el-megaproyecto-de-ypf-en-vaca-muerta-que-busca-generar-mas-de-usd-100000-millones-en-exportaciones/>
 57. LM Neuquén, inversiones comprometidas en Vaca Muerta en 2026. <https://mase.lmneuquen.com/empresas/vaca-muerta-los-yacimientos-mayores-compromisos-inversiones-2026-n1242081>
 
-### Inteligencia artificial y el PBI (diapositiva 7 de «Hacia el 2056», y el simulador)
+### Inteligencia artificial y el PBI (diapositiva 6 de «Hacia el 2056», y el simulador)
 
 Escenarios de crecimiento de Argentina con IA y estimaciones de otros analistas.
 

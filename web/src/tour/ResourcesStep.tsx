@@ -12,9 +12,17 @@ import { Spinner } from '../ui/Spinner.js';
 import { PRODUCTION_UNIT, SECTOR_LABELS, SECTOR_VALUES, mapValuesOf, rankedProvinces } from './provinceMock.js';
 import { RESOURCE_SECTORS, breakdown, sectorExports, totals } from './resourcesData.js';
 import type { Part, ResourceSector } from './resourcesData.js';
+import { ProvinceStep } from './ProvinceStep.js';
 import { RESOURCES_TITLE } from './slideTitles.js';
 
 type View = ResourceSector | 'total';
+
+const PARTS = [
+  { value: 'resources', label: 'Recursos' },
+  { value: 'provinces', label: 'Producción por provincia' }
+] as const;
+
+type Pane = (typeof PARTS)[number]['value'];
 
 const VIEWS_OF_SECTOR: ReadonlyArray<{ value: View; label: string }> = [...RESOURCE_SECTORS, { value: 'total', label: 'Total' }];
 
@@ -70,6 +78,7 @@ export function ResourcesStep() {
   const provinces = useProvinces();
   const [form, setForm] = useState<Form>('treemap');
   const [view, setView] = useState<View>('mineria');
+  const [part, setPart] = useState<Pane>('resources');
   const label = view === 'total' ? 'Total' : SECTOR_LABELS[view];
   const parts = useMemo(
     () => (view === 'total' ? { title: 'Exportaciones de 2025 por sector', unit: 'miles de millones de USD', parts: sectorExports() } : breakdown(view)),
@@ -92,6 +101,21 @@ export function ResourcesStep() {
     const found = RESOURCE_SECTORS.find((s) => s.label === name);
     if (found) setView(found.value);
   }, []);
+  if (part === 'provinces') {
+    return (
+      <section className="gdp-step" aria-label={RESOURCES_TITLE}>
+        <header className="gdp-head">
+          <Reveal k="head" className="gdp-title">
+            <h2>{RESOURCES_TITLE}</h2>
+          </Reveal>
+          <div className="tour-controls">
+            <Segmented label="Mostrar" options={PARTS} value={part} onChange={setPart} />
+          </div>
+        </header>
+        <ProvinceStep embedded />
+      </section>
+    );
+  }
   return (
     <section className="gdp-step res-step" aria-label={RESOURCES_TITLE}>
       <header className="gdp-head">
@@ -100,6 +124,7 @@ export function ResourcesStep() {
           <p className="gdp-sub">Elegí un sector o el total; en el total, tocá un sector para verlo por dentro</p>
         </Reveal>
         <div className="tour-controls">
+          <Segmented label="Mostrar" options={PARTS} value={part} onChange={setPart} />
           <Segmented label="Sector" options={VIEWS_OF_SECTOR} value={view} onChange={setView} />
           <Segmented label="Gráfico" options={FORMS} value={form} onChange={setForm} />
         </div>
