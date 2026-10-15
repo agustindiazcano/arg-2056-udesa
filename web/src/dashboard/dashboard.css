@@ -1443,8 +1443,12 @@
 }
 
 #overlay[data-scene='andes'] .chrome .tab {
+  min-height: 2.25rem;
+  padding-inline: 0.9rem;
   border-color: color-mix(in srgb, var(--intro-ink) 8%, transparent);
+  border-radius: 999px;
   background: color-mix(in srgb, var(--intro-bg) 76%, transparent);
+  letter-spacing: 0.015em;
   transition: color 200ms ease, background 200ms ease, border-color 200ms ease, box-shadow 200ms ease, transform 200ms ease;
 }
 
@@ -1457,10 +1461,15 @@
 }
 
 #overlay[data-scene='andes'] .chrome .tab[aria-selected='true'] {
-  color: var(--gold);
-  border-color: color-mix(in srgb, var(--gold) 58%, transparent);
-  background: color-mix(in srgb, var(--gold) 10%, var(--intro-bg));
-  box-shadow: inset 0 1px 0 color-mix(in srgb, white 8%, transparent), 0 0 16px color-mix(in srgb, var(--gold) 12%, transparent);
+  color: var(--intro-on-light);
+  border-color: color-mix(in srgb, var(--gold) 84%, white 10%);
+  background: linear-gradient(135deg, color-mix(in srgb, var(--gold) 92%, white), var(--gold));
+  box-shadow: inset 0 1px 0 color-mix(in srgb, white 35%, transparent), 0 0 22px color-mix(in srgb, var(--gold) 32%, transparent);
+}
+
+#overlay[data-scene='andes'] .chrome .tab[aria-selected='true']:hover {
+  color: var(--intro-on-light);
+  background: linear-gradient(135deg, color-mix(in srgb, var(--gold) 84%, white), color-mix(in srgb, var(--gold) 90%, var(--intro-bg)));
 }
 
 #overlay[data-scene='andes'] .andes-title {
