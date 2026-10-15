@@ -1061,7 +1061,8 @@
 /* the panel of the right goes up to the navbar */
 #overlay[data-scene='andes'] .dash--stage .dash-side {
   top: calc(var(--chrome-h) + var(--space-sm));
-  bottom: var(--space-md);
+  /* it stops above the attribution of MapTiler and OpenStreetMap, the small «i» button of the map in the bottom right corner */
+  bottom: calc(var(--space-md) + 2.25rem);
 }
 
 /* the zoom and reset buttons live in the bottom bar, right after the progress */
