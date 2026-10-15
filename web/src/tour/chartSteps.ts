@@ -1,4 +1,4 @@
-/** The steps of the Recorrido that show a chart instead of a scene: steps 0, 1 and 2 (the GDP since 1900, the GDP and the map of production by province) steps 3 to 13 except 6 (the investor slide, removed on 2026-10-14) and 11 (merged into the Exports slide, step 4), and step 14 (productivity, its own component). Kept apart from the charts so that the app shell does not load them. */
+/** The steps of the Recorrido that show a chart instead of a scene: steps 0, 1 and 2 (the GDP since 1900, the GDP and the map of production by province) steps 3 to 13 except 6 (the investor slide, removed on 2026-10-14) and 11 (merged into the Exports slide, step 4), step 14 (productivity), and draft steps 16 and 17. Kept apart from the charts so that the app shell does not load them. */
 /** The first slide: the title "Argentina 2056" and the index of the others (it has no data, so it is not in the Data page). */
 export const INDEX_STEP = 20;
 
