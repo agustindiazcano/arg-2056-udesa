@@ -283,7 +283,6 @@ export function buildSlides(): SlideData[] {
     slide('2', 'Producción por provincia', [provinces(), hydrocarbonProvinces(), indicators()], true, ['W3', 'E6']),
     slide('3', TOUR_CHARTS[3]!.title, [chartTable(3)]),
     slide('4', TOUR_CHARTS[4]!.title, [chartTable(4), { ...chartTable(4, EXPORT_COMPOSITION_CHART), id: 'chart-11' }, complexesTable(), exportSharesTable(), greatItemsTable(), ...servicesTables()], false, ['E7', 'E1', 'E10']),
-    slide('5', TOUR_CHARTS[5]!.title, [chartTable(5), errorTable(), argentinaTable(), countriesTable(), scenariosTable(), imfTable()], false),
     slide('7', TOUR_CHARTS[7]!.title, [
       { id: 'provinces-value', title: `Valor productivo por provincia (${PRODUCTION_UNIT})`, columns: ['Provincia', 'Valor'], rows: PROVINCES.map((p, i) => [p.name, PROVINCE_VALUES[i] ?? null]) },
       hydrocarbonProvinces()
@@ -293,6 +292,7 @@ export function buildSlides(): SlideData[] {
     slide('10', TOUR_CHARTS[10]!.title, [chartTable(10), agroTable()], true, ['E8']),
     slide('12', TOUR_CHARTS[12]!.title, [chartTable(12)], false, ['E2']),
     slide('13', TOUR_CHARTS[13]!.title, [chartTable(13), reservesTable()], true, ['E3', 'E5', 'E6']),
+    slide('5', TOUR_CHARTS[5]!.title, [chartTable(5), errorTable(), argentinaTable(), countriesTable(), scenariosTable(), imfTable()], false),
     slide('sim', 'Simulador del PBI', [
       { id: 'factors', title: 'Factores del escenario de referencia', columns: ['Factor', 'Valor', 'Unidad'], rows: SIM_FIELDS.map((f) => [f.label, DEFAULT_SIM[f.key], f.unit]) },
       { id: 'reference', title: 'PBI del escenario de referencia (miles de millones de USD)', columns: ['Año', 'PBI'], rows: sim.years.map((y, i) => [y, sim.gdp[i] ?? null]) }

@@ -32,7 +32,7 @@ afterEach(cleanup);
 describe('the rule of 70 calculator (slide 6)', () => {
   it('opens at 3 % a year with the exact time and the two rules', () => {
     render(<Rule70Step />);
-    expect(screen.getByRole('heading', { name: 'La regla del 70' })).toBeTruthy();
+    expect(screen.getByRole('heading', { name: '¿Cuánto hay que crecer por año para duplicar el PBI? La regla del 70' })).toBeTruthy();
     expect(rate().value).toBe('3');
     expect(cell('Exacta', 1)).toBe('23,4 años');
     expect(cell('Regla del 70', 1)).toBe('23,3 años');
@@ -137,7 +137,7 @@ describe('the rule of 70 calculator (slide 6)', () => {
 describe('the slide inside the Recorrido and the Data page', () => {
   it('is what step 5 of the Recorrido shows, with its side panel', () => {
     render(<TourStep step={5} />);
-    expect(screen.getByRole('heading', { name: 'La regla del 70', level: 2 })).toBeTruthy();
+    expect(screen.getByRole('heading', { name: '¿Cuánto hay que crecer por año para duplicar el PBI? La regla del 70', level: 2 })).toBeTruthy();
     expect(screen.getByRole('complementary', { name: /texto y referencias/i })).toBeTruthy();
   });
 

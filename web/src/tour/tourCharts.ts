@@ -185,7 +185,7 @@ export const TOUR_CHARTS: Record<number, TourChartDef> = {
   },
   5: {
     step: 5,
-    title: 'Regla del 70: cuánto tarda en duplicarse el PBI',
+    title: '¿Cuánto hay que crecer por año para duplicar el PBI? La regla del 70',
     subtitle: 'años que tarda según el crecimiento anual (70 dividido la tasa)',
     source: 'Cálculo de la regla del 70',
     kind: 'chart',

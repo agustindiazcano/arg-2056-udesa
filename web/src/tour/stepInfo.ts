@@ -75,7 +75,7 @@ export const STEP_INFO: Record<number, StepInfo> = {
     refs: ['E7', 'E1']
   },
   5: {
-    heading: 'La regla del 70',
+    heading: '¿Cuánto hay que crecer por año para duplicar el PBI? La regla del 70',
     paragraphs: [
       'Una forma rápida de saber cuánto tarda en duplicarse algo que crece a una tasa constante: se divide 70 por la tasa en %. A 3 % por año tarda unos 23 años. La regla del 72 es la misma idea con otra constante; la fórmula exacta es t = ln 2 / ln(1 + r).',
       'Con el deslizador elegís la tasa y ves el tiempo exacto, las dos reglas y cuánto se equivoca cada una. El gráfico del error muestra para qué tasas anda mejor cada regla, y el de crecimiento, en escala lineal o logarítmica (donde un crecimiento constante es una recta). El recuadro de Argentina dice en qué año se duplicaría el PBI real de 2026 a esa tasa.',

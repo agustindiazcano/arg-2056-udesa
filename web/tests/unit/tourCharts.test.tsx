@@ -28,7 +28,7 @@ describe('the charts of the Recorrido', () => {
   it('titles the steps as the human asked', () => {
     expect(TOUR_CHARTS[3]!.title).toBe('Cuarta revolución industrial: el impacto de la IA en la economía');
     expect(TOUR_CHARTS[4]!.title).toBe('Recursos naturales: exportaciones por sector');
-    expect(TOUR_CHARTS[5]!.title).toBe('Regla del 70: cuánto tarda en duplicarse el PBI');
+    expect(TOUR_CHARTS[5]!.title).toBe('¿Cuánto hay que crecer por año para duplicar el PBI? La regla del 70');
     expect(TOUR_CHARTS[6]).toBeUndefined();
     expect(TOUR_CHARTS[7]!.title).toBe('Mapa productivo por provincia');
     expect(TOUR_CHARTS[8]!.title).toBe('Minería: hoy vs proyecto');

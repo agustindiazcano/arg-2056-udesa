@@ -257,8 +257,8 @@ describe('Reducer', () => {
     });
 
     it('skips step 6 (the investor slide was removed) going forward and back, and tourSet ignores it', () => {
-      expect(reduce({ ...tour, tourStep: 5 }, { type: 'nextScene' }).tourStep).toBe(7);
-      expect(reduce({ ...tour, tourStep: 7 }, { type: 'prevScene' }).tourStep).toBe(5);
+      expect(reduce({ ...tour, tourStep: 4 }, { type: 'nextScene' }).tourStep).toBe(7);
+      expect(reduce({ ...tour, tourStep: 7 }, { type: 'prevScene' }).tourStep).toBe(4);
       expect(reduce(tour, { type: 'tourSet', step: 6 })).toBe(tour);
     });
 
