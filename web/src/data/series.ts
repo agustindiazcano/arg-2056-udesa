@@ -6,12 +6,6 @@ export type Quality = 'real' | 'partial' | 'placeholder';
 
 export const QUALITIES: readonly Quality[] = ['real', 'partial', 'placeholder'];
 
-export const QUALITY_LABEL: Record<Quality, string> = {
-  real: 'Datos reales',
-  partial: 'Datos en parte reales',
-  placeholder: 'Datos de prueba'
-};
-
 /** What every series says about itself. A placeholder has no retrieval date because nothing was retrieved. */
 export interface SeriesMeta {
   quality: Quality;

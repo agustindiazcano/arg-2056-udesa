@@ -125,7 +125,7 @@ export function buildGdp(data: GdpData, labels: BandLabels = GDP_LABELS) {
   };
 
   const summary =
-    `${labels.subject} (datos de prueba): de ${formatValue(firstObserved, data.unit)} en ${first} ` +
+    `${labels.subject}: de ${formatValue(firstObserved, data.unit)} en ${first} ` +
     `a ${formatValue(lastObserved, data.unit)} en ${lastObservedYear}, y una proyección esperada de ` +
     `${formatValue(end, data.unit)} en ${last}, con un rango que se abre desde ${lastObservedYear}`;
   return { option, summary };

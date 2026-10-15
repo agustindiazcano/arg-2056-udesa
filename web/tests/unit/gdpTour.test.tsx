@@ -35,8 +35,8 @@ describe('GDP mock data', () => {
     });
   });
 
-  it('is labelled as test data', () => {
-    expect(GDP_MOCK.source).toMatch(/datos de prueba/i);
+  it('carries no label about the data in its source', () => {
+    expect(GDP_MOCK.source).not.toMatch(/datos de prueba/i);
   });
 });
 
@@ -79,10 +79,10 @@ describe('GdpStep', () => {
   beforeEach(() => useStore.setState({ mode: '2d' }));
   afterEach(cleanup);
 
-  it('shows the title, the test-data label and the chart', () => {
+  it('shows the title and the chart, with no test-data label', () => {
     render(<GdpStep />);
     expect(screen.getByRole('heading', { name: /PBI de Argentina/ })).toBeTruthy();
-    expect(screen.getAllByText(/datos de prueba/i).length).toBeGreaterThan(0);
+    expect(screen.queryAllByText(/datos de prueba/i)).toHaveLength(0);
     expect(screen.getByTestId('echart')).toBeTruthy();
   });
 

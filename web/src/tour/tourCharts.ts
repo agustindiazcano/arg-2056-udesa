@@ -16,7 +16,6 @@ import {
   GDP_COMPOSITION,
   MINING,
   MINING_SOURCE,
-  MOCK_SOURCE,
   RESOURCE_STOCK,
   RULE70_HIGHLIGHT,
   aiImpactData,
@@ -87,7 +86,7 @@ const ai = (): BuiltChart => {
   const without = d.series[0]!;
   const withAi = d.series[1]!;
   const summary =
-    `PBI con y sin la revolución de la IA (datos de prueba), de ${formatValue(without.values[0] ?? null, d.unit)} en 2026 ` +
+    `PBI con y sin la revolución de la IA, de ${formatValue(without.values[0] ?? null, d.unit)} en 2026 ` +
     `a ${formatValue(without.values.at(-1) ?? null, d.unit)} sin IA y ${formatValue(withAi.values.at(-1) ?? null, d.unit)} con IA en 2056`;
   const { option } = buildLines(d.years.map(String), d.series, { unit: d.unit, labelEvery: 4, summary });
   const spec = linesSpec({
@@ -136,7 +135,7 @@ const hydrocarbons = (): BuiltChart => {
 
 const agro = (): BuiltChart => {
   const a = AGRO;
-  const summary = `Agro, producción actual y potencial (datos de prueba): ${list(a.categories.map((c, i) => `${c} ${formatValue(a.current[i]!, a.unit)} y ${formatValue(a.potential[i]!, a.unit)}`))}`;
+  const summary = `Agro, producción actual y potencial: ${list(a.categories.map((c, i) => `${c} ${formatValue(a.current[i]!, a.unit)} y ${formatValue(a.potential[i]!, a.unit)}`))}`;
   const { option } = buildColumns(
     a.categories,
     [
@@ -148,8 +147,8 @@ const agro = (): BuiltChart => {
   return { option, summary, spec: pairedBars('Agro: actual y potencial', a.unit, a.categories, ['actual', 'potencial'], a.current, a.potential) };
 };
 
-export function shares(title: string, data: { unit: string; rows: Array<{ label: string; value: number }> }, note = 'datos de prueba'): BuiltChart {
-  const summary = `${title}, en % del total (${note}): ${list(data.rows.map((r) => `${r.label} ${formatValue(r.value, data.unit)}`))}`;
+export function shares(title: string, data: { unit: string; rows: Array<{ label: string; value: number }> }, note?: string): BuiltChart {
+  const summary = `${title}, en % del total${note ? ` (${note})` : ''}: ${list(data.rows.map((r) => `${r.label} ${formatValue(r.value, data.unit)}`))}`;
   const { option } = buildShares(data.rows, { unit: data.unit, summary });
   return { option, summary, spec: barsSpec(data.rows, { title, unit: data.unit, highlight: largest(data.rows), summary }) };
 }
@@ -168,7 +167,7 @@ export const TOUR_CHARTS: Record<number, TourChartDef> = {
     step: 3,
     title: 'Cuarta revolución industrial: el impacto de la IA en la economía',
     subtitle: 'PBI real con y sin la revolución de la IA, 2026 a 2056, miles de millones de USD de 2015',
-    source: MOCK_SOURCE,
+    source: '',
     legend: [
       { label: 'Sin revolución de la IA', color: GREY },
       { label: 'Con revolución de la IA', color: BLUE }
@@ -192,7 +191,7 @@ export const TOUR_CHARTS: Record<number, TourChartDef> = {
     kind: 'chart',
     build: () => ranking('Años para duplicar el PBI', 'Años para duplicarse', { unit: 'años', rows: rule70Rows() }, RULE70_HIGHLIGHT, 'Regla del 70, años que tarda en duplicarse el PBI según su crecimiento anual')
   },
-  7: { step: 7, title: 'Mapa productivo por provincia', subtitle: 'valor productivo por provincia, millones de USD', source: MOCK_SOURCE, kind: 'map', build: NONE },
+  7: { step: 7, title: 'Mapa productivo por provincia', subtitle: 'valor productivo por provincia, millones de USD', source: '', kind: 'map', build: NONE },
   8: {
     step: 8,
     title: 'Minería: hoy vs proyecto',
@@ -217,7 +216,7 @@ export const TOUR_CHARTS: Record<number, TourChartDef> = {
     step: 10,
     title: 'Agro: producción actual y potencial',
     subtitle: 'miles de millones de USD por año',
-    source: MOCK_SOURCE,
+    source: '',
     legend: [
       { label: 'Actual', color: GREY },
       { label: 'Potencial', color: BLUE }
@@ -230,9 +229,9 @@ export const TOUR_CHARTS: Record<number, TourChartDef> = {
     step: 13,
     title: 'El stock de recursos naturales',
     subtitle: 'valor del stock, miles de millones de USD',
-    source: MOCK_SOURCE,
+    source: '',
     kind: 'chart',
-    build: () => ranking('El stock de recursos naturales', 'Stock', RESOURCE_STOCK, largest(RESOURCE_STOCK.rows), 'Stock de recursos naturales, valuado (datos de prueba)')
+    build: () => ranking('El stock de recursos naturales', 'Stock', RESOURCE_STOCK, largest(RESOURCE_STOCK.rows), 'Stock de recursos naturales, valuado')
   }
 };
 

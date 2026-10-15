@@ -23,11 +23,11 @@ describe('the side panel of the charts of the Recorrido', () => {
     }
   });
 
-  it('is open by default, with the text, the data badge and the linked references', () => {
+  it('is open by default, with the text and the linked references, and no badge about the data', () => {
     render(<TourSidebar step={4} />);
     const panel = screen.getByRole('complementary', { name: /texto y referencias/i });
     expect(within(panel).getByRole('heading', { name: STEP_INFO[4]!.heading })).toBeTruthy();
-    expect(within(panel).getByText('Datos reales')).toBeTruthy();
+    expect(within(panel).queryByText('Datos reales')).toBeNull();
     const link = within(panel).getByRole('link', { name: /INDEC, Intercambio comercial argentino/ });
     expect(link.getAttribute('href')).toMatch(/^https:\/\/www\.indec\.gob\.ar/);
   });
@@ -40,9 +40,9 @@ describe('the side panel of the charts of the Recorrido', () => {
     expect(screen.getByRole('complementary')).toBeTruthy();
   });
 
-  it('says so when a chart has no references yet', () => {
+  it('shows no references block, and no label, when a chart has no references', () => {
     render(<TourSidebar step={7} />);
-    expect(screen.getByText(/todavía no tiene fuentes cargadas/)).toBeTruthy();
-    expect(screen.getByText('Datos de prueba')).toBeTruthy();
+    expect(screen.queryByText('Referencias')).toBeNull();
+    expect(screen.queryByText('Datos de prueba')).toBeNull();
   });
 });

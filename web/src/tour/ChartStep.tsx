@@ -1,7 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { EChart } from '../charts/EChart.js';
 import { formatValue } from '../charts/format.js';
-import { TABLE_META } from '../datasets/quality.js';
 import { TourChart } from './TourChart.js';
 import { ProvinceMap, useProvinces } from '../scenes/forecast/ProvinceMap.js';
 import { mapSummary } from '../scenes/forecast/mapSelectors.js';
@@ -17,9 +16,6 @@ import { TourIndicators } from './TourIndicators.js';
 import { useTourLayout } from './useTourLayout.js';
 import type { TourCount } from './useTourLayout.js';
 import type { TourChartDef } from './tourCharts.js';
-
-/** The entry of TABLE_META of the chart of a step (the map of step 7 is the table of values by province). */
-const metaOfStep = (step: number) => TABLE_META[step === 7 ? 'provinces-value' : `chart-${step}`];
 
 const VIEWS = [
   { value: '2d', label: '2D' },
@@ -59,7 +55,7 @@ export function visibleSteps(step: number, count: number): number[] {
 function ChartBody({ def }: { def: TourChartDef }) {
   const { option, summary, spec } = useMemo(() => def.build(), [def]);
   return (
-    <TourChart spec={spec} meta={metaOfStep(def.step)}>
+    <TourChart spec={spec}>
       <EChart option={option} aria-label={summary} />
     </TourChart>
   );
@@ -73,10 +69,9 @@ function MapBody({ def, small = false }: { def: TourChartDef; small?: boolean })
   const [selected, setSelected] = useState<ProvinceId | null>(null);
   if (provinces.status === 'loading') return <Spinner label="Cargando el mapa de las provincias..." />;
   if (provinces.status === 'error') return <p style={{ color: 'var(--state-warning)' }}>{`La geometría de las provincias no está disponible: ${provinces.message}`}</p>;
-  const summary = mapSummary(values, 'level', 'valor productivo (datos de prueba)', 2025, UNIT);
+  const summary = mapSummary(values, 'level', 'valor productivo', 2025, UNIT);
   return (
     <TourChart
-      meta={metaOfStep(def.step)}
       spec={{
         kind: 'map',
         title: def.title,
@@ -127,7 +122,13 @@ export function ChartStep({ step }: { step: number }) {
         <Reveal k={String(step)} className="gdp-title">
           <h2>{def.title}</h2>
           <p className="gdp-sub">
-            {def.subtitle} · <span className={/prueba/i.test(def.source) ? 'gdp-mock' : 'gdp-source'}>{def.source}</span>
+            {def.subtitle}
+            {def.source && (
+              <>
+                {' · '}
+                <span className="gdp-source">{def.source}</span>
+              </>
+            )}
           </p>
           <Legend def={def} />
         </Reveal>

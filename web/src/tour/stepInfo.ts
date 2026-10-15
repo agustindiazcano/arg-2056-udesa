@@ -15,12 +15,6 @@ export interface StepInfo {
   refs: string[];
 }
 
-export const DATA_LABEL: Record<StepData, string> = {
-  real: 'Datos reales',
-  parcial: 'Datos en parte reales',
-  prueba: 'Datos de prueba'
-};
-
 export const STEP_INFO: Record<number, StepInfo> = {
   0: {
     heading: 'Dónde estuvo y dónde está Argentina',

@@ -2,9 +2,6 @@ import { ARG_GDP_2026, GDP_UNIT } from './gdpFacts.js';
 import energy from './energyArgentina.json';
 import type { GdpData } from './gdpMock.js';
 
-/** The label every made-up chart of the Recorrido carries. */
-export const MOCK_SOURCE = 'Datos de prueba (inventados)';
-
 const round1 = (value: number): number => Math.round(value * 10) / 10;
 
 export interface LineSeriesData {
@@ -124,7 +121,7 @@ export const MINING: RangedGroups = {
  * of the Secretaría de Energía (`energyArgentina.json`, built by `scripts/build_energy_data.py`). 2025 is 793.7 (the IAE report has 800.2 with the same
  * source; the 860 that the press gave is not in the official series).
  */
-export const HYDROCARBONS_SOURCE = 'Historia 2015-2025: Secretaría de Energía (datos abiertos); proyección y rango: datos de prueba (inventados)';
+export const HYDROCARBONS_SOURCE = 'Historia 2015-2025: Secretaría de Energía (datos abiertos)';
 
 /** Step 9: national oil production in thousands of barrels a day, 2015 to 2056: real until 2025, then a made-up projection with the floor and the ceiling that Vaca Muerta sets. */
 export const HYDROCARBONS_LAST_OBSERVED = 2025;

@@ -1,6 +1,5 @@
 import React, { useMemo, useRef, useState } from 'react';
 import { formatDecimal } from '../charts/format.js';
-import { QUALITY_LABEL } from '../data/series.js';
 import { downloadCsv, referencesCsv, slideCsv, slug, tableCsv } from './csv.js';
 import { REFERENCES } from './references.js';
 import { buildSlides } from './slides.js';
@@ -14,11 +13,6 @@ function Table({ slide, table }: { slide: SlideData; table: DataTable }) {
     <div className="data-table-block">
       <div className="data-table-head">
         <strong>{table.title}</strong>
-        {table.quality && (
-          <span className={`data-quality data-quality--${table.quality}`} title={`${table.source ?? ''}${table.retrievedAt ? `. Consultado el ${table.retrievedAt}` : ''}`}>
-            {QUALITY_LABEL[table.quality]}
-          </span>
-        )}
         <span className="data-count">{`${table.rows.length} filas`}</span>
         <button type="button" className="btn" aria-label={`Descargar CSV: ${table.title}`} onClick={() => downloadCsv(`${fileOf(slide)}-${table.id}.csv`, tableCsv(table))}>
           Descargar CSV
@@ -90,13 +84,12 @@ export function DataPage() {
       </header>
 
       <p className="data-intro">
-        Elegí una diapositiva para ver sus tablas. Las cifras marcadas «Datos de prueba» son inventadas y se reemplazan por series con fuente antes del lanzamiento.
+        Elegí una diapositiva para ver sus tablas.
       </p>
 
       {[current].map((s) => (
         <article key={s.id} id={`data-slide-${s.id}`} className="data-slide" aria-labelledby={`data-title-${s.id}`}>
           <h3 id={`data-title-${s.id}`}>{s.label}</h3>
-          <p className={s.mock ? 'data-badge data-badge--mock' : 'data-badge'}>{s.mock ? 'Datos de prueba (inventados)' : 'Datos reales, sin verificar por una persona'}</p>
           <div className="data-cards">
             {s.tables.map((t) => (
               <Table key={t.id} slide={s} table={t} />

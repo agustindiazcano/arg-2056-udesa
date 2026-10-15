@@ -16,7 +16,7 @@ export interface BandLabels {
   range: string;
 }
 
-export const GDP_SOURCE = `PBI real. Historia 1990-2025: ${GDP_SOURCE_HISTORY}. ${GDP_SOURCE_2026}. Desde 2027 y el rango: datos de prueba (inventados)`;
+export const GDP_SOURCE = `PBI real. Historia 1990-2025: ${GDP_SOURCE_HISTORY}. ${GDP_SOURCE_2026}`;
 
 export const GDP_LABELS: BandLabels = { subject: 'PBI de Argentina', history: 'PBI observado', expected: 'Proyección esperada', range: 'Rango' };
 

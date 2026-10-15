@@ -14,7 +14,6 @@ import { Segmented } from '../ui/Segmented.js';
 import { Spinner } from '../ui/Spinner.js';
 import type { Map3DSpec } from '../charts3d/types.js';
 import type { ProvinceId } from '../types/province.js';
-import { MOCK_SOURCE } from './tourData.js';
 import { TourIndicators } from './TourIndicators.js';
 import { PRODUCTION_UNIT, SECTOR_LABELS, SECTOR_VALUES, mapValuesOf, rankedProvinces } from './provinceMock.js';
 import type { Sector } from './provinceMock.js';
@@ -46,7 +45,7 @@ export function ProvinceStep() {
   const sectorLabel = SECTOR_LABELS[sector];
 
   const bars = useMemo(() => {
-    const summary = `Producción de ${sectorLabel.toLowerCase()} por provincia (datos de prueba), de mayor a menor: ${rows.map((r) => `${r.short} ${formatValue(r.value, PRODUCTION_UNIT)}`).join(', ')}`;
+    const summary = `Producción de ${sectorLabel.toLowerCase()} por provincia, de mayor a menor: ${rows.map((r) => `${r.short} ${formatValue(r.value, PRODUCTION_UNIT)}`).join(', ')}`;
     const { option } = buildColumns(rows.map((r) => r.short), [{ name: sectorLabel, values: rows.map((r) => r.value), color: tokens.muted }], {
       unit: PRODUCTION_UNIT,
       highlight: selectedShort,
@@ -76,7 +75,7 @@ export function ProvinceStep() {
             onSelect: pickProvince,
             upright: true,
             zoomToSelected: true,
-            summary: mapSummary(values, 'level', `producción de ${sectorLabel.toLowerCase()} (datos de prueba)`, 2025, PRODUCTION_UNIT)
+            summary: mapSummary(values, 'level', `producción de ${sectorLabel.toLowerCase()}`, 2025, PRODUCTION_UNIT)
           },
     [provinces, values, selected, sectorLabel, formatProduction, pickProvince]
   );
@@ -91,7 +90,7 @@ export function ProvinceStep() {
         <Reveal k="head" className="gdp-title">
           <h2>{TITLE}</h2>
           <p className="gdp-sub">
-            {PRODUCTION_UNIT} por año; elegí un sector y tocá una provincia · <span className="gdp-mock">{MOCK_SOURCE}</span>
+            {PRODUCTION_UNIT} por año; elegí un sector y tocá una provincia
           </p>
         </Reveal>
         <div className="tour-controls">

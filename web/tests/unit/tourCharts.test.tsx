@@ -49,8 +49,8 @@ describe('the charts of the Recorrido', () => {
     }
   });
 
-  it('labels the made-up data and not the arithmetic of the Rule of 70', () => {
-    expect(TOUR_CHARTS[3]!.source).toMatch(/datos de prueba/i);
+  it('names the real sources and carries no label about made-up data', () => {
+    expect(TOUR_CHARTS[3]!.source).not.toMatch(/datos de prueba/i);
     expect(TOUR_CHARTS[4]!.source).toMatch(/INDEC/);
     expect(TOUR_CHARTS[12]!.source).toMatch(/INDEC/);
     expect(TOUR_CHARTS[5]!.source).not.toMatch(/datos de prueba/i);

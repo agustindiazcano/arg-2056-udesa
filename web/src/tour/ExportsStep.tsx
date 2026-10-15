@@ -3,7 +3,6 @@ import { EChart } from '../charts/EChart.js';
 import { buildColumns } from '../charts/builders/tourCharts.js';
 import { formatValue } from '../charts/format.js';
 import { barsSpec } from '../charts3d/specs.js';
-import { TABLE_META } from '../datasets/quality.js';
 import { Reveal } from '../motion/Reveal.js';
 import { useStore } from '../state/store.js';
 import { MetricToggle } from '../ui/MetricToggle.js';
@@ -85,7 +84,7 @@ export function ExportsStep() {
       <div className="tour-grid" data-count={1} data-layout="grid">
         <Reveal k={`${metric}-${year}-${complex}`} className="gdp-chart">
           <div className="tour-chart">
-            <TourChart spec={built.spec} meta={TABLE_META['chart-4']}>
+            <TourChart spec={built.spec}>
               <EChart option={built.option} aria-label={built.summary} />
             </TourChart>
           </div>
