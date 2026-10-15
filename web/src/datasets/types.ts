@@ -14,7 +14,7 @@ export interface DataTable {
 }
 
 export interface SlideData {
-  /** the step of the Recorrido ("0" to "14") or "sim" for the simulator */
+  /** the step id of the Recorrido or "sim" for the simulator */
   id: string;
   /** "<number> · <title>", as the selector shows it */
   label: string;

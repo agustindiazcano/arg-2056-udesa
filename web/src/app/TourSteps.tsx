@@ -6,7 +6,7 @@ import { stepNumber } from '../tour/chartSteps';
 /** How many numbered buttons show at once: the step and its neighbours. */
 const WINDOW = 3;
 
-/** The numbers to show: the current step in the middle, held inside the steps that exist (0 1 2 at the start, 12 13 14 at the end; there is no 6). */
+/** The numbers to show: the current step in the middle, held inside the steps that exist. */
 export function stepWindow(step: number): number[] {
   const at = Math.max(TOUR_STEP_LIST.indexOf(step), 0);
   const first = Math.min(Math.max(at - 1, 0), TOUR_STEP_LIST.length - WINDOW);

@@ -21,6 +21,7 @@ const REPORT = 'Informe de escenarios de crecimiento con IA pasado por el respon
 const CALC = 'Cálculo propio con t = ln 2 / ln(1 + r), sin dato externo';
 
 const made = (): TableMeta => ({ quality: 'placeholder', source: MADE_UP, retrievedAt: null });
+const draft = (source: string): TableMeta => ({ quality: 'placeholder', source, retrievedAt: null });
 const meta = (quality: Quality, source: string, retrievedAt: string): TableMeta => ({ quality, source, retrievedAt });
 
 /**
@@ -84,7 +85,9 @@ export const TABLE_META: Readonly<Record<string, TableMeta>> = {
   'oph-change': meta('partial', PWT, '2026-10-12'),
   cumulative: meta('partial', PWT, '2026-10-12'),
   factors: made(),
-  reference: meta('partial', 'Simulador: parte del PBI real de 2026 (Banco Mundial y FMI); crecimiento base y aporte de la IA del informe de escenarios con IA (sin verificar); el resto, de prueba', '2026-10-15')
+  reference: meta('partial', 'Simulador: parte del PBI real de 2026 (Banco Mundial y FMI); crecimiento base y aporte de la IA del informe de escenarios con IA (sin verificar); el resto, de prueba', '2026-10-15'),
+  'development-draft': draft('Borrador interactivo; definiciones, series e indicadores aún pendientes de investigación y verificación'),
+  'forecast-uncertainty-draft': draft('Borrador interactivo; ejemplos tecnológicos, costos, vintages de pronósticos y efectos de desarrollo aún pendientes de investigación y verificación')
 };
 
 /** The table with its quality, source and retrieval date; throws if the registry does not know it, so a new table cannot go without them. */

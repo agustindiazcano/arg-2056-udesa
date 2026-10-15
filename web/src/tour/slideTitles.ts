@@ -12,3 +12,5 @@ export const COMPOSITION_TITLE = 'Composición del PBI y exportaciones por compl
 export const AI_TITLE = 'Cuarta revolución industrial: el impacto de la IA en la economía';
 export const RESOURCES_TITLE = 'Recursos naturales';
 export const PRODUCTIVITY_TITLE = 'Productividad';
+export const DEVELOPMENT_TITLE = 'Indicadores de desarrollo';
+export const FORECAST_UNCERTAINTY_TITLE = '¿Qué tan lejos podemos mirar?';
