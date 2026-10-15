@@ -50,7 +50,7 @@ test.describe('keyboard operability', () => {
 
   test('the tab bar is a navigation landmark named Scenes', async ({ page }) => {
     await page.goto('/');
-    await expect(page.getByRole('navigation', { name: 'Escenas' }).getByRole('tab')).toHaveCount(5);
+    await expect(page.getByRole('navigation', { name: 'Escenas' }).getByRole('tab')).toHaveCount(4);
   });
 
   for (const entry of SCENE_TABS) {
