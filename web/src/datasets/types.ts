@@ -10,6 +10,7 @@ export interface DataTable {
   /** how real the table is, where it comes from and when it was read; set by `withMeta` */
   quality?: Quality;
   source?: string;
+  url?: string;
   retrievedAt?: string | null;
 }
 

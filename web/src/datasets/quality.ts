@@ -6,6 +6,8 @@ export interface TableMeta {
   source: string;
   /** ISO date; null only for a placeholder, which retrieved nothing */
   retrievedAt: string | null;
+  /** link to the source, where there is one */
+  url?: string;
 }
 
 const MADE_UP = 'Datos de prueba (inventados)';
@@ -19,8 +21,12 @@ const PWT = 'Penn World Table 11.0 vía FRED, e INDEC (sin volver a descargar)';
 
 const CALC = 'Cálculo propio con t = ln 2 / ln(1 + r), sin dato externo';
 
+const WB_URL = 'https://data.worldbank.org/indicator/NY.GDP.MKTP.KD';
+const IMF_URL = 'https://www.imf.org/external/datamapper/NGDP_RPCH@WEO';
+const REPO_URL = 'https://github.com/agustindiazcano/arg-2056-udesa/blob/main/docs/data-requests.md';
+
 const made = (): TableMeta => ({ quality: 'placeholder', source: MADE_UP, retrievedAt: null });
-const meta = (quality: Quality, source: string, retrievedAt: string): TableMeta => ({ quality, source, retrievedAt });
+const meta = (quality: Quality, source: string, retrievedAt: string, url?: string): TableMeta => ({ quality, source, retrievedAt, ...(url ? { url } : {}) });
 
 /**
  * The quality, source and retrieval date of every table of the Data page, by table id (the tables that two slides share have one entry).
@@ -42,13 +48,13 @@ export const TABLE_META: Readonly<Record<string, TableMeta>> = {
   'chart-4': meta('real', INDEC_X, '2026-10-13'),
   complexes: meta('real', INDEC_X, '2026-10-13'),
   'great-items': meta('real', 'INDEC, Intercambio comercial argentino (informe de agosto de 2026)', '2026-10-13'),
-  'chart-5': meta('real', 'Cálculo propio: 70 dividido la tasa de crecimiento, sin dato externo', '2026-10-14'),
+  'chart-5': meta('real', 'Cálculo propio: 70 dividido la tasa de crecimiento, sin dato externo', '2026-10-14', REPO_URL),
   'provinces-value': made(),
-  'rule70-errors': meta('real', CALC, '2026-10-15'),
-  'rule70-argentina': meta('real', `${CALC}; PBI real de 2026: Banco Mundial y FMI`, '2026-10-15'),
-  'rule70-countries': meta('real', `${WB}; PBI per cápita: PBI sobre población del mismo archivo; tasas calculadas`, '2026-10-15'),
-  'rule70-scenarios': meta('real', CALC, '2026-10-15'),
-  'rule70-imf': meta('real', 'FMI, World Economic Outlook (SDMX), crecimiento real del PBI 2026-2031; promedio y duplicación calculados', '2026-10-14'),
+  'rule70-errors': meta('real', CALC, '2026-10-15', REPO_URL),
+  'rule70-argentina': meta('real', `${CALC}; PBI real de 2026: Banco Mundial y FMI`, '2026-10-15', WB_URL),
+  'rule70-countries': meta('real', `${WB}; PBI per cápita: PBI sobre población del mismo archivo; tasas calculadas`, '2026-10-15', WB_URL),
+  'rule70-scenarios': meta('real', CALC, '2026-10-15', REPO_URL),
+  'rule70-imf': meta('real', 'FMI, World Economic Outlook (SDMX), crecimiento real del PBI 2026-2031; promedio y duplicación calculados', '2026-10-14', IMF_URL),
   'chart-8': meta('partial', ARMINERA, '2026-10-13'),
   'mining-exports': meta('partial', ARMINERA, '2026-10-13'),
   'services-exports': meta('real', CEI, '2026-10-15'),
@@ -84,5 +90,5 @@ export const TABLE_META: Readonly<Record<string, TableMeta>> = {
 export function withMeta(table: DataTable): DataTable {
   const m = TABLE_META[table.id];
   if (!m) throw new Error(`table "${table.id}" has no entry in TABLE_META`);
-  return { ...table, quality: m.quality, source: m.source, retrievedAt: m.retrievedAt };
+  return { ...table, quality: m.quality, source: m.source, retrievedAt: m.retrievedAt, ...(m.url ? { url: m.url } : {}) };
 }
