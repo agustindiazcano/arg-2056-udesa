@@ -1,5 +1,6 @@
 // @vitest-environment jsdom
 import React from 'react';
+import { readFileSync } from 'node:fs';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
 
@@ -84,5 +85,25 @@ describe('the first slide: the title and the index', () => {
     expect(screen.getByRole('navigation', { name: 'Índice' })).toBeTruthy();
     expect(screen.queryByRole('complementary')).toBeNull();
     expect(container.textContent).not.toMatch(FORBIDDEN);
+  });
+});
+
+describe('the look of the first slide', () => {
+  const css = () => readFileSync('src/styles/ui.css', 'utf8');
+  // the body of the rule that starts with the selector at the beginning of a line
+  const rule = (selector: string): string => {
+    const text = css();
+    const at = text.indexOf(`
+${selector} {`);
+    return at < 0 ? '' : text.slice(at, text.indexOf('}', at));
+  };
+
+  it('centers the title in its column, horizontally and vertically, and the whole composition in the page', () => {
+    expect(rule('.index-head')).toMatch(/display:\s*flex/);
+    expect(rule('.index-head')).toMatch(/justify-content:\s*center/);
+    expect(rule('.index-head')).toMatch(/align-items:\s*center/);
+    expect(rule('.index-title')).toMatch(/text-align:\s*center/);
+    expect(rule('.index-step')).toMatch(/margin-inline:\s*auto/);
+    expect(rule('.index-step')).toMatch(/max-width:/);
   });
 });
