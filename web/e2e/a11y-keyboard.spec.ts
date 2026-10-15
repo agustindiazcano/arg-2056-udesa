@@ -60,7 +60,8 @@ test.describe('keyboard operability', () => {
       await expectSceneShown(page, entry);
       // the Andes show "Saltar intro" while their intro goes on and take it away after: the controls are counted once it is gone
       const skip = page.getByRole('button', { name: 'Saltar intro' });
-      if (await skip.count()) await skip.click();
+      // the intro can end by itself between looking for the button and clicking it (a slow runner): the button gone is the outcome we want, and the next line still asserts it
+      await skip.click({ timeout: 3000 }).catch(() => {});
       await expect(skip).toHaveCount(0);
 
       const { total, visited } = await tabThroughEveryControl(page);
