@@ -14,6 +14,7 @@ import { DEFAULT_SIM, SIM_FIELDS, simulate } from '../tour/simModel.js';
 import { specRaw } from '../tour/specTable.js';
 import { COPPER_PROJECTS, LITHIUM_PROJECTS, MINING_CAPEX, MINING_EXPORTS_2024, MINING_EXPORTS_BY_YEAR, MINING_PROJECTION } from '../tour/miningArminera.js';
 import { MINING_BY_PROVINCE_2025, MINING_BY_PROVINCE_2026_JAN_AUG } from '../tour/miningByProvince.js';
+import { SBC_EXPORTS_2025, SERVICES_EXPORTS_2025 } from '../tour/servicesExports.js';
 import { RIGI_MINING, RIGI_OIL_GAS } from '../tour/rigiProjects.js';
 import type { RigiProject } from '../tour/rigiProjects.js';
 import { EXPORT_COMPOSITION_CHART, TOUR_CHARTS } from '../tour/tourCharts.js';
@@ -165,6 +166,21 @@ const agroTable = (): DataTable => ({
 });
 
 /** The tables of the Secretaría de Minería (ARMINERA 2025), transcribed from images: exports, projection, capex and the advanced lithium and copper projects. */
+const servicesTables = (): DataTable[] => [
+  {
+    id: 'services-exports',
+    title: 'Exportaciones de servicios de 2025 por categoría (millones de USD; total 18.039; las otras categorías suman el resto)',
+    columns: ['Categoría', 'Millones de USD', '% del total'],
+    rows: SERVICES_EXPORTS_2025.categories.map((c) => [c.name, c.value, Math.round((c.value / SERVICES_EXPORTS_2025.total) * 1000) / 10])
+  },
+  {
+    id: 'sbc-exports',
+    title: 'Servicios basados en el conocimiento exportados en 2025 (millones de USD; total 9.563 = 53,0 % de los servicios)',
+    columns: ['Servicio', 'Millones de USD'],
+    rows: SBC_EXPORTS_2025.rows.map((r) => [r.name, r.value])
+  }
+];
+
 const miningByProvinceTable = (): DataTable => ({
   id: 'mining-provinces',
   title: 'Exportaciones mineras por provincia (millones de USD FOB; el informe junta Catamarca, Jujuy y Salta como NOA y solo rotula Jujuy en 2026)',
@@ -260,7 +276,7 @@ export function buildSlides(): SlideData[] {
     ], true, ['W3', 'W5', 'I1', 'F1', 'X1', 'X2', 'X3']),
     slide('2', 'Producción por provincia', [provinces(), hydrocarbonProvinces(), indicators()], true, ['W3', 'E6']),
     slide('3', TOUR_CHARTS[3]!.title, [chartTable(3)]),
-    slide('4', TOUR_CHARTS[4]!.title, [chartTable(4), { ...chartTable(4, EXPORT_COMPOSITION_CHART), id: 'chart-11' }, complexesTable(), exportSharesTable(), greatItemsTable()], false, ['E7', 'E1']),
+    slide('4', TOUR_CHARTS[4]!.title, [chartTable(4), { ...chartTable(4, EXPORT_COMPOSITION_CHART), id: 'chart-11' }, complexesTable(), exportSharesTable(), greatItemsTable(), ...servicesTables()], false, ['E7', 'E1', 'E10']),
     slide('5', TOUR_CHARTS[5]!.title, [chartTable(5)], false),
     slide('7', TOUR_CHARTS[7]!.title, [
       { id: 'provinces-value', title: `Valor productivo por provincia (${PRODUCTION_UNIT})`, columns: ['Provincia', 'Valor'], rows: PROVINCES.map((p, i) => [p.name, PROVINCE_VALUES[i] ?? null]) },

@@ -78,7 +78,8 @@ Every task below has a brief (`<slug>.md` in the repository root) and a prompt (
 ## Data to verify (human, against original source)
 
 - [ ] Mining exports by province (`web/src/tour/miningByProvince.ts`, Data slide 8): read from the text of two PDFs of the Secretaría de Minería (2026.01 and 2026.09); check them by eye, and read Catamarca and Salta alone from the chart of the NOA page. Pasted AI figures (Salta 501, Catamarca 353) are half-year 2026 and were NOT used.
-- [ ] RIGI list: Taca Taca now 4.232 (NI 43-101); Bajo del Choique-La Invernada (12.240 or 12.400) added from Chequeado; the official ministry list and Resolución 1771/2026 are still to read (H1). rigi.ar is private, not a source of amounts.
+- [ ] Services exports 2025 (`web/src/tour/servicesExports.ts`, Data slide 4): read from the CEI (Cancillería) PDF, based on INDEC; check against the INDEC balance-of-payments table. The chart of the PDF shows other shares (34,6 % and 29,0 %) than its text (35,8 % and 26,9 %); the text matches value / total and was used.
+- [ ] RIGI list: Taca Taca now 4.232 (NI 43-101); Bajo del Choique-La Invernada (12.240 or 12.400) added from Chequeado; the official ministry list and Resolución 1771/2026 are still to read (H1). the official portal (argentina.gob.ar/economia/rigi) only renders its list in the browser: open it and copy the projects; rigi.ar is private, not a source of amounts.
 
 - [ ] Andes pop-up «Cómo fue el cruce» (`web/src/scenes/andes/CrossingInfo.tsx`): six columns (four secondary, the main force in two), the columns' roads and the meeting at Curimón (the sources give 8 or 9 February: H5, H16 of `docs/references.md`). Check the wording against a primary source.
 
