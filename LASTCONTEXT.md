@@ -37,13 +37,18 @@
 - The human: choose the OECD scenario that equals "expected" (M1), old WEO editions (M3), 2005 projections (M4); RIGI list (H1), mining and agro by province (H9), years of step 0 and the investment figure; check the mining transcription (H3b). Model and parameters for the projections from 2027.
 
 ## Current task (2026-10-15)
-- On separate worktree `C:\Users\agusd\.codex\worktrees\desarrollo-mapas\arg-2056-udesa`, branch `task/indicadores-desarrollo-mapas`.
-- Planning only: `development-indicators-maps.md` defines a Development slide and a province-level resource/project explorer, including smooth 2D/3D map transitions.
-- Added `forecast-uncertainty.md` as a second planned slide: projection uncertainty, historical technology diffusion, AI capability/cost evidence, an adverse adoption/employment scenario, forecast revisions, and why PBI growth is relevant to development indicators.
-- Added task 51 to `roadmap.md`, prompt/status to `TASKS.md`, and queue, data-verification and visual-debt entries to `PENDING.md`.
-- Added task 52 to `roadmap.md`, `TASKS.md` and `PENDING.md`; it explicitly blocks unsupported claims about forecast accuracy, historical innovation lags, cost declines and growth/development causality.
-- No data, code, tests, or sources have been added; no values/coordinates are treated as verified.
-- Next: human/source audit, agree indicator definitions and project-location coverage; then implement in separate small task branches.
+- New worktree `C:\Users\agusd\.codex\worktrees\slides-interactivas-8463\arg-2056-udesa`, branch `task/borradores-slides-interactivas` (based on the planning branch).
+- Added new tour steps 16 and 17: interactive Development indicators, then Forecast uncertainty/AI adoption. Both are marked drafts and contain no empirical series; added review items to `PENDING.md`.
+- Step 16 has selectable health/education/equality indicators and switches for time-series or regional comparison; values, definitions and sources are explicit placeholders.
+- Step 17 has interactive sections for historical diffusion, model/cost topics, forecast revisions and an adverse AI pathway; its widening fan is labeled conceptual and has no data values.
+- Step 16 explains why PBI growth matters alongside per-capita GDP, wages and development measures; education/human capital and savings/investment are selectable research channels, not displayed estimates.
+- No resource-map province zoom/transition was implemented in these slides; it remains on the earlier plan. The OpenAI/ChatGPT timeline is marked for source verification in `PENDING.md`.
+- Typecheck was attempted but the new worktree has no local dependencies; the reused compiler resolved incomplete types from another checkout. No test suite was run.
+- Next: review the new slides in the app, then source and verify claims/data before replacing any placeholder. Run only the fast checks for touched files as allowed; no local test run planned.
+
+## Prior planning (2026-10-15)
+- The separate `task/indicadores-desarrollo-mapas` worktree has plans in `development-indicators-maps.md` and `forecast-uncertainty.md`, with tasks 51/52 listed in `roadmap.md`, `TASKS.md` and `PENDING.md`.
+- The plans still require source review. No values or project coordinates were verified. The provincial resource/project map and 2D/3D province transitions remain unimplemented.
 
 - **Revalidation (`task/revalidate-sources`, 2026-10-14)**: checked a pasted AI report against sources. Added official mining exports by province (`miningByProvince.ts`, table `mining-provinces`, refs E9, R12); Taca Taca capex fixed to the NI 43-101 (4.232); Bajo del Choique added; `dataMigration.test.ts` now lists `CORRECTED` tables on purpose. Not done: RIGI official list (H1), services exports (D26: 9.600 only from press), Palermo Aike and productivity notes (links open, content unchecked). Not pushed.
 - **Services (2026-10-15)**: table `services-exports` and `sbc-exports` in Data slide 4 (CEI Cancillería, ref E10). The pasted "services > 9.600" is the SBC, not total services (18.039). Official RIGI portal gives 16 approved / 29.892 (2026-06-11) and does not render a list to a script: H1 stays with the human.

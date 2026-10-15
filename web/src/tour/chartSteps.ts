@@ -5,9 +5,9 @@ export const INDEX_STEP = 20;
 /**
  * The steps of the Recorrido in the order they are shown. A step is named by its id (what the code, the tests and `docs/data-requests.md`
  * call it); the number on the button and in the Data page is its position here (0, 1, 2...). Human order of 2026-10-15: Productividad
- * (id 14) goes right after the GDP slide (id 1). Ids 6 (investors), 11 (shares of the exports) and 15 do not exist any more; 20 is the index.
+ * (id 14) goes right after the GDP slide (id 1). New interactive draft slides use ids 16 (development) and 17 (forecast uncertainty). Ids 6, 11 and 15 do not exist; 20 is the index.
  */
-export const TOUR_ORDER: readonly number[] = [INDEX_STEP, 0, 8, 5, 12, 14, 3];
+export const TOUR_ORDER: readonly number[] = [INDEX_STEP, 0, 8, 5, 12, 14, 3, 16, 17];
 
 export const CHART_STEPS: ReadonlySet<number> = new Set(TOUR_ORDER);
 

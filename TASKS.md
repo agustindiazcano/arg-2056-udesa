@@ -279,8 +279,8 @@ Legend: DONE = merged. READY = can start now. BLOCKED = needs the human input na
 | 29 | polish | DECIDED | D-polish-3 color from the human; model and data tasks done, unless the human starts it earlier (3D first, D-3d-6) |
 | 30 | docs-submission | BLOCKED | the contest's rules (table in the brief); backtest-run |
 | 31 | demo-video (optional) | BLOCKED | what the contest requires |
-| 32 | development-indicators-maps | READY for source audit and contract design | verify indicator definitions, project/resource records and locations before publishing |
-| 33 | forecast-uncertainty | READY for evidence review and data-contract design | historical technology diffusion, AI cost/adoption evidence, macro forecast vintages, growth/development studies |
+| 32 | development-indicators-maps | PARTIAL (interactive draft slide added) | source audit, data contract and provincial resource map/transitions remain |
+| 33 | forecast-uncertainty | PARTIAL (interactive draft slide added) | historical technology diffusion, AI cost/adoption evidence, forecast vintages and growth/development studies remain |
 
 8. docs/archived/references-page.md  [DONE - merged]
 

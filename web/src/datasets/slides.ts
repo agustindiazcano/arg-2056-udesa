@@ -21,7 +21,7 @@ import { stepNumber } from '../tour/chartSteps.js';
 import { AGRO_TONNES_CHART, AGRO_USD_CHART, EXPORT_COMPOSITION_CHART, HYDROCARBONS_CHART, STOCK_CHART, TOUR_CHARTS } from '../tour/tourCharts.js';
 import { perCapitaSeries, populationPath } from '../tour/aiModel.js';
 import { AI_ANALYSTS, AI_SCENARIOS, US_SCENARIOS } from '../tour/aiScenarios.js';
-import { COMPOSITION_TITLE, RESOURCES_TITLE } from '../tour/slideTitles.js';
+import { COMPOSITION_TITLE, DEVELOPMENT_TITLE, FORECAST_UNCERTAINTY_TITLE, RESOURCES_TITLE } from '../tour/slideTitles.js';
 import { exportRows } from '../tour/exportsData.js';
 import { countriesTable } from '../tour/rule70Countries.js';
 import { imfTable } from '../tour/rule70Imf.js';
@@ -331,6 +331,34 @@ export function buildSlides(): SlideData[] {
     ], true, ['W3', 'W5', 'I1', 'F1', 'X1', 'X2', 'X3', 'E2', 'E7', 'E1', 'E10']),
     slide('14', 'Productividad', productivityTables(), false, ['P6', 'P7', 'P7b', 'P1', 'P8', 'P9']),
     slide('3', TOUR_CHARTS[3]!.title, [chartTable(3), ...aiTables(), perCapitaTable(), aiPopulationTable()], true, ['A1', 'A2', 'A3', 'A4', 'A5', 'A6', 'A7', 'A8', 'A9', 'A10']),
+    slide('16', DEVELOPMENT_TITLE, [{
+      id: 'development-draft',
+      title: 'Indicadores propuestos y estado de investigación',
+      columns: ['Indicador', 'Estado de definición', 'Estado de fuente'],
+      rows: [
+        ['IDH', 'Pendiente', 'Pendiente'],
+        ['Resultados PISA por área', 'Pendiente', 'Pendiente'],
+        ['Deserción universitaria', 'Pendiente', 'Pendiente'],
+        ['Esperanza de vida', 'Pendiente', 'Pendiente'],
+        ['Graduación universitaria y STEM', 'Pendiente', 'Pendiente'],
+        ['Maestría y doctorado', 'Pendiente', 'Pendiente'],
+        ['Índice de Gini', 'Pendiente', 'Pendiente'],
+        ['PBI por habitante y salarios reales', 'Definición pendiente', 'Pendiente']
+      ]
+    }], true),
+    slide('17', FORECAST_UNCERTAINTY_TITLE, [{
+      id: 'forecast-uncertainty-draft',
+      title: 'Evidencia necesaria para la diapositiva',
+      columns: ['Tema interactivo', 'Estado de evidencia'],
+      rows: [
+        ['Difusión de tecnologías y productividad', 'Pendiente de estudio y serie comparable'],
+        ['Capacidad de modelos y costos de inferencia', 'Pendiente de fuentes comparables'],
+        ['Hardware de cómputo y robótica', 'Pendiente de serie y benchmark'],
+        ['Revisiones de pronósticos económicos', 'Pendiente de vintages y métricas de error'],
+        ['IA, empleo y salarios', 'Pendiente de evidencia para Argentina'],
+        ['Crecimiento, educación, ahorro e inversión', 'Pendiente de estudios y límites causales']
+      ]
+    }], true),
     slide('sim', 'Simulador del PBI', [
       { id: 'factors', title: 'Factores del escenario de referencia', columns: ['Factor', 'Valor', 'Unidad'], rows: SIM_FIELDS.map((f) => [f.label, DEFAULT_SIM[f.key], f.unit]) },
       { id: 'reference', title: 'PBI del escenario de referencia (miles de millones de USD)', columns: ['Año', 'PBI'], rows: sim.years.map((y, i) => [y, sim.gdp[i] ?? null]) }
