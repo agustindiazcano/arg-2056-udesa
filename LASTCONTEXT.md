@@ -1,5 +1,12 @@
 # Last Context
 
+## Current task — chart styling
+- Branch `task/chart-aesthetics`, isolated worktree `C:\Users\agusd\.codex\worktrees\chart-aesthetics\arg-2056-udesa`.
+- CSS-only refinements in `web/src/styles/ui.css`: richer chart-card depth and focus state, clearer captions/legends, pill-style Gráfico | Tabla switch, more readable striped tables, and reduced-motion handling.
+- No chart data or behavior changed. `git diff --check` passed. No tests run (CSS only).
+- Browser preview remains unverified: this checkout has no local `node_modules`; attempting to borrow dependencies from the primary checkout was blocked by worktree permissions. Primary checkout had pre-existing edits and was not altered by this task.
+- Next: inspect the chart in a browser with this branch's assets, then commit the style change.
+
 ## State
 - **PPP removed from the whole project** (human request 2026-10-13, `task/remove-ppp`): the Maddison data (`scripts/build_world_data.py`, `worldRealData.json`, `worldReference.json`) is deleted, and its references (W1, W2, D1, D11, H5) and mentions in the docs, `AGENTS.md`, the tests and the comments are gone. Nothing in the app or the docs uses PPP.
 - **All GDP is real, at constant 2015 US dollars**: `scripts/build_world_gdp.py` -> `web/src/tour/worldGdp.json` (World Bank `NY.GDP.MKTP.KD`); `web/src/tour/gdpFacts.ts` is the single source (2025 observed 609.2; 2026 = 2025 x the IMF real growth 2.06 % = 621.8, shared by steps 1, 3 and the simulator); `tests/unit/gdpConsistency.test.ts` guards it. Argentina's population is the INDEC's (46.387 M in 2025). Exports stay in current USD (a flow) and say so. Rules and the IMF comparison: sections 0b and 5 of `docs/data-requests.md`.

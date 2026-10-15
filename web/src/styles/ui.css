@@ -2404,3 +2404,117 @@ main.scene-container {
   width: 0.55rem;
   height: 0.55rem;
 }
+
+/* ---- Chart surfaces: clearer hierarchy for the story and simulator ---------------------------------------------- */
+
+.gdp-chart {
+  background:
+    radial-gradient(90% 70% at 12% 0%, color-mix(in srgb, var(--blue) 10%, transparent), transparent 68%),
+    linear-gradient(155deg, color-mix(in srgb, var(--glass) 92%, #172330), color-mix(in srgb, var(--page) 72%, var(--glass)));
+  border-color: color-mix(in srgb, var(--border) 74%, var(--blue) 26%);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, white 5%, transparent), 0 16px 42px color-mix(in srgb, #000 22%, transparent);
+  transition: border-color 220ms ease, box-shadow 220ms ease, background-color 220ms ease;
+}
+
+.gdp-chart:focus-within {
+  border-color: color-mix(in srgb, var(--blue) 48%, var(--border));
+  box-shadow: inset 0 1px 0 color-mix(in srgb, white 6%, transparent), 0 18px 46px color-mix(in srgb, #000 28%, transparent), 0 0 0 1px color-mix(in srgb, var(--blue) 12%, transparent);
+}
+
+.tour-caption {
+  min-height: 1.7rem;
+  color: var(--ink-2);
+}
+
+.tour-caption > strong {
+  color: var(--ink);
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+
+.tour-legend {
+  color: color-mix(in srgb, var(--ink-2) 90%, var(--ink));
+}
+
+.tour-swatch {
+  box-shadow: 0 0 12px color-mix(in srgb, currentColor 25%, transparent);
+}
+
+.tour-view-switch .segmented {
+  gap: 2px;
+  padding: 3px;
+  border-color: color-mix(in srgb, var(--border) 80%, white 5%);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--page) 78%, transparent);
+  box-shadow: 0 6px 18px color-mix(in srgb, #000 20%, transparent), inset 0 1px 0 color-mix(in srgb, white 4%, transparent);
+  backdrop-filter: blur(12px);
+}
+
+.tour-view-switch .segmented .seg {
+  min-height: 1.8rem;
+  padding: 0.32rem 0.8rem;
+  border: 0;
+  border-radius: 999px;
+  color: var(--muted);
+  font-size: 0.76rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  transition: color 160ms ease, background 160ms ease, box-shadow 160ms ease;
+}
+
+.tour-view-switch .segmented .seg:hover {
+  color: var(--ink);
+  background: color-mix(in srgb, white 6%, transparent);
+}
+
+.tour-view-switch .segmented .seg[aria-pressed='true'] {
+  color: var(--ink);
+  background: color-mix(in srgb, var(--blue) 22%, var(--glass));
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--blue) 35%, transparent), 0 2px 8px color-mix(in srgb, #000 20%, transparent);
+}
+
+.tour-view-switch .segmented .seg:focus-visible {
+  outline: 2px solid var(--focus, #ffc107);
+  outline-offset: 2px;
+  z-index: 1;
+}
+
+.tour-table {
+  scrollbar-color: color-mix(in srgb, var(--blue) 36%, var(--border)) transparent;
+  scrollbar-width: thin;
+}
+
+.tour-table table {
+  border-collapse: separate;
+  border-spacing: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.tour-table thead th {
+  padding-top: 0.55rem;
+  padding-bottom: 0.55rem;
+  border-bottom: 1px solid color-mix(in srgb, var(--blue) 35%, var(--border));
+  background: color-mix(in srgb, var(--page) 94%, var(--blue));
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-size: 0.68rem;
+}
+
+.tour-table tbody tr:nth-child(even) {
+  background: color-mix(in srgb, white 2.5%, transparent);
+}
+
+.tour-table tbody tr:hover {
+  background: color-mix(in srgb, var(--blue) 9%, transparent);
+}
+
+.tour-table tbody td {
+  border-bottom: 1px solid color-mix(in srgb, var(--border) 68%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gdp-chart,
+  .tour-view-switch .segmented .seg {
+    transition: none;
+  }
+}
