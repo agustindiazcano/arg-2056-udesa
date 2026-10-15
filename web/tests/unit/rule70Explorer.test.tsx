@@ -151,3 +151,10 @@ describe('the Data page', () => {
     expect(slide.tables.map((t) => t.id)).toEqual(['chart-5', 'rule70-errors', 'rule70-argentina', 'rule70-countries']);
   });
 });
+
+describe('the look of the tabs and of the title', () => {
+  it('names the case with the indicator as it is written (PBI in capitals)', () => {
+    openExplorer();
+    expect(screen.getByRole('heading', { level: 3 }).textContent).toBe('Argentina: PBI real, 1960 a 2025');
+  });
+});

@@ -172,7 +172,7 @@ export function CountryExplorer() {
         {result.ok && (
           <Reveal k="results" delay={0.1} className="gdp-chart rule70-card">
             <h3 className="rule70-case">
-              {result.name}: {INDICATOR_LABEL[indicator].toLowerCase()}, {result.from} a {result.to}
+              {result.name}: {INDICATOR_LABEL[indicator]}, {result.from} a {result.to}
             </h3>
             <table className="rule70-table" aria-label="Resultados del período">
               <thead>

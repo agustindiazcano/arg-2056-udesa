@@ -2067,6 +2067,13 @@ main.scene-container {
   min-height: 0;
 }
 
+.tabbed-chart-tabs .chip[aria-selected='true'] {
+  color: var(--nav-on-accent);
+  background: var(--nav-accent);
+  border-color: transparent;
+  box-shadow: 0 0 18px color-mix(in srgb, var(--nav-accent) 45%, transparent);
+}
+
 .rule70-presets {
   display: flex;
   flex-wrap: wrap;
