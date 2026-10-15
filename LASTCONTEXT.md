@@ -42,3 +42,4 @@
 - **Productivity check (2026-10-15)**: all INDEC figures of the pasted report (PTF -0,9 % / +2,8 %, indices 103,1 / 114,0 / 110,7 / 92,5, stock 2.127.939, +12,6 % imported transport) match the PDF (D22). No code changed.
 - **Rule of 70 last + new title (`task/rule70-last`, human order of 2026-10-15)**: the rule of 70 (id 5) is the last slide (`TOUR_ORDER` ends in 5, number 13; Data follows) and its title is «¿Cuánto hay que crecer por año para duplicar el PBI? La regla del 70» (`RULE70_TITLE`).
 - **1/3 by default (in the same PR)**: `useTourLayout` starts with `focus: true`, so every chart slide that has the 1/2/3/4/1/3 buttons opens in the 1/3 layout.
+- **Rule of 70, R6 (`task/rule70-csv`, on top of `task/rule70-last`)**: the CSV of every Data table (per table, per slide) now ends each row with fuente, indicador, url, retrieved_at (`csv.ts`; `url` in `TABLE_META` for the rule-of-70 tables). Tables with no entry keep their columns.

@@ -10,7 +10,13 @@ function field(cell: Cell): string {
 }
 
 const line = (cells: Cell[]): string => cells.map(field).join(',') + EOL;
-const body = (t: DataTable): string => line(t.columns) + t.rows.map(line).join('');
+/** Provenance columns on every row of a table that has a source: where it comes from, what it measures, the link and the day it was read. */
+const PROVENANCE = ['fuente', 'indicador', 'url', 'retrieved_at'];
+const provenance = (t: DataTable): Cell[] => [t.source ?? '', t.title, t.url ?? '', t.retrievedAt ?? ''];
+const body = (t: DataTable): string =>
+  t.source === undefined
+    ? line(t.columns) + t.rows.map(line).join('')
+    : line([...t.columns, ...PROVENANCE]) + t.rows.map((r) => line([...r, ...provenance(t)])).join('');
 
 /** The CSV of one table: UTF-8 with a byte order mark (so Excel reads the accents), CRLF lines, numbers as they are. */
 export function tableCsv(t: DataTable): string {
