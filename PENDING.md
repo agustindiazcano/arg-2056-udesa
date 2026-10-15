@@ -77,6 +77,8 @@ Every task below has a brief (`<slug>.md` in the repository root) and a prompt (
 
 ## Data to verify (human, against original source)
 
+- [ ] Andes pop-up «Cómo fue el cruce» (`web/src/scenes/andes/CrossingInfo.tsx`): six columns (four secondary, the main force in two), the columns' roads and the meeting at Curimón (the sources give 8 or 9 February: H5, H16 of `docs/references.md`). Check the wording against a primary source.
+
 - [ ] Recorrido step 1 GDP chart: the history 1990-2025 is real (World Bank, constant 2015 USD) and 2026 comes from the IMF real growth; from 2027 the projection and the fan are made up (`web/src/tour/gdpMock.ts`, labelled "Datos de prueba"); replace them with the model before release.
 
 - [x] Recorrido steps 1 and 2 indicators box: real values of the World Bank (WDI, 2025, read 2026-10-12) in `web/src/tour/indicatorsMock.ts`; still to confirm against the INDEC (`docs/data-requests.md` D9).

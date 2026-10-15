@@ -17,6 +17,8 @@
 
 - **Rename (`task/rename-recorrido`)**: the section "Recorrido" is now "Hacia el 2056" in the tab, the intro button, the steps' accessible name and the README; the code, `docs/` and the dashboard mode "Recorrido" keep the old word. The intro has no Comenzar button any more: "Cruce de los Andes" and "Hacia el 2056" take its look (`.intro-start`); Enter still opens the Andes.
 
+- **Andes interface (`task/andes-ui`)**: the right panel holds the minimap, the altitude profile and the indicators (folded: a strip of `--strip-w` with the toggle and the data abbreviated); zoom/reset buttons in the bottom bar (slot `mapnav`); events list without parentheses, combats in red with the flag of the Army of the Andes (white over sky blue) against the Spanish one; removed the "Batalla de Chacabuco" button, the map clouds and the story caption over the Andes (`showsStory`); "Cámara en números" hidden (`.andes-dev-only`); the spotlight card of each force shows only commanders, men and units; new closable pop-up `CrossingInfo` (six columns, four secondary, the main force split in two that meet at Curimón), open from the moment the loading screen leaves. Not seen in a browser; the e2e keyboard test of the Andes may need a look (the pop-up takes the focus).
+
 ## Next
 - Approve the consolidation plan (PR #81).
 - The human: choose the OECD scenario that equals "expected" (M1), old WEO editions (M3), 2005 projections (M4); RIGI list (H1), mining and agro by province (H9), years of step 0 and the investment figure; check the mining transcription (H3b). Model and parameters for the projections from 2027.
