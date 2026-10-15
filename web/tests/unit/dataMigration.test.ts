@@ -11,23 +11,26 @@ describe('the Data page after the series migration', () => {
   const slides = buildSlides();
 
   // Slide 6 ("Qué miran los inversores", made-up 0-10 scores with no source) was removed by the human on 2026-10-14.
+  // Slide 11 (shares of the exports) was merged into slide 4 (Exports) on the same day: its table lives there now.
   const REMOVED = ['6'];
+  const MOVED: Record<string, string> = { '11': '4' };
   const kept = fixture.filter((s) => !REMOVED.includes(s.id));
+  const remaining = kept.filter((s) => !(s.id in MOVED));
 
-  it('keeps every slide of main except the removed ones', () => {
-    expect(slides.map((s) => s.id)).toEqual(kept.map((s) => s.id));
+  it('keeps every slide of main except the removed and the merged ones', () => {
+    expect(slides.map((s) => s.id)).toEqual(remaining.map((s) => s.id));
   });
 
   it.each(kept.map((s) => [s.id, s] as const))('slide %s keeps its tables cell by cell', (_id, old) => {
-    const now = slides.find((s) => s.id === old.id)!;
-    expect(now.refs).toEqual(old.refs);
-    expect(now.tables.map((t) => t.id)).toEqual(old.tables.map((t) => t.id));
+    const now = slides.find((s) => s.id === (MOVED[old.id] ?? old.id))!;
+    for (const ref of old.refs) expect(now.refs, ref).toContain(ref);
     for (const t of old.tables) {
-      const n = now.tables.find((x) => x.id === t.id)!;
-      expect(n.title, t.id).toBe(t.title);
-      expect(n.columns, t.id).toEqual(t.columns);
+      const n = now.tables.find((x) => x.id === t.id);
+      expect(n, `table ${t.id} of slide ${old.id}`).toBeDefined();
+      expect(n!.title, t.id).toBe(t.title);
+      expect(n!.columns, t.id).toEqual(t.columns);
       // the fixture is JSON, where -0 is written as 0 (same number): compare through the same serialization
-      expect(JSON.parse(JSON.stringify(n.rows)), t.id).toEqual(t.rows);
+      expect(JSON.parse(JSON.stringify(n!.rows)), t.id).toEqual(t.rows);
     }
   });
 
@@ -50,7 +53,9 @@ describe('the Data page after the series migration', () => {
     for (let step = 0; step <= 13; step += 1) {
       const q = quality.get(`chart-${step}`);
       if (q === undefined) continue;
-      const data = STEP_INFO[step]!.data;
+      const info = STEP_INFO[step];
+      if (!info) continue; // chart-11 lives in the Exports slide now and has no panel of its own
+      const data = info.data;
       if (data === 'prueba') expect(q, `chart-${step}`).toBe('placeholder');
       if (data === 'real') expect(q, `chart-${step}`).not.toBe('placeholder');
       if (data === 'parcial') expect(q, `chart-${step}`).toBe('partial');

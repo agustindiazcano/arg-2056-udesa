@@ -15,7 +15,9 @@ import { specRaw } from '../tour/specTable.js';
 import { COPPER_PROJECTS, LITHIUM_PROJECTS, MINING_CAPEX, MINING_EXPORTS_2024, MINING_EXPORTS_BY_YEAR, MINING_PROJECTION } from '../tour/miningArminera.js';
 import { RIGI_MINING, RIGI_OIL_GAS } from '../tour/rigiProjects.js';
 import type { RigiProject } from '../tour/rigiProjects.js';
-import { TOUR_CHARTS } from '../tour/tourCharts.js';
+import { EXPORT_COMPOSITION_CHART, TOUR_CHARTS } from '../tour/tourCharts.js';
+import { exportRows } from '../tour/exportsData.js';
+import type { TourChartDef } from '../tour/tourCharts.js';
 import { EXPORTS_GREAT_ITEMS, EXPORTS_GREAT_ITEMS_SOURCE, EXPORTS_TOTAL_2025, EXPORT_COMPLEXES, PROVINCE_VALUES } from '../tour/tourData.js';
 import { FIRST_YEAR as WORLD_FIRST, LAST_YEAR as WORLD_LAST, WORLD_UNIT, argentinaReal, regionCountries, regionValuesAt } from '../tour/worldData.js';
 import type { DataTable, SlideData } from './types.js';
@@ -32,8 +34,7 @@ function slide(id: string, title: string, tables: DataTable[], mock = true, refs
 }
 
 /** The raw table of a chart of the Recorrido (bars or lines), from the same spec the 3D view and the Gráfico | Tabla switch use. */
-function chartTable(step: number): DataTable {
-  const def = TOUR_CHARTS[step]!;
+function chartTable(step: number, def: TourChartDef = TOUR_CHARTS[step]!): DataTable {
   const spec = def.build().spec!;
   if (spec.kind === 'map') throw new Error(`step ${step} is a map`);
   const raw = specRaw(spec);
@@ -134,6 +135,18 @@ const complexesTable = (): DataTable => ({
   columns: ['Complejo', '2025', '2024', 'Variación (%)', 'Participación 2025 (%)'],
   rows: EXPORT_COMPLEXES.map((c) => [c.label, c.y2025, c.y2024, Math.round((c.y2025 / c.y2024 - 1) * 1000) / 10, Math.round((c.y2025 / EXPORTS_TOTAL_2025) * 1000) / 10])
 });
+
+/** The share of each complex in the exports of 2024 and 2025 (percent of the total of the year; the 2024 total is the sum of the complexes), as the Exports slide shows them. */
+const exportSharesTable = (): DataTable => {
+  const a = exportRows(2024, 'share');
+  const b = exportRows(2025, 'share');
+  return {
+    id: 'exports-shares',
+    title: 'Participación de cada complejo en las exportaciones de bienes, 2024 y 2025 (%, calculada de la tabla de arriba)',
+    columns: ['Complejo', 'Participación 2024 (%)', 'Participación 2025 (%)'],
+    rows: a.map((r, i) => [r.label, r.value, b[i]!.value])
+  };
+};
 
 const greatItemsTable = (): DataTable => ({
   id: 'great-items',
@@ -238,7 +251,7 @@ export function buildSlides(): SlideData[] {
     ], true, ['W3', 'W5', 'I1', 'F1', 'X1', 'X2', 'X3']),
     slide('2', 'Producción por provincia', [provinces(), hydrocarbonProvinces(), indicators()], true, ['W3', 'E6']),
     slide('3', TOUR_CHARTS[3]!.title, [chartTable(3)]),
-    slide('4', TOUR_CHARTS[4]!.title, [chartTable(4), complexesTable(), greatItemsTable()], false, ['E7', 'E1']),
+    slide('4', TOUR_CHARTS[4]!.title, [chartTable(4), { ...chartTable(4, EXPORT_COMPOSITION_CHART), id: 'chart-11' }, complexesTable(), exportSharesTable(), greatItemsTable()], false, ['E7', 'E1']),
     slide('5', TOUR_CHARTS[5]!.title, [chartTable(5)], false),
     slide('7', TOUR_CHARTS[7]!.title, [
       { id: 'provinces-value', title: `Valor productivo por provincia (${PRODUCTION_UNIT})`, columns: ['Provincia', 'Valor'], rows: PROVINCES.map((p, i) => [p.name, PROVINCE_VALUES[i] ?? null]) },
@@ -247,7 +260,6 @@ export function buildSlides(): SlideData[] {
     slide('8', TOUR_CHARTS[8]!.title, [chartTable(8), ...miningTables(), rigiTable('rigi-mining', 'Proyectos mineros del RIGI y otros en evaluación (prensa, sin verificar)', RIGI_MINING)], false, ['E3', 'E5', 'R1', 'R2', 'R3', 'R4', 'R5', 'R9']),
     slide('9', TOUR_CHARTS[9]!.title, [chartTable(9), nationalProduction(), oilSince1950(), rigiTable('rigi-oil-gas', 'Proyectos de petróleo y gas del RIGI y otros en evaluación (prensa, sin verificar)', RIGI_OIL_GAS)], true, ['E6', 'E4', 'R2', 'R3', 'R6', 'R7', 'R8', 'R10', 'R11']),
     slide('10', TOUR_CHARTS[10]!.title, [chartTable(10), agroTable()], true, ['E8']),
-    slide('11', TOUR_CHARTS[11]!.title, [chartTable(11)], false, ['E7']),
     slide('12', TOUR_CHARTS[12]!.title, [chartTable(12)], false, ['E2']),
     slide('13', TOUR_CHARTS[13]!.title, [chartTable(13), reservesTable()], true, ['E3', 'E5', 'E6']),
     slide('14', 'Productividad', productivityTables(), false, ['P6', 'P7', 'P7b', 'P1', 'P8', 'P9']),

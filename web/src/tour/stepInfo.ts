@@ -70,9 +70,10 @@ export const STEP_INFO: Record<number, StepInfo> = {
     heading: 'De qué viven las exportaciones',
     paragraphs: [
       'Argentina exportó bienes por 87.111 millones de dólares en 2025, 9,3 % más que en 2024 (datos provisorios). El INDEC los agrupa en complejos exportadores, que reúnen la materia prima con los productos elaborados de una misma cadena.',
-      'El complejo soja es el primero (21.442 millones, uno de cada cuatro dólares), seguido por el petrolero-petroquímico (11.772, un récord desde 2002), el automotriz (8.784) y el maicero (6.660). Los diez principales complejos juntan el 77,7 % de lo exportado.'
+      'El complejo soja es el primero (21.442 millones, uno de cada cuatro dólares), seguido por el petrolero-petroquímico (11.772, un récord desde 2002), el automotriz (8.784) y el maicero (6.660). Los diez principales complejos juntan el 77,7 % de lo exportado.',
+      'Con el botón «% del total» el mismo gráfico muestra cómo se reparte: la soja es el 24,6 %; el petróleo y la petroquímica, el 13,5 %; los autos, el 10,1 %; y el maíz, el 7,6 %. El oro y la plata (5,6 %) crecieron 27,7 % y el trigo (4,2 %) 32,0 % respecto de 2024.'
     ],
-    how: 'Cada barra es un complejo exportador, en miles de millones de dólares de 2025. «Otros complejos» reúne a los 27 restantes y «Resto de exportaciones» a lo que no entra en ningún complejo.',
+    how: 'Elegí dólares o % del total, el año (el informe que tenemos trae 2024 y 2025; los otros años están deshabilitados porque no hay dato) y, si querés, un complejo para ver cómo cambió. Cada barra es un complejo exportador. «Otros complejos» reúne a los 27 restantes y «Resto de exportaciones» a lo que no entra en ningún complejo.',
     data: 'real',
     note: 'INDEC, «Complejos exportadores, año 2025» (marzo de 2026, datos provisorios), solo bienes: no incluye servicios. En Data está también el acumulado de enero a julio de 2026 por gran rubro (58.365 millones, 22,9 % más que un año antes).',
     refs: ['E7', 'E1']
@@ -131,17 +132,6 @@ export const STEP_INFO: Record<number, StepInfo> = {
     data: 'prueba',
     note: 'Las barras del gráfico son de prueba (están en dólares). Las toneladas por cultivo son reales (MAGyP, series nacionales) y están en Data. Falta un estudio de potencial y valuar la producción.',
     refs: ['E8']
-  },
-  11: {
-    heading: 'Cómo se reparte lo que exportamos',
-    paragraphs: [
-      'El mismo total del paso 4, ahora como porcentaje de las exportaciones de bienes de 2025.',
-      'La soja es el 24,6 %; el petróleo y la petroquímica, el 13,5 %; los autos, el 10,1 %; y el maíz, el 7,6 %. El oro y la plata (5,6 %) crecieron 27,7 % y el trigo (4,2 %) 32,0 % respecto de 2024.'
-    ],
-    how: 'Cada barra es la parte del total que corresponde a un complejo. Todas las barras suman 100 %.',
-    data: 'real',
-    note: 'INDEC, «Complejos exportadores, año 2025» (datos provisorios). Los porcentajes son sobre las exportaciones de bienes.',
-    refs: ['E7']
   },
   12: {
     heading: 'De qué se compone el PBI',

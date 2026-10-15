@@ -56,6 +56,7 @@ export const TABLE_META: Readonly<Record<string, TableMeta>> = {
   'chart-10': made(),
   'agro-production': meta('real', 'MAGyP, series nacionales anuales (datos.gob.ar)', '2026-10-13'),
   'chart-11': meta('real', INDEC_X, '2026-10-13'),
+  'exports-shares': meta('real', `${INDEC_X}; porcentajes calculados`, '2026-10-13'),
   'chart-12': meta('real', 'INDEC, cuentas nacionales, valor agregado a precios de 2004 (preliminar)', '2026-10-13'),
   'chart-13': made(),
   reserves: meta('real', ENERGIA, '2026-10-13'),

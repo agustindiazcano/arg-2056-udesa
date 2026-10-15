@@ -2,6 +2,7 @@ import React from 'react';
 // the styles of the 3D charts, the tables and the nav buttons live here; the Dashboard is not always loaded before the Recorrido
 import '../dashboard/dashboard.css';
 import { ChartStep } from './ChartStep.js';
+import { ExportsStep } from './ExportsStep.js';
 import { ProvinceStep } from './ProvinceStep.js';
 import { ProductivityStep } from './ProductivityStep.js';
 import { WorldStep } from './WorldStep.js';
@@ -13,7 +14,7 @@ export function TourStep({ step }: { step: number }) {
   // every other step has the side panel with the text and the references, next to its chart
   return (
     <div className="tour-frame">
-      {step === 0 ? <WorldStep /> : step === 2 ? <ProvinceStep /> : <ChartStep step={step} />}
+      {step === 0 ? <WorldStep /> : step === 2 ? <ProvinceStep /> : step === 4 ? <ExportsStep /> : <ChartStep step={step} />}
       <TourSidebar step={step} />
     </div>
   );

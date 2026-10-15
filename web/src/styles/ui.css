@@ -1984,3 +1984,21 @@ main.scene-container {
   opacity: 0.45;
   cursor: not-allowed;
 }
+
+.export-complex {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: var(--font-sm);
+  color: var(--muted);
+}
+
+.export-complex select {
+  max-width: 14rem;
+  padding: 0.2rem 0.4rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface, var(--page));
+  color: var(--ink);
+  font: inherit;
+}

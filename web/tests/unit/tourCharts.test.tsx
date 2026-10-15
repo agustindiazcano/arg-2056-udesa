@@ -16,7 +16,7 @@ import { useStore } from '../../src/state/store';
 
 describe('the charts of the Recorrido', () => {
   it('has a chart for step 1 and for steps 3 to 13 except 6 (the investor slide was removed), and the shell also knows steps 0 and 2', () => {
-    expect(CHART_STEP_LIST).toEqual([1, 3, 4, 5, 7, 8, 9, 10, 11, 12, 13]);
+    expect(CHART_STEP_LIST).toEqual([1, 3, 4, 5, 7, 8, 9, 10, 12, 13]);
     // step 2 is the map of production by province: its own component, not one of the charts that go side by side
     expect([...CHART_STEPS].sort((a, b) => a - b)).toEqual([0, 1, 2, ...CHART_STEP_LIST.slice(1), 14]);
     expect(hasTourChart(0)).toBe(true);
@@ -34,7 +34,7 @@ describe('the charts of the Recorrido', () => {
     expect(TOUR_CHARTS[8]!.title).toBe('Minería: hoy vs proyecto');
     expect(TOUR_CHARTS[9]!.title).toBe('Hidrocarburos: Vaca Muerta define el piso y el techo');
     expect(TOUR_CHARTS[10]!.title).toBe('Agro: producción actual y potencial');
-    expect(TOUR_CHARTS[11]!.title).toBe('Composición de las exportaciones');
+    expect(TOUR_CHARTS[11]).toBeUndefined(); // merged into the Exports slide (step 4)
     expect(TOUR_CHARTS[12]!.title).toBe('Composición del PBI');
     expect(TOUR_CHARTS[13]!.title).toBe('El stock de recursos naturales');
   });
@@ -81,7 +81,7 @@ describe('visibleSteps', () => {
     expect(visibleSteps(1, 1)).toEqual([1]);
     expect(visibleSteps(1, 4)).toEqual([1, 3, 4, 5]);
     expect(visibleSteps(5, 3)).toEqual([5, 7, 8]);
-    expect(visibleSteps(13, 4)).toEqual([10, 11, 12, 13]);
+    expect(visibleSteps(13, 4)).toEqual([9, 10, 12, 13]);
   });
 });
 
@@ -119,11 +119,11 @@ describe('ChartStep', () => {
     expect(picks.map((b) => b.getAttribute('aria-label'))).toEqual([
       'Ver grande: Hidrocarburos: Vaca Muerta define el piso y el techo',
       'Ver grande: Agro: producción actual y potencial',
-      'Ver grande: Composición de las exportaciones'
+      'Ver grande: Composición del PBI'
     ]);
     expect(document.querySelector('.tour-grid')?.getAttribute('data-layout')).toBe('focus');
     expect(document.querySelector('[data-size="big"]')?.getAttribute('data-step')).toBe('8');
     fireEvent.click(picks[2]!);
-    expect(useStore.getState().tourStep).toBe(11);
+    expect(useStore.getState().tourStep).toBe(12);
   });
 });
