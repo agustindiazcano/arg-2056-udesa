@@ -1446,6 +1446,13 @@ main.scene-container {
   font-variant-numeric: tabular-nums;
 }
 
+.sim-method {
+  margin: var(--space-2, 0.5rem) 0;
+  color: var(--muted);
+  font-size: 0.72rem;
+  line-height: 1.4;
+}
+
 .sim-label,
 .sim-help {
   color: var(--muted);

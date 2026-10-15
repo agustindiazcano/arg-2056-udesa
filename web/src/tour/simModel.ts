@@ -1,4 +1,5 @@
 import { ARG_GDP_2026 } from './gdpFacts';
+import { populationPath } from './aiModel';
 
 /**
  * The GDP simulator of the Simulador section: plain arithmetic, not the forecast model. The yearly growth is the base rate plus the
@@ -11,7 +12,7 @@ export interface SimParams {
   baseGrowth: number;
   /** extra growth per year at full adoption of the AI, percentage points */
   ai: number;
-  /** growth of the population, % per year */
+  /** annual population-growth adjustment, percentage points relative to the UN WPP medium path */
   population: number;
   /** extra growth per year from productivity reforms, percentage points */
   productivity: number;
@@ -30,7 +31,7 @@ export const AI_RAMP_YEARS = 15;
 /** percentage points of growth for each point of investment over the default */
 export const INVESTMENT_PP_PER_POINT = 0.1;
 
-export const DEFAULT_SIM: SimParams = { baseGrowth: 3.0, ai: 0.4, population: 0.5, productivity: 0, investment: 17.5 };
+export const DEFAULT_SIM: SimParams = { baseGrowth: 3.0, ai: 0.4, population: 0, productivity: 0, investment: 17.5 };
 
 export interface SimField {
   key: SimKey;
@@ -45,7 +46,7 @@ export interface SimField {
 export const SIM_FIELDS: readonly SimField[] = [
   { key: 'baseGrowth', label: 'Crecimiento anual base', unit: '% anual', min: 0, max: 6, step: 0.1, help: 'La tasa a la que crece el PBI antes de los demás factores.' },
   { key: 'ai', label: 'Impacto de la IA', unit: 'pp por año', min: 0, max: 3, step: 0.1, help: 'Crecimiento extra con la IA plenamente adoptada; llega en 15 años. Los escenarios de la diapositiva de la IA lo ubican entre 0,1 y 0,7.' },
-  { key: 'population', label: 'Crecimiento de la población', unit: '% anual', min: -0.5, max: 2, step: 0.1, help: 'Más gente suma al PBI un punto por punto, medido contra el 0,5 % base.' },
+  { key: 'population', label: 'Ajuste de población', unit: 'pp vs WPP', min: -1, max: 2, step: 0.1, help: 'Desplaza la senda media de población de ONU WPP; cambia el PBI total y la población usada para calcular el PBI por habitante.' },
   { key: 'productivity', label: 'Mejora de productividad', unit: 'pp por año', min: -1, max: 2, step: 0.1, help: 'Reformas que suben (o bajan) lo que produce cada trabajador.' },
   { key: 'investment', label: 'Inversión', unit: '% del PBI', min: 10, max: 30, step: 0.5, help: 'Cada punto sobre el 17,5 % suma una décima al crecimiento anual.' }
 ];
@@ -53,19 +54,27 @@ export const SIM_FIELDS: readonly SimField[] = [
 /** Growth of the year, in %. */
 export function growthAt(p: SimParams, year: number): number {
   const ramp = Math.min(1, Math.max(0, (year - SIM_START) / AI_RAMP_YEARS));
-  return p.baseGrowth + p.ai * ramp + (p.population - DEFAULT_SIM.population) + p.productivity + (p.investment - DEFAULT_SIM.investment) * INVESTMENT_PP_PER_POINT;
+  return p.baseGrowth + p.ai * ramp + p.population + p.productivity + (p.investment - DEFAULT_SIM.investment) * INVESTMENT_PP_PER_POINT;
 }
 
-export function simulate(p: SimParams): { years: number[]; gdp: number[] } {
+export function simulate(p: SimParams): { years: number[]; gdp: number[]; population: number[]; perCapita: number[] } {
   const years: number[] = [];
   const gdp: number[] = [];
+  const population: number[] = [];
+  const populationBaseline = populationPath();
+  const populationIndex = new Map(populationBaseline.years.map((year, index) => [year, index]));
   let value = SIM_START_GDP;
   for (let year = SIM_START; year <= SIM_END; year += 1) {
     years.push(year);
     gdp.push(Math.round(value * 10) / 10);
+    const baselinePopulation = populationBaseline.values[populationIndex.get(year)!]!;
+    const populationAdjustment = Math.pow(1 + p.population / 100, year - SIM_START);
+    population.push(Math.round(baselinePopulation * populationAdjustment * 1000) / 1000);
     value *= 1 + growthAt(p, year) / 100;
   }
-  return { years, gdp };
+  // GDP is in billions of constant USD and population in millions, so the ratio is thousands of USD per person.
+  const perCapita = gdp.map((amount, index) => Math.round((amount / population[index]!) * 100) / 100);
+  return { years, gdp, population, perCapita };
 }
 
 /** Rule of 70: years to double at a yearly growth in %, or null when it does not grow. */

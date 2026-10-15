@@ -33,7 +33,14 @@ const VIEWS = [
   { value: '3d', label: '3D' }
 ] as const;
 
+const INDICATORS = [
+  { value: 'gdp', label: 'PBI total' },
+  { value: 'perCapita', label: 'PBI por habitante' }
+] as const;
+
 const UNIT = 'miles de millones de USD de 2015 (PBI real)';
+const PER_CAPITA_UNIT = 'miles de USD de 2015 por habitante';
+const POPULATION_UNIT = 'millones de personas';
 const TITLE = `Simulador: evolución del PBI hasta ${SIM_END}`;
 const REFERENCE = 'Escenario de referencia';
 const YOURS = 'Tu escenario';
@@ -46,6 +53,7 @@ export function Simulator() {
   const mode = useStore((s) => s.mode);
   const dispatch = useStore((s) => s.dispatch);
   const [params, setParams] = useState<SimParams>(DEFAULT_SIM);
+  const [indicator, setIndicator] = useState<(typeof INDICATORS)[number]['value']>('gdp');
   // the lines draw themselves from 2026 to 2056 when the visitor presses play, like the first slide
   const reduced = useReducedMotion();
   const [run, setRun] = useState(0);
@@ -59,37 +67,45 @@ export function Simulator() {
   const reference = useMemo(() => simulate(DEFAULT_SIM), []);
   const end = mine.gdp.at(-1) ?? 0;
   const endRef = reference.gdp.at(-1) ?? 0;
+  const endPerCapita = mine.perCapita.at(-1) ?? 0;
+  const endPerCapitaRef = reference.perCapita.at(-1) ?? 0;
+  const endPopulation = mine.population.at(-1) ?? 0;
+  const perCapitaDelta = endPerCapitaRef > 0 ? ((endPerCapita / endPerCapitaRef) - 1) * 100 : null;
   const growth = averageGrowth(mine.gdp);
   const double = doublingYears(growth);
   const delta = endRef > 0 ? ((end - endRef) / endRef) * 100 : 0;
 
   const chart = useMemo(() => {
     const xLabels = mine.years.map(String);
-    const summary = `PBI simulado de ${SIM_START} a ${SIM_END}: de ${formatValue(mine.gdp[0] ?? null, UNIT)} a ${formatValue(end, UNIT)} en tu escenario y ${formatValue(endRef, UNIT)} en el de referencia`;
+    const unit = indicator === 'gdp' ? UNIT : PER_CAPITA_UNIT;
+    const mineValues = mine[indicator];
+    const referenceValues = reference[indicator];
+    const title = indicator === 'gdp' ? 'PBI total simulado' : 'PBI por habitante simulado';
+    const summary = `${title} de ${SIM_START} a ${SIM_END}: de ${formatValue(mineValues[0] ?? null, unit)} a ${formatValue(mineValues.at(-1) ?? null, unit)} en tu escenario y ${formatValue(referenceValues.at(-1) ?? null, unit)} en el de referencia`;
     const series = [
-      { name: REFERENCE, values: reference.gdp, color: tokens.muted, dashed: true },
-      { name: YOURS, values: mine.gdp, color: tokens.blue }
+      { name: REFERENCE, values: referenceValues, color: tokens.muted, dashed: true },
+      { name: YOURS, values: mineValues, color: tokens.blue }
     ];
     const shown = series.map((s) => ({ ...s, values: s.values.map((v, i) => (mine.years[i]! <= shownYear ? v : null)) }));
-    const lines = buildLines(xLabels, shown, { unit: UNIT, labelEvery: 4, summary }).option as unknown as { yAxis: Record<string, unknown> };
+    const lines = buildLines(xLabels, shown, { unit, labelEvery: 4, summary }).option as unknown as { yAxis: Record<string, unknown> };
     // the axis does not move while the lines draw: it fits the whole range of both lines
-    const all = [...reference.gdp, ...mine.gdp];
+    const all = [...referenceValues, ...mineValues];
     lines.yAxis = { ...lines.yAxis, min: Math.floor(Math.min(...all) * 0.97), max: Math.ceil(Math.max(...all) * 1.02) };
     // a dot and the year at which your GDP is twice, three and four times that of 2026, once the line has got there
-    const option = addMilestones(lines, mine.years, [{ values: mine.gdp, color: tokens.blue }], shownYear);
+    const option = indicator === 'gdp' ? addMilestones(lines, mine.years, [{ values: mineValues, color: tokens.blue }], shownYear) : lines;
     const spec = linesSpec({
-      title: 'PBI simulado',
-      unit: UNIT,
+      title,
+      unit,
       xLabels,
       series: [
-        { name: REFERENCE, values: reference.gdp, tone: 'muted', dashed: true },
-        { name: YOURS, values: mine.gdp, tone: 'accent', color: tokens.blue }
+        { name: REFERENCE, values: referenceValues, tone: 'muted', dashed: true },
+        { name: YOURS, values: mineValues, tone: 'accent', color: tokens.blue }
       ],
       follow: true,
       summary
     });
-    return { option, spec: { ...spec, clock }, summary };
-  }, [mine, reference, end, endRef, shownYear, clock]);
+    return { option, spec: { ...spec, clock }, summary, unit, mineValues };
+  }, [mine, reference, indicator, shownYear, clock]);
 
   const set = (key: SimKey, value: number) => setParams((p) => ({ ...p, [key]: value }));
 
@@ -156,10 +172,11 @@ export function Simulator() {
                 {YOURS}
               </li>
             </ul>
+            <Segmented label="Indicador" options={INDICATORS} value={indicator} onChange={setIndicator} />
           </div>
           <div className="world-year" aria-hidden="true">
             <strong>{shownYear}</strong>
-            <span>{formatValue(mine.gdp[shownYear - SIM_START] ?? null, UNIT)}</span>
+            <span>{formatValue(chart.mineValues[shownYear - SIM_START] ?? null, chart.unit)}</span>
           </div>
           <div className="tour-chart" key={run}>
             <TourChart spec={chart.spec}>
@@ -180,7 +197,22 @@ export function Simulator() {
               <strong>{formatDecimal(growth)} % anual</strong>
               <span className="sim-label">{double === null ? 'No se duplica' : `Se duplica en ${Math.round(double)} años`}</span>
             </div>
+            <div>
+              <span className="sim-label">PBI por habitante en {SIM_END}</span>
+              <strong>{formatValue(endPerCapita, PER_CAPITA_UNIT)}</strong>
+              <span className="sim-label">
+                {perCapitaDelta === null
+                  ? 'Sin referencia'
+                  : `${perCapitaDelta >= 0 ? '+' : ''}${formatDecimal(Math.round(perCapitaDelta * 10) / 10)} % frente a la referencia`}
+              </span>
+            </div>
+            <div>
+              <span className="sim-label">Población en {SIM_END}</span>
+              <strong>{formatValue(endPopulation, POPULATION_UNIT)}</strong>
+              <span className="sim-label">Senda demográfica seleccionada</span>
+            </div>
           </div>
+          <p className="sim-method">PBI por habitante = PBI real ÷ población (ONU WPP, variante media, anclada a INDEC).</p>
 
           <div className="sim-factors">
             {SIM_FIELDS.map((f) => (
