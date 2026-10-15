@@ -279,6 +279,7 @@ Legend: DONE = merged. READY = can start now. BLOCKED = needs the human input na
 | 29 | polish | DECIDED | D-polish-3 color from the human; model and data tasks done, unless the human starts it earlier (3D first, D-3d-6) |
 | 30 | docs-submission | BLOCKED | the contest's rules (table in the brief); backtest-run |
 | 31 | demo-video (optional) | BLOCKED | what the contest requires |
+| 32 | development-indicators-maps | READY for source audit and contract design | verify indicator definitions, project/resource records and locations before publishing |
 
 8. docs/archived/references-page.md  [DONE - merged]
 
@@ -404,6 +405,25 @@ Rules:
  
 When finished: overwrite LASTCONTEXT.md, update PENDING.md, and write a PR description with (a) what changed, (b) what was verified, (c) what the human must verify.
 ```
+
+---
+
+## development-indicators-maps
+
+Before implementation, read `AGENTS.md`, `LASTCONTEXT.md`, `PENDING.md`, `development-indicators-maps.md`, `docs/data-requests.md`, `docs/references.md`, `docs/dashboard.md`, `docs/geo.md`, and `docs/design.md`, then inspect the current Recorrido slide registry, province map, resources view, projects contract/data, and motion utilities.
+
+Execute the plan in `development-indicators-maps.md` in small, reviewable slices. First audit source coverage and current contracts; do not add or display values or coordinates until each is tied to a source and reviewed. Keep separate PRs/branches for the Development slide, provincial resource/project explorer, and shared map transitions if that keeps the changes small.
+
+Rules:
+- The planning brief is on `task/indicadores-desarrollo-mapas`. Create a new `task/...` branch for each implementation slice; never touch `main`, merge, or push to `main`.
+- Follow strict TDD for logic. Keep every UI number in `PENDING.md` under Data to verify until a human confirms it against the source.
+- Do not infer dropout, STEM or postgraduate rates from incompatible counts/denominators. Do not convert projects' resources, reserves, production, capacity or CAPEX into one another.
+- Preserve `source` and `retrieved_at`; gaps are `null` with a note. Tests never write in the real `data/` directory.
+- Map selection and list/detail selection stay synchronized. Respect `prefers-reduced-motion`, keyboard access, map cleanup, and precomputed data; no projection computation per frame.
+- Do not invent visual colors or project coordinates. Add no dependencies without a reason in the PR.
+- Before push, run `python scripts/precheck.py`; never push if it fails. Never claim CI is green unless the run was checked.
+
+When finished, update `LASTCONTEXT.md`, `PENDING.md`, and the brief with the verified sources, remaining human checks, and a PR description stating what changed, what was verified, and what needs human review.
  
 ---
  

@@ -36,6 +36,13 @@
 - Approve the consolidation plan (PR #81).
 - The human: choose the OECD scenario that equals "expected" (M1), old WEO editions (M3), 2005 projections (M4); RIGI list (H1), mining and agro by province (H9), years of step 0 and the investment figure; check the mining transcription (H3b). Model and parameters for the projections from 2027.
 
+## Current task (2026-10-15)
+- On separate worktree `C:\Users\agusd\.codex\worktrees\desarrollo-mapas\arg-2056-udesa`, branch `task/indicadores-desarrollo-mapas`.
+- Planning only: `development-indicators-maps.md` defines a Development slide and a province-level resource/project explorer, including smooth 2D/3D map transitions.
+- Added task 51 to `roadmap.md`, prompt/status to `TASKS.md`, and queue, data-verification and visual-debt entries to `PENDING.md`.
+- No data, code, tests, or sources have been added; no values/coordinates are treated as verified.
+- Next: human/source audit, agree indicator definitions and project-location coverage; then implement in separate small task branches.
+
 - **Revalidation (`task/revalidate-sources`, 2026-10-14)**: checked a pasted AI report against sources. Added official mining exports by province (`miningByProvince.ts`, table `mining-provinces`, refs E9, R12); Taca Taca capex fixed to the NI 43-101 (4.232); Bajo del Choique added; `dataMigration.test.ts` now lists `CORRECTED` tables on purpose. Not done: RIGI official list (H1), services exports (D26: 9.600 only from press), Palermo Aike and productivity notes (links open, content unchecked). Not pushed.
 - **Services (2026-10-15)**: table `services-exports` and `sbc-exports` in Data slide 4 (CEI Cancillería, ref E10). The pasted "services > 9.600" is the SBC, not total services (18.039). Official RIGI portal gives 16 approved / 29.892 (2026-06-11) and does not render a list to a script: H1 stays with the human.
 - **Los Toldos / Palermo Aike (2026-10-15)**: 6.432 is the exact figure (phases add up); Palermo Aike costs are statements (YPF 75-80, governor 85), recorded in D25, not loaded in the app.
