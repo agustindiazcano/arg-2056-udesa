@@ -29,7 +29,7 @@ describe('the Test proyección button', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Test proyección' }));
     const dialog = screen.getByRole('dialog', { name: 'Test proyección' });
     expect(dialog.getAttribute('aria-modal')).toBe('true');
-    expect(dialog.textContent).toContain('Datos de prueba: no son datos del modelo.');
+    expect(dialog.textContent).not.toMatch(/datos de prueba/i);
     await waitFor(() => expect(screen.getByTestId('projection-scenes')).toBeTruthy());
   });
 

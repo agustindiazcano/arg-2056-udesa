@@ -68,7 +68,7 @@ export function buildProvinceMap(input: ProvinceMapInput, opts: ProvinceMapOpts)
   const tooltipFormatter = (params: TooltipParams): string => {
     const id = params.data?.provinceId ?? params.name ?? '';
     if (id === MALVINAS_ID) {
-      return 'Islas Malvinas<br/>Territorio mostrado como referencia: contorno ilustrativo, sin datos';
+      return 'Islas Malvinas';
     }
     const name = nameOf(id) ?? id;
     const v = values.values[id];

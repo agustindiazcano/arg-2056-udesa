@@ -44,7 +44,7 @@ export function demoBarsSpec(values: MapValues, names: Record<string, string>, c
     .slice(0, count)
     .map(([id, v]) => ({ label: demoLabel(id, names[id] ?? id), value: v.plotted }));
   return barsSpec(rows, {
-    title: 'Provincias con mayor valor (datos de prueba)',
+    title: 'Provincias con mayor valor',
     unit: 'pts',
     highlight: rows[0]?.label ?? null
   });

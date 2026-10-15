@@ -163,7 +163,7 @@ describe('demoBarsSpec', () => {
     ]);
   });
 
-  it('says in its title that the data is a test', () => {
-    expect(spec.title).toBe('Provincias con mayor valor (datos de prueba)');
+  it('has a plain title, with no label about the data', () => {
+    expect(spec.title).toBe('Provincias con mayor valor');
   });
 });

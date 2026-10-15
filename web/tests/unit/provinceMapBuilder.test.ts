@@ -221,10 +221,8 @@ describe('buildProvinceMap', () => {
     expect(build().option.tooltip.formatter({ name: 'Salta', data: { provinceId: 'AR-A' } })).toContain('Salta<br/>20 t');
   });
 
-  it('describes the Malvinas as an illustrative territory outline', () => {
-    expect(build().option.tooltip.formatter({ name: MALVINAS_ID })).toBe(
-      'Islas Malvinas<br/>Territorio mostrado como referencia: contorno ilustrativo, sin datos'
-    );
+  it('names the Malvinas in its tooltip and says nothing else about them', () => {
+    expect(build().option.tooltip.formatter({ name: MALVINAS_ID })).toBe('Islas Malvinas');
   });
 
   it('counts excluded provinces and builds the summary with mapSummary', () => {
