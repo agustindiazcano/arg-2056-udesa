@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { EChart } from '../charts/EChart.js';
 import { addMilestones } from '../charts/builders/milestones.js';
-import { buildLines } from '../charts/builders/tourCharts.js';
+import { buildFluidLines } from '../charts/builders/tourCharts.js';
 import { formatValue } from '../charts/format.js';
 import { FOLLOW_MS, followFrame } from '../charts3d/followAnim.js';
 import { linesSpec } from '../charts3d/specs.js';
@@ -47,13 +47,23 @@ const TONE: Record<string, string> = { base: 'neutro', moderate: 'intermedio', o
 type Line = { name: string; values: Array<number | null>; color: string };
 
 /** The lines drawn up to `year`, on axes that do not move while they draw (the whole range of the data is fixed). */
-function lineOption(years: number[], series: Line[], year: number, unit: string, summary: string, withDots = false, baseValue?: number | null) {
-  const shown = series.map((s) => ({ ...s, values: s.values.map((v, i) => (years[i]! <= Math.floor(year + 1e-6) ? v : null)) }));
-  const all = series.flatMap((s) => s.values.filter((v): v is number => v !== null));
-  const { option } = buildLines(years.map(String), shown, { unit, labelEvery: 5, summary });
-  const fixed = option as unknown as { yAxis: Record<string, unknown> };
-  fixed.yAxis = { ...fixed.yAxis, min: Math.floor(Math.min(...all) * 0.97), max: Math.ceil(Math.max(...all) * 1.02) };
-  return withDots ? addMilestones(option, years, series, Math.floor(year + 1e-6), baseValue) : option;
+function lineOption(
+  years: number[],
+  series: Line[],
+  year: number,
+  unit: string,
+  summary: string,
+  withDots = false,
+  baseValue?: number | null,
+  labelEvery = 5
+) {
+  const { option } = buildFluidLines(years, series, year, {
+    unit,
+    labelEvery,
+    summary,
+    showHead: true
+  });
+  return withDots ? addMilestones(option, years, series, year, baseValue) : option;
 }
 
 /**
@@ -103,20 +113,23 @@ export function AiStep() {
     () => perCapita.series.map((s) => ({ name: s.name, values: from1960 ? [...histPerCapita, ...s.values] : s.values, color: s.color })),
     [perCapita, from1960, histPerCapita]
   );
-  const perCapitaSummary = `PBI por habitante por escenario: ${perCapita.series.map((s) => `${s.name} ${formatValue(s.values.at(-1) ?? null, perCapita.unit)} en 2056`).join(', ')}`;
+  const perCapitaSummary = `PBI per cápita por escenario: ${perCapita.series.map((s) => `${s.name} ${formatValue(s.values.at(-1) ?? null, perCapita.unit)} en 2056`).join(', ')}`;
 
   const popYears = useMemo(() => (from1960 ? [...hist.years.slice(0, -1), ...pop.years] : pop.years), [from1960, hist, pop]);
   const popValues = useMemo(() => (from1960 ? [...histPop.slice(0, -1), ...pop.values] : pop.values), [from1960, histPop, pop]);
   const popLines: Line[] = useMemo(() => [{ name: 'Población', values: popValues, color: tokens.muted }], [popValues]);
   const popSummary = `Población de Argentina de ${num(popValues[0]!)} millones en ${FIRST} a ${num(popValues.at(-1)!)} en ${LAST}`;
 
+  const bigInterval = from1960 ? 15 : 5;
+  const smallInterval = from1960 ? 25 : 10;
+
   const big = useMemo(
-    () => lineOption(activeYears, gdpLines, year, gdp.unit, gdpSummary, true, gdp.series[0]!.values[0]),
-    [activeYears, gdpLines, year, gdp, gdpSummary]
+    () => lineOption(activeYears, gdpLines, year, gdp.unit, gdpSummary, true, gdp.series[0]!.values[0], bigInterval),
+    [activeYears, gdpLines, year, gdp, gdpSummary, bigInterval]
   );
   const small = useMemo(
-    () => lineOption(perCapitaYears, perCapitaLines, year, perCapita.unit, perCapitaSummary),
-    [perCapitaYears, perCapitaLines, year, perCapita, perCapitaSummary]
+    () => lineOption(perCapitaYears, perCapitaLines, year, perCapita.unit, perCapitaSummary, false, undefined, smallInterval),
+    [perCapitaYears, perCapitaLines, year, perCapita, perCapitaSummary, smallInterval]
   );
   const bigSpec = useMemo(
     () =>
@@ -132,7 +145,10 @@ export function AiStep() {
   );
   // a new clock object is part of the spec: the 3D chart draws itself from the same time as the flat one
   const bigSpecTimed = useMemo(() => ({ ...bigSpec, clock }), [bigSpec, clock]);
-  const popOption = useMemo(() => lineOption(popYears, popLines, year, 'M', popSummary), [popYears, popLines, year, popSummary]);
+  const popOption = useMemo(
+    () => lineOption(popYears, popLines, year, 'M', popSummary, false, undefined, smallInterval),
+    [popYears, popLines, year, popSummary, smallInterval]
+  );
 
   return (
     <section className="gdp-step prov-step" aria-label={AI_TITLE}>
@@ -208,10 +224,10 @@ export function AiStep() {
         </Reveal>
 
         <div className="prov-side">
-          <Reveal k="small" delay={0.07} className="gdp-chart ai-small" role="region" aria-label="PBI por habitante y población">
+          <Reveal k="small" delay={0.07} className="gdp-chart ai-small" role="region" aria-label="PBI per cápita y población">
             <div className="ai-small-charts">
               <div className="ai-small-chart">
-                <strong className="composition-title">PBI por habitante (miles de USD)</strong>
+                <strong className="composition-title">PBI per cápita (miles de USD)</strong>
                 <div className="tour-chart">
                   <EChart option={small} aria-label={perCapitaSummary} />
                 </div>
@@ -251,7 +267,7 @@ export function AiStep() {
                     : gdp.series.map((s) => <td key={s.name}>{num(s.values[shownYear - 2026] ?? 0)}</td>)}
                 </tr>
                 <tr>
-                  <th scope="row">PBI por habitante (miles de USD)</th>
+                  <th scope="row">PBI per cápita (miles de USD)</th>
                   {shownYear < 2026
                     ? AI_SCENARIOS.map((s) => <td key={s.id}>{num(histPerCapita[shownYear - 1960] ?? 0, 2)}</td>)
                     : perCapita.series.map((s) => <td key={s.name}>{num(s.values[shownYear - 2026] ?? 0, 2)}</td>)}
@@ -271,7 +287,7 @@ export function AiStep() {
                 <li key={r.id}>
                   <span className="tour-swatch" style={{ background: AI_SCENARIOS[k]!.color }} aria-hidden="true" />
                   <strong>{`${r.name} (${TONE[r.id]})`}</strong>
-                  {`: ${pct(r.averageGrowth, 2)} anual, el PBI cambia ${pct(r.gdpChange)} y el PBI por habitante ${pct(r.perCapitaChange)} entre 2026 y 2056; duplicar el PBI llevaría ${num(r.doublingYears)} años. ${AI_SCENARIOS[k]!.comment}.`}
+                  {`: ${pct(r.averageGrowth, 2)} anual, el PBI cambia ${pct(r.gdpChange)} y el PBI per cápita ${pct(r.perCapitaChange)} entre 2026 y 2056; duplicar el PBI llevaría ${num(r.doublingYears)} años. ${AI_SCENARIOS[k]!.comment}.`}
                 </li>
               ))}
             </ul>

@@ -1417,3 +1417,73 @@
 #overlay[data-scene='andes'] .dash--side-hidden .dash-side {
   background: color-mix(in srgb, var(--surface) 92%, transparent);
 }
+
+/* ---- Modern Map Breadcrumb Navigation ------------------------------------------------------------- */
+
+.map-breadcrumb-bar {
+  position: absolute;
+  top: var(--space-sm);
+  left: var(--space-sm);
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: 4px 10px;
+  background: rgba(15, 23, 42, 0.88);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(56, 189, 248, 0.28);
+  border-radius: var(--radius-md, 8px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.45);
+  font-size: 0.82rem;
+  color: var(--ink);
+  pointer-events: auto;
+}
+
+.map-back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: transparent;
+  border: none;
+  padding: 2px 6px;
+  border-radius: 4px;
+  color: #38bdf8;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.map-back-btn:hover {
+  background: rgba(56, 189, 248, 0.16);
+  color: #7dd3fc;
+  transform: translateX(-1px);
+}
+
+.map-back-btn .back-arrow {
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.breadcrumb-sep {
+  color: var(--muted);
+  font-weight: 300;
+  margin: 0 2px;
+}
+
+.breadcrumb-current {
+  font-weight: 600;
+  color: #f8fafc;
+}
+
+.dept-badge {
+  margin-left: 6px;
+  padding: 2px 8px;
+  background: rgba(56, 189, 248, 0.15);
+  border: 1px solid rgba(56, 189, 248, 0.32);
+  border-radius: 12px;
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: #bae6fd;
+}
+

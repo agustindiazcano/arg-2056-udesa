@@ -1,18 +1,23 @@
 # Last Context
 
 ## State
-- **PPP removed from the whole project** (human request 2026-10-13, `task/remove-ppp`): Maddison data and references deleted. All GDP is real at constant 2015 USD (`web/src/tour/worldGdp.json`).
-- **Visual corrections (slides 1 & 6) and 1960 mode in AI slide (`task/visual-corrections-1-6`)**:
-  - Slide 1 (`WorldStep`) & Slide 6 (`AiStep`): big year and value (`.world-year`) repositioned to the top-right corner (`top: var(--space-md); right: var(--space-md)`).
-  - Main chart: `[ Gráfico | Tabla ]` (`.tour-view-switch`) positioned at the top-left corner (`top: 0; left: 0`). Excluded `.tour-view-switch` from 100% width/height in `.prov-map` so it doesn't stretch or cover canvas interactions.
-  - Slide 1 region card (`.prov-bars`): `[ Gráfico | Tabla ]` switch repositioned to the top-right corner of the card (`top: var(--space-md); right: var(--space-md)`), in line with the title `Mayores economías de la región en [año]`, giving full vertical height back to the 3D/2D bars chart.
-  - Slide 6 (`AiStep`): added button "Ver desde 1960" / "Ver desde 2026" to compare AI projections against historical observed GDP, GDP per capita and population from 1960 to 2056; milestones ("x2", "x3", "x4") remain anchored to 2026 base GDP.
-  - Added `visual-corrections/` to `.gitignore`.
-  - Added unit test `web/tests/unit/aiStep1960.test.tsx`.
-- **Order of slides**: 0 index, 1 world, 2 Recursos (+ provinces), 3 rule of 70, 4 Composición+Exportaciones, 5 Productividad, 6 IA (`TOUR_ORDER` = 20, 0, 8, 5, 12, 14, 3).
-- **Testing rule**: Do not run heavy test suites locally; push branches to GitHub to let CI run them.
+- **Branch**: `task/visual-corrections-1-6`
+- **Slide 1 & Slide 6 layout & typography**:
+  - Repositioned `.gdp-chart:has(> .world-year) .tour-view-switch` to `top: -12px; left: -15px;`.
+  - Replaced "PBI por habitante" with "PBI per cápita" across copy, tables, and metrics on Slide 6.
+  - Spaced out years on Slide 6 mini-charts (`smallInterval = from1960 ? 25 : 10`) to eliminate overlapping labels.
+  - Added "Ver desde 1960" toggle for historical comparison.
+- **GDP Simulator & Fluid Animations**:
+  - Simulator starts paused (`initialPlaying: false`).
+  - Added prominent highlight milestones for GDP doubling multiples (x2, x3, x4).
+  - Implemented 60fps continuous line animations with glowing head markers and interpolated trailing tips (`buildFluidLines`, `Lines3D`).
+- **Sophisticated 3D & 2D Maps with Departmental / Municipal Drill-Down**:
+  - **Subtle 3D relief**: Flat base (`0.05`) with gentle elevation variations (`0.14`) and embossed provincial boundary relief ridges.
+  - **Aerial perspective**: Default camera at `UPRIGHT_PHI: 0.04` providing an aerial 2D view with rich 3D tactile depth and directional shadows.
+  - **Department & Municipal Drill-Down**: Clicking any province loads official IGN/INDEC data (`web/public/geo/departments/*.json`, 527 departments), reveals department divisions, plots municipal cabeceras, and shows rich tooltips.
+  - **Modern Breadcrumb Navigation**: Glassmorphic `Argentina › [Provincia]` header with `← Argentina` return button and department count pill.
+- **Testing**: Typecheck clean (`tsc --noEmit` exit 0), targeted unit tests pass.
 
 ## Next
-- Push branch `task/visual-corrections-1-6` to GitHub for CI review.
-- Human review of the visual changes on Slide 1 and Slide 6.
-- Approve the consolidation plan (PR #81).
+- Push branch `task/visual-corrections-1-6` to GitHub.
+- Open/update PR for human review.

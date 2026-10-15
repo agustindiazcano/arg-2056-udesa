@@ -1373,8 +1373,8 @@ main.scene-container {
 
 /* the big year and its value sit at the top right, with the Gráfico | Tabla switch on the top left */
 .gdp-chart:has(> .world-year) .tour-view-switch {
-  top: 0;
-  left: 0;
+  top: -12px;
+  left: -15px;
   right: auto;
 }
 

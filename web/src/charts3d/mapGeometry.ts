@@ -17,12 +17,21 @@ export interface ProjectedProvince {
   decor?: true;
 }
 
+export interface MapProjectionParams {
+  midLon: number;
+  midLat: number;
+  kx: number;
+  scale: number;
+}
+
 export interface ProjectedMap {
   provinces: ProjectedProvince[];
   /** shapes drawn with the map that are not provinces (the Malvinas): they do not count for the bounds nor for picking */
   decor?: ProjectedProvince[];
   /** the extent after centring on the origin */
   bounds: { minX: number; maxX: number; minY: number; maxY: number; width: number; height: number };
+  /** parameters used to project geographic coordinates to scene coordinates */
+  params?: MapProjectionParams;
 }
 
 type Ring = number[][];
@@ -57,6 +66,7 @@ export function projectFeatures(geo: ProvincesGeo, opts: { scale?: number; malvi
   const midLon = (minLon + maxLon) / 2;
   const midLat = (minLat + maxLat) / 2;
   const kx = Math.cos((midLat * Math.PI) / 180) * scale;
+  const params: MapProjectionParams = { midLon, midLat, kx, scale };
 
   const project = (p: number[]): Point => [(p[0]! - midLon) * kx, (p[1]! - midLat) * scale];
 
@@ -90,8 +100,42 @@ export function projectFeatures(geo: ProvincesGeo, opts: { scale?: number; malvi
   return {
     provinces,
     decor,
-    bounds: { minX: -width / 2, maxX: width / 2, minY: -height / 2, maxY: height / 2, width, height }
+    bounds: { minX: -width / 2, maxX: width / 2, minY: -height / 2, maxY: height / 2, width, height },
+    params
   };
+}
+
+export interface ProjectedDepartment {
+  id: string;
+  name: string;
+  cabecera: string;
+  centroid: Point;
+  polygons: ProjectedPolygon[];
+}
+
+/** Projects a province's departments into the exact same 3D coordinate space as the national map. */
+export function projectDepartments(
+  departments: { features: Array<{ id?: string; properties: { id?: string; departamento: string; cabecera: string; centroid: [number, number] }; geometry: { type: string; coordinates: unknown } }> },
+  params: MapProjectionParams
+): ProjectedDepartment[] {
+  const { midLon, midLat, kx, scale } = params;
+  const project = (p: number[]): Point => [(p[0]! - midLon) * kx, (p[1]! - midLat) * scale];
+
+  return departments.features.map((f) => {
+    const g = f.geometry as { type: string; coordinates: PolygonCoords | PolygonCoords[] };
+    const polys = g.type === 'Polygon' ? [g.coordinates as PolygonCoords] : (g.coordinates as PolygonCoords[]);
+    const centroid = project(f.properties.centroid);
+    return {
+      id: f.id || f.properties.id || f.properties.departamento,
+      name: f.properties.departamento,
+      cabecera: f.properties.cabecera,
+      centroid,
+      polygons: polys.map((poly) => ({
+        outer: open(poly[0]!).map(project),
+        holes: poly.slice(1).map((ring) => open(ring).map(project))
+      }))
+    };
+  });
 }
 
 export interface ProvinceStyle {
@@ -100,14 +144,13 @@ export interface ProvinceStyle {
   hasData: boolean;
 }
 
-const BASE_HEIGHT = 0.12;
-const RELIEF = 1.5;
-const FLAT = 0.05;
+// Sophisticated subtle relief: flat base with gentle elevation variations
+const BASE_HEIGHT = 0.05;
+const RELIEF = 0.14;
+const FLAT = 0.03;
 
 /**
- * How a province looks in 3D: its height and color from its value on the color domain. No value or no domain: flat, in
- * the no-data color. Level uses the sequential ramp (higher is lighter and taller); change uses the diverging one and
- * rises with the size of the change in either direction.
+ * How a province looks in 3D: subtle relief height and sleek color from its value on the color domain.
  */
 export function provinceStyle(value: number | undefined, domain: [number, number] | null, metric: 'level' | 'change'): ProvinceStyle {
   if (value === undefined || domain === null) return { height: FLAT, color: NO_DATA, hasData: false };
