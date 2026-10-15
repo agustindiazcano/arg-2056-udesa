@@ -119,6 +119,17 @@ export function Map3D({ spec, projection, free = false }: { spec: Map3DSpec; pro
       return group;
     });
     const all = meshes.flat();
+    // the Malvinas: flat, in the no-data color, not part of `all` so they are neither raised nor picked
+    const flat = provinceStyle(undefined, null, 'level');
+    for (const decor of map.decor ?? []) {
+      for (const polygon of decor.polygons) {
+        const geometry = new ExtrudeGeometry(new Shape(polygon.outer.map(([x, y]) => new Vector2(x, y))), { depth: 1, bevelEnabled: false });
+        geometry.rotateX(-Math.PI / 2);
+        const mesh = new Mesh(geometry, new MeshStandardMaterial({ color: new Color(flat.color), roughness: 0.65 }));
+        mesh.scale.y = flat.height;
+        scene.add(mesh);
+      }
+    }
 
     const setGrowth = (t: number) => {
       const k = easeOutCubic(t);

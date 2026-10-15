@@ -1,4 +1,5 @@
-import type { ProjectedMap, ProvinceStyle } from '../charts3d/mapGeometry';
+import { provinceStyle } from '../charts3d/mapGeometry';
+import type { ProjectedMap, ProjectedProvince, ProvinceStyle } from '../charts3d/mapGeometry';
 
 /** How much the north-south direction is squashed on the screen (the map is seen from the south, tilted), and how tall one unit of height is. */
 const SQUASH = 0.62;
@@ -17,6 +18,8 @@ export interface IsoProvince {
   color: string;
   sideColor: string;
   selected: boolean;
+  /** the Malvinas: drawn flat, not a province, not selectable */
+  decor?: true;
 }
 
 export interface IsoMap {
@@ -59,9 +62,11 @@ export function isoMap(map: ProjectedMap, o: { styleOf: (id: string) => Province
     ys.push(p[1]);
   };
 
-  const provinces = map.provinces.map((province) => {
-    const style = o.styleOf(province.id);
-    const selected = o.selectedId === province.id;
+  const shapes: ProjectedProvince[] = [...map.provinces, ...(map.decor ?? []).map((d) => ({ ...d, decor: true as const }))];
+  const provinces = shapes.map((province) => {
+    const isDecor = province.decor === true;
+    const style = isDecor ? provinceStyle(undefined, null, 'level') : o.styleOf(province.id);
+    const selected = !isDecor && o.selectedId === province.id;
     const height = style.height + (selected ? SELECTED_LIFT : 0);
     const top: string[] = [];
     const sides: string[] = [];
@@ -100,7 +105,8 @@ export function isoMap(map: ProjectedMap, o: { styleOf: (id: string) => Province
         sides: sides.join('') || 'M0 0Z',
         color: style.color,
         sideColor: shade(style.color, WALL_SHADE),
-        selected
+        selected,
+        ...(isDecor ? { decor: true as const } : {})
       } satisfies IsoProvince
     };
   });

@@ -1,3 +1,4 @@
+import { MALVINAS_FEATURE } from '../geo/malvinas';
 import type { ProvincesGeo } from '../geo/provinces';
 import { DIVERGING, NO_DATA, SEQUENTIAL_BLUE } from '../styles/tokens';
 
@@ -12,10 +13,14 @@ export interface ProjectedProvince {
   id: string;
   name: string;
   polygons: ProjectedPolygon[];
+  /** drawn but not a province: flat, in the no-data color, never picked (the Malvinas) */
+  decor?: true;
 }
 
 export interface ProjectedMap {
   provinces: ProjectedProvince[];
+  /** shapes drawn with the map that are not provinces (the Malvinas): they do not count for the bounds nor for picking */
+  decor?: ProjectedProvince[];
   /** the extent after centring on the origin */
   bounds: { minX: number; maxX: number; minY: number; maxY: number; width: number; height: number };
 }
@@ -35,7 +40,7 @@ function open(ring: Ring): Ring {
  * shrunk by the cosine of the middle latitude so the shapes keep their proportions, and the whole map is centred on the
  * origin. `scale` sets the size of one degree of latitude.
  */
-export function projectFeatures(geo: ProvincesGeo, opts: { scale?: number } = {}): ProjectedMap {
+export function projectFeatures(geo: ProvincesGeo, opts: { scale?: number; malvinas?: boolean } = {}): ProjectedMap {
   const scale = opts.scale ?? 0.18;
   const rings: Ring[] = [];
   for (const f of geo.features) {
@@ -68,10 +73,23 @@ export function projectFeatures(geo: ProvincesGeo, opts: { scale?: number } = {}
     };
   });
 
+  const decor: ProjectedProvince[] =
+    opts.malvinas === false
+      ? []
+      : [
+          {
+            id: MALVINAS_FEATURE.properties.id,
+            name: 'Islas Malvinas',
+            decor: true,
+            polygons: MALVINAS_FEATURE.geometry.coordinates.map((poly) => ({ outer: open(poly[0]!).map(project), holes: [] }))
+          }
+        ];
+
   const width = (maxLon - minLon) * kx;
   const height = (maxLat - minLat) * scale;
   return {
     provinces,
+    decor,
     bounds: { minX: -width / 2, maxX: width / 2, minY: -height / 2, maxY: height / 2, width, height }
   };
 }

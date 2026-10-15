@@ -31,6 +31,14 @@ export function TourMapSvg({ spec }: { spec: Map3DSpec }) {
           aria-label={spec.summary}
         >
           {drawing.provinces.map((p) => {
+            if (p.decor) {
+              return (
+                <g key={p.id} data-decor={p.id} aria-hidden="true" pointerEvents="none">
+                  <path d={p.sides} fill={p.sideColor} />
+                  <path d={p.top} fill={p.color} fillRule="evenodd" stroke={tokens.page} strokeWidth={0.025} strokeLinejoin="round" />
+                </g>
+              );
+            }
             const value = values.values[p.id];
             const text = `${p.name}: ${value ? spec.formatValue(value.plotted) : 'sin datos'}`;
             return (
