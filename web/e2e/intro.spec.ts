@@ -25,7 +25,8 @@ test.describe('intro screen', () => {
     await page.goto('/');
     await page.getByRole('button', { name: 'Hacia el 2056' }).click();
     await expect(page.getByRole('tab', { name: 'Hacia el 2056' })).toHaveAttribute('aria-selected', 'true');
-    await expect(page.getByRole('heading', { name: 'PBI de Argentina' })).toBeVisible();
+    // the Recorrido opens on its index: the title and the list of slides
+    await expect(page.getByRole('navigation', { name: 'Índice' })).toBeVisible();
 
     await page.goto('/');
     await page.getByRole('button', { name: 'Data Dashboard' }).click();

@@ -21,6 +21,9 @@ interface CountryRow {
 }
 
 const COUNTRIES = data.countries as CountryRow[];
+
+/** Every country of the data (real GDP in billions of constant 2015 USD and population in millions, one value per year from `FIRST_YEAR`), for the rule-of-70 explorer. */
+export const worldCountries = (): readonly CountryRow[] => COUNTRIES;
 const BY_NAME = new Map(COUNTRIES.map((c) => [c.name, c]));
 const YEAR_COUNT = LAST_YEAR - FIRST_YEAR + 1;
 

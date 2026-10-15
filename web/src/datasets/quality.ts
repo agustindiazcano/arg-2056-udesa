@@ -46,6 +46,7 @@ export const TABLE_META: Readonly<Record<string, TableMeta>> = {
   'provinces-value': made(),
   'rule70-errors': meta('real', CALC, '2026-10-15'),
   'rule70-argentina': meta('real', `${CALC}; PBI real de 2026: Banco Mundial y FMI`, '2026-10-15'),
+  'rule70-countries': meta('real', `${WB}; PBI per cápita: PBI sobre población del mismo archivo; tasas calculadas`, '2026-10-15'),
   'chart-8': meta('partial', ARMINERA, '2026-10-13'),
   'mining-exports': meta('partial', ARMINERA, '2026-10-13'),
   'services-exports': meta('real', CEI, '2026-10-15'),

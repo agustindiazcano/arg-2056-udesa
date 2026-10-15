@@ -1,7 +1,9 @@
-import { formatNumber } from '../charts/format.js';
+import { formatAxisNumber, formatNumber } from '../charts/format.js';
 import { tokens } from '../styles/tokens.js';
 import { START_YEAR, compoundPath, doublingMarks, errorCurve } from './rule70Model.js';
 import { doublingTimeExact } from '../core/doubling.js';
+import { INDICATOR_LABEL, INDICATOR_UNIT, ROLLING_WINDOW } from './rule70Countries.js';
+import type { Analysis } from './rule70Countries.js';
 
 export type Scale = 'linear' | 'log';
 
@@ -108,4 +110,70 @@ export function errorChart() {
     ]
   };
   return { option, summary, labels, error70, error72 };
+}
+
+const BASE = { animation: false, backgroundColor: 'transparent' };
+
+const lineSeries = (name: string, data: Array<number | null>, color: string, style: 'solid' | 'dashed' | 'dotted', width = 2) => ({
+  name,
+  type: 'line',
+  data,
+  symbol: 'none',
+  smooth: false,
+  connectNulls: false,
+  lineStyle: { width, color, type: style },
+  itemStyle: { color }
+});
+
+/** The real series of a country against the path of a constant rate between the endpoints and the line fitted on every year. */
+export function countryChart(a: Analysis, scale: Scale) {
+  const labels = a.points.map((p) => String(p.year));
+  const actual = a.points.map((p) => p.actual);
+  const constant = a.points.map((p) => p.constant);
+  const fitted = a.points.map((p) => Math.exp(a.fit.intercept + a.fit.slope * p.year));
+  const unit = INDICATOR_UNIT[a.indicator];
+  const summary =
+    `${a.name}, ${INDICATOR_LABEL[a.indicator].toLowerCase()} (${unit}) de ${a.from} a ${a.to}, en escala ${scale === 'log' ? 'logarítmica' : 'lineal'}: ` +
+    `va de ${es(a.v0)} a ${es(a.v1)}, ${es(a.cagrPct, 2)} % por año entre los extremos; la línea punteada es una tasa constante y la de trazos el ajuste de todos los años`;
+  const axisLabel = { color: tokens.muted, formatter: (v: number) => formatAxisNumber(v) };
+  const option = {
+    ...BASE,
+    tooltip: {
+      ...TOOLTIP,
+      formatter: (p: Array<{ dataIndex: number }>) => {
+        const i = p[0]!.dataIndex;
+        return `<strong>${labels[i]}</strong><br/>Real: ${actual[i] === null ? 'sin dato' : es(actual[i]!)}<br/>Tasa constante: ${es(constant[i]!)}<br/>Ajuste: ${es(fitted[i]!)}`;
+      }
+    },
+    grid: GRID,
+    xAxis: { type: 'category', data: labels, boundaryGap: false, axisLine: { lineStyle: { color: tokens.baseline } }, axisTick: { show: false }, axisLabel: { color: tokens.ink2, interval: Math.max(0, Math.floor(labels.length / 7) - 1) } },
+    yAxis: scale === 'log' ? { type: 'log', splitLine: { lineStyle: LINE }, axisLabel } : { type: 'value', splitLine: { lineStyle: LINE }, axisLabel },
+    series: [lineSeries('Real', actual, tokens.blue, 'solid', 3), lineSeries('Tasa constante entre los extremos', constant, tokens.muted, 'dotted'), lineSeries('Ajuste de todos los años', fitted, tokens.scenario.optimistic, 'dashed')]
+  };
+  return { option, summary, labels, actual, constant, fitted };
+}
+
+/** The doubling time implied by the rate of each window of ROLLING_WINDOW years, ending in each year. */
+export function rollingChart(a: Analysis) {
+  const labels = a.rolling.map((r) => String(r.year));
+  const values = a.rolling.map((r) => (Number.isFinite(r.doublingYears) ? r.doublingYears : null));
+  const finite = values.filter((v): v is number => v !== null);
+  const summary =
+    `${a.name}: tiempo de duplicación implícito en ventanas móviles de ${ROLLING_WINDOW} años, ${a.rolling[0]?.year ?? a.from} a ${a.to}` +
+    (finite.length ? `, de ${es(Math.min(...finite))} a ${es(Math.max(...finite))} años; donde la ventana no creció no hay duplicación` : ', sin ventanas que crezcan');
+  const option = {
+    ...BASE,
+    tooltip: {
+      ...TOOLTIP,
+      formatter: (p: Array<{ dataIndex: number }>) => {
+        const i = p[0]!.dataIndex;
+        return `<strong>${labels[i]}</strong><br/>${values[i] === null ? 'No se duplica' : `Se duplica cada ${es(values[i]!)} años`} (${es(a.rolling[i]!.ratePct, 2)} % por año)`;
+      }
+    },
+    grid: GRID,
+    xAxis: { type: 'category', data: labels, boundaryGap: false, axisLine: { lineStyle: { color: tokens.baseline } }, axisTick: { show: false }, axisLabel: { color: tokens.ink2, interval: Math.max(0, Math.floor(labels.length / 7) - 1) } },
+    yAxis: { type: 'value', min: 0, splitLine: { lineStyle: LINE }, axisLabel: { color: tokens.muted, formatter: (v: number) => `${es(v, 0)} años` } },
+    series: [lineSeries('Años para duplicarse', values, tokens.blue, 'solid', 3)]
+  };
+  return { option, summary, labels, values };
 }

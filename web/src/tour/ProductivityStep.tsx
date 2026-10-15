@@ -5,6 +5,7 @@ import { barsSpec, linesSpec } from '../charts3d/specs.js';
 import { Reveal } from '../motion/Reveal.js';
 import { useStore } from '../state/store.js';
 import { Segmented } from '../ui/Segmented.js';
+import { PRODUCTIVITY_TITLE } from './slideTitles.js';
 import { TourChart } from './TourChart.js';
 import { COUNTRIES, DATA_SOURCES, PERIODS, PRODUCTIVITY_STEPS, LAST_YEAR, cumulative2011, num, periodFrom, seriesOf } from './productivity.js';
 import type { Metric, Period, ProductivityStepDef, SourceLink } from './productivity.js';
@@ -110,7 +111,7 @@ export function ProductivityStep() {
     <section className="gdp-step prov-step prod-step" aria-label="Productividad">
       <header className="gdp-head">
         <Reveal k="head" className="gdp-title">
-          <h2>Productividad</h2>
+          <h2>{PRODUCTIVITY_TITLE}</h2>
           <p className="gdp-sub">
             PTF y producto por hora trabajada, Argentina, Estados Unidos, Chile y Brasil, 1955 a {LAST_YEAR} · <Links links={DATA_SOURCES} />
           </p>

@@ -7,6 +7,7 @@ import { Reveal } from '../motion/Reveal.js';
 import { useStore } from '../state/store.js';
 import { MetricToggle } from '../ui/MetricToggle.js';
 import { Segmented } from '../ui/Segmented.js';
+import { EXPORTS_TITLE } from './slideTitles.js';
 import { YearSelector } from '../ui/YearSelector.js';
 import { tokens } from '../styles/tokens.js';
 import { TourChart } from './TourChart.js';
@@ -24,7 +25,7 @@ const METRICS = [
   { value: 'share', label: '% del total' }
 ] as const;
 
-const TITLE = 'Exportaciones por complejo';
+const TITLE = EXPORTS_TITLE;
 
 /**
  * Step 4 of the Recorrido, "Exportaciones": the exports of goods by exporting complex (INDEC) in dollars or as a share of the total, for a year,

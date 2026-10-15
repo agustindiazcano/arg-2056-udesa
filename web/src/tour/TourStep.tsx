@@ -3,14 +3,17 @@ import React from 'react';
 import '../dashboard/dashboard.css';
 import { ChartStep } from './ChartStep.js';
 import { ExportsStep } from './ExportsStep.js';
+import { IndexStep } from './IndexStep.js';
 import { ProvinceStep } from './ProvinceStep.js';
 import { Rule70Step } from './Rule70Step.js';
 import { ProductivityStep } from './ProductivityStep.js';
 import { WorldStep } from './WorldStep.js';
+import { INDEX_STEP } from './chartSteps.js';
 import { TourSidebar } from './TourSidebar.js';
 
 /** The chart of a step of the Recorrido. One lazy chunk keeps ECharts out of the initial load. */
 export function TourStep({ step }: { step: number }) {
+  if (step === INDEX_STEP) return <IndexStep />;
   if (step === 14) return <ProductivityStep />;
   // every other step has the side panel with the text and the references, next to its chart
   return (

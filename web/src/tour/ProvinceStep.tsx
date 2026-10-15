@@ -11,6 +11,7 @@ import { mapSummary } from '../scenes/forecast/mapSelectors.js';
 import { useStore } from '../state/store.js';
 import { tokens } from '../styles/tokens.js';
 import { Segmented } from '../ui/Segmented.js';
+import { PROVINCE_TITLE } from './slideTitles.js';
 import { Spinner } from '../ui/Spinner.js';
 import type { Map3DSpec } from '../charts3d/types.js';
 import type { ProvinceId } from '../types/province.js';
@@ -25,7 +26,7 @@ const VIEWS = [
 
 const SECTORS = (Object.keys(SECTOR_LABELS) as Sector[]).map((value) => ({ value, label: SECTOR_LABELS[value] }));
 
-const TITLE = 'Producción por provincia';
+const TITLE = PROVINCE_TITLE;
 
 /**
  * Step 2 of the Recorrido: a big upright map of the provinces on the left; on the right the ranking of production by province

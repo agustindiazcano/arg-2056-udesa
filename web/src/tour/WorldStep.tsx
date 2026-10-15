@@ -9,6 +9,7 @@ import { useReducedMotion } from '../runtime/useReducedMotion.js';
 import { useStore } from '../state/store.js';
 import { tokens } from '../styles/tokens.js';
 import { Segmented } from '../ui/Segmented.js';
+import { WORLD_TITLE } from './slideTitles.js';
 import { elapsedForYear, seriesFrame, valueAt, yearAtElapsed } from './worldAnim.js';
 import { SPEEDS } from '../state/reducer.js';
 import { useTimeline } from './useTimeline.js';
@@ -33,7 +34,7 @@ const PauseIcon = () => (
 );
 const speedFormat = new Intl.NumberFormat('es-AR', { maximumFractionDigits: 2 });
 
-const TITLE = `El PBI de Argentina desde ${FIRST_YEAR}`;
+const TITLE = WORLD_TITLE;
 const SERIES_NAME = 'PBI real de Argentina';
 const REGION_OPTIONS = [
   { value: 'gdp', label: 'PBI' },
