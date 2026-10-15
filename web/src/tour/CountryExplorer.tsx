@@ -4,9 +4,9 @@ import { formatNumber } from '../charts/format.js';
 import { Reveal } from '../motion/Reveal.js';
 import { MetricToggle } from '../ui/MetricToggle.js';
 import { Segmented } from '../ui/Segmented.js';
-import { countryChart, rollingChart } from './rule70Charts.js';
+import { countryChart, decompositionChart, residualChart, rollingChart } from './rule70Charts.js';
 import type { Scale } from './rule70Charts.js';
-import { INDICATOR_LABEL, INDICATOR_UNIT, PRESETS, ROLLING_WINDOW, analyse, countryList } from './rule70Countries.js';
+import { INDICATOR_LABEL, INDICATOR_UNIT, PRESETS, ROLLING_WINDOW, analyse, countryList, decompose } from './rule70Countries.js';
 import type { Indicator } from './rule70Countries.js';
 import { FIRST_YEAR, LAST_YEAR, WORLD_SOURCE } from './worldData.js';
 
@@ -18,6 +18,14 @@ const INDICATORS = [
 const SCALES = [
   { value: 'linear', label: 'Lineal' },
   { value: 'log', label: 'Logarítmica' }
+] as const;
+
+type LowerView = 'rolling' | 'residuals' | 'split';
+
+const LOWER_VIEWS = [
+  { value: 'rolling', label: `Ventanas de ${ROLLING_WINDOW} años` },
+  { value: 'residuals', label: 'Residuos del ajuste' },
+  { value: 'split', label: 'Total y población' }
 ] as const;
 
 const YEARS = Array.from({ length: LAST_YEAR - FIRST_YEAR + 1 }, (_, i) => FIRST_YEAR + i);
@@ -35,11 +43,15 @@ export function CountryExplorer() {
   const [from, setFrom] = useState(first.from);
   const [to, setTo] = useState(first.to);
   const [scale, setScale] = useState<Scale>('linear');
+  const [lower, setLower] = useState<LowerView>('rolling');
 
   const countries = useMemo(() => countryList(), []);
   const result = useMemo(() => analyse(code, indicator, from, to), [code, indicator, from, to]);
   const growth = useMemo(() => (result.ok ? countryChart(result, scale) : null), [result, scale]);
   const rolling = useMemo(() => (result.ok ? rollingChart(result) : null), [result]);
+  const residuals = useMemo(() => (result.ok ? residualChart(result) : null), [result]);
+  const split = useMemo(() => decompose(code, from, to), [code, from, to]);
+  const splitChart = useMemo(() => (result.ok && split.ok ? decompositionChart(split, result.name) : null), [result, split]);
 
   const apply = (id: string) => {
     const p = PRESETS.find((x) => x.id === id)!;
@@ -86,32 +98,102 @@ export function CountryExplorer() {
                 </table>
               </details>
             </Reveal>
-            <Reveal k={`rolling-${code}-${indicator}-${from}-${to}`} delay={0.07} className="gdp-chart rule70-card">
-              <strong>Cuánto tardaba en duplicarse, en ventanas de {ROLLING_WINDOW} años</strong>
-              <div className="rule70-chart">
-                <EChart option={rolling.option} aria-label={rolling.summary} />
+            <Reveal k={`lower-${lower}-${code}-${indicator}-${from}-${to}`} delay={0.07} className="gdp-chart rule70-card">
+              <div className="rule70-card-head">
+                <strong>
+                  {lower === 'rolling' ? `Cuánto tardaba en duplicarse, en ventanas de ${ROLLING_WINDOW} años` : lower === 'residuals' ? 'Cuánto se aparta el real de la línea ajustada' : 'Crecimiento total, por habitante y de la población'}
+                </strong>
+                <Segmented label="Vista del gráfico de abajo" options={LOWER_VIEWS} value={lower} onChange={setLower} />
               </div>
-              <details>
-                <summary>Ver los datos de las ventanas</summary>
-                <table className="rule70-table" aria-label="Tiempo de duplicación por ventana">
-                  <thead>
-                    <tr>
-                      <th scope="col">Ventana que termina en</th>
-                      <th scope="col">Tasa (% anual)</th>
-                      <th scope="col">Años para duplicarse</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {result.rolling.map((r) => (
-                      <tr key={r.year}>
-                        <td>{r.year}</td>
-                        <td>{es(r.ratePct, 2)}</td>
-                        <td>{Number.isFinite(r.doublingYears) ? es(r.doublingYears) : 'no se duplica'}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </details>
+              {lower === 'rolling' && (
+                <>
+                  <div className="rule70-chart">
+                    <EChart option={rolling.option} aria-label={rolling.summary} />
+                  </div>
+                  <details>
+                    <summary>Ver los datos de las ventanas</summary>
+                    <table className="rule70-table" aria-label="Tiempo de duplicación por ventana">
+                      <thead>
+                        <tr>
+                          <th scope="col">Ventana que termina en</th>
+                          <th scope="col">Tasa (% anual)</th>
+                          <th scope="col">Años para duplicarse</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {result.rolling.map((r) => (
+                          <tr key={r.year}>
+                            <td>{r.year}</td>
+                            <td>{es(r.ratePct, 2)}</td>
+                            <td>{Number.isFinite(r.doublingYears) ? es(r.doublingYears) : 'no se duplica'}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </details>
+                </>
+              )}
+              {lower === 'residuals' && residuals && (
+                <>
+                  <div className="rule70-chart">
+                    <EChart option={residuals.option} aria-label={residuals.summary} />
+                  </div>
+                  <details>
+                    <summary>Ver los residuos</summary>
+                    <table className="rule70-table" aria-label="Residuos por año">
+                      <thead>
+                        <tr>
+                          <th scope="col">Año</th>
+                          <th scope="col">Residuo (% de la línea ajustada)</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {result.residuals.map((r) => (
+                          <tr key={r.year}>
+                            <td>{r.year}</td>
+                            <td>{es(r.residualPct, 2)}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </details>
+                </>
+              )}
+              {lower === 'split' &&
+                (split.ok && splitChart ? (
+                  <>
+                    <div className="rule70-chart">
+                      <EChart option={splitChart.option} aria-label={splitChart.summary} />
+                    </div>
+                    <table className="rule70-table" aria-label="Crecimiento total, por habitante y de la población">
+                      <thead>
+                        <tr>
+                          <th scope="col">Medida</th>
+                          <th scope="col">Crecimiento entre {split.from} y {split.to}</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>PBI real</td>
+                          <td>{es(split.totalPct, 2)} % por año</td>
+                        </tr>
+                        <tr>
+                          <td>PBI por habitante</td>
+                          <td>{es(split.perCapitaPct, 2)} % por año</td>
+                        </tr>
+                        <tr>
+                          <td>Población</td>
+                          <td>{es(split.populationPct, 2)} % por año</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <p className="rule70-note">
+                      (1 + total) = (1 + por habitante) × (1 + población): {es(1 + split.totalPct / 100, 5)} = {es((1 + split.perCapitaPct / 100) * (1 + split.populationPct / 100), 5)}. El nivel de vida sigue al PBI por habitante, no al total.
+                    </p>
+                  </>
+                ) : (
+                  <p role="status">{split.ok ? '' : split.reason}</p>
+                ))}
             </Reveal>
           </>
         ) : (
@@ -214,6 +296,11 @@ export function CountryExplorer() {
                   <td>Veces que se duplicó</td>
                   <td>{es(result.doublings, 2)}</td>
                   <td>log₂ del cociente entre el final y el inicio</td>
+                </tr>
+                <tr>
+                  <td>Mayor residuo del ajuste</td>
+                  <td>{es(result.maxResidualPct)} %</td>
+                  <td>del real respecto de la línea ajustada</td>
                 </tr>
                 <tr>
                   <td>Mayor desvío de la tasa constante</td>

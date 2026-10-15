@@ -1,4 +1,4 @@
-import { cagr, doublingTimeExact, logLinearFit, rollingDoublingTime, ruleTime } from '../core/doubling.js';
+import { cagr, doublingTimeExact, growthDecomposition, logLinearFit, rollingDoublingTime, ruleTime } from '../core/doubling.js';
 import type { LogLinearFit, YearValue } from '../core/doubling.js';
 import type { DataTable } from '../datasets/types.js';
 import { worldCountries, FIRST_YEAR, LAST_YEAR } from './worldData.js';
@@ -82,6 +82,9 @@ export interface Analysis {
   /** the largest distance of the real series from the constant-rate path, in percent of the path */
   maxDeviationPct: number;
   rolling: Array<{ year: number; ratePct: number; doublingYears: number }>;
+  /** how far each year is from the fitted line, in percent of the line (no threshold: the number and the chart are the diagnosis) */
+  residuals: Array<{ year: number; residualPct: number }>;
+  maxResidualPct: number;
 }
 
 export type AnalysisResult = Analysis | { ok: false; reason: string };
@@ -101,6 +104,8 @@ export function analyse(code: string, indicator: Indicator, from: number, to: nu
   const doublingExact = doublingTimeExact(cagrPct);
   const factor = 1 + cagrPct / 100;
   const points: AnalysisPoint[] = period.map((p) => ({ year: p.year, actual: p.value, constant: first * factor ** (p.year - from) }));
+  const fit = logLinearFit(period);
+  const residuals = fit.residuals.map((r) => ({ year: r.year, residualPct: (Math.exp(r.residual) - 1) * 100 }));
   const deviations = points.filter((p) => p.actual !== null).map((p) => Math.abs(p.actual! / p.constant - 1) * 100);
   return {
     ok: true,
@@ -113,15 +118,55 @@ export function analyse(code: string, indicator: Indicator, from: number, to: nu
     v0: first,
     v1: last,
     cagrPct,
-    fit: logLinearFit(period),
+    fit,
     doublingExact,
     rule70: cagrPct > 0 ? ruleTime(70, cagrPct) : null,
     rule72: cagrPct > 0 ? ruleTime(72, cagrPct) : null,
     doublings: Math.log2(last / first),
     points,
     maxDeviationPct: deviations.length ? Math.max(...deviations) : 0,
-    rolling: rollingDoublingTime(period, ROLLING_WINDOW)
+    rolling: rollingDoublingTime(period, ROLLING_WINDOW),
+    residuals,
+    maxResidualPct: residuals.length ? Math.max(...residuals.map((r) => Math.abs(r.residualPct))) : 0
   };
+}
+
+export interface Decomposition {
+  ok: true;
+  from: number;
+  to: number;
+  /** growth rates between the endpoints, percent per year */
+  totalPct: number;
+  perCapitaPct: number;
+  populationPct: number;
+  /** |(1 + total) - (1 + per person)(1 + population)|: zero up to rounding, because per person is the total over the population */
+  identityError: number;
+}
+
+/** Real GDP, real GDP per person and population: the growth between the endpoints and the identity that ties them, (1 + total) = (1 + per person)(1 + population). */
+export function decompose(code: string, from: number, to: number): Decomposition | { ok: false; reason: string } {
+  const country = worldCountries().find((x) => x.code === code);
+  if (!country) return { ok: false, reason: `País desconocido: ${code}` };
+  if (!(to - from >= 2)) return { ok: false, reason: 'El período tiene que tener al menos dos años.' };
+  const gdp = seriesOf(code, 'gdp');
+  const pc = seriesOf(code, 'percapita');
+  const at = (series: Array<{ year: number; value: number | null }>, year: number) => series.find((p) => p.year === year)?.value ?? null;
+  const pop = (year: number): number | null => {
+    const v = country.pop[year - FIRST_YEAR];
+    return v === undefined || v === null || v <= 0 ? null : v;
+  };
+  const g0 = at(gdp, from);
+  const g1 = at(gdp, to);
+  const p0 = pop(from);
+  const p1 = pop(to);
+  if (g0 === null || g1 === null) return { ok: false, reason: 'Sin dato de PBI real en un extremo del período.' };
+  if (p0 === null || p1 === null) return { ok: false, reason: 'Sin dato de población en un extremo del período.' };
+  const years = to - from;
+  const totalPct = cagr(g0, g1, years);
+  const populationPct = cagr(p0, p1, years);
+  const perCapitaPct = cagr(at(pc, from)!, at(pc, to)!, years);
+  const check = growthDecomposition(totalPct, populationPct);
+  return { ok: true, from, to, totalPct, perCapitaPct, populationPct, identityError: Math.abs(check.perCapitaPct - perCapitaPct) / 100 };
 }
 
 const round = (v: number, digits: number): number => Math.round(v * 10 ** digits) / 10 ** digits;
