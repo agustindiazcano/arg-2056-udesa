@@ -1,15 +1,13 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 
 /**
  * The pop-up that explains how the crossing was made: six columns, four secondary ones to distract the enemy and the main force split in two that met
  * again at Curimón before Chacabuco. The columns, roads and the place follow `forces.ts` and `docs/references.md` (H5, H16: the meeting at Curimón on
- * 8 or 9 February); the sources call the artillery and its supplies «parque», so the text does too. Closes with its button or Escape.
+ * 8 or 9 February); the sources call the artillery and its supplies «parque», so the text does too. Closes with its button or Escape. It opens by itself, so it
+ * does not take the focus (the keys of the scene, like Space for play, keep working).
  */
 export function CrossingInfo({ onClose }: { onClose: () => void }) {
-  const closeRef = useRef<HTMLButtonElement>(null);
-
   useEffect(() => {
-    closeRef.current?.focus();
     const onKey = (e: KeyboardEvent) => {
       if (e.key !== 'Escape') return;
       e.stopPropagation();
@@ -23,7 +21,7 @@ export function CrossingInfo({ onClose }: { onClose: () => void }) {
     <section className="andes-crossing andes-glass" role="dialog" aria-labelledby="andes-crossing-title">
       <header>
         <h2 id="andes-crossing-title">Cómo fue el cruce</h2>
-        <button type="button" ref={closeRef} className="chip" aria-label="Cerrar" onClick={onClose}>
+        <button type="button" className="chip" aria-label="Cerrar" onClick={onClose}>
           ×
         </button>
       </header>

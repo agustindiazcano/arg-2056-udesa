@@ -414,6 +414,15 @@ describe('Andes scene', () => {
     expect(screen.queryByRole('dialog', { name: 'Cómo fue el cruce' })).toBeNull();
   });
 
+  it('does not take the focus when it opens (Space still plays and pauses)', async () => {
+    stubFetch();
+    renderScene();
+    await screen.findByTestId('andes-renderer');
+    fireEvent.click(screen.getByRole('button', { name: 'Saltar intro' }));
+    const dialog = await screen.findByRole('dialog', { name: 'Cómo fue el cruce' }, { timeout: 5000 });
+    expect(dialog.contains(document.activeElement)).toBe(false);
+  });
+
   it('closes the crossing pop-up with Escape', async () => {
     stubFetch();
     renderScene();

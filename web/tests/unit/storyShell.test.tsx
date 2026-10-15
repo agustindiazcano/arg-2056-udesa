@@ -46,8 +46,10 @@ function press(key: string) {
 }
 
 describe('App shell with the story layer', () => {
-  it('mounts the caption panel', () => {
+  it('mounts the caption panel over the data scenes, and not over the Andes', () => {
     render(<App />);
+    expect(screen.queryByRole('region', { name: 'Historia' })).toBeNull();
+    act(() => useStore.getState().dispatch({ type: 'setScene', scene: 'economy' }));
     expect(screen.getByRole('region', { name: 'Historia' })).toBeTruthy();
     expect(screen.getByText('Paso 1 de 3')).toBeTruthy();
   });
