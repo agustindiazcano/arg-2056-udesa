@@ -43,6 +43,7 @@ export const TABLE_META: Readonly<Record<string, TableMeta>> = {
   'provinces-value': made(),
   'chart-8': meta('partial', ARMINERA, '2026-10-13'),
   'mining-exports': meta('partial', ARMINERA, '2026-10-13'),
+  'mining-provinces': meta('real', 'Secretaría de Minería, Origen provincial de las exportaciones mineras (Aduana), informes de diciembre de 2025 y agosto de 2026', '2026-10-14'),
   'mining-2024': meta('partial', ARMINERA, '2026-10-13'),
   'mining-projection': meta('partial', ARMINERA, '2026-10-13'),
   'mining-capex': meta('partial', ARMINERA, '2026-10-13'),

@@ -77,6 +77,9 @@ Every task below has a brief (`<slug>.md` in the repository root) and a prompt (
 
 ## Data to verify (human, against original source)
 
+- [ ] Mining exports by province (`web/src/tour/miningByProvince.ts`, Data slide 8): read from the text of two PDFs of the Secretaría de Minería (2026.01 and 2026.09); check them by eye, and read Catamarca and Salta alone from the chart of the NOA page. Pasted AI figures (Salta 501, Catamarca 353) are half-year 2026 and were NOT used.
+- [ ] RIGI list: Taca Taca now 4.232 (NI 43-101); Bajo del Choique-La Invernada (12.240 or 12.400) added from Chequeado; the official ministry list and Resolución 1771/2026 are still to read (H1). rigi.ar is private, not a source of amounts.
+
 - [ ] Andes pop-up «Cómo fue el cruce» (`web/src/scenes/andes/CrossingInfo.tsx`): six columns (four secondary, the main force in two), the columns' roads and the meeting at Curimón (the sources give 8 or 9 February: H5, H16 of `docs/references.md`). Check the wording against a primary source.
 
 - [ ] Recorrido step 1 GDP chart: the history 1990-2025 is real (World Bank, constant 2015 USD) and 2026 comes from the IMF real growth; from 2027 the projection and the fan are made up (`web/src/tour/gdpMock.ts`, labelled "Datos de prueba"); replace them with the model before release.

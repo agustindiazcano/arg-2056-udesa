@@ -22,3 +22,5 @@
 ## Next
 - Approve the consolidation plan (PR #81).
 - The human: choose the OECD scenario that equals "expected" (M1), old WEO editions (M3), 2005 projections (M4); RIGI list (H1), mining and agro by province (H9), years of step 0 and the investment figure; check the mining transcription (H3b). Model and parameters for the projections from 2027.
+
+- **Revalidation (`task/revalidate-sources`, 2026-10-14)**: checked a pasted AI report against sources. Added official mining exports by province (`miningByProvince.ts`, table `mining-provinces`, refs E9, R12); Taca Taca capex fixed to the NI 43-101 (4.232); Bajo del Choique added; `dataMigration.test.ts` now lists `CORRECTED` tables on purpose. Not done: RIGI official list (H1), services exports (D26: 9.600 only from press), Palermo Aike and productivity notes (links open, content unchecked). Not pushed.
