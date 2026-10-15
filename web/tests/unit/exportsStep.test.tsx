@@ -23,7 +23,7 @@ describe('the Exports slide (step 4)', () => {
     expect(screen.getByRole('button', { name: 'Dólares' }).getAttribute('aria-pressed')).toBe('true');
     expect(screen.getByRole('button', { name: '2025' }).getAttribute('aria-pressed')).toBe('true');
     expect(chartText()).toContain('Complejo soja 21,4');
-    expect(screen.getByRole('note', { name: /datos reales/i })).toBeTruthy();
+    expect(screen.queryByRole('note')).toBeNull();
     expect(screen.getByText(/INDEC/)).toBeTruthy();
   });
 

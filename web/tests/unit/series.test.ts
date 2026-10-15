@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import fixture from '../fixtures/dataTables.main.json';
-import { pointsToTable, tableToPoints, validatePoint, QUALITY_LABEL, qualityOfStepData } from '../../src/data/series';
+import { pointsToTable, tableToPoints, validatePoint, qualityOfStepData } from '../../src/data/series';
 import type { SeriesPoint } from '../../src/data/series';
 
 const ok: SeriesPoint = { series_id: 'gdp-real', value: 609.2, unit: 'miles de millones de USD de 2015', year: 2025, quality: 'real', source: 'Banco Mundial (WDI)', retrieved_at: '2026-10-12' };
@@ -29,7 +29,6 @@ describe('the series record', () => {
     expect(qualityOfStepData('real')).toBe('real');
     expect(qualityOfStepData('parcial')).toBe('partial');
     expect(qualityOfStepData('prueba')).toBe('placeholder');
-    expect(QUALITY_LABEL.placeholder).toBe('Datos de prueba');
   });
 });
 
