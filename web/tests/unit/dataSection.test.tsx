@@ -52,10 +52,11 @@ describe('the slides with data', () => {
   const slides = buildSlides();
 
   it('has a slide per step with data, in order, each with a number, a title and tables', () => {
-    expect(slides.map((s) => s.id)).toEqual(['0', '1', '2', '3', '4', '5', '7', '8', '9', '10', '12', '13', '14', 'sim']);
-    for (const s of slides) {
+    expect(slides.map((s) => s.id)).toEqual(['0', '1', '14', '2', '3', '4', '5', '7', '8', '9', '10', '12', '13', 'sim']);
+    for (const [i, s] of slides.entries()) {
       expect(s.title.length).toBeGreaterThan(0);
-      expect(s.label.startsWith(s.id === 'sim' ? 'Simulador' : s.id)).toBe(true);
+      // the number of the label is the position of the slide (0, 1, 2...), not its id
+      expect(s.label.startsWith(s.id === 'sim' ? 'Simulador' : `${i} · `)).toBe(true);
       expect(s.tables.length).toBeGreaterThan(0);
       for (const t of s.tables) {
         expect(t.rows.length).toBeGreaterThan(0);
@@ -110,7 +111,7 @@ describe('the Data page', () => {
     const select = screen.getByRole('combobox', { name: 'Diapositiva' }) as HTMLSelectElement;
     const options = within(select).getAllByRole('option').map((o) => o.textContent);
     expect(options[0]).toBe('0 · El PBI de Argentina desde 1960');
-    expect(options).toContain('14 · Productividad');
+    expect(options).toContain('2 · Productividad');
     expect(options.at(-1)).toMatch(/^Simulador/);
     expect(screen.getByRole('heading', { name: '0 · El PBI de Argentina desde 1960' })).toBeTruthy();
     expect(screen.getByRole('heading', { name: 'Referencias' })).toBeTruthy();
@@ -122,10 +123,10 @@ describe('the Data page', () => {
   it('shows only the tables of the chosen slide, not those of the others', () => {
     render(<DataPage />);
     const select = screen.getByRole('combobox', { name: 'Diapositiva' });
-    expect(screen.queryByRole('heading', { name: '14 · Productividad' })).toBeNull();
+    expect(screen.queryByRole('heading', { name: '2 · Productividad' })).toBeNull();
     expect(screen.queryByRole('table', { name: 'PTF, índice 1955 = 100' })).toBeNull();
     fireEvent.change(select, { target: { value: '14' } });
-    expect(screen.getByRole('heading', { name: '14 · Productividad' })).toBeTruthy();
+    expect(screen.getByRole('heading', { name: '2 · Productividad' })).toBeTruthy();
     expect(screen.getAllByRole('table')).toHaveLength(5);
     expect(screen.queryByRole('heading', { name: '0 · El PBI de Argentina desde 1960' })).toBeNull();
     fireEvent.change(select, { target: { value: '1' } });

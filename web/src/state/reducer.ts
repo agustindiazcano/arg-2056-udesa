@@ -6,15 +6,11 @@ import type { ProvinceId } from '../types/province';
 import { YEAR_MAX, YEAR_MIN } from '../types/year';
 import { STEPS } from '../content/steps';
 import { applyFocus } from '../story/focus';
-import { CHART_STEPS } from '../tour/chartSteps';
+import { TOUR_ORDER } from '../tour/chartSteps';
 import type { StepsByScene } from '../story/types';
 
-/** The first and the last step of the Recorrido (the numbered buttons of the navbar): the steps go from 0 to TOUR_STEPS. */
-export const TOUR_FIRST_STEP = 0;
-export const TOUR_STEPS = 14;
-
-/** The steps that exist, in order: 0 to TOUR_STEPS without the ones that were removed (6, the investor slide). */
-export const TOUR_STEP_LIST: readonly number[] = [...CHART_STEPS].sort((a, b) => a - b);
+/** The steps of the Recorrido that exist, in the order they are shown (the arrow keys and the buttons of the navbar follow it). */
+export const TOUR_STEP_LIST: readonly number[] = TOUR_ORDER;
 
 export interface State {
   scene: Scene;
@@ -30,7 +26,7 @@ export interface State {
   aiOverlay: 'off' | 'on';
   /** the current story step of every scene; entering a scene restarts it at 0 */
   stepIndex: Record<Scene, number>;
-  /** the step of the Recorrido, from TOUR_FIRST_STEP to TOUR_STEPS */
+  /** the id of the step of the Recorrido (one of TOUR_STEP_LIST) */
   tourStep: number;
 }
 

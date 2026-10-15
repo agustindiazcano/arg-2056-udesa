@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { reduce, tick, INITIAL_STEP_INDEX, TOUR_STEPS, State } from '../../src/state/reducer';
+import { reduce, tick, INITIAL_STEP_INDEX, TOUR_STEP_LIST, State } from '../../src/state/reducer';
 import { YEAR_MAX, YEAR_MIN } from '../../src/types/year';
 
 describe('Reducer', () => {
@@ -241,15 +241,16 @@ describe('Reducer', () => {
   describe('the steps of the Recorrido', () => {
     const tour: State = { ...initialState, scene: 'economy', section: 'tour' };
 
-    it('the arrow keys move the step, not the scene, and stop at 0 and at TOUR_STEPS', () => {
+    it('the arrow keys move the step, not the scene, in the order the slides are shown (1 then 14 then 2), and stop at the first and the last', () => {
       let state = reduce({ ...tour, tourStep: 1 }, { type: 'nextScene' });
-      expect(state).toMatchObject({ tourStep: 2, scene: 'economy' });
+      expect(state).toMatchObject({ tourStep: 14, scene: 'economy' });
+      expect(reduce(state, { type: 'nextScene' }).tourStep).toBe(2);
       state = reduce(state, { type: 'prevScene' });
       expect(state.tourStep).toBe(1);
       state = reduce(state, { type: 'prevScene' });
       expect(state.tourStep).toBe(0);
       expect(reduce(state, { type: 'prevScene' })).toBe(state);
-      const last: State = { ...tour, tourStep: TOUR_STEPS };
+      const last: State = { ...tour, tourStep: TOUR_STEP_LIST.at(-1)! };
       expect(reduce(last, { type: 'nextScene' })).toBe(last);
     });
 
@@ -263,7 +264,7 @@ describe('Reducer', () => {
       expect(reduce(tour, { type: 'tourSet', step: 7 }).tourStep).toBe(7);
       expect(reduce({ ...tour, tourStep: 5 }, { type: 'tourSet', step: 0 }).tourStep).toBe(0);
       expect(reduce(tour, { type: 'tourSet', step: -1 })).toBe(tour);
-      expect(reduce(tour, { type: 'tourSet', step: TOUR_STEPS + 1 })).toBe(tour);
+      expect(reduce(tour, { type: 'tourSet', step: 99 })).toBe(tour);
       expect(reduce(tour, { type: 'tourSet', step: 2.5 })).toBe(tour);
     });
 

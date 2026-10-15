@@ -17,6 +17,7 @@ import { MINING_BY_PROVINCE_2025, MINING_BY_PROVINCE_2026_JAN_AUG } from '../tou
 import { SBC_EXPORTS_2025, SERVICES_EXPORTS_2025 } from '../tour/servicesExports.js';
 import { RIGI_MINING, RIGI_OIL_GAS } from '../tour/rigiProjects.js';
 import type { RigiProject } from '../tour/rigiProjects.js';
+import { stepNumber } from '../tour/chartSteps.js';
 import { EXPORT_COMPOSITION_CHART, TOUR_CHARTS } from '../tour/tourCharts.js';
 import { exportRows } from '../tour/exportsData.js';
 import type { TourChartDef } from '../tour/tourCharts.js';
@@ -32,7 +33,7 @@ const indicators = (): DataTable => ({
 });
 
 function slide(id: string, title: string, tables: DataTable[], mock = true, refs: string[] = []): SlideData {
-  return { id, label: id === 'sim' ? `Simulador del PBI` : `${id} · ${title}`, title, mock, tables: tables.map(withMeta), refs };
+  return { id, label: id === 'sim' ? `Simulador del PBI` : `${stepNumber(Number(id))} · ${title}`, title, mock, tables: tables.map(withMeta), refs };
 }
 
 /** The raw table of a chart of the Recorrido (bars or lines), from the same spec the 3D view and the Gráfico | Tabla switch use. */
@@ -274,6 +275,7 @@ export function buildSlides(): SlideData[] {
       ...externalTables(),
       indicators()
     ], true, ['W3', 'W5', 'I1', 'F1', 'X1', 'X2', 'X3']),
+    slide('14', 'Productividad', productivityTables(), false, ['P6', 'P7', 'P7b', 'P1', 'P8', 'P9']),
     slide('2', 'Producción por provincia', [provinces(), hydrocarbonProvinces(), indicators()], true, ['W3', 'E6']),
     slide('3', TOUR_CHARTS[3]!.title, [chartTable(3)]),
     slide('4', TOUR_CHARTS[4]!.title, [chartTable(4), { ...chartTable(4, EXPORT_COMPOSITION_CHART), id: 'chart-11' }, complexesTable(), exportSharesTable(), greatItemsTable(), ...servicesTables()], false, ['E7', 'E1', 'E10']),
@@ -287,7 +289,6 @@ export function buildSlides(): SlideData[] {
     slide('10', TOUR_CHARTS[10]!.title, [chartTable(10), agroTable()], true, ['E8']),
     slide('12', TOUR_CHARTS[12]!.title, [chartTable(12)], false, ['E2']),
     slide('13', TOUR_CHARTS[13]!.title, [chartTable(13), reservesTable()], true, ['E3', 'E5', 'E6']),
-    slide('14', 'Productividad', productivityTables(), false, ['P6', 'P7', 'P7b', 'P1', 'P8', 'P9']),
     slide('sim', 'Simulador del PBI', [
       { id: 'factors', title: 'Factores del escenario de referencia', columns: ['Factor', 'Valor', 'Unidad'], rows: SIM_FIELDS.map((f) => [f.label, DEFAULT_SIM[f.key], f.unit]) },
       { id: 'reference', title: 'PBI del escenario de referencia (miles de millones de USD)', columns: ['Año', 'PBI'], rows: sim.years.map((y, i) => [y, sim.gdp[i] ?? null]) }
