@@ -8,8 +8,8 @@ export interface Milestone {
 }
 
 /** The first year the series reaches `multiple` times its first value, for each multiple it reaches (a series that never gets there has no milestone). */
-export function milestones(years: number[], values: Array<number | null>, multiples: readonly number[] = [2, 3, 4]): Milestone[] {
-  const base = values.find((v): v is number => v !== null);
+export function milestones(years: number[], values: Array<number | null>, multiples: readonly number[] = [2, 3, 4], baseValue?: number | null): Milestone[] {
+  const base = baseValue != null ? baseValue : values.find((v): v is number => v !== null);
   if (base === undefined || base <= 0) return [];
   const out: Milestone[] = [];
   for (const multiple of multiples) {
@@ -20,7 +20,7 @@ export function milestones(years: number[], values: Array<number | null>, multip
 }
 
 /** Adds the milestones of some lines to a line chart option: a dot on the line and the label "x2 · 2041". Only the milestones up to `upTo` show. */
-export function addMilestones(option: object, years: number[], lines: Array<{ values: Array<number | null>; color: string }>, upTo = Infinity): object {
+export function addMilestones(option: object, years: number[], lines: Array<{ values: Array<number | null>; color: string }>, upTo = Infinity, baseValue?: number | null): object {
   const dots = lines.map((line) => ({
     type: 'effectScatter',
     silent: true,
@@ -30,7 +30,7 @@ export function addMilestones(option: object, years: number[], lines: Array<{ va
     z: 6,
     symbolSize: 11,
     itemStyle: { color: line.color, borderColor: tokens.ink, borderWidth: 2 },
-    data: milestones(years, line.values)
+    data: milestones(years, line.values, [2, 3, 4], baseValue)
       .filter((m) => m.year <= upTo)
       .map((m) => ({
         value: [String(m.year), m.value],
