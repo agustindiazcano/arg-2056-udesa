@@ -2175,3 +2175,30 @@ main.scene-container {
     align-content: start;
   }
 }
+
+.rule70-inputs {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+  gap: var(--space-2, 0.5rem);
+}
+
+.rule70-inputs .rule70-field {
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.rule70-inputs input[type='number'] {
+  width: 100%;
+  padding: 0.2rem 0.4rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface, var(--page));
+  color: var(--ink);
+  font: inherit;
+}
+
+.rule70-col--stack {
+  grid-template-rows: auto auto;
+  align-content: start;
+  overflow: auto;
+}
