@@ -31,7 +31,8 @@ describe('the Data page after the series migration', () => {
     for (const t of old.tables) {
       const n = now.tables.find((x) => x.id === t.id);
       expect(n, `table ${t.id} of slide ${old.id}`).toBeDefined();
-      expect(n!.title, t.id).toBe(t.title);
+      // the rule of 70 slide was retitled on purpose on 2026-10-15 (human order): the title of its first table follows it
+      if (t.id !== 'chart-5') expect(n!.title, t.id).toBe(t.title);
       expect(n!.columns, t.id).toEqual(t.columns);
       // the fixture is JSON, where -0 is written as 0 (same number): compare through the same serialization
       if (CORRECTED.includes(t.id)) continue;

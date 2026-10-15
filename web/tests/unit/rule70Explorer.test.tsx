@@ -38,7 +38,7 @@ afterEach(cleanup);
 describe('the tabs of the slide', () => {
   it('opens on the calculator and has a second tab with the real countries', () => {
     render(<Rule70Step />);
-    expect(screen.getByRole('tablist', { name: 'La regla del 70' })).toBeTruthy();
+    expect(screen.getByRole('tablist', { name: '¿Cuánto hay que crecer por año para duplicar el PBI? La regla del 70' })).toBeTruthy();
     expect(screen.getByRole('tab', { name: 'Calculadora' }).getAttribute('aria-selected')).toBe('true');
     expect(screen.getByRole('spinbutton', { name: /tasa de crecimiento/i })).toBeTruthy();
     fireEvent.click(screen.getByRole('tab', { name: 'Países reales' }));

@@ -7,5 +7,5 @@ import { FIRST_YEAR } from './worldData.js';
 export const WORLD_TITLE = `El PBI de Argentina desde ${FIRST_YEAR}`;
 export const PROVINCE_TITLE = 'Producción por provincia';
 export const EXPORTS_TITLE = 'Exportaciones por complejo';
-export const RULE70_TITLE = 'La regla del 70';
+export const RULE70_TITLE = '¿Cuánto hay que crecer por año para duplicar el PBI? La regla del 70';
 export const PRODUCTIVITY_TITLE = 'Productividad';
