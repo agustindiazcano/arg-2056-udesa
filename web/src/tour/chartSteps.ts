@@ -1,4 +1,14 @@
 /** The steps of the Recorrido that show a chart instead of a scene: steps 0, 1 and 2 (the GDP since 1900, the GDP and the map of production by province) steps 3 to 13 except 6 (the investor slide, removed on 2026-10-14) and 11 (merged into the Exports slide, step 4), and step 14 (productivity, its own component). Kept apart from the charts so that the app shell does not load them. */
-export const CHART_STEPS: ReadonlySet<number> = new Set([0, 1, 2, 3, 4, 5, 7, 8, 9, 10, 12, 13, 14]);
+/**
+ * The steps of the Recorrido in the order they are shown. A step is named by its id (what the code, the tests and `docs/data-requests.md`
+ * call it); the number on the button and in the Data page is its position here (0, 1, 2...). Human order of 2026-10-15: Productividad
+ * (id 14) goes right after the GDP slide (id 1). Ids 6 (investors), 11 (shares of the exports) and 15 do not exist any more.
+ */
+export const TOUR_ORDER: readonly number[] = [0, 1, 14, 2, 3, 4, 5, 7, 8, 9, 10, 12, 13];
+
+export const CHART_STEPS: ReadonlySet<number> = new Set(TOUR_ORDER);
+
+/** The number shown for a step: its position in the order the slides are shown. */
+export const stepNumber = (step: number): number => TOUR_ORDER.indexOf(step);
 
 export const hasTourChart = (step: number): boolean => CHART_STEPS.has(step);

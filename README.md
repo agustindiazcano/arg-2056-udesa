@@ -69,7 +69,7 @@ Las cifras de bajas de Chacabuco no coinciden entre las fuentes 5, 10, 17, 18, 1
 
 23. Schwab, K. (2016). *La Cuarta Revolución Industrial*. Foro Económico Mundial.
 
-### Productividad (paso 14 del Recorrido y simulador)
+### Productividad (diapositiva 2 de «Hacia el 2056», y el simulador)
 
 24. INDEC, Documento de trabajo N.º 52, *Productividad y stock de capital* (PTF y productividad laboral 2016-2025). <https://www.indec.gob.ar/ftp/cuadros/economia/productividad_stock_capital_10_26.pdf>
 25. Baumann Fonay, I. (2026). «PTF y PIB potencial de Argentina, 1990-2025». <https://macroargentina.substack.com/p/ptf-y-pib-potencial-de-argentina>, y su serie en Alphacast <https://www.alphacast.io/datasets/potential-gross-domestic-product-output-gap-tfp-53419>

@@ -21,7 +21,8 @@ describe('the Data page after the series migration', () => {
   const remaining = kept.filter((s) => !(s.id in MOVED));
 
   it('keeps every slide of main except the removed and the merged ones', () => {
-    expect(slides.map((s) => s.id)).toEqual(remaining.map((s) => s.id));
+    // the order of the slides changed on 2026-10-15 (14 goes after 1): the same slides, not the same order
+    expect(slides.map((s) => s.id).sort()).toEqual(remaining.map((s) => s.id).sort());
   });
 
   it.each(kept.map((s) => [s.id, s] as const))('slide %s keeps its tables cell by cell', (_id, old) => {

@@ -3,6 +3,8 @@
  * how real its data is and which references (ids of `REFERENCES`) it comes from. Where the data is still made up the panel says so; the
  * state of every slide is in `docs/data-requests.md`, section 0.
  */
+import { stepNumber } from './chartSteps.js';
+
 export type StepData = 'real' | 'parcial' | 'prueba';
 
 export interface StepInfo {
@@ -87,7 +89,7 @@ export const STEP_INFO: Record<number, StepInfo> = {
     heading: 'El mapa productivo',
     paragraphs: [
       'Cada provincia pintada según su valor productivo anual, en millones de dólares.',
-      'Es la misma información del paso 2 vista como un solo número por provincia.'
+      `Es la misma información del paso ${stepNumber(2)} vista como un solo número por provincia.`
     ],
     how: 'Tocá una provincia para destacarla. El tono más oscuro es el valor más alto.',
     data: 'prueba',

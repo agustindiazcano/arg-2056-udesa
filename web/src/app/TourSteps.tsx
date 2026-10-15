@@ -1,6 +1,7 @@
 import React from 'react';
 import { useStore } from '../state/store';
 import { TOUR_STEP_LIST } from '../state/reducer';
+import { stepNumber } from '../tour/chartSteps';
 
 /** How many numbered buttons show at once: the step and its neighbours. */
 const WINDOW = 3;
@@ -17,17 +18,19 @@ export function TourSteps() {
   const tourStep = useStore((s) => s.tourStep);
   const dispatch = useStore((s) => s.dispatch);
   const go = (step: number) => dispatch({ type: 'tourSet', step });
+  // the steps are named by id, in the order they are shown: first and last are positions, not the smallest and the largest id
+  const at = TOUR_STEP_LIST.indexOf(tourStep);
   return (
     <div role="group" aria-label="Pasos hacia el 2056" className="tour-steps">
-      <button type="button" className="chip" disabled={tourStep <= TOUR_STEP_LIST[0]!} onClick={() => go(TOUR_STEP_LIST[TOUR_STEP_LIST.indexOf(tourStep) - 1]!)}>
+      <button type="button" className="chip" disabled={at <= 0} onClick={() => go(TOUR_STEP_LIST[at - 1]!)}>
         Anterior
       </button>
       {stepWindow(tourStep).map((n) => (
         <button key={n} type="button" className="chip" aria-pressed={tourStep === n} onClick={() => go(n)}>
-          {n}
+          {stepNumber(n)}
         </button>
       ))}
-      <button type="button" className="chip" disabled={tourStep >= TOUR_STEP_LIST.at(-1)!} onClick={() => go(TOUR_STEP_LIST[TOUR_STEP_LIST.indexOf(tourStep) + 1]!)}>
+      <button type="button" className="chip" disabled={at < 0 || at >= TOUR_STEP_LIST.length - 1} onClick={() => go(TOUR_STEP_LIST[at + 1]!)}>
         Siguiente
       </button>
     </div>
