@@ -43,9 +43,7 @@ describe('the CSV of a table', () => {
 
   it('adds fuente, indicador, url and retrieved_at to every row of a table that has a source', () => {
     const csv = tableCsv({ id: 't', title: 'PBI', columns: ['Año'], rows: [[2025]], source: 'BM', url: 'https://x.org', retrievedAt: '2026-10-12' });
-    expect(csv).toBe('﻿Año,fuente,indicador,url,retrieved_at
-2025,BM,PBI,https://x.org,2026-10-12
-');
+    expect(csv).toBe('﻿Año,fuente,indicador,url,retrieved_at\r\n2025,BM,PBI,https://x.org,2026-10-12\r\n');
   });
 
   it('makes the CSV of the references with their label, link and state', () => {
