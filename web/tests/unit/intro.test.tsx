@@ -35,6 +35,15 @@ describe('Intro', () => {
     expect(onStart).toHaveBeenCalledWith('andes');
   });
 
+  it('tells what the project is in two paragraphs, with the final text of the intro', () => {
+    render(<Intro onStart={() => {}} />);
+    const paragraphs = Array.from(document.querySelectorAll('.intro-sub')).map((p) => p.textContent);
+    expect(paragraphs).toEqual([
+      'Del Cruce de los Andes a la Cuarta Revolución Industrial: el desafío estratégico de 1817 como faro para el presente. Un análisis de los recursos de Argentina en 2026 y una proyección de su desarrollo hacia 2056 frente al impacto de la Inteligencia Artificial en la economía.',
+      'Es una ventana al inicio de la lucha por nuestra libertad política y, a la vez, una hoja de ruta desde la actualidad hacia el desarrollo económico de las próximas tres décadas, explorada a través de datos, escenarios interactivos y modelos de incertidumbre.'
+    ]);
+  });
+
   it('gives the buttons of the sections the look the Comenzar button had', () => {
     render(<Intro onStart={() => {}} />);
     const group = screen.getByRole('group', { name: 'Ir directo a' });
@@ -68,9 +77,9 @@ describe('Intro', () => {
     expect(onStart.mock.calls).toEqual([['andes'], ['tour'], ['dashboard']]);
   });
 
-  it('draws the 24 provinces as decoration hidden from assistive technology', () => {
+  it('draws the 24 provinces and the Malvinas as decoration hidden from assistive technology', () => {
     const { container } = render(<Intro onStart={() => undefined} />);
-    expect(container.querySelectorAll('.intro-prov')).toHaveLength(24);
+    expect(container.querySelectorAll('.intro-prov')).toHaveLength(25);
     expect(container.querySelector('.intro-stage')?.getAttribute('aria-hidden')).toBe('true');
   });
 

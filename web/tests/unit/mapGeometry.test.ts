@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { projectFeatures, provinceStyle } from '../../src/charts3d/mapGeometry';
 import type { ProvincesGeo } from '../../src/geo/provinces';
+import { MALVINAS_ID } from '../../src/geo/malvinas';
 import { DIVERGING, NO_DATA, SEQUENTIAL_BLUE } from '../../src/styles/tokens';
 
 const square = (lon: number, lat: number, size: number): number[][] => [
@@ -37,6 +38,30 @@ describe('projectFeatures', () => {
       ['AR-A', 'Provincia AR-A'],
       ['AR-B', 'Provincia AR-B']
     ]);
+  });
+
+  it('adds the Malvinas as decoration: apart from the provinces, flagged by its id, and without moving the map', () => {
+    expect(out.decor).toHaveLength(1);
+    expect(out.decor![0]!.id).toBe(MALVINAS_ID);
+    expect(out.decor![0]!.polygons).toHaveLength(2);
+    expect(out.provinces.some((p) => p.id === MALVINAS_ID)).toBe(false);
+    // the bounds are those of the provinces alone
+    expect(out.bounds.width / out.bounds.height).toBeCloseTo((15 * Math.cos((35 * Math.PI) / 180)) / 10, 6);
+    expect(projectFeatures(geo, { scale: 1, malvinas: false }).decor).toEqual([]);
+  });
+
+  it('puts the Malvinas to the south-east of a mainland drawn around them, using the same projection', () => {
+    const wide = {
+      type: 'FeatureCollection',
+      features: [feature('AR-S', { type: 'Polygon', coordinates: [[[-73, -55], [-53, -55], [-53, -22], [-73, -22], [-73, -55]]] })]
+    } as unknown as ProvincesGeo;
+    const m = projectFeatures(wide, { scale: 1 });
+    const xs = m.decor![0]!.polygons.flatMap((p) => p.outer.map((q) => q[0]));
+    const ys = m.decor![0]!.polygons.flatMap((p) => p.outer.map((q) => q[1]));
+    expect(Math.min(...xs)).toBeGreaterThan(m.bounds.minX);
+    expect(Math.max(...xs)).toBeLessThan(m.bounds.maxX);
+    expect(Math.min(...ys)).toBeGreaterThan(m.bounds.minY);
+    expect(Math.max(...ys)).toBeLessThan(0); // in the southern half
   });
 
   it('puts the east at larger x and the north at larger y', () => {

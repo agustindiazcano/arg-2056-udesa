@@ -224,6 +224,9 @@
   line-height: 1.5;
   color: var(--intro-ink-dim);
 }
+.intro-sub + .intro-sub {
+  margin-top: calc(var(--u) * -1);
+}
 .intro-start {
   cursor: pointer;
   padding: calc(var(--u) * 1) calc(var(--u) * 2.8);

@@ -10,15 +10,15 @@ describe('Malvinas illustrative outline', () => {
     expect(MALVINAS_ID).not.toMatch(/^AR-[A-Z]$/);
   });
 
-  it('is two coarse closed polygons (the two main islands), as a MultiPolygon', () => {
+  it('is two closed polygons (the two main islands), as a MultiPolygon, drawn with enough points to read as the islands', () => {
     const g = MALVINAS_FEATURE.geometry;
     expect(g.type).toBe('MultiPolygon');
     expect(g.coordinates).toHaveLength(2);
     for (const polygon of g.coordinates) {
       expect(polygon).toHaveLength(1);
       const ring = polygon[0]!;
-      expect(ring.length).toBeGreaterThanOrEqual(4);
-      expect(ring.length).toBeLessThanOrEqual(15); // a rough drawing, not a survey
+      expect(ring.length).toBeGreaterThanOrEqual(15); // Soledad has its peninsula and bays, Gran Malvina its irregular coast
+      expect(ring.length).toBeLessThanOrEqual(40); // still a hand drawing, not a survey
       expect(ring[0]).toEqual(ring[ring.length - 1]);
     }
   });
@@ -38,6 +38,25 @@ describe('Malvinas illustrative outline', () => {
     }
     const [a, b] = boxes as [(typeof boxes)[number], (typeof boxes)[number]];
     expect(a.east < b.west || b.east < a.west).toBe(true);
+  });
+
+  it('puts Gran Malvina (west) and Soledad (east) where they are: the sound between them, Soledad reaching further south-east', () => {
+    const [west, east] = MALVINAS_FEATURE.geometry.coordinates.map((p) => p[0]!);
+    const lon = (r: number[][]) => r.map((p) => p[0]!);
+    expect(Math.max(...lon(west!))).toBeLessThan(Math.min(...lon(east!)));
+    expect(Math.min(...lon(west!))).toBeLessThan(-61); // the west island reaches 61 degrees west
+    expect(Math.max(...lon(east!))).toBeGreaterThan(-57.8); // Cape Pembroke
+  });
+
+  it('is drawn with a consistent orientation (counter-clockwise), so the 3D shapes are not inside out', () => {
+    for (const polygon of MALVINAS_FEATURE.geometry.coordinates) {
+      const r = polygon[0]!;
+      const area = r.reduce((sum, a, i) => {
+        const b = r[(i + 1) % r.length]!;
+        return sum + (a[0]! * b[1]! - b[0]! * a[1]!);
+      }, 0);
+      expect(area).toBeGreaterThan(0);
+    }
   });
 
   it('geoWithMalvinas appends exactly one feature and does not mutate the input', () => {

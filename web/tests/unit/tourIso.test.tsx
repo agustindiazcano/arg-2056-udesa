@@ -10,6 +10,7 @@ import { TourBarsSvg } from '../../src/tour3d/TourBarsSvg';
 import { TourMapSvg } from '../../src/tour3d/TourMapSvg';
 import type { Bars3DSpec, Map3DSpec } from '../../src/charts3d/types';
 import type { ProvincesGeo } from '../../src/geo/provinces';
+import { NO_DATA } from '../../src/styles/tokens';
 
 afterEach(cleanup);
 
@@ -22,6 +23,30 @@ const projected: ProjectedMap = {
   bounds: { minX: 0, maxX: 1, minY: 0, maxY: 3, width: 1, height: 3 }
 };
 const style = (height: number) => ({ height, color: '#336699', hasData: true });
+
+const decorProjected: ProjectedMap = {
+  ...projected,
+  decor: [{ id: 'MALVINAS', name: 'Islas Malvinas', polygons: [{ outer: [[3, -1], [4, -1], [4, 0], [3, 0]], holes: [] }] }]
+};
+
+describe('isoMap with decoration', () => {
+  const draw = () => isoMap(decorProjected, { styleOf: () => style(1), selectedId: 'MALVINAS' });
+
+  it('draws the decoration flat, in the no-data color, never selected nor lifted', () => {
+    const decor = draw().provinces.find((p) => p.id === 'MALVINAS')!;
+    expect(decor.decor).toBe(true);
+    expect(decor.color).toBe(NO_DATA);
+    expect(decor.selected).toBe(false);
+    expect(draw().provinces.filter((p) => !p.decor).map((p) => p.id).sort()).toEqual(['N', 'S']);
+  });
+
+  it('keeps the decoration inside the viewBox', () => {
+    const { provinces, viewBox } = draw();
+    const decor = provinces.find((p) => p.decor)!;
+    const nums = (decor.top + decor.sides).match(/-?\d+(\.\d+)?/g)!.map(Number);
+    expect(Math.max(...nums)).toBeLessThanOrEqual(Math.max(viewBox.x + viewBox.width, viewBox.y + viewBox.height));
+  });
+});
 
 describe('isoMap', () => {
   const draw = (selectedId: string | null) => isoMap(projected, { styleOf: (id) => style(id === 'N' ? 1 : 0.5), selectedId });
@@ -99,6 +124,18 @@ describe('TourMapSvg', () => {
     const { container } = render(<TourMapSvg spec={spec()} />);
     expect(container.querySelector('canvas')).toBeNull();
     expect(screen.getByRole('img', { name: 'resumen del mapa' })).toBeTruthy();
+    expect(container.querySelectorAll('[data-province]')).toHaveLength(2);
+  });
+
+  it('draws the Malvinas as decoration: visible, hidden from the pointer, and never counted as a province', () => {
+    const onSelect = vi.fn();
+    const { container } = render(<TourMapSvg spec={spec(onSelect)} />);
+    const decor = container.querySelector('[data-decor="MALVINAS"]');
+    expect(decor).not.toBeNull();
+    expect(decor!.getAttribute('aria-hidden')).toBe('true');
+    expect(decor!.querySelector('path')).not.toBeNull();
+    fireEvent.click(decor!);
+    expect(onSelect).not.toHaveBeenCalled();
     expect(container.querySelectorAll('[data-province]')).toHaveLength(2);
   });
 
