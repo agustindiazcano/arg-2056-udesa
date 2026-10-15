@@ -104,13 +104,13 @@ const ai = (): BuiltChart => {
 };
 
 /** A ranking of single columns, the largest in the accent color: the shape of steps 4, 5, 6 and 13. */
-function ranking(title: string, name: string, data: { unit: string; rows: Array<{ label: string; value: number }> }, highlight: string, intro: string): BuiltChart {
+export function ranking(title: string, name: string, data: { unit: string; rows: Array<{ label: string; value: number }> }, highlight: string, intro: string): BuiltChart {
   const summary = `${intro}: ${list(data.rows.map((r) => `${r.label} ${formatValue(r.value, data.unit)}`))}`;
   const { option } = buildColumns(data.rows.map((r) => r.label), [{ name, values: data.rows.map((r) => r.value), color: GREY }], { unit: data.unit, highlight, summary });
   return { option, summary, spec: barsSpec(data.rows, { title, unit: data.unit, highlight, summary }) };
 }
 
-const largest = (rows: Array<{ label: string; value: number }>): string => [...rows].sort((a, b) => b.value - a.value)[0]!.label;
+export const largest = (rows: Array<{ label: string; value: number }>): string => [...rows].sort((a, b) => b.value - a.value)[0]!.label;
 
 const mining = (): BuiltChart => {
   const m = MINING;
@@ -148,7 +148,7 @@ const agro = (): BuiltChart => {
   return { option, summary, spec: pairedBars('Agro: actual y potencial', a.unit, a.categories, ['actual', 'potencial'], a.current, a.potential) };
 };
 
-function shares(title: string, data: { unit: string; rows: Array<{ label: string; value: number }> }, note = 'datos de prueba'): BuiltChart {
+export function shares(title: string, data: { unit: string; rows: Array<{ label: string; value: number }> }, note = 'datos de prueba'): BuiltChart {
   const summary = `${title}, en % del total (${note}): ${list(data.rows.map((r) => `${r.label} ${formatValue(r.value, data.unit)}`))}`;
   const { option } = buildShares(data.rows, { unit: data.unit, summary });
   return { option, summary, spec: barsSpec(data.rows, { title, unit: data.unit, highlight: largest(data.rows), summary }) };
@@ -225,7 +225,6 @@ export const TOUR_CHARTS: Record<number, TourChartDef> = {
     kind: 'chart',
     build: agro
   },
-  11: { step: 11, title: 'Composición de las exportaciones', subtitle: 'porcentaje del total exportado en 2025, por complejo exportador', source: EXPORTS_SOURCE, kind: 'chart', build: () => shares('Composición de las exportaciones', EXPORT_COMPOSITION, 'INDEC') },
   12: { step: 12, title: 'Composición del PBI', subtitle: 'porcentaje del valor agregado por sector, 2025', source: GDP_COMPOSITION_SOURCE, kind: 'chart', build: () => shares('Composición del PBI', GDP_COMPOSITION, 'INDEC') },
   13: {
     step: 13,
@@ -238,4 +237,14 @@ export const TOUR_CHARTS: Record<number, TourChartDef> = {
 };
 
 /** The steps that have a chart, in order. */
+/** The composition of the exports in percent (the old step 11, now inside the Exports slide, step 4): kept only to build its table of the Data page. */
+export const EXPORT_COMPOSITION_CHART: TourChartDef = {
+  step: 4,
+  title: 'Composición de las exportaciones',
+  subtitle: 'porcentaje del total exportado en 2025, por complejo exportador',
+  source: EXPORTS_SOURCE,
+  kind: 'chart',
+  build: () => shares('Composición de las exportaciones', EXPORT_COMPOSITION, 'INDEC')
+};
+
 export const CHART_STEP_LIST: number[] = Object.keys(TOUR_CHARTS).map(Number).sort((a, b) => a - b);

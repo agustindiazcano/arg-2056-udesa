@@ -21,7 +21,7 @@ Una fila por diapositiva (paso del Recorrido). «Real» = con fuente y consultad
 | 8 | Minería hoy y lo que viene | **real** (Secretaría de Minería, ARMINERA 2025, transcrito de imágenes): exportaciones 2024 y proyección 2035; en Data los proyectos de litio y cobre y la proyección por año; la lista del RIGI es de prensa, sin verificar | D14, D23 | Verificar la lista del RIGI (H1) |
 | 9 | Hidrocarburos | parcial: historia 2015-2025 de la producción nacional de petróleo real (Secretaría de Energía, datos abiertos); proyección y rango de prueba; tabla de proyectos de prensa, sin verificar | D15, D23 | La proyección y el rango (modelo) |
 | 10 | Agro actual y potencial | prueba (las barras, en dólares); las toneladas por cultivo y campaña son reales (MAGyP) y están en Data | D16 | Un estudio de potencial y valuar la producción |
-| 11 | Composición de las exportaciones | **real** (INDEC, por complejo exportador, 2025, provisorio) | D13 | Nada |
+| 11 | ~~Cómo se reparte lo que exportamos~~ | **fusionada con el paso 4 el 2026-10-14**: el paso 4 («Exportaciones por complejo») tiene el botón «% del total»; la tabla sigue en Data | — | Nada |
 | 12 | Composición del PBI | **real** (INDEC, valor agregado de 2025 a precios de 2004, preliminar) | D17 | Verificar a mano que la columna «Total» del cuadro 4 sea el promedio trimestral de 2025 |
 | 13 | Stock de recursos naturales | prueba (las barras); en Data las reservas reales de petróleo y gas al 31-12-2025 (Secretaría de Energía); las cantidades de minerales de ARMINERA y del USGS están en el texto | D18 | Valuar y reservas de minerales (el USGS las trae en tablas que no se pudieron leer) |
 | 14 | Productividad | real (INDEC, PWT/FRED); falta verificar | D2 a D8, D21, D22 | Verificar fuentes citadas |
