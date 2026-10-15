@@ -282,7 +282,7 @@ export function buildSlides(): SlideData[] {
       { id: 'provinces-value', title: `Valor productivo por provincia (${PRODUCTION_UNIT})`, columns: ['Provincia', 'Valor'], rows: PROVINCES.map((p, i) => [p.name, PROVINCE_VALUES[i] ?? null]) },
       hydrocarbonProvinces()
     ], true, ['E6']),
-    slide('8', TOUR_CHARTS[8]!.title, [chartTable(8), ...miningTables(), rigiTable('rigi-mining', 'Proyectos mineros del RIGI y otros en evaluación (prensa, sin verificar)', RIGI_MINING)], false, ['E3', 'E5', 'E9', 'R1', 'R2', 'R3', 'R4', 'R5', 'R9', 'R12']),
+    slide('8', TOUR_CHARTS[8]!.title, [chartTable(8), ...miningTables(), rigiTable('rigi-mining', 'Proyectos mineros del RIGI y otros en evaluación (prensa, sin verificar)', RIGI_MINING)], false, ['E3', 'E5', 'E9', 'E11', 'R1', 'R2', 'R3', 'R4', 'R5', 'R9', 'R12', 'R13']),
     slide('9', TOUR_CHARTS[9]!.title, [chartTable(9), nationalProduction(), oilSince1950(), rigiTable('rigi-oil-gas', 'Proyectos de petróleo y gas del RIGI y otros en evaluación (prensa, sin verificar)', RIGI_OIL_GAS)], true, ['E6', 'E4', 'R2', 'R3', 'R6', 'R7', 'R8', 'R10', 'R11']),
     slide('10', TOUR_CHARTS[10]!.title, [chartTable(10), agroTable()], true, ['E8']),
     slide('12', TOUR_CHARTS[12]!.title, [chartTable(12)], false, ['E2']),
