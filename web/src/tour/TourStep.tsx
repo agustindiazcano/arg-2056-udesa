@@ -4,6 +4,7 @@ import '../dashboard/dashboard.css';
 import { ChartStep } from './ChartStep.js';
 import { ExportsStep } from './ExportsStep.js';
 import { ProvinceStep } from './ProvinceStep.js';
+import { Rule70Step } from './Rule70Step.js';
 import { ProductivityStep } from './ProductivityStep.js';
 import { WorldStep } from './WorldStep.js';
 import { TourSidebar } from './TourSidebar.js';
@@ -14,7 +15,7 @@ export function TourStep({ step }: { step: number }) {
   // every other step has the side panel with the text and the references, next to its chart
   return (
     <div className="tour-frame">
-      {step === 0 ? <WorldStep /> : step === 2 ? <ProvinceStep /> : step === 4 ? <ExportsStep /> : <ChartStep step={step} />}
+      {step === 0 ? <WorldStep /> : step === 2 ? <ProvinceStep /> : step === 4 ? <ExportsStep /> : step === 5 ? <Rule70Step /> : <ChartStep step={step} />}
       <TourSidebar step={step} />
     </div>
   );

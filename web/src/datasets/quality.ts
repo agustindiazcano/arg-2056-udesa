@@ -17,6 +17,8 @@ const CEI = 'CEI de la Cancillería, Análisis del comercio de servicios de la A
 const PRESS = 'Prensa, sin verificar';
 const PWT = 'Penn World Table 11.0 vía FRED, e INDEC (sin volver a descargar)';
 
+const CALC = 'Cálculo propio con t = ln 2 / ln(1 + r), sin dato externo';
+
 const made = (): TableMeta => ({ quality: 'placeholder', source: MADE_UP, retrievedAt: null });
 const meta = (quality: Quality, source: string, retrievedAt: string): TableMeta => ({ quality, source, retrievedAt });
 
@@ -42,6 +44,8 @@ export const TABLE_META: Readonly<Record<string, TableMeta>> = {
   'great-items': meta('real', 'INDEC, Intercambio comercial argentino (informe de agosto de 2026)', '2026-10-13'),
   'chart-5': meta('real', 'Cálculo propio: 70 dividido la tasa de crecimiento, sin dato externo', '2026-10-14'),
   'provinces-value': made(),
+  'rule70-errors': meta('real', CALC, '2026-10-15'),
+  'rule70-argentina': meta('real', `${CALC}; PBI real de 2026: Banco Mundial y FMI`, '2026-10-15'),
   'chart-8': meta('partial', ARMINERA, '2026-10-13'),
   'mining-exports': meta('partial', ARMINERA, '2026-10-13'),
   'services-exports': meta('real', CEI, '2026-10-15'),

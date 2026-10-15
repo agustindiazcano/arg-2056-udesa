@@ -1923,3 +1923,130 @@ main.scene-container {
   color: var(--ink);
   font: inherit;
 }
+
+/* ---- Recorrido, the rule of 70: two charts on the left, the calculator and the Argentina box on the right ----------------- */
+
+.rule70-grid {
+  flex: 1 1 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  gap: var(--space-3);
+  min-height: 0;
+}
+
+.rule70-col {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  gap: var(--space-3);
+  min-height: 0;
+  min-width: 0;
+}
+
+.rule70-col:first-child {
+  grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
+}
+
+.rule70-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2, 0.5rem);
+  min-height: 0;
+  min-width: 0;
+  overflow: auto;
+  pointer-events: auto;
+}
+
+.rule70-card-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2, 0.5rem);
+}
+
+.rule70-switches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2, 0.5rem);
+}
+
+.rule70-chart {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 9rem;
+}
+
+.rule70-chart > * {
+  width: 100%;
+  height: 100%;
+}
+
+.rule70-rate {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.rule70-rate input[type='range'] {
+  flex: 1 1 8rem;
+}
+
+.rule70-rate input[type='number'] {
+  width: 5rem;
+  padding: 0.2rem 0.4rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface, var(--page));
+  color: var(--ink);
+  font: inherit;
+}
+
+.rule70-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+.rule70-table th,
+.rule70-table td {
+  padding: 0.25rem 0.4rem;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+}
+
+.rule70-note {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.rule70-legend {
+  color: var(--ink-2);
+  font-size: 0.8rem;
+}
+
+.rule70-key {
+  display: inline-block;
+  width: 0.8rem;
+  height: 0.2rem;
+  margin: 0 0.2rem 0 0.6rem;
+  vertical-align: middle;
+}
+
+.rule70-key--70 {
+  background: var(--scenario-pessimistic);
+}
+
+.rule70-key--72 {
+  background: var(--blue);
+}
+
+.rule70-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}

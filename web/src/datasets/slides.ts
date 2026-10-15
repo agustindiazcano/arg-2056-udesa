@@ -20,6 +20,7 @@ import type { RigiProject } from '../tour/rigiProjects.js';
 import { stepNumber } from '../tour/chartSteps.js';
 import { EXPORT_COMPOSITION_CHART, TOUR_CHARTS } from '../tour/tourCharts.js';
 import { exportRows } from '../tour/exportsData.js';
+import { argentinaTable, errorTable } from '../tour/rule70Model.js';
 import type { TourChartDef } from '../tour/tourCharts.js';
 import { EXPORTS_GREAT_ITEMS, EXPORTS_GREAT_ITEMS_SOURCE, EXPORTS_TOTAL_2025, EXPORT_COMPLEXES, PROVINCE_VALUES } from '../tour/tourData.js';
 import { FIRST_YEAR as WORLD_FIRST, LAST_YEAR as WORLD_LAST, WORLD_UNIT, argentinaReal, regionCountries, regionValuesAt } from '../tour/worldData.js';
@@ -279,7 +280,7 @@ export function buildSlides(): SlideData[] {
     slide('2', 'Producción por provincia', [provinces(), hydrocarbonProvinces(), indicators()], true, ['W3', 'E6']),
     slide('3', TOUR_CHARTS[3]!.title, [chartTable(3)]),
     slide('4', TOUR_CHARTS[4]!.title, [chartTable(4), { ...chartTable(4, EXPORT_COMPOSITION_CHART), id: 'chart-11' }, complexesTable(), exportSharesTable(), greatItemsTable(), ...servicesTables()], false, ['E7', 'E1', 'E10']),
-    slide('5', TOUR_CHARTS[5]!.title, [chartTable(5)], false),
+    slide('5', TOUR_CHARTS[5]!.title, [chartTable(5), errorTable(), argentinaTable()], false),
     slide('7', TOUR_CHARTS[7]!.title, [
       { id: 'provinces-value', title: `Valor productivo por provincia (${PRODUCTION_UNIT})`, columns: ['Provincia', 'Valor'], rows: PROVINCES.map((p, i) => [p.name, PROVINCE_VALUES[i] ?? null]) },
       hydrocarbonProvinces()
