@@ -37,14 +37,10 @@
 - The human: choose the OECD scenario that equals "expected" (M1), old WEO editions (M3), 2005 projections (M4); RIGI list (H1), mining and agro by province (H9), years of step 0 and the investment figure; check the mining transcription (H3b). Model and parameters for the projections from 2027.
 
 ## Current task (2026-10-15)
-- New worktree `C:\Users\agusd\.codex\worktrees\slides-interactivas-8463\arg-2056-udesa`, branch `task/borradores-slides-interactivas` (based on the planning branch).
-- Added new tour steps 16 and 17: interactive Development indicators, then Forecast uncertainty/AI adoption. Both are marked drafts and contain no empirical series; added review items to `PENDING.md`.
-- Step 16 has selectable health/education/equality indicators and switches for time-series or regional comparison; values, definitions and sources are explicit placeholders.
-- Step 17 has interactive sections for historical diffusion, model/cost topics, forecast revisions and an adverse AI pathway; its widening fan is labeled conceptual and has no data values.
-- Step 16 explains why PBI growth matters alongside per-capita GDP, wages and development measures; education/human capital and savings/investment are selectable research channels, not displayed estimates.
-- No resource-map province zoom/transition was implemented in these slides; it remains on the earlier plan. The OpenAI/ChatGPT timeline is marked for source verification in `PENDING.md`.
-- Typecheck was attempted but the new worktree has no local dependencies; the reused compiler resolved incomplete types from another checkout. No test suite was run.
-- Next: review the new slides in the app, then source and verify claims/data before replacing any placeholder. Run only the fast checks for touched files as allowed; no local test run planned.
+- New worktree `C:\Users\agusd\.codex\worktrees\intro-argentina-3d\arg-2056-udesa`, branch `task/intro-model-3d`, based on `task/borradores-slides-interactivas`.
+- Refined the intro's Argentina model in `web/src/intro/Intro.tsx` and `intro.css`: nine depth slices give smoother solid provincial sides, with clearer top faces, outline contrast, shadow and a soft ground light.
+- Ran Vite from this worktree at `http://127.0.0.1:5175/` and inspected the tilted intro in the browser. No tests run; this was a visual-only CSS/markup task.
+- Next: human review of the preview; keep the 2D/3D province-map transitions and resource explorer in `PENDING.md`.
 
 ## Prior planning (2026-10-15)
 - The separate `task/indicadores-desarrollo-mapas` worktree has plans in `development-indicators-maps.md` and `forecast-uncertainty.md`, with tasks 51/52 listed in `roadmap.md`, `TASKS.md` and `PENDING.md`.

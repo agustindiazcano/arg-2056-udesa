@@ -1,10 +1,10 @@
 /* Intro screen. Adapted from test/argentina-2056-intro.html; system fonts only (the CSP forbids web fonts). */
 .intro {
   --intro-ink-dim: color-mix(in srgb, var(--intro-ink) 62%, var(--intro-bg));
-  --intro-prov: color-mix(in srgb, var(--intro-bg), var(--intro-white) 7%);
-  --intro-line: color-mix(in srgb, var(--intro-bg), var(--intro-line-tint) 52%);
-  --intro-side-top: color-mix(in srgb, var(--intro-bg), var(--intro-white) 6%);
-  --intro-side-bot: color-mix(in srgb, var(--intro-bg), var(--intro-black) 38%);
+  --intro-prov: color-mix(in srgb, var(--intro-bg), var(--intro-white) 10%);
+  --intro-line: color-mix(in srgb, var(--intro-bg), var(--intro-line-tint) 66%);
+  --intro-side-top: color-mix(in srgb, var(--intro-bg), var(--intro-white) 10%);
+  --intro-side-bot: color-mix(in srgb, var(--intro-bg), var(--intro-black) 48%);
   --ar: 0.4895;
   /* the whole composition lives in a frame with the proportions of the reference (1398 x 842), centered; everything is sized from it, so a laptop and a large monitor look the same */
   --fw: min(94vw, calc(94vh * 1.66));
@@ -25,7 +25,7 @@
 }
 .intro[data-tilted='true'] {
   --lift: calc(var(--mh) * 0.04);
-  --step: calc(var(--mh) * 0.0175); /* 2 side layers: the same thickness as 5 thinner ones */
+  --step: calc(var(--mh) * 0.00475); /* 8 shaded slices keep the same overall depth with smoother faces */
 }
 .intro-frame {
   position: absolute;
@@ -79,8 +79,11 @@
   opacity: 0;
   transition: opacity 1.6s, transform 1.8s cubic-bezier(0.22, 0.8, 0.24, 1);
   transform: translate3d(-50%, -50%, -3px) scale(0.5);
-  background-image: linear-gradient(var(--intro-grid) 1px, transparent 1px), linear-gradient(90deg, var(--intro-grid) 1px, transparent 1px);
-  background-size: calc(var(--mh) * 0.035) calc(var(--mh) * 0.035);
+  background-image:
+    radial-gradient(ellipse at 50% 42%, color-mix(in srgb, var(--intro-light) 18%, transparent), transparent 68%),
+    linear-gradient(var(--intro-grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--intro-grid) 1px, transparent 1px);
+  background-size: auto, calc(var(--mh) * 0.035) calc(var(--mh) * 0.035), calc(var(--mh) * 0.035) calc(var(--mh) * 0.035);
   mask-image: radial-gradient(closest-side, var(--intro-black) 45%, transparent 100%);
 }
 .intro[data-tilted='true'] .intro-floor {
@@ -123,7 +126,7 @@
 .intro-layer.side use {
   fill: var(--sf);
   stroke: var(--sf);
-  stroke-width: 3.4;
+  stroke-width: 1.25;
 }
 .intro:not([data-tilted='true']) .intro-layer.side {
   opacity: 0;
@@ -131,7 +134,10 @@
 .intro-layer.top use {
   fill: var(--intro-prov);
   stroke: var(--intro-line);
-  stroke-width: 1.7;
+  stroke-width: 1.45;
+}
+.intro-layer.top {
+  filter: drop-shadow(0 2px 4px color-mix(in srgb, var(--intro-black) 62%, transparent));
 }
 .intro-layer.glow {
   left: var(--x);
@@ -160,6 +166,9 @@
 }
 .intro-prov.lit .intro-layer.side {
   --sf: color-mix(in srgb, var(--intro-light) calc(8% + var(--t) * 42%), var(--intro-side-bot));
+}
+.intro-prov.lit .intro-layer.top {
+  filter: drop-shadow(0 0 9px color-mix(in srgb, var(--intro-light) 44%, transparent));
 }
 
 .intro-vignette {

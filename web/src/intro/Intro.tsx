@@ -7,7 +7,7 @@ import './intro.css';
 import { INSTITUTIONS } from '../ui/institutions';
 import { withMalvinas } from './malvinasPath';
 
-const LAYERS = 3; // 2 sides and the top: fewer composited layers per province
+const LAYERS = 9; // eight shaded side slices and the top give the provinces a continuous, solid edge
 // speed of the lights (0.8): the prototype waits (350 to 1050 ms) / speed between changes
 const LIGHT_SPEED = 0.8;
 const APPEAR_MS = 2300; // the provinces appear upright and centered, then the view tilts
