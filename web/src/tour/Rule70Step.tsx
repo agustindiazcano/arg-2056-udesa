@@ -6,6 +6,8 @@ import { Segmented } from '../ui/Segmented.js';
 import { RULE70_TITLE } from './slideTitles.js';
 import { TabbedChart } from '../ui/TabbedChart.js';
 import { CountryExplorer } from './CountryExplorer.js';
+import { ImfProjections } from './ImfProjections.js';
+import { ScenarioCompare } from './ScenarioCompare.js';
 import { GDP_UNIT } from './gdpFacts.js';
 import { errorChart, growthChart } from './rule70Charts.js';
 import type { Scale } from './rule70Charts.js';
@@ -192,7 +194,7 @@ function Calculator() {
 
 /**
  * Step 5 of the Recorrido, the rule of 70, in two tabs: the calculator (a rate chosen by the visitor and the year the GDP of Argentina
- * doubles at it) and the real countries (what happened in China, South Korea, India, the United States and Argentina, or any country).
+ * doubles at it) and the real countries (what happened in China, South Korea, India, the United States and Argentina, or any country), the comparison of two rates and the projections of the IMF.
  */
 export function Rule70Step() {
   return (
@@ -207,7 +209,9 @@ export function Rule70Step() {
         label={TITLE}
         tabs={[
           { id: 'calculator', label: 'Calculadora', render: () => <Calculator /> },
-          { id: 'countries', label: 'Países reales', render: () => <CountryExplorer /> }
+          { id: 'countries', label: 'Países reales', render: () => <CountryExplorer /> },
+          { id: 'scenarios', label: 'Escenarios', render: () => <ScenarioCompare /> },
+          { id: 'imf', label: 'Proyecciones del FMI', render: () => <ImfProjections /> }
         ]}
       />
     </section>

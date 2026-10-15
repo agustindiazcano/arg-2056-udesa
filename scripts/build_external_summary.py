@@ -1,4 +1,4 @@
-"""Writes web/src/tour/externalProjections.json, the compact view of data/processed/external_forecasts.json that the Data section shows.
+"""Writes web/src/tour/externalProjections.json and web/src/tour/imfCountries.json, the compact views of data/processed/external_forecasts.json that the Data section shows.
 
 Run after `python -m datapipe run external_forecasts_macro`: python scripts/build_external_summary.py
 The only arithmetic is the average annual growth of the OECD GDP volume between 2026 and 2056, (V2056 / V2026)^(1/30) - 1.
@@ -45,4 +45,25 @@ out = {
     ],
 }
 (ROOT / 'web' / 'src' / 'tour' / 'externalProjections.json').write_text(json.dumps(out, ensure_ascii=False, indent=1) + '\n', encoding='utf-8')
+
+# the real GDP growth the IMF projects for every country of the data, 2025 to 2031, for the rule-of-70 slide (web/src/tour/imfCountries.json)
+NAMES = {'AR': 'Argentina', 'BR': 'Brasil', 'CL': 'Chile', 'CN': 'China', 'CO': 'Colombia', 'ES': 'España', 'IN': 'India', 'KR': 'Corea del Sur', 'MX': 'México', 'US': 'Estados Unidos', 'UY': 'Uruguay'}
+imf = [r for r in recs if r['forecaster'] == 'IMF' and r['indicator'] == 'gdp_growth_real_pct']
+countries = []
+for geo in sorted(NAMES, key=lambda g: NAMES[g]):
+    rows = sorted((r for r in imf if r['geo'] == geo), key=lambda r: r['year'])
+    assert rows, geo
+    countries.append({
+        'code': geo,
+        'name': NAMES[geo],
+        'vintage': rows[0]['vintage'],
+        'growth': {str(r['year']): round(r['value'], 3) for r in rows},
+    })
+imf_out = {
+    'source': 'FMI, World Economic Outlook (SDMX), crecimiento real del PBI (NGDP_RPCH), via data/processed/external_forecasts.json',
+    'url': 'https://www.imf.org/en/Publications/WEO',
+    'retrieved_at': imf[0]['retrieved_at'],
+    'countries': countries,
+}
+(ROOT / 'web' / 'src' / 'tour' / 'imfCountries.json').write_text(json.dumps(imf_out, ensure_ascii=False, indent=1) + chr(10), encoding='utf-8')
 print('ok')
