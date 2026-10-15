@@ -3,13 +3,45 @@
 Un relato interactivo, con datos, que une el Cruce de los Andes (1817) con el desafío de Argentina hacia 2056: recursos, economía, población y el impacto de la inteligencia artificial y la automatización (la «Cuarta Revolución Industrial» en el sentido de Klaus Schwab, Foro Económico Mundial).
 
 - **Los Andes**: mapa 3D con satélite y relieve reales; la marcha de la columna principal del Ejército de los Andes, las otras columnas del cruce y el encuentro de las fuerzas, con figuras en miniatura.
-- **Hacia el 2056** (antes «Recorrido»): una presentación guiada con gráficos 2D y 3D (cada gráfico tiene su tabla). Incluye la diapositiva de **productividad** (PTF y producto por hora, Argentina, EE. UU., Chile y Brasil, con datos de la Penn World Table).
-- **Simulador del PBI**: un gráfico grande del PBI hasta 2056 y, a la derecha, factores que se pueden mover (crecimiento base, IA, población, productividad, inversión). Es una ilustración con aritmética simple, no el modelo.
+- **Hacia el 2056** (antes «Recorrido»): una presentación guiada, con un índice y 13 diapositivas, con gráficos 2D y 3D (cada gráfico tiene su tabla). Incluye la diapositiva de **productividad** (PTF y producto por hora, Argentina, EE. UU., Chile y Brasil, con datos de la Penn World Table).
+- **Simulador del PBI**: un gráfico grande del PBI hasta 2056 y, a la derecha, factores que se pueden mover (crecimiento base, IA, población, productividad, inversión). Usa aritmética simple sobre los supuestos elegidos.
 - **Data**: una página con scroll con los datos de cada diapositiva en tablas, un selector (número y título de la diapositiva) para descargar sus datos como CSV, la descarga de cada tabla y, al final, los enlaces de las referencias (también descargables en CSV).
-- **Proyecciones de otros organismos**: el FMI, la OCDE y la ONU están cargados con el pipeline de datos (`data/processed/external_forecasts.json`, `scripts/fetch_external_forecasts.py`) y se muestran en la página Data, en la diapositiva 1; el estado de cada serie del modelo está en [`docs/model-data-status.md`](docs/model-data-status.md).
+- **Proyecciones de otros organismos**: el FMI, la OCDE y la ONU están cargados con el pipeline de datos (`data/processed/external_forecasts.json`, `scripts/fetch_external_forecasts.py`) y se muestran en la página Data, en la diapositiva 2.
 - **Data Dashboard** (oculto por ahora): economía, recursos, pronóstico 2056 con abanico de incertidumbre, revolución IA y simulador.
 
 La incertidumbre se muestra como abanico de percentiles; las cifras en disputa, como rangos; los vacíos, como «sin dato». Los supuestos y las reglas de datos están en [`AGENTS.md`](AGENTS.md) y [`docs/assumptions.md`](docs/assumptions.md).
+
+## Qué es
+
+Un proyecto de **ciencia de datos y visualización**: toma datos abiertos de organismos oficiales e internacionales, los baja con un pipeline reproducible (cada archivo con su hash, su fuente y su fecha), los valida y los muestra en gráficos interactivos y mapas, 2D y 3D. Cada gráfico tiene su tabla, y cada número de la presentación está en la página Data con su referencia.
+
+## Stack
+
+| Capa | Tecnología |
+|---|---|
+| Aplicación web | TypeScript (modo estricto), React 19, Vite, Zustand |
+| Visualización | ECharts (gráficos y mapas 2D), Three.js (vistas 3D y la escena de los Andes), MapLibre GL (mapa satelital con relieve), GSAP (animaciones) |
+| Datos y ciencia de datos | Python 3.12 (biblioteca estándar, `jsonschema`, NumPy). Pipeline en `scripts/datapipe`: archivos crudos registrados con hash, adaptadores puros, salidas reproducibles y validación contra esquemas JSON. Los cálculos estadísticos de la regla del 70 (tasa entre extremos, regresión de ln V contra el año con R² y residuos, ventanas móviles, tiempo exacto de duplicación) son un módulo de TypeScript puro, `web/src/core/doubling.ts` |
+| Calidad | pytest, Vitest, Playwright con axe (accesibilidad), ESLint, Ruff, presupuestos de tamaño del bundle y de los datos |
+| Entrega | GitHub Actions (CI) y Vercel |
+
+## Las diapositivas de «Hacia el 2056»
+
+La presentación abre en una diapositiva con el título y el índice (la 0), y tiene 13 más:
+
+1. El PBI de Argentina desde 1960 (ranking mundial y de la región)
+2. PBI de Argentina
+3. Productividad
+4. Producción por provincia
+5. Cuarta revolución industrial: el impacto de la IA en la economía
+6. Exportaciones por complejo
+7. La regla del 70 (calculadora y países reales)
+8. Mapa productivo por provincia
+9. Minería: hoy vs proyecto
+10. Hidrocarburos: Vaca Muerta define el piso y el techo
+11. Agro: producción actual y potencial
+12. Composición del PBI
+13. El stock de recursos naturales
 
 ## Cómo correrlo
 
@@ -20,20 +52,21 @@ cp .env.example .env.local   # completar VITE_MAPTILER_KEY (satélite y relieve 
 npm run dev
 ```
 
-Sin `VITE_MAPTILER_KEY` la escena de los Andes muestra un aviso y un fondo liso. La clave queda en el bundle: restringila por origen en MapTiler. Antes de un push: `python scripts/precheck.py`.
+Sin `VITE_MAPTILER_KEY` la escena de los Andes muestra un aviso y un fondo liso. La clave queda en el bundle: restringila por origen en MapTiler. Antes de un push: `python scripts/precheck.py` (corre ruff, pytest, la validación de datos, el lint, el chequeo de tipos y los tests de la web). Los tests de la web: `cd web && npm test`; los de Python: `pytest`.
 
 ## Estructura
 
 | Carpeta | Contenido |
 |---|---|
 | `web/` | Aplicación (Vite, React, TypeScript, MapLibre GL, Three.js, ECharts) |
-| `model/` | Modelo de pronóstico en Python, con backtest |
-| `data/` | Datos, esquemas y generador de datos de prueba |
+| `model/` | Módulo de población por cohortes del modelo de pronóstico, en Python, con tests (diseño en `docs/model-design.md`) |
+| `data/` | Archivos crudos con hash y fuente, salidas procesadas y esquemas JSON |
+| `scripts/` | Pipeline de datos (`datapipe`), descargas de las fuentes, chequeos y `precheck.py` |
 | `docs/` | Decisiones, supuestos, diseño y fuentes |
 
 ## Referencias
 
-La lista completa, con qué dato sale de cada fuente y qué falta verificar, está en [`docs/references.md`](docs/references.md). Los enlaces a los que no se pudo entrar y los datos que faltan traer están en [`docs/data-requests.md`](docs/data-requests.md).
+La lista completa, con qué dato sale de cada fuente, está en [`docs/references.md`](docs/references.md).
 
 ### Cruce de los Andes (1817)
 
@@ -58,7 +91,7 @@ La lista completa, con qué dato sale de cada fuente y qué falta verificar, est
 19. Academia de Historia Militar de Chile, «Batalla de Chacabuco». <https://www.academiahistoriamilitar.cl/academia/batalla-de-chacabuco/>
 20. Infobae, «Batalla de Chacabuco: la urgencia de San Martín, el arriesgado ataque de O'Higgins y la carga letal de los Granaderos» (12-02-2026). <https://www.infobae.com/historia/2026/02/12/batalla-de-chacabuco-la-urgencia-de-san-martin-el-arriesgado-ataque-de-ohiggins-y-la-carga-letal-de-los-granaderos>
 
-Las cifras de bajas de Chacabuco no coinciden entre las fuentes 5, 10, 17, 18, 19 y 20: la pantalla usa las del parte de San Martín y dice cuáles son las otras. Las fuentes marcadas «por informe» en [`docs/references.md`](docs/references.md) todavía no se verificaron en el original.
+Las cifras de bajas de Chacabuco no coinciden entre las fuentes 5, 10, 17, 18, 19 y 20: la pantalla usa las del parte de San Martín y dice cuáles son las otras.
 
 ### Mapa y terreno
 
@@ -76,11 +109,11 @@ Las cifras de bajas de Chacabuco no coinciden entre las fuentes 5, 10, 17, 18, 1
 26. Penn World Table 11.0 (Groningen Growth and Development Centre), vía FRED. <https://www.rug.nl/ggdc/productivity/pwt/> y <https://fred.stlouisfed.org/series/EMPENGARA148NRUG> (empleo de Argentina)
 27. Acemoglu, D. (2024). «The Simple Macroeconomics of AI». NBER Working Paper 32487. <https://www.nber.org/papers/w32487>
 
-Las dos mediciones de la PTF de 2025 no coinciden (INDEC +2,8 %, Baumann +4,2 %); la PWT llega hasta 2023. Las demás fuentes de la sección 4.1 de [`docs/references.md`](docs/references.md) (literatura de IA, contexto, descartadas) y su estado están allí. El simulador sigue con coeficientes de prueba.
+Las dos mediciones de la PTF de 2025 no coinciden (INDEC +2,8 %, Baumann +4,2 %); la PWT llega hasta 2023. Las demás fuentes de la sección 4.1 de [`docs/references.md`](docs/references.md) (literatura de IA, contexto, descartadas) y su estado están allí.
 
 ### Economía, comercio, recursos y proyecciones (Recorrido «Hacia el 2056» y Data)
 
-Todos los enlaces de los datos que usa la aplicación. «Leída» = se abrió y se tomaron cifras; «secundaria» = prensa, sin verificar contra la fuente oficial. El estado de cada una y qué falta verificar está en [`docs/references.md`](docs/references.md) y [`docs/data-requests.md`](docs/data-requests.md); la misma lista se ve en la sección Data de la aplicación.
+Todos los enlaces de los datos que usa la aplicación. La misma lista se ve en la sección Data de la aplicación y, con el detalle de cada cifra, en [`docs/references.md`](docs/references.md).
 
 **PBI, población y proyecciones**
 

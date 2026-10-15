@@ -2110,9 +2110,16 @@ main.scene-container {
   grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr);
   align-items: center;
   gap: var(--space-4, 2rem);
+  width: 100%;
+  max-width: 78rem;
+  margin-inline: auto;
 }
 
 .index-head {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
   pointer-events: none;
 }
 
@@ -2123,6 +2130,7 @@ main.scene-container {
   font-weight: 200;
   line-height: 1.05;
   letter-spacing: 0.1em;
+  text-align: center;
   text-transform: uppercase;
   color: var(--intro-ink);
 }
