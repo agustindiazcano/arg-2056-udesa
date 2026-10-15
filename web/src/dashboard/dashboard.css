@@ -1428,14 +1428,14 @@
   display: flex;
   align-items: center;
   gap: var(--space-xs);
-  padding: 4px 10px;
-  background: rgba(15, 23, 42, 0.88);
+  padding: var(--space-2) var(--space-sm);
+  background: var(--glass-strong);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(56, 189, 248, 0.28);
-  border-radius: var(--radius-md, 8px);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.45);
-  font-size: 0.82rem;
+  border: 1px solid color-mix(in srgb, var(--blue) 35%, var(--border));
+  border-radius: var(--radius-md);
+  box-shadow: 0 4px 16px var(--border);
+  font-size: var(--font-sm);
   color: var(--ink);
   pointer-events: auto;
 }
@@ -1443,25 +1443,25 @@
 .map-back-btn {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
+  gap: var(--space-xs);
   background: transparent;
   border: none;
   padding: 2px 6px;
-  border-radius: 4px;
-  color: #38bdf8;
+  border-radius: var(--radius-sm);
+  color: var(--blue);
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .map-back-btn:hover {
-  background: rgba(56, 189, 248, 0.16);
-  color: #7dd3fc;
+  background: color-mix(in srgb, var(--blue) 18%, transparent);
+  color: color-mix(in srgb, var(--blue) 75%, var(--ink));
   transform: translateX(-1px);
 }
 
 .map-back-btn .back-arrow {
-  font-size: 1rem;
+  font-size: var(--font-base);
   line-height: 1;
 }
 
@@ -1473,17 +1473,17 @@
 
 .breadcrumb-current {
   font-weight: 600;
-  color: #f8fafc;
+  color: var(--ink);
 }
 
 .dept-badge {
-  margin-left: 6px;
-  padding: 2px 8px;
-  background: rgba(56, 189, 248, 0.15);
-  border: 1px solid rgba(56, 189, 248, 0.32);
-  border-radius: 12px;
+  margin-left: var(--space-xs);
+  padding: 2px var(--space-sm);
+  background: color-mix(in srgb, var(--blue) 16%, transparent);
+  border: 1px solid color-mix(in srgb, var(--blue) 35%, transparent);
+  border-radius: var(--radius-pill);
   font-size: 0.72rem;
   font-weight: 500;
-  color: #bae6fd;
+  color: color-mix(in srgb, var(--blue) 60%, var(--ink));
 }
 
