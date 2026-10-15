@@ -12,6 +12,9 @@ describe('the Data page after the series migration', () => {
 
   // Slide 6 ("Qué miran los inversores", made-up 0-10 scores with no source) was removed by the human on 2026-10-14.
   // Slide 11 (shares of the exports) was merged into slide 4 (Exports) on the same day: its table lives there now.
+  // Tables whose cells were corrected on purpose on 2026-10-14 (task/revalidate-sources): Taca Taca capex 3.583 -> 4.232 (NI 43-101) and
+  // the RIGI approval of Bajo del Choique-La Invernada. Their columns are still compared; their rows are checked in the tests of the new data.
+  const CORRECTED = ['rigi-mining', 'rigi-oil-gas'];
   const REMOVED = ['6'];
   const MOVED: Record<string, string> = { '11': '4' };
   const kept = fixture.filter((s) => !REMOVED.includes(s.id));
@@ -30,6 +33,7 @@ describe('the Data page after the series migration', () => {
       expect(n!.title, t.id).toBe(t.title);
       expect(n!.columns, t.id).toEqual(t.columns);
       // the fixture is JSON, where -0 is written as 0 (same number): compare through the same serialization
+      if (CORRECTED.includes(t.id)) continue;
       expect(JSON.parse(JSON.stringify(n!.rows)), t.id).toEqual(t.rows);
     }
   });

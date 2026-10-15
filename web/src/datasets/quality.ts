@@ -13,6 +13,7 @@ const WB = 'Banco Mundial (WDI), NY.GDP.MKTP.KD, dólares constantes de 2015';
 const ENERGIA = 'Secretaría de Energía, datos abiertos';
 const INDEC_X = 'INDEC, Complejos exportadores, año 2025 (provisorio)';
 const ARMINERA = 'Secretaría de Minería, ARMINERA 2025 (transcrito a mano de imágenes, sin verificar)';
+const CEI = 'CEI de la Cancillería, Análisis del comercio de servicios de la Argentina 2026 (con base en el INDEC)';
 const PRESS = 'Prensa, sin verificar';
 const PWT = 'Penn World Table 11.0 vía FRED, e INDEC (sin volver a descargar)';
 
@@ -43,6 +44,9 @@ export const TABLE_META: Readonly<Record<string, TableMeta>> = {
   'provinces-value': made(),
   'chart-8': meta('partial', ARMINERA, '2026-10-13'),
   'mining-exports': meta('partial', ARMINERA, '2026-10-13'),
+  'services-exports': meta('real', CEI, '2026-10-15'),
+  'sbc-exports': meta('real', CEI, '2026-10-15'),
+  'mining-provinces': meta('real', 'Secretaría de Minería, Origen provincial de las exportaciones mineras (Aduana), informes de diciembre de 2025 y agosto de 2026', '2026-10-14'),
   'mining-2024': meta('partial', ARMINERA, '2026-10-13'),
   'mining-projection': meta('partial', ARMINERA, '2026-10-13'),
   'mining-capex': meta('partial', ARMINERA, '2026-10-13'),
