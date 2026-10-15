@@ -3,6 +3,8 @@ import { EChart } from '../charts/EChart.js';
 import { formatNumber } from '../charts/format.js';
 import { Reveal } from '../motion/Reveal.js';
 import { Segmented } from '../ui/Segmented.js';
+import { TabbedChart } from '../ui/TabbedChart.js';
+import { CountryExplorer } from './CountryExplorer.js';
 import { GDP_UNIT } from './gdpFacts.js';
 import { errorChart, growthChart } from './rule70Charts.js';
 import type { Scale } from './rule70Charts.js';
@@ -29,7 +31,7 @@ const signed = (v: number, digits = 1): string => `${v >= 0 ? '+' : '−'}${es(M
  * rules of 70 and 72, how wrong each rule is for each rate, the compound growth on a linear or a logarithmic scale, and when the real GDP of
  * Argentina (from its 2026 level) doubles at the rate chosen. Pure arithmetic, see `rule70Model.ts` and `core/doubling.ts`.
  */
-export function Rule70Step() {
+function Calculator() {
   const [rate, setRate] = useState(DEFAULT_RATE);
   const [draft, setDraft] = useState(String(DEFAULT_RATE));
   const [scale, setScale] = useState<Scale>('linear');
@@ -52,15 +54,7 @@ export function Rule70Step() {
   };
 
   return (
-    <section className="gdp-step rule70-step" aria-label={TITLE}>
-      <header className="gdp-head">
-        <Reveal k="head" className="gdp-title">
-          <h2>{TITLE}</h2>
-          <p className="gdp-sub">Cuánto tarda en duplicarse algo que crece a una tasa constante: la fórmula exacta, las reglas del 70 y del 72, y el PBI de Argentina</p>
-        </Reveal>
-      </header>
-
-      <div className="rule70-grid">
+    <div className="rule70-grid">
         <div className="rule70-col">
           <Reveal k="growth" className="gdp-chart rule70-card">
             <div className="rule70-card-head">
@@ -191,7 +185,30 @@ export function Rule70Step() {
             </p>
           </Reveal>
         </div>
-      </div>
+    </div>
+  );
+}
+
+/**
+ * Step 5 of the Recorrido, the rule of 70, in two tabs: the calculator (a rate chosen by the visitor and the year the GDP of Argentina
+ * doubles at it) and the real countries (what happened in China, South Korea, India, the United States and Argentina, or any country).
+ */
+export function Rule70Step() {
+  return (
+    <section className="gdp-step rule70-step" aria-label={TITLE}>
+      <header className="gdp-head">
+        <Reveal k="head" className="gdp-title">
+          <h2>{TITLE}</h2>
+          <p className="gdp-sub">Cuánto tarda en duplicarse algo que crece a una tasa constante: la fórmula exacta, las reglas del 70 y del 72, el PBI de Argentina y lo que pasó en países reales</p>
+        </Reveal>
+      </header>
+      <TabbedChart
+        label={TITLE}
+        tabs={[
+          { id: 'calculator', label: 'Calculadora', render: () => <Calculator /> },
+          { id: 'countries', label: 'Países reales', render: () => <CountryExplorer /> }
+        ]}
+      />
     </section>
   );
 }

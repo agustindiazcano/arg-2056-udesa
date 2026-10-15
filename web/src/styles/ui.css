@@ -2050,3 +2050,48 @@ main.scene-container {
   clip: rect(0 0 0 0);
   white-space: nowrap;
 }
+
+.rule70-step .tabbed-chart {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: var(--space-2, 0.5rem);
+  min-height: 0;
+  pointer-events: auto;
+}
+
+.rule70-step .tabbed-chart-panel {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.rule70-presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2, 0.5rem);
+}
+
+.rule70-field {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2, 0.5rem);
+  color: var(--ink-2);
+  font-size: 0.9rem;
+}
+
+.rule70-field select {
+  padding: 0.2rem 0.4rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface, var(--page));
+  color: var(--ink);
+  font: inherit;
+}
+
+.rule70-case {
+  margin: 0;
+  font-size: 1rem;
+}
