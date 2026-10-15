@@ -2398,6 +2398,255 @@ main.scene-container {
   height: 0.55rem;
 }
 
+/* ---- Chart surfaces: clearer hierarchy for the story and simulator ---------------------------------------------- */
+
+.gdp-chart {
+  background:
+    radial-gradient(90% 70% at 12% 0%, color-mix(in srgb, var(--blue) 10%, transparent), transparent 68%),
+    linear-gradient(155deg, color-mix(in srgb, var(--glass) 92%, var(--glass-shadow-blue)), color-mix(in srgb, var(--page) 72%, var(--glass)));
+  border-color: color-mix(in srgb, var(--border) 74%, var(--blue) 26%);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, white 5%, transparent), 0 16px 42px color-mix(in srgb, var(--intro-black) 22%, transparent);
+  transition: border-color 220ms ease, box-shadow 220ms ease, background-color 220ms ease;
+}
+
+.gdp-chart:focus-within {
+  border-color: color-mix(in srgb, var(--blue) 48%, var(--border));
+  box-shadow: inset 0 1px 0 color-mix(in srgb, white 6%, transparent), 0 18px 46px color-mix(in srgb, var(--intro-black) 28%, transparent), 0 0 0 1px color-mix(in srgb, var(--blue) 12%, transparent);
+}
+
+.tour-caption {
+  min-height: 1.7rem;
+  color: var(--ink-2);
+}
+
+.tour-caption > strong {
+  color: var(--ink);
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+
+.tour-legend {
+  color: color-mix(in srgb, var(--ink-2) 90%, var(--ink));
+}
+
+.tour-swatch {
+  box-shadow: 0 0 12px color-mix(in srgb, currentColor 25%, transparent);
+}
+
+.tour-view-switch .segmented {
+  gap: 2px;
+  padding: 3px;
+  border-color: color-mix(in srgb, var(--border) 80%, white 5%);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--page) 78%, transparent);
+  box-shadow: 0 6px 18px color-mix(in srgb, var(--intro-black) 20%, transparent), inset 0 1px 0 color-mix(in srgb, white 4%, transparent);
+  backdrop-filter: blur(12px);
+}
+
+.tour-view-switch .segmented .seg {
+  min-height: 1.8rem;
+  padding: 0.32rem 0.8rem;
+  border: 0;
+  border-radius: 999px;
+  color: var(--muted);
+  font-size: 0.76rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  transition: color 160ms ease, background 160ms ease, box-shadow 160ms ease;
+}
+
+.tour-view-switch .segmented .seg:hover {
+  color: var(--ink);
+  background: color-mix(in srgb, white 6%, transparent);
+}
+
+.tour-view-switch .segmented .seg[aria-pressed='true'] {
+  color: var(--ink);
+  background: color-mix(in srgb, var(--blue) 22%, var(--glass));
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--blue) 35%, transparent), 0 2px 8px color-mix(in srgb, var(--intro-black) 20%, transparent);
+}
+
+.tour-view-switch .segmented .seg:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+  z-index: 1;
+}
+
+.tour-table {
+  scrollbar-color: color-mix(in srgb, var(--blue) 36%, var(--border)) transparent;
+  scrollbar-width: thin;
+}
+
+.tour-table table {
+  border-collapse: separate;
+  border-spacing: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.tour-table thead th {
+  padding-top: 0.55rem;
+  padding-bottom: 0.55rem;
+  border-bottom: 1px solid color-mix(in srgb, var(--blue) 35%, var(--border));
+  background: color-mix(in srgb, var(--page) 94%, var(--blue));
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-size: 0.68rem;
+}
+
+.tour-table tbody tr:nth-child(even) {
+  background: color-mix(in srgb, white 2.5%, transparent);
+}
+
+.tour-table tbody tr:hover {
+  background: color-mix(in srgb, var(--blue) 9%, transparent);
+}
+
+.tour-table tbody td {
+  border-bottom: 1px solid color-mix(in srgb, var(--border) 68%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gdp-chart,
+  .tour-view-switch .segmented .seg {
+    transition: none;
+  }
+}
+
+/* Keep the simulator's navigation in the same visual language as Hacia el 2056. */
+#overlay[data-section='simulator'] .chrome {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--intro-bg) 92%, transparent), color-mix(in srgb, var(--intro-black) 96%, transparent));
+  border-bottom: 1px solid color-mix(in srgb, var(--gold) 20%, transparent);
+  backdrop-filter: blur(16px) saturate(1.15);
+}
+
+#overlay[data-section='simulator'] .brand {
+  font-size: 1.05rem;
+  letter-spacing: 0.035em;
+  text-transform: none;
+}
+
+#overlay[data-section='simulator'] .brand-a {
+  color: var(--intro-ink);
+  font-weight: 300;
+}
+
+#overlay[data-section='simulator'] .brand-n {
+  color: var(--gold);
+  text-shadow: 0 0 14px color-mix(in srgb, var(--gold) 35%, transparent);
+}
+
+#overlay[data-section='simulator'] .tab {
+  border-color: color-mix(in srgb, var(--intro-ink) 8%, transparent);
+  background: color-mix(in srgb, var(--intro-bg) 76%, transparent);
+  transition: color 200ms ease, background 200ms ease, border-color 200ms ease, box-shadow 200ms ease, transform 200ms ease;
+}
+
+#overlay[data-section='simulator'] .tab:hover {
+  color: var(--gold);
+  border-color: color-mix(in srgb, var(--gold) 45%, transparent);
+  background: color-mix(in srgb, var(--gold) 8%, var(--intro-bg));
+  box-shadow: 0 5px 18px color-mix(in srgb, var(--intro-black) 28%, transparent);
+  transform: translateY(-1px);
+}
+
+#overlay[data-section='simulator'] .tab[aria-selected='true'] {
+  color: var(--gold);
+  border-color: color-mix(in srgb, var(--gold) 58%, transparent);
+  background: color-mix(in srgb, var(--gold) 10%, var(--intro-bg));
+  box-shadow: inset 0 1px 0 color-mix(in srgb, white 8%, transparent), 0 0 16px color-mix(in srgb, var(--gold) 12%, transparent);
+}
+
+#overlay[data-section='simulator'] .header-end .data-button {
+  color: color-mix(in srgb, var(--intro-ink) 78%, var(--intro-bg));
+}
+
+#overlay[data-section='simulator'] .header-end .data-button:hover {
+  color: var(--gold);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #overlay[data-section='simulator'] .tab {
+    transition: none;
+  }
+}
+
+/* Make the guided tour's navbar as legible as the Andes and simulator navigation. */
+#overlay[data-section='tour'] .chrome {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--intro-bg) 92%, transparent), color-mix(in srgb, var(--intro-black) 96%, transparent));
+  border-bottom: 1px solid color-mix(in srgb, var(--gold) 20%, transparent);
+  backdrop-filter: blur(16px) saturate(1.15);
+}
+
+#overlay[data-section='tour'] .brand {
+  font-size: 1.05rem;
+  letter-spacing: 0.035em;
+  text-transform: none;
+}
+
+#overlay[data-section='tour'] .brand-a {
+  color: var(--intro-ink);
+  font-weight: 300;
+}
+
+#overlay[data-section='tour'] .brand-n {
+  color: var(--gold);
+  text-shadow: 0 0 14px color-mix(in srgb, var(--gold) 35%, transparent);
+}
+
+#overlay[data-section='tour'] .chrome .tab,
+#overlay[data-section='tour'] .tour-steps .chip {
+  min-height: 2.25rem;
+  padding-inline: 0.9rem;
+  border: 1px solid color-mix(in srgb, var(--intro-ink) 8%, transparent);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--intro-bg) 76%, transparent);
+  color: color-mix(in srgb, var(--intro-ink) 76%, var(--intro-bg));
+  transition: color 200ms ease, background 200ms ease, border-color 200ms ease, box-shadow 200ms ease, transform 200ms ease;
+}
+
+#overlay[data-section='tour'] .chrome .tab:hover,
+#overlay[data-section='tour'] .tour-steps .chip:hover:not(:disabled) {
+  color: var(--gold);
+  border-color: color-mix(in srgb, var(--gold) 45%, transparent);
+  background: color-mix(in srgb, var(--gold) 8%, var(--intro-bg));
+  box-shadow: 0 5px 18px color-mix(in srgb, var(--intro-black) 28%, transparent);
+  transform: translateY(-1px);
+}
+
+#overlay[data-section='tour'] .chrome .tab[aria-selected='true'],
+#overlay[data-section='tour'] .tour-steps .chip[aria-pressed='true'] {
+  color: var(--intro-on-light);
+  border-color: color-mix(in srgb, var(--gold) 84%, white 10%);
+  background: linear-gradient(135deg, color-mix(in srgb, var(--gold) 92%, white), var(--gold));
+  box-shadow: inset 0 1px 0 color-mix(in srgb, white 35%, transparent), 0 0 22px color-mix(in srgb, var(--gold) 32%, transparent);
+}
+
+#overlay[data-section='tour'] .chrome .tab[aria-selected='true']:hover,
+#overlay[data-section='tour'] .tour-steps .chip[aria-pressed='true']:hover {
+  color: var(--intro-on-light);
+  background: linear-gradient(135deg, color-mix(in srgb, var(--gold) 84%, white), color-mix(in srgb, var(--gold) 90%, var(--intro-bg)));
+}
+
+#overlay[data-section='tour'] .tour-steps .chip:disabled {
+  opacity: 0.42;
+  cursor: default;
+}
+
+#overlay[data-section='tour'] .header-end .data-button {
+  color: color-mix(in srgb, var(--intro-ink) 78%, var(--intro-bg));
+}
+
+#overlay[data-section='tour'] .header-end .data-button:hover {
+  color: var(--gold);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #overlay[data-section='tour'] .chrome .tab,
+  #overlay[data-section='tour'] .tour-steps .chip {
+    transition: none;
+  }
+}
+
 /* ---- draft slides: development indicators and forecast uncertainty ------------------------------------------------ */
 
 .draft-slide {

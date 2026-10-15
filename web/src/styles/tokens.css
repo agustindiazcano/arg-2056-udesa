@@ -65,6 +65,7 @@
   --andes-c21: rgb(0 0 0 / 0.45);
 
   --color-focus: #ffc107;
+  --glass-shadow-blue: #172330;
 
   /* Intro screen (src/intro/intro.css) */
   --intro-bg: #1c1c1c; /* rgb(28, 28, 28) */

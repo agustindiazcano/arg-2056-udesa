@@ -136,6 +136,8 @@ Every task below has a brief (`<slug>.md` in the repository root) and a prompt (
 
 ## Done
 
+- [x] `chart-aesthetics` (branch `task/chart-aesthetics`): refined chart-card surfaces, captions, legends, chart/table segmented controls, and data-table scanability with reduced-motion support. Follow-ups: matched simulator and Hacia el 2056 navbars, including gold active section/current-step pills; polished Andes UI. Previewed in the isolated browser; Andes terrain still needs `VITE_MAPTILER_KEY`.
+
 - [ ] `recorrido-graficos` (branch `task/recorrido-graficos`, worktree `arg-2056-udesa-recorrido`, local, not pushed): indicators box on steps 1 and 2, step buttons next to the Recorrido tab, play/pause icons and speed on step 0, a Gráfico | Tabla switch on every chart, step 14 «Productividad» (five steps, real PWT data) and the «Simulador del PBI» section; sources in README and `docs/references.md` 4.1; a Data section (`web/src/datasets/`) with the tables of every slide, CSV downloads and the references. Human: check the new lazy chunk against `budgets.json` (`npm run check:bundle`, not run locally). Waiting for review; not seen in a browser; unit tests only.
 - [ ] `tour-gdp-chart` (branch `task/tour-gdp-chart`): Recorrido step 1 shows a modern GDP chart (observed, projected to 2056, range) with 2D / 3D buttons, on made-up data. Waiting for CI and review; steps 2 to 15 still show the data scenes.
 - [x] `F4` (branch `task/motion-story`): gsap 3.15.0; scene transition, counters, series draw-in, story panel redesigned; the 18 steps are now drafts (no figures, no sources) that keep `placeholder: true`.
