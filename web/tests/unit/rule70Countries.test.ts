@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { PRESETS, analyse, countriesTable, countryList, seriesOf } from '../../src/tour/rule70Countries';
+import { PRESETS, analyse, countriesTable, countryList, decompose, seriesOf } from '../../src/tour/rule70Countries';
 
 const close = (a: number, b: number, tol: number) => expect(Math.abs(a - b), `${a} vs ${b}`).toBeLessThanOrEqual(tol);
 
@@ -121,5 +121,41 @@ describe('the Data table of the cases', () => {
     expect(t.rows).toHaveLength(5);
     const korea = t.rows.find((r) => String(r[0]).startsWith('Corea'))!;
     close(korea[6] as number, 7.72, 0.05);
+  });
+});
+
+describe('the diagnostics of the constant-rate assumption', () => {
+  it('gives the residuals of the fit year by year, in percent: they add up to zero in ln and the largest one is reported', () => {
+    const a = ok('KOR', 'percapita', 1960, 1990);
+    expect(a.residuals).toHaveLength(31);
+    expect(a.residuals[0]).toMatchObject({ year: 1960 });
+    close(a.fit.residuals.reduce((n, r) => n + r.residual, 0), 0, 1e-9); // a property of least squares with an intercept
+    a.residuals.forEach((r, i) => close(r.residualPct, (Math.exp(a.fit.residuals[i]!.residual) - 1) * 100, 1e-9));
+    close(a.maxResidualPct, Math.max(...a.residuals.map((r) => Math.abs(r.residualPct))), 1e-9);
+    expect(a.maxResidualPct).toBeGreaterThan(0);
+  });
+
+  it('splits the growth of South Korea 1960-1990 into total, per person and population: (1 + total) = (1 + per person)(1 + population) to 1e-9', () => {
+    const d = decompose('KOR', 1960, 1990);
+    if (!d.ok) throw new Error(d.reason);
+    close(d.perCapitaPct, 7.72, 0.05);
+    expect(d.totalPct).toBeGreaterThan(d.perCapitaPct);
+    expect(d.populationPct).toBeGreaterThan(1);
+    close((1 + d.perCapitaPct / 100) * (1 + d.populationPct / 100), 1 + d.totalPct / 100, 1e-9);
+    expect(d.identityError).toBeLessThan(1e-9);
+  });
+
+  it('holds the identity for every preset', () => {
+    for (const p of PRESETS) {
+      const d = decompose(p.code, p.from, p.to);
+      if (!d.ok) throw new Error(d.reason);
+      expect(d.identityError, p.id).toBeLessThan(1e-9);
+    }
+  });
+
+  it('refuses a period whose endpoints have no population or no GDP', () => {
+    const missing = countryList().flatMap((c) => seriesOf(c.code, 'gdp').filter((p) => p.value === null).map((p) => ({ code: c.code, year: p.year })))[0]!;
+    expect(decompose(missing.code, missing.year, 2025).ok).toBe(false);
+    expect(decompose('ARG', 2010, 2011).ok).toBe(false);
   });
 });

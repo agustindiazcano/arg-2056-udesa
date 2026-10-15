@@ -10,7 +10,7 @@ vi.mock('../../src/charts/EChart.js', () => ({
 }));
 
 import { Rule70Step } from '../../src/tour/Rule70Step';
-import { analyse, countryList, seriesOf } from '../../src/tour/rule70Countries';
+import { analyse, countryList, decompose, seriesOf } from '../../src/tour/rule70Countries';
 import { buildSlides } from '../../src/datasets/slides';
 import { formatNumber } from '../../src/charts/format';
 import { useStore } from '../../src/state/store';
@@ -156,5 +156,49 @@ describe('the look of the tabs and of the title', () => {
   it('names the case with the indicator as it is written (PBI in capitals)', () => {
     openExplorer();
     expect(screen.getByRole('heading', { level: 3 }).textContent).toBe('Argentina: PBI real, 1960 a 2025');
+  });
+});
+
+describe('the diagnostics of the constant-rate assumption', () => {
+  const view = (name: string) => fireEvent.click(screen.getByRole('button', { name }));
+
+  it('opens on the rolling windows and offers the residuals and the split of the growth as other views of the lower chart', () => {
+    openExplorer();
+    expect(screen.getByRole('button', { name: 'Ventanas de 10 años' }).getAttribute('aria-pressed')).toBe('true');
+    expect(screen.getByRole('button', { name: 'Residuos del ajuste' }).getAttribute('aria-pressed')).toBe('false');
+    expect(screen.getByRole('button', { name: 'Total y población' })).toBeTruthy();
+  });
+
+  it('draws the residuals of the fit, one per year, and reports the largest next to R2, with no pass or fail', () => {
+    openExplorer();
+    view('Residuos del ajuste');
+    const chart = screen.getAllByTestId('echart')[1]!;
+    expect(Number(chart.getAttribute('data-points'))).toBe(66); // 1960 to 2025
+    expect(chart.getAttribute('aria-label')).toMatch(/residuos/i);
+    const a = analyse('ARG', 'gdp', 1960, 2025);
+    if (!a.ok) throw new Error(a.reason);
+    expect(row('Mayor residuo del ajuste')[1]!.textContent).toBe(`${es(a.maxResidualPct)} %`);
+    expect(row('Tasa ajustada')[2]!.textContent).toBe(`R² ${es(a.fit.r2, 2)}`);
+    expect(document.body.textContent).not.toMatch(/supera|cumple el supuesto|rechaza/i);
+  });
+
+  it('shows the residuals as a table too', () => {
+    openExplorer();
+    view('Residuos del ajuste');
+    expect(screen.getByRole('table', { name: 'Residuos por año' })).toBeTruthy();
+  });
+
+  it('splits the growth into total, per person and population, and shows the identity that ties them', () => {
+    openExplorer();
+    fireEvent.click(screen.getByRole('button', { name: 'Corea del Sur 1960-1990' }));
+    view('Total y población');
+    const table = within(screen.getByRole('table', { name: 'Crecimiento total, por habitante y de la población' }));
+    const d = decompose('KOR', 1960, 1990);
+    if (!d.ok) throw new Error(d.reason);
+    expect(within(table.getByRole('row', { name: /^PBI real/ })).getAllByRole('cell')[1]!.textContent).toBe(`${es(d.totalPct, 2)} % por año`);
+    expect(within(table.getByRole('row', { name: /^PBI por habitante/ })).getAllByRole('cell')[1]!.textContent).toBe(`${es(d.perCapitaPct, 2)} % por año`);
+    expect(within(table.getByRole('row', { name: /^Población/ })).getAllByRole('cell')[1]!.textContent).toBe(`${es(d.populationPct, 2)} % por año`);
+    expect(screen.getByText(/\(1 \+ total\) = \(1 \+ por habitante\) × \(1 \+ población\)/)).toBeTruthy();
+    expect(screen.getAllByTestId('echart')[1]!.getAttribute('data-points')).toBe('3');
   });
 });

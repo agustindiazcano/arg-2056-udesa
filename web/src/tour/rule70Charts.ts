@@ -3,7 +3,7 @@ import { tokens } from '../styles/tokens.js';
 import { START_YEAR, compoundPath, doublingMarks, errorCurve } from './rule70Model.js';
 import { doublingTimeExact } from '../core/doubling.js';
 import { INDICATOR_LABEL, INDICATOR_UNIT, ROLLING_WINDOW } from './rule70Countries.js';
-import type { Analysis } from './rule70Countries.js';
+import type { Analysis, Decomposition } from './rule70Countries.js';
 
 export type Scale = 'linear' | 'log';
 
@@ -174,6 +174,48 @@ export function rollingChart(a: Analysis) {
     xAxis: { type: 'category', data: labels, boundaryGap: false, axisLine: { lineStyle: { color: tokens.baseline } }, axisTick: { show: false }, axisLabel: { color: tokens.ink2, interval: Math.max(0, Math.floor(labels.length / 7) - 1) } },
     yAxis: { type: 'value', min: 0, splitLine: { lineStyle: LINE }, axisLabel: { color: tokens.muted, formatter: (v: number) => `${es(v, 0)} años` } },
     series: [lineSeries('Años para duplicarse', values, tokens.blue, 'solid', 3)]
+  };
+  return { option, summary, labels, values };
+}
+
+/** How far each year is from the line fitted on every year, in percent of the line: a straight line of constant growth has residuals of zero. */
+export function residualChart(a: Analysis) {
+  const labels = a.residuals.map((r) => String(r.year));
+  const values = a.residuals.map((r) => r.residualPct);
+  const summary =
+    `${a.name}: residuos del ajuste de ${a.from} a ${a.to}, en porcentaje de la línea ajustada, uno por año; ` +
+    `el mayor es de ${es(a.maxResidualPct)} % y el R² del ajuste es ${es(a.fit.r2, 2)}`;
+  const option = {
+    ...BASE,
+    tooltip: {
+      ...TOOLTIP,
+      formatter: (p: Array<{ dataIndex: number }>) => `<strong>${labels[p[0]!.dataIndex]}</strong><br/>Residuo: ${es(values[p[0]!.dataIndex]!, 2)} %`
+    },
+    grid: GRID,
+    xAxis: { type: 'category', data: labels, boundaryGap: false, axisLine: { lineStyle: { color: tokens.baseline } }, axisTick: { show: false }, axisLabel: { color: tokens.ink2, interval: Math.max(0, Math.floor(labels.length / 7) - 1) } },
+    yAxis: { type: 'value', splitLine: { lineStyle: LINE }, axisLabel: { color: tokens.muted, formatter: (v: number) => `${es(v, 0)} %` } },
+    series: [
+      {
+        ...lineSeries('Residuo (% de la línea ajustada)', values, tokens.blue, 'solid', 3),
+        markLine: { silent: true, symbol: 'none', lineStyle: { color: tokens.muted }, label: { show: false }, data: [{ yAxis: 0 }] }
+      }
+    ]
+  };
+  return { option, summary, labels, values };
+}
+
+/** The growth of the real GDP, of the GDP per person and of the population between the endpoints, as three bars. */
+export function decompositionChart(d: Decomposition, name: string) {
+  const labels = ['PBI real', 'PBI por habitante', 'Población'];
+  const values = [d.totalPct, d.perCapitaPct, d.populationPct];
+  const summary = `${name}, de ${d.from} a ${d.to}: el PBI real creció ${es(d.totalPct, 2)} % por año, el PBI por habitante ${es(d.perCapitaPct, 2)} % y la población ${es(d.populationPct, 2)} %; el primero es el producto de los otros dos`;
+  const option = {
+    ...BASE,
+    tooltip: { ...TOOLTIP, trigger: 'item', formatter: (p: { name: string; value: number }) => `${p.name}: ${es(p.value, 2)} % por año` },
+    grid: GRID,
+    xAxis: { type: 'category', data: labels, axisLine: { lineStyle: { color: tokens.baseline } }, axisTick: { show: false }, axisLabel: { color: tokens.ink2 } },
+    yAxis: { type: 'value', splitLine: { lineStyle: LINE }, axisLabel: { color: tokens.muted, formatter: (v: number) => `${es(v, 0)} %` } },
+    series: [{ name: 'Crecimiento anual', type: 'bar', data: values, barWidth: '40%', itemStyle: { color: tokens.blue } }]
   };
   return { option, summary, labels, values };
 }
