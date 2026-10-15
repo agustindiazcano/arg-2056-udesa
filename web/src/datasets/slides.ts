@@ -306,6 +306,7 @@ export function buildSlides(): SlideData[] {
       false,
       ['W5', 'I1', 'F1']
     ),
+    slide('8', RESOURCES_TITLE, [chartTable(8), ...miningTables(), rigiTable('rigi-mining', 'Proyectos mineros del RIGI y otros en evaluación (prensa, sin verificar)', RIGI_MINING), chartTable(9, HYDROCARBONS_CHART), nationalProduction(), oilSince1950(), rigiTable('rigi-oil-gas', 'Proyectos de petróleo y gas del RIGI y otros en evaluación (prensa, sin verificar)', RIGI_OIL_GAS), chartTable(10, AGRO_USD_CHART), agroTable(), { ...chartTable(10, AGRO_TONNES_CHART), id: 'agro-tonnes' }, chartTable(13, STOCK_CHART), reservesTable()], false, ['E3', 'E5', 'E9', 'E11', 'R1', 'R2', 'R3', 'R4', 'R5', 'R9', 'R12', 'R13', 'E6', 'E4', 'R6', 'R7', 'R8', 'R10', 'R11', 'E8']),
     slide('5', TOUR_CHARTS[5]!.title, [chartTable(5), errorTable(), argentinaTable(), countriesTable(), scenariosTable(), imfTable()], false),
     slide('12', COMPOSITION_TITLE, [
       chartTable(12),
@@ -331,7 +332,6 @@ export function buildSlides(): SlideData[] {
       hydrocarbonProvinces(),
       indicators()
     ], true, ['W3', 'E6']),
-    slide('8', RESOURCES_TITLE, [chartTable(8), ...miningTables(), rigiTable('rigi-mining', 'Proyectos mineros del RIGI y otros en evaluación (prensa, sin verificar)', RIGI_MINING), chartTable(9, HYDROCARBONS_CHART), nationalProduction(), oilSince1950(), rigiTable('rigi-oil-gas', 'Proyectos de petróleo y gas del RIGI y otros en evaluación (prensa, sin verificar)', RIGI_OIL_GAS), chartTable(10, AGRO_USD_CHART), agroTable(), { ...chartTable(10, AGRO_TONNES_CHART), id: 'agro-tonnes' }, chartTable(13, STOCK_CHART), reservesTable()], false, ['E3', 'E5', 'E9', 'E11', 'R1', 'R2', 'R3', 'R4', 'R5', 'R9', 'R12', 'R13', 'E6', 'E4', 'R6', 'R7', 'R8', 'R10', 'R11', 'E8']),
     slide('3', TOUR_CHARTS[3]!.title, [chartTable(3), ...aiTables(), perCapitaTable(), aiPopulationTable()], true, ['A1', 'A2', 'A3', 'A4', 'A5', 'A6', 'A7', 'A8', 'A9', 'A10']),
     slide('sim', 'Simulador del PBI', [
       { id: 'factors', title: 'Factores del escenario de referencia', columns: ['Factor', 'Valor', 'Unidad'], rows: SIM_FIELDS.map((f) => [f.label, DEFAULT_SIM[f.key], f.unit]) },

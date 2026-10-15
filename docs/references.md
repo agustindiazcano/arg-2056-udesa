@@ -128,7 +128,7 @@ La escena 3D de Chacabuco es un **diorama de pantalla completa que no usa el map
 
 Pendiente, salvo la productividad (4.1). Esas escenas todavía usan datos de prueba (cada gráfico lo dice con «Datos de prueba»). Cuando se reemplacen por datos reales, cada fuente se agrega acá con su URL, fecha de consulta y qué cifra aporta, y se registra en `data/processed/sources.json` (que alimenta la página de Fuentes de la aplicación). Las reglas están en la sección 6 de [`AGENTS.md`](../AGENTS.md).
 
-### 4.1 Productividad (diapositiva 4 de «Hacia el 2056»; su id interno es 14)
+### 4.1 Productividad (diapositiva 5 de «Hacia el 2056»; su id interno es 14)
 
 El gráfico de la diapositiva de productividad y el simulador usan hoy **datos de prueba** (`web/src/tour/tourData.ts`, `simModel.ts`). Estas son las fuentes con las que se reemplazan, y qué cifra aporta cada una.
 
@@ -200,7 +200,7 @@ Cargadas el 2026-10-14 con el pipeline de datos (`scripts/fetch_external_forecas
 | X2 | ONU, *World Population Prospects 2024*. <https://population.un.org/wpp/downloads> | Argentina hasta 2056: población, fecundidad y esperanza de vida, variantes baja, media y alta | **leída** (archivos CSV, 2026-10-14) |
 | X3 | FMI, *World Economic Outlook* (actualización del 2026-09-30). <https://www.imf.org/en/Publications/WEO> | Crecimiento real, inversión total y población 2025-2031, Argentina y diez países | **leída** (API SDMX, 2026-10-14) |
 
-### 4.5 Inteligencia artificial y el PBI (diapositiva 10 de «Hacia el 2056»; su id interno es 3)
+### 4.5 Inteligencia artificial y el PBI (diapositiva 7 de «Hacia el 2056»; su id interno es 3)
 
 Cargadas el 2026-10-15 desde dos informes que pasó el responsable (escritos con IA). Los escenarios de Argentina y de EE.UU. y las estimaciones de los analistas están en las tablas `chart-3`, `ai-scenarios`, `ai-us` y `ai-analysts` de Data. Los enlaces **no se abrieron**: ninguna cifra se verificó en su original.
 

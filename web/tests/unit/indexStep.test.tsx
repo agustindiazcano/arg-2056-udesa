@@ -47,7 +47,7 @@ describe('the first slide: the title and the index', () => {
     expect(list).toHaveLength(rest.length);
     expect(list.map((li) => li.textContent)).toEqual(indexItems().map((i) => `${i.number} · ${i.title}`));
     expect(list[0]!.textContent).toBe('1 · El PBI de Argentina desde 1960');
-    expect(list[3]!.textContent).toBe(`4 · ${PRODUCTIVITY_TITLE}`);
+    expect(list[4]!.textContent).toBe(`5 · ${PRODUCTIVITY_TITLE}`);
     expect(list.at(-1)!.textContent).toBe(`${rest.length} · ${TOUR_CHARTS[3]!.title}`);
   });
 

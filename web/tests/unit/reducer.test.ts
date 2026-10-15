@@ -250,6 +250,8 @@ describe('Reducer', () => {
       state = reduce(state, { type: 'prevScene' });
       expect(state.tourStep).toBe(5);
       state = reduce(state, { type: 'prevScene' });
+      expect(state.tourStep).toBe(8);
+      state = reduce(state, { type: 'prevScene' });
       expect(state.tourStep).toBe(0);
       state = reduce(state, { type: 'prevScene' });
       expect(state.tourStep).toBe(20); // the index is the first slide
@@ -259,8 +261,8 @@ describe('Reducer', () => {
     });
 
     it('skips step 6 (the investor slide was removed) going forward and back, and tourSet ignores it', () => {
-      expect(reduce({ ...tour, tourStep: 2 }, { type: 'nextScene' }).tourStep).toBe(8);
-      expect(reduce({ ...tour, tourStep: 8 }, { type: 'prevScene' }).tourStep).toBe(2);
+      expect(reduce({ ...tour, tourStep: 0 }, { type: 'nextScene' }).tourStep).toBe(8);
+      expect(reduce({ ...tour, tourStep: 8 }, { type: 'prevScene' }).tourStep).toBe(0);
       expect(reduce(tour, { type: 'tourSet', step: 6 })).toBe(tour);
     });
 

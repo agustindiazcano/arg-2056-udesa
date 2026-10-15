@@ -52,7 +52,7 @@ describe('the slides with data', () => {
   const slides = buildSlides();
 
   it('has a slide per step with data, in order, each with a number, a title and tables', () => {
-    expect(slides.map((s) => s.id)).toEqual(['0', '5', '12', '14', '2', '8', '3', 'sim']);
+    expect(slides.map((s) => s.id)).toEqual(['0', '8', '5', '12', '14', '2', '3', 'sim']);
     for (const [i, s] of slides.entries()) {
       expect(s.title.length).toBeGreaterThan(0);
       // the number of the label is the position of the slide (0, 1, 2...), not its id
@@ -130,7 +130,7 @@ describe('the Data page', () => {
     expect(screen.getAllByRole('table')).toHaveLength(5);
     expect(screen.queryByRole('heading', { name: '1 · El PBI de Argentina desde 1960' })).toBeNull();
     fireEvent.change(select, { target: { value: '12' } });
-    expect(screen.getAllByRole('heading', { level: 3 })[0]!.textContent).toBe('3 · Composición del PBI y exportaciones por complejo');
+    expect(screen.getAllByRole('heading', { level: 3 })[0]!.textContent).toBe('4 · Composición del PBI y exportaciones por complejo');
   });
 
   it('downloads the CSV of the slide chosen in the selector, and one table at a time', () => {

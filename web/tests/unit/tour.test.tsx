@@ -65,15 +65,15 @@ describe('Recorrido steps in the navbar', () => {
   });
 
   it('keeps the current step in the middle of the three numbers, held inside the steps that exist', () => {
-    // the ids go in the order they are shown: 20 0 5 12 14 2 8 3 (20 is the index, 14 Productividad; the buttons show 0 1 2 3...)
-    expect(stepWindow(20)).toEqual([20, 0, 5]);
-    expect(stepWindow(0)).toEqual([20, 0, 5]);
-    expect(stepWindow(5)).toEqual([0, 5, 12]);
+    // the ids go in the order they are shown: 20 0 8 5 12 14 2 3 (20 is the index, 14 Productividad; the buttons show 0 1 2 3...)
+    expect(stepWindow(20)).toEqual([20, 0, 8]);
+    expect(stepWindow(0)).toEqual([20, 0, 8]);
+    expect(stepWindow(8)).toEqual([0, 8, 5]);
+    expect(stepWindow(5)).toEqual([8, 5, 12]);
     expect(stepWindow(12)).toEqual([5, 12, 14]);
     expect(stepWindow(14)).toEqual([12, 14, 2]);
-    expect(stepWindow(2)).toEqual([14, 2, 8]);
-    expect(stepWindow(8)).toEqual([2, 8, 3]);
-    expect(stepWindow(3)).toEqual([2, 8, 3]);
+    expect(stepWindow(2)).toEqual([14, 2, 3]);
+    expect(stepWindow(3)).toEqual([14, 2, 3]);
   });
 
   it('Anterior and Siguiente move one step, and the last step disables Siguiente', () => {
@@ -81,11 +81,11 @@ describe('Recorrido steps in the navbar', () => {
     fireEvent.click(steps().getByRole('button', { name: 'Siguiente' }));
     fireEvent.click(steps().getByRole('button', { name: 'Siguiente' }));
     fireEvent.click(steps().getByRole('button', { name: 'Siguiente' }));
-    // index -> 0 -> 5 (the rule of 70, number 2) -> 12 (Composición, number 3)
-    expect(useStore.getState().tourStep).toBe(12);
+    // index -> 0 -> 8 (Recursos, number 2) -> 5 (the rule of 70, number 3)
+    expect(useStore.getState().tourStep).toBe(5);
     expect(steps().getAllByRole('button').map((b) => b.textContent)).toEqual(['Anterior', '2', '3', '4', 'Siguiente']);
     fireEvent.click(steps().getByRole('button', { name: 'Anterior' }));
-    expect(useStore.getState().tourStep).toBe(5);
+    expect(useStore.getState().tourStep).toBe(8);
     act(() => useStore.setState({ tourStep: 3 }));
     expect((steps().getByRole('button', { name: 'Siguiente' }) as HTMLButtonElement).disabled).toBe(true);
   });
@@ -93,9 +93,9 @@ describe('Recorrido steps in the navbar', () => {
   it('a click picks a step, and the right and left arrow keys move it', () => {
     render(<App />);
     fireEvent.click(steps().getByRole('button', { name: '2' }));
-    expect(useStore.getState().tourStep).toBe(5); // the button numbered 2 is the rule of 70
+    expect(useStore.getState().tourStep).toBe(8); // the button numbered 2 is Recursos
     fireEvent.keyDown(window, { key: 'ArrowRight' });
-    expect(useStore.getState().tourStep).toBe(12);
+    expect(useStore.getState().tourStep).toBe(5);
     expect(steps().getByRole('button', { name: '3' }).getAttribute('aria-pressed')).toBe('true');
     fireEvent.keyDown(window, { key: 'ArrowLeft' });
     fireEvent.keyDown(window, { key: 'ArrowLeft' });
