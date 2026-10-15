@@ -214,7 +214,8 @@ describe('Andes scene', () => {
     renderScene();
     await screen.findByTestId('andes-renderer');
     expect(screen.queryByRole('button', { name: 'Ver batalla' })).toBeNull();
-    fireEvent.click(screen.getByRole('button', { name: 'Batalla de Chacabuco' }));
+    // the "Batalla de Chacabuco" button was removed (human request); the army gets there with the clock
+    act(() => useStore.setState({ yearFloat: 2056 }));
     fireEvent.click(await screen.findByRole('button', { name: 'Ver batalla' }));
     const scene = await screen.findByRole('dialog', { name: /Batalla de Chacabuco/ }, { timeout: 15000 });
     expect(within(scene).getByText('Recreación')).toBeTruthy();
@@ -400,15 +401,11 @@ describe('Andes scene', () => {
     expect(screen.queryByRole('button', { name: 'Saltar intro' })).toBeNull();
   });
 
-  it('has a "Batalla de Chacabuco" button that moves the progress to 100 % and shows the battle', async () => {
+  it('has no "Batalla de Chacabuco" button in the control bar (removed by human request)', async () => {
     stubFetch();
     renderScene();
-    const renderer = await screen.findByTestId('andes-renderer');
-    expect(renderer.getAttribute('data-battle')).toBe('0');
-    fireEvent.click(screen.getByRole('button', { name: 'Batalla de Chacabuco' }));
-    expect(screen.getByTestId('andes-renderer').getAttribute('data-battle')).toBe('1');
-    expect(screen.getByTestId('andes-renderer').getAttribute('data-day')).toBe('27');
-    expect(screen.queryByRole('button', { name: 'Saltar intro' })).toBeNull();
+    await screen.findByTestId('andes-renderer');
+    expect(screen.queryByRole('button', { name: 'Batalla de Chacabuco' })).toBeNull();
   });
 
   it('has a toggle for the panel of the right, open by default on a wide screen and folded away on a laptop', async () => {

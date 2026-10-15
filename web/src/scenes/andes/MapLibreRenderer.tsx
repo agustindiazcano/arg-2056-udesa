@@ -717,8 +717,8 @@ export function MapLibreRenderer({ initialView, route, columns, day, selectedId,
     // a force that shows its figures has no balls
     const balls = forceBalls(route, k, columnsRef.current, dayRef.current, zoom, centre.lat);
     ballsRef.current?.setBalls(balls.filter((ball) => !withFigures.has(ball.id)));
-    // clouds over the cordillera (not on a weak device) and the smoke and flashes of the combat being fought
-    effectsRef.current?.setState({ sites: combatSites(route, dayRef.current), clouds: graphics.tier !== 'low', still: reduced });
+    // the smoke and flashes of the combat being fought; the clouds over the cordillera are off (they looked wrong on the map)
+    effectsRef.current?.setState({ sites: combatSites(route, dayRef.current), clouds: false, still: reduced });
     map.triggerRepaint();
   };
   const syncArmyRef = useRef(syncArmy);
@@ -1438,11 +1438,13 @@ export function MapLibreRenderer({ initialView, route, columns, day, selectedId,
         }}
       />
       </SlotPortal>
-      <NavControls
-        onZoomIn={() => zoomButton(1)}
-        onZoomOut={() => zoomButton(-1)}
-        onReset={() => mapRef.current?.easeTo({ ...cameraFor('map', coordAtKm(route, 0))!, duration: 1200 })}
-      />
+      <SlotPortal slot="mapnav">
+        <NavControls
+          onZoomIn={() => zoomButton(1)}
+          onZoomOut={() => zoomButton(-1)}
+          onReset={() => mapRef.current?.easeTo({ ...cameraFor('map', coordAtKm(route, 0))!, duration: 1200 })}
+        />
+      </SlotPortal>
     </div>
   );
 }

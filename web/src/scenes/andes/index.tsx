@@ -153,16 +153,6 @@ export default function Scene() {
     setTourPlay(0);
     setFocus((f) => ({ id: MAIN_FORCE_ID, n: (f?.n ?? 0) + 1, near: false }));
   };
-  /** The button of the battle of Chacabuco: the progress goes to 100 %, the light falls on the field with its name and the camera goes over the two lines. */
-  const showBattle = () => {
-    setFollowId(null);
-    setCamera('free');
-    setSkipIntro(true);
-    setIntroOn(false);
-    setTourPlay(0);
-    dispatch({ type: 'setYear', year: pace.yearAt(1) });
-    setBattleShow((n) => n + 1);
-  };
   /** The battle in 3D takes the whole screen: the big map is taken off (it is the heavy part) after saving where it looks, and nothing that would replay on the way back is left set. */
   const openBattle = () => {
     setResumeView(cameraApi.current?.get());
@@ -239,9 +229,6 @@ export default function Scene() {
       </header>
 
       <div className="andes-nav andes-modes" role="group" aria-label="Controles de la escena">
-        <button type="button" className="chip" onClick={showBattle}>
-          Batalla de Chacabuco
-        </button>
         {battleReached && (
           <button type="button" className="chip" onClick={openBattle}>
             Ver batalla
@@ -277,7 +264,7 @@ export default function Scene() {
         </button>
         <button
           type="button"
-          className="chip"
+          className="chip andes-dev-only"
           aria-pressed={tunerOpen}
           onClick={() => {
             if (!tunerOpen && cameraApi.current) setCamView(cameraApi.current.get());
@@ -353,31 +340,47 @@ export default function Scene() {
             progress={crossed}
             events={route.points.map((p) => ({ progress: route.totalKm > 0 ? p.distanceKm / route.totalKm : 0, name: p.name }))}
           />
+          {/* folded panel: the same data with the name of each indicator abbreviated; hidden while the panel is open */}
+          <dl className="andes-side-mini" aria-hidden="true">
+            {[
+              ['Fecha', campaignDateText(day).replace(' de ', ' ').replace(/([a-záéíóú]{3})[a-záéíóú]*$/i, '$1')],
+              ['Día', String(Math.round(day))],
+              ['Rec.', position ? `${formatNumber(position.distanceKm, 0)} km` : '—'],
+              ['Alt.', position && position.altitudeM !== null ? `${formatNumber(position.altitudeM, 0)} m` : '—'],
+              ['SpO₂', spo2 === null ? '—' : `${Math.round(spo2)} %`],
+              ['Event.', String(route.points.length)]
+            ].map(([label, value]) => (
+              <div key={label}>
+                <dt>{label}</dt>
+                <dd>{value}</dd>
+              </div>
+            ))}
+          </dl>
+          <section aria-label="Indicadores" className="dash-tiles andes-side-tiles">
+            <TileGrid>
+              <Tile id="andes-date" label="Fecha">
+                <span className="tile-value">{campaignDateText(day)}</span>
+              </Tile>
+              <Tile id="andes-day" label="Día de la campaña">
+                <span className="tile-value">{Math.round(day)}</span>
+              </Tile>
+              <Tile id="andes-km" label="Recorrido">
+                <span className="tile-value">{position ? `${formatNumber(position.distanceKm, 0)} km` : 'sin dato'}</span>
+              </Tile>
+              <Tile id="andes-alt" label="Altitud del ejército">
+                <span className="tile-value">
+                  {position && position.altitudeM !== null ? `${formatNumber(position.altitudeM, 0)} m` : 'sin dato'}
+                </span>
+              </Tile>
+              <Tile id="andes-spo2" label="Saturación de oxígeno (SpO₂)" note="Estimada por la altura; depende de cada persona">
+                <span className="tile-value">{spo2 === null ? 'sin dato' : `${Math.round(spo2)} %`}</span>
+              </Tile>
+              <Tile id="andes-events" label="Eventos">
+                <span className="tile-value">{route.points.length}</span>
+              </Tile>
+            </TileGrid>
+          </section>
         </>
-      }
-      tiles={
-        <TileGrid>
-          <Tile id="andes-date" label="Fecha">
-            <span className="tile-value">{campaignDateText(day)}</span>
-          </Tile>
-          <Tile id="andes-day" label="Día de la campaña">
-            <span className="tile-value">{Math.round(day)}</span>
-          </Tile>
-          <Tile id="andes-km" label="Recorrido">
-            <span className="tile-value">{position ? `${formatNumber(position.distanceKm, 0)} km` : 'sin dato'}</span>
-          </Tile>
-          <Tile id="andes-alt" label="Altitud del ejército">
-            <span className="tile-value">
-              {position && position.altitudeM !== null ? `${formatNumber(position.altitudeM, 0)} m` : 'sin dato'}
-            </span>
-          </Tile>
-          <Tile id="andes-spo2" label="Saturación de oxígeno (SpO₂)" note="Estimada por la altura; depende de cada persona">
-            <span className="tile-value">{spo2 === null ? 'sin dato' : `${Math.round(spo2)} %`}</span>
-          </Tile>
-          <Tile id="andes-events" label="Eventos">
-            <span className="tile-value">{route.points.length}</span>
-          </Tile>
-        </TileGrid>
       }
     />
   );

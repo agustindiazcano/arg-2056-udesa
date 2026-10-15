@@ -1,11 +1,13 @@
 import { create } from 'zustand';
 
-export type SlotName = 'filters' | 'narrative' | 'progress' | 'nav' | 'minimap';
+export type SlotName = 'filters' | 'narrative' | 'progress' | 'mapnav' | 'nav' | 'minimap';
 
 interface SlotsState {
   filters: HTMLElement | null;
   narrative: HTMLElement | null;
   progress: HTMLElement | null;
+  /** the zoom and reset buttons of the Andes map, in the bottom bar after the progress */
+  mapnav: HTMLElement | null;
   nav: HTMLElement | null;
   minimap: HTMLElement | null;
   set: (slot: SlotName, element: HTMLElement | null) => void;
@@ -16,6 +18,7 @@ export const useSlots = create<SlotsState>((set) => ({
   filters: null,
   narrative: null,
   progress: null,
+  mapnav: null,
   nav: null,
   minimap: null,
   set: (slot, element) => set({ [slot]: element } as Partial<SlotsState>)
