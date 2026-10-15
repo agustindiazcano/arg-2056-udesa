@@ -2338,3 +2338,44 @@ main.scene-container {
   flex-direction: column;
   min-width: 9rem;
 }
+
+.ai-key-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.ai-small-charts {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: var(--space-3);
+  height: 100%;
+}
+
+.ai-small-chart {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+}
+
+.ai-small-chart > .tour-chart {
+  flex: 1 1 auto;
+  min-height: 9rem;
+  position: relative;
+}
+
+.ai-small-chart > .tour-chart > * {
+  width: 100%;
+  height: 100%;
+}
+
+.ai-summary {
+  margin: var(--space-2, 0.5rem) 0 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2, 0.5rem);
+  font-size: 0.85rem;
+}
