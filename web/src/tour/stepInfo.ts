@@ -79,7 +79,8 @@ export const STEP_INFO: Record<number, StepInfo> = {
     paragraphs: [
       'Una forma rápida de saber cuánto tarda en duplicarse algo que crece a una tasa constante: se divide 70 por la tasa en %. A 3 % por año tarda unos 23 años. La regla del 72 es la misma idea con otra constante; la fórmula exacta es t = ln 2 / ln(1 + r).',
       'Con el deslizador elegís la tasa y ves el tiempo exacto, las dos reglas y cuánto se equivoca cada una. El gráfico del error muestra para qué tasas anda mejor cada regla, y el de crecimiento, en escala lineal o logarítmica (donde un crecimiento constante es una recta). El recuadro de Argentina dice en qué año se duplicaría el PBI real de 2026 a esa tasa.',
-      'En la pestaña «Países reales» se ve lo que pasó de verdad: China entre 1979 y 2010, Corea del Sur entre 1960 y 1990, India, Estados Unidos y Argentina, o cualquier otro país y período. Se compara la tasa entre los extremos con la ajustada sobre todos los años, se cuenta cuántas veces se duplicó el nivel y se ve cuánto tardaba en duplicarse en cada ventana de diez años.'
+      'En la pestaña «Países reales» se ve lo que pasó de verdad: China entre 1979 y 2010, Corea del Sur entre 1960 y 1990, India, Estados Unidos y Argentina, o cualquier otro país y período. Se compara la tasa entre los extremos con la ajustada sobre todos los años, se cuenta cuántas veces se duplicó el nivel y se ve cuánto tardaba en duplicarse en cada ventana de diez años.',
+      'La pestaña «Escenarios» compara dos tasas durante N años (cuántas veces se multiplica cada nivel, cuánto más alto termina el que crece más y, si arrancan en niveles distintos, cuándo se cruzan) y la de «Proyecciones del FMI» muestra el crecimiento que el FMI proyecta para once países y cuánto tardaría en duplicarse el PBI a ese ritmo.'
     ],
     how: 'Mové el deslizador o escribí una tasa entre 0,1 y 20 %. En la escala logarítmica cada línea horizontal es una duplicación.',
     data: 'real',

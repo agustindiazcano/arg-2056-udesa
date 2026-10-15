@@ -143,7 +143,7 @@ describe('the slide inside the Recorrido and the Data page', () => {
 
   it('keeps the old table of the slide and adds the tables of the errors and of Argentina to Data', () => {
     const slide = buildSlides().find((s) => s.id === '5')!;
-    expect(slide.tables.map((t) => t.id)).toEqual(['chart-5', 'rule70-errors', 'rule70-argentina', 'rule70-countries']);
+    expect(slide.tables.map((t) => t.id)).toEqual(['chart-5', 'rule70-errors', 'rule70-argentina', 'rule70-countries', 'rule70-scenarios', 'rule70-imf']);
     expect(slide.tables.every((t) => t.rows.length > 0)).toBe(true);
   });
 });

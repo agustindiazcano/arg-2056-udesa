@@ -47,6 +47,8 @@ export const TABLE_META: Readonly<Record<string, TableMeta>> = {
   'rule70-errors': meta('real', CALC, '2026-10-15'),
   'rule70-argentina': meta('real', `${CALC}; PBI real de 2026: Banco Mundial y FMI`, '2026-10-15'),
   'rule70-countries': meta('real', `${WB}; PBI per cápita: PBI sobre población del mismo archivo; tasas calculadas`, '2026-10-15'),
+  'rule70-scenarios': meta('real', CALC, '2026-10-15'),
+  'rule70-imf': meta('real', 'FMI, World Economic Outlook (SDMX), crecimiento real del PBI 2026-2031; promedio y duplicación calculados', '2026-10-14'),
   'chart-8': meta('partial', ARMINERA, '2026-10-13'),
   'mining-exports': meta('partial', ARMINERA, '2026-10-13'),
   'services-exports': meta('real', CEI, '2026-10-15'),

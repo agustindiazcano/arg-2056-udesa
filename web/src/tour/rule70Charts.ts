@@ -4,6 +4,7 @@ import { START_YEAR, compoundPath, doublingMarks, errorCurve } from './rule70Mod
 import { doublingTimeExact } from '../core/doubling.js';
 import { INDICATOR_LABEL, INDICATOR_UNIT, ROLLING_WINDOW } from './rule70Countries.js';
 import type { Analysis, Decomposition } from './rule70Countries.js';
+import type { ScenarioResult } from './rule70Scenarios.js';
 
 export type Scale = 'linear' | 'log';
 
@@ -218,4 +219,42 @@ export function decompositionChart(d: Decomposition, name: string) {
     series: [{ name: 'Crecimiento anual', type: 'bar', data: values, barWidth: '40%', itemStyle: { color: tokens.blue } }]
   };
   return { option, summary, labels, values };
+}
+
+/** The two levels of a comparison of rates, year by year from 0 to the horizon. */
+export function scenarioChart(c: ScenarioResult, scale: Scale, names: [string, string]) {
+  const labels = c.years.map(String);
+  const axisLabel = { color: tokens.muted, formatter: (v: number) => formatAxisNumber(v) };
+  const summary =
+    `Dos niveles que crecen a tasas constantes durante ${c.years.length - 1} años, en escala ${scale === 'log' ? 'logarítmica' : 'lineal'}: ` +
+    `${names[0]} termina en ${es(c.levelsA.at(-1)!)} (multiplicado por ${es(c.multiplierA, 2)}) y ${names[1]} en ${es(c.levelsB.at(-1)!)} (multiplicado por ${es(c.multiplierB, 2)})`;
+  const option = {
+    ...BASE,
+    tooltip: {
+      ...TOOLTIP,
+      formatter: (p: Array<{ dataIndex: number }>) => {
+        const i = p[0]!.dataIndex;
+        return `<strong>Año ${labels[i]}</strong><br/>${names[0]}: ${es(c.levelsA[i]!)}<br/>${names[1]}: ${es(c.levelsB[i]!)}`;
+      }
+    },
+    grid: GRID,
+    xAxis: { type: 'category', data: labels, boundaryGap: false, axisLine: { lineStyle: { color: tokens.baseline } }, axisTick: { show: false }, axisLabel: { color: tokens.ink2, interval: Math.max(0, Math.floor(labels.length / 7) - 1) } },
+    yAxis: scale === 'log' ? { type: 'log', splitLine: { lineStyle: LINE }, axisLabel } : { type: 'value', splitLine: { lineStyle: LINE }, axisLabel },
+    series: [lineSeries(names[0], c.levelsA, tokens.scenario.pessimistic, 'solid', 3), lineSeries(names[1], c.levelsB, tokens.blue, 'solid', 3)]
+  };
+  return { option, summary, labels };
+}
+
+/** The real GDP growth that the IMF projects for a country, 2026 to 2031, as bars. */
+export function imfChart(name: string, years: number[], growth: number[]) {
+  const summary = `${name}, crecimiento real del PBI que proyecta el FMI, ${years[0]} a ${years.at(-1)}: ${years.map((y, i) => `${y} ${es(growth[i]!, 2)} %`).join(', ')}`;
+  const option = {
+    ...BASE,
+    tooltip: { ...TOOLTIP, trigger: 'item', formatter: (p: { name: string; value: number }) => `${p.name}: ${es(p.value, 2)} %` },
+    grid: GRID,
+    xAxis: { type: 'category', data: years.map(String), axisLine: { lineStyle: { color: tokens.baseline } }, axisTick: { show: false }, axisLabel: { color: tokens.ink2 } },
+    yAxis: { type: 'value', splitLine: { lineStyle: LINE }, axisLabel: { color: tokens.muted, formatter: (v: number) => `${es(v, 0)} %` } },
+    series: [{ name: 'Crecimiento real', type: 'bar', data: growth, barWidth: '40%', itemStyle: { color: tokens.blue } }]
+  };
+  return { option, summary };
 }
