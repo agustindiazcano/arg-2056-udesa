@@ -3,6 +3,7 @@ import { EChart } from '../charts/EChart.js';
 import { formatNumber } from '../charts/format.js';
 import { Reveal } from '../motion/Reveal.js';
 import { Segmented } from '../ui/Segmented.js';
+import { RULE70_TITLE } from './slideTitles.js';
 import { TabbedChart } from '../ui/TabbedChart.js';
 import { CountryExplorer } from './CountryExplorer.js';
 import { GDP_UNIT } from './gdpFacts.js';
@@ -10,7 +11,7 @@ import { errorChart, growthChart } from './rule70Charts.js';
 import type { Scale } from './rule70Charts.js';
 import { DEFAULT_RATE, RATE_MAX, RATE_MIN, RATE_STEP, START_YEAR, argentinaDoubling, clampRate, ruleTable } from './rule70Model.js';
 
-const TITLE = 'La regla del 70';
+const TITLE = RULE70_TITLE;
 
 const SCALES = [
   { value: 'linear', label: 'Lineal' },

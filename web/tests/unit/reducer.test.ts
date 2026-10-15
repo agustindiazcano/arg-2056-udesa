@@ -249,6 +249,8 @@ describe('Reducer', () => {
       expect(state.tourStep).toBe(1);
       state = reduce(state, { type: 'prevScene' });
       expect(state.tourStep).toBe(0);
+      state = reduce(state, { type: 'prevScene' });
+      expect(state.tourStep).toBe(20); // the index is the first slide
       expect(reduce(state, { type: 'prevScene' })).toBe(state);
       const last: State = { ...tour, tourStep: TOUR_STEP_LIST.at(-1)! };
       expect(reduce(last, { type: 'nextScene' })).toBe(last);

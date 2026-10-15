@@ -128,7 +128,7 @@ La escena 3D de Chacabuco es un **diorama de pantalla completa que no usa el map
 
 Pendiente, salvo la productividad (4.1). Esas escenas todavía usan datos de prueba (cada gráfico lo dice con «Datos de prueba»). Cuando se reemplacen por datos reales, cada fuente se agrega acá con su URL, fecha de consulta y qué cifra aporta, y se registra en `data/processed/sources.json` (que alimenta la página de Fuentes de la aplicación). Las reglas están en la sección 6 de [`AGENTS.md`](../AGENTS.md).
 
-### 4.1 Productividad (diapositiva 2 de «Hacia el 2056»; su id interno es 14)
+### 4.1 Productividad (diapositiva 3 de «Hacia el 2056»; su id interno es 14)
 
 El gráfico de la diapositiva de productividad y el simulador usan hoy **datos de prueba** (`web/src/tour/tourData.ts`, `simModel.ts`). Estas son las fuentes con las que se reemplazan, y qué cifra aporta cada una.
 

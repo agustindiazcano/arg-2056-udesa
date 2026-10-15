@@ -24,10 +24,11 @@ const initialState: State = {
   provinceFilterOpen: false,
   aiOverlay: 'off',
   stepIndex: INITIAL_STEP_INDEX,
-  tourStep: 0
+  tourStep: TOUR_ORDER[0]!
 };
 
 import { tick as tickReducer } from './reducer';
+import { TOUR_ORDER } from '../tour/chartSteps';
 
 export const useStore = create<AppStore>((set) => ({
   ...initialState,

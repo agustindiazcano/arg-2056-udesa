@@ -2102,3 +2102,76 @@ main.scene-container {
   margin: 0;
   font-size: 1rem;
 }
+
+/* ---- Recorrido, the first slide: the text Argentina 2056 and the index of the slides ------------------------------------- */
+
+.index-step {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr);
+  align-items: center;
+  gap: var(--space-4, 2rem);
+}
+
+.index-head {
+  pointer-events: none;
+}
+
+.index-title {
+  margin: 0;
+  font-family: var(--font-title);
+  font-size: clamp(1.8rem, 4.4vw, 4.2rem);
+  font-weight: 200;
+  line-height: 1.05;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--intro-ink);
+}
+
+.index-title .n {
+  display: block;
+  font-weight: 800;
+  color: var(--intro-light);
+  text-shadow: 0 0 14px color-mix(in srgb, var(--intro-light) 55%, transparent);
+}
+
+.index-card {
+  flex: 0 1 auto;
+  pointer-events: auto;
+  overflow: auto;
+  max-height: 100%;
+}
+
+.index-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1, 0.25rem);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.index-item {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.index-item:hover,
+.index-item:focus-visible {
+  color: var(--intro-light);
+  border-color: color-mix(in srgb, var(--intro-light) 60%, transparent);
+  background: color-mix(in srgb, var(--intro-light) 12%, transparent);
+}
+
+@media (max-width: 800px) {
+  .index-step {
+    grid-template-columns: minmax(0, 1fr);
+    align-content: start;
+  }
+}

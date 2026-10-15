@@ -6,11 +6,11 @@ Estados: **no accedida** (el enlace falló), **sin enlace** (la IA no encontró 
 
 ## 0. Estado de cada diapositiva del Recorrido
 
-**Orden y números desde el 2026-10-15.** La diapositiva de productividad se movió a la derecha de la 1 y los números se renumeraron en el orden en que se muestran. En esta lista (y en los pedidos D1, D2... de abajo) la columna «Paso» es el **id interno**, el que usa el código y el que tenían antes; el número que ve la persona en los botones y en la página Data es el de la columna «Se muestra como».
+**Orden y números desde el 2026-10-15.** La diapositiva de productividad se movió a la derecha de la 1, se agregó una primera diapositiva con el título «Argentina 2056» y el índice (id 20, número 0, sin datos) y los números se renumeraron en el orden en que se muestran. En esta lista (y en los pedidos D1, D2... de abajo) la columna «Paso» es el **id interno**, el que usa el código y el que tenían antes; el número que ve la persona en los botones y en la página Data es el de la columna «Se muestra como».
 
-| Id (Paso) | 0 | 1 | 14 | 2 | 3 | 4 | 5 | 7 | 8 | 9 | 10 | 12 | 13 |
-|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| Se muestra como | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 |
+| Id (Paso) | 20 | 0 | 1 | 14 | 2 | 3 | 4 | 5 | 7 | 8 | 9 | 10 | 12 | 13 |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| Se muestra como | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 |
 
 Una fila por diapositiva (paso del Recorrido). «Real» = con fuente y consultada; «parcial» = algunas cifras reales; «prueba» = inventada («Datos de prueba»). Todo dato real y su referencia se ven en la sección **Data** de la aplicación (`web/src/datasets/slides.ts` y `references.ts`).
 

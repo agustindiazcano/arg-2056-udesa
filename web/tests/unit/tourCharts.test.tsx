@@ -18,7 +18,7 @@ describe('the charts of the Recorrido', () => {
   it('has a chart for step 1 and for steps 3 to 13 except 6 (the investor slide was removed), and the shell also knows steps 0 and 2', () => {
     expect(CHART_STEP_LIST).toEqual([1, 3, 4, 5, 7, 8, 9, 10, 12, 13]);
     // step 2 is the map of production by province: its own component, not one of the charts that go side by side
-    expect([...CHART_STEPS].sort((a, b) => a - b)).toEqual([0, 1, 2, ...CHART_STEP_LIST.slice(1), 14]);
+    expect([...CHART_STEPS].sort((a, b) => a - b)).toEqual([0, 1, 2, ...CHART_STEP_LIST.slice(1), 14, 20]); // 14 is Productividad and 20 the index: their own components
     expect(hasTourChart(0)).toBe(true);
     expect(hasTourChart(2)).toBe(true);
     expect(hasTourChart(14)).toBe(true);
