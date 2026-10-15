@@ -233,17 +233,6 @@ export default function Scene() {
         </button>
       )}
 
-      <button
-        type="button"
-        className="chip andes-side-toggle"
-        aria-expanded={sideOpen}
-        aria-label="Panel lateral"
-        title={sideOpen ? 'Ocultar el panel de la derecha' : 'Mostrar el panel de la derecha'}
-        onClick={() => setSideOpen(!sideOpen)}
-      >
-        <span aria-hidden="true">{sideOpen ? '▸' : '◂'}</span>
-      </button>
-
       <header className="andes-title andes-glass">
         <h1>Los Andes</h1>
         <p>El cruce de 1817 sobre el terreno</p>
@@ -348,11 +337,23 @@ export default function Scene() {
       stage={stage}
       sideHidden={!sideOpen}
       side={
-        <AltitudeProfile
-          points={profile}
-          progress={crossed}
-          events={route.points.map((p) => ({ progress: route.totalKm > 0 ? p.distanceKm / route.totalKm : 0, name: p.name }))}
-        />
+        <>
+          <button
+            type="button"
+            className="chip andes-side-toggle"
+            aria-expanded={sideOpen}
+            aria-label="Panel lateral"
+            title={sideOpen ? 'Ocultar el panel de la derecha' : 'Mostrar el panel de la derecha'}
+            onClick={() => setSideOpen(!sideOpen)}
+          >
+            <span aria-hidden="true">{sideOpen ? '▸' : '◂'}</span>
+          </button>
+          <AltitudeProfile
+            points={profile}
+            progress={crossed}
+            events={route.points.map((p) => ({ progress: route.totalKm > 0 ? p.distanceKm / route.totalKm : 0, name: p.name }))}
+          />
+        </>
       }
       tiles={
         <TileGrid>

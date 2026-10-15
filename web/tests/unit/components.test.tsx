@@ -21,14 +21,14 @@ describe('UI Components', () => {
     it('does not offer the deprecated Data Dashboard unless it is switched on', () => {
       window.localStorage.removeItem(SHOW_DASHBOARD_KEY);
       const { unmount } = render(<TabBar />);
-      expect(screen.getAllByRole('tab').map((t) => t.textContent)).toEqual(['Andes', 'Recorrido', 'Simulador del PBI', 'Data']);
+      expect(screen.getAllByRole('tab').map((t) => t.textContent)).toEqual(['Andes', 'Recorrido', 'Simulador del PBI']);
       unmount();
     });
 
     it('renders the section tabs in order, aria-selected follows store, click changes section', () => {
       render(<TabBar />);
       const tabs = screen.getAllByRole('tab');
-      expect(tabs).toHaveLength(5);
+      expect(tabs).toHaveLength(4);
       expect(tabs[0]!.getAttribute('aria-selected')).toBe('true');
       expect(tabs[1]!.getAttribute('aria-selected')).toBe('false');
 
@@ -37,7 +37,7 @@ describe('UI Components', () => {
       expect(useStore.getState()).toMatchObject({ section: 'dashboard', scene: 'economy' });
       expect(tabs[0]!.getAttribute('aria-selected')).toBe('false');
       expect(tabs[1]!.getAttribute('aria-selected')).toBe('true');
-      expect(screen.getAllByRole('tab')).toHaveLength(10);
+      expect(screen.getAllByRole('tab')).toHaveLength(9);
     });
   });
 

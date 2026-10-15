@@ -11,14 +11,25 @@ export function SectionTabs() {
   return (
     <nav aria-label="Escenas">
       <div role="tablist" className="tabs">
-        {visibleSections(SECTIONS).map((s) => (
+        {visibleSections(SECTIONS).filter((s) => s !== 'data').map((s) => (
           <button key={s} type="button" role="tab" className="tab" aria-selected={section === s} onClick={() => dispatch({ type: 'setSection', section: s })}>
-            {s === 'data' && <DatabaseIcon />}
             {SECTION_LABELS[s]}
           </button>
         ))}
       </div>
     </nav>
+  );
+}
+
+/** The Data button, at the top right of the header: the tables behind every number, with their sources. */
+export function DataButton() {
+  const section = useStore((s) => s.section);
+  const dispatch = useStore((s) => s.dispatch);
+  return (
+    <button type="button" className="tab data-button" aria-pressed={section === 'data'} onClick={() => dispatch({ type: 'setSection', section: 'data' })}>
+      <DatabaseIcon />
+      {SECTION_LABELS.data}
+    </button>
   );
 }
 

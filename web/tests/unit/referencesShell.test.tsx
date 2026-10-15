@@ -10,18 +10,10 @@ import { inputs } from '../../vite.config.js';
 afterEach(cleanup);
 
 describe('shell link to the References page', () => {
-  it('is present, points to references.html and is keyboard focusable', () => {
+  it('is gone from the header: the Data button takes its place', () => {
     render(<Header />);
-    const link = screen.getByRole('link', { name: 'Fuentes y métodos' });
-    expect(link.getAttribute('href')).toBe('references.html');
-    expect(link.getAttribute('tabindex')).not.toBe('-1');
-    link.focus();
-    expect(document.activeElement).toBe(link);
-  });
-
-  it('opens in the same tab', () => {
-    render(<Header />);
-    expect(screen.getByRole('link', { name: 'Fuentes y métodos' }).getAttribute('target')).toBeNull();
+    expect(screen.queryByRole('link', { name: 'Fuentes y métodos' })).toBeNull();
+    expect(screen.getByRole('button', { name: 'Data' })).toBeTruthy();
   });
 });
 

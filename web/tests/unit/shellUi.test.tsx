@@ -51,7 +51,7 @@ describe('header', () => {
     expect(brand.querySelector('.brand-a')?.textContent).toBe('Argentina');
     expect(brand.querySelector('.brand-n')?.textContent).toBe('2056');
     const nav = screen.getByRole('navigation', { name: 'Escenas' });
-    expect(within(nav).getAllByRole('tab').map((t) => t.textContent)).toEqual(['Andes', 'Data Dashboard', 'Recorrido', 'Simulador del PBI', 'Data']);
+    expect(within(nav).getAllByRole('tab').map((t) => t.textContent)).toEqual(['Andes', 'Data Dashboard', 'Recorrido', 'Simulador del PBI']);
     expect(SCENE_LABELS.economy).toBe('Economía');
   });
 
@@ -59,7 +59,7 @@ describe('header', () => {
     window.localStorage.removeItem(SHOW_DASHBOARD_KEY);
     render(<App />);
     const nav = screen.getByRole('navigation', { name: 'Escenas' });
-    expect(within(nav).getAllByRole('tab').map((t) => t.textContent)).toEqual(['Andes', 'Recorrido', 'Simulador del PBI', 'Data']);
+    expect(within(nav).getAllByRole('tab').map((t) => t.textContent)).toEqual(['Andes', 'Recorrido', 'Simulador del PBI']);
     expect(screen.queryByRole('tab', { name: 'Data Dashboard' })).toBeNull();
   });
 
@@ -99,10 +99,14 @@ describe('header', () => {
     expect(screen.getByRole('tab', { name: 'Andes' }).getAttribute('aria-selected')).toBe('false');
   });
 
-  it('has the skip link and the link to the sources in Spanish', () => {
+  it('has the skip link, and the Data button at the top right instead of the link to the sources', () => {
     render(<App />);
     expect(screen.getByRole('link', { name: 'Saltar al contenido principal' }).getAttribute('href')).toBe('#main');
-    expect(screen.getByRole('link', { name: 'Fuentes y métodos' }).getAttribute('href')).toBe('references.html');
+    expect(screen.queryByRole('link', { name: 'Fuentes y métodos' })).toBeNull();
+    const button = within(document.querySelector('.header-end') as HTMLElement).getByRole('button', { name: 'Data' });
+    expect(button.getAttribute('aria-pressed')).toBe('false');
+    fireEvent.click(button);
+    expect(button.getAttribute('aria-pressed')).toBe('true');
   });
 
   it('the document title is "<escena> | Argentina 2056"', () => {

@@ -34,6 +34,11 @@ function Links({ links }: { links: readonly SourceLink[] }) {
 const CAVEAT = `La PWT 11.0 termina en ${LAST_YEAR}: no incluye 2024 ni 2025.`;
 const TOTAL = PRODUCTIVITY_STEPS.length;
 
+/** The steps that open with Argentina alone (the yearly change of output per hour, step 4): the other countries turn on with a click. */
+const ONLY_ARGENTINA: ReadonlySet<number> = new Set([3]);
+
+const initialHidden = (step: number): Set<string> => new Set(ONLY_ARGENTINA.has(step) ? COUNTRIES.filter((c) => c.code !== 'AR').map((c) => c.code) : []);
+
 function LineBody({ def, period, hidden }: { def: ProductivityStepDef; period: Period; hidden: Set<string> }) {
   const built = useMemo(() => {
     const metric = def.metric as Metric;
@@ -89,14 +94,16 @@ export function ProductivityStep() {
   const dispatch = useStore((s) => s.dispatch);
   const [n, setN] = useState(0);
   const [period, setPeriod] = useState<Period>(1955);
-  const [hidden, setHidden] = useState<Set<string>>(() => new Set());
+  // the countries turned off, kept apart for each step so that the choice of one chart does not leak into another
+  const [hiddenByStep, setHiddenByStep] = useState<Record<number, Set<string>>>({});
+  const hidden = hiddenByStep[n] ?? initialHidden(n);
   const def = PRODUCTIVITY_STEPS[n]!;
   const toggle = (code: string) =>
-    setHidden((h) => {
-      const next = new Set(h);
+    setHiddenByStep((all) => {
+      const next = new Set(all[n] ?? initialHidden(n));
       if (next.has(code)) next.delete(code);
       else if (next.size < COUNTRIES.length - 1) next.add(code);
-      return next;
+      return { ...all, [n]: next };
     });
 
   return (

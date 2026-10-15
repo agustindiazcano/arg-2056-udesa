@@ -86,6 +86,26 @@ describe('the productivity step of the Recorrido', () => {
     expect(screen.getByText('Paso 2 de 5')).toBeTruthy();
   });
 
+  it('opens the yearly change of output per hour (step 4) with only Argentina, and a click turns another country on', () => {
+    render(<ProductivityStep />);
+    const pressed = () => screen.getAllByRole('button').filter((b) => b.classList.contains('prod-legend')).map((b) => [b.textContent, b.getAttribute('aria-pressed')]);
+    // the other line charts start with the four countries
+    expect(pressed().every(([, p]) => p === 'true')).toBe(true);
+    act(() => {
+      fireEvent.click(screen.getByRole('tab', { name: /^4\b/ }));
+    });
+    expect(pressed()).toEqual([['Argentina', 'true'], ['Estados Unidos', 'false'], ['Chile', 'false'], ['Brasil', 'false']]);
+    act(() => {
+      fireEvent.click(screen.getByRole('button', { name: 'Chile' }));
+    });
+    expect(pressed()).toEqual([['Argentina', 'true'], ['Estados Unidos', 'false'], ['Chile', 'true'], ['Brasil', 'false']]);
+    // the choice of the other steps is not touched
+    act(() => {
+      fireEvent.click(screen.getByRole('tab', { name: /^3\b/ }));
+    });
+    expect(pressed().every(([, p]) => p === 'true')).toBe(true);
+  });
+
   it('the last step shows the cumulative change 2011-2023 in two panels, and says the AI numbers are estimates', () => {
     render(<ProductivityStep />);
     act(() => {

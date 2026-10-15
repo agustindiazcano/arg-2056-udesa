@@ -126,6 +126,16 @@ button.brand:focus-visible .brand-n {
   border-bottom-color: var(--intro-light);
 }
 
+.header-end .data-button[aria-pressed='true'] {
+  color: var(--intro-light);
+  border-bottom-color: var(--intro-light);
+}
+
+.header-end .data-button {
+  display: inline-flex;
+  align-items: center;
+}
+
 /* ---- tabs --------------------------------------------------------------------------------------------------- */
 
 .tabs {
@@ -1908,4 +1918,69 @@ main.scene-container {
 .prov-bars .world-metric-pick {
   flex: 1 1 100%;
   margin-top: 0;
+}
+
+/* the quality of the data, inside the chart: a badge in the corner and, over a placeholder, a mark across the chart */
+.tour-quality-frame {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.data-quality {
+  display: inline-block;
+  padding: 0.1rem 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--muted);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.tour-quality-frame > .data-quality {
+  position: absolute;
+  top: 0.25rem;
+  right: 0.25rem;
+  z-index: 2;
+  background: var(--surface, var(--page));
+}
+
+.data-quality--real {
+  color: var(--ink);
+  border-color: var(--ink-2);
+}
+
+.data-quality--placeholder {
+  color: var(--state-warning);
+  border-color: var(--state-warning);
+}
+
+.data-quality-watermark {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  color: var(--state-warning);
+  opacity: 0.18;
+  font-size: clamp(1.5rem, 6vw, 4rem);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  transform: rotate(-12deg);
+}
+
+.tabbed-chart-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1, 0.25rem);
+  margin-bottom: var(--space-2, 0.5rem);
+}
+
+.segmented .seg:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
 }

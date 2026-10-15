@@ -1,3 +1,4 @@
+import { withMeta } from './quality.js';
 import { PROVINCES } from '../types/province.js';
 import { GDP_MOCK } from '../tour/gdpMock.js';
 import agro from '../tour/agroArgentina.json';
@@ -27,7 +28,7 @@ const indicators = (): DataTable => ({
 });
 
 function slide(id: string, title: string, tables: DataTable[], mock = true, refs: string[] = []): SlideData {
-  return { id, label: id === 'sim' ? `Simulador del PBI` : `${id} · ${title}`, title, mock, tables, refs };
+  return { id, label: id === 'sim' ? `Simulador del PBI` : `${id} · ${title}`, title, mock, tables: tables.map(withMeta), refs };
 }
 
 /** The raw table of a chart of the Recorrido (bars or lines), from the same spec the 3D view and the Gráfico | Tabla switch use. */
@@ -193,7 +194,7 @@ function productivityTables(): DataTable[] {
   ];
 }
 
-/** The data behind each slide of the Recorrido (steps 0 to 14) and the simulator, as tables ready to read and to download. Step 15 has no chart yet. */
+/** The data behind each slide of the Recorrido (steps 0 to 14) and the simulator, as tables ready to read and to download. */
 export function buildSlides(): SlideData[] {
   const argentina = argentinaReal();
   const region = regionCountries();
@@ -239,7 +240,6 @@ export function buildSlides(): SlideData[] {
     slide('3', TOUR_CHARTS[3]!.title, [chartTable(3)]),
     slide('4', TOUR_CHARTS[4]!.title, [chartTable(4), complexesTable(), greatItemsTable()], false, ['E7', 'E1']),
     slide('5', TOUR_CHARTS[5]!.title, [chartTable(5)], false),
-    slide('6', TOUR_CHARTS[6]!.title, [chartTable(6)]),
     slide('7', TOUR_CHARTS[7]!.title, [
       { id: 'provinces-value', title: `Valor productivo por provincia (${PRODUCTION_UNIT})`, columns: ['Provincia', 'Valor'], rows: PROVINCES.map((p, i) => [p.name, PROVINCE_VALUES[i] ?? null]) },
       hydrocarbonProvinces()

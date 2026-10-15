@@ -88,17 +88,6 @@ export const STEP_INFO: Record<number, StepInfo> = {
     note: 'No es una medición: es una cuenta (70 dividido la tasa), por eso no tiene fuente de datos.',
     refs: []
   },
-  6: {
-    heading: 'Qué miran los inversores',
-    paragraphs: [
-      'Los capitales se mueven hacia donde ven reglas claras, estabilidad y retornos. Este gráfico ordena los factores que pesan en esa decisión.',
-      'No es una encuesta publicada: es un esquema para ordenar la discusión.'
-    ],
-    how: 'Cada barra es el puntaje de 0 a 10 de un factor. Una barra baja es un obstáculo para invertir.',
-    data: 'prueba',
-    note: 'Los puntajes son de prueba. Falta una fuente que los publique, o sacar esta diapositiva.',
-    refs: []
-  },
   7: {
     heading: 'El mapa productivo',
     paragraphs: [

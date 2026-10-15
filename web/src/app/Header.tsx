@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 import { useSlots } from '../dashboard/slots';
 import { useStore } from '../state/store';
 import { TourSteps } from './TourSteps';
-import { SceneTabs, SectionTabs } from './TabBar';
+import { DataButton, SceneTabs, SectionTabs } from './TabBar';
 
 /** The title as in the intro, on one line: "Argentina" light, "2056" in the accent. */
 const BRAND = (
@@ -11,7 +11,7 @@ const BRAND = (
   </>
 );
 
-/** The brand (a way back to the intro), the sections (the steps of the Recorrido next to them, and the controls of the scene) and the link to the sources. */
+/** The brand (a way back to the intro), the sections (the steps of the Recorrido next to them, and the controls of the scene) and the Data button. */
 export function Header({ onHome }: { onHome?: () => void }) {
   const section = useStore((s) => s.section);
   const navRef = useCallback((el: HTMLDivElement | null) => useSlots.getState().set('nav', el), []);
@@ -28,7 +28,7 @@ export function Header({ onHome }: { onHome?: () => void }) {
         <SectionTabs />
         {section === 'tour' && <TourSteps />}
         <div className="header-end">
-          <a href="references.html">Fuentes y métodos</a>
+          <DataButton />
         </div>
       </div>
       {/* the second row: the scenes of the Data Dashboard, and the controls of the Andes */}

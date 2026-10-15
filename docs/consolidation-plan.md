@@ -1,4 +1,6 @@
-# Consolidation plan: 15 slides + simulator -> 7 slides (A-G)
+# Consolidation plan: 15 slides + simulator -> 6 slides (A-F)
+
+Update 2026-10-14: slide G (investor view) was dropped by the human; the sections and tables below that mention G are kept only as history.
 
 Status: Phase 0, updated with the human decisions of 2026-10-14 (no code changed). Written 2026-10-14 from a read of `web/src/tour`, `web/src/tour3d`, `web/src/datasets`, `web/tests/unit`, `web/e2e` and `.github/workflows/ci.yml`.
 
@@ -6,9 +8,9 @@ Status: Phase 0, updated with the human decisions of 2026-10-14 (no code changed
 
 | # | Question | Decision |
 |---|---|---|
-| Q1 | 7 or 8 slides | 7 slides (A-G). The simulator is folded into B and stops being a separate app section. |
+| Q1 | 7 or 8 slides | 7 slides (A-G), later 6 after Q3. The simulator is folded into B and stops being a separate app section. |
 | Q2 | Branch prefix | `task/<slug>`, as in `AGENTS.md` and `CLAUDE.md`. No change to those files. (This PR keeps its original branch name `feat/consolidation-plan` because renaming would close it; every later PR uses `task/`.) |
-| Q3 | Slide G | Short spike on the coverage of a sovereign-spread series (G2) and World Bank B-READY (G3). If neither can be fetched, drop the slide (G4). The 0-10 score is never migrated. The human decides after the spike. |
+| Q3 | Slide G | **Dropped (human decision of 2026-10-14, after the spike was planned): slide 6, "Qué miran los inversores", is eliminated and there is no slide G.** The 0-10 score is not migrated and no replacement indicator is built. The Recorrido has 6 slides (A-F) plus the simulator inside B. |
 | Q4 | AI in slide B | One engine: AI is a simulator parameter (`ai` in `simModel.ts`). The "With AI" tab shows the same projection with the parameter on, over the same fan. No hand-drawn curve. |
 | Q5 | Fan of slide B | Interim bootstrap on 1960-2025 World Bank volatility, tagged `partial`, replaced by `model-montecarlo` output when it lands. |
 | Q6 | Exports year range | Ship with the years that exist (2024, 2025); the INDEC 2015-2023 series is a data request. |
@@ -82,11 +84,11 @@ Data page: it is keyed by old step ids today. It will be re-keyed to the new sli
 | E: mining by mineral time series | Only totals 2018-2024 and 2024 shares | Per-mineral series needs ARMINERA/SIACAM detail (H3b verification also pending). |
 | E: hydrocarbons conventional vs unconventional | Not in repo | Secretaría de Energía "producción no convencional" tables (datos abiertos); request. |
 | F: sources | The cited PWT/FRED/INDEC links were never re-downloaded (D21) | Task 5 verifies and reports discrepancies before merging. |
-| G: sovereign spread / B-READY | No data in repo | Section 6. |
+| G: sovereign spread / B-READY | Not needed: slide G was dropped | Section 6 is history. |
 
-Data to be requested (added to `docs/data-requests.md` in the task that needs it): INDEC exports by complex 2015-2023; Secretaría de Energía non-conventional oil and gas series; MAGyP agro by province; SIACAM mining by province and mineral; INDEC population by province; INDEC GVA by province (Cuentas de crecimiento y desigualdad / PBG provincial); a sovereign spread series (BCRA or JP Morgan EMBI via a public source).
+Data to be requested (added to `docs/data-requests.md` in the task that needs it): INDEC exports by complex 2015-2023; Secretaría de Energía non-conventional oil and gas series; MAGyP agro by province; SIACAM mining by province and mineral; INDEC population by province; INDEC GVA by province (Cuentas de crecimiento y desigualdad / PBG provincial).
 
-## 6. Slide G: options (decision requested)
+## 6. Slide G: options (history; the human chose to drop the slide)
 
 | Option | What it shows | Source | Pros | Cons |
 |---|---|---|---|---|
@@ -121,7 +123,7 @@ Recommendation: investigate G2 and G3 coverage in a short spike at Task 9; if ne
 | 6 | `slide-structure` (C) | 2, 3 (for the composition panel) | provincial data (section 5); ships with the placeholder badge | Slide C with placeholder badge; data list |
 | 7 | `slide-gdp` (B): tabs Base / With AI / Simulator, rule of 70 panel, bootstrap fan, visible assumptions; the simulator section is removed from the app nav | 2 | none (Q4, Q5 decided) | Slide B; old 1, 3, 5 and `sim` removed |
 | 8 | `slide-world` (A) | 2 | none | Slide A; old 0 removed |
-| 9 | `slide-investor` (G) | 2 | spike result and human decision (Q3) | Per decision |
+| 9 | `drop-investor-slide`: remove step 6 (`TOUR_CHARTS[6]`, `STEP_INFO[6]`, its Data slide and `chart-6` entries) when the navigation is renumbered | 2 | none | Step 6 gone; no replacement |
 | 10 | `nav-cleanup`: `TOUR_STEPS`, nav buttons, Data selector, `README.md`, `docs/data-requests.md`, `LASTCONTEXT.md`, `PENDING.md` | all slides | all | Final structure |
 
 Each slide PR leaves the old steps in place until the new slide covers all their real data; Task 10 renumbers the navigation once. After every PR the work stops until the human approves.

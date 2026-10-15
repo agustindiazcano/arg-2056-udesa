@@ -1253,29 +1253,47 @@
 /* ---- the panel of the right can be folded away: the stage takes its width ---------------------------------------- */
 
 #overlay[data-scene='andes']:has(.dash--side-hidden) {
-  --side-w: 0px;
+  --side-w: 2.75rem;
 }
 
-/* it is moved off to the right and not removed, so the minimap keeps its size and shows again as it was */
+/* it is slid to the right and not removed, so the minimap keeps its size; only a thin strip, as wide as the toggle, stays */
 #overlay[data-scene='andes'] .dash--side-hidden .dash-side {
-  transform: translateX(calc(100% + var(--space-lg, 2rem)));
+  width: calc(min(340px, 30vw) - var(--space-md));
+  transform: translateX(calc(100% - 34px));
+  overflow: hidden;
+}
+
+#overlay[data-scene='andes'] .dash--side-hidden .dash-side > :not(.andes-side-toggle) {
   visibility: hidden;
-  opacity: 0;
   pointer-events: none;
 }
 
 #overlay[data-scene='andes'] .dash--stage .dash-side {
-  transition: transform 0.25s ease, opacity 0.25s ease, visibility 0.25s;
+  padding-top: calc(var(--space-sm) + 2rem);
+  transition: transform 0.25s ease;
 }
 
 .andes-side-toggle {
   position: absolute;
-  top: calc(var(--chrome-h, 0px) + var(--space-sm));
-  right: calc(var(--space-md) + 124px);
+  top: var(--space-xs);
+  right: var(--space-xs);
   z-index: 6;
   width: 32px;
   height: 32px;
   padding: 0;
   display: grid;
   place-items: center;
+  background: var(--glass-strong);
+  color: var(--ink);
+  backdrop-filter: blur(8px);
+}
+
+.andes-side-toggle:hover {
+  background: var(--selected);
+}
+
+/* folded: the toggle sits on the left edge of the strip, which is as wide as it is */
+#overlay[data-scene='andes'] .dash--side-hidden .andes-side-toggle {
+  right: auto;
+  left: 0;
 }

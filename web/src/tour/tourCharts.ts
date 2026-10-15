@@ -14,7 +14,6 @@ import {
   HYDROCARBONS_SOURCE,
   EXPORT_COMPOSITION,
   GDP_COMPOSITION,
-  INVESTOR_SCORES,
   MINING,
   MINING_SOURCE,
   MOCK_SOURCE,
@@ -192,14 +191,6 @@ export const TOUR_CHARTS: Record<number, TourChartDef> = {
     source: 'Cálculo de la regla del 70',
     kind: 'chart',
     build: () => ranking('Años para duplicar el PBI', 'Años para duplicarse', { unit: 'años', rows: rule70Rows() }, RULE70_HIGHLIGHT, 'Regla del 70, años que tarda en duplicarse el PBI según su crecimiento anual')
-  },
-  6: {
-    step: 6,
-    title: 'Qué miran los inversores',
-    subtitle: 'puntaje de 0 a 10 de cada factor',
-    source: MOCK_SOURCE,
-    kind: 'chart',
-    build: () => ranking('Qué miran los inversores', 'Puntaje', INVESTOR_SCORES, largest(INVESTOR_SCORES.rows), 'Qué miran los inversores, de 0 a 10 (datos de prueba)')
   },
   7: { step: 7, title: 'Mapa productivo por provincia', subtitle: 'valor productivo por provincia, millones de USD', source: MOCK_SOURCE, kind: 'map', build: NONE },
   8: {
