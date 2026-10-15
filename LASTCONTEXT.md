@@ -40,9 +40,10 @@
 - New worktree `C:\Users\agusd\.codex\worktrees\intro-argentina-3d\arg-2056-udesa`, branch `task/intro-model-3d`, based on `task/borradores-slides-interactivas`.
 - Refined the intro's Argentina model in `web/src/intro/Intro.tsx` and `intro.css`: nine depth slices give smoother solid provincial sides, with clearer top faces, outline contrast, shadow and a soft ground light.
 - Intro visual pass: «Argentina 2056» now uses title case, a restrained Raleway scale, and a translucent reading panel; shortcut buttons use an outlined treatment with staggered reveal and eased hover/focus/press states. Existing bundled fonts only; no behavior changed.
+- Hacia el 2056 visual pass (`web/src/styles/ui.css`): scoped the title-case wordmark, glass/gold scene tabs, step controls and index slide title/buttons to the tour; keyboard/focus behavior is unchanged. Browser review at 5175 showed both the index and GDP slide.
 - Shortcut hover and keyboard focus highlight San Juan and Mendoza for «Cruce de los Andes», and all 24 jurisdictions plus Malvinas for «Hacia el 2056». Commit `73599fa`.
 - Simulator (`web/src/tour/Simulator.tsx`, `simModel.ts`): added a PBI total/per-capita selector, derived per-capita values from GDP and population, showed 2056 population, and tied the population control to the UN WPP medium path (anchored to INDEC). Updated the pending note: coefficients are still arithmetic assumptions, and resource projections need verified physical quantities.
-- `npm run typecheck` and targeted ESLint pass. In the browser, the per-capita selector renders 13.4k USD/person in 2026 and 33.8k in 2056 under the current baseline; the intro refresh was visually reviewed at `http://127.0.0.1:5175/`. Vite remains available there. Keep 2D/3D province-map transitions and resource explorer pending.
+- `npm run typecheck` and targeted ESLint pass for the simulator change; this visual-only CSS change was reviewed in the browser and `git diff --check` passed. Vite remains available at `http://127.0.0.1:5175/`. Keep 2D/3D province-map transitions and resource explorer pending.
 
 ## Prior planning (2026-10-15)
 - The separate `task/indicadores-desarrollo-mapas` worktree has plans in `development-indicators-maps.md` and `forecast-uncertainty.md`, with tasks 51/52 listed in `roadmap.md`, `TASKS.md` and `PENDING.md`.
