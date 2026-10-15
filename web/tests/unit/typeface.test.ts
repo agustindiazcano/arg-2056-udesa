@@ -47,18 +47,18 @@ describe('title figures', () => {
 });
 
 describe('intro title weights', () => {
-  it('"Argentina" is weight 200 and "2056" is weight 400', () => {
+  it('"Argentina" is weight 350 and "2056" is weight 300', () => {
     const css = read('src/intro/intro.css');
-    expect(css).toMatch(/\.intro-title \.a\s*\{[^}]*font-weight:\s*200/);
-    expect(css).toMatch(/\.intro-title \.n\s*\{[^}]*font-weight:\s*400/);
+    expect(css).toMatch(/\.intro-title \.a\s*\{[^}]*font-weight:\s*350/);
+    expect(css).toMatch(/\.intro-title \.n\s*\{[^}]*font-weight:\s*300/);
   });
 });
 
 describe('navbar with the look of the intro', () => {
   const ui = read('src/styles/ui.css');
 
-  it('the brand is "Argentina" in weight 200 and "2056" in weight 800, in the accent of the intro, on one line', () => {
-    expect(ui).toMatch(/\.brand-a\s*\{[^}]*font-weight:\s*200/);
+  it('the brand is "Argentina" in weight 350 and "2056" in weight 800, in the accent of the intro, on one line', () => {
+    expect(ui).toMatch(/\.brand-a\s*\{[^}]*font-weight:\s*350/);
     expect(ui).toMatch(/\.brand-n\s*\{[^}]*font-weight:\s*800[^}]*var\(--intro-light\)/);
     expect(ui).toMatch(/\.brand\s*\{[^}]*white-space:\s*nowrap/);
   });

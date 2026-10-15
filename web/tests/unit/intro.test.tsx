@@ -50,7 +50,10 @@ describe('Intro', () => {
     const panel = document.querySelector('.intro-text')!;
     expect(panel).not.toBeNull();
     expect(panel.querySelectorAll('.intro-sub')).toHaveLength(2);
-    expect(readFileSync('src/intro/intro.css', 'utf8')).toMatch(/\.intro-text\s*\{[^}]*background:\s*color-mix\(in srgb,\s*var\(--intro-black\)\s*\d+%,\s*transparent\)/);
+    const css = readFileSync('src/intro/intro.css', 'utf8');
+    expect(css).toMatch(/\.intro-text\s*\{[^}]*background:\s*linear-gradient\(115deg,/);
+    expect(css).toContain('var(--intro-black) 78%, transparent');
+    expect(css).toContain('var(--intro-black) 48%, transparent');
   });
 
   it('gives the buttons of the sections the look the Comenzar button had', () => {
@@ -92,10 +95,10 @@ describe('Intro', () => {
     expect(container.querySelector('.intro-stage')?.getAttribute('aria-hidden')).toBe('true');
   });
 
-  it('stacks 3 layers per province (2 sides and the top) and a glow of 3 strokes', () => {
+  it('stacks 8 shaded side layers and the top per province, plus a glow of 3 strokes', () => {
     const { container } = render(<Intro onStart={() => undefined} />);
     const prov = container.querySelector('.intro-prov')!;
-    expect(prov.querySelectorAll('.intro-layer.side')).toHaveLength(2);
+    expect(prov.querySelectorAll('.intro-layer.side')).toHaveLength(8);
     expect(prov.querySelectorAll('.intro-layer.top')).toHaveLength(1);
     expect(prov.querySelectorAll('.intro-layer.glow use')).toHaveLength(3);
   });

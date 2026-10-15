@@ -5,9 +5,9 @@ import { visibleSections } from '../content/sectionLabels';
 import type { Section } from '../types/scene';
 import './intro.css';
 import { INSTITUTIONS } from '../ui/institutions';
-import { withMalvinas } from './malvinasPath';
+import { INTRO_MALVINAS_ID, withMalvinas } from './malvinasPath';
 
-const LAYERS = 3; // 2 sides and the top: fewer composited layers per province
+const LAYERS = 9; // eight shaded side slices and the top give the provinces a continuous, solid edge
 // speed of the lights (0.8): the prototype waits (350 to 1050 ms) / speed between changes
 const LIGHT_SPEED = 0.8;
 const APPEAR_MS = 2300; // the provinces appear upright and centered, then the view tilts
@@ -40,8 +40,14 @@ export function Intro({ onStart }: Props) {
   const reduced = useMemo(() => typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches, []);
   const [tilted, setTilted] = useState(reduced);
   const [lit, setLit] = useState<ReadonlySet<number>>(new Set());
+  const [highlightedSection, setHighlightedSection] = useState<'andes' | 'tour' | null>(null);
   const litRef = useRef(lit);
   litRef.current = lit;
+  const nationalProvinceIds = useMemo(() => new Set(data.provinces.map((province) => province.id)), []);
+  const andesProvinceIds = useMemo(
+    () => new Set(data.provinces.filter((province) => province.name === 'San Juan' || province.name === 'Mendoza').map((province) => province.id)),
+    []
+  );
 
   const shapes = useMemo(
     () =>
@@ -113,25 +119,32 @@ export function Intro({ onStart }: Props) {
         <div className="intro-cam">
           <div className="intro-floor" />
           <div className="intro-map">
-            {shapes.map((s) => (
-              <div key={s.id} className={`intro-prov${lit.has(s.id) ? ' lit' : ''}`} style={{ ...s.top, '--d': `${s.delay}ms` } as React.CSSProperties}>
-                {Array.from({ length: LAYERS }, (_, i) => (
-                  <svg
-                    key={i}
-                    className={`intro-layer ${i === LAYERS - 1 ? 'top' : 'side'}`}
-                    style={{ '--i': i, '--t': (i / (LAYERS - 1)).toFixed(3) } as React.CSSProperties}
-                    viewBox={s.topView}
-                  >
-                    <use href={`#intro-pr${s.id}`} />
-                  </svg>
-                ))}
-                <svg className="intro-layer glow" style={{ '--i': LAYERS - 1.15, ...s.glow } as React.CSSProperties} viewBox={s.glowView}>
-                  {[1, 2, 3].map((k) => (
-                    <use key={k} className={`g${k}`} href={`#intro-pr${s.id}`} />
+            {shapes.map((s) => {
+              const highlighted = highlightedSection === 'tour'
+                ? nationalProvinceIds.has(s.id) || s.id === INTRO_MALVINAS_ID
+                : highlightedSection === 'andes'
+                  ? andesProvinceIds.has(s.id)
+                  : lit.has(s.id);
+              return (
+                <div key={s.id} className={`intro-prov${highlighted ? ' lit' : ''}`} style={{ ...s.top, '--d': `${s.delay}ms` } as React.CSSProperties}>
+                  {Array.from({ length: LAYERS }, (_, i) => (
+                    <svg
+                      key={i}
+                      className={`intro-layer ${i === LAYERS - 1 ? 'top' : 'side'}`}
+                      style={{ '--i': i, '--t': (i / (LAYERS - 1)).toFixed(3) } as React.CSSProperties}
+                      viewBox={s.topView}
+                    >
+                      <use href={`#intro-pr${s.id}`} />
+                    </svg>
                   ))}
-                </svg>
-              </div>
-            ))}
+                  <svg className="intro-layer glow" style={{ '--i': LAYERS - 1.15, ...s.glow } as React.CSSProperties} viewBox={s.glowView}>
+                    {[1, 2, 3].map((k) => (
+                      <use key={k} className={`g${k}`} href={`#intro-pr${s.id}`} />
+                    ))}
+                  </svg>
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>
@@ -146,7 +159,16 @@ export function Intro({ onStart }: Props) {
         </div>
         <div role="group" aria-label="Ir directo a" className="intro-shortcuts">
           {shortcuts.map(({ section, label }) => (
-            <button key={section} type="button" className="intro-start" onClick={() => onStart(section)}>
+            <button
+              key={section}
+              type="button"
+              className="intro-start"
+              onMouseEnter={() => section === 'andes' || section === 'tour' ? setHighlightedSection(section) : undefined}
+              onMouseLeave={() => setHighlightedSection(null)}
+              onFocus={() => section === 'andes' || section === 'tour' ? setHighlightedSection(section) : undefined}
+              onBlur={() => setHighlightedSection(null)}
+              onClick={() => onStart(section)}
+            >
               {label}
             </button>
           ))}

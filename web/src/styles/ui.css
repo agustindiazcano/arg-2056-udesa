@@ -207,6 +207,87 @@ button.brand:focus-visible .brand-n {
   cursor: default;
 }
 
+/* The Hacia el 2056 shell continues the intro's title case and restrained gold/glass treatment. */
+#overlay[data-section='tour'] .chrome {
+  background: linear-gradient(112deg, color-mix(in srgb, var(--intro-black) 96%, transparent), color-mix(in srgb, var(--surface) 91%, transparent));
+  border-bottom: 1px solid color-mix(in srgb, var(--intro-light) 20%, transparent);
+  box-shadow: 0 0.6rem 1.8rem color-mix(in srgb, var(--intro-black) 28%, transparent);
+  backdrop-filter: blur(16px) saturate(1.15);
+  transition: background 0.55s ease, border-color 0.55s ease, box-shadow 0.55s ease;
+}
+
+#overlay[data-section='tour'] .brand {
+  gap: 0.24em;
+  font-size: 1.18rem;
+  letter-spacing: -0.035em;
+  text-transform: none;
+  transition: color 0.45s ease, transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+#overlay[data-section='tour'] button.brand:hover,
+#overlay[data-section='tour'] button.brand:focus-visible {
+  transform: translateY(-1px);
+}
+
+#overlay[data-section='tour'] .brand-a {
+  font-weight: 350;
+}
+
+#overlay[data-section='tour'] .brand-n {
+  font-weight: 500;
+  text-shadow: 0 0 12px color-mix(in srgb, var(--intro-light) 36%, transparent);
+}
+
+#overlay[data-section='tour'] .tab,
+#overlay[data-section='tour'] .tour-steps .chip {
+  position: relative;
+  border-color: color-mix(in srgb, var(--intro-ink) 11%, transparent);
+  border-radius: 0.6rem;
+  background: linear-gradient(145deg, color-mix(in srgb, var(--intro-ink) 6%, transparent), color-mix(in srgb, var(--intro-black) 54%, transparent));
+  color: color-mix(in srgb, var(--intro-ink) 72%, var(--intro-bg));
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--intro-ink) 7%, transparent);
+  transition: color 0.35s ease, background 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease, transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+#overlay[data-section='tour'] .tab:hover,
+#overlay[data-section='tour'] .tour-steps .chip:hover:not(:disabled),
+#overlay[data-section='tour'] .tab:focus-visible,
+#overlay[data-section='tour'] .tour-steps .chip:focus-visible {
+  color: var(--intro-ink);
+  background: linear-gradient(145deg, color-mix(in srgb, var(--intro-light) 17%, transparent), color-mix(in srgb, var(--intro-black) 46%, transparent));
+  border-color: color-mix(in srgb, var(--intro-light) 66%, transparent);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--intro-ink) 14%, transparent), 0 0.35rem 1.1rem color-mix(in srgb, var(--intro-black) 28%, transparent);
+  transform: translateY(-1px);
+}
+
+#overlay[data-section='tour'] .tab[aria-selected='true'],
+#overlay[data-section='tour'] .tour-steps .chip[aria-pressed='true'] {
+  color: var(--intro-ink);
+  background: linear-gradient(145deg, color-mix(in srgb, var(--intro-light) 24%, var(--intro-bg)), color-mix(in srgb, var(--intro-black) 58%, var(--intro-light)));
+  border-color: color-mix(in srgb, var(--intro-light) 78%, transparent);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--intro-ink) 16%, transparent), 0 0 1.15rem color-mix(in srgb, var(--intro-light) 16%, transparent);
+}
+
+#overlay[data-section='tour'] .tab[aria-selected='true']:hover,
+#overlay[data-section='tour'] .tour-steps .chip[aria-pressed='true']:hover {
+  color: var(--intro-ink);
+  background: linear-gradient(145deg, color-mix(in srgb, var(--intro-light) 32%, var(--intro-bg)), color-mix(in srgb, var(--intro-black) 48%, var(--intro-light)));
+}
+
+#overlay[data-section='tour'] .tour-steps .chip:disabled {
+  opacity: 0.36;
+  cursor: default;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #overlay[data-section='tour'] .chrome,
+  #overlay[data-section='tour'] .brand,
+  #overlay[data-section='tour'] .tab,
+  #overlay[data-section='tour'] .tour-steps .chip {
+    transition: none;
+  }
+}
+
 /* ---- controls ----------------------------------------------------------------------------------------------- */
 
 .controls-wrap {
@@ -1438,6 +1519,13 @@ main.scene-container {
   font-variant-numeric: tabular-nums;
 }
 
+.sim-method {
+  margin: var(--space-2, 0.5rem) 0;
+  color: var(--muted);
+  font-size: 0.72rem;
+  line-height: 1.4;
+}
+
 .sim-label,
 .sim-help {
   color: var(--muted);
@@ -2126,19 +2214,20 @@ main.scene-container {
   margin: 0;
   font-family: var(--font-title);
   font-size: clamp(1.8rem, 4.4vw, 4.2rem);
-  font-weight: 200;
+  font-weight: 350;
   line-height: 1.05;
-  letter-spacing: 0.1em;
+  letter-spacing: -0.035em;
   text-align: center;
-  text-transform: uppercase;
   color: var(--intro-ink);
 }
 
 .index-title .n {
   display: block;
-  font-weight: 800;
+  margin-top: 0.12em;
+  font-weight: 500;
+  letter-spacing: 0.045em;
   color: var(--intro-light);
-  text-shadow: 0 0 14px color-mix(in srgb, var(--intro-light) 55%, transparent);
+  text-shadow: 0 0 14px color-mix(in srgb, var(--intro-light) 34%, transparent);
 }
 
 .index-card {
@@ -2158,22 +2247,32 @@ main.scene-container {
 }
 
 .index-item {
+  display: flex;
+  align-items: center;
   width: 100%;
-  padding: 0.5rem 0.75rem;
-  border: 1px solid transparent;
-  border-radius: var(--radius-md);
-  background: transparent;
+  min-height: 2.8rem;
+  padding: 0.65rem 0.9rem;
+  border: 1px solid color-mix(in srgb, var(--intro-ink) 9%, transparent);
+  border-radius: 0.65rem;
+  background: linear-gradient(115deg, color-mix(in srgb, var(--intro-ink) 4%, transparent), color-mix(in srgb, var(--intro-black) 22%, transparent));
   color: var(--ink);
   font: inherit;
   text-align: left;
   cursor: pointer;
+  transition: color 0.35s ease, border-color 0.4s ease, background 0.4s ease, box-shadow 0.4s ease, transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 .index-item:hover,
 .index-item:focus-visible {
-  color: var(--intro-light);
-  border-color: color-mix(in srgb, var(--intro-light) 60%, transparent);
-  background: color-mix(in srgb, var(--intro-light) 12%, transparent);
+  color: var(--intro-ink);
+  border-color: color-mix(in srgb, var(--intro-light) 62%, transparent);
+  background: linear-gradient(115deg, color-mix(in srgb, var(--intro-light) 15%, transparent), color-mix(in srgb, var(--intro-black) 18%, transparent));
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--intro-ink) 10%, transparent), 0 0.3rem 1rem color-mix(in srgb, var(--intro-black) 24%, transparent);
+  transform: translateX(0.2rem);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .index-item { transition: none; }
 }
 
 @media (max-width: 800px) {
