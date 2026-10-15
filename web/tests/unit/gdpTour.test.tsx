@@ -11,6 +11,7 @@ import { buildGdp } from '../../src/charts/builders/gdp';
 import { GDP_MOCK, LAST_OBSERVED_YEAR, gdpLinesSpec } from '../../src/tour/gdpMock';
 import { GdpStep } from '../../src/tour/GdpStep';
 import { useStore } from '../../src/state/store';
+import { useTourLayout } from '../../src/tour/useTourLayout';
 
 describe('GDP mock data', () => {
   it('has one value per year, the history up to the last observed year and the projection from it', () => {
@@ -76,7 +77,10 @@ describe('gdpLinesSpec', () => {
 });
 
 describe('GdpStep', () => {
-  beforeEach(() => useStore.setState({ mode: '2d' }));
+  beforeEach(() => {
+    useStore.setState({ mode: '2d' });
+    useTourLayout.setState({ count: 1, focus: false });
+  });
   afterEach(cleanup);
 
   it('shows the title and the chart, with no test-data label', () => {

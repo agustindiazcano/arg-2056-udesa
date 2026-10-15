@@ -48,7 +48,7 @@ describe('the first slide: the title and the index', () => {
     expect(list.map((li) => li.textContent)).toEqual(indexItems().map((i) => `${i.number} · ${i.title}`));
     expect(list[0]!.textContent).toBe('1 · El PBI de Argentina desde 1960');
     expect(list[2]!.textContent).toBe(`3 · ${PRODUCTIVITY_TITLE}`);
-    expect(list.at(-1)!.textContent).toBe(`${rest.length} · El stock de recursos naturales`);
+    expect(list.at(-1)!.textContent).toBe(`${rest.length} · ${RULE70_TITLE}`);
   });
 
   it('uses the title each slide shows as its own heading', () => {
