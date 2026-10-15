@@ -1060,7 +1060,7 @@ main.scene-container {
   min-height: 0;
 }
 
-.prov-map > .tour-chart > * {
+.prov-map > .tour-chart > *:not(.tour-view-switch) {
   width: 100%;
   height: 100%;
 }
@@ -1133,28 +1133,20 @@ main.scene-container {
   min-height: 0;
 }
 
-.prov-bars > .tour-chart > * {
+.prov-bars > .tour-chart > *:not(.tour-view-switch) {
   width: 100%;
   height: 100%;
 }
 
-/* the Gráfico | Tabla switch of the region sits above the chart, in the flow, so it does not cover the bars */
-.prov-bars > .tour-chart {
-  display: flex;
-  flex-direction: column;
-}
-
+/* the Gráfico | Tabla switch of the region sits in the top right corner of the card */
 .prov-bars > .tour-chart > .tour-view-switch {
-  position: static;
-  flex: 0 0 auto;
+  position: absolute;
+  top: var(--space-md);
+  right: var(--space-md);
+  z-index: 3;
   width: auto;
   height: auto;
-  margin-bottom: var(--space-1, 0.25rem);
-}
-
-.prov-bars > .tour-chart > :not(.tour-view-switch) {
-  flex: 1 1 auto;
-  min-height: 0;
+  margin-bottom: 0;
 }
 
 .prov-bars .tour-table {
@@ -1460,15 +1452,15 @@ main.scene-container {
   font-variant-numeric: tabular-nums;
 }
 
-/* the big year and its value sit at the top right, with the Gráfico | Tabla switch in the corner and the year just to its left */
+/* the big year and its value sit at the top right, with the Gráfico | Tabla switch on the top left */
 .gdp-chart:has(> .world-year) .tour-view-switch {
-  top: 0;
-  right: 0;
-  left: auto;
+  top: -12px;
+  left: -15px;
+  right: auto;
 }
 
 .gdp-chart:has(> .world-year) > .world-year {
-  right: 11rem;
+  right: var(--space-md);
 }
 
 .gdp-chart:has(> .world-year) .tour-table {
@@ -1980,6 +1972,7 @@ main.scene-container {
 
 .prov-bars .tour-caption > strong {
   flex: 1 1 100%;
+  padding-right: 9rem;
   white-space: normal;
 }
 

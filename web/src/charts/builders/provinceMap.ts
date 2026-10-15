@@ -154,3 +154,100 @@ export function buildProvinceMap(input: ProvinceMapInput, opts: ProvinceMapOpts)
     mapName: MAP_NAME
   };
 }
+
+export interface DepartmentFeatureForMap {
+  id?: string;
+  properties: {
+    departamento: string;
+    cabecera: string;
+    centroid: [number, number];
+  };
+}
+
+export interface DepartmentGeoForMap {
+  provinceId: string;
+  features: DepartmentFeatureForMap[];
+}
+
+export function buildDepartmentMap(deptGeo: DepartmentGeoForMap, provinceName: string) {
+  const mapName = `ar-dept-${deptGeo.provinceId}`;
+  const items = deptGeo.features.map((f) => ({
+    name: f.properties.departamento,
+    cabecera: f.properties.cabecera
+  }));
+  const markers = deptGeo.features.map((f) => ({
+    name: f.properties.departamento,
+    value: [...f.properties.centroid, 1],
+    cabecera: f.properties.cabecera
+  }));
+
+  const option = {
+    animation: false,
+    tooltip: {
+      trigger: 'item',
+      backgroundColor: 'rgba(15, 23, 42, 0.92)',
+      borderColor: '#38bdf8',
+      borderWidth: 1,
+      textStyle: { color: tokens.ink },
+      formatter: (params: { data?: { cabecera?: string }; name?: string }) => {
+        const dName = params.name ?? '';
+        const cabecera = params.data?.cabecera ?? deptGeo.features.find((f) => f.properties.departamento === dName)?.properties.cabecera ?? '';
+        return `<strong>${dName}</strong><br/><span style="color:#94a3b8">Municipio / Cabecera:</span> <strong>${cabecera}</strong><br/><span style="color:#64748b">${provinceName}</span>`;
+      }
+    },
+    geo: {
+      map: mapName,
+      roam: true,
+      scaleLimit: { min: ZOOM_MIN, max: ZOOM_MAX },
+      label: { show: false },
+      itemStyle: {
+        areaColor: tokens.surface,
+        borderColor: '#38bdf8',
+        borderWidth: 1.2
+      },
+      emphasis: {
+        itemStyle: {
+          areaColor: '#1d4ed8',
+          borderColor: '#ffffff',
+          borderWidth: 1.8
+        },
+        label: { show: true, color: tokens.ink, fontSize: 11 }
+      }
+    },
+    series: [
+      {
+        type: 'map',
+        map: mapName,
+        geoIndex: 0,
+        data: items
+      },
+      {
+        type: 'scatter',
+        coordinateSystem: 'geo',
+        geoIndex: 0,
+        symbol: 'circle',
+        symbolSize: 7,
+        itemStyle: {
+          color: '#38bdf8',
+          borderColor: '#ffffff',
+          borderWidth: 1.5
+        },
+        label: {
+          show: true,
+          position: 'top',
+          formatter: (p: { data?: { cabecera?: string } }) => p.data?.cabecera ?? '',
+          color: tokens.ink,
+          fontSize: 10
+        },
+        data: markers
+      }
+    ]
+  };
+
+  return {
+    option,
+    mapName,
+    summary: `${provinceName}: división en ${deptGeo.features.length} departamentos y municipios.`
+  };
+}
+

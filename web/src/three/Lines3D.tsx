@@ -277,14 +277,31 @@ export function Lines3D({ spec }: { spec: Lines3DSpec }) {
       setGrowth(1);
       const base = { ...stage.pose };
       const points = (layout.series[0]?.segments ?? []).flat();
-      const heightAt = (x: number): number => {
-        const next = points.findIndex((p) => p.x >= x);
-        if (next <= 0) return points[0]?.y ?? 0;
-        if (next < 0) return points.at(-1)?.y ?? 0;
-        const a = points[next - 1]!;
-        const b = points[next]!;
+      const heightAtPoints = (pts: { x: number; y: number }[], x: number): number => {
+        const next = pts.findIndex((p) => p.x >= x);
+        if (next <= 0) return pts[0]?.y ?? 0;
+        if (next < 0) return pts.at(-1)?.y ?? 0;
+        const a = pts[next - 1]!;
+        const b = pts[next]!;
         return lerp(a.y, b.y, (x - a.x) / Math.max(b.x - a.x, 1e-6));
       };
+      const heightAt = (x: number): number => heightAtPoints(points, x);
+
+      // glowing head spheres following the leading edge of each series
+      const headSpheres: Mesh[] = spec.series.map((s, i) => {
+        const look = LOOK[s.tone];
+        const color = new Color(s.color ?? look.color);
+        const lane = layout.series[i]!;
+        const sphere = new Mesh(
+          new SphereGeometry(look.radius * 2.2, 16, 16),
+          new MeshBasicMaterial({ color, toneMapped: false })
+        );
+        sphere.position.set(-WIDTH / 2, 0, lane.z);
+        sphere.visible = false;
+        scene.add(sphere);
+        return sphere;
+      });
+
       // The camera follows the head until the visitor takes it (a drag, the wheel, the buttons, a double click): from then on
       // the line keeps drawing and the camera is theirs. The stage animation is not used: any camera move cancels it.
       let lastSet = { ...base };
@@ -294,6 +311,16 @@ export function Lines3D({ spec }: { spec: Lines3DSpec }) {
         const head = lerp(-WIDTH / 2, WIDTH / 2, f.reveal);
         reveal.constant = f.reveal >= 1 ? WIDTH : head;
         for (const item of hiddenUntilDone) item.visible = f.reveal >= 1;
+        headSpheres.forEach((sphere, i) => {
+          if (f.reveal > 0 && f.reveal < 1) {
+            sphere.visible = true;
+            const lane = layout.series[i]!;
+            const pts = lane.segments.flat();
+            sphere.position.set(head, heightAtPoints(pts, head), lane.z);
+          } else {
+            sphere.visible = false;
+          }
+        });
         if (!handedOver) {
           const p = stage.pose;
           handedOver = ['x', 'y', 'z', 'theta', 'phi', 'radius'].some((k) => Math.abs((p as never)[k] - (lastSet as never)[k]) > 1e-4);
@@ -309,6 +336,13 @@ export function Lines3D({ spec }: { spec: Lines3DSpec }) {
         }
         stage.requestRender();
       };
+      const cleanSpheres = () => {
+        headSpheres.forEach((s) => {
+          scene.remove(s);
+          s.geometry.dispose();
+          (s.material as MeshBasicMaterial).dispose();
+        });
+      };
       const clock = spec.clock;
       if (clock) {
         // the page owns the time (it plays it and the visitor drags it): draw what the clock says on every frame; a jump of the clock takes the camera back
@@ -323,7 +357,10 @@ export function Lines3D({ spec }: { spec: Lines3DSpec }) {
           raf = requestAnimationFrame(step);
         };
         raf = requestAnimationFrame(step);
-        cancel = () => cancelAnimationFrame(raf);
+        cancel = () => {
+          cancelAnimationFrame(raf);
+          cleanSpheres();
+        };
       } else if (reduced) {
         frame(FOLLOW_TOTAL_MS);
       } else {
@@ -336,7 +373,10 @@ export function Lines3D({ spec }: { spec: Lines3DSpec }) {
           if (elapsed < FOLLOW_TOTAL_MS) raf = requestAnimationFrame(step);
         };
         raf = requestAnimationFrame(step);
-        cancel = () => cancelAnimationFrame(raf);
+        cancel = () => {
+          cancelAnimationFrame(raf);
+          cleanSpheres();
+        };
       }
     } else if (reduced) {
       setGrowth(1);

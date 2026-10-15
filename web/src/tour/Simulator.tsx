@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { EChart } from '../charts/EChart.js';
 import { addMilestones } from '../charts/builders/milestones.js';
-import { buildLines } from '../charts/builders/tourCharts.js';
+import { buildFluidLines } from '../charts/builders/tourCharts.js';
 import { formatDecimal, formatValue } from '../charts/format.js';
 import { FOLLOW_MS, followFrame } from '../charts3d/followAnim.js';
 import { linesSpec } from '../charts3d/specs.js';
@@ -54,11 +54,11 @@ export function Simulator() {
   const dispatch = useStore((s) => s.dispatch);
   const [params, setParams] = useState<SimParams>(DEFAULT_SIM);
   const [indicator, setIndicator] = useState<(typeof INDICATORS)[number]['value']>('gdp');
-  // the lines draw themselves from 2026 to 2056 when the visitor presses play, like the first slide
+  // the lines draw themselves from 2026 to 2056 when the visitor presses play, like the first slide; starts paused
   const reduced = useReducedMotion();
   const [run, setRun] = useState(0);
   const [speed, setSpeed] = useState(1);
-  const { elapsed, clock, seek, playing, play, pause } = useTimeline(run, reduced, speed);
+  const { elapsed, clock, seek, playing, play, pause } = useTimeline(run, reduced, speed, false);
   const stepSpeed = (by: 1 | -1) => setSpeed((v) => SPEEDS[Math.min(SPEEDS.length - 1, Math.max(0, SPEEDS.indexOf(v) + by))] ?? v);
   const year = SIM_START + followFrame(elapsed).reveal * (SIM_END - SIM_START);
   const shownYear = Math.min(SIM_END, Math.floor(year + 1e-6));
@@ -75,25 +75,15 @@ export function Simulator() {
   const double = doublingYears(growth);
   const delta = endRef > 0 ? ((end - endRef) / endRef) * 100 : 0;
 
-  const chart = useMemo(() => {
+  const unit = indicator === 'gdp' ? UNIT : PER_CAPITA_UNIT;
+  const mineValues = mine[indicator];
+  const referenceValues = reference[indicator];
+  const title = indicator === 'gdp' ? 'PBI total simulado' : 'PBI por habitante simulado';
+  const summary = `${title} de ${SIM_START} a ${SIM_END}: de ${formatValue(mineValues[0] ?? null, unit)} a ${formatValue(mineValues.at(-1) ?? null, unit)} en tu escenario y ${formatValue(referenceValues.at(-1) ?? null, unit)} en el de referencia`;
+
+  const spec = useMemo(() => {
     const xLabels = mine.years.map(String);
-    const unit = indicator === 'gdp' ? UNIT : PER_CAPITA_UNIT;
-    const mineValues = mine[indicator];
-    const referenceValues = reference[indicator];
-    const title = indicator === 'gdp' ? 'PBI total simulado' : 'PBI por habitante simulado';
-    const summary = `${title} de ${SIM_START} a ${SIM_END}: de ${formatValue(mineValues[0] ?? null, unit)} a ${formatValue(mineValues.at(-1) ?? null, unit)} en tu escenario y ${formatValue(referenceValues.at(-1) ?? null, unit)} en el de referencia`;
-    const series = [
-      { name: REFERENCE, values: referenceValues, color: tokens.muted, dashed: true },
-      { name: YOURS, values: mineValues, color: tokens.blue }
-    ];
-    const shown = series.map((s) => ({ ...s, values: s.values.map((v, i) => (mine.years[i]! <= shownYear ? v : null)) }));
-    const lines = buildLines(xLabels, shown, { unit, labelEvery: 4, summary }).option as unknown as { yAxis: Record<string, unknown> };
-    // the axis does not move while the lines draw: it fits the whole range of both lines
-    const all = [...referenceValues, ...mineValues];
-    lines.yAxis = { ...lines.yAxis, min: Math.floor(Math.min(...all) * 0.97), max: Math.ceil(Math.max(...all) * 1.02) };
-    // a dot and the year at which your GDP is twice, three and four times that of 2026, once the line has got there
-    const option = indicator === 'gdp' ? addMilestones(lines, mine.years, [{ values: mineValues, color: tokens.blue }], shownYear) : lines;
-    const spec = linesSpec({
+    const built = linesSpec({
       title,
       unit,
       xLabels,
@@ -104,8 +94,33 @@ export function Simulator() {
       follow: true,
       summary
     });
-    return { option, spec: { ...spec, clock }, summary, unit, mineValues };
-  }, [mine, reference, indicator, shownYear, clock]);
+    return { ...built, clock };
+  }, [title, unit, mine.years, referenceValues, mineValues, summary, clock]);
+
+  const option = useMemo(() => {
+    const series = [
+      { name: REFERENCE, values: referenceValues, color: tokens.muted, dashed: true },
+      { name: YOURS, values: mineValues, color: tokens.blue }
+    ];
+    const currentYear = playing || elapsed > 0 ? year : SIM_END;
+    const { option: fluidOpt } = buildFluidLines(mine.years, series, currentYear, {
+      unit,
+      labelEvery: 4,
+      summary,
+      showHead: true,
+      showGhost: true
+    });
+    // dot and pulsing milestone highlight at x2, x3, x4
+    return indicator === 'gdp'
+      ? addMilestones(
+          fluidOpt,
+          mine.years,
+          [{ values: mineValues, color: tokens.blue }],
+          currentYear,
+          mineValues[0]
+        )
+      : fluidOpt;
+  }, [referenceValues, mineValues, playing, elapsed, year, mine.years, unit, summary, indicator]);
 
   const set = (key: SimKey, value: number) => setParams((p) => ({ ...p, [key]: value }));
 
@@ -176,11 +191,11 @@ export function Simulator() {
           </div>
           <div className="world-year" aria-hidden="true">
             <strong>{shownYear}</strong>
-            <span>{formatValue(chart.mineValues[shownYear - SIM_START] ?? null, chart.unit)}</span>
+            <span>{formatValue(mineValues[shownYear - SIM_START] ?? null, unit)}</span>
           </div>
           <div className="tour-chart" key={run}>
-            <TourChart spec={chart.spec}>
-              <EChart option={chart.option} aria-label={chart.summary} />
+            <TourChart spec={spec}>
+              <EChart option={option} aria-label={summary} />
             </TourChart>
           </div>
         </Reveal>
