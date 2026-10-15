@@ -3,13 +3,55 @@
 Un relato interactivo, con datos, que une el Cruce de los Andes (1817) con el desafío de Argentina hacia 2056: recursos, economía, población y el impacto de la inteligencia artificial y la automatización (la «Cuarta Revolución Industrial» en el sentido de Klaus Schwab, Foro Económico Mundial).
 
 - **Los Andes**: mapa 3D con satélite y relieve reales; la marcha de la columna principal del Ejército de los Andes, las otras columnas del cruce y el encuentro de las fuerzas, con figuras en miniatura.
-- **Hacia el 2056** (antes «Recorrido»): una presentación guiada con gráficos 2D y 3D (cada gráfico tiene su tabla). Incluye la diapositiva de **productividad** (PTF y producto por hora, Argentina, EE. UU., Chile y Brasil, con datos de la Penn World Table).
+- **Hacia el 2056** (antes «Recorrido»): una presentación guiada, con un índice y 13 diapositivas, con gráficos 2D y 3D (cada gráfico tiene su tabla). Incluye la diapositiva de **productividad** (PTF y producto por hora, Argentina, EE. UU., Chile y Brasil, con datos de la Penn World Table).
 - **Simulador del PBI**: un gráfico grande del PBI hasta 2056 y, a la derecha, factores que se pueden mover (crecimiento base, IA, población, productividad, inversión). Es una ilustración con aritmética simple, no el modelo.
 - **Data**: una página con scroll con los datos de cada diapositiva en tablas, un selector (número y título de la diapositiva) para descargar sus datos como CSV, la descarga de cada tabla y, al final, los enlaces de las referencias (también descargables en CSV).
-- **Proyecciones de otros organismos**: el FMI, la OCDE y la ONU están cargados con el pipeline de datos (`data/processed/external_forecasts.json`, `scripts/fetch_external_forecasts.py`) y se muestran en la página Data, en la diapositiva 1; el estado de cada serie del modelo está en [`docs/model-data-status.md`](docs/model-data-status.md).
+- **Proyecciones de otros organismos**: el FMI, la OCDE y la ONU están cargados con el pipeline de datos (`data/processed/external_forecasts.json`, `scripts/fetch_external_forecasts.py`) y se muestran en la página Data, en la diapositiva 2; el estado de cada serie del modelo está en [`docs/model-data-status.md`](docs/model-data-status.md).
 - **Data Dashboard** (oculto por ahora): economía, recursos, pronóstico 2056 con abanico de incertidumbre, revolución IA y simulador.
 
 La incertidumbre se muestra como abanico de percentiles; las cifras en disputa, como rangos; los vacíos, como «sin dato». Los supuestos y las reglas de datos están en [`AGENTS.md`](AGENTS.md) y [`docs/assumptions.md`](docs/assumptions.md).
+
+## Qué es
+
+Un proyecto de **ciencia de datos y visualización**: toma datos abiertos de organismos oficiales e internacionales, los baja con un pipeline reproducible (cada archivo con su hash, su fuente y su fecha), los valida y los muestra en gráficos interactivos y mapas, 2D y 3D. Cada gráfico tiene su tabla, y cada número de la presentación está en la página Data con su referencia.
+
+## Stack
+
+| Capa | Tecnología |
+|---|---|
+| Aplicación web | TypeScript (modo estricto), React 19, Vite, Zustand |
+| Visualización | ECharts (gráficos y mapas 2D), Three.js (vistas 3D y la escena de los Andes), MapLibre GL (mapa satelital con relieve), GSAP (animaciones) |
+| Datos y ciencia de datos | Python 3.12 (biblioteca estándar, `jsonschema`, NumPy). Pipeline en `scripts/datapipe`: archivos crudos registrados con hash, adaptadores puros, salidas reproducibles y validación contra esquemas JSON. Los cálculos estadísticos de la regla del 70 (tasa entre extremos, regresión de ln V contra el año con R² y residuos, ventanas móviles, tiempo exacto de duplicación) son un módulo de TypeScript puro, `web/src/core/doubling.ts` |
+| Calidad | pytest, Vitest, Playwright con axe (accesibilidad), ESLint, Ruff, presupuestos de tamaño del bundle y de los datos |
+| Entrega | GitHub Actions (CI) y Vercel |
+
+## Qué está terminado y qué no
+
+| Parte | Estado |
+|---|---|
+| Los Andes (escena 3D del Cruce) | Terminada. Varias fuentes históricas están «por informe» y no se verificaron en el original (ver [`docs/references.md`](docs/references.md)). |
+| Hacia el 2056: PBI desde 1960, productividad, exportaciones, regla del 70, minería, historia de los hidrocarburos y composición del PBI | Con datos reales de las fuentes de la sección «Referencias». La minería está transcrita a mano de imágenes de un documento y los proyectos del RIGI vienen de prensa. Las toneladas por cultivo y las reservas reales están en la página Data. |
+| Cifras provisorias | Producción por provincia y mapa productivo, curva de la inteligencia artificial, agro en dólares, stock de recursos, proyección y rango de los hidrocarburos, proyección y abanico del PBI desde 2027 y el simulador. **Son valores de prueba, no resultados del modelo.** |
+| Proyecciones de otros organismos | Cargadas: FMI (2025-2031), OCDE (seis escenarios hasta 2056) y ONU (tres variantes de población hasta 2056). |
+| Modelo de proyección a 2056 | **Diseñado, casi sin implementar.** Hoy solo existe un módulo de población por cohortes (`model/src/argmodel/population`). El crecimiento, los recursos, los escenarios, la simulación Monte Carlo y el backtest están descritos en [`docs/model-design.md`](docs/model-design.md) y no existen todavía. |
+
+## Las diapositivas de «Hacia el 2056»
+
+La presentación abre en una diapositiva con el título y el índice (la 0), y tiene 13 más:
+
+1. El PBI de Argentina desde 1960 (ranking mundial y de la región)
+2. PBI de Argentina
+3. Productividad
+4. Producción por provincia
+5. Cuarta revolución industrial: el impacto de la IA en la economía
+6. Exportaciones por complejo
+7. La regla del 70 (calculadora y países reales)
+8. Mapa productivo por provincia
+9. Minería: hoy vs proyecto
+10. Hidrocarburos: Vaca Muerta define el piso y el techo
+11. Agro: producción actual y potencial
+12. Composición del PBI
+13. El stock de recursos naturales
 
 ## Cómo correrlo
 
@@ -20,15 +62,16 @@ cp .env.example .env.local   # completar VITE_MAPTILER_KEY (satélite y relieve 
 npm run dev
 ```
 
-Sin `VITE_MAPTILER_KEY` la escena de los Andes muestra un aviso y un fondo liso. La clave queda en el bundle: restringila por origen en MapTiler. Antes de un push: `python scripts/precheck.py`.
+Sin `VITE_MAPTILER_KEY` la escena de los Andes muestra un aviso y un fondo liso. La clave queda en el bundle: restringila por origen en MapTiler. Antes de un push: `python scripts/precheck.py` (corre ruff, pytest, la validación de datos, el lint, el chequeo de tipos y los tests de la web). Los tests de la web: `cd web && npm test`; los de Python: `pytest`.
 
 ## Estructura
 
 | Carpeta | Contenido |
 |---|---|
 | `web/` | Aplicación (Vite, React, TypeScript, MapLibre GL, Three.js, ECharts) |
-| `model/` | Modelo de pronóstico en Python, con backtest |
-| `data/` | Datos, esquemas y generador de datos de prueba |
+| `model/` | Punto de partida del modelo de pronóstico en Python: hoy solo la población por cohortes, con tests (el resto está en `docs/model-design.md`) |
+| `data/` | Archivos crudos con hash y fuente, salidas procesadas, esquemas JSON y datos de prueba |
+| `scripts/` | Pipeline de datos (`datapipe`), descargas de las fuentes, chequeos y `precheck.py` |
 | `docs/` | Decisiones, supuestos, diseño y fuentes |
 
 ## Referencias
@@ -69,7 +112,7 @@ Las cifras de bajas de Chacabuco no coinciden entre las fuentes 5, 10, 17, 18, 1
 
 23. Schwab, K. (2016). *La Cuarta Revolución Industrial*. Foro Económico Mundial.
 
-### Productividad (diapositiva 2 de «Hacia el 2056», y el simulador)
+### Productividad (diapositiva 3 de «Hacia el 2056», y el simulador)
 
 24. INDEC, Documento de trabajo N.º 52, *Productividad y stock de capital* (PTF y productividad laboral 2016-2025). <https://www.indec.gob.ar/ftp/cuadros/economia/productividad_stock_capital_10_26.pdf>
 25. Baumann Fonay, I. (2026). «PTF y PIB potencial de Argentina, 1990-2025». <https://macroargentina.substack.com/p/ptf-y-pib-potencial-de-argentina>, y su serie en Alphacast <https://www.alphacast.io/datasets/potential-gross-domestic-product-output-gap-tfp-53419>
