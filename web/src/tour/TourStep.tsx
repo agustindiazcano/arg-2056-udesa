@@ -11,6 +11,8 @@ import { ResourcesStep } from './ResourcesStep.js';
 import { Rule70Step } from './Rule70Step.js';
 import { ProductivityStep } from './ProductivityStep.js';
 import { WorldStep } from './WorldStep.js';
+import { DevelopmentStep } from './DevelopmentStep.js';
+import { ForecastUncertaintyStep } from './ForecastUncertaintyStep.js';
 import { INDEX_STEP } from './chartSteps.js';
 import { TourSidebar } from './TourSidebar.js';
 
@@ -18,6 +20,8 @@ import { TourSidebar } from './TourSidebar.js';
 export function TourStep({ step }: { step: number }) {
   if (step === INDEX_STEP) return <IndexStep />;
   if (step === 14) return <ProductivityStep />;
+  if (step === 16) return <DevelopmentStep />;
+  if (step === 17) return <ForecastUncertaintyStep />;
   // every other step has the side panel with the text and the references, next to its chart
   return (
     <div className="tour-frame">

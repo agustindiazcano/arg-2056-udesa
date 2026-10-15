@@ -2398,6 +2398,7 @@ main.scene-container {
   height: 0.55rem;
 }
 
+<<<<<<< HEAD
 /* ---- Chart surfaces: clearer hierarchy for the story and simulator ---------------------------------------------- */
 
 .gdp-chart {
@@ -2644,5 +2645,310 @@ main.scene-container {
   #overlay[data-section='tour'] .chrome .tab,
   #overlay[data-section='tour'] .tour-steps .chip {
     transition: none;
+  }
+}
+
+/* ---- draft slides: development indicators and forecast uncertainty ------------------------------------------------ */
+
+.draft-slide {
+  gap: var(--space-2, 0.5rem);
+  overflow: hidden;
+}
+
+.draft-slide-head {
+  align-items: center;
+}
+
+.draft-status,
+.draft-kicker {
+  color: var(--muted);
+  font-size: 0.72rem;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.draft-status {
+  padding: 0.35rem 0.6rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+}
+
+.draft-slide-layout {
+  flex: 1 1 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+  gap: var(--space-3);
+  min-height: 0;
+}
+
+.draft-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  min-width: 0;
+  min-height: 0;
+  overflow: auto;
+}
+
+.draft-section-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+.draft-section-head h3,
+.draft-detail h3 {
+  margin: 0.25rem 0 0;
+  font-size: 1.05rem;
+  font-weight: 500;
+}
+
+.draft-tabs,
+.draft-mode,
+.draft-choice-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1, 0.25rem);
+}
+
+.draft-tabs button,
+.draft-indicator,
+.draft-choice-row .btn,
+.draft-mode .btn {
+  min-height: 2.35rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--surface) 82%, transparent);
+  color: var(--ink-2);
+  cursor: pointer;
+}
+
+.draft-tabs button {
+  padding: 0.45rem 0.8rem;
+}
+
+.draft-tabs button[aria-pressed='true'],
+.draft-indicator[aria-pressed='true'],
+.draft-choice-row .btn[aria-pressed='true'],
+.draft-mode .btn[aria-pressed='true'] {
+  border-color: var(--blue);
+  background: color-mix(in srgb, var(--blue) 16%, var(--surface));
+  color: var(--ink);
+}
+
+.draft-indicator-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-1, 0.25rem);
+}
+
+.draft-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  padding: 0.55rem 0.7rem;
+  text-align: left;
+}
+
+.draft-empty {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: 7rem;
+  padding: var(--space-3);
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-md);
+  color: var(--ink-2);
+  text-align: center;
+}
+
+.draft-empty p,
+.draft-context p,
+.draft-footnote,
+.draft-detail-copy,
+.uncertainty-copy p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+
+.draft-empty-mark {
+  color: var(--blue);
+  font-size: 1.8rem;
+}
+
+.draft-meta-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-2);
+  margin: 0;
+}
+
+.draft-meta-list div {
+  padding-top: var(--space-2);
+  border-top: 1px solid var(--border);
+}
+
+.draft-meta-list dt,
+.draft-meta-list dd {
+  margin: 0;
+  font-size: 0.78rem;
+}
+
+.draft-meta-list dt {
+  color: var(--muted);
+}
+
+.draft-meta-list dd {
+  margin-top: 0.25rem;
+  color: var(--ink-2);
+}
+
+.draft-context {
+  padding-top: var(--space-2);
+  border-top: 1px solid var(--border);
+}
+
+.draft-context h4 {
+  margin: 0 0 var(--space-1);
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.draft-context small,
+.draft-adverse-note small {
+  display: block;
+  margin-top: var(--space-1);
+  color: var(--muted);
+  font-size: 0.72rem;
+}
+
+.uncertainty-slide > .draft-tabs {
+  flex: 0 0 auto;
+}
+
+.uncertainty-layout {
+  grid-template-columns: minmax(0, 1.25fr) minmax(15rem, 0.75fr);
+}
+
+.draft-horizon {
+  display: grid;
+  gap: var(--space-1);
+  color: var(--ink-2);
+  font-size: 0.82rem;
+}
+
+.draft-horizon input {
+  width: 100%;
+  accent-color: var(--blue);
+}
+
+.draft-horizon-labels {
+  display: flex;
+  justify-content: space-between;
+  color: var(--muted);
+  font-size: 0.72rem;
+}
+
+.draft-fan-figure {
+  margin: 0;
+  padding: var(--space-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--surface) 65%, transparent);
+}
+
+.draft-fan {
+  display: block;
+  width: 100%;
+  max-height: 10rem;
+}
+
+.draft-fan-grid {
+  fill: none;
+  stroke: var(--grid);
+  stroke-width: 1;
+}
+
+.draft-fan-area {
+  fill: color-mix(in srgb, var(--blue) 22%, transparent);
+  stroke: color-mix(in srgb, var(--blue) 65%, transparent);
+  stroke-width: 1.5;
+}
+
+.draft-fan-center {
+  fill: none;
+  stroke: var(--ink-2);
+  stroke-dasharray: 5 5;
+  stroke-width: 1.5;
+}
+
+.draft-fan text {
+  fill: var(--muted);
+  font-size: 12px;
+}
+
+.draft-fan-figure figcaption {
+  color: var(--muted);
+  font-size: 0.7rem;
+}
+
+.draft-choice-row .btn {
+  min-height: 2rem;
+  padding: 0.35rem 0.6rem;
+  font-size: 0.76rem;
+}
+
+.draft-detail-copy {
+  padding-top: var(--space-2);
+  border-top: 1px solid var(--border);
+}
+
+.uncertainty-copy blockquote {
+  margin: 0;
+  padding-left: var(--space-3);
+  border-left: 2px solid var(--blue);
+  color: var(--ink-2);
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.draft-adverse-note {
+  padding: var(--space-3);
+  border: 1px solid color-mix(in srgb, var(--scenario-pessimistic) 45%, var(--border));
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--scenario-pessimistic) 8%, var(--surface));
+}
+
+.draft-adverse-note strong {
+  display: block;
+  margin-bottom: var(--space-1);
+  color: var(--ink);
+}
+
+.draft-adverse-note p {
+  color: var(--ink-2);
+}
+
+.draft-footnote {
+  flex: 0 0 auto;
+  font-size: 0.72rem;
+}
+
+@media (max-width: 900px) {
+  .draft-slide-layout,
+  .uncertainty-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .draft-indicator-list {
+    grid-template-columns: minmax(0, 1fr);
   }
 }
