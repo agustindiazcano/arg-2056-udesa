@@ -2,6 +2,20 @@
 
 Every task below has a brief (`<slug>.md` in the repository root) and a prompt (`TASKS.md`). The list of all tasks, with their blockers, is `roadmap.md`; the status table is "Next Steps" in `TASKS.md`. READY = can start now. BLOCKED = needs what the line says.
 
+## New corrections (`test/correcciones-nuevas.png`, plan in `docs/action-plan-correcciones-nuevas.md`)
+
+Order: C8, C7, C2, C3, C4, C5, C1, C6.
+- [x] C8 `map-zoom-limits`: ZOOM_MAX 8 -> 32 in `web/src/charts/navState.ts` (country and department maps); tests updated. Branch `task/map-zoom-limits`, worktree `arg-2056-udesa-correcciones`. Not checked visually in the browser.
+- [ ] C7 `map-drill-transition`: smooth transition between country, province and department.
+- [ ] C2 `res-sector-filter-panel`: with the Mining filter, the composition panel shows mining only.
+- [ ] C3 `res-province-drilldown`: selecting a province shows departments if there is data, otherwise production by mining sector.
+- [ ] C4 `res-department-projects`: click on a department expands it and lists mining projects when data exists.
+- [ ] C5 `map-search`: search by province or department.
+- [ ] C1 `res-minerals-extend`: add boron, copper, molybdenum; add the Taca Taca project.
+- [ ] C6 `province-profile-slide`: LAST, with mock data (decided by the user; mock never labeled in the UI, listed in `docs/mock-data.md`, release gate still blocks until replaced by real data). New slide with provincial GDP, coparticipation, GDP per capita, exports, population, poverty, unemployment, private / public / registered employment; security filter only if an official provincial series exists.
+- [ ] **Data to verify (human)**: every figure added by C1 and C6 against the original source (INDEC, Secretaria de Mineria, USGS, Ministerio de Economia, Secretaria de Trabajo). Source candidates in section 4 of the plan.
+
+
 ## Task queue (in order)
 
 1. [x] `data-pipeline`: scripts and processed datasets with `source` + `retrieved_at` (resources, economy, population, provinces).

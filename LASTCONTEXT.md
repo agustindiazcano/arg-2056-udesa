@@ -1,16 +1,17 @@
 # Last Context
 
 ## State
-- **Branch**: `task/data-page-tabs`
-- **Task**: Enhance Data section with tabs for Data, Referencias, and Metodología, JSON downloads, and Andes sources.
+- **Branch**: `task/map-zoom-limits` (worktree `../arg-2056-udesa-correcciones`, from `origin/main`; another agent works in the main tree, so work stays in this worktree).
+- **Task**: C8 of `docs/action-plan-correcciones-nuevas.md` (plan from `test/correcciones-nuevas.png`): free the 2D map zoom.
 - **Key changes**:
-  - Transformed the static Data header into 3 title-style tab buttons: "Data", "Referencias", and "Metodología".
-  - "Data" tab provides table exploration by slide, with CSV and new JSON downloads for both individual tables and entire slides (`downloadJson`, `tableJson`, `slideJson`).
-  - "Referencias" tab lists all categorized sources, links, and verification status, including the 20 Cruce de los Andes historical references (H1-H25) from the README, with CSV and JSON downloads.
-  - "Metodología" tab renders `MethodologyView` detailing the overall API and document pipeline and slide-specific methodologies (PBI base, Regla del 70, Productividad, IA, Recursos, Simulador, y Proyecciones al 2056).
-  - Cleaned styling in `ui.css` using CSS tokens and `color-mix` without color literals.
-  - Validated with full `python scripts/precheck.py` (all 9 steps PASS: ruff, pytest, terrain, validate-data, check-budget, references, web-lint, web-typecheck, web-test with 2034 tests).
+  - `ZOOM_MAX` 8 -> 32 in `web/src/charts/navState.ts`; it applies to the country and the department maps (`scaleLimit` in `provinceMap.ts`).
+  - Tests changed first: `navState.test.ts`, `forecastMap.test.tsx`, `provinceMapBuilder.test.ts` now expect 32 (deliberate spec change, not a weakened test).
+  - Added `docs/action-plan-correcciones-nuevas.md` and the "New corrections" section in `PENDING.md`.
+  - Verified: the three test files above pass (43 tests), `tsc --noEmit` clean. Not run: full `python scripts/precheck.py`, browser check.
+- Worktree needed `npm ci` in `web/` (done).
 
 ## Next
-- Human review of Data section tabs, JSON downloads, and Andes references in the browser.
-- Open PR for `task/data-page-tabs`.
+- Run `python scripts/precheck.py`, then push `task/map-zoom-limits` and open the PR (CI not checked).
+- Then the corrections in order: C7, C2, C3, C4, C5, C1, C6 (last, with mock data).
+- Consider a bigger `BUTTON_FACTOR` (1.25 needs about 15 presses to reach 32x) if the review asks for it.
+- Pending from the other agent (main tree): intro hover effects on the 3D map.

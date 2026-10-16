@@ -23,7 +23,7 @@ describe('zoomMap', () => {
   });
 
   it('does nothing at the limits', () => {
-    const top = chart(8);
+    const top = chart(32);
     zoomMap(top as never, 'in');
     expect(top.dispatchAction).not.toHaveBeenCalled();
     const bottom = chart(1);

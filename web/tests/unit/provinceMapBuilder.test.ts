@@ -91,7 +91,7 @@ describe('buildProvinceMap', () => {
     expect(option.geo.map).toBe(MAP_NAME);
     expect(option.geo.nameProperty).toBe('id');
     expect(option.geo.roam).toBe(true);
-    expect(option.geo.scaleLimit).toEqual({ min: 1, max: 8 });
+    expect(option.geo.scaleLimit).toEqual({ min: 1, max: 32 });
     const map = option.series.find((s) => s.type === 'map')!;
     expect(map.geoIndex).toBe(0);
     expect(map.nameProperty).toBe('id');
