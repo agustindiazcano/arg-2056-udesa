@@ -73,7 +73,13 @@
   --nav-on-accent: #0b1522;
   --intro-light: #9a9679; /* rgb(154, 150, 121): lit provinces, title, button */
   --intro-ink: #e8ebf7;
-  --gold: #e0b341; /* the title "Argentina" lights up in gold on hover, with a gold aura around the whole logo */
+  --gold: #dfa73f; /* warm radiant gold */
+  --gold-highlight: #fae4b8;
+  --gold-deep: #b87f22;
+  --gold-shadow: #85530d;
+  --gold-hover-highlight: #fff2d6;
+  --gold-hover-deep: #c48c28;
+  --gold-hover-shadow: #945f10;
   --intro-on-light: #14080a;
   --intro-line-tint: #aab6e8;
   --intro-grid: rgba(170, 182, 232, 0.24);
