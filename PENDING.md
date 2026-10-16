@@ -136,6 +136,8 @@ Every task below has a brief (`<slug>.md` in the repository root) and a prompt (
 
 ## Done
 
+- [x] `readme-methodology` (branch `task/readme-methodology`): added "Metodología y pipeline de datos" section to `README.md` documenting automated API ingesta, official document normalization, and decoupled architecture without hardcoded data.
+
 - [x] `nav-gold-buttons` (branch `task/nav-gold-buttons`): unified button shape across the entire app to the rounded-rectangle form of the Simulador (`border-radius: var(--radius-md)`); refined gold color palette to warm radiant gold (`#dfa73f`) with champagne highlights (`#fae4b8`) and metallic gradient on the 2056 logo, removing harsh yellow tones.
 
 - [x] `chart-aesthetics` (branch `task/chart-aesthetics`): refined chart-card surfaces, captions, legends, chart/table segmented controls, and data-table scanability with reduced-motion support. Follow-ups: matched simulator and Hacia el 2056 navbars, including gold active section/current-step pills; polished Andes UI. Previewed in the isolated browser; Andes terrain still needs `VITE_MAPTILER_KEY`.
