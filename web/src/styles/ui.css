@@ -1604,6 +1604,68 @@ main.scene-container {
   font-weight: 300;
 }
 
+.data-tabs {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2, 0.5rem);
+  margin: 0 auto 0 0;
+}
+
+.data-tab-btn {
+  background: none;
+  border: 1px solid transparent;
+  padding: var(--space-xs) var(--space-3);
+  border-radius: var(--radius-md);
+  color: var(--muted);
+  font-family: inherit;
+  font-size: var(--font-xl, 1.4rem);
+  font-weight: 300;
+  cursor: pointer;
+  transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+}
+
+.data-tab-btn:hover {
+  color: var(--ink);
+  background: var(--surface);
+}
+
+.data-tab-btn--active {
+  color: var(--gold-highlight);
+  border-color: color-mix(in srgb, var(--gold) 45%, transparent);
+  background: color-mix(in srgb, var(--gold) 12%, var(--intro-bg));
+  font-weight: 500;
+  box-shadow: 0 0 12px color-mix(in srgb, var(--gold) 15%, transparent);
+}
+
+.data-meth-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2, 0.5rem);
+  color: var(--ink-2);
+  font-size: 0.88rem;
+  line-height: 1.55;
+}
+
+.data-meth-body h4 {
+  margin: var(--space-2, 0.5rem) 0 0.1rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.data-meth-body p {
+  margin: 0;
+}
+
+.data-meth-body code {
+  padding: 0.1rem 0.35rem;
+  border-radius: var(--radius-sm, 4px);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  font-size: 0.82rem;
+  font-family: monospace;
+}
+
 .data-select {
   display: inline-flex;
   align-items: center;

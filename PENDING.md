@@ -136,6 +136,8 @@ Every task below has a brief (`<slug>.md` in the repository root) and a prompt (
 
 ## Done
 
+- [x] `data-page-tabs` (branch `task/data-page-tabs`): enhanced Data section with 3 view tabs (Data, Referencias, Metodología), JSON downloads for tables, slides, and references, added all 20 Cruce de los Andes references from README to `references.ts`, and added comprehensive methodology view covering general pipeline and slide-specific methods (Regla del 70, Simulador, PBI 2056).
+
 - [x] `readme-methodology` (branch `task/readme-methodology`): added "Metodología y pipeline de datos" section to `README.md` documenting automated API ingesta, official document normalization, and decoupled architecture without hardcoded data.
 
 - [x] `nav-gold-buttons` (branch `task/nav-gold-buttons`): unified button shape across the entire app to the rounded-rectangle form of the Simulador (`border-radius: var(--radius-md)`); refined gold color palette to warm radiant gold (`#dfa73f`) with champagne highlights (`#fae4b8`) and metallic gradient on the 2056 logo, removing harsh yellow tones.
