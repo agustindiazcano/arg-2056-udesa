@@ -157,7 +157,7 @@ describe('Forecast scene: province map', () => {
     await loadedWithMap();
     const option = mapOption() as unknown as { geo: { roam: boolean; scaleLimit: { min: number; max: number } } };
     expect(option.geo.roam).toBe(true);
-    expect(option.geo.scaleLimit).toEqual({ min: 1, max: 8 });
+    expect(option.geo.scaleLimit).toEqual({ min: 1, max: 32 });
 
     const chart = mapChart()!;
     fireEvent.click(screen.getByRole('button', { name: 'Acercar' }));

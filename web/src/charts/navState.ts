@@ -3,9 +3,9 @@ import type { ProvincesGeo } from '../geo/provinces';
 /** [minLng, minLat, maxLng, maxLat] */
 export type Bbox = [number, number, number, number];
 
-/** The zoom of a 2D map goes from the whole territory to 8 times. */
+/** The zoom of a 2D map goes from the whole territory to 32 times, so a small department can fill the frame. */
 export const ZOOM_MIN = 1;
-export const ZOOM_MAX = 8;
+export const ZOOM_MAX = 32;
 /** One press of `+` zooms in by this factor and one press of `-` by its inverse. */
 export const BUTTON_FACTOR = 1.25;
 

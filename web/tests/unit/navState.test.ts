@@ -2,12 +2,13 @@ import { describe, expect, it } from 'vitest';
 import { BUTTON_FACTOR, ZOOM_MAX, ZOOM_MIN, clampCenter, clampZoom, geoBbox, zoomFactorFor } from '../../src/charts/navState';
 
 describe('clampZoom', () => {
-  it('keeps the zoom between 1 and 8 times', () => {
+  it('keeps the zoom between 1 and 32 times, so a department can fill the frame', () => {
     expect(ZOOM_MIN).toBe(1);
-    expect(ZOOM_MAX).toBe(8);
+    expect(ZOOM_MAX).toBe(32);
     expect(clampZoom(0.5)).toBe(1);
     expect(clampZoom(3)).toBe(3);
-    expect(clampZoom(20)).toBe(8);
+    expect(clampZoom(20)).toBe(20);
+    expect(clampZoom(100)).toBe(32);
   });
 });
 
@@ -17,10 +18,10 @@ describe('zoomFactorFor', () => {
     expect(zoomFactorFor(2, 1 / BUTTON_FACTOR)).toBeCloseTo(1 / BUTTON_FACTOR, 10);
   });
 
-  it('is cut so that the zoom stops at 8 and at 1', () => {
-    expect(zoomFactorFor(7, 2)).toBeCloseTo(8 / 7, 10);
+  it('is cut so that the zoom stops at 32 and at 1', () => {
+    expect(zoomFactorFor(31, 2)).toBeCloseTo(32 / 31, 10);
     expect(zoomFactorFor(1.2, 0.5)).toBeCloseTo(1 / 1.2, 10);
-    expect(zoomFactorFor(8, 1.25)).toBe(1);
+    expect(zoomFactorFor(32, 1.25)).toBe(1);
     expect(zoomFactorFor(1, 0.8)).toBe(1);
   });
 });

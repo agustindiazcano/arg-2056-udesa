@@ -5,7 +5,7 @@ Every task below has a brief (`<slug>.md` in the repository root) and a prompt (
 ## New corrections (`test/correcciones-nuevas.png`, plan in `docs/action-plan-correcciones-nuevas.md`)
 
 Order: C8, C7, C2, C3, C4, C5, C1, C6.
-- [ ] C8 `map-zoom-limits`: free the map zoom, allow zooming in further.
+- [x] C8 `map-zoom-limits`: ZOOM_MAX 8 -> 32 in `web/src/charts/navState.ts` (country and department maps); tests updated. Branch `task/map-zoom-limits`. Not checked visually in the browser.
 - [ ] C7 `map-drill-transition`: smooth transition between country, province and department.
 - [ ] C2 `res-sector-filter-panel`: with the Mining filter, the composition panel shows mining only.
 - [ ] C3 `res-province-drilldown`: selecting a province shows departments if there is data, otherwise production by mining sector.
@@ -14,6 +14,7 @@ Order: C8, C7, C2, C3, C4, C5, C1, C6.
 - [ ] C1 `res-minerals-extend`: add boron, copper, molybdenum; add the Taca Taca project.
 - [ ] C6 `province-profile-slide`: LAST, with mock data (decided by the user; mock never labeled in the UI, listed in `docs/mock-data.md`, release gate still blocks until replaced by real data). New slide with provincial GDP, coparticipation, GDP per capita, exports, population, poverty, unemployment, private / public / registered employment; security filter only if an official provincial series exists.
 - [ ] **Data to verify (human)**: every figure added by C1 and C6 against the original source (INDEC, Secretaria de Mineria, USGS, Ministerio de Economia, Secretaria de Trabajo). Source candidates in section 4 of the plan.
+
 
 ## Task queue (in order)
 
