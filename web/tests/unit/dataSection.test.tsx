@@ -3,7 +3,7 @@ import React from 'react';
 import { act, cleanup, fireEvent, render, screen, within } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { slideCsv, tableCsv, referencesCsv } from '../../src/datasets/csv';
+import { slideCsv, tableCsv, referencesCsv, tableJson, slideJson, referencesJson } from '../../src/datasets/csv';
 import { REFERENCES } from '../../src/datasets/references';
 import { buildSlides } from '../../src/datasets/slides';
 import { DataPage } from '../../src/datasets/DataPage';
@@ -12,7 +12,7 @@ import { SECTION_LABELS } from '../../src/content/sectionLabels';
 import { reduce } from '../../src/state/reducer';
 import { useStore } from '../../src/state/store';
 
-describe('the CSV of a table', () => {
+describe('the CSV and JSON exports of a table', () => {
   it('starts with the byte order mark, ends lines with CRLF and keeps numbers as they are', () => {
     const csv = tableCsv({ id: 't', title: 'T', columns: ['Año', 'PBI'], rows: [[2025, 640.5], [2026, null]] });
     expect(csv.startsWith('﻿')).toBe(true);
@@ -45,6 +45,34 @@ describe('the CSV of a table', () => {
     const csv = referencesCsv(REFERENCES);
     expect(csv.split('\r\n')[0]).toBe('﻿id,fuente,url,estado');
     expect(csv).toContain('https://www.indec.gob.ar/ftp/cuadros/economia/productividad_stock_capital_10_26.pdf');
+  });
+
+  it('converts a table to JSON objects with column names as keys', () => {
+    const json = tableJson({ id: 't', title: 'T', columns: ['Año', 'PBI'], rows: [[2025, 640.5], [2026, null]] });
+    expect(json).toEqual([
+      { Año: 2025, PBI: 640.5 },
+      { Año: 2026, PBI: null }
+    ]);
+  });
+
+  it('converts a full slide with all its tables to structured JSON', () => {
+    const json = slideJson({
+      id: '1',
+      label: '1 · Uno',
+      title: 'Uno',
+      mock: true,
+      tables: [{ id: 't1', title: 'T1', columns: ['col'], rows: [['val']] }],
+      refs: []
+    });
+    expect(json.id).toBe('1');
+    expect(json.tables[0]!.rows).toEqual([{ col: 'val' }]);
+  });
+
+  it('converts references to structured JSON', () => {
+    const json = referencesJson(REFERENCES);
+    expect(json.length).toBeGreaterThan(0);
+    expect(json[0]).toHaveProperty('id');
+    expect(json[0]).toHaveProperty('url');
   });
 });
 
@@ -106,18 +134,38 @@ describe('the Data page', () => {
     vi.restoreAllMocks();
   });
 
-  it('has a selector with the number and title of each slide, a section per slide and the references at the end', () => {
+  it('has tabs for Data, Referencias, and Metodología, showing the slide selector on Data', () => {
     render(<DataPage />);
+    expect(screen.getByRole('button', { name: 'Data' })).toBeTruthy();
+    expect(screen.getByRole('button', { name: 'Referencias' })).toBeTruthy();
+    expect(screen.getByRole('button', { name: 'Metodología' })).toBeTruthy();
+
     const select = screen.getByRole('combobox', { name: 'Diapositiva' }) as HTMLSelectElement;
     const options = within(select).getAllByRole('option').map((o) => o.textContent);
     expect(options[0]).toBe('1 · El PBI de Argentina desde 1960');
     expect(options).toContain('5 · Productividad');
     expect(options.at(-1)).toMatch(/^Simulador/);
     expect(screen.getByRole('heading', { name: '1 · El PBI de Argentina desde 1960' })).toBeTruthy();
+  });
+
+  it('switches between Data, Referencias, and Metodología tabs', () => {
+    render(<DataPage />);
+    // Click Referencias tab
+    fireEvent.click(screen.getByRole('button', { name: 'Referencias' }));
     expect(screen.getByRole('heading', { name: 'Referencias' })).toBeTruthy();
     const link = screen.getAllByRole('link', { name: /INDEC/ })[0] as HTMLAnchorElement;
     expect(link.href).toContain('indec.gob.ar');
     expect(link.target).toBe('_blank');
+
+    // Click Metodología tab
+    fireEvent.click(screen.getByRole('button', { name: 'Metodología' }));
+    expect(screen.getByRole('heading', { name: 'Metodología y pipeline de datos' })).toBeTruthy();
+    expect(screen.getByText(/La regla del 70/)).toBeTruthy();
+    expect(screen.getByText(/Simulador del PBI y Proyecciones a 2056/)).toBeTruthy();
+
+    // Click back to Data tab
+    fireEvent.click(screen.getByRole('button', { name: 'Data' }));
+    expect(screen.getByRole('combobox', { name: 'Diapositiva' })).toBeTruthy();
   });
 
   it('shows only the tables of the chosen slide, not those of the others', () => {
@@ -133,7 +181,7 @@ describe('the Data page', () => {
     expect(screen.getAllByRole('heading', { level: 3 })[0]!.textContent).toBe('4 · Composición del PBI y exportaciones por complejo');
   });
 
-  it('downloads the CSV of the slide chosen in the selector, and one table at a time', () => {
+  it('downloads CSV and JSON for slides, tables, and references', () => {
     render(<DataPage />);
     fireEvent.change(screen.getByRole('combobox', { name: 'Diapositiva' }), { target: { value: '14' } });
     act(() => {
@@ -141,12 +189,30 @@ describe('the Data page', () => {
     });
     expect(saved).toEqual(['diapositiva-14-productividad.csv']);
     act(() => {
+      fireEvent.click(screen.getByRole('button', { name: 'Descargar JSON de la diapositiva' }));
+    });
+    expect(saved.at(-1)).toBe('diapositiva-14-productividad.json');
+
+    act(() => {
       fireEvent.click(screen.getAllByRole('button', { name: /^Descargar CSV: / })[0]!);
     });
-    expect(saved).toHaveLength(2);
+    expect(saved).toHaveLength(3);
+
+    act(() => {
+      fireEvent.click(screen.getAllByRole('button', { name: /^Descargar JSON: / })[0]!);
+    });
+    expect(saved).toHaveLength(4);
+
+    // Switch to Referencias tab
+    fireEvent.click(screen.getByRole('button', { name: 'Referencias' }));
     act(() => {
       fireEvent.click(screen.getByRole('button', { name: 'Descargar referencias (CSV)' }));
     });
     expect(saved.at(-1)).toBe('referencias.csv');
+
+    act(() => {
+      fireEvent.click(screen.getByRole('button', { name: 'Descargar referencias (JSON)' }));
+    });
+    expect(saved.at(-1)).toBe('referencias.json');
   });
 });

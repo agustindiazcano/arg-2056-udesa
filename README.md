@@ -15,6 +15,12 @@ La incertidumbre se muestra como abanico de percentiles; las cifras en disputa, 
 
 Un proyecto de **ciencia de datos y visualización**: toma datos abiertos de organismos oficiales e internacionales, los baja con un pipeline reproducible (cada archivo con su hash, su fuente y su fecha), los valida y los muestra en gráficos interactivos y mapas, 2D y 3D. Cada gráfico tiene su tabla, y cada número de la presentación está en la página Data con su referencia.
 
+## Metodología y pipeline de datos
+
+1. **Pipelines automatizados vía API:** Para las series macroeconómicas y sectoriales internacionales y nacionales (Banco Mundial, FMI, Secretaría de Energía y Secretaría de Agricultura), se implementaron scripts en Python que consultan sus APIs oficiales (REST, SDMX y CKAN). Estos scripts limpian, normalizan unidades (e.g. dólares reales constantes de 2015, barriles equivalentes, toneladas) y exportan los resultados a archivos JSON estructurados y versionados en el repositorio (`worldGdp.json`, `energyArgentina.json`, `agroArgentina.json`, `imfWeo.json`, entre otros).
+2. **Extracción y normalización de fuentes oficiales:** Para publicaciones e informes periódicos que no cuentan con APIs abiertas (como las cuentas nacionales, informes de complejos exportadores y reportes de productividad del INDEC, o los informes de inversión de la Secretaría de Minería y USGS), los datos se extrajeron directamente de los documentos, cuadros estadísticos y balances oficiales primarios. Su consistencia interna y sumas de componentes se validan mediante pruebas automáticas.
+3. **Arquitectura desacoplada y trazabilidad:** Los datos no están hardcodeados de manera estática ni aislada en la interfaz: el frontend consume exclusivamente estos datasets estructurados y versionados (JSON y módulos tipados con TypeScript). Cada registro cuenta con metadatos explícitos de trazabilidad: organismo emisor, enlace o identificador de publicación, fecha de captura, período relevado y unidad de medida.
+
 ## Stack
 
 | Capa | Tecnología |
