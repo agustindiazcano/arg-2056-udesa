@@ -1,16 +1,20 @@
 # Last Context
 
 ## State
-- **Branch**: `task/data-page-tabs`
-- **Task**: Enhance Data section with tabs for Data, Referencias, and Metodología, JSON downloads, and Andes sources.
+- **Branch**: `task/clean-ui-investigation-labels`
+- **Task**: Remove all "por investigar", "en investigación", and verification status labels from the UI, and enforce agent rule in AGENTS.md and GEMINI.md.
 - **Key changes**:
-  - Transformed the static Data header into 3 title-style tab buttons: "Data", "Referencias", and "Metodología".
-  - "Data" tab provides table exploration by slide, with CSV and new JSON downloads for both individual tables and entire slides (`downloadJson`, `tableJson`, `slideJson`).
-  - "Referencias" tab lists all categorized sources, links, and verification status, including the 20 Cruce de los Andes historical references (H1-H25) from the README, with CSV and JSON downloads.
-  - "Metodología" tab renders `MethodologyView` detailing the overall API and document pipeline and slide-specific methodologies (PBI base, Regla del 70, Productividad, IA, Recursos, Simulador, y Proyecciones al 2056).
-  - Cleaned styling in `ui.css` using CSS tokens and `color-mix` without color literals.
-  - Validated with full `python scripts/precheck.py` (all 9 steps PASS: ruff, pytest, terrain, validate-data, check-budget, references, web-lint, web-typecheck, web-test with 2034 tests).
+  - Added strict rule to `AGENTS.md` and `GEMINI.md`: "Never state in the UI that something is pending investigation, to be researched, or that it is test/mock data. That belongs in documentation files, never in the site's UI."
+  - Removed "Hipótesis por investigar" from Slide 8 adverse scenario (`ForecastUncertaintyStep.tsx`) and polished draft footnotes and detail copy into academic, objective explanations.
+  - Removed unverified/pending strings from `DevelopmentStep.tsx` ("definiciones y series en investigación", "Sin cifras verificadas", "Serie pendiente de verificación", "Pendientes", "aporte a investigar").
+  - Cleaned `quality.ts` table descriptions and `slides.ts` tables for slides 16 and 17, replacing placeholder investigation labels with structured conceptual schemas and multilateral reference organizations.
+  - Removed verification badge rendering from Data page Referencias tab (`DataPage.tsx`).
+  - Cleaned internal verification annotations from bibliographic labels in `references.ts`.
+  - Added comprehensive automated assertions in `noDataLabels.test.tsx` verifying that `DevelopmentStep`, `ForecastUncertaintyStep`, and Data tabs contain no forbidden investigation/unverified labels.
+  - Verified with `web/tests/unit/noDataLabels.test.tsx`, `dataMigration.test.ts`, `eslint`, and `tsc --noEmit`.
 
 ## Next
-- Human review of Data section tabs, JSON downloads, and Andes references in the browser.
-- Open PR for `task/data-page-tabs`.
+- Intro scene enhancements:
+  - On hover over "Cruce de los Andes" button, illuminate San Juan and Mendoza on the 3D intro map.
+  - On hover over "Hacia 2056" button, illuminate all Argentine provinces in gold, including Islas Malvinas.
+  - On hover over the 3D map provinces, display a tooltip with the province name.

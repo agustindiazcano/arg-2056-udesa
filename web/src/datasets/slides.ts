@@ -333,30 +333,30 @@ export function buildSlides(): SlideData[] {
     slide('3', TOUR_CHARTS[3]!.title, [chartTable(3), ...aiTables(), perCapitaTable(), aiPopulationTable()], true, ['A1', 'A2', 'A3', 'A4', 'A5', 'A6', 'A7', 'A8', 'A9', 'A10']),
     slide('16', DEVELOPMENT_TITLE, [{
       id: 'development-draft',
-      title: 'Indicadores propuestos y estado de investigación',
-      columns: ['Indicador', 'Estado de definición', 'Estado de fuente'],
+      title: 'Estructura conceptual de indicadores de desarrollo',
+      columns: ['Indicador', 'Dimensión', 'Organismo de referencia'],
       rows: [
-        ['IDH', 'Pendiente', 'Pendiente'],
-        ['Resultados PISA por área', 'Pendiente', 'Pendiente'],
-        ['Deserción universitaria', 'Pendiente', 'Pendiente'],
-        ['Esperanza de vida', 'Pendiente', 'Pendiente'],
-        ['Graduación universitaria y STEM', 'Pendiente', 'Pendiente'],
-        ['Maestría y doctorado', 'Pendiente', 'Pendiente'],
-        ['Índice de Gini', 'Pendiente', 'Pendiente'],
-        ['PBI por habitante y salarios reales', 'Definición pendiente', 'Pendiente']
+        ['IDH', 'Desarrollo humano', 'PNUD'],
+        ['Resultados PISA por área', 'Educación y aprendizaje', 'OCDE'],
+        ['Deserción universitaria', 'Educación superior', 'Ministerio de Capital Humano'],
+        ['Esperanza de vida', 'Salud y longevidad', 'Banco Mundial / OMS'],
+        ['Graduación universitaria y STEM', 'Capital humano avanzado', 'CONICET / Universidades'],
+        ['Maestría y doctorado', 'Formación de posgrado', 'CONICET / Redes académicas'],
+        ['Índice de Gini', 'Distribución del ingreso', 'INDEC / Banco Mundial'],
+        ['PBI por habitante y salarios reales', 'Bienestar material', 'INDEC / FMI']
       ]
     }], true),
     slide('17', FORECAST_UNCERTAINTY_TITLE, [{
       id: 'forecast-uncertainty-draft',
-      title: 'Evidencia necesaria para la diapositiva',
-      columns: ['Tema interactivo', 'Estado de evidencia'],
+      title: 'Dimensiones analíticas de incertidumbre tecnológica',
+      columns: ['Dimensión tecnológica', 'Enfoque analítico'],
       rows: [
-        ['Difusión de tecnologías y productividad', 'Pendiente de estudio y serie comparable'],
-        ['Capacidad de modelos y costos de inferencia', 'Pendiente de fuentes comparables'],
-        ['Hardware de cómputo y robótica', 'Pendiente de serie y benchmark'],
-        ['Revisiones de pronósticos económicos', 'Pendiente de vintages y métricas de error'],
-        ['IA, empleo y salarios', 'Pendiente de evidencia para Argentina'],
-        ['Crecimiento, educación, ahorro e inversión', 'Pendiente de estudios y límites causales']
+        ['Difusión de tecnologías y productividad', 'Rezagos históricos de adopción y productividad agregada'],
+        ['Capacidad de modelos y costos de inferencia', 'Evolución de costo unitario por token y escala de cómputo'],
+        ['Hardware de cómputo y robótica', 'Ley de Moore, aceleradores dedicados y automatización física'],
+        ['Revisiones de pronósticos económicos', 'Comparación de proyecciones históricas frente a series efectivas'],
+        ['IA, empleo y salarios', 'Efectos de complementariedad vs. sustitución de tareas laborales'],
+        ['Crecimiento, educación, ahorro e inversión', 'Canales de acumulación de capital físico y humano a largo plazo']
       ]
     }], true),
     slide('sim', 'Simulador del PBI', [

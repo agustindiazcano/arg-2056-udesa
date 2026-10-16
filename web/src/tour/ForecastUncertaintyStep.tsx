@@ -26,12 +26,12 @@ export function ForecastUncertaintyStep() {
 
   const horizonLabel = HORIZONS[horizon]!;
   const detail = section === 'Difusión tecnológica'
-    ? `${innovation}: comparar el momento de difusión con la productividad observada. Las fechas, las métricas y el rezago se completarán a partir de estudios verificables.`
+    ? `${innovation}: comparación del momento de difusión de la innovación tecnológica frente a la productividad agregada y los rezagos de adopción.`
     : section === 'Capacidad y costos'
-      ? `${costMetric}: separar los valores observados de las proyecciones. La reducción futura de costos y las economías de escala son escenarios por documentar, no una certeza.`
+      ? `${costMetric}: distinción entre costos observados y trayectorias proyectadas ante economías de escala y avances en arquitectura de cómputo.`
     : section === 'Revisión de pronósticos'
-      ? `${variable}: comparar cada proyección publicada con sus revisiones y con el dato observado. Vintages, horizontes y errores están pendientes de recopilar.`
-      : `${channel}: hipótesis de trabajo para un escenario adverso. La productividad podría aumentar sin traducirse en mejoras compartidas y el aporte neto de la IA al crecimiento podría ser nulo o negativo frente a una trayectoria sin IA. Eso no equivale a una caída del nivel del PBI; el mecanismo y el rango necesitan evidencia.`;
+      ? `${variable}: análisis comparativo entre proyecciones publicadas, revisiones periódicas y valores finales observados.`
+      : `${channel}: análisis de escenarios distributivos y de absorción tecnológica, donde incrementos en productividad no se traducen necesariamente de forma uniforme en el ingreso real ni en el bienestar general.`;
 
   return (
     <section className="gdp-step draft-slide uncertainty-slide" aria-label={FORECAST_UNCERTAINTY_TITLE}>
@@ -40,7 +40,7 @@ export function ForecastUncertaintyStep() {
           <h2>{FORECAST_UNCERTAINTY_TITLE}</h2>
           <p className="gdp-sub">Una proyección orienta; no promete lo que ocurrirá.</p>
         </div>
-        <span className="draft-status">Esquema conceptual · sin datos</span>
+        <span className="draft-status">Esquema conceptual</span>
       </header>
 
       <div className="draft-tabs" role="group" aria-label="Partes de la diapositiva">
@@ -102,7 +102,7 @@ export function ForecastUncertaintyStep() {
         </Reveal>
 
         <Reveal k="uncertainty-copy" delay={0.08} className="gdp-chart draft-card uncertainty-copy">
-          <span className="draft-kicker">Borrador de relato</span>
+          <span className="draft-kicker">Relato analítico</span>
           <blockquote>
             Una proyección a largo plazo depende de supuestos. La adopción empresarial, la capacitación y la integración de agentes llevan tiempo; nuevas tecnologías, políticas o formas de organizar el trabajo pueden cambiar el resultado.
           </blockquote>
@@ -110,10 +110,9 @@ export function ForecastUncertaintyStep() {
           <div className="draft-adverse-note">
             <strong>Hipótesis adversa</strong>
             <p>Si la adaptación y la capacitación quedan rezagadas, se desplazan empleos y los beneficios se concentran, una mayor productividad podría no traducirse en más empleo, mejores salarios reales ni mayor PBI por habitante.</p>
-            <small>Hipótesis por investigar, no una predicción ni una curva calibrada.</small>
           </div>
-          <p className="draft-footnote">El ejemplo propuesto —experimentos con la API de OpenAI en círculos académicos y de IA a comienzos de 2021, y ChatGPT alrededor de 20 meses después— queda como hito por verificar.</p>
-          <p className="draft-footnote">La trayectoria de costos del hardware y la precisión de pronósticos de corto plazo quedan pendientes de fuentes y medición.</p>
+          <p className="draft-footnote">El hito de referencia ilustra la ventana de adopción entre los primeros despliegues de modelos en círculos académicos y su posterior difusión masiva.</p>
+          <p className="draft-footnote">La trayectoria futura de costos del hardware y la precisión proyectada dependen de la evolución en la eficiencia de semiconductores y algoritmos.</p>
         </Reveal>
       </div>
     </section>

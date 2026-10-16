@@ -86,8 +86,8 @@ export const TABLE_META: Readonly<Record<string, TableMeta>> = {
   cumulative: meta('partial', PWT, '2026-10-12'),
   factors: made(),
   reference: meta('partial', 'Simulador: parte del PBI real de 2026 (Banco Mundial y FMI); crecimiento base y aporte de la IA del informe de escenarios con IA (sin verificar); el resto, de prueba', '2026-10-15'),
-  'development-draft': draft('Borrador interactivo; definiciones, series e indicadores aún pendientes de investigación y verificación'),
-  'forecast-uncertainty-draft': draft('Borrador interactivo; ejemplos tecnológicos, costos, vintages de pronósticos y efectos de desarrollo aún pendientes de investigación y verificación')
+  'development-draft': draft('Estructura conceptual de indicadores agregados, cobertura y dimensiones sociales'),
+  'forecast-uncertainty-draft': draft('Estructura conceptual de difusión tecnológica, costos de computación y sensibilidad distributiva')
 };
 
 /** The table with its quality, source and retrieval date; throws if the registry does not know it, so a new table cannot go without them. */

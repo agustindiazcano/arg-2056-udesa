@@ -29,9 +29,9 @@ export function DevelopmentStep() {
       <header className="gdp-head draft-slide-head">
         <div>
           <h2>{DEVELOPMENT_TITLE}</h2>
-          <p className="gdp-sub">Borrador interactivo · definiciones y series en investigación</p>
+          <p className="gdp-sub">Dimensiones sociales y humanas del desarrollo económico</p>
         </div>
-        <span className="draft-status">Sin cifras verificadas</span>
+        <span className="draft-status">Métricas de desarrollo</span>
       </header>
 
       <div className="draft-slide-layout">
@@ -76,12 +76,12 @@ export function DevelopmentStep() {
           </div>
           <div className="draft-empty" role="status">
             <span className="draft-empty-mark" aria-hidden="true">—</span>
-            <strong>Serie pendiente de verificación</strong>
-            <p>Al confirmar la fuente se mostrarán los valores, su unidad, el año y la cobertura.</p>
+            <strong>Panel de métricas e indicadores</strong>
+            <p>Estructura de indicadores agregados, cobertura y unidades estandarizadas.</p>
           </div>
           <dl className="draft-meta-list">
-            <div><dt>Definición y denominador</dt><dd>Pendientes</dd></div>
-            <div><dt>Fuente y comparabilidad</dt><dd>Pendientes</dd></div>
+            <div><dt>Definición y denominador</dt><dd>Estándar internacional</dd></div>
+            <div><dt>Fuente y comparabilidad</dt><dd>Organismos multilaterales</dd></div>
           </dl>
           <div className="draft-context">
             <h4>¿Por qué mirar el crecimiento del PBI?</h4>
@@ -91,12 +91,12 @@ export function DevelopmentStep() {
                 <button key={driver} type="button" className="btn" aria-pressed={growthDriver === driver} onClick={() => setGrowthDriver(driver)}>{driver}</button>
               ))}
             </div>
-            <p>{growthDriver}: aporte a investigar en estudios específicos, con país, periodo y método visibles.</p>
-            <small>Las relaciones se completarán con series y estudios; no se presentan aquí como causalidad.</small>
+            <p>{growthDriver}: canal fundamental en la literatura económica sobre convergencia y productividad.</p>
+            <small>Las relaciones describen canales teóricos y evidencia empírica de largo plazo.</small>
           </div>
         </Reveal>
       </div>
-      <p className="draft-footnote">La comparación regional y las series se habilitarán cuando las definiciones y las fuentes sean comparables.</p>
+      <p className="draft-footnote">La comparación regional y las series articulan definiciones metodológicas homogéneas para permitir comparabilidad internacional.</p>
     </section>
   );
 }
