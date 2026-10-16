@@ -2,6 +2,19 @@
 
 Every task below has a brief (`<slug>.md` in the repository root) and a prompt (`TASKS.md`). The list of all tasks, with their blockers, is `roadmap.md`; the status table is "Next Steps" in `TASKS.md`. READY = can start now. BLOCKED = needs what the line says.
 
+## New corrections (`test/correcciones-nuevas.png`, plan in `docs/action-plan-correcciones-nuevas.md`)
+
+Order: C8, C7, C2, C3, C4, C5, C1, C6.
+- [ ] C8 `map-zoom-limits`: free the map zoom, allow zooming in further.
+- [ ] C7 `map-drill-transition`: smooth transition between country, province and department.
+- [ ] C2 `res-sector-filter-panel`: with the Mining filter, the composition panel shows mining only.
+- [ ] C3 `res-province-drilldown`: selecting a province shows departments if there is data, otherwise production by mining sector.
+- [ ] C4 `res-department-projects`: click on a department expands it and lists mining projects when data exists.
+- [ ] C5 `map-search`: search by province or department.
+- [ ] C1 `res-minerals-extend`: add boron, copper, molybdenum; add the Taca Taca project.
+- [ ] C6 `province-profile-slide`: LAST, with mock data (decided by the user; mock never labeled in the UI, listed in `docs/mock-data.md`, release gate still blocks until replaced by real data). New slide with provincial GDP, coparticipation, GDP per capita, exports, population, poverty, unemployment, private / public / registered employment; security filter only if an official provincial series exists.
+- [ ] **Data to verify (human)**: every figure added by C1 and C6 against the original source (INDEC, Secretaria de Mineria, USGS, Ministerio de Economia, Secretaria de Trabajo). Source candidates in section 4 of the plan.
+
 ## Task queue (in order)
 
 1. [x] `data-pipeline`: scripts and processed datasets with `source` + `retrieved_at` (resources, economy, population, provinces).
@@ -135,6 +148,10 @@ Every task below has a brief (`<slug>.md` in the repository root) and a prompt (
 - [ ] `data/mock/` has no research mocks (`ai_estimates.json` and the other four are generated only in tests); `scene-ai-revolution` wires `ai_estimates.json`.
 
 ## Done
+
+- [x] `slide3-charts-restyle` (branch `task/intro-hover-effects`): restyled Slide 3 (Cuarta revolución industrial / IA) charts, palette, and card system to match Slide 5 (Regla del 70): solid clean Y-grid lines (`tokens.grid`), no X-grid lines, eliminated blurry `shadowBlur` glow and muddy overlapping `areaStyle` gradients, applied crisp vector line styling, unified cards and headers using `.rule70-card`, `.rule70-card-head`, `.rule70-legend`, `.rule70-key`, and `.rule70-table`, and set population series to `tokens.blue`.
+
+- [x] `intro-hover-effects` (branch `task/intro-hover-effects`): enhanced 3D intro map interactions: hovering "Cruce de los Andes" button highlights only San Juan and Mendoza; hovering "Hacia el 2056" button illuminates all 24 provinces + Islas Malvinas lifted in gold (`var(--gold)`); hovering any province in the 3D map displays a floating tooltip with the province name. Fully covered in `intro.test.tsx`.
 
 - [x] `data-page-tabs` (branch `task/data-page-tabs`): enhanced Data section with 3 view tabs (Data, Referencias, Metodología), JSON downloads for tables, slides, and references, added all 20 Cruce de los Andes references from README to `references.ts`, and added comprehensive methodology view covering general pipeline and slide-specific methods (Regla del 70, Simulador, PBI 2056).
 

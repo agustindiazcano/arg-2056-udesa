@@ -26,3 +26,4 @@ web/test-results/
 # Annotated reference screenshots (local only)
 test/*.png
 visual-corrections/
+.gemini/
