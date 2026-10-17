@@ -6,7 +6,7 @@ Every task below has a brief (`<slug>.md` in the repository root) and a prompt (
 
 Order: C8, C7, C2, C3, C4, C5, C1, C6.
 - [x] C8 `map-zoom-limits`: ZOOM_MAX 8 -> 32 in `web/src/charts/navState.ts` (country and department maps); tests updated. Branch `task/map-zoom-limits`. Not checked visually in the browser.
-- [ ] C7 `map-drill-transition`: smooth transition between country, province and department.
+- [x] C7 `map-drill-transition`: smooth transition between country, province and department. Camera glides to the selected province (`animationDurationUpdate` 450 ms, cubicInOut) and the drawn map settles in (fade + scale) when it swaps country <-> departments; instant with reduced motion. `web/src/charts/drillTransition.ts`, tests `drillTransition.test.tsx`, `mapDrillTransition.test.tsx`. Branch `task/map-drill-transition`. Not checked visually in the browser.
 - [ ] C2 `res-sector-filter-panel`: with the Mining filter, the composition panel shows mining only.
 - [ ] C3 `res-province-drilldown`: selecting a province shows departments if there is data, otherwise production by mining sector.
 - [ ] C4 `res-department-projects`: click on a department expands it and lists mining projects when data exists.
