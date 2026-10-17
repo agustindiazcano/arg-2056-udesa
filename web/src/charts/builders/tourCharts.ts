@@ -2,9 +2,9 @@ import { tokens } from '../../styles/tokens.js';
 import { formatAxisNumber, formatValue } from '../format.js';
 import { fade } from './gdp.js';
 
-const GRID_LINE = { color: tokens.grid, type: 'dashed' } as const;
+const LINE = { color: tokens.grid } as const;
 
-/** The axes the Recorrido charts share: dashed grid lines in both directions, quiet labels. */
+/** The axes the Recorrido charts share: clean solid y-grid lines, quiet labels (matching Slide 5 style). */
 function axes(categories: string[], labelEvery?: number, boundaryGap = true) {
   return {
     grid: { left: 8, right: 24, top: 24, bottom: 8, containLabel: true },
@@ -15,11 +15,11 @@ function axes(categories: string[], labelEvery?: number, boundaryGap = true) {
       axisLine: { lineStyle: { color: tokens.baseline } },
       axisTick: { show: false },
       axisLabel: { color: tokens.ink2, ...(labelEvery ? { interval: labelEvery } : {}) },
-      splitLine: { show: true, ...(labelEvery ? { interval: labelEvery } : {}), lineStyle: GRID_LINE }
+      splitLine: { show: false }
     },
     yAxis: {
       type: 'value',
-      splitLine: { lineStyle: GRID_LINE },
+      splitLine: { lineStyle: LINE },
       axisLabel: { color: tokens.muted, formatter: (v: number) => formatAxisNumber(v) }
     }
   };
@@ -165,9 +165,8 @@ export function buildLines(xLabels: string[], series: LineChartSeries[], opts: {
       smooth: 0.25,
       symbol: 'none',
       z: 3,
-      lineStyle: { width: 3, color: s.color, ...(s.dashed ? { type: 'dashed' } : {}), shadowBlur: 12, shadowColor: `${s.color}88` },
-      itemStyle: { color: s.color },
-      areaStyle: { color: fade(s.color, '40', '00') }
+      lineStyle: { width: 3, color: s.color, ...(s.dashed ? { type: 'dashed' } : {}) },
+      itemStyle: { color: s.color }
     }))
   };
   return { option, summary: opts.summary };
@@ -186,6 +185,7 @@ export function buildFluidLines(
     yMax?: number;
     showHead?: boolean;
     showGhost?: boolean;
+    area?: boolean;
   }
 ) {
   const minYear = years[0]!;
@@ -230,12 +230,10 @@ export function buildFluidLines(
       lineStyle: {
         width: 3,
         color: s.color,
-        ...(s.dashed ? { type: 'dashed' } : {}),
-        shadowBlur: 12,
-        shadowColor: `${s.color}88`
+        ...(s.dashed ? { type: 'dashed' } : {})
       },
       itemStyle: { color: s.color },
-      areaStyle: { color: fade(s.color, '40', '00') }
+      ...(opts.area ? { areaStyle: { color: fade(s.color, '40', '00') } } : {})
     };
   });
 
@@ -257,16 +255,14 @@ export function buildFluidLines(
             type: 'line',
             data: [[currentYear, headVal]],
             symbol: 'circle',
-            symbolSize: 10,
+            symbolSize: 8,
             z: 5,
             silent: true,
             lineStyle: { opacity: 0 },
             itemStyle: {
               color: s.color,
-              borderColor: tokens.ink,
-              borderWidth: 2,
-              shadowBlur: 14,
-              shadowColor: s.color
+              borderColor: '#ffffff',
+              borderWidth: 2
             }
           });
         }
@@ -288,7 +284,7 @@ export function buildFluidLines(
         lineStyle: {
           width: 1.5,
           color: s.color,
-          opacity: 0.28,
+          opacity: 0.35,
           type: 'dashed'
         }
       });
@@ -324,13 +320,13 @@ export function buildFluidLines(
       axisLine: { lineStyle: { color: tokens.baseline } },
       axisTick: { show: false },
       axisLabel: { color: tokens.ink2, hideOverlap: true, formatter: (v: number) => String(Math.round(v)) },
-      splitLine: { show: true, lineStyle: GRID_LINE }
+      splitLine: { show: false }
     },
     yAxis: {
       type: 'value',
       min: yMin,
       max: yMax,
-      splitLine: { lineStyle: GRID_LINE },
+      splitLine: { lineStyle: LINE },
       axisLabel: { color: tokens.muted, formatter: (v: number) => formatAxisNumber(v) }
     },
     series: [...ghostSeries, ...seriesData, ...headDots]
@@ -406,13 +402,13 @@ export function buildFollowedSeries(
       axisLine: { lineStyle: { color: tokens.baseline } },
       axisTick: { show: false },
       axisLabel: { color: tokens.muted, formatter: (v: number) => String(Math.round(v)) },
-      splitLine: { show: true, lineStyle: GRID_LINE }
+      splitLine: { show: false }
     },
     yAxis: {
       type: 'value',
       min: 0,
       max: frame.yMax,
-      splitLine: { lineStyle: GRID_LINE },
+      splitLine: { lineStyle: LINE },
       axisLabel: { color: tokens.muted, formatter: (v: number) => formatAxisNumber(v) }
     },
     series: [

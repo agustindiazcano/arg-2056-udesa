@@ -117,7 +117,7 @@ export function AiStep() {
 
   const popYears = useMemo(() => (from1960 ? [...hist.years.slice(0, -1), ...pop.years] : pop.years), [from1960, hist, pop]);
   const popValues = useMemo(() => (from1960 ? [...histPop.slice(0, -1), ...pop.values] : pop.values), [from1960, histPop, pop]);
-  const popLines: Line[] = useMemo(() => [{ name: 'Población', values: popValues, color: tokens.muted }], [popValues]);
+  const popLines: Line[] = useMemo(() => [{ name: 'Población', values: popValues, color: tokens.blue }], [popValues]);
   const popSummary = `Población de Argentina de ${num(popValues[0]!)} millones en ${FIRST} a ${num(popValues.at(-1)!)} en ${LAST}`;
 
   const bigInterval = from1960 ? 15 : 5;
@@ -203,46 +203,55 @@ export function AiStep() {
         </div>
       </header>
 
-      <div className="prov-grid">
-        <Reveal k="main" className="gdp-chart prov-map">
-          <div className="world-year" aria-hidden="true">
-            <strong>{shownYear}</strong>
-            <span>{formatValue(gdpLines[1]!.values[at] ?? null, gdp.unit)}</span>
+      <div className="prov-grid ai-grid-layout">
+        <Reveal k="main" className="gdp-chart rule70-card ai-main-card">
+          <div className="rule70-card-head">
+            <div className="ai-head-group">
+              <strong>PBI real de Argentina ({gdp.unit})</strong>
+              <span className="ai-head-year">{shownYear}: {formatValue(gdpLines[1]!.values[at] ?? null, gdp.unit)}</span>
+            </div>
+            <div className="rule70-legend">
+              {AI_SCENARIOS.map((s) => (
+                <span key={s.id} className="ai-legend-item">
+                  <span className="rule70-key" style={{ background: s.color }} aria-hidden="true" /> {s.name}
+                </span>
+              ))}
+            </div>
           </div>
-          <div className="ai-key-row ai-key-small" role="list" aria-label="Escenarios">
-            {AI_SCENARIOS.map((s) => (
-              <span key={s.id} role="listitem" className="ai-key">
-                <span className="tour-swatch" style={{ background: s.color }} aria-hidden="true" /> {s.name}
-              </span>
-            ))}
-          </div>
-          <div className="tour-chart">
+          <div className="rule70-chart ai-main-chart">
             <TourChart spec={bigSpecTimed} mode={view} key={`${run}-${from1960}`}>
               <EChart option={big} aria-label={gdpSummary} />
             </TourChart>
           </div>
         </Reveal>
 
-        <div className="prov-side">
-          <Reveal k="small" delay={0.07} className="gdp-chart ai-small" role="region" aria-label="PBI per cápita y población">
+        <div className="prov-side ai-side-col">
+          <Reveal k="small" delay={0.07} className="gdp-chart rule70-card ai-small" role="region" aria-label="PBI per cápita y población">
             <div className="ai-small-charts">
-              <div className="ai-small-chart">
-                <strong className="composition-title">PBI per cápita (miles de USD)</strong>
-                <div className="tour-chart">
+              <div className="ai-subcard">
+                <div className="rule70-card-head">
+                  <strong>PBI per cápita (miles de USD)</strong>
+                </div>
+                <div className="rule70-chart ai-subcard-chart">
                   <EChart option={small} aria-label={perCapitaSummary} />
                 </div>
               </div>
-              <div className="ai-small-chart">
-                <strong className="composition-title">Población (millones)</strong>
-                <div className="tour-chart">
+              <div className="ai-subcard">
+                <div className="rule70-card-head">
+                  <strong>Población (millones)</strong>
+                </div>
+                <div className="rule70-chart ai-subcard-chart">
                   <EChart option={popOption} aria-label={popSummary} />
                 </div>
               </div>
             </div>
           </Reveal>
 
-          <Reveal k="numbers" delay={0.14} className="gdp-chart ai-numbers" role="region" aria-label={`Indicadores en ${shownYear}`}>
-            <table aria-label={`Indicadores por escenario en ${shownYear}`}>
+          <Reveal k="numbers" delay={0.14} className="gdp-chart rule70-card ai-numbers" role="region" aria-label={`Indicadores en ${shownYear}`}>
+            <div className="rule70-card-head">
+              <strong>Indicadores en {shownYear}</strong>
+            </div>
+            <table className="rule70-table ai-table" aria-label={`Indicadores por escenario en ${shownYear}`}>
               <thead>
                 <tr>
                   <th scope="col">{shownYear}</th>
@@ -285,9 +294,9 @@ export function AiStep() {
             <ul className="ai-summary" aria-label="Resumen de los escenarios">
               {rows.map((r, k) => (
                 <li key={r.id}>
-                  <span className="tour-swatch" style={{ background: AI_SCENARIOS[k]!.color }} aria-hidden="true" />
-                  <strong>{`${r.name} (${TONE[r.id]})`}</strong>
-                  {`: ${pct(r.averageGrowth, 2)} anual, el PBI cambia ${pct(r.gdpChange)} y el PBI per cápita ${pct(r.perCapitaChange)} entre 2026 y 2056; duplicar el PBI llevaría ${num(r.doublingYears)} años. ${AI_SCENARIOS[k]!.comment}.`}
+                  <span className="rule70-key" style={{ background: AI_SCENARIOS[k]!.color }} aria-hidden="true" />
+                  <strong>{`${r.name} (${TONE[r.id]}):`}</strong>
+                  {` ${pct(r.averageGrowth, 2)} anual, el PBI cambia ${pct(r.gdpChange)} y el PBI per cápita ${pct(r.perCapitaChange)} entre 2026 y 2056; duplicar el PBI llevaría ${num(r.doublingYears)} años. ${AI_SCENARIOS[k]!.comment}.`}
                 </li>
               ))}
             </ul>

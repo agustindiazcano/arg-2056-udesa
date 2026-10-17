@@ -5,7 +5,7 @@ import { visibleSections } from '../content/sectionLabels';
 import type { Section } from '../types/scene';
 import './intro.css';
 import { INSTITUTIONS } from '../ui/institutions';
-import { withMalvinas } from './malvinasPath';
+import { withMalvinas, type IntroShape } from './malvinasPath';
 
 const LAYERS = 3; // 2 sides and the top: fewer composited layers per province
 // speed of the lights (0.8): the prototype waits (350 to 1050 ms) / speed between changes
@@ -19,6 +19,9 @@ interface Props {
 
 // the 24 provinces of the sheet and, after them, the illustrative Malvinas
 const provinces = withMalvinas(data.provinces);
+
+const SAN_JUAN_ID = provinces.find((p) => p.name.toLowerCase().includes('san juan'))?.id ?? 9;
+const MENDOZA_ID = provinces.find((p) => p.name.toLowerCase().includes('mendoza'))?.id ?? 10;
 
 /** The ways in: straight to a section (the Data Dashboard only when it is switched on: it is deprecated). */
 const ALL_SHORTCUTS: ReadonlyArray<{ section: Section; label: string }> = [
@@ -40,8 +43,22 @@ export function Intro({ onStart }: Props) {
   const reduced = useMemo(() => typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches, []);
   const [tilted, setTilted] = useState(reduced);
   const [lit, setLit] = useState<ReadonlySet<number>>(new Set());
+  const [hoveredShortcut, setHoveredShortcut] = useState<Section | null>(null);
+  const [hoveredProvince, setHoveredProvince] = useState<IntroShape | null>(null);
+  const [pointer, setPointer] = useState<{ x: number; y: number } | null>(null);
   const litRef = useRef(lit);
   litRef.current = lit;
+
+  const isLit = (id: number): boolean => {
+    if (hoveredShortcut === 'tour') return true;
+    if (hoveredShortcut === 'andes') return id === SAN_JUAN_ID || id === MENDOZA_ID;
+    if (hoveredProvince?.id === id) return true;
+    return lit.has(id);
+  };
+
+  const isGold = (_id: number): boolean => {
+    return hoveredShortcut === 'tour';
+  };
 
   const shapes = useMemo(
     () =>
@@ -99,7 +116,7 @@ export function Intro({ onStart }: Props) {
   }, [onStart]);
 
   return (
-    <div className="intro" data-tilted={tilted}>
+    <div className="intro" data-tilted={tilted} onMouseMove={(e) => setPointer({ x: e.clientX, y: e.clientY })}>
       <svg className="intro-defs" aria-hidden="true" focusable="false">
         <defs>
           {provinces.map((p) => (
@@ -113,25 +130,47 @@ export function Intro({ onStart }: Props) {
         <div className="intro-cam">
           <div className="intro-floor" />
           <div className="intro-map">
-            {shapes.map((s) => (
-              <div key={s.id} className={`intro-prov${lit.has(s.id) ? ' lit' : ''}`} style={{ ...s.top, '--d': `${s.delay}ms` } as React.CSSProperties}>
-                {Array.from({ length: LAYERS }, (_, i) => (
-                  <svg
-                    key={i}
-                    className={`intro-layer ${i === LAYERS - 1 ? 'top' : 'side'}`}
-                    style={{ '--i': i, '--t': (i / (LAYERS - 1)).toFixed(3) } as React.CSSProperties}
-                    viewBox={s.topView}
-                  >
-                    <use href={`#intro-pr${s.id}`} />
-                  </svg>
-                ))}
-                <svg className="intro-layer glow" style={{ '--i': LAYERS - 1.15, ...s.glow } as React.CSSProperties} viewBox={s.glowView}>
-                  {[1, 2, 3].map((k) => (
-                    <use key={k} className={`g${k}`} href={`#intro-pr${s.id}`} />
+            {shapes.map((s, index) => {
+              const province = provinces[index]!;
+              const litUp = isLit(s.id);
+              const gold = isGold(s.id);
+              const isHovered = hoveredProvince?.id === s.id;
+              return (
+                <div
+                  key={s.id}
+                  className={`intro-prov${litUp ? ' lit' : ''}${gold ? ' gold' : ''}${isHovered ? ' hovered' : ''}`}
+                  style={{ ...s.top, '--d': `${s.delay}ms` } as React.CSSProperties}
+                  data-province-id={s.id}
+                  data-province-name={province.name}
+                  onMouseEnter={(e) => {
+                    setHoveredProvince(province);
+                    if (e.clientX || e.clientY) setPointer({ x: e.clientX, y: e.clientY });
+                  }}
+                  onMouseLeave={() => setHoveredProvince((cur) => (cur?.id === s.id ? null : cur))}
+                >
+                  {Array.from({ length: LAYERS }, (_, i) => (
+                    <svg
+                      key={i}
+                      className={`intro-layer ${i === LAYERS - 1 ? 'top' : 'side'}`}
+                      style={{ '--i': i, '--t': (i / (LAYERS - 1)).toFixed(3) } as React.CSSProperties}
+                      viewBox={s.topView}
+                      onMouseEnter={i === LAYERS - 1 ? (e) => {
+                        setHoveredProvince(province);
+                        if (e.clientX || e.clientY) setPointer({ x: e.clientX, y: e.clientY });
+                      } : undefined}
+                      onMouseLeave={i === LAYERS - 1 ? () => setHoveredProvince((cur) => (cur?.id === s.id ? null : cur)) : undefined}
+                    >
+                      <use href={`#intro-pr${s.id}`} />
+                    </svg>
                   ))}
-                </svg>
-              </div>
-            ))}
+                  <svg className="intro-layer glow" style={{ '--i': LAYERS - 1.15, ...s.glow } as React.CSSProperties} viewBox={s.glowView}>
+                    {[1, 2, 3].map((k) => (
+                      <use key={k} className={`g${k}`} href={`#intro-pr${s.id}`} />
+                    ))}
+                  </svg>
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>
@@ -146,7 +185,16 @@ export function Intro({ onStart }: Props) {
         </div>
         <div role="group" aria-label="Ir directo a" className="intro-shortcuts">
           {shortcuts.map(({ section, label }) => (
-            <button key={section} type="button" className="intro-start" onClick={() => onStart(section)}>
+            <button
+              key={section}
+              type="button"
+              className="intro-start"
+              onClick={() => onStart(section)}
+              onMouseEnter={() => setHoveredShortcut(section)}
+              onMouseLeave={() => setHoveredShortcut(null)}
+              onFocus={() => setHoveredShortcut(section)}
+              onBlur={() => setHoveredShortcut(null)}
+            >
               {label}
             </button>
           ))}
@@ -154,6 +202,17 @@ export function Intro({ onStart }: Props) {
       </main>
       </div>
       <div className="intro-vignette" aria-hidden="true" />
+
+      {hoveredProvince && (
+        <div
+          className="intro-tooltip"
+          style={pointer ? { left: `${pointer.x}px`, top: `${pointer.y}px` } : undefined}
+          role="tooltip"
+          aria-hidden="true"
+        >
+          {hoveredProvince.name}
+        </div>
+      )}
 
       <footer className="intro-footer">
         <ul className="intro-logos" aria-label="Instituciones">

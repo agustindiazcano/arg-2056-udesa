@@ -23,12 +23,11 @@ export function addMilestones(option: object, years: number[], lines: Array<{ va
   const dots = lines.map((line) => ({
     type: 'effectScatter',
     silent: true,
-    // the dot pulses: a ring that grows and fades, over and over
-    rippleEffect: { scale: 3.5, period: 2.5, brushType: 'stroke', color: line.color },
+    rippleEffect: { scale: 2.5, period: 3, brushType: 'stroke', color: line.color },
     showEffectOn: 'render',
     z: 6,
-    symbolSize: 13,
-    itemStyle: { color: line.color, borderColor: '#ffffff', borderWidth: 2.5, shadowBlur: 14, shadowColor: line.color },
+    symbolSize: 8,
+    itemStyle: { color: line.color, borderColor: '#ffffff', borderWidth: 2 },
     data: milestones(years, line.values, [2, 3, 4], baseValue)
       .filter((m) => m.year <= upTo)
       .map((m) => ({
@@ -36,14 +35,14 @@ export function addMilestones(option: object, years: number[], lines: Array<{ va
         label: {
           show: true,
           position: 'top',
-          distance: 8,
+          distance: 6,
           color: '#ffffff',
-          fontSize: 13,
-          fontWeight: 700,
-          backgroundColor: 'rgba(13,13,13,0.85)',
-          padding: [3, 7],
+          fontSize: 11,
+          fontWeight: 600,
+          backgroundColor: 'rgba(13,13,13,0.92)',
+          padding: [2, 6],
           borderRadius: 4,
-          borderColor: 'rgba(255,255,255,0.25)',
+          borderColor: 'rgba(255,255,255,0.15)',
           borderWidth: 1,
           formatter: `x${m.multiple} · ${m.year}`
         }

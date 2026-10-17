@@ -135,3 +135,4 @@ Commit format: `type(scope): imperative summary` (types: feat, fix, test, refact
 - Do not hand-edit anything under `data/processed/`.
 - Do not change a scenario parameter without recording it in `docs/assumptions.md`.
 - Do not describe unverified facts as certain, in code, copy or docs.
+- Never state in the UI that something is pending investigation, to be researched, or that it is test/mock data. That belongs in documentation files, never in the site's UI.

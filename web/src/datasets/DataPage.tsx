@@ -212,7 +212,7 @@ export function DataPage() {
         <article id="data-referencias" className="data-slide" aria-labelledby="data-title-refs">
           <h3 id="data-title-refs">Referencias</h3>
           <p className="data-intro">
-            Todos los enlaces y fuentes oficiales utilizados en el proyecto, organizados por temática y con el estado de verificación de cada uno.
+            Todos los enlaces y fuentes oficiales utilizados en el proyecto, organizados por temática.
           </p>
           {Array.from(new Set(REFERENCES.map((r) => r.group))).map((group) => (
             <div key={group} className="data-table-block">
@@ -223,7 +223,6 @@ export function DataPage() {
                     <a href={r.url} target="_blank" rel="noopener noreferrer">
                       {r.label}
                     </a>
-                    <span className="data-status">{r.status}</span>
                   </li>
                 ))}
               </ul>

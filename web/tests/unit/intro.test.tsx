@@ -135,6 +135,54 @@ describe('Intro', () => {
     fireEvent.keyDown(window, { key: 'Enter' });
     expect(onStart).toHaveBeenCalledTimes(1);
   });
+
+  it('hovering over the Cruce de los Andes button illuminates only San Juan and Mendoza', () => {
+    const { container } = render(<Intro onStart={() => undefined} />);
+    const andesBtn = screen.getByRole('button', { name: 'Cruce de los Andes' });
+    fireEvent.mouseEnter(andesBtn);
+
+    const sanJuan = container.querySelector('[data-province-name="San Juan"]');
+    const mendoza = container.querySelector('[data-province-name="Mendoza"]');
+    expect(sanJuan?.classList.contains('lit')).toBe(true);
+    expect(mendoza?.classList.contains('lit')).toBe(true);
+
+    const salta = container.querySelector('[data-province-name="Salta"]');
+    const buenosAires = container.querySelector('[data-province-name="Buenos Aires"]');
+    expect(salta?.classList.contains('lit')).toBe(false);
+    expect(buenosAires?.classList.contains('lit')).toBe(false);
+
+    fireEvent.mouseLeave(andesBtn);
+  });
+
+  it('hovering over the Hacia el 2056 button illuminates all provinces and Malvinas painted in gold', () => {
+    const { container } = render(<Intro onStart={() => undefined} />);
+    const tourBtn = screen.getByRole('button', { name: 'Hacia el 2056' });
+    fireEvent.mouseEnter(tourBtn);
+
+    const allProvs = container.querySelectorAll('.intro-prov');
+    expect(allProvs).toHaveLength(25);
+    for (const p of Array.from(allProvs)) {
+      expect(p.classList.contains('lit')).toBe(true);
+      expect(p.classList.contains('gold')).toBe(true);
+    }
+    const malvinas = container.querySelector('[data-province-name="Islas Malvinas"]');
+    expect(malvinas?.classList.contains('gold')).toBe(true);
+
+    fireEvent.mouseLeave(tourBtn);
+    expect(container.querySelector('.intro-prov.gold')).toBeNull();
+  });
+
+  it('hovering over a province in the 3D map displays a tooltip with its name', () => {
+    const { container } = render(<Intro onStart={() => undefined} />);
+    const mendoza = container.querySelector('[data-province-name="Mendoza"]')!;
+    expect(mendoza).not.toBeNull();
+
+    fireEvent.mouseEnter(mendoza);
+    expect(screen.getByText('Mendoza')).toBeTruthy();
+
+    fireEvent.mouseLeave(mendoza);
+    expect(screen.queryByText('Mendoza')).toBeNull();
+  });
 });
 
 describe('Root', () => {

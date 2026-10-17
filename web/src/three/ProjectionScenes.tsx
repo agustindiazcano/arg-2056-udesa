@@ -30,7 +30,7 @@ export default function ProjectionScenes() {
       selectedId: null,
       formatValue: format,
       onSelect: noSelect,
-      summary: `${MAP_TITLE}, vista 3D con valores de prueba.`
+      summary: `${MAP_TITLE}, vista 3D.`
     };
   }, [geo]);
   const barsSpec = useMemo(() => (mapSpec ? demoBarsSpec(mapSpec.values, NAMES, 6) : null), [mapSpec]);

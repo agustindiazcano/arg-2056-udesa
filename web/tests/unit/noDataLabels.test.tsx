@@ -9,7 +9,9 @@ vi.mock('../../src/charts/EChart.js', () => ({
 
 import { DataPage } from '../../src/datasets/DataPage';
 import { ChartStep } from '../../src/tour/ChartStep';
+import { DevelopmentStep } from '../../src/tour/DevelopmentStep';
 import { ExportsStep } from '../../src/tour/ExportsStep';
+import { ForecastUncertaintyStep } from '../../src/tour/ForecastUncertaintyStep';
 import { STEP_INFO } from '../../src/tour/stepInfo';
 import { TourChart } from '../../src/tour/TourChart';
 import { TourSidebar } from '../../src/tour/TourSidebar';
@@ -17,9 +19,10 @@ import { CHART_STEP_LIST, TOUR_CHARTS } from '../../src/tour/tourCharts';
 import { useStore } from '../../src/state/store';
 import { useTourLayout } from '../../src/tour/useTourLayout';
 
-// Human decision of 2026-10-14: the front says nothing about how real, read or verified a datum is (no "Datos de prueba",
-// "Datos en parte reales", "Datos reales", "leída", "sin verificar"...). That lives in docs/data-requests.md and docs/references.md.
-const FORBIDDEN = /datos de prueba|datos en parte reales|datos reales|inventad|mock|sin verificar|no verificad|a verificar|no leíd|\bleída\b|\bleíd[oa]s?\b|\bleyeron\b/i;
+// Human decision of 2026-10-14 and 2026-10-16: the front says nothing about how real, read or verified a datum is
+// (no "Datos de prueba", "Datos en parte reales", "Datos reales", "leída", "sin verificar", "por investigar"...).
+// That lives in docs/data-requests.md and docs/references.md.
+const FORBIDDEN = /datos de prueba|datos en parte reales|datos reales|inventad|mock|sin verificar|no verificad|a verificar|no leíd|\bleída\b|\bleíd[oa]s?\b|\bleyeron\b|por investigar|en investigaci[oó]n|pendiente de verificaci/i;
 
 const everyText = (root: HTMLElement): string =>
   [root.textContent ?? '', ...Array.from(root.querySelectorAll('[aria-label],[title]')).flatMap((e) => [e.getAttribute('aria-label') ?? '', e.getAttribute('title') ?? ''])].join('\n');
@@ -59,6 +62,16 @@ describe('the charts of the Recorrido', () => {
     expect(container.querySelector('[role="note"]')).toBeNull();
   });
 
+  it('DevelopmentStep contains no unverified or pending investigation labels', () => {
+    const { container } = render(<DevelopmentStep />);
+    expect(everyText(container)).not.toMatch(FORBIDDEN);
+  });
+
+  it('ForecastUncertaintyStep contains no unverified or pending investigation labels', () => {
+    const { container } = render(<ForecastUncertaintyStep />);
+    expect(everyText(container)).not.toMatch(FORBIDDEN);
+  });
+
   it('TourChart puts its children straight in the box, with no extra wrapper (the map takes its height from `.prov-map > .tour-chart > *`)', () => {
     const { container } = render(
       <div className="tour-chart" data-testid="box">
@@ -83,5 +96,20 @@ describe('the Data page', () => {
       expect(container.querySelector('.data-badge')).toBeNull();
       expect(container.querySelector('.data-quality')).toBeNull();
     }
+    for (const slide of ['16', '17']) {
+      fireEvent.change(select, { target: { value: slide } });
+      expect(everyText(container), `slide ${slide}`).not.toMatch(FORBIDDEN);
+      expect(container.querySelector('.data-badge')).toBeNull();
+      expect(container.querySelector('.data-quality')).toBeNull();
+    }
+  });
+
+  it('shows no unverified or reading status on the references or methodology tabs', () => {
+    const { container } = render(<DataPage />);
+    fireEvent.click(screen.getByRole('button', { name: 'Referencias' }));
+    expect(everyText(container)).not.toMatch(FORBIDDEN);
+
+    fireEvent.click(screen.getByRole('button', { name: 'Metodología' }));
+    expect(everyText(container)).not.toMatch(FORBIDDEN);
   });
 });

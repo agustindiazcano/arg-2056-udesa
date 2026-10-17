@@ -2400,10 +2400,35 @@ main.scene-container {
   min-width: 9rem;
 }
 
-.ai-key-row {
+.ai-head-group {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-3);
+  align-items: baseline;
+  gap: var(--space-2, 0.5rem);
+}
+
+.ai-head-year {
+  color: var(--ink-2);
+  font-weight: 500;
+  font-size: 0.85rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.ai-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+}
+
+.ai-main-chart {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 18rem;
+}
+
+.ai-main-chart > * {
+  width: 100%;
+  height: 100%;
 }
 
 .ai-small-charts {
@@ -2413,20 +2438,25 @@ main.scene-container {
   height: 100%;
 }
 
-.ai-small-chart {
+.ai-subcard {
   display: flex;
   flex-direction: column;
   min-width: 0;
   min-height: 0;
+  gap: var(--space-2, 0.5rem);
 }
 
-.ai-small-chart > .tour-chart {
-  flex: 1 1 auto;
-  min-height: 9rem;
+.ai-subcard .rule70-card-head {
+  font-size: 0.82rem;
+}
+
+.ai-subcard-chart {
   position: relative;
+  flex: 1 1 auto;
+  min-height: 7.5rem;
 }
 
-.ai-small-chart > .tour-chart > * {
+.ai-subcard-chart > * {
   width: 100%;
   height: 100%;
 }
@@ -2438,26 +2468,23 @@ main.scene-container {
   display: flex;
   flex-direction: column;
   gap: var(--space-2, 0.5rem);
-  font-size: 0.85rem;
+  font-size: 0.82rem;
+  color: var(--ink-2);
+}
+
+.ai-summary li {
+  display: flex;
+  align-items: baseline;
+  gap: 0.35rem;
+}
+
+.ai-summary .rule70-key {
+  margin: 0;
+  flex-shrink: 0;
 }
 
 .sim-chart {
   position: relative;
-}
-
-.ai-key-small {
-  position: absolute;
-  left: var(--space-md);
-  bottom: var(--space-md);
-  z-index: 4;
-  gap: var(--space-2, 0.5rem);
-  font-size: 0.7rem;
-  pointer-events: none;
-}
-
-.ai-key-small .tour-swatch {
-  width: 0.55rem;
-  height: 0.55rem;
 }
 
 /* ---- Chart surfaces: clearer hierarchy for the story and simulator ---------------------------------------------- */
