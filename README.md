@@ -174,4 +174,13 @@ Escenarios de crecimiento de Argentina con IA y estimaciones de otros analistas.
 66. Penn Wharton Budget Model, «How AI could lift productivity and GDP growth». <https://knowledge.wharton.upenn.edu/articles/how-ai-could-lift-productivity-and-gdp-growth/>
 67. Forecasting Research Institute, efectos económicos de la IA. <https://forecastingresearch.org/economic-effects-of-ai>
 
+### Desarrollo humano, educación, población y difusión tecnológica (diapositivas 7 y 8 de «Hacia el 2056»)
+
+68. PNUD (UNDP), Human Development Report: serie histórica del IDH de Argentina (1990-2023) y comparación LATAM. <https://hdr.undp.org/data-center/human-development-index>
+69. OCDE, Resultados PISA (2012, 2018, 2022): puntajes medios en lectura, matemática y ciencias para Argentina y la región. <https://www.oecd.org/pisa/>
+70. Stanford Institute for Human-Centered Artificial Intelligence (HAI), *Artificial Intelligence Index Report 2024*: costos de entrenamiento, cómputo y eficiencia de inferencia. <https://aiindex.stanford.edu/report/>
+71. INDEC, Censo Nacional de Población, Hogares y Viviendas 2022: resultados definitivos por provincia (45.892.285 habitantes). <https://www.indec.gob.ar/indec/web/Nivel4-Tema-2-41-165>
+72. INDEC, Origen provincial de las exportaciones (OPEX): informes técnicos anuales 2023 y 2024 por provincia y grandes rubros. <https://www.indec.gob.ar/indec/web/Nivel4-Tema-3-2-40>
+
 > Las posiciones de los lugares son aproximadas, las fechas intermedias entre las documentadas son estimaciones marcadas como tales, y las cifras de efectivos varían según la fuente. Todo está señalado en [`docs/references.md`](docs/references.md).
+

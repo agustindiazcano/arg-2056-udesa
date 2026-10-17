@@ -219,6 +219,19 @@ Cargadas el 2026-10-15 desde dos informes que pasó el responsable (escritos con
 
 El gráfico usa el punto medio de cada rango del informe (2027-2030 y 2031-2035) a partir del PBI de 2026, y de 2036 a 2056 mantiene el ritmo de 2031-2035 (un supuesto, no una cifra del informe), igual al de las demás diapositivas. El simulador toma de ese informe su crecimiento base (3,0 %) y el aporte de la IA (0,4 puntos por año, dentro de 0,1 a 0,7).
 
+### 4.6 Desarrollo humano, educación, costos de IA y demografía provincial (diapositivas 7, 8 y ficha provincial)
+
+Fuentes primarias y metodológicas agregadas en la expansión de datos de octubre de 2026.
+
+| # | Fuente | Qué se usa | Estado |
+|---|---|---|---|
+| D1 | PNUD (UNDP), *Human Development Report*. <https://hdr.undp.org/data-center/human-development-index> | Serie histórica del IDH de Argentina (1990-2023) y comparación LATAM 2022/2023 | **leída** (2026-10-16) |
+| D2 | OCDE, *Resultados PISA*. <https://www.oecd.org/pisa/> | Puntajes medios en lectura, matemática y ciencias (2012, 2018, 2022) y comparación regional en matemática | **leída** (2026-10-16) |
+| D3 | Stanford HAI, *Artificial Intelligence Index Report 2024*. <https://aiindex.stanford.edu/report/> | Costos históricos y de frontera en cómputo de entrenamiento de modelos (Transformer a Gemini Ultra / GPT-4) y compresión de inferencia | **leída** (2026-10-16) |
+| D4 | INDEC, *Censo Nacional de Población, Hogares y Viviendas 2022*. <https://www.indec.gob.ar/indec/web/Nivel4-Tema-2-41-165> | Población definitiva por provincia (45.892.285 habitantes a nivel nacional) | **leída** (2026-10-16) |
+| D5 | INDEC, *Origen provincial de las exportaciones (OPEX)*. <https://www.indec.gob.ar/indec/web/Nivel4-Tema-3-2-40> | Informes técnicos de comercio exterior por provincia y grandes rubros (2023: 66.789 M USD; 2024: 79.721 M USD) | **leída** (2026-10-16) |
+
+
 ## Para verificar antes de publicar
 
 - Cada fecha, lugar y cifra de la sección 1 contra una fuente primaria o académica; las marcadas «por informe» contra el original (Espejo, Mitre, Barros Arana, Encina y Castedo, Instituto Nacional Sanmartiniano, Academia de Historia Militar de Chile).

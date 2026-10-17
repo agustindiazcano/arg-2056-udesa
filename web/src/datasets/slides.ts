@@ -331,34 +331,93 @@ export function buildSlides(): SlideData[] {
     ], true, ['W3', 'W5', 'I1', 'F1', 'X1', 'X2', 'X3', 'E2', 'E7', 'E1', 'E10']),
     slide('14', 'Productividad', productivityTables(), false, ['P6', 'P7', 'P7b', 'P1', 'P8', 'P9']),
     slide('3', TOUR_CHARTS[3]!.title, [chartTable(3), ...aiTables(), perCapitaTable(), aiPopulationTable()], true, ['A1', 'A2', 'A3', 'A4', 'A5', 'A6', 'A7', 'A8', 'A9', 'A10']),
-    slide('16', DEVELOPMENT_TITLE, [{
-      id: 'development-draft',
-      title: 'Estructura conceptual de indicadores de desarrollo',
-      columns: ['Indicador', 'Dimensión', 'Organismo de referencia'],
-      rows: [
-        ['IDH', 'Desarrollo humano', 'PNUD'],
-        ['Resultados PISA por área', 'Educación y aprendizaje', 'OCDE'],
-        ['Deserción universitaria', 'Educación superior', 'Ministerio de Capital Humano'],
-        ['Esperanza de vida', 'Salud y longevidad', 'Banco Mundial / OMS'],
-        ['Graduación universitaria y STEM', 'Capital humano avanzado', 'CONICET / Universidades'],
-        ['Maestría y doctorado', 'Formación de posgrado', 'CONICET / Redes académicas'],
-        ['Índice de Gini', 'Distribución del ingreso', 'INDEC / Banco Mundial'],
-        ['PBI por habitante y salarios reales', 'Bienestar material', 'INDEC / FMI']
-      ]
-    }], true),
-    slide('17', FORECAST_UNCERTAINTY_TITLE, [{
-      id: 'forecast-uncertainty-draft',
-      title: 'Dimensiones analíticas de incertidumbre tecnológica',
-      columns: ['Dimensión tecnológica', 'Enfoque analítico'],
-      rows: [
-        ['Difusión de tecnologías y productividad', 'Rezagos históricos de adopción y productividad agregada'],
-        ['Capacidad de modelos y costos de inferencia', 'Evolución de costo unitario por token y escala de cómputo'],
-        ['Hardware de cómputo y robótica', 'Ley de Moore, aceleradores dedicados y automatización física'],
-        ['Revisiones de pronósticos económicos', 'Comparación de proyecciones históricas frente a series efectivas'],
-        ['IA, empleo y salarios', 'Efectos de complementariedad vs. sustitución de tareas laborales'],
-        ['Crecimiento, educación, ahorro e inversión', 'Canales de acumulación de capital físico y humano a largo plazo']
-      ]
-    }], true),
+    slide('16', DEVELOPMENT_TITLE, [
+      {
+        id: 'hdi-series',
+        title: 'Índice de Desarrollo Humano (IDH) de Argentina (1990-2023)',
+        columns: ['Año', 'Valor IDH', 'Categoría', 'Fuente'],
+        rows: [
+          [1990, 0.733, 'Alto', 'PNUD'],
+          [1995, 0.762, 'Alto', 'PNUD'],
+          [2000, 0.789, 'Alto', 'PNUD'],
+          [2005, 0.809, 'Muy alto', 'PNUD'],
+          [2010, 0.844, 'Muy alto', 'PNUD'],
+          [2015, 0.859, 'Muy alto', 'PNUD'],
+          [2018, 0.852, 'Muy alto', 'PNUD'],
+          [2019, 0.853, 'Muy alto', 'PNUD'],
+          [2020, 0.851, 'Muy alto', 'PNUD'],
+          [2021, 0.847, 'Muy alto', 'PNUD'],
+          [2022, 0.858, 'Muy alto', 'PNUD'],
+          [2023, 0.865, 'Muy alto', 'PNUD']
+        ]
+      },
+      {
+        id: 'pisa-argentina',
+        title: 'Resultados PISA Argentina (puntajes medios 2012, 2018, 2022)',
+        columns: ['Ciclo PISA', 'Lectura', 'Matemática', 'Ciencias', 'Fuente'],
+        rows: [
+          ['PISA 2012', 396, 388, 406, 'OCDE'],
+          ['PISA 2018', 402, 379, 404, 'OCDE'],
+          ['PISA 2022', 401, 378, 406, 'OCDE']
+        ]
+      },
+      {
+        id: 'pisa-latam-math',
+        title: 'PISA 2022: Comparación regional en Matemática',
+        columns: ['País', 'Puntaje Matemática', 'Fuente'],
+        rows: [
+          ['Chile', 412, 'OCDE'],
+          ['Uruguay', 409, 'OCDE'],
+          ['México', 395, 'OCDE'],
+          ['Colombia', 383, 'OCDE'],
+          ['Brasil', 379, 'OCDE'],
+          ['Argentina', 378, 'OCDE']
+        ]
+      },
+      {
+        id: 'development-draft',
+        title: 'Estructura conceptual de indicadores de desarrollo',
+        columns: ['Indicador', 'Dimensión', 'Organismo de referencia'],
+        rows: [
+          ['IDH', 'Desarrollo humano', 'PNUD'],
+          ['Resultados PISA por área', 'Educación y aprendizaje', 'OCDE'],
+          ['Deserción universitaria', 'Educación superior', 'Ministerio de Capital Humano'],
+          ['Esperanza de vida', 'Salud y longevidad', 'Banco Mundial / OMS'],
+          ['Graduación universitaria y STEM', 'Capital humano avanzado', 'CONICET / Universidades'],
+          ['Maestría y doctorado', 'Formación de posgrado', 'CONICET / Redes académicas'],
+          ['Índice de Gini', 'Distribución del ingreso', 'INDEC / Banco Mundial'],
+          ['PBI por habitante y salarios reales', 'Bienestar material', 'INDEC / FMI']
+        ]
+      }
+    ], false, ['D1', 'D2']),
+    slide('17', FORECAST_UNCERTAINTY_TITLE, [
+      {
+        id: 'ai-training-costs',
+        title: 'Costo de cómputo estimado en entrenamiento de modelos frontera (Stanford AI Index 2024)',
+        columns: ['Modelo', 'Año', 'Costo estimado de cómputo (USD)', 'Fuente'],
+        rows: [
+          ['Transformer original', 2017, 'Cientos de USD', 'Stanford HAI / Epoch AI'],
+          ['BERT', 2018, '< 10.000', 'Stanford HAI / Epoch AI'],
+          ['GPT-2', 2019, '~50.000', 'Stanford HAI / Epoch AI'],
+          ['GPT-3', 2020, '4.600.000', 'Stanford HAI / Epoch AI'],
+          ['GPT-4', 2023, '78.000.000', 'Stanford HAI / Epoch AI'],
+          ['Gemini Ultra', 2023, '191.000.000', 'Stanford HAI / Epoch AI']
+        ]
+      },
+      {
+        id: 'forecast-uncertainty-draft',
+        title: 'Dimensiones analíticas de incertidumbre tecnológica',
+        columns: ['Dimensión tecnológica', 'Enfoque analítico'],
+        rows: [
+          ['Difusión de tecnologías y productividad', 'Rezagos históricos de adopción y productividad agregada'],
+          ['Capacidad de modelos y costos de inferencia', 'Evolución de costo unitario por token y escala de cómputo'],
+          ['Hardware de cómputo y robótica', 'Ley de Moore, aceleradores dedicados y automatización física'],
+          ['Revisiones de pronósticos económicos', 'Comparación de proyecciones históricas frente a series efectivas'],
+          ['IA, empleo y salarios', 'Efectos de complementariedad vs. sustitución de tareas laborales'],
+          ['Crecimiento, educación, ahorro e inversión', 'Canales de acumulación de capital físico y humano a largo plazo']
+        ]
+      }
+    ], false, ['D3', 'A1', 'A8']),
     slide('sim', 'Simulador del PBI', [
       { id: 'factors', title: 'Factores del escenario de referencia', columns: ['Factor', 'Valor', 'Unidad'], rows: SIM_FIELDS.map((f) => [f.label, DEFAULT_SIM[f.key], f.unit]) },
       { id: 'reference', title: 'PBI del escenario de referencia (miles de millones de USD)', columns: ['Año', 'PBI'], rows: sim.years.map((y, i) => [y, sim.gdp[i] ?? null]) }

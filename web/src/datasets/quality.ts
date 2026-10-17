@@ -86,6 +86,10 @@ export const TABLE_META: Readonly<Record<string, TableMeta>> = {
   cumulative: meta('partial', PWT, '2026-10-12'),
   factors: made(),
   reference: meta('partial', 'Simulador: parte del PBI real de 2026 (Banco Mundial y FMI); crecimiento base y aporte de la IA del informe de escenarios con IA (sin verificar); el resto, de prueba', '2026-10-15'),
+  'hdi-series': meta('real', 'PNUD (UNDP), Human Development Report (1990-2023)', '2026-10-16'),
+  'pisa-argentina': meta('real', 'OCDE, Programa para la Evaluación Internacional de Alumnos (PISA)', '2026-10-16'),
+  'pisa-latam-math': meta('real', 'OCDE, PISA 2022 (Resultados de Matemática en América Latina)', '2026-10-16'),
+  'ai-training-costs': meta('real', 'Stanford HAI / Epoch AI, Artificial Intelligence Index Report 2024', '2026-10-16'),
   'development-draft': draft('Estructura conceptual de indicadores agregados, cobertura y dimensiones sociales'),
   'forecast-uncertainty-draft': draft('Estructura conceptual de difusión tecnológica, costos de computación y sensibilidad distributiva')
 };
