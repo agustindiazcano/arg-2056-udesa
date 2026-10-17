@@ -20,3 +20,8 @@ export const titleOf = (id: number): string => SPECIAL[id] ?? TOUR_CHARTS[id]!.t
 export function indexItems(): IndexItem[] {
   return TOUR_ORDER.filter((id) => id !== INDEX_STEP).map((id) => ({ id, number: stepNumber(id), title: titleOf(id) }));
 }
+
+/** The slides of the dropdown menu of the navbar: slide 0, the index, first, then the others in the order they are shown. */
+export function menuItems(): IndexItem[] {
+  return TOUR_ORDER.map((id) => ({ id, number: stepNumber(id), title: id === INDEX_STEP ? 'Índice' : titleOf(id) }));
+}
