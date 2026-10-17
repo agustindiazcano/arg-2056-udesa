@@ -125,7 +125,7 @@ export function AiUsageView() {
               </li>
               <li>
                 <strong>mutmut:</strong> pruebas de mutación (<em>mutation testing</em>) sobre los diffs del modelo y
-                la lógica de estado para verificar que la batería de tests detecte cambios semánticos reales.
+                la lógica de estado para comprobar que la batería de tests detecte cambios semánticos reales.
               </li>
             </ul>
 
