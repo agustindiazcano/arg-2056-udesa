@@ -482,3 +482,87 @@ export function buildFollowedSeries(
   };
   return { option, summary: opts.summary };
 }
+
+export interface FollowedLine {
+  name: string;
+  values: number[];
+  color: string;
+  /** the line of the home country: thicker */
+  main?: boolean;
+}
+
+/**
+ * Several lines as they are while the animation follows them (the countries of slide 1): each one drawn up to `frame.year` with a dot at its
+ * head, on a linear or, when `log` is on, a logarithmic scale whose floor is the power of ten under the smallest value.
+ */
+export function buildFollowedLines(
+  years: number[],
+  lines: FollowedLine[],
+  frame: { year: number; xMin: number; xMax: number; yMax: number; visibleCount: number },
+  opts: { unit: string; summary: string; log?: boolean }
+) {
+  const positives = lines.flatMap((l) => l.values).filter((v) => v > 0);
+  const logMin = positives.length ? 10 ** Math.floor(Math.log10(Math.min(...positives))) : 1;
+  const next = years[frame.visibleCount];
+  const drawn = (l: FollowedLine): Array<[number, number]> => {
+    const pts: Array<[number, number]> = years.slice(0, frame.visibleCount).map((y, i) => [y, l.values[i]!]);
+    const last = pts.at(-1);
+    const nextValue = l.values[frame.visibleCount];
+    if (last && next !== undefined && nextValue !== undefined && frame.year > last[0]) {
+      const t = (frame.year - last[0]) / (next - last[0]);
+      pts.push([frame.year, last[1] + (nextValue - last[1]) * t]);
+    }
+    return pts;
+  };
+  const series = lines.flatMap((l) => {
+    const pts = drawn(l);
+    const head = pts.at(-1);
+    return [
+      {
+        name: l.name,
+        type: 'line',
+        data: pts,
+        symbol: 'none',
+        z: l.main ? 4 : 3,
+        lineStyle: { width: l.main ? 3.5 : 2, color: l.color },
+        itemStyle: { color: l.color }
+      },
+      {
+        name: `${l.name} hoy`,
+        type: 'line',
+        data: head ? [head] : [],
+        symbol: 'circle',
+        symbolSize: l.main ? 10 : 7,
+        z: 5,
+        silent: true,
+        lineStyle: { opacity: 0 },
+        itemStyle: { color: l.color, borderColor: tokens.ink, borderWidth: l.main ? 2 : 1 }
+      }
+    ];
+  });
+  const option = {
+    animation: false,
+    backgroundColor: 'transparent',
+    tooltip: { show: false },
+    grid: { left: 8, right: 28, top: 24, bottom: 8, containLabel: true },
+    xAxis: {
+      type: 'value',
+      min: frame.xMin,
+      max: frame.xMax,
+      minInterval: 1,
+      axisLine: { lineStyle: { color: tokens.baseline } },
+      axisTick: { show: false },
+      axisLabel: { color: tokens.muted, formatter: (v: number) => String(Math.round(v)) },
+      splitLine: { show: false }
+    },
+    yAxis: {
+      type: opts.log ? 'log' : 'value',
+      min: opts.log ? logMin : 0,
+      max: frame.yMax,
+      splitLine: { lineStyle: LINE },
+      axisLabel: { color: tokens.muted, formatter: (v: number) => formatAxisNumber(v) }
+    },
+    series
+  };
+  return { option, summary: opts.summary };
+}

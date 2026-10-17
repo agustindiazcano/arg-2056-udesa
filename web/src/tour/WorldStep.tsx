@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { EChart } from '../charts/EChart.js';
-import { buildColumns, buildFollowedSeries } from '../charts/builders/tourCharts.js';
+import { buildColumns, buildFollowedLines, buildFollowedSeries } from '../charts/builders/tourCharts.js';
 import { formatValue } from '../charts/format.js';
 import { TourChart } from './TourChart.js';
 import { barsSpec, linesSpec } from '../charts3d/specs.js';
@@ -17,6 +17,7 @@ import { elapsedForYear, seriesFrame, valueAt, yearAtElapsed } from './worldAnim
 import { SPEEDS } from '../state/reducer.js';
 import { useTimeline } from './useTimeline.js';
 import { WorldTable } from './WorldTable.js';
+import { COMPARE_OPTIONS, DEFAULT_COMPARE, compareSeries, countryColor, flagSrc, isSquashed } from './worldCompare.js';
 import { FIRST_YEAR, HOME, LAST_YEAR, REGION_METRICS, WORLD_SOURCE, WORLD_UNIT, mainSeries, regionCountries, regionValuesAt } from './worldData.js';
 import type { RankMetric, RegionMetric } from './worldData.js';
 
@@ -39,6 +40,11 @@ const speedFormat = new Intl.NumberFormat('es-AR', { maximumFractionDigits: 2 })
 
 const TITLE = WORLD_TITLE;
 /** What the big chart shows for each metric of the ranking tables: its name, its unit and the label of the series. */
+const SCALES = [
+  { value: 'linear', label: 'Lineal' },
+  { value: 'log', label: 'Logarítmica' }
+] as const;
+
 const MAIN: Record<RankMetric, { name: string; unit: string }> = {
   gdp: { name: 'PBI real de Argentina', unit: WORLD_UNIT },
   percapita: { name: 'PBI per cápita real de Argentina', unit: REGION_METRICS.percapita.unit }
@@ -68,14 +74,34 @@ export function WorldStep() {
   const { name: SERIES_NAME, unit: MAIN_UNIT } = MAIN[mainMetric];
   const series = useMemo(() => mainSeries(mainMetric), [mainMetric]);
   const today = series.values.at(-1) ?? 0;
+  // the countries drawn next to Argentina (flags to switch them) and, only when a line is squashed, the logarithmic scale
+  const [compare, setCompare] = useState<string[]>([...DEFAULT_COMPARE]);
+  const [logScale, setLogScale] = useState(false);
+  const lines = useMemo(() => compareSeries(compare, mainMetric), [compare, mainMetric]);
+  const squashed = isSquashed(lines);
+  const log = squashed && logScale;
+  const toggleCountry = (name: string) => setCompare((cur) => (cur.includes(name) ? cur.filter((c) => c !== name) : [...cur, name]));
+  // the view fits the highest line at every year
+  const envelope = useMemo(() => series.years.map((_, i) => Math.max(...lines.map((l) => l.values[i] ?? 0))), [series, lines]);
   const regionNames = useMemo(regionCountries, []);
   // the bars of the region show one of three values, chosen by clicking their title
   const [regionMetric, setRegionMetric] = useState<RegionMetric>('percapita');
   const metricInfo = REGION_METRICS[regionMetric];
 
   const summary = `${SERIES_NAME} de ${FIRST_YEAR} a ${LAST_YEAR}: de ${formatValue(series.values[0] ?? null, MAIN_UNIT)} a ${formatValue(today, MAIN_UNIT)}`;
-  const frame = useMemo(() => seriesFrame(elapsed, series.years, series.values), [elapsed, series]);
-  const flat = useMemo(() => buildFollowedSeries(series.years, series.values, frame, { unit: MAIN_UNIT, name: SERIES_NAME, summary }), [series, frame, summary, MAIN_UNIT, SERIES_NAME]);
+  const frame = useMemo(() => seriesFrame(elapsed, series.years, envelope), [elapsed, series, envelope]);
+  const flat = useMemo(
+    () =>
+      lines.length === 1
+        ? buildFollowedSeries(series.years, series.values, frame, { unit: MAIN_UNIT, name: SERIES_NAME, summary })
+        : buildFollowedLines(
+            series.years,
+            lines.map((l) => ({ name: l.country, values: l.values, color: countryColor(l.country), main: l.country === HOME })),
+            frame,
+            { unit: MAIN_UNIT, summary, log }
+          ),
+    [series, lines, frame, summary, MAIN_UNIT, SERIES_NAME, log]
+  );
   // a new object on every run: the 3D chart draws itself again
   const spec = useMemo(
     () =>
@@ -83,11 +109,12 @@ export function WorldStep() {
         title: SERIES_NAME,
         unit: MAIN_UNIT,
         xLabels: series.years.map(String),
-        series: [{ name: SERIES_NAME, values: series.values, tone: 'highlight' }],
+        series: lines.map((l) => (l.country === HOME ? { name: SERIES_NAME, values: l.values, tone: 'highlight' as const } : { name: l.country, values: l.values, tone: 'muted' as const, color: countryColor(l.country) })),
         follow: true,
+        log,
         summary
       }),
-    [series, summary, MAIN_UNIT, SERIES_NAME]
+    [series, lines, summary, MAIN_UNIT, SERIES_NAME, log]
   );
   const lineSpec = useMemo(() => ({ ...spec, clock }), [spec, clock]);
 
@@ -175,6 +202,37 @@ export function WorldStep() {
           <div className="world-year" aria-hidden="true">
             <strong>{shownYear}</strong>
             <span>{formatValue(Math.round(shownValue), MAIN_UNIT)}</span>
+          </div>
+          <div className="world-compare" role="group" aria-label="Países a comparar con Argentina">
+            <span className="world-flag world-flag--home" data-name={HOME} role="img" aria-label={`${HOME}, siempre en el gráfico`}>
+              <img src={flagSrc(HOME)} alt="" width={24} height={18} />
+            </span>
+            {COMPARE_OPTIONS.map((o) => (
+              <button
+                key={o.name}
+                type="button"
+                className="world-flag"
+                data-name={o.name}
+                aria-pressed={compare.includes(o.name)}
+                aria-label={o.name}
+                style={{ '--line': countryColor(o.name) } as React.CSSProperties}
+                onClick={() => toggleCountry(o.name)}
+              >
+                <img src={flagSrc(o.name)} alt="" width={24} height={18} />
+              </button>
+            ))}
+            {squashed && (
+              <span className="world-scale">
+                <Segmented label="Escala" options={SCALES} value={log ? 'log' : 'linear'} onChange={(next) => setLogScale(next === 'log')} />
+                <ChartHelp
+                  title="Escala logarítmica"
+                  paragraphs={[
+                    'Una línea queda aplastada cuando su valor es menos de una décima parte del de la más alta. Con la escala logarítmica cada marca del eje vale diez veces la anterior, así que se ve cuánto crece cada país sin que el más grande tape a los demás, y una recta es un crecimiento constante.',
+                    'Los valores no cambian: solo cambia cómo se reparte el eje. Por eso este botón aparece solo cuando hace falta.'
+                  ]}
+                />
+              </span>
+            )}
           </div>
           <div className="tour-chart" key={`${mode}-${run}`}>
             <TourChart spec={lineSpec}>

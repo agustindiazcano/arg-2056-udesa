@@ -76,6 +76,8 @@ export interface Lines3DSpec {
   unit: string;
   xLabels: string[];
   series: Line3D[];
+  /** logarithmic scale: every power of ten is one equal step of height (the lines need positive values) */
+  log?: boolean;
   /** a range drawn behind the lines (the p10 to p90 of the forecast) */
   band?: { lower: Array<number | null>; upper: Array<number | null> };
   /** index of the x label to mark (the playhead year) */

@@ -86,3 +86,34 @@ describe('layoutLines', () => {
     expect(empty.series[0]!.segments).toEqual([]);
   });
 });
+
+describe('layoutLines on a logarithmic scale', () => {
+  const log = (over: Partial<Lines3DSpec> = {}) =>
+    layoutLines(
+      spec({
+        log: true,
+        series: [
+          { name: 'Chica', values: [10, 100, 1000, 1000], tone: 'highlight' },
+          { name: 'Grande', values: [100, 1000, 10000, 100000], tone: 'muted' }
+        ],
+        ...over
+      }),
+      opts
+    );
+
+  it('puts each power of ten at an equal height, from the power under the smallest value to the one over the largest', () => {
+    const l = log();
+    expect(l.top).toBe(100000);
+    expect(l.ticks.map((t) => t.value)).toEqual([10, 100, 1000, 10000, 100000]);
+    expect(l.ticks.map((t) => t.height)).toEqual([0, 1, 2, 3, 4]);
+    const chica = l.series[0]!.segments[0]!;
+    expect(chica.map((p) => p.y)).toEqual([0, 1, 2, 2]);
+    expect(l.series[1]!.segments[0]!.map((p) => p.y)).toEqual([1, 2, 3, 4]);
+  });
+
+  it('keeps the linear scale when log is off', () => {
+    expect(layoutLines(spec(), opts).ticks).toHaveLength(5);
+    expect(layoutLines(spec(), opts).ticks[0]!.value).toBe(0);
+  });
+});
+

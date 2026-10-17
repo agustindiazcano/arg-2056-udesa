@@ -3404,3 +3404,89 @@ button.brand:focus-visible .brand-a {
   font-size: 0.82rem;
 }
 
+
+/* ---- slide 1: the flags that choose the countries next to Argentina, and the scale switch ----------------------------- */
+.world-compare {
+  position: absolute;
+  top: 2.9rem;
+  left: var(--space-md);
+  z-index: 3;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-xs);
+  max-width: 62%;
+  pointer-events: auto;
+}
+
+.world-flag {
+  position: relative;
+  display: inline-flex;
+  padding: 3px;
+  border: 2px solid transparent;
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--intro-bg) 80%, transparent);
+  opacity: 0.5;
+  cursor: pointer;
+  transition: opacity 0.15s ease-out, border-color 0.15s ease-out;
+}
+
+.world-flag img {
+  display: block;
+  border-radius: 2px;
+}
+
+.world-flag:hover,
+.world-flag[aria-pressed='true'] {
+  opacity: 1;
+}
+
+.world-flag[aria-pressed='true'] {
+  border-color: var(--line);
+}
+
+.world-flag--home {
+  cursor: default;
+  opacity: 1;
+  border-color: var(--ink);
+}
+
+/* the name of the country, in our own tooltip (no native title) */
+.world-flag::after {
+  content: attr(data-name);
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 50%;
+  z-index: 5;
+  padding: 0.15rem 0.45rem;
+  border-radius: var(--radius-sm);
+  background: var(--intro-bg);
+  color: var(--ink);
+  font-size: 0.75rem;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(-50%);
+  transition: opacity 0.12s ease-out;
+}
+
+.world-flag:hover::after,
+.world-flag:focus-visible::after {
+  opacity: 1;
+}
+
+.world-scale {
+  display: inline-flex;
+  flex-basis: 100%;
+  align-items: center;
+  gap: var(--space-xs);
+  margin-top: 1.2rem; /* room for the name of a flag under it */
+}
+
+/* the counter of the year keeps to the right, in at most two lines, so it does not run under the flags */
+.gdp-chart:has(> .world-compare) > .world-year span {
+  display: block;
+  max-width: 15rem;
+  margin-left: auto;
+  text-align: right;
+}
