@@ -127,6 +127,17 @@ Order: C8, C7, C2, C3, C4, C5, C1, C6.
       - **Australia**: mining and energy powerhouse (iron ore, coal, lithium, LNG) paired with high tertiary education attainment, strong legal/regulatory framework, and high-value service exports.
       - **Canada**: vast reserves in energy, critical minerals, and agro-forestry backed by top global educational attainment (STEM & post-secondary), diversified advanced manufacturing, and technological hubs.
       - **Chile**: regional benchmark in copper and lithium reserves, fiscal rule on structural surplus, and sovereign stabilization funds, contrasting the transition hurdles toward high-income status.
+  - [ ] **Global AI token consumption, LLM usage pyramid, and relative access cost & tax barrier (new slide)**:
+    - **Global AI token volumes and programming usage**: global token consumption across frontier closed and open weights (OpenAI, Anthropic, Google Gemini, Meta Llama, DeepSeek, Hugging Face ecosystem), breaking down coding/software engineering workflows vs. general text/enterprise queries.
+    - **LLM usage pyramid**: visual multi-tier hierarchy:
+      - *Base*: Free web/consumer chat interfaces (massive query volume, lowest compute per interaction).
+      - *Middle*: API developer integration, specialized coding assistants and IDEs (Cursor, GitHub Copilot, Claude Code, Aider), fine-tuned domain models.
+      - *Apex*: High-compute test-time reasoning (o1/o3, extended thinking), autonomous multi-agent loops, and deep-search research/coding agents (lowest volume, highest compute and token expenditure).
+    - **Global nominal vs. relative purchasing power cost**: benchmark subscription ($20–$200/month) and API rates (per million tokens) against developer wages across regions. In developed economies, frontier tools represent <0.5% of an average tech wage, whereas in developing nations they represent a substantial fraction of monthly income.
+    - **Argentina's tax surcharge and structural access bottleneck**:
+      - Dissect the foreign currency tax burden applied to international credit card transactions (digital service VAT, PAIS tax, income/wealth tax perceptions, provincial stamp taxes) which historically added a 30% to 155% overhead on nominal dollar pricing.
+      - Quantify the effective local effort needed to access identical frontier AI tools compared to high-income countries.
+      - Evaluate how regulatory, currency, and tax barriers act as an institutional impediment that slows down local adoption of cutting-edge technology, penalizing developers, researchers, and startups and widening the productivity gap.
 
 
 
