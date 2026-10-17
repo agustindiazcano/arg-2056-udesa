@@ -1,7 +1,7 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useStore } from '../state/store';
 import { SECTION_LABELS } from '../content/sectionLabels';
-import { menuItems } from '../tour/indexData';
+import type { IndexItem } from '../tour/indexData';
 
 /** The little arrow that says the tab opens a menu. */
 function Chevron() {
@@ -22,14 +22,26 @@ export function TourMenu() {
   const dispatch = useStore((s) => s.dispatch);
   const [hover, setHover] = useState(false);
   const [pinned, setPinned] = useState(false);
-  const items = useMemo(() => menuItems(), []);
   const open = hover || pinned;
+  // the titles live with the charts of the Recorrido, which the main chunk must not carry: they load the first time the menu opens
+  const [items, setItems] = useState<IndexItem[] | null>(null);
+  useEffect(() => {
+    if (!open || items) return;
+    let live = true;
+    void import('../tour/indexData').then((m) => {
+      if (live) setItems(m.menuItems());
+    });
+    return () => {
+      live = false;
+    };
+  }, [open, items]);
   const close = () => {
     setHover(false);
     setPinned(false);
   };
   return (
     <div
+      role="presentation"
       className="tour-menu"
       onMouseEnter={() => setHover(true)}
       onMouseLeave={close}
@@ -60,7 +72,7 @@ export function TourMenu() {
         {SECTION_LABELS.tour}
         <Chevron />
       </button>
-      {open && (
+      {open && items && (
         <ul role="menu" aria-label="Diapositivas" className="tour-menu-list">
           {items.map((item) => (
             <li key={item.id} role="none">
