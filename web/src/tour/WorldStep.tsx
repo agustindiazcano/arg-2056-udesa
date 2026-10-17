@@ -9,7 +9,10 @@ import { useReducedMotion } from '../runtime/useReducedMotion.js';
 import { useStore } from '../state/store.js';
 import { tokens } from '../styles/tokens.js';
 import { Segmented } from '../ui/Segmented.js';
+import { ChartHelp } from '../ui/ChartHelp.js';
+import { RefList } from '../ui/RefLink.js';
 import { WORLD_TITLE } from './slideTitles.js';
+import { STEP_INFO } from './stepInfo.js';
 import { elapsedForYear, seriesFrame, valueAt, yearAtElapsed } from './worldAnim.js';
 import { SPEEDS } from '../state/reducer.js';
 import { useTimeline } from './useTimeline.js';
@@ -105,14 +108,18 @@ export function WorldStep() {
 
   const shownYear = Math.floor(frame.year + 1e-6);
   const shownValue = valueAt(series.years, series.values, frame.year);
+  const step0Info = STEP_INFO[0]!;
 
   return (
     <section className="gdp-step prov-step" aria-label={TITLE}>
       <header className="gdp-head">
         <Reveal k="head" className="gdp-title">
-          <h2>{TITLE}</h2>
+          <div className="slide-title-row">
+            <h2>{TITLE}</h2>
+            <ChartHelp title={step0Info.heading} paragraphs={step0Info.paragraphs} how={step0Info.how} refs={step0Info.refs} />
+          </div>
           <p className="gdp-sub">
-            {WORLD_UNIT}, {FIRST_YEAR} a {LAST_YEAR} · <span className="gdp-source">{WORLD_SOURCE}</span>
+            {WORLD_UNIT}, {FIRST_YEAR} a {LAST_YEAR} · <span className="gdp-source">{WORLD_SOURCE}</span> · <RefList ids={step0Info.refs} />
           </p>
         </Reveal>
         <div className="tour-controls">
@@ -173,6 +180,12 @@ export function WorldStep() {
           <Reveal k="top" delay={0.07} className="gdp-chart prov-rank" role="region" aria-label="Rankings mundiales de PBI y de PBI per cápita">
             <div className="prov-rank-head">
               <strong>Ranking mundial en {shownYear}</strong>
+              <ChartHelp
+                title="Ranking mundial de PBI y PBI per cápita"
+                paragraphs={[step0Info.paragraphs[0]!]}
+                how="El ranking de PBI per cápita cuenta solo países de un millón de habitantes o más."
+                refs={step0Info.refs}
+              />
             </div>
             <div className="world-ranks">
               <WorldTable metric="gdp" title="PBI real" unit={WORLD_UNIT} year={frame.year} />
@@ -183,13 +196,19 @@ export function WorldStep() {
           <Reveal k="region" delay={0.14} className="gdp-chart prov-bars" role="region" aria-label="Mayores economías de la región">
             <div className="tour-caption">
               <strong>Mayores economías de la región en {shownYear}</strong>
+              <ChartHelp
+                title="Mayores economías de la región"
+                paragraphs={[step0Info.paragraphs[1]!]}
+                how="Las barras de la región se reordenan de mayor a menor en cada año."
+                refs={step0Info.refs}
+              />
               <div className="world-metric-pick">
                 <span>En la región</span>
                 <Segmented label="Dato de la región" options={REGION_OPTIONS} value={regionMetric} onChange={setRegionMetric} />
               </div>
             </div>
             <div className="tour-chart">
-              <TourChart spec={regionSpec}>
+              <TourChart spec={regionSpec} mode="2d">
                 <EChart option={regionFlat} aria-label={regionText} />
               </TourChart>
             </div>

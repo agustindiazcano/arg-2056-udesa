@@ -1,15 +1,15 @@
 # LASTCONTEXT.md
 
 ## State
-- **Branch**: `task/nav-deadline-badge` (PR #121, merged with `main` @ `de76d64` after PR #119 C8 and PR #122 C7).
+- **Branch**: `task/data-ai-usage` (created from `main` @ `da960a0`, PR #124).
 - **Features added**:
-  1. Cartel rojo en el navbar inmediatamente a la derecha de los botones de navegación: `En desarrollo hasta el deadline 31/10` con punto blanco pulsante y soporte para `prefers-reduced-motion` (`Header.tsx`, `ui.css` usando tokens de `tokens.css`, `navSlot.test.tsx`).
-  2. Blindaje de opacidad inicial en `Reveal.tsx` para evitar condiciones de carrera en animaciones de GSAP en CI.
-  3. Reglas en `AGENTS.md`: tests corren en CI (Rule #1) y prohibición de literales de color fuera de `tokens.css`.
-  4. Agregadas en `PENDING.md` las especificaciones en inglés de:
-     - Diapositiva sobre consumo global de tokens de IA, pirámide de uso de LLMs, costo de acceso relativo en PPP y trabas impositivas locales en Argentina.
-     - Contextos históricos y estructurales (doctrina Jack Welch, colapso URSS, desindustrialización, shock China/OMC, precedentes hacia Super AGI, límites de recursos naturales, Mercosur/Brasil, sesgos en olas tecnológicas y políticas).
-     - Comparativa nice-to-have de economías con abundantes recursos naturales y alto capital humano (Noruega, Australia, Canadá, Chile).
+  1. Nueva pestaña **Uso de AI** (`AiUsageView.tsx`) en la sección `Data` (`DataPage.tsx`) junto a `Data`, `Referencias` y `Metodología`, incluyendo:
+     - Orquestación multi-agente en paralelo, consumo directo de datos procesados sin *hardcoding* y gobernanza *Human-in-the-Loop*.
+     - Explicación detallada y tabla comparativa directa entre **Branch tradicional** (`git checkout / switch`) y **Git Worktree** (`git worktree add`), detallando por qué se utilizan *worktrees* con múltiples agentes de IA para evitar pisar cambios en compilación y bloqueos de archivos (`EBUSY` / `.lock`).
+     - Flujo Gitflow con *commits* atómicos, PRs con aprobación humana, TDD + CI frente al alto costo en tokens del *code review* por IA, validación visual en dos etapas (Playwright mediante agente + iteración humana), herramientas de IA y stack completo de librerías de testing.
+  2. **Referencias numeradas (`[1]`, `[2]`, ...) con tooltips estilizados** (`RefLink.tsx`, `RefList`) en **Hacia el 2056** y **Data**: chips compactos (`[48] FMI`, `[52] Banco Mundial`) con tooltip estilizado en *hover*/*focus* que muestra cita + URL y apertura en nueva pestaña al hacer click.
+  3. **Tooltips y pop-ups de explicación (`?`)** (`ChartHelp.tsx`): botón `?` en cada diapositiva/gráfico de **Hacia el 2056** con tooltip estilizado en *hover* y ventana modal accesible al hacer click (sin `title` nativos y cumpliendo `eslint-plugin-jsx-a11y`).
+  4. **Gráfico «Mayores economías de la región» en 2D** (`WorldStep.tsx`): el gráfico de barras de mayores economías de la región (PBI, PBI per cápita, Población) se renderiza siempre en 2D (`mode="2d"`).
 
 ## Next
-- Revisión y merge de PR #121 y PR #120.
+- Verificar estado de CI del PR #124 (`task/data-ai-usage`) y aprobación humana para merge.

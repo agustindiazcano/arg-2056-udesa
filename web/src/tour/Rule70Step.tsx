@@ -3,7 +3,10 @@ import { EChart } from '../charts/EChart.js';
 import { formatNumber } from '../charts/format.js';
 import { Reveal } from '../motion/Reveal.js';
 import { Segmented } from '../ui/Segmented.js';
+import { ChartHelp } from '../ui/ChartHelp.js';
+import { RefList } from '../ui/RefLink.js';
 import { RULE70_TITLE } from './slideTitles.js';
+import { STEP_INFO } from './stepInfo.js';
 import { TabbedChart } from '../ui/TabbedChart.js';
 import { ConvergencePlanner } from './ConvergencePlanner.js';
 import { CountryExplorer } from './CountryExplorer.js';
@@ -45,6 +48,7 @@ function Calculator() {
   const arg = useMemo(() => argentinaDoubling(rate), [rate]);
   const growth = useMemo(() => growthChart(rate, Number(horizon), scale), [rate, horizon, scale]);
   const errors = useMemo(() => errorChart(), []);
+  const step5Info = STEP_INFO[5]!;
 
   // the field keeps what is typed (so 0.5 can be typed through "0"); the calculation always uses the rate held between the limits
   const type = (text: string) => {
@@ -63,6 +67,7 @@ function Calculator() {
           <Reveal k="growth" className="gdp-chart rule70-card">
             <div className="rule70-card-head">
               <strong>Crecimiento a {es(rate)} % por año</strong>
+              <ChartHelp title="Crecimiento compuesto" paragraphs={[step5Info.paragraphs[0]!, step5Info.paragraphs[1]!]} how={step5Info.how} refs={step5Info.refs} />
               <div className="rule70-switches">
                 <Segmented label="Escala" options={SCALES} value={scale} onChange={setScale} />
                 <Segmented label="Horizonte" options={HORIZONS} value={horizon} onChange={setHorizon} />
@@ -95,6 +100,7 @@ function Calculator() {
           <Reveal k="errors" delay={0.07} className="gdp-chart rule70-card">
             <div className="rule70-card-head">
               <strong>Cuánto se equivoca cada regla, según la tasa</strong>
+              <ChartHelp title="Error de las reglas del 70 y del 72" paragraphs={[step5Info.paragraphs[0]!]} how="La regla divide 70 (o 72) por la tasa en %. Con tasas chicas el 70 se acerca; cerca de 8 % el 72 es mejor." refs={step5Info.refs} />
               <span className="rule70-legend">
                 <span className="rule70-key rule70-key--70" aria-hidden="true" /> Regla del 70 <span className="rule70-key rule70-key--72" aria-hidden="true" /> Regla del 72
               </span>
@@ -198,12 +204,18 @@ function Calculator() {
  * convergence planning towards developed nations, and IMF projections.
  */
 export function Rule70Step() {
+  const step5Info = STEP_INFO[5]!;
   return (
     <section className="gdp-step rule70-step" aria-label={TITLE}>
       <header className="gdp-head">
         <Reveal k="head" className="gdp-title">
-          <h2>{TITLE}</h2>
-          <p className="gdp-sub">Cuánto tarda en duplicarse algo que crece a una tasa constante: la fórmula exacta, las reglas del 70 y del 72, qué tasa necesita Argentina para converger con países desarrollados y lo que pasó en economías reales</p>
+          <div className="slide-title-row">
+            <h2>{TITLE}</h2>
+            <ChartHelp title={step5Info.heading} paragraphs={step5Info.paragraphs} how={step5Info.how} refs={step5Info.refs} />
+          </div>
+          <p className="gdp-sub">
+            Cuánto tarda en duplicarse algo que crece a una tasa constante: la fórmula exacta, las reglas del 70 y del 72, qué tasa necesita Argentina para converger con países desarrollados y lo que pasó en economías reales · <RefList ids={step5Info.refs} />
+          </p>
         </Reveal>
       </header>
       <TabbedChart

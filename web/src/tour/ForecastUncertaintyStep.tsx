@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { Reveal } from '../motion/Reveal.js';
+import { ChartHelp } from '../ui/ChartHelp.js';
+import { RefList } from '../ui/RefLink.js';
 import { FORECAST_UNCERTAINTY_TITLE } from './slideTitles.js';
 
 const SECTIONS = ['Difusión tecnológica', 'Capacidad y costos', 'Revisión de pronósticos', 'Escenario adverso'] as const;
@@ -37,8 +39,21 @@ export function ForecastUncertaintyStep() {
     <section className="gdp-step draft-slide uncertainty-slide" aria-label={FORECAST_UNCERTAINTY_TITLE}>
       <header className="gdp-head draft-slide-head">
         <div>
-          <h2>{FORECAST_UNCERTAINTY_TITLE}</h2>
-          <p className="gdp-sub">Una proyección orienta; no promete lo que ocurrirá.</p>
+          <div className="slide-title-row">
+            <h2>{FORECAST_UNCERTAINTY_TITLE}</h2>
+            <ChartHelp
+              title={FORECAST_UNCERTAINTY_TITLE}
+              paragraphs={[
+                'Las proyecciones económicas a largo plazo dependen de supuestos sobre adopción tecnológica, costos de cómputo, marcos regulatorios y complementariedad con el empleo.',
+                'El abanico conceptual ilustra cómo la incertidumbre se amplía a medida que se extiende el horizonte temporal y por qué los escenarios deben leerse como rangos condicionales.'
+              ]}
+              how="Cambiá el horizonte temporal (Corto, Medio, Largo) y alterná entre las pestañas para explorar los canales de difusión tecnológica, costos y escenarios distributivos."
+              refs={['A1', 'A5', 'F1']}
+            />
+          </div>
+          <p className="gdp-sub">
+            Una proyección orienta; no promete lo que ocurrirá · <RefList ids={['A1', 'A5', 'F1']} />
+          </p>
         </div>
         <span className="draft-status">Esquema conceptual</span>
       </header>

@@ -6,9 +6,12 @@ import { Reveal } from '../motion/Reveal.js';
 import { useStore } from '../state/store.js';
 import { tokens } from '../styles/tokens.js';
 import { Segmented } from '../ui/Segmented.js';
+import { ChartHelp } from '../ui/ChartHelp.js';
+import { RefList } from '../ui/RefLink.js';
 import { ExportsStep } from './ExportsStep.js';
 import { TourChart } from './TourChart.js';
 import { COMPOSITION_TITLE } from './slideTitles.js';
+import { STEP_INFO } from './stepInfo.js';
 import { EXPORT_COMPOSITION_CHART, TOUR_CHARTS } from './tourCharts.js';
 import type { TourChartDef } from './tourCharts.js';
 
@@ -44,9 +47,13 @@ function Big({ def, form }: { def: TourChartDef; form: Form }) {
     const labels = rows.map((r) => r.label);
     return buildColumns(labels, [{ name: def.title, values: rows.map((r) => r.value), color: tokens.muted }], { unit: '%', highlight: labels[0] ?? '', summary: built.summary }).option;
   }, [def, rows, built.summary]);
+  const step12Info = STEP_INFO[12]!;
   return (
     <Reveal k={`${def.title}-${form}`} className="gdp-chart">
-      <h3 className="composition-title">{def.title}</h3>
+      <h3 className="composition-title">
+        <span>{def.title}</span>
+        <ChartHelp title={def.title} paragraphs={[def.subtitle, ...step12Info.paragraphs]} how={step12Info.how} refs={step12Info.refs} />
+      </h3>
       <p className="gdp-sub">{def.subtitle}</p>
       <div className="tour-chart">
         {form === 'treemap' ? (
@@ -73,12 +80,16 @@ export function CompositionStep() {
   const dispatch = useStore((s) => s.dispatch);
   const [form, setForm] = useState<Form>('treemap');
   const [part, setPart] = useState<Part>('composition');
+  const step12Info = STEP_INFO[12]!;
   if (part === 'exports') {
     return (
       <section className="gdp-step" aria-label={COMPOSITION_TITLE}>
         <header className="gdp-head">
           <Reveal k="head" className="gdp-title">
-            <h2>{COMPOSITION_TITLE}</h2>
+            <div className="slide-title-row">
+              <h2>{COMPOSITION_TITLE}</h2>
+              <ChartHelp title={step12Info.heading} paragraphs={step12Info.paragraphs} how={step12Info.how} refs={step12Info.refs} />
+            </div>
           </Reveal>
           <div className="tour-controls">
             <Segmented label="Mostrar" options={PARTS} value={part} onChange={setPart} />
@@ -92,7 +103,13 @@ export function CompositionStep() {
     <section className="gdp-step" aria-label={COMPOSITION_TITLE}>
       <header className="gdp-head">
         <Reveal k="head" className="gdp-title">
-          <h2>{COMPOSITION_TITLE}</h2>
+          <div className="slide-title-row">
+            <h2>{COMPOSITION_TITLE}</h2>
+            <ChartHelp title={step12Info.heading} paragraphs={step12Info.paragraphs} how={step12Info.how} refs={step12Info.refs} />
+          </div>
+          <p className="gdp-sub">
+            Valor agregado por sector y exportaciones por complejo · <RefList ids={step12Info.refs} />
+          </p>
         </Reveal>
         <div className="tour-controls">
           <Segmented label="Mostrar" options={PARTS} value={part} onChange={setPart} />

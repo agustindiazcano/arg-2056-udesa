@@ -11,12 +11,14 @@ import {
   tableCsv,
   tableJson
 } from './csv.js';
+import { AiUsageView } from './AiUsageView.js';
 import { MethodologyView } from './MethodologyView.js';
 import { REFERENCES } from './references.js';
 import { buildSlides } from './slides.js';
 import type { Cell, DataTable, SlideData } from './types.js';
+import { RefLink } from '../ui/RefLink.js';
 
-export type DataTab = 'data' | 'references' | 'methodology';
+export type DataTab = 'data' | 'references' | 'methodology' | 'ai';
 
 const cell = (c: Cell): string => (c === null ? '—' : typeof c === 'number' ? formatDecimal(c) : c);
 const fileOf = (s: SlideData): string => `diapositiva-${slug(`${s.id} ${s.title}`)}`;
@@ -71,17 +73,17 @@ function Table({ slide, table }: { slide: SlideData; table: DataTable }) {
 }
 
 /**
- * The Data section: provides three views via title tabs:
+ * The Data section: provides four views via title tabs:
  * 1. Data: tables behind each slide of the Recorrido, with CSV and JSON downloads.
  * 2. Referencias: official sources and links categorized with their verification state.
  * 3. Metodología: technical data pipeline description and slide-specific methodologies.
+ * 4. Uso de AI: multi-agent workflow, human governance, Gitflow, and testing stack.
  */
 export function DataPage() {
   const [tab, setTab] = useState<DataTab>('data');
   const slides = useMemo(buildSlides, []);
   const [selected, setSelected] = useState(slides[0]!.id);
   const current = slides.find((s) => s.id === selected) ?? slides[0]!;
-  const refsById = useMemo(() => new Map(REFERENCES.map((r) => [r.id, r])), []);
 
   const page = useRef<HTMLDivElement>(null);
   const choose = (id: string) => {
@@ -121,6 +123,14 @@ export function DataPage() {
             aria-pressed={tab === 'methodology'}
           >
             Metodología
+          </button>
+          <button
+            type="button"
+            className={`data-tab-btn ${tab === 'ai' ? 'data-tab-btn--active' : ''}`}
+            onClick={() => switchTab('ai')}
+            aria-pressed={tab === 'ai'}
+          >
+            Uso de AI
           </button>
         </nav>
 
@@ -190,17 +200,11 @@ export function DataPage() {
               {s.refs.length > 0 && (
                 <p className="data-refs">
                   Fuentes:{' '}
-                  {s.refs.map((id, i) => {
-                    const r = refsById.get(id)!;
-                    return (
-                      <React.Fragment key={id}>
-                        {i > 0 && ', '}
-                        <a href={r.url} target="_blank" rel="noopener noreferrer">
-                          {r.label}
-                        </a>
-                      </React.Fragment>
-                    );
-                  })}
+                  <span className="ref-chip-list">
+                    {s.refs.map((id) => (
+                      <RefLink key={id} id={id} />
+                    ))}
+                  </span>
                 </p>
               )}
             </article>
@@ -212,7 +216,7 @@ export function DataPage() {
         <article id="data-referencias" className="data-slide" aria-labelledby="data-title-refs">
           <h3 id="data-title-refs">Referencias</h3>
           <p className="data-intro">
-            Todos los enlaces y fuentes oficiales utilizados en el proyecto, organizados por temática.
+            Todos los enlaces y fuentes oficiales utilizados en el proyecto, numerados y organizados por temática.
           </p>
           {Array.from(new Set(REFERENCES.map((r) => r.group))).map((group) => (
             <div key={group} className="data-table-block">
@@ -220,9 +224,7 @@ export function DataPage() {
               <ul className="data-reflist">
                 {REFERENCES.filter((r) => r.group === group).map((r) => (
                   <li key={r.id}>
-                    <a href={r.url} target="_blank" rel="noopener noreferrer">
-                      {r.label}
-                    </a>
+                    <RefLink id={r.id} fullLabel />
                   </li>
                 ))}
               </ul>
@@ -232,6 +234,8 @@ export function DataPage() {
       )}
 
       {tab === 'methodology' && <MethodologyView />}
+
+      {tab === 'ai' && <AiUsageView />}
     </div>
   );
 }

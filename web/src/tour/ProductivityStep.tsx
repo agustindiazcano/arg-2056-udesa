@@ -5,6 +5,8 @@ import { barsSpec, linesSpec } from '../charts3d/specs.js';
 import { Reveal } from '../motion/Reveal.js';
 import { useStore } from '../state/store.js';
 import { Segmented } from '../ui/Segmented.js';
+import { ChartHelp } from '../ui/ChartHelp.js';
+import { RefLink } from '../ui/RefLink.js';
 import { PRODUCTIVITY_TITLE } from './slideTitles.js';
 import { TourChart } from './TourChart.js';
 import { COUNTRIES, DATA_SOURCES, PERIODS, PRODUCTIVITY_STEPS, LAST_YEAR, cumulative2011, num, periodFrom, seriesOf } from './productivity.js';
@@ -19,16 +21,11 @@ const PERIOD_OPTIONS = PERIODS.map((p) => ({ value: String(p), label: `Desde ${p
 
 function Links({ links }: { links: readonly SourceLink[] }) {
   return (
-    <>
-      {links.map((l, i) => (
-        <React.Fragment key={l.url}>
-          {i > 0 && ', '}
-          <a href={l.url} target="_blank" rel="noopener noreferrer">
-            {l.label}
-          </a>
-        </React.Fragment>
+    <span className="ref-chip-list">
+      {links.map((l) => (
+        <RefLink key={l.url} url={l.url} label={l.label} />
       ))}
-    </>
+    </span>
   );
 }
 
@@ -134,6 +131,7 @@ export function ProductivityStep() {
           <div className="tour-caption">
             <strong>{def.chart}</strong>
             <span className="prod-unit">{def.unit}</span>
+            <ChartHelp title={def.heading} paragraphs={def.paragraphs} how={def.how} />
             {def.kind !== 'bars' && (
               <ul className="tour-legend" aria-label="Países">
                 {COUNTRIES.map((c) => (
@@ -181,7 +179,7 @@ export function ProductivityStep() {
           <div className="prod-nav">
             <div role="tablist" aria-label="Pasos de la diapositiva" className="prod-tabs">
               {PRODUCTIVITY_STEPS.map((s, i) => (
-                <button key={s.heading} type="button" role="tab" className="chip" aria-selected={i === n} title={s.chart} onClick={() => setN(i)}>
+                <button key={s.heading} type="button" role="tab" className="chip" aria-selected={i === n} onClick={() => setN(i)}>
                   {i + 1}
                 </button>
               ))}

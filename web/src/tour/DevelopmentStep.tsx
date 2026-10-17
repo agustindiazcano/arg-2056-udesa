@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { Reveal } from '../motion/Reveal.js';
+import { ChartHelp } from '../ui/ChartHelp.js';
+import { RefList } from '../ui/RefLink.js';
 import { DEVELOPMENT_TITLE } from './slideTitles.js';
 
 const INDICATORS = {
@@ -28,8 +30,21 @@ export function DevelopmentStep() {
     <section className="gdp-step draft-slide" aria-label={DEVELOPMENT_TITLE}>
       <header className="gdp-head draft-slide-head">
         <div>
-          <h2>{DEVELOPMENT_TITLE}</h2>
-          <p className="gdp-sub">Dimensiones sociales y humanas del desarrollo económico</p>
+          <div className="slide-title-row">
+            <h2>{DEVELOPMENT_TITLE}</h2>
+            <ChartHelp
+              title={DEVELOPMENT_TITLE}
+              paragraphs={[
+                'El crecimiento del PBI por habitante resume la capacidad productiva agregada, pero el desarrollo humano requiere evaluar también salud, educación y distribución del ingreso.',
+                'Este panel organiza las dimensiones de salud, educación e igualdad bajo estándares comparables internacionalmente.'
+              ]}
+              how="Seleccioná una dimensión (Salud, Educación o Igualdad) y un indicador para explorar su definición metodológica y su vínculo con el crecimiento económico."
+              refs={['W1', 'W3']}
+            />
+          </div>
+          <p className="gdp-sub">
+            Dimensiones sociales y humanas del desarrollo económico · <RefList ids={['W1', 'W3']} />
+          </p>
         </div>
         <span className="draft-status">Métricas de desarrollo</span>
       </header>

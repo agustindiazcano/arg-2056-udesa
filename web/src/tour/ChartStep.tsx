@@ -12,6 +12,9 @@ import type { ProvinceId } from '../types/province.js';
 import { PRODUCTION_UNIT, mapValuesOf } from './provinceMock.js';
 import { CHART_STEP_LIST, TOUR_CHARTS } from './tourCharts.js';
 import { Spinner } from '../ui/Spinner.js';
+import { ChartHelp } from '../ui/ChartHelp.js';
+import { RefList } from '../ui/RefLink.js';
+import { STEP_INFO } from './stepInfo.js';
 import { TourIndicators } from './TourIndicators.js';
 import { useTourLayout } from './useTourLayout.js';
 import type { TourCount } from './useTourLayout.js';
@@ -111,6 +114,7 @@ export function ChartStep({ step }: { step: number }) {
   const setFocus = useTourLayout((s) => s.setFocus);
   const def = TOUR_CHARTS[step];
   if (!def) return null;
+  const info = STEP_INFO[step];
   const steps = visibleSteps(step, focus ? 4 : count);
   // "1/3": the chart of the step is the big one, on the right; the others are small, on the left, and a click makes one of them the big one
   const small = focus ? steps.filter((s) => s !== step) : [];
@@ -120,13 +124,27 @@ export function ChartStep({ step }: { step: number }) {
     <section className="gdp-step" aria-label={def.title}>
       <header className="gdp-head">
         <Reveal k={String(step)} className="gdp-title">
-          <h2>{def.title}</h2>
+          <div className="slide-title-row">
+            <h2>{def.title}</h2>
+            <ChartHelp
+              title={info?.heading ?? def.title}
+              paragraphs={info?.paragraphs ?? [def.subtitle]}
+              how={info?.how}
+              refs={info?.refs}
+            />
+          </div>
           <p className="gdp-sub">
             {def.subtitle}
             {def.source && (
               <>
                 {' · '}
                 <span className="gdp-source">{def.source}</span>
+              </>
+            )}
+            {info?.refs && info.refs.length > 0 && (
+              <>
+                {' · '}
+                <RefList ids={info.refs} />
               </>
             )}
           </p>

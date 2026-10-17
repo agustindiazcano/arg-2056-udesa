@@ -125,9 +125,11 @@ describe('step 0 of the Recorrido', () => {
     expect(group.textContent).toContain('0,25×');
   });
 
-  it('defaults the regional comparison to PBI per cápita', () => {
+  it('defaults the regional comparison to PBI per cápita and renders the regional bar chart in 2D', () => {
     render(<WorldStep />);
     const perCapitaBtn = screen.getByRole('button', { name: 'PBI per cápita' });
     expect(perCapitaBtn.getAttribute('aria-pressed')).toBe('true');
+    const regionSection = screen.getByRole('region', { name: 'Mayores economías de la región' });
+    expect(regionSection.querySelector('[data-testid="echart"]')).toBeTruthy();
   });
 });
