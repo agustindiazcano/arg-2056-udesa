@@ -5,15 +5,20 @@ Every task below has a brief (`<slug>.md` in the repository root) and a prompt (
 ## New corrections (`test/correcciones-nuevas.png`, plan in `docs/action-plan-correcciones-nuevas.md`)
 
 Order: C8, C7, C2, C3, C4, C5, C1, C6.
-- [x] C8 `map-zoom-limits`: ZOOM_MAX 8 -> 32 in `web/src/charts/navState.ts` (country and department maps); tests updated. Branch `task/map-zoom-limits`. Not checked visually in the browser.
-- [ ] C7 `map-drill-transition`: smooth transition between country, province and department.
-- [ ] C2 `res-sector-filter-panel`: with the Mining filter, the composition panel shows mining only.
-- [ ] C3 `res-province-drilldown`: selecting a province shows departments if there is data, otherwise production by mining sector.
-- [ ] C4 `res-department-projects`: click on a department expands it and lists mining projects when data exists.
-- [ ] C5 `map-search`: search by province or department.
-- [ ] C1 `res-minerals-extend`: add boron, copper, molybdenum; add the Taca Taca project.
-- [ ] C6 `province-profile-slide`: LAST, with mock data (decided by the user; mock never labeled in the UI, listed in `docs/mock-data.md`, release gate still blocks until replaced by real data). New slide with provincial GDP, coparticipation, GDP per capita, exports, population, poverty, unemployment, private / public / registered employment; security filter only if an official provincial series exists.
-- [ ] **Data to verify (human)**: every figure added by C1 and C6 against the original source (INDEC, Secretaria de Mineria, USGS, Ministerio de Economia, Secretaria de Trabajo). Source candidates in section 4 of the plan.
+- [x] C8 `map-zoom-limits`: ZOOM_MAX 8 -> 32 in `web/src/charts/navState.ts` (country and department maps); tests updated. Branch `task/map-zoom-limits`.
+- [x] C7 `map-drill-transition`: smooth CSS opacity and scale transition (0.3s cubicOut) for map drilldown between country, province and departments in `ProvinceMap.tsx` and `dashboard.css`, respecting prefers-reduced-motion; unit test in `mapDrillTransition.test.tsx`. Branch `task/map-drill-transition`.
+- [x] C2 `res-sector-filter-panel`: pure selector `provinceSectorBreakdown` in `provinceSectorBreakdown.ts` and updated `ResourcesStep.tsx` so selecting a province with a sector filter shows that sector's detailed provincial composition (e.g. minerals for mineria) instead of multi-sector breakdown; hidden cleanly when below threshold. 12 unit tests passing in `provinceSectorBreakdown.test.ts`. Branch `task/res-sector-filter-panel`.
+- [x] C3 `res-province-drilldown`: selecting a province shows department ranking if department-level data exists (e.g. Salta, San Juan, Catamarca, Jujuy, Santa Cruz), otherwise falls back to mineral/sector breakdown of that province (e.g. Rio Negro). Implemented in `provinceDrilldown.ts` and `ResourcesStep.tsx`; 7 tests in `provinceDrilldown.test.ts`. Branch `task/res-province-drilldown`.
+- [x] C4 `res-department-projects`: clicking a department (in chart bars or on the map) selects it and expands registered mining projects (name, company, mineral, status, investment/capacity); if no projects exist, nothing extra is shown. Integrated in `ProvinceMap.tsx` and `ResourcesStep.tsx`; tests in `resourcesStepDrilldown.test.tsx`. Branch `task/res-province-drilldown`.
+- [x] C5 `map-search`: search by province or department with autocomplete, keyboard navigation, normalization (accents/case) and seamless drilldown on the map. Branch `task/map-search`.
+- [x] C1 `res-minerals-extend`: added copper (116.7 Mt), boron (3rd world reserve), and molybdenum (2.2+ Mt) to mining totals and provincial breakdowns; added Taca Taca with NI 43-101 parameters; enabled search by mining project in MapSearch. Branch `task/res-minerals-extend`.
+- [x] C6 `province-profile-slide`: LAST, with mock data (decided by the user; mock never labeled in the UI, listed in `docs/mock-data.md`, release gate still blocks until replaced by real data). New slide/pane with provincial GDP, coparticipation, GDP per capita, exports, population, poverty, unemployment, private / public / registered employment, and security filter; ranking chart, accessible table, map with search. Branch `task/province-profile-slide`.
+- [ ] **Data to verify (human)**:
+  - C1: Recursos de cobre 116,7 Mt (Secretaría de Minería ARMINERA 2025 p. 8).
+  - C1: Reservas y producción de boro (boratos): 3.ª reserva mundial (USGS Mineral Commodity Summaries / Secretaría de Minería).
+  - C1: Potencial de molibdeno: 2,2+ Mt asociado a pórfidos de cobre (informes de Taca Taca, El Pachón, MARA).
+  - C1: Taca Taca capex 4.232 M USD inicial (First Quantum NI 43-101 de 2026-02-19).
+  - C6: Figures for provincial profile slide (INDEC, Ministerio de Economía, Secretaría de Trabajo).
 
 
 ## Task queue (in order)

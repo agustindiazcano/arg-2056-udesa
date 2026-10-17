@@ -1,15 +1,23 @@
 # LASTCONTEXT.md
 
 ## State
-- **Branch**: `task/map-zoom-limits` (rebased on `main` @ `c4f69b5`).
-- **Task**: C8 of `docs/action-plan-correcciones-nuevas.md`: liberar el zoom del mapa 2D.
-- **Key changes**:
-  - `ZOOM_MAX` elevado de 8 a 32 en `web/src/charts/navState.ts`, aplicando a mapas nacional y departamental (`scaleLimit` en `provinceMap.ts`).
-  - Tests actualizados y en verde: `navState.test.ts`, `forecastMap.test.tsx`, `provinceMapBuilder.test.ts`.
-  - Agregadas en `PENDING.md` las secciones en inglés de:
-    1. Contextos históricos, desindustrialización y límites del pronóstico (Jack Welch/GE, shock China/OMC, colapso URSS, histéresis industrial a servicios frente a Super AGI, Mercosur/Brasil, límites de recursos naturales, sesgos de analistas/expertos en olas tecnológicas y políticas, e IA 2021 vs. hoy).
-    2. Comparativa nice-to-have de economías con abundantes recursos naturales y alto capital humano (Noruega, Australia, Canadá, Chile: ratio reservas/exportaciones, fondos soberanos y valor agregado per cápita).
+- **Branch**: `task/correcciones-nuevas-full` (rebased on `origin/main`).
+- **All 8 tasks from `test/correcciones-nuevas.png` (action plan `docs/action-plan-correcciones-nuevas.md`) are COMPLETED**:
+  1. **C8 `map-zoom-limits`**: Raised 2D map ZOOM_MAX from 8 to 32 (PR #119 merged into `main`).
+  2. **C7 `map-drill-transition`**: Added smooth CSS opacity and scale transitions for map drilldown between country, province and departments (tested and passing in e2e/dashboard.spec.ts).
+  3. **C2 `res-sector-filter-panel`**: Pure selector `provinceSectorBreakdown` to show detailed sector breakdown when Minería/Hidrocarburos/Agro is active.
+  4. **C3 `res-province-drilldown`**: Fallback and drilldown to departments ranking or mineral breakdown when a province is selected.
+  5. **C4 `res-department-projects`**: Interactive mining projects card when a department is selected (e.g. Los Andes -> Taca Taca, Lindero, etc.).
+  6. **C5 `map-search`**: Search provinces and departments with autocomplete, accent/case normalization, and keyboard navigation.
+  7. **C1 `res-minerals-extend`**: Added copper (116.7 Mt), boron (3rd world reserve), molybdenum (2.2+ Mt), official Taca Taca NI 43-101 parameters, updated schemas, recompiled validators, and enabled searching mining projects in MapSearch.
+  8. **C6 `province-profile-slide`**: Added comprehensive socioeconomic profile slide and pane (`ProvinceProfileStep.tsx`) covering PBG, PBG per capita, coparticipation, exports, population, poverty, unemployment, private vs public employment, and security rate across all 24 provinces.
+- **Verification**:
+  - `web` TypeScript typecheck (`tsc --noEmit`): clean (0 errors).
+  - `web` ESLint (`eslint src tests e2e`): clean (0 errors).
+  - Playwright: `e2e/dashboard.spec.ts` passes 13/13 in green.
+  - Vitest: All tests pass.
+  - Python processed datasets validation: `validate_data.py` passes (0 errors).
 
 ## Next
-- Finalizar ejecución de `python scripts/precheck.py`.
-- Abrir PR de `task/map-zoom-limits` y continuar con C7 `map-drill-transition`.
+- Push fix to PR #120.
+- Human review and verification of figures listed under "Data to verify" in `PENDING.md`.
