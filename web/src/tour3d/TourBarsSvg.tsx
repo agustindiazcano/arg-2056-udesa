@@ -51,7 +51,7 @@ export function TourBarsSvg({ spec }: { spec: Bars3DSpec }) {
           ))}
           {drawing.bars.map((b) => {
             const item = layout.items[b.index]!;
-            const base = (b.highlight ? SEQUENTIAL_BLUE[9] : SEQUENTIAL_BLUE[4]) ?? tokens.ink;
+            const base = (b.highlight ? SEQUENTIAL_BLUE[9] : tokens.categorical[b.index % tokens.categorical.length]) ?? tokens.ink;
             const text = `${item.label}: ${item.display}`;
             return (
               <g

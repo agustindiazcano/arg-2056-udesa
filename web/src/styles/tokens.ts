@@ -23,8 +23,25 @@ export const tokens = {
 
   blue: '#3987e5',
 
-  /** Distinct colors for the parts of a whole (the sectors of a treemap); each keeps white text readable. */
-  categorical: ['#3987e5', '#199e70', '#c27b00', '#d95926', '#8e6bd8', '#d14d8f', '#2a9fb3', '#7f9a1f', '#b5513a', '#6f6e68'],
+  /** Distinct colors for the parts of a whole (the sectors of a treemap, pie, and bars); each keeps white text readable. */
+  categorical: [
+    '#3987e5',
+    '#199e70',
+    '#c27b00',
+    '#d95926',
+    '#8e6bd8',
+    '#d14d8f',
+    '#2a9fb3',
+    '#7f9a1f',
+    '#b5513a',
+    '#6f6e68',
+    '#2563eb',
+    '#d97706',
+    '#059669',
+    '#7c3aed',
+    '#0891b2',
+    '#65a30d'
+  ],
 };
 
 /** Opacity of the p10-p90 band (design.md section 4, fan chart). Mirrors --band-alpha in tokens.css. */

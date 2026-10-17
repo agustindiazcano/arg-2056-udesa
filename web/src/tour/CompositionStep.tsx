@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { EChart } from '../charts/EChart.js';
+import { buildPie } from '../charts/builders/pie.js';
 import { buildColumns } from '../charts/builders/tourCharts.js';
 import { Reveal } from '../motion/Reveal.js';
 import { useStore } from '../state/store.js';
@@ -13,6 +14,7 @@ import type { TourChartDef } from './tourCharts.js';
 
 const FORMS = [
   { value: 'treemap', label: 'Treemap' },
+  { value: 'pie', label: 'Torta' },
   { value: 'bars', label: 'Barras' }
 ] as const;
 
@@ -35,12 +37,13 @@ export const COMPOSITION_CHARTS: ReadonlyArray<TourChartDef> = [TOUR_CHARTS[12]!
 
 function Big({ def, form }: { def: TourChartDef; form: Form }) {
   const built = useMemo(() => def.build(), [def]);
-  // the bars of the same shares (the spec of the 3D view holds them in order)
+  // the bars and pie of the same shares (the spec of the 3D view holds them in order)
+  const rows = useMemo(() => (built.spec && built.spec.kind === 'bars' ? built.spec.bars : []), [built]);
+  const pie = useMemo(() => buildPie(rows, { unit: '%', summary: built.summary }).option, [rows, built.summary]);
   const bars = useMemo(() => {
-    const rows = built.spec && built.spec.kind === 'bars' ? built.spec.bars : [];
     const labels = rows.map((r) => r.label);
     return buildColumns(labels, [{ name: def.title, values: rows.map((r) => r.value), color: tokens.muted }], { unit: '%', highlight: labels[0] ?? '', summary: built.summary }).option;
-  }, [def, built]);
+  }, [def, rows, built.summary]);
   return (
     <Reveal k={`${def.title}-${form}`} className="gdp-chart">
       <h3 className="composition-title">{def.title}</h3>
@@ -48,6 +51,8 @@ function Big({ def, form }: { def: TourChartDef; form: Form }) {
       <div className="tour-chart">
         {form === 'treemap' ? (
           <EChart option={built.option} aria-label={built.summary} />
+        ) : form === 'pie' ? (
+          <EChart option={pie} aria-label={built.summary} />
         ) : (
           <TourChart spec={built.spec}>
             <EChart option={bars} aria-label={built.summary} />

@@ -216,7 +216,18 @@ export function decompositionChart(d: Decomposition, name: string) {
     grid: GRID,
     xAxis: { type: 'category', data: labels, axisLine: { lineStyle: { color: tokens.baseline } }, axisTick: { show: false }, axisLabel: { color: tokens.ink2 } },
     yAxis: { type: 'value', splitLine: { lineStyle: LINE }, axisLabel: { color: tokens.muted, formatter: (v: number) => `${es(v, 0)} %` } },
-    series: [{ name: 'Crecimiento anual', type: 'bar', data: values, barWidth: '40%', itemStyle: { color: tokens.blue } }]
+    series: [
+      {
+        name: 'Crecimiento anual',
+        type: 'bar',
+        data: values.map((v, i) => ({
+          value: v,
+          itemStyle: { color: tokens.categorical[i % tokens.categorical.length], borderRadius: v >= 0 ? [4, 4, 0, 0] : [0, 0, 4, 4] }
+        })),
+        barWidth: '40%',
+        itemStyle: { color: tokens.blue }
+      }
+    ]
   };
   return { option, summary, labels, values };
 }
@@ -254,7 +265,18 @@ export function imfChart(name: string, years: number[], growth: number[]) {
     grid: GRID,
     xAxis: { type: 'category', data: years.map(String), axisLine: { lineStyle: { color: tokens.baseline } }, axisTick: { show: false }, axisLabel: { color: tokens.ink2 } },
     yAxis: { type: 'value', splitLine: { lineStyle: LINE }, axisLabel: { color: tokens.muted, formatter: (v: number) => `${es(v, 0)} %` } },
-    series: [{ name: 'Crecimiento real', type: 'bar', data: growth, barWidth: '40%', itemStyle: { color: tokens.blue } }]
+    series: [
+      {
+        name: 'Crecimiento real',
+        type: 'bar',
+        data: growth.map((v, i) => ({
+          value: v,
+          itemStyle: { color: tokens.categorical[i % tokens.categorical.length], borderRadius: v >= 0 ? [4, 4, 0, 0] : [0, 0, 4, 4] }
+        })),
+        barWidth: '40%',
+        itemStyle: { color: tokens.blue }
+      }
+    ]
   };
   return { option, summary };
 }
