@@ -8,7 +8,7 @@
     "properties": {
       "id": { "type": "string", "pattern": "^[a-z0-9-]+$" },
       "name": { "type": "string", "minLength": 1 },
-      "resource": { "enum": ["lithium", "copper", "gold", "silver", "oil", "gas", "soy", "wheat", "corn", "other"] },
+      "resource": { "enum": ["lithium", "copper", "gold", "silver", "oil", "gas", "soy", "wheat", "corn", "boron", "molybdenum", "other"] },
       "geo": { "type": "string", "pattern": "^AR-[A-Z]$" },
       "status": { "enum": ["operating", "ramp_up", "construction", "approved", "feasibility", "prefeasibility", "exploration", "announced"] },
       "company": {

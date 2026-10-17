@@ -6,6 +6,9 @@ import { PROVINCE_VALUES } from './tourData.js';
 /** The unit of every made-up production value by province. */
 export const PRODUCTION_UNIT = 'millones de USD';
 
+/** A province is shown as a producer of a sector only above this value (million USD). */
+export const PRODUCER_MIN = 100;
+
 export type Sector = 'mineria' | 'agro' | 'hidrocarburos';
 
 export const SECTOR_LABELS: Record<Sector, string> = { mineria: 'Minería', agro: 'Agro', hidrocarburos: 'Hidrocarburos' };
@@ -22,7 +25,7 @@ export const SECTOR_VALUES: Record<Sector, ReadonlyArray<number>> = {
 };
 
 /** The short names that fit under a bar. */
-const SHORT: Partial<Record<ProvinceId, string>> = {
+export const SHORT: Partial<Record<ProvinceId, string>> = {
   'AR-C': 'CABA',
   'AR-B': 'Buenos Aires',
   'AR-G': 'Santiago del Estero',
