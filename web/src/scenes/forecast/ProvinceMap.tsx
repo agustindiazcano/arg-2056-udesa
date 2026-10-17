@@ -78,6 +78,8 @@ interface ProvinceMapProps {
   /** The map zooms to the selected province and back to the whole territory when nothing is selected. */
   zoomToSelected?: boolean;
   onSelect: (id: ProvinceId | null) => void;
+  selectedDepartment?: string | null;
+  onSelectDepartment?: (dept: string | null) => void;
 }
 
 const NO_DATA_TEXT = 'sin datos';
@@ -95,7 +97,9 @@ export function ProvinceMap({
   hideTitle = false,
   compact = false,
   zoomToSelected = false,
-  onSelect
+  onSelect,
+  selectedDepartment = null,
+  onSelectDepartment
 }: ProvinceMapProps) {
   const [asTable, setAsTable] = useState(false);
   const [deptGeo, setDeptGeo] = useState<DepartmentsGeo | null>(null);
@@ -164,7 +168,12 @@ export function ProvinceMap({
   }, [selectedId, zoomToSelected, geo, bbox, deptBuilt]);
 
   const handleClick = (params: ChartClickParams) => {
-    if (deptBuilt) return;
+    if (deptBuilt) {
+      if (params.name) {
+        onSelectDepartment?.(params.name === selectedDepartment ? null : params.name);
+      }
+      return;
+    }
     const id = params.data?.provinceId ?? params.name;
     if (!isProvinceId(id)) return; // for example the illustrative Malvinas region
     onSelect(id === selectedId ? null : id);
@@ -236,14 +245,32 @@ export function ProvinceMap({
                 <button
                   type="button"
                   className="map-back-btn"
-                  onClick={() => onSelect(null)}
-                  title="Volver al mapa nacional"
+                  onClick={() => {
+                    if (selectedDepartment) {
+                      onSelectDepartment?.(null);
+                    } else {
+                      onSelect(null);
+                    }
+                  }}
+                  title={selectedDepartment ? `Volver a ${selectedProvince.name}` : 'Volver al mapa nacional'}
                 >
-                  <span className="back-arrow">←</span> Argentina
+                  <span className="back-arrow">←</span> {selectedDepartment ? selectedProvince.name : 'Argentina'}
                 </button>
                 <span className="breadcrumb-sep">›</span>
-                <span className="breadcrumb-current">{selectedProvince.name}</span>
-                {deptGeo && <span className="dept-badge">{deptGeo.features.length} departamentos</span>}
+                <span className="breadcrumb-current">
+                  {selectedDepartment ? selectedDepartment : selectedProvince.name}
+                </span>
+                {deptGeo && !selectedDepartment && <span className="dept-badge">{deptGeo.features.length} departamentos</span>}
+                {selectedDepartment && (
+                  <button
+                    type="button"
+                    className="map-back-btn"
+                    style={{ marginLeft: 'auto', fontSize: '0.75rem', padding: '2px 8px' }}
+                    onClick={() => onSelectDepartment?.(null)}
+                  >
+                    Ver todos los departamentos
+                  </button>
+                )}
               </div>
             )}
             <div className={`map-drill-canvas${isTransitioning ? ' map-transitioning' : ''}`}>

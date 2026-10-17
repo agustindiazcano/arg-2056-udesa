@@ -17,6 +17,7 @@ import type { Part, ResourceSector } from './resourcesData.js';
 import { ProvinceStep } from './ProvinceStep.js';
 import { RESOURCES_TITLE } from './slideTitles.js';
 import { provinceSectorBreakdown } from './provinceSectorBreakdown.js';
+import { getDepartmentProjects, provinceDrilldownData } from './provinceDrilldown.js';
 
 export { PRODUCER_MIN };
 
@@ -89,25 +90,48 @@ export function ResourcesStep() {
   const [view, setView] = useState<View>('mineria');
   const [part, setPart] = useState<Pane>('resources');
   const [selected, setSelected] = useState<ProvinceId | null>(null);
+  const [selectedDept, setSelectedDept] = useState<string | null>(null);
   const label = view === 'total' ? 'Total' : SECTOR_LABELS[view];
   const parts = useMemo(() => provinceSectorBreakdown(view, selected), [view, selected]);
-  const select = useCallback((id: string | null) => setSelected((current) => (id === null || id === current ? null : (id as ProvinceId))), []);
-  const rows = useMemo(() => producers(view), [view]);
+  const select = useCallback((id: string | null) => {
+    setSelected((current) => {
+      const next = id === null || id === current ? null : (id as ProvinceId);
+      setSelectedDept(null);
+      return next;
+    });
+  }, []);
   const tiles = useMemo(() => totals(view), [view]);
   const values = useMemo(() => mapValuesOf(viewValues(view)), [view]);
-  const provinceBars = useMemo(() => {
-    const title = `${label}: provincias que producen`;
-    const summary = `${title}, de mayor a menor (${PRODUCTION_UNIT}): ${rows.map((r) => `${r.short} ${formatValue(r.value, PRODUCTION_UNIT)}`).join(', ')}`;
-    const { option } = buildColumns(rows.map((r) => r.short), [{ name: label, values: rows.map((r) => r.value), color: tokens.muted }], {
-      unit: PRODUCTION_UNIT,
+
+  const drilldown = useMemo(() => provinceDrilldownData(view, selected), [view, selected]);
+  const drilldownBars = useMemo(() => {
+    const title = drilldown.title;
+    const summary = `${title}, de mayor a menor (${drilldown.unit}): ${drilldown.rows.map((r) => `${r.name} ${formatValue(r.value, drilldown.unit)}`).join(', ')}`;
+    const { option } = buildColumns(drilldown.rows.map((r) => r.name), [{ name: label, values: drilldown.rows.map((r) => r.value), color: tokens.muted }], {
+      unit: drilldown.unit,
       summary,
-      dense: { barWidth: 14, rotate: 55 }
+      dense: { barWidth: 14, rotate: drilldown.rows.length > 5 ? 55 : 0 }
     });
-    return { title, option, summary };
-  }, [label, rows]);
+    return { title, option, summary, kind: drilldown.kind };
+  }, [label, drilldown]);
+
+  const handleDrilldownClick = useCallback((params: ChartClickParams) => {
+    if (drilldown.kind === 'departments' && params.name) {
+      setSelectedDept((curr) => (curr === params.name ? null : params.name!));
+    }
+  }, [drilldown.kind]);
+
+  const projects = useMemo(() => {
+    if (!selected || !selectedDept) return [];
+    return getDepartmentProjects(selected, selectedDept);
+  }, [selected, selectedDept]);
+
   const pickSector = useCallback((name: string) => {
     const found = RESOURCE_SECTORS.find((s) => s.label === name);
-    if (found) setView(found.value);
+    if (found) {
+      setView(found.value);
+      setSelectedDept(null);
+    }
   }, []);
   if (part === 'provinces') {
     return (
@@ -169,12 +193,70 @@ export function ResourcesStep() {
               </strong>
             </div>
           ) : null}
-          <Reveal k={`bars-${view}`} delay={0.07} className="gdp-chart">
-            <strong className="composition-title">{`${provinceBars.title} (${PRODUCTION_UNIT})`}</strong>
+          <Reveal k={`bars-${view}-${selected ?? 'all'}`} delay={0.07} className="gdp-chart">
+            <strong className="composition-title">{`${drilldownBars.title} (${drilldown.unit})`}</strong>
             <div className="tour-chart">
-              <EChart option={provinceBars.option} aria-label={provinceBars.summary} />
+              <EChart option={drilldownBars.option} aria-label={drilldownBars.summary} onClick={handleDrilldownClick} />
             </div>
           </Reveal>
+          {projects.length > 0 && selectedDept && (
+            <Reveal k={`projects-${selected}-${selectedDept}`} delay={0.1} className="gdp-chart dept-projects-card">
+              <div className="dept-projects-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-sm)' }}>
+                <strong className="composition-title" style={{ margin: 0 }}>
+                  Proyectos mineros en {selectedDept} ({projects.length})
+                </strong>
+                <button
+                  type="button"
+                  className="btn"
+                  style={{ fontSize: '0.75rem', padding: '2px 8px' }}
+                  onClick={() => setSelectedDept(null)}
+                >
+                  Cerrar
+                </button>
+              </div>
+              <ul className="dept-projects-list" style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                {projects.map((proj) => (
+                  <li
+                    key={proj.name}
+                    style={{
+                      background: 'rgba(255, 255, 255, 0.04)',
+                      borderRadius: '6px',
+                      padding: '10px 12px',
+                      border: '1px solid rgba(255, 255, 255, 0.08)'
+                    }}
+                  >
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '4px' }}>
+                      <strong style={{ fontSize: '0.95rem', color: 'var(--ink)' }}>{proj.name}</strong>
+                      <span
+                        style={{
+                          fontSize: '0.75rem',
+                          padding: '2px 6px',
+                          borderRadius: '4px',
+                          background: proj.status === 'Producción' ? 'rgba(34, 197, 94, 0.15)' : 'rgba(56, 189, 248, 0.15)',
+                          color: proj.status === 'Producción' ? '#4ade80' : '#38bdf8'
+                        }}
+                      >
+                        {proj.status}
+                      </span>
+                    </div>
+                    <div style={{ fontSize: '0.82rem', color: 'var(--ink-muted)', marginBottom: '2px' }}>
+                      <span>{proj.company}</span> • <span>{proj.kind}</span>
+                    </div>
+                    {proj.capacity && (
+                      <div style={{ fontSize: '0.78rem', color: 'var(--ink-muted)' }}>
+                        Capacidad: {proj.capacity}
+                      </div>
+                    )}
+                    {proj.investment && (
+                      <div style={{ fontSize: '0.78rem', color: 'var(--ink-muted)' }}>
+                        Inversión: {proj.investment.toLocaleString('es-AR')} millones de USD
+                      </div>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </Reveal>
+          )}
         </div>
         <Reveal k={`map-${view}`} delay={0.14} className="gdp-chart prov-map res-map">
           <strong className="composition-title">{`${label} por provincia`}</strong>
@@ -193,6 +275,8 @@ export function ResourcesStep() {
                 observed
                 hideTitle
                 onSelect={select}
+                selectedDepartment={selectedDept}
+                onSelectDepartment={setSelectedDept}
               />
             )}
           </div>
