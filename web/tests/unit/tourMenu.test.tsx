@@ -47,7 +47,7 @@ describe('Hacia el 2056 dropdown menu', () => {
   it('opens on hover with the list of slides, slide 0 as «Índice», and closes when the pointer leaves', () => {
     render(<SectionTabs />);
     fireEvent.mouseEnter(wrap());
-    const menu = await screen.findByRole('menu', { name: 'Diapositivas' });
+    const menu = screen.getByRole('menu', { name: 'Diapositivas' });
     const items = within(menu).getAllByRole('menuitem');
     expect(items).toHaveLength(TOUR_ORDER.length);
     expect(items[0]!.textContent).toBe('0 · Índice');
