@@ -1,15 +1,20 @@
 # LASTCONTEXT.md
 
 ## State
-- **Branch**: `task/data-ai-usage` (created from `main` @ `da960a0`, PR #124).
-- **Features added**:
-  1. Nueva pestaña **Uso de AI** (`AiUsageView.tsx`) en la sección `Data` (`DataPage.tsx`) junto a `Data`, `Referencias` y `Metodología`, incluyendo:
-     - Orquestación multi-agente en paralelo, consumo directo de datos procesados sin *hardcoding* y gobernanza *Human-in-the-Loop*.
-     - Explicación detallada y tabla comparativa directa entre **Branch tradicional** (`git checkout / switch`) y **Git Worktree** (`git worktree add`), detallando por qué se utilizan *worktrees* con múltiples agentes de IA para evitar pisar cambios en compilación y bloqueos de archivos (`EBUSY` / `.lock`).
-     - Flujo Gitflow con *commits* atómicos, PRs con aprobación humana, TDD + CI frente al alto costo en tokens del *code review* por IA, validación visual en dos etapas (Playwright mediante agente + iteración humana), herramientas de IA y stack completo de librerías de testing.
-  2. **Referencias numeradas (`[1]`, `[2]`, ...) con tooltips estilizados** (`RefLink.tsx`, `RefList`) en **Hacia el 2056** y **Data**: chips compactos (`[48] FMI`, `[52] Banco Mundial`) con tooltip estilizado en *hover*/*focus* que muestra cita + URL y apertura en nueva pestaña al hacer click.
-  3. **Tooltips y pop-ups de explicación (`?`)** (`ChartHelp.tsx`): botón `?` en cada diapositiva/gráfico de **Hacia el 2056** con tooltip estilizado en *hover* y ventana modal accesible al hacer click (sin `title` nativos y cumpliendo `eslint-plugin-jsx-a11y`).
-  4. **Gráfico «Mayores economías de la región» en 2D** (`WorldStep.tsx`): el gráfico de barras de mayores economías de la región (PBI, PBI per cápita, Población) se renderiza siempre en 2D (`mode="2d"`).
+- **Branch**: `task/archive-root-docs` (limpieza de raíz: briefs completados a `docs/archived/`, tareas pendientes a `docs/tasks/`, diseño y roadmap a `docs/`).
+- **Snapshot archivado**: ver [lastcontext-2026-10-17.md](file:///C:/projects/projects-github-agustindiazcano/arg-2056-udesa/docs/lastcontext-2026-10-17.md) para el registro completo de la jornada.
+- **Capacidades clave incorporadas**:
+  1. **Pestaña «Uso de AI»** (`AiUsageView.tsx` en `DataPage.tsx`): framework de contexto, orquestación multi-agente, comparativa técnica Gitflow vs. Worktrees, gobernanza HITL y stack completo de testing.
+  2. **Referencias numeradas interactivas** (`RefLink.tsx`): chips `[n]` con tooltip de metadatos de fuente y apertura en pestaña externa.
+  3. **Ayuda contextual accesible** (`ChartHelp.tsx`): botones `?` con tooltip ligero y modal accesible «Cómo leer este gráfico».
+  4. **Mapas y navegación**: transiciones suaves C7, límites de zoom C8, búsqueda de provincias y departamentos C5, drilldown con proyectos mineros C1-C4, panel de perfil provincial C6.
+  5. **Visualización y UI**: gráfico de economías regionales fijado en 2D (`WorldStep.tsx`) y badge de deadline en navbar (`Header.tsx`).
+
+## Reglas operativas vigentes
+- **RULE #1**: Tests corren exclusivamente en CI (GitHub Actions), nunca localmente.
+- **Estilos**: Cero literales de color fuera de `tokens.css` (usar siempre `var(--token)` o `color-mix()`).
+- **Multi-agente**: Usar `git worktree` para tareas paralelas independientes sin bloquear carpetas de build en Windows.
+- **Datos**: Todo dato presentado debe incluir `source` y `retrieved_at`. Ningún mock sin documentar en `docs/mock-data.md`.
 
 ## Next
-- Verificar estado de CI del PR #124 (`task/data-ai-usage`) y aprobación humana para merge.
+- Consultar `PENDING.md` para las siguientes tareas del modelo (`model-params`, `model-population-hardening`) o mejoras visuales pendientes.
