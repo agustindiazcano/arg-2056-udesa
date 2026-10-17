@@ -134,10 +134,12 @@ Order: C8, C7, C2, C3, C4, C5, C1, C6.
       - *Middle*: API developer integration, specialized coding assistants and IDEs (Cursor, GitHub Copilot, Claude Code, Aider), fine-tuned domain models.
       - *Apex*: High-compute test-time reasoning (o1/o3, extended thinking), autonomous multi-agent loops, and deep-search research/coding agents (lowest volume, highest compute and token expenditure).
     - **Global nominal vs. relative purchasing power cost**: benchmark subscription ($20–$200/month) and API rates (per million tokens) against developer wages across regions. In developed economies, frontier tools represent <0.5% of an average tech wage, whereas in developing nations they represent a substantial fraction of monthly income.
-    - **Argentina's tax surcharge and structural access bottleneck**:
-      - Dissect the foreign currency tax burden applied to international credit card transactions (digital service VAT, PAIS tax, income/wealth tax perceptions, provincial stamp taxes) which historically added a 30% to 155% overhead on nominal dollar pricing.
-      - Quantify the effective local effort needed to access identical frontier AI tools compared to high-income countries.
-      - Evaluate how regulatory, currency, and tax barriers act as an institutional impediment that slows down local adoption of cutting-edge technology, penalizing developers, researchers, and startups and widening the productivity gap.
+    - **Argentina's tax surcharge and structural access bottleneck (falling behind in the global race)**:
+      - *The global AI acceleration*: Leading economies are engaged in an exponential race for AI capability, subsidizing infrastructure, compute access, open research, and developer ecosystems.
+      - *Double penalty on developing nations*: For emerging and lower-income countries, baseline tool adoption is already challenging due to income disparities and dollar pricing.
+      - *Self-imposed friction ("trabas en la rueda")*: Rather than incentivizing technological catch-up, Argentine policy has historically added severe domestic obstacles via foreign exchange taxes and digital service surcharges (digital VAT, PAIS tax, income/wealth tax prepayments, provincial stamp taxes) adding a 30% to 155% overhead on top of international card payments.
+      - *Surrendering the frontier*: To access the exact same frontier models, Argentine researchers, students, and engineers face an artificial premium requiring vastly more working hours than peers abroad, disincentivizing local adoption of cutting-edge tooling and voluntarily falling behind in the global race.
+
 
 
 
