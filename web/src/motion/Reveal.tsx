@@ -11,7 +11,7 @@ interface RevealProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 /** A box that fades in, rises a little and settles from a slightly smaller size when it mounts or `k` changes; nothing under reduced motion. */
-export function Reveal({ k, delay = 0, children, ...rest }: RevealProps) {
+export function Reveal({ k, delay = 0, children, style, ...rest }: RevealProps) {
   const ref = useRef<HTMLDivElement>(null);
   const reduced = useReducedMotion();
 
@@ -29,7 +29,7 @@ export function Reveal({ k, delay = 0, children, ...rest }: RevealProps) {
   }, [k, delay, reduced]);
 
   return (
-    <div ref={ref} {...rest}>
+    <div ref={ref} style={reduced ? style : { opacity: 0, ...style }} {...rest}>
       {children}
     </div>
   );
