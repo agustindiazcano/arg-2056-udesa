@@ -14,6 +14,9 @@ import { Spinner } from '../ui/Spinner.js';
 import { PRODUCTION_UNIT, SECTOR_LABELS, SECTOR_VALUES, mapValuesOf, rankedProvinces } from './provinceMock.js';
 import { RESOURCE_SECTORS, breakdown, sectorExports, totals } from './resourcesData.js';
 import type { Part, ResourceSector } from './resourcesData.js';
+import { TourChart } from './TourChart.js';
+import type { Map3DSpec } from '../charts3d/types.js';
+import { mapSummary } from '../scenes/forecast/mapSelectors.js';
 import { ProvinceStep } from './ProvinceStep.js';
 import { RESOURCES_TITLE } from './slideTitles.js';
 
@@ -109,6 +112,26 @@ export function ResourcesStep() {
     });
     return { title, option, summary };
   }, [label, rows]);
+  const formatProduction = useCallback((v: number) => formatValue(v, PRODUCTION_UNIT), []);
+  const mapSpec = useMemo<Map3DSpec | null>(
+    () =>
+      provinces.status !== 'success'
+        ? null
+        : {
+            kind: 'map',
+            title: `${label} por provincia`,
+            geo: provinces.geo,
+            values,
+            metric: 'level',
+            selectedId: selected,
+            formatValue: formatProduction,
+            onSelect: select,
+            upright: true,
+            zoomToSelected: true,
+            summary: mapSummary(values, 'level', `producción de ${label.toLowerCase()}`, 2025, PRODUCTION_UNIT)
+          },
+    [provinces, values, selected, label, formatProduction, select]
+  );
   const pickSector = useCallback((name: string) => {
     const found = RESOURCE_SECTORS.find((s) => s.label === name);
     if (found) setView(found.value);
@@ -176,18 +199,20 @@ export function ResourcesStep() {
             {provinces.status === 'loading' && <Spinner label="Cargando el mapa de las provincias..." />}
             {provinces.status === 'error' && <p style={{ color: 'var(--state-warning)' }}>{`La geometría de las provincias no está disponible: ${provinces.message}`}</p>}
             {provinces.status === 'success' && (
-              <ProvinceMap
-                geo={provinces.geo}
-                values={values}
-                unit={PRODUCTION_UNIT}
-                indicatorLabel={`producción de ${label.toLowerCase()}`}
-                metric="level"
-                selectedId={selected}
-                year={2025}
-                observed
-                hideTitle
-                onSelect={select}
-              />
+              <TourChart spec={mapSpec ?? undefined} mode="3d">
+                <ProvinceMap
+                  geo={provinces.geo}
+                  values={values}
+                  unit={PRODUCTION_UNIT}
+                  indicatorLabel={`producción de ${label.toLowerCase()}`}
+                  metric="level"
+                  selectedId={selected}
+                  year={2025}
+                  observed
+                  hideTitle
+                  onSelect={select}
+                />
+              </TourChart>
             )}
           </div>
         </Reveal>

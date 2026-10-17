@@ -33,8 +33,8 @@ const TITLE = PROVINCE_TITLE;
  * map, in the ranking or in the bars, selects it, and the map zooms to it. Made-up values.
  */
 export function ProvinceStep({ embedded = false }: { embedded?: boolean } = {}) {
-  // the map of Argentina opens flat (human order of 2026-10-15); this slide keeps its own 2D / 3D choice
-  const [mode, setMode] = useState<'2d' | '3d'>('2d');
+  // the map of Argentina defaults to 3D; this slide keeps its own 2D / 3D choice
+  const [mode, setMode] = useState<'2d' | '3d'>('3d');
   const provinces = useProvinces();
   const [sector, setSector] = useState<Sector>('mineria');
   const [selected, setSelected] = useState<ProvinceId | null>(null);
