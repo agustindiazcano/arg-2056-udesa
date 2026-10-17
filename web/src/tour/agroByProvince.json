@@ -1,0 +1,297 @@
+{
+  "campaign": "2024/2025",
+  "source": "Secretaría de Agricultura, Ganadería y Pesca (SAGyP / ex-MAGyP), Dirección de Estimaciones Agrícolas, datos.gob.ar",
+  "url": "https://datos.magyp.gob.ar/dataset/estimaciones-agricolas",
+  "retrieved_at": "2026-10-17",
+  "valuation_reference": "Precios FOB oficiales promedio campaña 2024/25: Soja 420 USD/t, Maíz 180 USD/t, Trigo 230 USD/t, Girasol 410 USD/t",
+  "provinces": [
+    {
+      "id": "AR-A",
+      "province": "Salta",
+      "total_tonnes": 2390872,
+      "estimated_usd_m": 612.2,
+      "crops": {
+        "soja_t": 740812,
+        "maiz_t": 1570901,
+        "trigo_t": 78665,
+        "girasol_t": 494
+      }
+    },
+    {
+      "id": "AR-B",
+      "province": "Buenos Aires",
+      "total_tonnes": 44769674,
+      "estimated_usd_m": 12888.0,
+      "crops": {
+        "soja_t": 15533596,
+        "maiz_t": 17196317,
+        "trigo_t": 9265428,
+        "girasol_t": 2774333
+      }
+    },
+    {
+      "id": "AR-C",
+      "province": "Ciudad Autónoma de Buenos Aires",
+      "total_tonnes": 0,
+      "estimated_usd_m": 0.0,
+      "crops": {
+        "soja_t": 0,
+        "maiz_t": 0,
+        "trigo_t": 0,
+        "girasol_t": 0
+      }
+    },
+    {
+      "id": "AR-D",
+      "province": "San Luis",
+      "total_tonnes": 2893736,
+      "estimated_usd_m": 667.3,
+      "crops": {
+        "soja_t": 410091,
+        "maiz_t": 2243830,
+        "trigo_t": 39525,
+        "girasol_t": 200290
+      }
+    },
+    {
+      "id": "AR-E",
+      "province": "Entre Ríos",
+      "total_tonnes": 7904997,
+      "estimated_usd_m": 2357.0,
+      "crops": {
+        "soja_t": 3372215,
+        "maiz_t": 2254760,
+        "trigo_t": 2217630,
+        "girasol_t": 60392
+      }
+    },
+    {
+      "id": "AR-F",
+      "province": "La Rioja",
+      "total_tonnes": 0,
+      "estimated_usd_m": 0.0,
+      "crops": {
+        "soja_t": 0,
+        "maiz_t": 0,
+        "trigo_t": 0,
+        "girasol_t": 0
+      }
+    },
+    {
+      "id": "AR-G",
+      "province": "Santiago del Estero",
+      "total_tonnes": 5013586,
+      "estimated_usd_m": 1635.8,
+      "crops": {
+        "soja_t": 2895235,
+        "maiz_t": 1612241,
+        "trigo_t": 433058,
+        "girasol_t": 73052
+      }
+    },
+    {
+      "id": "AR-H",
+      "province": "Chaco",
+      "total_tonnes": 1054569,
+      "estimated_usd_m": 364.8,
+      "crops": {
+        "soja_t": 403337,
+        "maiz_t": 226844,
+        "trigo_t": 107811,
+        "girasol_t": 316577
+      }
+    },
+    {
+      "id": "AR-J",
+      "province": "San Juan",
+      "total_tonnes": 0,
+      "estimated_usd_m": 0.0,
+      "crops": {
+        "soja_t": 0,
+        "maiz_t": 0,
+        "trigo_t": 0,
+        "girasol_t": 0
+      }
+    },
+    {
+      "id": "AR-K",
+      "province": "Catamarca",
+      "total_tonnes": 158707,
+      "estimated_usd_m": 54.0,
+      "crops": {
+        "soja_t": 101766,
+        "maiz_t": 36988,
+        "trigo_t": 19703,
+        "girasol_t": 250
+      }
+    },
+    {
+      "id": "AR-L",
+      "province": "La Pampa",
+      "total_tonnes": 5010635,
+      "estimated_usd_m": 1330.6,
+      "crops": {
+        "soja_t": 1008942,
+        "maiz_t": 2831135,
+        "trigo_t": 459370,
+        "girasol_t": 711188
+      }
+    },
+    {
+      "id": "AR-M",
+      "province": "Mendoza",
+      "total_tonnes": 0,
+      "estimated_usd_m": 0.0,
+      "crops": {
+        "soja_t": 0,
+        "maiz_t": 0,
+        "trigo_t": 0,
+        "girasol_t": 0
+      }
+    },
+    {
+      "id": "AR-N",
+      "province": "Misiones",
+      "total_tonnes": 148453,
+      "estimated_usd_m": 30.4,
+      "crops": {
+        "soja_t": 15135,
+        "maiz_t": 133318,
+        "trigo_t": 0,
+        "girasol_t": 0
+      }
+    },
+    {
+      "id": "AR-P",
+      "province": "Formosa",
+      "total_tonnes": 99981,
+      "estimated_usd_m": 29.3,
+      "crops": {
+        "soja_t": 38800,
+        "maiz_t": 45673,
+        "trigo_t": 8930,
+        "girasol_t": 6578
+      }
+    },
+    {
+      "id": "AR-Q",
+      "province": "Neuquén",
+      "total_tonnes": 0,
+      "estimated_usd_m": 0.0,
+      "crops": {
+        "soja_t": 0,
+        "maiz_t": 0,
+        "trigo_t": 0,
+        "girasol_t": 0
+      }
+    },
+    {
+      "id": "AR-R",
+      "province": "Río Negro",
+      "total_tonnes": 0,
+      "estimated_usd_m": 0.0,
+      "crops": {
+        "soja_t": 0,
+        "maiz_t": 0,
+        "trigo_t": 0,
+        "girasol_t": 0
+      }
+    },
+    {
+      "id": "AR-S",
+      "province": "Santa Fe",
+      "total_tonnes": 20929791,
+      "estimated_usd_m": 6866.3,
+      "crops": {
+        "soja_t": 11463852,
+        "maiz_t": 5219638,
+        "trigo_t": 3494812,
+        "girasol_t": 751489
+      }
+    },
+    {
+      "id": "AR-T",
+      "province": "Tucumán",
+      "total_tonnes": 826271,
+      "estimated_usd_m": 266.7,
+      "crops": {
+        "soja_t": 473056,
+        "maiz_t": 265954,
+        "trigo_t": 86636,
+        "girasol_t": 625
+      }
+    },
+    {
+      "id": "AR-U",
+      "province": "Chubut",
+      "total_tonnes": 0,
+      "estimated_usd_m": 0.0,
+      "crops": {
+        "soja_t": 0,
+        "maiz_t": 0,
+        "trigo_t": 0,
+        "girasol_t": 0
+      }
+    },
+    {
+      "id": "AR-V",
+      "province": "Tierra del Fuego, Antártida e Islas del Atlántico Sur",
+      "total_tonnes": 0,
+      "estimated_usd_m": 0.0,
+      "crops": {
+        "soja_t": 0,
+        "maiz_t": 0,
+        "trigo_t": 0,
+        "girasol_t": 0
+      }
+    },
+    {
+      "id": "AR-W",
+      "province": "Corrientes",
+      "total_tonnes": 80948,
+      "estimated_usd_m": 18.0,
+      "crops": {
+        "soja_t": 8010,
+        "maiz_t": 55380,
+        "trigo_t": 14100,
+        "girasol_t": 3458
+      }
+    },
+    {
+      "id": "AR-X",
+      "province": "Córdoba",
+      "total_tonnes": 35574345,
+      "estimated_usd_m": 10187.8,
+      "crops": {
+        "soja_t": 14628596,
+        "maiz_t": 17971562,
+        "trigo_t": 2280460,
+        "girasol_t": 693727
+      }
+    },
+    {
+      "id": "AR-Y",
+      "province": "Jujuy",
+      "total_tonnes": 44960,
+      "estimated_usd_m": 11.8,
+      "crops": {
+        "soja_t": 14396,
+        "maiz_t": 26412,
+        "trigo_t": 4152,
+        "girasol_t": 0
+      }
+    },
+    {
+      "id": "AR-Z",
+      "province": "Santa Cruz",
+      "total_tonnes": 0,
+      "estimated_usd_m": 0.0,
+      "crops": {
+        "soja_t": 0,
+        "maiz_t": 0,
+        "trigo_t": 0,
+        "girasol_t": 0
+      }
+    }
+  ]
+}

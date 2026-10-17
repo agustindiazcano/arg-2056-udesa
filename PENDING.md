@@ -98,7 +98,8 @@ Order: C8, C7, C2, C3, C4, C5, C1, C6.
 
 ## Data to verify (human, against original source)
 
-- [ ] Mining exports by province (`web/src/tour/miningByProvince.ts`, Data slide 8): read from the text of two PDFs of the Secretaría de Minería (2026.01 and 2026.09); check them by eye, and read Catamarca and Salta alone from the chart of the NOA page. Pasted AI figures (Salta 501, Catamarca 353) are half-year 2026 and were NOT used.
+- [x] Mining exports by province (`web/src/tour/miningByProvince.ts`, Data slide 8): verified from the official treemaps of the Secretaría de Minería (informes 2026.01 y 2026.09); Catamarca (351 M USD en 2025, 419 M USD en ene-ago 2026) y Salta (498 M USD en 2025, 706 M USD en ene-ago 2026) están desagregadas y cierran con Jujuy, San Juan, Santa Cruz y Resto.
+
 - [ ] Services exports 2025 (`web/src/tour/servicesExports.ts`, Data slide 4): read from the CEI (Cancillería) PDF, based on INDEC; check against the INDEC balance-of-payments table. The chart of the PDF shows other shares (34,6 % and 29,0 %) than its text (35,8 % and 26,9 %); the text matches value / total and was used.
 - [x] Los Toldos II Este: 6.432 confirmed against the phases (1.635 + 1.268 + 3.529) in El Economista; still read the resolution itself in the Boletín Oficial.
 - [x] INDEC productivity 2016-2025 figures (PTF, VAB, capital stock) checked against the PDF (P1) on 2026-10-15; all match, see D22.

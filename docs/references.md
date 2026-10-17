@@ -230,6 +230,9 @@ Fuentes primarias y metodológicas agregadas en la expansión de datos de octubr
 | D3 | Stanford HAI, *Artificial Intelligence Index Report 2024*. <https://aiindex.stanford.edu/report/> | Costos históricos y de frontera en cómputo de entrenamiento de modelos (Transformer a Gemini Ultra / GPT-4) y compresión de inferencia | **leída** (2026-10-16) |
 | D4 | INDEC, *Censo Nacional de Población, Hogares y Viviendas 2022*. <https://www.indec.gob.ar/indec/web/Nivel4-Tema-2-41-165> | Población definitiva por provincia (45.892.285 habitantes a nivel nacional) | **leída** (2026-10-16) |
 | D5 | INDEC, *Origen provincial de las exportaciones (OPEX)*. <https://www.indec.gob.ar/indec/web/Nivel4-Tema-3-2-40> | Informes técnicos de comercio exterior por provincia y grandes rubros (2023: 66.789 M USD; 2024: 79.721 M USD) | **leída** (2026-10-16) |
+| E12 | SAGyP (Secretaría de Agricultura, Ganadería y Pesca), *Estimaciones agrícolas por cultivo y provincia*. <https://datos.magyp.gob.ar/dataset/estimaciones-agricolas> | Producción provincial y por departamento de soja (51,1 Mt), maíz (51,7 Mt), trigo (18,5 Mt) y girasol (5,6 Mt) en la campaña 2024/2025; valorización FOB oficial aproximada de 37.320 M USD | **leída** (CSV oficial, 2026-10-17) |
+| E13 | Secretaría de Minería, *Origen provincial de las exportaciones mineras* (informe 2026.01 y 2026.09). <https://www.argentina.gob.ar/sites/default/files/2026.01_origen_provincial_de_las_exportaciones_mineras.pdf> | Desglose provincial completo en treemap oficial: en 2025 (12 meses, 6.037 M USD) Santa Cruz 2.383 (39,5 %), San Juan 1.757 (29,1 %), Jujuy 953 (15,8 %), Salta 498 (8,3 %), Catamarca 351 (5,8 %), Resto 95 (1,6 %); en enero-agosto 2026 (6.059 M USD): Santa Cruz 2.360, San Juan 1.302, Jujuy 1.156, Salta 706, Catamarca 419, Resto 115 | **leída** (PDF oficial, 2026-10-17) |
+
 
 
 ## Para verificar antes de publicar
