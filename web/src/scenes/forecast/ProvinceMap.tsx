@@ -99,13 +99,16 @@ export function ProvinceMap({
 }: ProvinceMapProps) {
   const [asTable, setAsTable] = useState(false);
   const [deptGeo, setDeptGeo] = useState<DepartmentsGeo | null>(null);
+  const [isTransitioning, setIsTransitioning] = useState(false);
   const apiRef = useRef<ECharts | null>(null);
   const bbox = useMemo(() => geoBbox(geo), [geo]);
 
   useEffect(() => {
+    setIsTransitioning(true);
+    const timer = setTimeout(() => setIsTransitioning(false), 300);
     if (!selectedId) {
       setDeptGeo(null);
-      return;
+      return () => clearTimeout(timer);
     }
     let active = true;
     loadDepartments(selectedId).then((data) => {
@@ -115,6 +118,7 @@ export function ProvinceMap({
     });
     return () => {
       active = false;
+      clearTimeout(timer);
     };
   }, [selectedId]);
 
@@ -242,13 +246,15 @@ export function ProvinceMap({
                 {deptGeo && <span className="dept-badge">{deptGeo.features.length} departamentos</span>}
               </div>
             )}
-            <EChart
-              option={deptBuilt ? deptBuilt.option : built.option}
-              aria-label={deptBuilt ? deptBuilt.summary : built.summary}
-              onClick={handleClick}
-              roam={deptBuilt ? undefined : { bbox }}
-              apiRef={apiRef}
-            />
+            <div className={`map-drill-canvas${isTransitioning ? ' map-transitioning' : ''}`}>
+              <EChart
+                option={deptBuilt ? deptBuilt.option : built.option}
+                aria-label={deptBuilt ? deptBuilt.summary : built.summary}
+                onClick={handleClick}
+                roam={deptBuilt ? undefined : { bbox }}
+                apiRef={apiRef}
+              />
+            </div>
             <NavControls
               onZoomIn={() => apiRef.current && zoomMap(apiRef.current, 'in')}
               onZoomOut={() => apiRef.current && zoomMap(apiRef.current, 'out')}

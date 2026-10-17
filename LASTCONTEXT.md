@@ -1,17 +1,18 @@
 # Last Context
 
 ## State
-- **Branch**: `task/map-zoom-limits` (worktree `../arg-2056-udesa-correcciones`, from `origin/main`; another agent works in the main tree, so work stays in this worktree).
-- **Task**: C8 of `docs/action-plan-correcciones-nuevas.md` (plan from `test/correcciones-nuevas.png`): free the 2D map zoom.
+- **Branch**: `task/map-drill-transition` (worktree `../arg-2056-udesa-correcciones`, branched from `task/map-zoom-limits`).
+- **Task**: C7 of `docs/action-plan-correcciones-nuevas.md` (`test/correcciones-nuevas.png`): smooth transition between country, province and department maps.
 - **Key changes**:
-  - `ZOOM_MAX` 8 -> 32 in `web/src/charts/navState.ts`; it applies to the country and the department maps (`scaleLimit` in `provinceMap.ts`).
-  - Tests changed first: `navState.test.ts`, `forecastMap.test.tsx`, `provinceMapBuilder.test.ts` now expect 32 (deliberate spec change, not a weakened test).
-  - Added `docs/action-plan-correcciones-nuevas.md` and the "New corrections" section in `PENDING.md`.
-  - Verified: the three test files above pass (43 tests), `tsc --noEmit` clean. Not run: full `python scripts/precheck.py`, browser check.
-- Worktree needed `npm ci` in `web/` (done).
+  - Added smooth CSS scale and opacity transitions (`.map-drill-canvas`, `.map-transitioning`) in `web/src/dashboard/dashboard.css`.
+  - Added `@media (prefers-reduced-motion: reduce)` override to disable transition for users requesting reduced motion.
+  - Updated `web/src/scenes/forecast/ProvinceMap.tsx` with `isTransitioning` state triggered on `selectedId` drilldown changes.
+  - Added unit test in `web/tests/unit/mapDrillTransition.test.tsx` verifying transition state toggle and timer cleanup.
+  - Verified with `npx vitest run tests/unit/mapDrillTransition.test.tsx`, `npx tsc --noEmit`, and `npx eslint`.
+- Main workspace branch `task/intro-hover-effects`:
+  - Completed subtle ripple `effectScatter` styling on milestones, committed and pushed to remote branch.
 
 ## Next
-- Run `python scripts/precheck.py`, then push `task/map-zoom-limits` and open the PR (CI not checked).
-- Then the corrections in order: C7, C2, C3, C4, C5, C1, C6 (last, with mock data).
-- Consider a bigger `BUTTON_FACTOR` (1.25 needs about 15 presses to reach 32x) if the review asks for it.
-- Pending from the other agent (main tree): intro hover effects on the 3D map.
+- Run precheck and commit/push `task/map-drill-transition`.
+- Proceed with C2 `res-sector-filter-panel`: when the filter is "Minería", the composition panel displays mining sectors instead of national totals.
+- Then C3 `res-province-drilldown`, C4 `res-department-projects`, C5 `map-search`, C1 `res-minerals-extend`, and C6 `province-profile-slide` (last, with mock data).
