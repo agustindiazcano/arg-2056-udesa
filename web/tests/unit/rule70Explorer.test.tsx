@@ -148,7 +148,7 @@ describe('the country explorer', () => {
 describe('the Data page', () => {
   it('has the table of the five cases next to the others of the slide', () => {
     const slide = buildSlides().find((s) => s.id === '5')!;
-    expect(slide.tables.map((t) => t.id)).toEqual(['chart-5', 'rule70-errors', 'rule70-argentina', 'rule70-countries', 'rule70-scenarios', 'rule70-imf']);
+    expect(slide.tables.map((t) => t.id)).toEqual(['chart-5', 'rule70-errors', 'rule70-argentina', 'rule70-convergence', 'rule70-countries', 'rule70-scenarios', 'rule70-imf']);
   });
 });
 

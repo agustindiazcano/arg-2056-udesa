@@ -104,4 +104,18 @@ describe('the simulator page', () => {
     });
     expect(result()).toBe(first);
   });
+
+  it('shows convergence comparison with developed benchmarks in the side panel', () => {
+    render(<Simulator />);
+    expect(screen.getByText(/Convergencia con país desarrollado/i)).toBeTruthy();
+    const select = screen.getByRole('combobox', { name: /país desarrollado de referencia/i }) as HTMLSelectElement;
+    expect(select).toBeTruthy();
+    expect(select.value).toBe('ESP');
+    expect(screen.getAllByText(/España/i).length).toBeGreaterThan(0);
+    act(() => {
+      fireEvent.change(select, { target: { value: 'PRT' } });
+    });
+    expect(select.value).toBe('PRT');
+    expect(screen.getAllByText(/Portugal/i).length).toBeGreaterThan(0);
+  });
 });

@@ -35,9 +35,9 @@ beforeEach(() => {
 afterEach(cleanup);
 
 describe('the tabs of the slide', () => {
-  it('has four: the calculator, the real countries, the scenarios and the projections of the IMF', () => {
+  it('has five: the calculator, convergence, real countries, scenarios and IMF projections', () => {
     render(<Rule70Step />);
-    expect(screen.getAllByRole('tab').map((t) => t.textContent)).toEqual(['Calculadora', 'Países reales', 'Escenarios', 'Proyecciones del FMI']);
+    expect(screen.getAllByRole('tab').map((t) => t.textContent)).toEqual(['Calculadora', 'Convergencia y desarrollo', 'Países reales', 'Escenarios', 'Proyecciones del FMI']);
   });
 });
 
@@ -131,7 +131,7 @@ describe('the projections of the IMF', () => {
 describe('the Data page and the labels', () => {
   it('adds the tables of the scenarios and of the IMF to the ones of the slide', () => {
     const slide = buildSlides().find((s) => s.id === '5')!;
-    expect(slide.tables.map((t) => t.id)).toEqual(['chart-5', 'rule70-errors', 'rule70-argentina', 'rule70-countries', 'rule70-scenarios', 'rule70-imf']);
+    expect(slide.tables.map((t) => t.id)).toEqual(['chart-5', 'rule70-errors', 'rule70-argentina', 'rule70-convergence', 'rule70-countries', 'rule70-scenarios', 'rule70-imf']);
   });
 
   it('carries no label about how real the data is', () => {

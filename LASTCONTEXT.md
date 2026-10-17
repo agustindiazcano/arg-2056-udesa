@@ -1,23 +1,29 @@
-# Last Context
+# LASTCONTEXT.md
 
 ## State
-- **Branch**: `task/intro-hover-effects`
-- **Tasks completed**:
-  1. **Default country maps to 3D**:
-     - `web/src/tour/ProvinceStep.tsx`: initial mode state set to `'3d'`.
-     - `web/src/tour/ResourcesStep.tsx`: added `mapSpec` and wrapped provincial map view in `TourChart` with `mode="3d"`.
-     - All provincial country maps in the Recorrido tour now default to 3D.
-  2. **Slide 3 (Cuarta revolución industrial / IA) chart restyling to match Slide 5**:
-     - Replaced dashed gridlines with Slide 5's clean solid lines (`splitLine: { lineStyle: { color: tokens.grid } }` on Y axis; hidden on X axis).
-     - Removed fuzzy `shadowBlur` and muddy overlapping `areaStyle` color gradients.
-     - Refactored `AiStep.tsx` layout and cards to use the Slide 5 `.rule70-card`, `.rule70-card-head`, `.rule70-legend`, `.rule70-key`, and `.rule70-table` system.
-     - Cleaned milestones and head dots into crisp vector dots matching Slide 5 styling.
-     - Set Population chart line to `tokens.blue` matching Slide 5 single-series palette.
-  3. **Intro scene hover effects**:
-     - Hovering "Cruce de los Andes" button highlights only San Juan and Mendoza on the 3D map.
-     - Hovering "Hacia el 2056" button illuminates all 24 provinces + Islas Malvinas lifted in gold (`var(--gold)`).
-     - Hovering over provinces on the 3D map displays a floating tooltip with the province name.
-     - Fully tested in `web/tests/unit/intro.test.tsx`.
+- **Branch**: `task/rule70-convergence-developed`
+- **Features added**:
+  1. **Convergencia y desarrollo en diapositiva Regla del 70 (`Rule70Step.tsx`)**:
+     - Pestaña interactiva «Convergencia y desarrollo» (`ConvergencePlanner.tsx`) con planificación de la tasa requerida a 20 y 30 años (2046 y 2056) para converger al nivel de PBI per cápita de economías desarrolladas.
+     - Benchmarks basados en datos reales del Banco Mundial (2024, dólares constantes de 2015):
+       - Portugal ($22.663 USD pc, umbral de altos ingresos europeo).
+       - España ($29.245 USD pc, economía desarrollada del sur europeo).
+       - Italia ($34.508 USD pc, G7 e industrialización avanzada).
+       - Corea del Sur ($37.049 USD pc, milagro de convergencia acelerada).
+       - Alemania ($44.028 USD pc, frontera industrial europea).
+       - Australia ($61.487 USD pc, altos ingresos en recursos y capital).
+       - Estados Unidos ($66.856 USD pc, frontera tecnológica e innovación global).
+     - Gráfico interactivo con trayectoria proyectada de convergencia de Argentina frente al país benchmark.
+     - Explicación de implicancias según la regla del 70 (duplicación de ingresos cada $70/r$ años).
+  2. **Simulador del PBI (`Simulator.tsx`)**:
+     - Selector interactivo de convergencia con países desarrollados en el panel lateral de factores.
+     - Cálculo en tiempo real del PBI per cápita resultante en 2056 frente a la población proyectada por la ONU (WPP 2024), mostrando el porcentaje alcanzado respecto a cada país desarrollado de referencia.
+  3. **Datos y calidad**:
+     - Tabla `rule70-convergence` registrada en `TABLE_META` (`quality.ts`) y conectada en la diapositiva 5 en `slides.ts`.
+     - Tests unitarios completos en `rule70Convergence.test.ts`, `rule70Step.test.tsx`, `rule70Explorer.test.tsx`, `rule70ScenariosUi.test.tsx` y `simulator.test.tsx`.
+- **Precheck**:
+  - `python scripts/precheck.py` 100% OK (PASS en ruff, pytest, terrain, validate-data, check-budget, references, web-lint, web-typecheck y web-test con 2047 tests unitarios).
 
 ## Next
-- Start the new corrections in order C8, C7, C2, C3, C4, C5, C1, C6 (see `docs/action-plan-correcciones-nuevas.md`), one `task/<slug>` branch each.
+- Merge / PR de `task/rule70-convergence-developed`.
+- Continuar con el plan de correcciones pendientes en `PENDING.md` (C8 `map-zoom-limits` y C7 `map-drill-transition`).
