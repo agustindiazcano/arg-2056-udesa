@@ -25,7 +25,7 @@ describe('the Exports slide (step 4)', () => {
     expect(screen.getByRole('button', { name: '2025' }).getAttribute('aria-pressed')).toBe('true');
     expect(chartText()).toContain('Complejo soja 21,4');
     expect(screen.queryByRole('note')).toBeNull();
-    expect(screen.getByText(/INDEC/)).toBeTruthy();
+    expect(screen.getAllByText(/INDEC/).length).toBeGreaterThan(0);
   });
 
   it('switches to the share of the total', () => {

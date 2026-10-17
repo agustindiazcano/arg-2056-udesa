@@ -136,7 +136,7 @@ describe('the country explorer', () => {
     openExplorer();
     for (const chart of screen.getAllByTestId('echart')) expect(chart.getAttribute('aria-label')!.length).toBeGreaterThan(40);
     expect(screen.getAllByText(/ver los datos/i).length).toBeGreaterThanOrEqual(2);
-    expect(screen.getByText(/Banco Mundial/)).toBeTruthy();
+    expect(screen.getAllByText(/Banco Mundial/).length).toBeGreaterThan(0);
   });
 
   it('carries no label about how real the data is', () => {
