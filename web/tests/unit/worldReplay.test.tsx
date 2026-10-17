@@ -124,4 +124,10 @@ describe('step 0 of the Recorrido', () => {
     }
     expect(group.textContent).toContain('0,25×');
   });
+
+  it('defaults the regional comparison to PBI per cápita', () => {
+    render(<WorldStep />);
+    const perCapitaBtn = screen.getByRole('button', { name: 'PBI per cápita' });
+    expect(perCapitaBtn.getAttribute('aria-pressed')).toBe('true');
+  });
 });
