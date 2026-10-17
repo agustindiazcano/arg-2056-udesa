@@ -1,15 +1,16 @@
 # LASTCONTEXT.md
 
 ## State
-- **Branch**: `task/map-zoom-limits` (rebased on `main` @ `c4f69b5`).
-- **Task**: C8 of `docs/action-plan-correcciones-nuevas.md`: liberar el zoom del mapa 2D.
+- **Branch**: `task/map-drill-transition` (from `main` @ `de32237`, after PR #119 C8 zoom limits).
+- **Task**: C7 of `docs/action-plan-correcciones-nuevas.md`: smooth drill country > province > department.
 - **Key changes**:
-  - `ZOOM_MAX` elevado de 8 a 32 en `web/src/charts/navState.ts`, aplicando a mapas nacional y departamental (`scaleLimit` en `provinceMap.ts`).
-  - Tests actualizados y en verde: `navState.test.ts`, `forecastMap.test.tsx`, `provinceMapBuilder.test.ts`.
-  - Agregadas en `PENDING.md` las secciones en inglés de:
-    1. Contextos históricos, desindustrialización y límites del pronóstico (Jack Welch/GE, shock China/OMC, colapso URSS, histéresis industrial a servicios frente a Super AGI, Mercosur/Brasil, límites de recursos naturales, sesgos de analistas/expertos en olas tecnológicas y políticas, e IA 2021 vs. hoy).
-    2. Comparativa nice-to-have de economías con abundantes recursos naturales y alto capital humano (Noruega, Australia, Canadá, Chile: ratio reservas/exportaciones, fondos soberanos y valor agregado per cápita).
+  - New `web/src/charts/drillTransition.ts`: `DRILL_MS` (450), `drillViewKey`, `cameraAnimation`, `useDrillTransition` (fires once per view change, never on first render, never with reduced motion, timer cleared on unmount).
+  - `ProvinceMap.tsx`: zoom-to-province now interpolates (`animationDurationUpdate` + cubicInOut, 0 with reduced motion); the chart sits in `.map-drill-canvas`, which gets `is-drilling` for 450 ms when the drawn map swaps (country <-> departments). Triggered by state, not scroll/frame.
+  - `dashboard.css`: `map-drill-in` keyframes (fade 0.2 -> 1, scale 0.97 -> 1); disabled under `prefers-reduced-motion`.
+  - Tests: `drillTransition.test.tsx` (12), `mapDrillTransition.test.tsx` (4); `forecastMap.test.tsx` still green.
+- Old local branch with a previous attempt renamed to `task/map-drill-transition-old` (based on an outdated main; superseded, not pushed again).
+- Not checked visually in the browser.
 
 ## Next
-- Finalizar ejecución de `python scripts/precheck.py`.
-- Abrir PR de `task/map-zoom-limits` y continuar con C7 `map-drill-transition`.
+- Human visual check of the drill on the forecast map (and with OS reduced motion on).
+- Then C2 `res-sector-filter-panel`.
