@@ -1,4 +1,5 @@
 import React from 'react';
+import { ChartHelp } from '../ui/ChartHelp.js';
 import { formatValue } from '../charts/format.js';
 import { SEQUENTIAL_BLUE, tokens } from '../styles/tokens.js';
 import { HOME, rankingTable } from './worldData.js';
@@ -14,14 +15,14 @@ const HOME_BG = SEQUENTIAL_BLUE[8] ?? tokens.blue;
  * One ranking of the world in a year. Argentina is a cell of its own over the list, always in the same place, with its place
  * among everyone and its value; under it the other countries move up and down as the years go by.
  */
-export function WorldTable({ metric, title, unit, year }: { metric: RankMetric; title: string; unit: string; year: number }) {
+export function WorldTable({ metric, title, unit, help, year }: { metric: RankMetric; title: string; unit: string; help: string; year: number }) {
   const { home, others } = rankingTable(year, metric, LISTED);
   const number = (value: number) => formatValue(Math.round(value), '');
   return (
     <div className="world-rank">
       <div className="world-rank-head">
         <strong>{title}</strong>
-        <span className="gdp-sub">{unit}</span>
+        <ChartHelp title={title} lead={unit} paragraphs={[help]} />
       </div>
       <div className="world-home" data-home="true" data-testid={`home-${metric === 'gdp' ? 'gdp' : 'percapita'}`} style={{ background: HOME_BG, color: tokens.page }}>
         <span>{home.rank}</span>

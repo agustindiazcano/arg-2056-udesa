@@ -35,7 +35,7 @@ describe('step 0 of the Recorrido', () => {
     });
     expect(slider.getAttribute('aria-valuetext')).toBe('Año 1990');
     expect(screen.getByText('Ranking mundial en 1990')).toBeTruthy();
-    expect(screen.getByText('Mayores economías de la región en 1990')).toBeTruthy();
+    expect(screen.getByText('Mayores economías de la región')).toBeTruthy();
     for (const name of ['PBI real', 'PBI per cápita real']) {
       expect(screen.getByRole('table', { name }).querySelectorAll('tbody tr')).toHaveLength(20);
     }
@@ -131,5 +131,31 @@ describe('step 0 of the Recorrido', () => {
     expect(perCapitaBtn.getAttribute('aria-pressed')).toBe('true');
     const regionSection = screen.getByRole('region', { name: 'Mayores economías de la región' });
     expect(regionSection.querySelector('[data-testid="echart"]')).toBeTruthy();
+  });
+
+  it('moves the clarifying units inside the question marks, as the first (sky blue) line, and keeps the title of the region without a year', () => {
+    render(<WorldStep />);
+    const sub = document.querySelector('.gdp-sub');
+    expect(sub?.textContent).not.toContain('miles de millones');
+    const help = (name: RegExp) => screen.getByRole('button', { name });
+    fireEvent.mouseEnter(help(/Explicación: Dónde estuvo/));
+    expect(screen.getByRole('tooltip').querySelector('.chart-help-lead')?.textContent).toContain('miles de millones de USD de 2015');
+    fireEvent.mouseLeave(help(/Explicación: Dónde estuvo/));
+    fireEvent.mouseEnter(help(/Explicación: PBI per cápita real/));
+    expect(screen.getByRole('tooltip').querySelector('.chart-help-lead')?.textContent).toBe('USD de 2015 por persona');
+    fireEvent.mouseLeave(help(/Explicación: PBI per cápita real/));
+    // the unit text no longer sits in the table head
+    expect(document.querySelector('.world-rank-head .gdp-sub')).toBeNull();
+    expect(screen.queryByText(/Mayores economías de la región en \d{4}/)).toBeNull();
+  });
+
+  it('puts the question mark on the same line as the title of the region and the Gráfico | Tabla switch in the head of its card', () => {
+    render(<WorldStep />);
+    const title = screen.getByText('Mayores economías de la región');
+    const head = title.closest('.tour-caption')!;
+    expect(head.querySelector('.chart-help-wrap')).toBeTruthy();
+    const card = screen.getByRole('region', { name: 'Mayores economías de la región' });
+    expect(card.querySelector('.tour-caption .tour-view-switch, .tour-caption-head .tour-view-switch')).toBeNull();
+    expect(card.querySelector('.tour-chart > .tour-view-switch')).toBeTruthy();
   });
 });

@@ -3,6 +3,8 @@ import { RefList } from './RefLink.js';
 
 export interface ChartHelpProps {
   title: string;
+  /** the clarifying line (unit, what is measured): the first line read, in sky blue */
+  lead?: string;
   paragraphs: readonly string[];
   how?: string;
   refs?: readonly string[];
@@ -14,7 +16,7 @@ export interface ChartHelpProps {
  * - On hover/focus: shows a custom styled floating tooltip with the explanatory text.
  * - On click: opens a styled modal popup with the full explanation, reading guide, and numbered references.
  */
-export function ChartHelp({ title, paragraphs, how, refs = [] }: ChartHelpProps) {
+export function ChartHelp({ title, lead, paragraphs, how, refs = [] }: ChartHelpProps) {
   const [hover, setHover] = useState(false);
   const [open, setOpen] = useState(false);
   const dialogTitleId = useId();
@@ -55,6 +57,7 @@ export function ChartHelp({ title, paragraphs, how, refs = [] }: ChartHelpProps)
       {hover && !open && (
         <div role="tooltip" className="chart-help-tooltip">
           <strong className="chart-help-tooltip-title">{title}</strong>
+          {lead && <p className="chart-help-lead">{lead}</p>}
           {paragraphs.map((p, i) => (
             <p key={i} className="chart-help-tooltip-p">
               {p}
@@ -99,6 +102,7 @@ export function ChartHelp({ title, paragraphs, how, refs = [] }: ChartHelpProps)
               </button>
             </div>
             <div className="chart-help-modal-body">
+              {lead && <p className="chart-help-lead">{lead}</p>}
               {paragraphs.map((p, i) => (
                 <p key={i}>{p}</p>
               ))}

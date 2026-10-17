@@ -17,4 +17,6 @@
 - **Datos**: Todo dato presentado debe incluir `source` y `retrieved_at`. Ningún mock sin documentar en `docs/mock-data.md`.
 
 ## Next
-- Consultar `PENDING.md` para las siguientes tareas del modelo (`model-params`, `model-population-hardening`) o mejoras visuales pendientes.
+- PR #125 abierto (`task/archive-root-docs`), CI 100% verde. Pendiente aprobación humana para merge a `main`.
+- Próxima sesión: iniciar la búsqueda de datos según el plan de búsqueda (agro provincial, minería Catamarca/Salta, impacto IA, perfil socioeconómico provincial).
+

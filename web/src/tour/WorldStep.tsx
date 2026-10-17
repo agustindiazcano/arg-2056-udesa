@@ -116,10 +116,10 @@ export function WorldStep() {
         <Reveal k="head" className="gdp-title">
           <div className="slide-title-row">
             <h2>{TITLE}</h2>
-            <ChartHelp title={step0Info.heading} paragraphs={step0Info.paragraphs} how={step0Info.how} refs={step0Info.refs} />
+            <ChartHelp title={step0Info.heading} lead={WORLD_UNIT} paragraphs={step0Info.paragraphs} how={step0Info.how} refs={step0Info.refs} />
           </div>
           <p className="gdp-sub">
-            {WORLD_UNIT}, {FIRST_YEAR} a {LAST_YEAR} · <span className="gdp-source">{WORLD_SOURCE}</span> · <RefList ids={step0Info.refs} />
+            {FIRST_YEAR} a {LAST_YEAR} · <span className="gdp-source">{WORLD_SOURCE}</span> · <RefList ids={step0Info.refs} />
           </p>
         </Reveal>
         <div className="tour-controls">
@@ -188,14 +188,26 @@ export function WorldStep() {
               />
             </div>
             <div className="world-ranks">
-              <WorldTable metric="gdp" title="PBI real" unit={WORLD_UNIT} year={frame.year} />
-              <WorldTable metric="percapita" title="PBI per cápita real" unit="USD de 2015 por persona" year={frame.year} />
+              <WorldTable
+                metric="gdp"
+                title="PBI real"
+                unit={REGION_METRICS.gdp.unit}
+                help="Los países ordenados por su PBI real del año que marca la línea de tiempo. Argentina aparece aparte, con su puesto entre todos los países del Banco Mundial."
+                year={frame.year}
+              />
+              <WorldTable
+                metric="percapita"
+                title="PBI per cápita real"
+                unit={REGION_METRICS.percapita.unit}
+                help="El PBI real dividido por la población. Cuenta solo países de un millón de habitantes o más. Argentina aparece aparte, con su puesto."
+                year={frame.year}
+              />
             </div>
           </Reveal>
 
           <Reveal k="region" delay={0.14} className="gdp-chart prov-bars" role="region" aria-label="Mayores economías de la región">
             <div className="tour-caption">
-              <strong>Mayores economías de la región en {shownYear}</strong>
+              <strong>Mayores economías de la región</strong>
               <ChartHelp
                 title="Mayores economías de la región"
                 paragraphs={[step0Info.paragraphs[1]!]}
