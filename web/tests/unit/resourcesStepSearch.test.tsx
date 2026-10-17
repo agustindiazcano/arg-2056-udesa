@@ -22,7 +22,7 @@ vi.mock('../../src/scenes/forecast/ProvinceMap.js', () => ({
 describe('ResourcesStep with MapSearch (C5)', () => {
   it('renders search input on top of the map', () => {
     render(<ResourcesStep />);
-    expect(screen.getByPlaceholderText(/buscar provincia o departamento/i)).toBeDefined();
+    expect(screen.getByPlaceholderText(/buscar provincia/i)).toBeDefined();
   });
 
   it('searching and selecting a department drills down to the province and department', () => {

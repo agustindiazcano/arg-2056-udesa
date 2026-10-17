@@ -1,13 +1,15 @@
 import { PROVINCES } from '../types/province.js';
 import type { ProvinceId } from '../types/province.js';
 import rawDepartments from '../geo/departmentsIndex.json';
+import { getAllMiningProjects } from '../tour/provinceDrilldown.js';
 
 export interface SearchResult {
   id: string;
   name: string;
-  type: 'provincia' | 'departamento';
+  type: 'provincia' | 'departamento' | 'proyecto';
   provinceId: ProvinceId;
   provinceName: string;
+  department?: string;
   subtitle?: string;
 }
 
@@ -37,7 +39,7 @@ function matchScore(name: string, q: string, isProvince: boolean): number {
 }
 
 /**
- * Searches provinces and departments with normalized accent and case insensitivity.
+ * Searches provinces, departments, and mining projects with normalized accent and case insensitivity.
  */
 export function searchGeo(query: string, maxResults = 8): SearchResult[] {
   const q = normalize(query);
@@ -87,7 +89,32 @@ export function searchGeo(query: string, maxResults = 8): SearchResult[] {
     }
   }
 
+  // Match mining projects (e.g. Taca Taca, Veladero, Josemaría, etc.)
+  const projects = getAllMiningProjects();
+  for (const proj of projects) {
+    const score = matchScore(proj.name, q, false);
+    if (score > 0) {
+      const companyPart = proj.company ? `(${proj.company}) ` : '';
+      const kindPart = proj.kind ? `Proyecto de ${proj.kind.toLowerCase()} ` : 'Proyecto minero ';
+      const subtitle = `${kindPart}${companyPart}· ${proj.department}, ${proj.provinceName}`.trim();
+
+      results.push({
+        score: score + 5, // give direct project matches good visibility
+        item: {
+          id: `proj:${proj.provinceId}:${proj.name}`,
+          name: proj.name,
+          type: 'proyecto',
+          provinceId: proj.provinceId,
+          provinceName: proj.provinceName,
+          department: proj.department,
+          subtitle
+        }
+      });
+    }
+  }
+
   results.sort((a, b) => b.score - a.score || a.item.name.localeCompare(b.item.name, 'es'));
 
   return results.slice(0, maxResults).map((r) => r.item);
 }
+

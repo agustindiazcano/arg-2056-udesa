@@ -13,17 +13,18 @@ export const PROVINCE_MINING_BREAKDOWN: Partial<Record<ProvinceId, Part[]>> = {
     { label: 'Litio', value: 700 },
     { label: 'Oro', value: 550 },
     { label: 'Plata', value: 350 },
-    { label: 'Boratos y otros', value: 200 }
+    { label: 'Boratos', value: 140 },
+    { label: 'Cobre y molibdeno', value: 60 }
   ],
   'AR-K': [
     { label: 'Litio', value: 1600 },
     { label: 'Oro', value: 800 },
-    { label: 'Cobre y otros', value: 800 }
+    { label: 'Cobre y molibdeno', value: 800 }
   ],
   'AR-J': [
     { label: 'Oro', value: 1900 },
     { label: 'Plata', value: 450 },
-    { label: 'Cobre y otros', value: 250 }
+    { label: 'Cobre y molibdeno', value: 250 }
   ],
   'AR-Z': [
     { label: 'Oro', value: 2000 },
@@ -33,7 +34,7 @@ export const PROVINCE_MINING_BREAKDOWN: Partial<Record<ProvinceId, Part[]>> = {
   'AR-Y': [
     { label: 'Litio', value: 1100 },
     { label: 'Plata', value: 500 },
-    { label: 'Plomo y cinc', value: 300 }
+    { label: 'Plomo, cinc y boratos', value: 300 }
   ],
   'AR-M': [
     { label: 'Rocas de aplicación y calizas', value: 200 },

@@ -254,3 +254,50 @@ export function provinceDrilldownData(
     rows: totalVal > 0 ? [{ name: label, value: totalVal }] : []
   };
 }
+
+export interface ProjectCatalogEntry {
+  name: string;
+  provinceId: ProvinceId;
+  provinceName: string;
+  department: string;
+  company?: string;
+  kind?: string;
+}
+
+const DEPT_CANONICAL_NAMES: Record<string, string> = {
+  'los andes': 'Los Andes',
+  'general guemes': 'General Güemes',
+  'iglesia': 'Iglesia',
+  'calingasta': 'Calingasta',
+  'jachal': 'Jáchal',
+  'antofagasta de la sierra': 'Antofagasta de la Sierra',
+  'andalgala': 'Andalgalá',
+  'tinogasta': 'Tinogasta',
+  'susques': 'Susques',
+  'rinconada': 'Rinconada',
+  'deseado': 'Deseado',
+  'magallanes': 'Magallanes'
+};
+
+export function getAllMiningProjects(): ProjectCatalogEntry[] {
+  const list: ProjectCatalogEntry[] = [];
+  for (const [provId, depts] of Object.entries(DEPARTMENT_PROJECTS)) {
+    const province = PROVINCES.find((p) => p.id === provId);
+    const provName = province?.name ?? provId;
+    for (const [deptNorm, projects] of Object.entries(depts)) {
+      const deptDisplay = DEPT_CANONICAL_NAMES[deptNorm] ?? deptNorm;
+      for (const p of projects) {
+        list.push({
+          name: p.name,
+          provinceId: provId as ProvinceId,
+          provinceName: provName,
+          department: deptDisplay,
+          company: p.company,
+          kind: p.kind
+        });
+      }
+    }
+  }
+  return list;
+}
+

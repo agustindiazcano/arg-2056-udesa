@@ -11,9 +11,15 @@ Order: C8, C7, C2, C3, C4, C5, C1, C6.
 - [x] C3 `res-province-drilldown`: selecting a province shows department ranking if department-level data exists (e.g. Salta, San Juan, Catamarca, Jujuy, Santa Cruz), otherwise falls back to mineral/sector breakdown of that province (e.g. Rio Negro). Implemented in `provinceDrilldown.ts` and `ResourcesStep.tsx`; 7 tests in `provinceDrilldown.test.ts`.
 - [x] C4 `res-department-projects`: clicking a department (in chart bars or on the map) selects it and expands registered mining projects (name, company, mineral, status, investment/capacity); if no projects exist, nothing extra is shown. Integrated in `ProvinceMap.tsx` and `ResourcesStep.tsx`; tests in `resourcesStepDrilldown.test.tsx`.
 - [x] C5 `map-search`: search by province or department with autocomplete, keyboard navigation, normalization (accents/case) and seamless drilldown on the map. Branch `task/map-search`.
-- [ ] C1 `res-minerals-extend`: add boron, copper, molybdenum; add the Taca Taca project.
+- [x] C1 `res-minerals-extend`: added copper (116.7 Mt), boron (3rd world reserve), and molybdenum (2.2+ Mt) to mining totals and provincial breakdowns; added Taca Taca with NI 43-101 parameters; enabled search by mining project in MapSearch. Branch `task/res-minerals-extend`.
 - [ ] C6 `province-profile-slide`: LAST, with mock data (decided by the user; mock never labeled in the UI, listed in `docs/mock-data.md`, release gate still blocks until replaced by real data). New slide with provincial GDP, coparticipation, GDP per capita, exports, population, poverty, unemployment, private / public / registered employment; security filter only if an official provincial series exists.
-- [ ] **Data to verify (human)**: every figure added by C1 and C6 against the original source (INDEC, Secretaria de Mineria, USGS, Ministerio de Economia, Secretaria de Trabajo). Source candidates in section 4 of the plan.
+- [ ] **Data to verify (human)**:
+  - C1: Recursos de cobre 116,7 Mt (Secretaría de Minería ARMINERA 2025 p. 8).
+  - C1: Reservas y producción de boro (boratos): 3.ª reserva mundial (USGS Mineral Commodity Summaries / Secretaría de Minería).
+  - C1: Potencial de molibdeno: 2,2+ Mt asociado a pórfidos de cobre (informes de Taca Taca, El Pachón, MARA).
+  - C1: Taca Taca capex 4.232 M USD inicial (First Quantum NI 43-101 de 2026-02-19).
+  - C6: Figures for provincial profile slide (INDEC, Ministerio de Economía, Secretaría de Trabajo).
+
 
 
 ## Task queue (in order)

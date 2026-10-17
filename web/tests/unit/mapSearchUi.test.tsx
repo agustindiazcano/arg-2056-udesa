@@ -12,7 +12,7 @@ describe('MapSearch UI component (C5: map-search)', () => {
   it('renders search input with placeholder', () => {
     render(<MapSearch onSelect={vi.fn()} />);
     expect(screen.getByRole('combobox')).toBeDefined();
-    expect(screen.getByPlaceholderText(/buscar provincia o departamento/i)).toBeDefined();
+    expect(screen.getByPlaceholderText(/buscar provincia/i)).toBeDefined();
   });
 
   it('shows dropdown results when typing and selects on click', () => {

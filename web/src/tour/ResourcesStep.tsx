@@ -140,6 +140,8 @@ export function ResourcesStep() {
     setSelected(result.provinceId);
     if (result.type === 'departamento') {
       setSelectedDept(result.name);
+    } else if (result.type === 'proyecto' && result.department) {
+      setSelectedDept(result.department);
     } else {
       setSelectedDept(null);
     }

@@ -79,7 +79,8 @@ export function breakdown(sector: ResourceSector): Breakdown {
         { label: 'Oro', value: 3.141 },
         { label: 'Plata', value: 0.652 },
         { label: 'Litio', value: 0.645 },
-        { label: 'Cobre y resto', value: 0.235 }
+        { label: 'Boratos', value: 0.120 },
+        { label: 'Cobre, molibdeno y resto', value: 0.115 }
       ]
     };
   }
@@ -109,7 +110,7 @@ const es = (v: number, digits = 1): string => v.toLocaleString('es-AR', { minimu
 /**
  * The totals shown above the charts: dollars, tonnes, barrels and reserves of the chosen view. Mining reserves and resources are the figures of the
  * Secretaría de Minería (ARMINERA 2025: lithium 122 million tonnes of carbonate equivalent, 21 of them reserves; 105 million ounces of gold, 3,216
- * million of silver); oil and gas are the production of 2025 and the proved reserves of the Secretaría de Energía (31 December 2025).
+ * million of silver; 116.7 million tonnes of copper); oil and gas are the production of 2025 and the proved reserves of the Secretaría de Energía (31 December 2025).
  */
 export function totals(view: ResourceSector | 'total'): Total[] {
   const exportsBn = sectorExports();
@@ -124,8 +125,11 @@ export function totals(view: ResourceSector | 'total'): Total[] {
   const mineria: Total[] = [
     { label: 'Exportaciones mineras de 2024', value: es(mining2024), unit: 'miles de millones de USD' },
     { label: 'Recursos de litio', value: '122', unit: 'millones de t de carbonato equivalente (21 de reservas)' },
+    { label: 'Recursos de cobre', value: '116,7', unit: 'millones de toneladas' },
     { label: 'Recursos de oro', value: '105', unit: 'millones de onzas' },
-    { label: 'Recursos de plata', value: '3.216', unit: 'millones de onzas' }
+    { label: 'Recursos de plata', value: '3.216', unit: 'millones de onzas' },
+    { label: 'Reservas de boro (boratos)', value: '3.ª', unit: 'reserva mundial (Salta y Jujuy)' },
+    { label: 'Potencial de molibdeno', value: '2,2+', unit: 'millones de t (asociado al cobre)' }
   ];
   const hidrocarburos: Total[] = [
     { label: 'Exportaciones del complejo petrolero, 2025', value: es(bySector('Hidrocarburos')), unit: 'miles de millones de USD' },

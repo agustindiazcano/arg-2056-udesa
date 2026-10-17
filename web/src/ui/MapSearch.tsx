@@ -10,7 +10,7 @@ export interface MapSearchProps {
 
 export function MapSearch({
   onSelect,
-  placeholder = 'Buscar provincia o departamento...',
+  placeholder = 'Buscar provincia, departamento o proyecto...',
   className = ''
 }: MapSearchProps) {
   const [query, setQuery] = useState('');
@@ -221,14 +221,22 @@ export function MapSearch({
                       background:
                         item.type === 'provincia'
                           ? 'rgba(56, 189, 248, 0.2)'
-                          : 'rgba(148, 163, 184, 0.15)',
+                          : item.type === 'proyecto'
+                            ? 'rgba(234, 179, 8, 0.2)'
+                            : 'rgba(148, 163, 184, 0.15)',
                       color:
                         item.type === 'provincia'
                           ? '#38bdf8'
-                          : 'var(--ink-muted)'
+                          : item.type === 'proyecto'
+                            ? '#facc15'
+                            : 'var(--ink-muted)'
                     }}
                   >
-                    {item.type === 'provincia' ? 'Provincia' : 'Departamento'}
+                    {item.type === 'provincia'
+                      ? 'Provincia'
+                      : item.type === 'proyecto'
+                        ? 'Proyecto'
+                        : 'Departamento'}
                   </span>
                 </div>
                 {item.subtitle && (
