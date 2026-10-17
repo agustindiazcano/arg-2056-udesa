@@ -7,6 +7,7 @@ vi.mock('../../src/charts/EChart.js', () => ({
   EChart: ({ 'aria-label': label }: { 'aria-label'?: string }) => <div role="img" aria-label={label} data-testid="echart" />
 }));
 
+import { CompositionStep } from '../../src/tour/CompositionStep';
 import { ExportsStep } from '../../src/tour/ExportsStep';
 import { TourStep } from '../../src/tour/TourStep';
 import { useStore } from '../../src/state/store';
@@ -60,5 +61,16 @@ describe('the Exports slide (step 4)', () => {
     render(<TourStep step={4} />);
     expect(screen.getByRole('complementary', { name: /texto y referencias/i })).toBeTruthy();
     expect(screen.getByRole('button', { name: 'Dólares' })).toBeTruthy();
+  });
+
+  it('CompositionStep (Slide 4) supports switching between Treemap, Torta and Barras in 2D', () => {
+    render(<CompositionStep />);
+    expect(screen.getByRole('button', { name: 'Treemap' }).getAttribute('aria-pressed')).toBe('true');
+    fireEvent.click(screen.getByRole('button', { name: 'Torta' }));
+    expect(screen.getByRole('button', { name: 'Torta' }).getAttribute('aria-pressed')).toBe('true');
+    expect(screen.getAllByTestId('echart')).toHaveLength(2);
+    fireEvent.click(screen.getByRole('button', { name: 'Barras' }));
+    expect(screen.getByRole('button', { name: 'Barras' }).getAttribute('aria-pressed')).toBe('true');
+    expect(screen.getAllByTestId('echart')).toHaveLength(2);
   });
 });

@@ -149,6 +149,8 @@ Order: C8, C7, C2, C3, C4, C5, C1, C6.
 
 ## Done
 
+- [x] `treemap-pie-bars-2d` (branch `task/treemap-pie-bars-2d`, worktree `arg-2056-udesa-tree2d`): applied 2D flat treemap, doughnut pie (`Torta`), and rounded bar chart styles from `test/tree-example.html` to Slides 2 (`ResourcesStep.tsx`) and 4 (`CompositionStep.tsx` & `ExportsStep.tsx`), added `Torta` option to `CompositionStep.tsx`, expanded `tokens.categorical` to 16 vibrant colors, and gave all 2D and 3D bar charts across the app a wide multi-color gama.
+
 - [x] `slide3-charts-restyle` (branch `task/intro-hover-effects`): restyled Slide 3 (Cuarta revolución industrial / IA) charts, palette, and card system to match Slide 5 (Regla del 70): solid clean Y-grid lines (`tokens.grid`), no X-grid lines, eliminated blurry `shadowBlur` glow and muddy overlapping `areaStyle` gradients, applied crisp vector line styling, unified cards and headers using `.rule70-card`, `.rule70-card-head`, `.rule70-legend`, `.rule70-key`, and `.rule70-table`, and set population series to `tokens.blue`.
 
 - [x] `intro-hover-effects` (branch `task/intro-hover-effects`): enhanced 3D intro map interactions: hovering "Cruce de los Andes" button highlights only San Juan and Mendoza; hovering "Hacia el 2056" button illuminates all 24 provinces + Islas Malvinas lifted in gold (`var(--gold)`); hovering any province in the 3D map displays a floating tooltip with the province name. Fully covered in `intro.test.tsx`.

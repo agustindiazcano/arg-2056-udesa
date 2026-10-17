@@ -99,20 +99,30 @@ export function buildProvinceBars(records: ResourceProductionRecord[], opts: Pro
     series: [
       {
         type: 'bar',
-        data: seriesData.map(d => ({
-          value: d.value,
-          itemStyle: {
-            color: d.isOther || (highlight !== null && d.geo !== highlight) ? tokens.muted : tokens.blue,
-            borderRadius: [0, 4, 4, 0] // 4px rounded data end (top-right, bottom-right)
-          }
-        })),
+        data: seriesData.map((d, idx) => {
+          const rankIdx = seriesData.length - 1 - idx;
+          const baseColor = d.isOther
+            ? tokens.muted
+            : highlight !== null
+              ? d.geo === highlight
+                ? tokens.blue
+                : tokens.muted
+              : tokens.categorical[rankIdx % tokens.categorical.length]!;
+          return {
+            value: d.value,
+            itemStyle: {
+              color: baseColor,
+              borderRadius: [0, 4, 4, 0] // 4px rounded data end (top-right, bottom-right)
+            }
+          };
+        }),
         barWidth: 16,
         itemStyle: {
           borderColor: tokens.surface,
           borderWidth: 1
         },
         label: {
-          show: false // labels only on the selected mark and the extremes? The brief says: "labels only on the selected mark and the extremes". For now we'll just show tooltip, maybe wait on label logic.
+          show: false
         }
       }
     ]

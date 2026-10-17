@@ -51,10 +51,11 @@ export function ExportsStep({ embedded = false }: { embedded?: boolean } = {}) {
 
   const built = useMemo(() => {
     const unit = EXPORT_UNIT[metric];
-    const rows = complex ? complexOverYears(complex, metric) : exportRows(year, metric);
-    const highlight = complex ? String(year) : [...rows].sort((a, b) => b.value - a.value)[0]!.label;
+    const rawRows = complex ? complexOverYears(complex, metric) : exportRows(year, metric);
+    const rows = complex ? rawRows : [...rawRows].sort((a, b) => b.value - a.value);
+    const highlight = complex ? String(year) : rows[0]!.label;
     const what = complex ? `${complex}, por año` : `Exportaciones de bienes por complejo exportador en ${year}`;
-    const summary = `${what} (INDEC), ${metric === 'usd' ? 'miles de millones de USD' : '% del total'}: ${rows.map((r) => `${r.label} ${formatValue(r.value, unit)}`).join(', ')}`;
+    const summary = `${what} (INDEC), ${metric === 'usd' ? 'miles de millones de USD' : '% del total'}: ${rawRows.map((r) => `${r.label} ${formatValue(r.value, unit)}`).join(', ')}`;
     const bars = buildColumns(rows.map((r) => r.label), [{ name: what, values: rows.map((r) => r.value), color: tokens.muted }], { unit, highlight, summary }).option;
     // one complex over the years is a series, not parts of a whole: it stays in bars
     const shape = complex ? 'bars' : form;

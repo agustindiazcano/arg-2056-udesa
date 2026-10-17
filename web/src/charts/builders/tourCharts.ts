@@ -36,6 +36,8 @@ export interface ColumnSeries {
   name: string;
   values: number[];
   color: string;
+  /** optional per-bar colors; defaults to cycling tokens.categorical for single-series charts */
+  colors?: string[];
   /** the range of each value, drawn as a whisker */
   range?: { low: number[]; high: number[] };
 }
@@ -52,26 +54,43 @@ interface ColumnsOpts {
 const BAR_WIDTH = 30;
 const BAR_GAP = 1.1;
 
-/** Columns, one series per group member: a single series is a ranking, two are a comparison; a series may carry a range. */
+/** Columns, one series per group member: a single series is a ranking with a rich categorical palette, two are a comparison; a series may carry a range. */
 export function buildColumns(categories: string[], series: ColumnSeries[], opts: ColumnsOpts) {
   const n = series.length;
-  const barWidth = opts.dense?.barWidth ?? (n === 1 ? 44 : BAR_WIDTH);
-  const bars = series.map((s) => ({
-    name: s.name,
-    type: 'bar',
-    barWidth,
-    barGap: `${Math.round((BAR_GAP - 1) * 100)}%`,
-    data: s.values.map((v, i) => ({
-      value: v,
-      itemStyle: {
-        color: opts.highlight !== undefined && categories[i] === opts.highlight ? tokens.blue : s.color,
-        borderRadius: [4, 4, 0, 0],
-        shadowBlur: 10,
-        shadowColor: `${s.color}55`
-      }
-    })),
-    label: { show: true, position: 'top', color: tokens.ink2, formatter: (p: { value: number }) => formatAxisNumber(p.value) }
-  }));
+  const barWidth = opts.dense?.barWidth ?? (n === 1 ? 36 : BAR_WIDTH);
+  const highlightIdx = opts.highlight !== undefined ? categories.indexOf(opts.highlight) : -1;
+  const bars = series.map((s, seriesIdx) => {
+    return {
+      name: s.name,
+      type: 'bar',
+      barWidth,
+      barMaxWidth: 44,
+      barGap: `${Math.round((BAR_GAP - 1) * 100)}%`,
+      data: s.values.map((v, i) => {
+        const isHighlight = highlightIdx === i;
+        const paletteColor =
+          s.colors?.[i] ??
+          (n === 1
+            ? highlightIdx > 0
+              ? tokens.categorical[1 + (i % (tokens.categorical.length - 1))]!
+              : tokens.categorical[i % tokens.categorical.length]!
+            : s.color !== tokens.muted
+              ? s.color
+              : tokens.categorical[(seriesIdx * 3 + i) % tokens.categorical.length]!);
+        const barColor = isHighlight ? tokens.blue : paletteColor;
+      return {
+        value: v,
+        itemStyle: {
+          color: barColor,
+          borderRadius: [4, 4, 0, 0],
+          borderColor: isHighlight ? tokens.ink : 'rgba(255,255,255,0.16)',
+          borderWidth: isHighlight ? 1.5 : 1
+        }
+      };
+    }),
+      label: { show: true, position: 'top', color: tokens.ink2, formatter: (p: { value: number }) => formatAxisNumber(p.value) }
+    };
+  });
 
   // a range is a whisker: a vertical line with two caps, centred on the bar of its series
   const whiskers = series.flatMap((s, k) => {
@@ -335,9 +354,10 @@ export function buildFluidLines(
   return { option, summary: opts.summary };
 }
 
-/** A treemap of shares: every rectangle is a part of the whole, its area its share. */
-export function buildShares(rows: Array<{ label: string; value: number }>, opts: { unit: string; summary: string }) {
+/** A treemap of shares: every rectangle is a part of the whole, its area its share, styled after the 2D flat view of `test/tree-example.html`. */
+export function buildShares(rows: Array<{ label: string; value: number; color?: string }>, opts: { unit: string; summary: string }) {
   const sorted = [...rows].sort((a, b) => b.value - a.value);
+  const total = sorted.reduce((sum, r) => sum + r.value, 0);
   const option = {
     animation: false,
     backgroundColor: 'transparent',
@@ -345,7 +365,10 @@ export function buildShares(rows: Array<{ label: string; value: number }>, opts:
       backgroundColor: 'rgba(13,13,13,0.92)',
       borderColor: tokens.border,
       textStyle: { color: tokens.ink },
-      formatter: (p: { name: string; value: number }) => `${p.name}<br/>${formatValue(p.value, opts.unit)}`
+      formatter: (p: { name: string; value: number }) => {
+        const pct = total > 0 && opts.unit !== '%' ? ` (${((p.value / total) * 100).toLocaleString('es-AR', { maximumFractionDigits: 1 })} %)` : '';
+        return `${p.name}<br/>${formatValue(p.value, opts.unit)}${pct}`;
+      }
     },
     series: [
       {
@@ -353,19 +376,41 @@ export function buildShares(rows: Array<{ label: string; value: number }>, opts:
         roam: false,
         nodeClick: false,
         breadcrumb: { show: false },
-        left: 8,
-        right: 8,
-        top: 8,
-        bottom: 8,
-        itemStyle: { borderColor: tokens.page, borderWidth: 3, gapWidth: 2, borderRadius: 6 },
+        left: 6,
+        right: 6,
+        top: 6,
+        bottom: 6,
+        squareRatio: 1.15,
+        itemStyle: { borderColor: tokens.page, borderWidth: 3, gapWidth: 3, borderRadius: 6 },
         label: {
           show: true,
+          position: 'inside',
+          align: 'center',
+          verticalAlign: 'middle',
           color: tokens.ink,
-          fontSize: 15,
-          formatter: (p: { name: string; value: number }) => `{n|${p.name}}\n{v|${formatValue(p.value, opts.unit)}}`,
-          rich: { n: { fontSize: 15, fontWeight: 600, color: tokens.ink }, v: { fontSize: 13, color: tokens.ink2 } }
+          fontSize: 13,
+          formatter: (p: { name: string; value: number }) => {
+            if (opts.unit === '%') {
+              return `{n|${p.name}}\n{v|${formatValue(p.value, opts.unit)}}`;
+            }
+            const pct = total > 0 ? `${((p.value / total) * 100).toLocaleString('es-AR', { maximumFractionDigits: 1 })} %` : '';
+            return `{n|${p.name}}\n{v|${pct}}\n{s|${formatValue(p.value, opts.unit)}}`;
+          },
+          rich: {
+            n: { fontSize: 13, fontWeight: 700, color: tokens.ink, lineHeight: 17, align: 'center' },
+            v: { fontSize: 12, fontWeight: 600, color: tokens.ink, lineHeight: 16, align: 'center' },
+            s: { fontSize: 10, color: tokens.ink2, lineHeight: 14, align: 'center' }
+          }
         },
-        data: sorted.map((r, i) => ({ name: r.label, value: r.value, itemStyle: { color: tokens.categorical[i % tokens.categorical.length] } }))
+        data: sorted.map((r, i) => ({
+          name: r.label,
+          value: r.value,
+          itemStyle: {
+            color: r.color ?? tokens.categorical[i % tokens.categorical.length],
+            borderColor: 'rgba(255,255,255,0.28)',
+            borderWidth: 1
+          }
+        }))
       }
     ]
   };

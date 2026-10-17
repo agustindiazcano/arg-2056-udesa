@@ -26,41 +26,55 @@ export function buildTreemap(records: CompositionRecord[], opts: TreemapOpts = {
   }
 
   // Calculate group totals and sort groups
-  const groups = Object.keys(grouped).map(group => {
+  const rawGroups = Object.keys(grouped).map(group => {
     const total = grouped[group]!.reduce((sum, r) => sum + (r.value_usd || 0), 0);
+    return { group, total, items: grouped[group]! };
+  }).sort((a, b) => b.total - a.total);
+
+  let leafIndex = 0;
+  const groups = rawGroups.map((g, groupIdx) => {
     // Sort leaves inside group
-    const children = grouped[group]!.sort((a, b) => (b.value_usd || 0) - (a.value_usd || 0)).map(r => {
+    const children = g.items.sort((a, b) => (b.value_usd || 0) - (a.value_usd || 0)).map((r, childIdx) => {
       const share = formatPercent(totalValue ? ((r.value_usd || 0) / totalValue) * 100 : 0);
-      const isHighlighted = !opts.highlightGroup || opts.highlightGroup === r.group;
+      const isHighlighted = !opts.highlightGroup || opts.highlightGroup === g.group;
+      const color = opts.highlightGroup
+        ? (isHighlighted ? tokens.blue : tokens.muted)
+        : (groupIdx === 1 && childIdx === 0 ? tokens.blue : tokens.categorical[(leafIndex + 1) % tokens.categorical.length]!);
+      leafIndex++;
       return {
         name: r.label || r.category,
         value: r.value_usd,
         itemStyle: {
-          color: isHighlighted ? tokens.blue : tokens.muted,
+          color,
           borderColor: tokens.surface,
           borderWidth: 2,
-          gapWidth: 2
+          gapWidth: 2,
+          borderRadius: 4
         },
         label: {
           show: true,
+          position: 'inside',
+          align: 'center',
+          verticalAlign: 'middle',
+          color: tokens.ink,
+          fontWeight: 600,
           formatter: `{b}\n${share}`
         }
       };
     });
 
     return {
-      name: group,
-      value: total,
+      name: g.group,
+      value: g.total,
       children,
       itemStyle: {
         borderColor: tokens.surface,
         borderWidth: 2,
-        gapWidth: 2
+        gapWidth: 2,
+        borderRadius: 4
       }
     };
   });
-
-  groups.sort((a, b) => b.value - a.value);
 
   const option = {
     tooltip: {

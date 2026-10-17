@@ -79,11 +79,11 @@ export function TourBars({ spec }: { spec: Bars3DSpec }) {
       scene.add(label);
     }
 
-    const normal = new Color(SEQUENTIAL_BLUE[4]);
     const lit = new Color(SEQUENTIAL_BLUE[9]);
-    const bars = layout.items.map((item) => {
+    const bars = layout.items.map((item, i) => {
+      const baseColor = new Color(tokens.categorical[i % tokens.categorical.length]!);
       const material = new MeshStandardMaterial({
-        color: item.highlight ? lit : normal,
+        color: item.highlight ? lit : baseColor,
         emissive: item.highlight ? lit : new Color(tokens.page),
         emissiveIntensity: item.highlight ? 0.45 : 0,
         roughness: 0.55

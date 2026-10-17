@@ -2,6 +2,8 @@ import { describe, it, expect } from 'vitest';
 import { buildTreemap } from '../../src/charts/builders/treemap.js';
 import { buildProvinceBars } from '../../src/charts/builders/provinceBars.js';
 import { buildTrend } from '../../src/charts/builders/trend.js';
+import { buildPie } from '../../src/charts/builders/pie.js';
+import { buildColumns, buildShares } from '../../src/charts/builders/tourCharts.js';
 import { tokens } from '../../src/styles/tokens.js';
 import type { CompositionRecord, ResourceProductionRecord } from '../../src/types/index.js';
 
@@ -68,9 +70,11 @@ describe('Chart Builders', () => {
       // Reversed for yAxis category! So top-left is at the end.
       expect(seriesData).toHaveLength(3); // top 2 + Other
       
-      // The array is reversed, so largest is at index 2
+      // The array is reversed, so largest is at index 2; each top province gets its own categorical color when none is highlighted
       expect(seriesData[2]?.value).toBe(500); // AR-A
+      expect(seriesData[2]?.itemStyle.color).toBe(tokens.categorical[0]);
       expect(seriesData[1]?.value).toBe(100); // AR-B
+      expect(seriesData[1]?.itemStyle.color).toBe(tokens.categorical[1]);
       expect(seriesData[0]?.value).toBe(60); // Other (50 + 10)
       expect(seriesData[0]?.itemStyle.color).toBe(tokens.muted);
     });
@@ -125,6 +129,62 @@ describe('Chart Builders', () => {
       const formatter = (option.tooltip as { formatter: (p: unknown[]) => string }).formatter;
       expect(formatter([{ name: '2021', value: null }])).toBe('2021: Sin datos');
       expect(buildTrend([], { resource: 'lithium' }).summary).toBe('Sin datos de tendencia.');
+    });
+  });
+
+  describe('buildShares, buildPie and buildColumns (2D treemap, doughnut pie and multi-color bars)', () => {
+    const sample = [
+      { label: 'Servicios', value: 60 },
+      { label: 'Industria', value: 25 },
+      { label: 'Agro', value: 15 }
+    ];
+
+    it('buildShares styles the 2D treemap with centered labels, rounded gaps and distinct categorical colors', () => {
+      const { option } = buildShares(sample, { unit: 'miles de millones de USD', summary: 'resumen' });
+      const s = (option.series as Array<{
+        type: string;
+        squareRatio: number;
+        itemStyle: { borderRadius: number; gapWidth: number };
+        label: { position: string; align: string; verticalAlign: string; formatter: (p: { name: string; value: number }) => string };
+        data: Array<{ name: string; itemStyle: { color: string } }>;
+      }>)[0]!;
+      expect(s.type).toBe('treemap');
+      expect(s.squareRatio).toBe(1.15);
+      expect(s.itemStyle.borderRadius).toBe(6);
+      expect(s.itemStyle.gapWidth).toBe(3);
+      expect(s.label.position).toBe('inside');
+      expect(s.label.align).toBe('center');
+      expect(s.label.verticalAlign).toBe('middle');
+      expect(s.label.formatter({ name: 'Servicios', value: 60 })).toContain('60 %');
+      expect(s.data.map((d) => d.itemStyle.color)).toEqual([tokens.categorical[0], tokens.categorical[1], tokens.categorical[2]]);
+    });
+
+    it('buildPie builds a doughnut chart with rounded slices and categorical colors', () => {
+      const { option } = buildPie(sample, { unit: '%', summary: 'resumen' });
+      const s = (option.series as Array<{
+        type: string;
+        radius: string[];
+        itemStyle: { borderRadius: number; borderWidth: number };
+        data: Array<{ name: string; itemStyle: { color: string } }>;
+      }>)[0]!;
+      expect(s.type).toBe('pie');
+      expect(s.radius).toEqual(['52%', '78%']);
+      expect(s.itemStyle.borderRadius).toBe(4);
+      expect(s.itemStyle.borderWidth).toBe(2);
+      expect(s.data.map((d) => d.itemStyle.color)).toEqual([tokens.categorical[0], tokens.categorical[1], tokens.categorical[2]]);
+    });
+
+    it('buildColumns assigns a distinct color from tokens.categorical to every bar in a single-series chart', () => {
+      const { option } = buildColumns(
+        sample.map((r) => r.label),
+        [{ name: 'PBI', values: sample.map((r) => r.value), color: tokens.muted }],
+        { unit: '%', highlight: 'Servicios', summary: 'resumen' }
+      );
+      const s = (option.series as Array<{
+        data: Array<{ value: number; itemStyle: { color: string; borderRadius: number[] } }>;
+      }>)[0]!;
+      expect(s.data.map((d) => d.itemStyle.color)).toEqual([tokens.categorical[0], tokens.categorical[1], tokens.categorical[2]]);
+      expect(s.data[0]?.itemStyle.borderRadius).toEqual([4, 4, 0, 0]);
     });
   });
 });

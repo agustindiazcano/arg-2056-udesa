@@ -62,13 +62,14 @@ export function producers(view: View): Array<{ short: string; value: number }> {
 
 function Parts({ title, unit, parts, form, onPick }: { title: string; unit: string; parts: Part[]; form: Form; onPick?: (label: string) => void }) {
   const built = useMemo(() => {
+    const sorted = [...parts].sort((a, b) => b.value - a.value);
     const summary = `${title}: ${parts.map((p) => `${p.label} ${formatValue(p.value, unit)}`).join(', ')}`;
     const option =
       form === 'treemap'
-        ? buildShares(parts, { unit, summary }).option
+        ? buildShares(sorted, { unit, summary }).option
         : form === 'pie'
-          ? buildPie(parts, { unit, summary }).option
-          : buildColumns(parts.map((p) => p.label), [{ name: title, values: parts.map((p) => p.value), color: tokens.muted }], { unit, summary }).option;
+          ? buildPie(sorted, { unit, summary }).option
+          : buildColumns(sorted.map((p) => p.label), [{ name: title, values: sorted.map((p) => p.value), color: tokens.muted }], { unit, summary }).option;
     return { option, summary };
   }, [title, unit, parts, form]);
   const click = (params: ChartClickParams) => {
