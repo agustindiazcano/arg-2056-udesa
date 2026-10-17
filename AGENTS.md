@@ -105,6 +105,7 @@ Commit format: `type(scope): imperative summary` (types: feat, fix, test, refact
 - Charts: treemap for composition, bars for rankings, choropleth for provinces, line + fan for series. No pie charts.
 - Keyboard map (defaults): `←/→` previous/next scene, `Space` play/pause, `+/-` speed, `1/2/3` scenario, `D` toggle 2D/3D, `P` province filter, `Esc` back/close.
 - Accessible by keyboard, readable contrast, respects `prefers-reduced-motion`.
+- Never write color literals (`#hex`, `rgb/rgba`, `hsl/hsla`) outside `web/src/styles/tokens.css`; every other `.css` file must use `var(--token)` or `color-mix()` (enforced by `shellUi.test.tsx`).
 - Visual polish (bloom, easing, palette) comes last. Do not start it before the model and data tasks in `PENDING.md` are done.
 
 ## 9. Testing by layer
