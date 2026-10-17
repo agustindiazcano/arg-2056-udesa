@@ -18,6 +18,8 @@ import { ProvinceStep } from './ProvinceStep.js';
 import { RESOURCES_TITLE } from './slideTitles.js';
 import { provinceSectorBreakdown } from './provinceSectorBreakdown.js';
 import { getDepartmentProjects, provinceDrilldownData } from './provinceDrilldown.js';
+import { MapSearch } from '../ui/MapSearch.js';
+import type { SearchResult } from '../ui/mapSearchLogic.js';
 
 export { PRODUCER_MIN };
 
@@ -130,6 +132,15 @@ export function ResourcesStep() {
     const found = RESOURCE_SECTORS.find((s) => s.label === name);
     if (found) {
       setView(found.value);
+      setSelectedDept(null);
+    }
+  }, []);
+
+  const handleSearchSelect = useCallback((result: SearchResult) => {
+    setSelected(result.provinceId);
+    if (result.type === 'departamento') {
+      setSelectedDept(result.name);
+    } else {
       setSelectedDept(null);
     }
   }, []);
@@ -259,7 +270,19 @@ export function ResourcesStep() {
           )}
         </div>
         <Reveal k={`map-${view}`} delay={0.14} className="gdp-chart prov-map res-map">
-          <strong className="composition-title">{`${label} por provincia`}</strong>
+          <strong
+            className="composition-title"
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              gap: '12px',
+              flexWrap: 'wrap'
+            }}
+          >
+            <span>{`${label} por provincia`}</span>
+            <MapSearch onSelect={handleSearchSelect} />
+          </strong>
           <div className="tour-chart">
             {provinces.status === 'loading' && <Spinner label="Cargando el mapa de las provincias..." />}
             {provinces.status === 'error' && <p style={{ color: 'var(--state-warning)' }}>{`La geometría de las provincias no está disponible: ${provinces.message}`}</p>}
