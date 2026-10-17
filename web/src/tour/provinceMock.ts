@@ -25,7 +25,7 @@ export const SECTOR_VALUES: Record<Sector, ReadonlyArray<number>> = {
 };
 
 /** The short names that fit under a bar. */
-const SHORT: Partial<Record<ProvinceId, string>> = {
+export const SHORT: Partial<Record<ProvinceId, string>> = {
   'AR-C': 'CABA',
   'AR-B': 'Buenos Aires',
   'AR-G': 'Santiago del Estero',

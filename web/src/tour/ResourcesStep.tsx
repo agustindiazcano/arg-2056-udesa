@@ -15,6 +15,7 @@ import { PRODUCTION_UNIT, PRODUCER_MIN, SECTOR_LABELS, SECTOR_VALUES, mapValuesO
 import { RESOURCE_SECTORS, totals } from './resourcesData.js';
 import type { Part, ResourceSector } from './resourcesData.js';
 import { ProvinceStep } from './ProvinceStep.js';
+import { ProvinceProfileStep } from './ProvinceProfileStep.js';
 import { RESOURCES_TITLE } from './slideTitles.js';
 import { provinceSectorBreakdown } from './provinceSectorBreakdown.js';
 import { getDepartmentProjects, provinceDrilldownData } from './provinceDrilldown.js';
@@ -27,7 +28,8 @@ type View = ResourceSector | 'total';
 
 const PARTS = [
   { value: 'resources', label: 'Recursos' },
-  { value: 'provinces', label: 'Producción por provincia' }
+  { value: 'provinces', label: 'Producción por provincia' },
+  { value: 'profile', label: 'Perfil por provincia' }
 ] as const;
 
 type Pane = (typeof PARTS)[number]['value'];
@@ -158,6 +160,21 @@ export function ResourcesStep() {
           </div>
         </header>
         <ProvinceStep embedded />
+      </section>
+    );
+  }
+  if (part === 'profile') {
+    return (
+      <section className="gdp-step" aria-label={RESOURCES_TITLE}>
+        <header className="gdp-head">
+          <Reveal k="head" className="gdp-title">
+            <h2>{RESOURCES_TITLE}</h2>
+          </Reveal>
+          <div className="tour-controls">
+            <Segmented label="Mostrar" options={PARTS} value={part} onChange={setPart} />
+          </div>
+        </header>
+        <ProvinceProfileStep embedded />
       </section>
     );
   }
