@@ -91,5 +91,10 @@ export const REFERENCES: readonly Reference[] = [
   { id: 'M3', group: 'Mapa', status: 'usada', label: 'MapTiler Geocoding', url: 'https://docs.maptiler.com/cloud/api/geocoding/' },
   { id: 'M4', group: 'Mapa', status: 'usada', label: '© OpenStreetMap contributors', url: 'https://www.openstreetmap.org/copyright' },
   { id: 'M6', group: 'Mapa', status: 'usada', label: 'MapLibre GL JS', url: 'https://maplibre.org' },
-  { id: 'M7', group: 'Mapa', status: 'usada', label: 'Three.js', url: 'https://threejs.org' }
+  { id: 'M7', group: 'Mapa', status: 'usada', label: 'Three.js', url: 'https://threejs.org' },
+  { id: 'D1', group: 'Desarrollo humano', status: 'leída', label: 'PNUD (UNDP), Human Development Report: serie histórica del IDH de Argentina (1990-2023) y comparación LATAM', url: 'https://hdr.undp.org/data-center/human-development-index' },
+  { id: 'D2', group: 'Educación', status: 'leída', label: 'OCDE, Resultados PISA (2012, 2018, 2022): puntajes en lectura, matemática y ciencias para Argentina y la región', url: 'https://www.oecd.org/pisa/' },
+  { id: 'D3', group: 'Inteligencia artificial', status: 'leída', label: 'Stanford HAI, Artificial Intelligence Index Report 2024: costos de entrenamiento, cómputo y eficiencia de inferencia', url: 'https://aiindex.stanford.edu/report/' },
+  { id: 'D4', group: 'Población', status: 'leída', label: 'INDEC, Censo Nacional de Población, Hogares y Viviendas 2022: resultados definitivos por provincia (45.892.285 hab.)', url: 'https://www.indec.gob.ar/indec/web/Nivel4-Tema-2-41-165' },
+  { id: 'D5', group: 'Economía', status: 'leída', label: 'INDEC, Origen provincial de las exportaciones (OPEX): informes técnicos 2023 y 2024 por provincia y grandes rubros', url: 'https://www.indec.gob.ar/indec/web/Nivel4-Tema-3-2-40' }
 ];
