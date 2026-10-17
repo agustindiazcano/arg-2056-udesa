@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import React from 'react';
-import { render, act } from '@testing-library/react';
+import { render, act, cleanup } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { ProvinceMap } from '../../src/scenes/forecast/ProvinceMap.js';
 import type { ProvincesGeo } from '../../src/geo/provinces.js';
@@ -69,6 +69,7 @@ describe('ProvinceMap drilldown transition (C7: map-drill-transition)', () => {
   });
 
   afterEach(() => {
+    cleanup();
     vi.useRealTimers();
   });
 

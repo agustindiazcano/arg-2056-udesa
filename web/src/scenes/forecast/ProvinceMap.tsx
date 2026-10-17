@@ -104,11 +104,15 @@ export function ProvinceMap({
   const [asTable, setAsTable] = useState(false);
   const [deptGeo, setDeptGeo] = useState<DepartmentsGeo | null>(null);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const prevSelectedIdRef = useRef<ProvinceId | null>(selectedId);
   const apiRef = useRef<ECharts | null>(null);
   const bbox = useMemo(() => geoBbox(geo), [geo]);
 
   useEffect(() => {
-    setIsTransitioning(true);
+    if (prevSelectedIdRef.current !== selectedId) {
+      prevSelectedIdRef.current = selectedId;
+      setIsTransitioning(true);
+    }
     const timer = setTimeout(() => setIsTransitioning(false), 300);
     if (!selectedId) {
       setDeptGeo(null);
