@@ -132,6 +132,19 @@ Order: C8, C7, C2, C3, C4, C5, C1, C6.
       - **Australia**: mining and energy powerhouse (iron ore, coal, lithium, LNG) paired with high tertiary education attainment, strong legal/regulatory framework, and high-value service exports.
       - **Canada**: vast reserves in energy, critical minerals, and agro-forestry backed by top global educational attainment (STEM & post-secondary), diversified advanced manufacturing, and technological hubs.
       - **Chile**: regional benchmark in copper and lithium reserves, fiscal rule on structural surplus, and sovereign stabilization funds, contrasting the transition hurdles toward high-income status.
+  - [ ] **Global AI token consumption, LLM usage pyramid, and relative access cost & tax barrier (new slide)**:
+    - **Global AI token volumes and programming usage**: global token consumption across frontier closed and open weights (OpenAI, Anthropic, Google Gemini, Meta Llama, DeepSeek, Hugging Face ecosystem), breaking down coding/software engineering workflows vs. general text/enterprise queries.
+    - **LLM usage pyramid**: visual multi-tier hierarchy:
+      - *Base*: Free web/consumer chat interfaces (massive query volume, lowest compute per interaction).
+      - *Middle*: API developer integration, specialized coding assistants and IDEs (Cursor, GitHub Copilot, Claude Code, Aider), fine-tuned domain models.
+      - *Apex*: High-compute test-time reasoning (o1/o3, extended thinking), autonomous multi-agent loops, and deep-search research/coding agents (lowest volume, highest compute and token expenditure).
+    - **Global nominal vs. relative purchasing power cost**: benchmark subscription ($20–$200/month) and API rates (per million tokens) against developer wages across regions. In developed economies, frontier tools represent <0.5% of an average tech wage, whereas in developing nations they represent a substantial fraction of monthly income.
+    - **Argentina's tax surcharge and structural access bottleneck (falling behind in the global race)**:
+      - *The global AI acceleration*: Leading economies are engaged in an exponential race for AI capability, subsidizing infrastructure, compute access, open research, and developer ecosystems.
+      - *Double penalty on developing nations*: For emerging and lower-income countries, baseline tool adoption is already challenging due to income disparities and dollar pricing.
+      - *Self-imposed friction ("trabas en la rueda")*: Rather than incentivizing technological catch-up, Argentine policy has historically added severe domestic obstacles via foreign exchange taxes and digital service surcharges (digital VAT, PAIS tax, income/wealth tax prepayments, provincial stamp taxes) adding a 30% to 155% overhead on top of international card payments.
+      - *Surrendering the frontier*: To access the exact same frontier models, Argentine researchers, students, and engineers face an artificial premium requiring vastly more working hours than peers abroad, disincentivizing local adoption of cutting-edge tooling and voluntarily falling behind in the global race.
+
 
 
 

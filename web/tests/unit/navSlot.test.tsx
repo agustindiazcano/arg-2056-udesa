@@ -38,4 +38,12 @@ describe('navbar slot', () => {
     const css = fs.readFileSync('src/dashboard/dashboard.css', 'utf8');
     expect(css).toMatch(/\.header-row--sub:has\(> \.nav-slot:empty\)[^{]*\{\s*display: none;/);
   });
+
+  it('renders the development deadline badge to the right of the buttons', () => {
+    render(<Header />);
+    const badge = screen.getByText(/En desarrollo hasta el deadline 31\/10/i);
+    expect(badge).toBeTruthy();
+    expect(badge.closest('.dev-deadline-badge')).toBeTruthy();
+  });
 });
+
