@@ -3,6 +3,8 @@ import { registerMap } from '../../charts/echarts.js';
 import type { ECharts } from '../../charts/echarts.js';
 import { resetMap, zoomMap } from '../../charts/mapNav.js';
 import { clampCenter, clampZoom, geoBbox } from '../../charts/navState.js';
+import { cameraAnimation, drillViewKey, useDrillTransition } from '../../charts/drillTransition.js';
+import { useReducedMotion } from '../../runtime/useReducedMotion.js';
 import { NavControls } from '../../ui/NavControls.js';
 import { MAP_NAME, buildDepartmentMap, buildProvinceMap } from '../../charts/builders/provinceMap.js';
 import { DataTable } from '../../charts/DataTable.js';
@@ -103,20 +105,13 @@ export function ProvinceMap({
 }: ProvinceMapProps) {
   const [asTable, setAsTable] = useState(false);
   const [deptGeo, setDeptGeo] = useState<DepartmentsGeo | null>(null);
-  const [isTransitioning, setIsTransitioning] = useState(false);
-  const prevSelectedIdRef = useRef<ProvinceId | null>(selectedId);
   const apiRef = useRef<ECharts | null>(null);
   const bbox = useMemo(() => geoBbox(geo), [geo]);
 
   useEffect(() => {
-    if (prevSelectedIdRef.current !== selectedId) {
-      prevSelectedIdRef.current = selectedId;
-      setIsTransitioning(true);
-    }
-    const timer = setTimeout(() => setIsTransitioning(false), 300);
     if (!selectedId) {
       setDeptGeo(null);
-      return () => clearTimeout(timer);
+      return;
     }
     let active = true;
     loadDepartments(selectedId).then((data) => {
@@ -126,7 +121,6 @@ export function ProvinceMap({
     });
     return () => {
       active = false;
-      clearTimeout(timer);
     };
   }, [selectedId]);
 
@@ -155,6 +149,10 @@ export function ProvinceMap({
     return buildDepartmentMap(deptGeo, selectedProvince?.name ?? selectedId);
   }, [selectedId, deptGeo, selectedProvince]);
 
+  const reducedMotion = useReducedMotion();
+  // the drill fires when the drawn map changes (country <-> departments), once per change
+  const drilling = useDrillTransition(drillViewKey(selectedId, deptBuilt !== null), reducedMotion);
+
   // after the new option (the child's effect runs first), the view goes to the selected province if still on national map
   useEffect(() => {
     const chart = apiRef.current;
@@ -168,8 +166,9 @@ export function ProvinceMap({
     const [bx0, by0, bx1, by1] = bbox;
     const zoom = clampZoom(0.75 * Math.min((bx1 - bx0) / Math.max(x1 - x0, 0.01), (by1 - by0) / Math.max(y1 - y0, 0.01)));
     const [cx, cy] = clampCenter([(x0 + x1) / 2, (y0 + y1) / 2], zoom, bbox);
-    chart.setOption({ geo: { zoom, center: [cx, cy] } } as never);
-  }, [selectedId, zoomToSelected, geo, bbox, deptBuilt]);
+    // the camera glides to the province instead of jumping (instant with reduced motion)
+    chart.setOption({ ...cameraAnimation(reducedMotion), geo: { zoom, center: [cx, cy] } } as never);
+  }, [selectedId, zoomToSelected, geo, bbox, deptBuilt, reducedMotion]);
 
   const handleClick = (params: ChartClickParams) => {
     if (deptBuilt) {
@@ -277,7 +276,7 @@ export function ProvinceMap({
                 )}
               </div>
             )}
-            <div className={`map-drill-canvas${isTransitioning ? ' map-transitioning' : ''}`}>
+            <div className={drilling ? 'map-drill-canvas is-drilling' : 'map-drill-canvas'} data-drilling={drilling || undefined}>
               <EChart
                 option={deptBuilt ? deptBuilt.option : built.option}
                 aria-label={deptBuilt ? deptBuilt.summary : built.summary}

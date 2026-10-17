@@ -1,3 +1,5 @@
+> **RULE #1: Tests run in the cloud (CI), never locally.** Do not run test suites, `scripts/precheck.py`, Vitest, pytest, Playwright or mutation testing on the local machine; it wastes tokens and time. Write the tests, commit, push and let GitHub Actions run them. Read the CI run status to know the result.
+
 # AGENTS.md — Argentina 2056
 
 Canonical instructions for every coding agent working in this repository.
@@ -66,7 +68,7 @@ docs/               assumptions.md, sources.md, decisions.md
 
 1. One agent at a time. One branch per task: `task/<short-slug>`.
 2. Strict TDD for logic: write the failing test, then the code, then refactor. Commit atomically.
-3. Heavy validation runs in CI, not locally. Locally run only the fast tests for the files you touched. Before every push run `python scripts/precheck.py` (same cheap checks as CI: ruff, pytest, validate_data, web lint, typecheck, tests). Never push if it fails. Heavy validation (mutation testing, backtest, visual snapshots) runs only in CI.
+3. All validation runs in CI, not locally (see rule #1 at the top). Do not run `scripts/precheck.py` or any test suite locally. Push and read the CI run; if it fails, fix and push again. Heavy validation (mutation testing, backtest, visual snapshots) also runs only in CI.
 4. Mutation testing runs on the diff for `model/` and `web/src/state`, `web/src/model-ts`.
 5. A human approves every pull request. Never merge. Never push to `main`.
 6. Small PRs: one chart, one layer, one dataset, one model component.
