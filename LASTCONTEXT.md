@@ -1,18 +1,17 @@
 # Last Context
 
 ## State
-- **Branch**: `task/map-drill-transition` (worktree `../arg-2056-udesa-correcciones`, branched from `task/map-zoom-limits`).
-- **Task**: C7 of `docs/action-plan-correcciones-nuevas.md` (`test/correcciones-nuevas.png`): smooth transition between country, province and department maps.
+- **Branch**: `task/res-sector-filter-panel` (worktree `../arg-2056-udesa-correcciones`, branched from `task/map-drill-transition`).
+- **Task**: C2 of `docs/action-plan-correcciones-nuevas.md` (`test/correcciones-nuevas.png`): when sector filter is active (Minería, Hidrocarburos, Agro), selecting a province displays that sector's detailed provincial composition instead of macro-sectors.
 - **Key changes**:
-  - Added smooth CSS scale and opacity transitions (`.map-drill-canvas`, `.map-transitioning`) in `web/src/dashboard/dashboard.css`.
-  - Added `@media (prefers-reduced-motion: reduce)` override to disable transition for users requesting reduced motion.
-  - Updated `web/src/scenes/forecast/ProvinceMap.tsx` with `isTransitioning` state triggered on `selectedId` drilldown changes.
-  - Added unit test in `web/tests/unit/mapDrillTransition.test.tsx` verifying transition state toggle and timer cleanup.
-  - Verified with `npx vitest run tests/unit/mapDrillTransition.test.tsx`, `npx tsc --noEmit`, and `npx eslint`.
-- Main workspace branch `task/intro-hover-effects`:
-  - Completed subtle ripple `effectScatter` styling on milestones, committed and pushed to remote branch.
+  - Implemented pure selector `provinceSectorBreakdown(view, provinceId)` in `web/src/tour/provinceSectorBreakdown.ts` with provincial breakdown data for minería, hidrocarburos, and agro across producing provinces.
+  - Returns `null` when a province has production below `PRODUCER_MIN` (100 M USD) in that sector, cleanly hiding the panel without mock or pending labels.
+  - Updated `web/src/tour/ResourcesStep.tsx` to use `provinceSectorBreakdown` and guarded against null parts.
+  - Added `// @vitest-environment jsdom` to `web/tests/unit/mapDrillTransition.test.tsx`.
+  - Added 12 unit tests in `web/tests/unit/provinceSectorBreakdown.test.ts` covering national view, sector filtering, total view, and threshold fallbacks.
+  - Verified tests (`npm test`), typecheck (`tsc --noEmit`), and lint (`eslint`).
 
 ## Next
-- Run precheck and commit/push `task/map-drill-transition`.
-- Proceed with C2 `res-sector-filter-panel`: when the filter is "Minería", the composition panel displays mining sectors instead of national totals.
-- Then C3 `res-province-drilldown`, C4 `res-department-projects`, C5 `map-search`, C1 `res-minerals-extend`, and C6 `province-profile-slide` (last, with mock data).
+- Commit and push `task/res-sector-filter-panel`.
+- Start branch `task/res-province-drilldown` for C3: selecting a province (e.g. Salta) shows department-level production if available, or production by mining sector if not (replacing the provinces ranking).
+- Followed by C4 `res-department-projects`, C5 `map-search`, C1 `res-minerals-extend`, and C6 `province-profile-slide` (last, with mock data).

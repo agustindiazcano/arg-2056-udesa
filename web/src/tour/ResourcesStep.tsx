@@ -11,11 +11,14 @@ import { PROVINCES } from '../types/province.js';
 import type { ProvinceId } from '../types/province.js';
 import { Segmented } from '../ui/Segmented.js';
 import { Spinner } from '../ui/Spinner.js';
-import { PRODUCTION_UNIT, SECTOR_LABELS, SECTOR_VALUES, mapValuesOf, rankedProvinces } from './provinceMock.js';
-import { RESOURCE_SECTORS, breakdown, sectorExports, totals } from './resourcesData.js';
+import { PRODUCTION_UNIT, PRODUCER_MIN, SECTOR_LABELS, SECTOR_VALUES, mapValuesOf, rankedProvinces } from './provinceMock.js';
+import { RESOURCE_SECTORS, totals } from './resourcesData.js';
 import type { Part, ResourceSector } from './resourcesData.js';
 import { ProvinceStep } from './ProvinceStep.js';
 import { RESOURCES_TITLE } from './slideTitles.js';
+import { provinceSectorBreakdown } from './provinceSectorBreakdown.js';
+
+export { PRODUCER_MIN };
 
 type View = ResourceSector | 'total';
 
@@ -35,9 +38,6 @@ const FORMS = [
 ] as const;
 
 type Form = (typeof FORMS)[number]['value'];
-
-/** A province is shown as a producer of a sector only above this value (million USD); the made-up table has placeholders of 5 to 20 for "nothing". */
-export const PRODUCER_MIN = 100;
 
 /** The values by province of a view, in the order of `PROVINCES`: one sector, or the three added up. */
 export function viewValues(view: View): number[] {
@@ -90,11 +90,7 @@ export function ResourcesStep() {
   const [part, setPart] = useState<Pane>('resources');
   const [selected, setSelected] = useState<ProvinceId | null>(null);
   const label = view === 'total' ? 'Total' : SECTOR_LABELS[view];
-  const provinceName = PROVINCES.find((p) => p.id === selected)?.name;
-  const parts = useMemo(() => {
-    if (selected && provinceName) return { title: `${provinceName}: qué produce`, unit: PRODUCTION_UNIT, parts: provinceParts(selected) };
-    return view === 'total' ? { title: 'Exportaciones de 2025 por sector', unit: 'miles de millones de USD', parts: sectorExports() } : breakdown(view);
-  }, [view, selected, provinceName]);
+  const parts = useMemo(() => provinceSectorBreakdown(view, selected), [view, selected]);
   const select = useCallback((id: string | null) => setSelected((current) => (id === null || id === current ? null : (id as ProvinceId))), []);
   const rows = useMemo(() => producers(view), [view]);
   const tiles = useMemo(() => totals(view), [view]);
@@ -152,17 +148,27 @@ export function ResourcesStep() {
       </ul>
       <div className="res-grid">
         <div className="res-left">
-          <Reveal k={`parts-${view}-${form}-${selected ?? 'all'}`} className="gdp-chart">
-            <strong className="composition-title">
-              {`${parts.title} (${parts.unit})`}
-              {selected && (
+          {parts ? (
+            <Reveal k={`parts-${view}-${form}-${selected ?? 'all'}`} className="gdp-chart">
+              <strong className="composition-title">
+                {`${parts.title} (${parts.unit})`}
+                {selected && (
+                  <button type="button" className="btn" onClick={() => setSelected(null)}>
+                    Todo el país
+                  </button>
+                )}
+              </strong>
+              <Parts title={parts.title} unit={parts.unit} parts={parts.parts} form={form} onPick={view === 'total' && !selected ? pickSector : undefined} />
+            </Reveal>
+          ) : selected ? (
+            <div className="gdp-chart">
+              <strong className="composition-title">
                 <button type="button" className="btn" onClick={() => setSelected(null)}>
                   Todo el país
                 </button>
-              )}
-            </strong>
-            <Parts title={parts.title} unit={parts.unit} parts={parts.parts} form={form} onPick={view === 'total' && !selected ? pickSector : undefined} />
-          </Reveal>
+              </strong>
+            </div>
+          ) : null}
           <Reveal k={`bars-${view}`} delay={0.07} className="gdp-chart">
             <strong className="composition-title">{`${provinceBars.title} (${PRODUCTION_UNIT})`}</strong>
             <div className="tour-chart">

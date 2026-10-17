@@ -7,7 +7,7 @@ Every task below has a brief (`<slug>.md` in the repository root) and a prompt (
 Order: C8, C7, C2, C3, C4, C5, C1, C6.
 - [x] C8 `map-zoom-limits`: ZOOM_MAX 8 -> 32 in `web/src/charts/navState.ts` (country and department maps); tests updated. Branch `task/map-zoom-limits`, worktree `arg-2056-udesa-correcciones`. Not checked visually in the browser.
 - [x] C7 `map-drill-transition`: smooth CSS opacity and scale transition (0.3s cubicOut) for map drilldown between country, province and departments in `ProvinceMap.tsx` and `dashboard.css`, respecting prefers-reduced-motion; unit test in `mapDrillTransition.test.tsx`.
-- [ ] C2 `res-sector-filter-panel`: with the Mining filter, the composition panel shows mining only.
+- [x] C2 `res-sector-filter-panel`: pure selector `provinceSectorBreakdown` in `provinceSectorBreakdown.ts` and updated `ResourcesStep.tsx` so selecting a province with a sector filter shows that sector's detailed provincial composition (e.g. minerals for mineria) instead of multi-sector breakdown; hidden cleanly when below threshold. 12 unit tests passing in `provinceSectorBreakdown.test.ts`.
 - [ ] C3 `res-province-drilldown`: selecting a province shows departments if there is data, otherwise production by mining sector.
 - [ ] C4 `res-department-projects`: click on a department expands it and lists mining projects when data exists.
 - [ ] C5 `map-search`: search by province or department.
