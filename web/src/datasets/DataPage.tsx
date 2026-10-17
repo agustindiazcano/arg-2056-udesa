@@ -16,6 +16,7 @@ import { MethodologyView } from './MethodologyView.js';
 import { REFERENCES } from './references.js';
 import { buildSlides } from './slides.js';
 import type { Cell, DataTable, SlideData } from './types.js';
+import { RefLink } from '../ui/RefLink.js';
 
 export type DataTab = 'data' | 'references' | 'methodology' | 'ai';
 
@@ -83,7 +84,6 @@ export function DataPage() {
   const slides = useMemo(buildSlides, []);
   const [selected, setSelected] = useState(slides[0]!.id);
   const current = slides.find((s) => s.id === selected) ?? slides[0]!;
-  const refsById = useMemo(() => new Map(REFERENCES.map((r) => [r.id, r])), []);
 
   const page = useRef<HTMLDivElement>(null);
   const choose = (id: string) => {
@@ -200,17 +200,11 @@ export function DataPage() {
               {s.refs.length > 0 && (
                 <p className="data-refs">
                   Fuentes:{' '}
-                  {s.refs.map((id, i) => {
-                    const r = refsById.get(id)!;
-                    return (
-                      <React.Fragment key={id}>
-                        {i > 0 && ', '}
-                        <a href={r.url} target="_blank" rel="noopener noreferrer">
-                          {r.label}
-                        </a>
-                      </React.Fragment>
-                    );
-                  })}
+                  <span className="ref-chip-list">
+                    {s.refs.map((id) => (
+                      <RefLink key={id} id={id} />
+                    ))}
+                  </span>
                 </p>
               )}
             </article>
@@ -222,7 +216,7 @@ export function DataPage() {
         <article id="data-referencias" className="data-slide" aria-labelledby="data-title-refs">
           <h3 id="data-title-refs">Referencias</h3>
           <p className="data-intro">
-            Todos los enlaces y fuentes oficiales utilizados en el proyecto, organizados por temática.
+            Todos los enlaces y fuentes oficiales utilizados en el proyecto, numerados y organizados por temática.
           </p>
           {Array.from(new Set(REFERENCES.map((r) => r.group))).map((group) => (
             <div key={group} className="data-table-block">
@@ -230,9 +224,7 @@ export function DataPage() {
               <ul className="data-reflist">
                 {REFERENCES.filter((r) => r.group === group).map((r) => (
                   <li key={r.id}>
-                    <a href={r.url} target="_blank" rel="noopener noreferrer">
-                      {r.label}
-                    </a>
+                    <RefLink id={r.id} fullLabel />
                   </li>
                 ))}
               </ul>

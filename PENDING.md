@@ -188,7 +188,7 @@ Order: C8, C7, C2, C3, C4, C5, C1, C6.
 
 ## Done
 
-- [x] `data-ai-usage` (branch `task/data-ai-usage`): added "Uso de AI" tab (`AiUsageView.tsx`) in the Data section (`DataPage.tsx`), documenting the custom context-engineering framework, parallel multi-agent orchestration, zero hardcoded data policy, human-in-the-loop governance, Gitflow with atomic commits and human PR approval, TDD + CI automation to reduce high-token AI code review, two-stage visual validation (Playwright first filter via agent + final human iteration), AI tools used (Claude, Claude Code, Google AI Studio, Gemini, Antigravity, Grok), and the full stack of testing/static-analysis libraries.
+- [x] `data-ai-usage` (branch `task/data-ai-usage`, PR #124): added "Uso de AI" tab (`AiUsageView.tsx`) in the Data section (`DataPage.tsx`); added canonical numbered reference chips (`[1] FMI`, `[2] Banco Mundial`, etc. via `RefLink.tsx` / `RefList`) across `Hacia el 2056` and `Data` with custom-styled hover tooltips showing the full citation and URL text and opening in a new tab on click; added custom-styled `?` explanation triggers (`ChartHelp.tsx`) on every slide/chart that show a styled explanation tooltip on hover and open a modal popup on click (zero native browser tooltips).
 
 - [x] `treemap-pie-bars-2d` (branch `task/treemap-pie-bars-2d`, worktree `arg-2056-udesa-tree2d`): applied 2D flat treemap, doughnut pie (`Torta`), and rounded bar chart styles from `test/tree-example.html` to Slides 2 (`ResourcesStep.tsx`) and 4 (`CompositionStep.tsx` & `ExportsStep.tsx`), added `Torta` option to `CompositionStep.tsx`, expanded `tokens.categorical` to 16 vibrant colors, and gave all 2D and 3D bar charts across the app a wide multi-color gama.
 

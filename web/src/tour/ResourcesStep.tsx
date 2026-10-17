@@ -24,6 +24,9 @@ import { provinceSectorBreakdown } from './provinceSectorBreakdown.js';
 import { getDepartmentProjects, provinceDrilldownData } from './provinceDrilldown.js';
 import { MapSearch } from '../ui/MapSearch.js';
 import type { SearchResult } from '../ui/mapSearchLogic.js';
+import { ChartHelp } from '../ui/ChartHelp.js';
+import { RefList } from '../ui/RefLink.js';
+import { STEP_INFO } from './stepInfo.js';
 
 export { PRODUCER_MIN };
 
@@ -202,12 +205,18 @@ export function ResourcesStep() {
       </section>
     );
   }
+  const step8Info = STEP_INFO[8]!;
   return (
     <section className="gdp-step res-step" aria-label={RESOURCES_TITLE}>
       <header className="gdp-head">
         <Reveal k="head" className="gdp-title">
-          <h2>{RESOURCES_TITLE}</h2>
-          <p className="gdp-sub">Elegí un sector o el total; tocá una provincia del mapa para ver lo que produce</p>
+          <div className="slide-title-row">
+            <h2>{RESOURCES_TITLE}</h2>
+            <ChartHelp title={step8Info.heading} paragraphs={step8Info.paragraphs} how={step8Info.how} refs={step8Info.refs} />
+          </div>
+          <p className="gdp-sub">
+            Elegí un sector o el total; tocá una provincia del mapa para ver lo que produce · <RefList ids={step8Info.refs} />
+          </p>
         </Reveal>
         <div className="tour-controls">
           <Segmented label="Mostrar" options={PARTS} value={part} onChange={setPart} />
@@ -229,7 +238,8 @@ export function ResourcesStep() {
           {parts ? (
             <Reveal k={`parts-${view}-${form}-${selected ?? 'all'}`} className="gdp-chart">
               <strong className="composition-title">
-                {`${parts.title} (${parts.unit})`}
+                <span>{`${parts.title} (${parts.unit})`}</span>
+                <ChartHelp title={parts.title} paragraphs={[step8Info.paragraphs[0]!, step8Info.paragraphs[1]!]} how={step8Info.how} refs={step8Info.refs} />
                 {selected && (
                   <button type="button" className="btn" onClick={() => setSelected(null)}>
                     Todo el país
@@ -248,7 +258,10 @@ export function ResourcesStep() {
             </div>
           ) : null}
           <Reveal k={`bars-${view}-${selected ?? 'all'}`} delay={0.07} className="gdp-chart">
-            <strong className="composition-title">{`${drilldownBars.title} (${drilldown.unit})`}</strong>
+            <strong className="composition-title">
+              <span>{`${drilldownBars.title} (${drilldown.unit})`}</span>
+              <ChartHelp title={drilldownBars.title} paragraphs={[step8Info.paragraphs[2]!, step8Info.paragraphs[3]!]} how={step8Info.how} refs={step8Info.refs} />
+            </strong>
             <div className="tour-chart">
               <EChart option={drilldownBars.option} aria-label={drilldownBars.summary} onClick={handleDrilldownClick} />
             </div>

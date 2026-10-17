@@ -1,5 +1,7 @@
 import React from 'react';
 import { REFERENCES } from '../datasets/references.js';
+import { ChartHelp } from '../ui/ChartHelp.js';
+import { RefLink } from '../ui/RefLink.js';
 import { useTourLayout } from './useTourLayout.js';
 import { STEP_INFO } from './stepInfo.js';
 
@@ -18,14 +20,18 @@ export function TourSidebar({ step }: { step: number }) {
 
   if (!open) {
     return (
-      <button type="button" className="tour-side-open" aria-expanded="false" aria-controls="tour-side" onClick={toggle}>
-        Mostrar texto
-      </button>
+      <div className="tour-side-collapsed">
+        <ChartHelp title={info.heading} paragraphs={info.paragraphs} how={info.how} refs={info.refs} />
+        <button type="button" className="tour-side-open" aria-expanded="false" aria-controls="tour-side" onClick={toggle}>
+          Mostrar texto
+        </button>
+      </div>
     );
   }
   return (
     <aside id="tour-side" className="tour-side" aria-label="Texto y referencias del gráfico">
       <div className="tour-side-head">
+        <ChartHelp title={info.heading} paragraphs={info.paragraphs} how={info.how} refs={info.refs} />
         <button type="button" className="btn" aria-expanded="true" aria-controls="tour-side" onClick={toggle}>
           Ocultar texto
         </button>
@@ -41,12 +47,10 @@ export function TourSidebar({ step }: { step: number }) {
       {refs.length > 0 && (
         <div className="tour-side-refs">
           <strong>Referencias</strong>
-          <ul>
+          <ul className="ref-chip-ul">
             {refs.map((r) => (
               <li key={r.id}>
-                <a href={r.url} target="_blank" rel="noopener noreferrer">
-                  {r.label}
-                </a>
+                <RefLink id={r.id} />
               </li>
             ))}
           </ul>

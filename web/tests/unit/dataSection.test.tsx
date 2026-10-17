@@ -167,9 +167,9 @@ describe('the Data page', () => {
     // Click Uso de AI tab
     fireEvent.click(screen.getByRole('button', { name: 'Uso de AI' }));
     expect(screen.getByRole('heading', { name: 'Uso de AI y flujo de ingeniería' })).toBeTruthy();
-    expect(screen.getByText(/Antigravity/i)).toBeTruthy();
-    expect(screen.getByText(/Playwright/i)).toBeTruthy();
-    expect(screen.getByText(/Vitest/i)).toBeTruthy();
+    expect(screen.getAllByText(/Antigravity/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/Playwright/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/Vitest/i).length).toBeGreaterThan(0);
 
     // Click back to Data tab
     fireEvent.click(screen.getByRole('button', { name: 'Data' }));

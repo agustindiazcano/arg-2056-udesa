@@ -10,7 +10,10 @@ import { ProvinceMap, useProvinces } from '../scenes/forecast/ProvinceMap.js';
 import { mapSummary } from '../scenes/forecast/mapSelectors.js';
 import { tokens } from '../styles/tokens.js';
 import { Segmented } from '../ui/Segmented.js';
+import { ChartHelp } from '../ui/ChartHelp.js';
+import { RefList } from '../ui/RefLink.js';
 import { PROVINCE_TITLE } from './slideTitles.js';
+import { STEP_INFO } from './stepInfo.js';
 import { Spinner } from '../ui/Spinner.js';
 import type { Map3DSpec } from '../charts3d/types.js';
 import type { ProvinceId } from '../types/province.js';
@@ -83,14 +86,18 @@ export function ProvinceStep({ embedded = false }: { embedded?: boolean } = {}) 
     const row = rows.find((r) => r.short === params.name);
     if (row) select(row.id);
   };
+  const step2Info = STEP_INFO[2]!;
 
   return (
     <section className="gdp-step prov-step" aria-label={TITLE}>
       <header className="gdp-head">
         <Reveal k="head" className="gdp-title">
-          {embedded ? <h3 className="composition-title">{TITLE}</h3> : <h2>{TITLE}</h2>}
+          <div className="slide-title-row">
+            {embedded ? <h3 className="composition-title">{TITLE}</h3> : <h2>{TITLE}</h2>}
+            <ChartHelp title={step2Info.heading} paragraphs={step2Info.paragraphs} how={step2Info.how} refs={step2Info.refs} />
+          </div>
           <p className="gdp-sub">
-            {PRODUCTION_UNIT} por año; elegí un sector y tocá una provincia
+            {PRODUCTION_UNIT} por año; elegí un sector y tocá una provincia · <RefList ids={step2Info.refs} />
           </p>
         </Reveal>
         <div className="tour-controls">
@@ -133,6 +140,7 @@ export function ProvinceStep({ embedded = false }: { embedded?: boolean } = {}) 
           <Reveal k="rank" delay={0.07} className="gdp-chart prov-rank" aria-label="Ranking de producción por provincia" role="region">
             <div className="prov-rank-head">
               <strong>Ranking de producción por provincia</strong>
+              <ChartHelp title="Ranking por provincia" paragraphs={step2Info.paragraphs} how={step2Info.how} refs={step2Info.refs} />
               <Segmented label="Sector" options={SECTORS} value={sector} onChange={setSector} />
             </div>
             <ol className="prov-rank-list">
@@ -151,6 +159,7 @@ export function ProvinceStep({ embedded = false }: { embedded?: boolean } = {}) 
           <Reveal k="bars" delay={0.14} className="gdp-chart prov-bars" role="region" aria-label="Producción por provincia en barras">
             <div className="tour-caption">
               <strong>{`Producción de ${sectorLabel.toLowerCase()} por provincia`}</strong>
+              <ChartHelp title={`Producción de ${sectorLabel.toLowerCase()} por provincia`} paragraphs={step2Info.paragraphs} how={step2Info.how} refs={step2Info.refs} />
             </div>
             <div className="tour-chart">
               <TourChart spec={bars.spec} mode={mode}>

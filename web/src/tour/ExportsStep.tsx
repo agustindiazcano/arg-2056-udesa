@@ -8,7 +8,10 @@ import { Reveal } from '../motion/Reveal.js';
 import { useStore } from '../state/store.js';
 import { MetricToggle } from '../ui/MetricToggle.js';
 import { Segmented } from '../ui/Segmented.js';
+import { ChartHelp } from '../ui/ChartHelp.js';
+import { RefList } from '../ui/RefLink.js';
 import { EXPORTS_TITLE } from './slideTitles.js';
+import { STEP_INFO } from './stepInfo.js';
 import { YearSelector } from '../ui/YearSelector.js';
 import { tokens } from '../styles/tokens.js';
 import { TourChart } from './TourChart.js';
@@ -73,14 +76,18 @@ export function ExportsStep({ embedded = false }: { embedded?: boolean } = {}) {
       { label: 'Complejos', value: String(usd.length), unit: 'con datos en el año' }
     ];
   }, [year]);
+  const step4Info = STEP_INFO[4]!;
 
   return (
     <section className="gdp-step" aria-label={embedded ? `${TITLE}, por año y complejo` : TITLE}>
       <header className="gdp-head">
         <Reveal k="head" className="gdp-title">
-          {embedded ? <h3 className="composition-title">{TITLE}</h3> : <h2>{TITLE}</h2>}
+          <div className="slide-title-row">
+            {embedded ? <h3 className="composition-title">{TITLE}</h3> : <h2>{TITLE}</h2>}
+            <ChartHelp title={step4Info.heading} paragraphs={step4Info.paragraphs} how={step4Info.how} refs={step4Info.refs} />
+          </div>
           <p className="gdp-sub">
-            {complex ? `${complex} en los años con datos` : `${year}`} · {metric === 'usd' ? 'miles de millones de USD' : 'porcentaje del total exportado'} · <span className="gdp-source">{EXPORTS_SOURCE}</span>
+            {complex ? `${complex} en los años con datos` : `${year}`} · {metric === 'usd' ? 'miles de millones de USD' : 'porcentaje del total exportado'} · <span className="gdp-source">{EXPORTS_SOURCE}</span> · <RefList ids={step4Info.refs} />
           </p>
         </Reveal>
         <div className="tour-controls">

@@ -9,12 +9,15 @@ import { Reveal } from '../motion/Reveal.js';
 import { useReducedMotion } from '../runtime/useReducedMotion.js';
 import { SPEEDS } from '../state/reducer.js';
 import { Segmented } from '../ui/Segmented.js';
+import { ChartHelp } from '../ui/ChartHelp.js';
+import { RefList } from '../ui/RefLink.js';
 import { TourChart } from './TourChart.js';
 import { tokens } from '../styles/tokens.js';
 import { AI_SCENARIOS } from './aiScenarios.js';
 import { perCapitaSeries, populationPath, summaries } from './aiModel.js';
 import { GDP_UNIT } from './gdpFacts.js';
 import { AI_TITLE } from './slideTitles.js';
+import { STEP_INFO } from './stepInfo.js';
 import { aiImpactData } from './tourData.js';
 import { useTimeline } from './useTimeline.js';
 import { argentinaReal, populationAt } from './worldData.js';
@@ -149,14 +152,18 @@ export function AiStep() {
     () => lineOption(popYears, popLines, year, 'M', popSummary, false, undefined, smallInterval),
     [popYears, popLines, year, popSummary, smallInterval]
   );
+  const step3Info = STEP_INFO[3]!;
 
   return (
     <section className="gdp-step prov-step" aria-label={AI_TITLE}>
       <header className="gdp-head">
         <Reveal k="head" className="gdp-title">
-          <h2>{AI_TITLE}</h2>
+          <div className="slide-title-row">
+            <h2>{AI_TITLE}</h2>
+            <ChartHelp title={step3Info.heading} paragraphs={step3Info.paragraphs} how={step3Info.how} refs={step3Info.refs} />
+          </div>
           <p className="gdp-sub">
-            {GDP_UNIT}, {FIRST} a {LAST} · {from1960 ? 'historia observada (1960-2025) y tres escenarios con la IA hacia 2056' : 'tres escenarios con la IA como impulso a la productividad'}
+            {GDP_UNIT}, {FIRST} a {LAST} · {from1960 ? 'historia observada (1960-2025) y tres escenarios con la IA hacia 2056' : 'tres escenarios con la IA como impulso a la productividad'} · <RefList ids={step3Info.refs} />
           </p>
         </Reveal>
         <div className="tour-controls">
@@ -208,6 +215,7 @@ export function AiStep() {
           <div className="rule70-card-head">
             <div className="ai-head-group">
               <strong>PBI real de Argentina ({gdp.unit})</strong>
+              <ChartHelp title="Escenarios del PBI real con IA" paragraphs={[step3Info.paragraphs[0]!, step3Info.paragraphs[1]!]} how={step3Info.how} refs={step3Info.refs} />
               <span className="ai-head-year">{shownYear}: {formatValue(gdpLines[1]!.values[at] ?? null, gdp.unit)}</span>
             </div>
             <div className="rule70-legend">
