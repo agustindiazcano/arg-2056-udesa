@@ -1,20 +1,19 @@
 # LASTCONTEXT.md
 
-## State
-- **Branch**: `task/archive-root-docs` (limpieza de raíz: briefs completados a `docs/archived/`, tareas pendientes a `docs/tasks/`, diseño y roadmap a `docs/`).
-- **Snapshot archivado**: ver [lastcontext-2026-10-17.md](file:///C:/projects/projects-github-agustindiazcano/arg-2056-udesa/docs/lastcontext-2026-10-17.md) para el registro completo de la jornada.
-- **Capacidades clave incorporadas**:
-  1. **Pestaña «Uso de AI»** (`AiUsageView.tsx` en `DataPage.tsx`): framework de contexto, orquestación multi-agente, comparativa técnica Gitflow vs. Worktrees, gobernanza HITL y stack completo de testing.
-  2. **Referencias numeradas interactivas** (`RefLink.tsx`): chips `[n]` con tooltip de metadatos de fuente y apertura en pestaña externa.
-  3. **Ayuda contextual accesible** (`ChartHelp.tsx`): botones `?` con tooltip ligero y modal accesible «Cómo leer este gráfico».
-  4. **Mapas y navegación**: transiciones suaves C7, límites de zoom C8, búsqueda de provincias y departamentos C5, drilldown con proyectos mineros C1-C4, panel de perfil provincial C6.
-  5. **Visualización y UI**: gráfico de economías regionales fijado en 2D (`WorldStep.tsx`) y badge de deadline en navbar (`Header.tsx`).
+## State (2026-10-17)
+- **Stack of three branches, all CI green, no PR opened** (merge in order; each is based on the previous): `task/tour-nav-menu` -> `task/nav-gold-palette` -> `task/intro-load-lights`.
+- **Separate branch, CI green, no PR**: `task/help-lead-text` (slide 1 step 1: `lead` line in `ChartHelp`, sky blue, first line of tooltip and popup; units moved into the `?`).
+- **Worktree** `../arg-2056-udesa-nav` (node_modules is a junction to the main checkout); the human works in the main checkout, so do not switch branches there.
 
-## Reglas operativas vigentes
-- **RULE #1**: Tests corren exclusivamente en CI (GitHub Actions), nunca localmente.
-- **Estilos**: Cero literales de color fuera de `tokens.css` (usar siempre `var(--token)` o `color-mix()`).
-- **Multi-agente**: Usar `git worktree` para tareas paralelas independientes sin bloquear carpetas de build en Windows.
-- **Datos**: Todo dato presentado debe incluir `source` y `retrieved_at`. Ningún mock sin documentar en `docs/mock-data.md`.
+## What was done
+1. `tour-nav-menu`: «Hacia el 2056» tab has a chevron and a dropdown of the slides, «0 · Índice» first (`web/src/app/TourMenu.tsx`, titles from the light `web/src/tour/menuItems.ts`, `slideTitles.ts` no longer imports the world data). Hover, click (pins) and Down arrow open it; Escape closes it.
+2. `nav-gold-palette`: tokens `--nav-gold*` derived from `--intro-light` (the home «2056»); navbar, navbar logo, Andes navbar and the all-lit provinces on hover of «Hacia el 2056» use it.
+3. `intro-load-lights`: during the flat load the provinces light up one by one (300 to 1300 ms), all lit when the map tilts (`loadLightPlan` in `web/src/intro/layout.ts`).
+4. `PENDING.md`: removed references to the deleted `test/` prototypes; queued the slide 1 plan and these tasks.
+
+## Rules in force
+- RULE #1: tests run only in CI. No colour literals outside `tokens.css`. Main chunk budget: do not import charts or data JSON from the app shell.
 
 ## Next
-- Consultar `PENDING.md` para las siguientes tareas del modelo (`model-params`, `model-population-hardening`) o mejoras visuales pendientes.
+- Open the PRs (human approves). Slide 1 plan: `docs/action-plan-slide1-visual.md`; next step `slide1-main-metric`, then compare countries (flags), flag + rank labels, region growth (LCN), `lead` in the other slides.
+- Human: look at the menu, the gold and the intro load by eye.
