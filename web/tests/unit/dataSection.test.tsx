@@ -167,6 +167,7 @@ describe('the Data page', () => {
     // Click Uso de AI tab
     fireEvent.click(screen.getByRole('button', { name: 'Uso de AI' }));
     expect(screen.getByRole('heading', { name: 'Uso de AI y flujo de ingeniería' })).toBeTruthy();
+    expect(screen.getByRole('table', { name: /Comparativa directa entre Branch tradicional y Git Worktree/i })).toBeTruthy();
     expect(screen.getAllByText(/Antigravity/i).length).toBeGreaterThan(0);
     expect(screen.getAllByText(/Playwright/i).length).toBeGreaterThan(0);
     expect(screen.getAllByText(/Vitest/i).length).toBeGreaterThan(0);

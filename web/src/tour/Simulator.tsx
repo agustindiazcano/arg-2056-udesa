@@ -11,8 +11,6 @@ import { SPEEDS } from '../state/reducer.js';
 import { useStore } from '../state/store.js';
 import { tokens } from '../styles/tokens.js';
 import { Segmented } from '../ui/Segmented.js';
-import { ChartHelp } from '../ui/ChartHelp.js';
-import { RefList } from '../ui/RefLink.js';
 import { TourChart } from './TourChart.js';
 import { DEFAULT_SIM, SIM_END, SIM_FIELDS, SIM_START, averageGrowth, doublingYears, simulate } from './simModel.js';
 import type { SimKey, SimParams } from './simModel.js';
@@ -122,20 +120,9 @@ export function Simulator() {
     <section className="gdp-step sim-step" aria-label={TITLE}>
       <header className="gdp-head">
         <Reveal k="head" className="gdp-title">
-          <div className="slide-title-row">
-            <h2>{TITLE}</h2>
-            <ChartHelp
-              title={TITLE}
-              paragraphs={[
-                'El simulador proyecta el PBI real de Argentina de 2025 a 2056 combinando crecimiento base, adopción de inteligencia artificial, demografía, productividad e inversión.',
-                'Permite evaluar el efecto compuesto de pequeñas diferencias en la tasa anual y comparar el PBI por habitante resultante en 2056 con economías desarrolladas.'
-              ]}
-              how="Mové los deslizadores de cada factor a la derecha para observar en vivo cómo cambia la curva azul frente al escenario de referencia y en cuántos años se duplica el PBI."
-              refs={['W5', 'I1', 'F1']}
-            />
-          </div>
+          <h2>{TITLE}</h2>
           <p className="gdp-sub">
-            {UNIT}, {SIM_START} a {SIM_END} · <RefList ids={['W5', 'I1', 'F1']} />
+            {UNIT}, {SIM_START} a {SIM_END}
           </p>
         </Reveal>
         <div className="tour-controls">

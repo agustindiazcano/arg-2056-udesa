@@ -208,7 +208,7 @@ export function WorldStep() {
               </div>
             </div>
             <div className="tour-chart">
-              <TourChart spec={regionSpec}>
+              <TourChart spec={regionSpec} mode="2d">
                 <EChart option={regionFlat} aria-label={regionText} />
               </TourChart>
             </div>

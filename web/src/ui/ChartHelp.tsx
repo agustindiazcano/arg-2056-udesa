@@ -70,19 +70,22 @@ export function ChartHelp({ title, paragraphs, how, refs = [] }: ChartHelpProps)
       )}
 
       {open && (
-        <div
-          className="chart-help-backdrop"
-          onClick={(e) => {
-            e.stopPropagation();
-            setOpen(false);
-          }}
-        >
+        <div className="chart-help-backdrop">
+          <button
+            type="button"
+            className="chart-help-backdrop-close"
+            tabIndex={-1}
+            aria-label="Cerrar fondo de explicación"
+            onClick={(e) => {
+              e.stopPropagation();
+              setOpen(false);
+            }}
+          />
           <div
             role="dialog"
             aria-modal="true"
             aria-labelledby={dialogTitleId}
             className="chart-help-modal"
-            onClick={(e) => e.stopPropagation()}
           >
             <div className="chart-help-modal-head">
               <h4 id={dialogTitleId}>{title}</h4>

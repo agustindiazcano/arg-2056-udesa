@@ -51,7 +51,9 @@ export function AiUsageView() {
 
         <section className="data-table-block" aria-labelledby="ai-workflow-heading">
           <div className="data-table-head">
-            <strong id="ai-workflow-heading">2. Flujo Gitflow, TDD y optimización del consumo de tokens</strong>
+            <strong id="ai-workflow-heading">
+              2. Flujo Gitflow, Branches, Worktrees, TDD y optimización del consumo de tokens
+            </strong>
           </div>
           <div className="data-meth-body">
             <h4>Ramas por tarea, commits atómicos y aprobación humana</h4>
@@ -61,6 +63,80 @@ export function AiUsageView() {
               (<code>feat</code>, <code>fix</code>, <code>test</code>, <code>data</code>, <code>refactor</code>) e
               integración exclusivamente mediante <em>Pull Requests</em> sujetas a revisión y aprobación humana antes
               de fusionarse a <code>main</code>.
+            </p>
+
+            <h4>Uso de Branches y Worktrees en Git para evitar conflictos entre agentes</h4>
+            <p>
+              En Git, <code>branch</code> y <code>worktree</code> resuelven dos problemas completamente distintos pero
+              complementarios para coordinar el trabajo en paralelo:
+            </p>
+            <ul>
+              <li>
+                <strong>¿Qué es una Branch (Rama)?</strong> Es un puntero móvil a un <em>commit</em> dentro de la base
+                de datos de Git (<code>.git/</code>) que representa una línea de desarrollo lógica o historial
+                independiente (ej. <code>main</code>, <code>task/map-search</code>). Ocupa casi cero espacio en disco
+                (solo un archivo de texto con el hash del <em>commit</em>), pero en un directorio tradicional de Git
+                solo puede haber una única <em>branch</em> activa en el disco a la vez: al ejecutar{' '}
+                <code>git checkout</code> o <code>git switch</code>, Git modifica los archivos físicos de esa carpeta
+                para reflejar la nueva rama.
+              </li>
+              <li>
+                <strong>¿Qué es un Worktree (Árbol de Trabajo)?</strong> Es una carpeta física separada en el disco
+                vinculada al mismo repositorio Git (<code>.git</code>). Permite tener múltiples <em>branches</em>{' '}
+                abiertas al mismo tiempo en carpetas distintas sin necesidad de clonar el repositorio nuevamente: todas
+                comparten el mismo historial, los mismos <em>commits</em> y los mismos remotos (<code>origin</code>), y
+                cada <em>worktree</em> mantiene su propia rama activa independiente.
+              </li>
+            </ul>
+
+            <div className="data-scroll" style={{ marginTop: '0.75rem', marginBottom: '0.75rem' }}>
+              <table className="data-table" aria-label="Comparativa directa entre Branch tradicional y Git Worktree">
+                <thead>
+                  <tr>
+                    <th scope="col">Característica</th>
+                    <th scope="col">Branch tradicional (git checkout / switch)</th>
+                    <th scope="col">Worktree (git worktree add)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th scope="row">¿Qué es?</th>
+                    <td>Un puntero lógico a un commit en el historial.</td>
+                    <td>Una carpeta física en el disco conectada al mismo repositorio.</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Simultaneidad</th>
+                    <td>Solo permite ver o editar una rama a la vez en el directorio.</td>
+                    <td>Permite tener múltiples ramas distintas abiertas en carpetas separadas a la vez.</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Servidores y procesos</th>
+                    <td>
+                      Cambiar de rama mientras corre <code>npm run dev</code> rompe el proceso o fuerza a recompilar
+                      todo.
+                    </td>
+                    <td>
+                      Permite mantener un servidor corriendo en la carpeta A y programar en la carpeta B sin que se
+                      toquen.
+                    </td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Trabajo en paralelo / Multitarea</th>
+                    <td>
+                      Para cambiar de tarea requiere hacer <code>git stash</code> o un commit provisional.
+                    </td>
+                    <td>Basta con cambiar de pestaña o terminal hacia la otra carpeta física.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <p>
+              <strong>¿Por qué lo usamos con múltiples agentes de IA en simultáneo?</strong> Git impide que dos árboles
+              modifiquen la misma rama a la vez, y si dos agentes de IA trabajan sobre la misma carpeta física, uno
+              guarda un archivo y pisa los cambios en curso del otro mientras compila, además de producir bloqueos de
+              archivos en Windows (<code>EBUSY</code> o archivos <code>.lock</code>). Con un <em>worktree</em> aislado
+              por tarea, cada agente opera en su propia carpeta física y en su propia rama sin colisiones.
             </p>
 
             <h4>TDD y testing automatizado frente al costo de Code Review con IA</h4>
