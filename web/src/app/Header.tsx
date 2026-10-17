@@ -27,6 +27,10 @@ export function Header({ onHome }: { onHome?: () => void }) {
         )}
         <SectionTabs />
         {section === 'tour' && <TourSteps />}
+        <span className="dev-deadline-badge" title="En desarrollo hasta el deadline 31/10">
+          <span className="dev-deadline-dot" aria-hidden="true" />
+          En desarrollo hasta el deadline 31/10
+        </span>
         <div className="header-end">
           <DataButton />
         </div>
