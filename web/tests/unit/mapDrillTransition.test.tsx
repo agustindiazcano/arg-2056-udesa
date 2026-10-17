@@ -50,7 +50,7 @@ const values: MapValues = {
 
 function view(selectedId: ProvinceId | null) {
   return (
-    <ProvinceMap geo={geo} values={values} unit="USD" indicatorLabel="ProducciÃ³n" metric="level" selectedId={selectedId} year={2026} onSelect={() => undefined} />
+    <ProvinceMap geo={geo} values={values} unit="USD" indicatorLabel="Producción" metric="level" selectedId={selectedId} year={2026} onSelect={() => undefined} />
   );
 }
 
