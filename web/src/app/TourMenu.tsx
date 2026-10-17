@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useStore } from '../state/store';
 import { SECTION_LABELS } from '../content/sectionLabels';
-import type { IndexItem } from '../tour/indexData';
+import { menuItems } from '../tour/menuItems';
 
 /** The little arrow that says the tab opens a menu. */
 function Chevron() {
@@ -13,8 +13,8 @@ function Chevron() {
 }
 
 /**
- * The «Hacia el 2056» tab with a dropdown of the slides of the Recorrido, slide 0 («Índice») included. It opens on hover and on keyboard
- * focus; a click on the tab opens the Recorrido and pins the menu open (touch screens have no hover) and a second click closes it.
+ * The «Hacia el 2056» tab with a dropdown of the slides of the Recorrido, slide 0 («Índice») included. It opens on hover and with the
+ * Down arrow on the tab (focusing the tab does not open it: the Tab key must walk the controls of the page); a click on the tab opens the Recorrido and pins the menu open (touch screens have no hover) and a second click closes it.
  */
 export function TourMenu() {
   const section = useStore((s) => s.section);
@@ -23,18 +23,7 @@ export function TourMenu() {
   const [hover, setHover] = useState(false);
   const [pinned, setPinned] = useState(false);
   const open = hover || pinned;
-  // the titles live with the charts of the Recorrido, which the main chunk must not carry: they load the first time the menu opens
-  const [items, setItems] = useState<IndexItem[] | null>(null);
-  useEffect(() => {
-    if (!open || items) return;
-    let live = true;
-    void import('../tour/indexData').then((m) => {
-      if (live) setItems(m.menuItems());
-    });
-    return () => {
-      live = false;
-    };
-  }, [open, items]);
+  const items = useMemo(() => menuItems(), []);
   const close = () => {
     setHover(false);
     setPinned(false);
@@ -62,7 +51,12 @@ export function TourMenu() {
         aria-selected={section === 'tour'}
         aria-haspopup="menu"
         aria-expanded={open}
-        onFocus={() => setHover(true)}
+        onKeyDown={(e) => {
+          if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            setPinned(true);
+          }
+        }}
         onClick={() => {
           dispatch({ type: 'setSection', section: 'tour' });
           if (open) close();
@@ -72,7 +66,7 @@ export function TourMenu() {
         {SECTION_LABELS.tour}
         <Chevron />
       </button>
-      {open && items && (
+      {open && (
         <ul role="menu" aria-label="Diapositivas" className="tour-menu-list">
           {items.map((item) => (
             <li key={item.id} role="none">
