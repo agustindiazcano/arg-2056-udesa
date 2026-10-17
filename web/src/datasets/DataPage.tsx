@@ -11,12 +11,13 @@ import {
   tableCsv,
   tableJson
 } from './csv.js';
+import { AiUsageView } from './AiUsageView.js';
 import { MethodologyView } from './MethodologyView.js';
 import { REFERENCES } from './references.js';
 import { buildSlides } from './slides.js';
 import type { Cell, DataTable, SlideData } from './types.js';
 
-export type DataTab = 'data' | 'references' | 'methodology';
+export type DataTab = 'data' | 'references' | 'methodology' | 'ai';
 
 const cell = (c: Cell): string => (c === null ? '—' : typeof c === 'number' ? formatDecimal(c) : c);
 const fileOf = (s: SlideData): string => `diapositiva-${slug(`${s.id} ${s.title}`)}`;
@@ -71,10 +72,11 @@ function Table({ slide, table }: { slide: SlideData; table: DataTable }) {
 }
 
 /**
- * The Data section: provides three views via title tabs:
+ * The Data section: provides four views via title tabs:
  * 1. Data: tables behind each slide of the Recorrido, with CSV and JSON downloads.
  * 2. Referencias: official sources and links categorized with their verification state.
  * 3. Metodología: technical data pipeline description and slide-specific methodologies.
+ * 4. Uso de AI: multi-agent workflow, human governance, Gitflow, and testing stack.
  */
 export function DataPage() {
   const [tab, setTab] = useState<DataTab>('data');
@@ -121,6 +123,14 @@ export function DataPage() {
             aria-pressed={tab === 'methodology'}
           >
             Metodología
+          </button>
+          <button
+            type="button"
+            className={`data-tab-btn ${tab === 'ai' ? 'data-tab-btn--active' : ''}`}
+            onClick={() => switchTab('ai')}
+            aria-pressed={tab === 'ai'}
+          >
+            Uso de AI
           </button>
         </nav>
 
@@ -232,6 +242,8 @@ export function DataPage() {
       )}
 
       {tab === 'methodology' && <MethodologyView />}
+
+      {tab === 'ai' && <AiUsageView />}
     </div>
   );
 }

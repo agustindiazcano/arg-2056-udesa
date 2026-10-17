@@ -104,12 +104,15 @@ describe('the Data page', () => {
     }
   });
 
-  it('shows no unverified or reading status on the references or methodology tabs', () => {
+  it('shows no unverified or reading status on the references, methodology, or AI usage tabs', () => {
     const { container } = render(<DataPage />);
     fireEvent.click(screen.getByRole('button', { name: 'Referencias' }));
     expect(everyText(container)).not.toMatch(FORBIDDEN);
 
     fireEvent.click(screen.getByRole('button', { name: 'Metodología' }));
+    expect(everyText(container)).not.toMatch(FORBIDDEN);
+
+    fireEvent.click(screen.getByRole('button', { name: 'Uso de AI' }));
     expect(everyText(container)).not.toMatch(FORBIDDEN);
   });
 });

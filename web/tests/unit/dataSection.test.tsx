@@ -134,11 +134,12 @@ describe('the Data page', () => {
     vi.restoreAllMocks();
   });
 
-  it('has tabs for Data, Referencias, and Metodología, showing the slide selector on Data', () => {
+  it('has tabs for Data, Referencias, Metodología, and Uso de AI, showing the slide selector on Data', () => {
     render(<DataPage />);
     expect(screen.getByRole('button', { name: 'Data' })).toBeTruthy();
     expect(screen.getByRole('button', { name: 'Referencias' })).toBeTruthy();
     expect(screen.getByRole('button', { name: 'Metodología' })).toBeTruthy();
+    expect(screen.getByRole('button', { name: 'Uso de AI' })).toBeTruthy();
 
     const select = screen.getByRole('combobox', { name: 'Diapositiva' }) as HTMLSelectElement;
     const options = within(select).getAllByRole('option').map((o) => o.textContent);
@@ -148,7 +149,7 @@ describe('the Data page', () => {
     expect(screen.getByRole('heading', { name: '1 · El PBI de Argentina desde 1960' })).toBeTruthy();
   });
 
-  it('switches between Data, Referencias, and Metodología tabs', () => {
+  it('switches between Data, Referencias, Metodología, and Uso de AI tabs', () => {
     render(<DataPage />);
     // Click Referencias tab
     fireEvent.click(screen.getByRole('button', { name: 'Referencias' }));
@@ -162,6 +163,13 @@ describe('the Data page', () => {
     expect(screen.getByRole('heading', { name: 'Metodología y pipeline de datos' })).toBeTruthy();
     expect(screen.getByText(/La regla del 70/)).toBeTruthy();
     expect(screen.getByText(/Simulador del PBI y Proyecciones a 2056/)).toBeTruthy();
+
+    // Click Uso de AI tab
+    fireEvent.click(screen.getByRole('button', { name: 'Uso de AI' }));
+    expect(screen.getByRole('heading', { name: 'Uso de AI y flujo de ingeniería' })).toBeTruthy();
+    expect(screen.getByText(/Antigravity/i)).toBeTruthy();
+    expect(screen.getByText(/Playwright/i)).toBeTruthy();
+    expect(screen.getByText(/Vitest/i)).toBeTruthy();
 
     // Click back to Data tab
     fireEvent.click(screen.getByRole('button', { name: 'Data' }));
