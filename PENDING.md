@@ -5,7 +5,7 @@ Every task below has a brief (`<slug>.md` in the repository root) and a prompt (
 ## New corrections (`test/correcciones-nuevas.png`, plan in `docs/action-plan-correcciones-nuevas.md`)
 
 Order: C8, C7, C2, C3, C4, C5, C1, C6.
-- [ ] C8 `map-zoom-limits`: free the map zoom, allow zooming in further.
+- [x] C8 `map-zoom-limits`: ZOOM_MAX 8 -> 32 in `web/src/charts/navState.ts` (country and department maps); tests updated. Branch `task/map-zoom-limits`. Not checked visually in the browser.
 - [ ] C7 `map-drill-transition`: smooth transition between country, province and department.
 - [ ] C2 `res-sector-filter-panel`: with the Mining filter, the composition panel shows mining only.
 - [ ] C3 `res-province-drilldown`: selecting a province shows departments if there is data, otherwise production by mining sector.
@@ -14,6 +14,7 @@ Order: C8, C7, C2, C3, C4, C5, C1, C6.
 - [ ] C1 `res-minerals-extend`: add boron, copper, molybdenum; add the Taca Taca project.
 - [ ] C6 `province-profile-slide`: LAST, with mock data (decided by the user; mock never labeled in the UI, listed in `docs/mock-data.md`, release gate still blocks until replaced by real data). New slide with provincial GDP, coparticipation, GDP per capita, exports, population, poverty, unemployment, private / public / registered employment; security filter only if an official provincial series exists.
 - [ ] **Data to verify (human)**: every figure added by C1 and C6 against the original source (INDEC, Secretaria de Mineria, USGS, Ministerio de Economia, Secretaria de Trabajo). Source candidates in section 4 of the plan.
+
 
 ## Task queue (in order)
 
@@ -108,6 +109,26 @@ Order: C8, C7, C2, C3, C4, C5, C1, C6.
 - [ ] **Province resource/project explorer** (`development-indicators-maps.md`): verify project names, coordinates, status, resource/reserve/production/capacity quantities and units against primary sources. Keep estimates, resources, reserves, production and capacity distinct.
 - [ ] **Forecast uncertainty / AI slide** (`forecast-uncertainty.md`): source historical technology diffusion-to-productivity lags; model-size, inference and robotics hardware cost series; 6/12-month forecast vintages and errors; evidence connecting real PBI per capita, real wages and development outcomes; and studies decomposing growth into education/human capital and savings/investment. Verify the OpenAI/ChatGPT timeline. Define whether an adverse AI impact means negative incremental growth versus a no-AI counterfactual or a fall in the PBI level.
 - [ ] **Draft slide 8 timeline claim**: verify the proposed account of OpenAI API experiments circulating in academic/AI circles at the beginning of 2021 and ChatGPT's arrival about 20 months later. Check dates and what “se viralizaban” can defensibly mean before retaining it in final copy.
+- [ ] **Historical shifts, structural shocks, and forecast limits (nice to have / qualitative context for forecast & AI narrative)**:
+  - [ ] **General Electric / Jack Welch doctrine**: dismantling industrial conglomerates, financialization, and aggressive outsourcing/offshoring to Asia and low-cost jurisdictions to cut costs and maximize shareholder returns.
+  - [ ] **Collapse of the USSR and post-Soviet labor supply expansion**: the fall of the Soviet bloc and integration of former socialist economies into global markets, unlocking massive low-wage labor supply and altering global wage dynamics.
+  - [ ] **Persistent hysteresis from deindustrialization**: historical evidence that countries and regions never fully recovered high-wage employment or manufacturing vitality after deindustrialization (rust belt dynamics).
+  - [ ] **China's WTO accession (2001) and the "China Shock"**: cite foundational papers and articles (e.g. Autor, Dorn, & Hanson, *The China Syndrome: Local Labor Market Effects of Import Competition in the United States*, AER 2013) documenting rapid manufacturing dislocation, wage stagnation, and localized economic decay.
+  - [ ] **Structural friction in labor reallocation (industry to services as precursor to AGI)**: historical evidence that displaced industrial workers do not transition easily or quickly into high-productivity services (friction, skill mismatches, structural stagnation); this historical reallocation failure serves as a preview/cautionary parallel of what could happen across service sectors under rapid transition toward Super AGI.
+  - [ ] **Limitations of natural resources**: natural resource extraction is capital-intensive rather than labor-intensive; if operating firms do not reinvest or spend dividends domestically, the multiplier effect on the host nation remains low (enclave economy / Dutch disease).
+  - [ ] **Argentina's entry into Mercosur and domestic deindustrialization**: structural deindustrialization of Argentine manufacturing following regional opening under Mercosur, with industrial scale and capacity shifting toward Brazil.
+  - [ ] **Limits of data for inferring technological and political waves**: can historical data alone predict transformative waves? Consistently flawed forecasts by top analysts and institutions: Wall Street analysts and Warren Buffett dismissing crypto, Tesla, or SpaceX during their formative years; political consulting failures with political outsiders (raising the question of whether polling/consultancy projections are systemic modeling failures or deliberate publicity techniques to manufacture momentum).
+  - [ ] **Ambiguity, sentiment, and rapid narrative rotation (Generative AI 2021 vs. today)**: analyzing ambiguities, emotionality, and market sentiment is necessary but insufficient; contrasting the negligible attention paid to generative AI across mainstream business and policy in 2021 with the universal focus on AI today.
+  - [ ] **Benchmark of resource-rich developed economies with advanced human capital (nice to have comparative panel)**:
+    - Comparative analysis of developed economies combining massive natural resource endowments with high human capital / human development (education, R&D, institutional quality, complex services).
+    - Key metrics to benchmark: reserve-to-production/export ratios, export complexity, value-added per capita, and the institutional mechanism for capturing and reinvesting resource rents (sovereign wealth funds, education/STEM investments) versus suffering Dutch disease.
+    - Reference peer economies:
+      - **Norway**: oil & gas endowment combined with world-leading sovereign wealth governance (Government Pension Fund Global), top-tier education, low inequality, and comprehensive human capital reinvestment.
+      - **Australia**: mining and energy powerhouse (iron ore, coal, lithium, LNG) paired with high tertiary education attainment, strong legal/regulatory framework, and high-value service exports.
+      - **Canada**: vast reserves in energy, critical minerals, and agro-forestry backed by top global educational attainment (STEM & post-secondary), diversified advanced manufacturing, and technological hubs.
+      - **Chile**: regional benchmark in copper and lithium reserves, fiscal rule on structural surplus, and sovereign stabilization funds, contrasting the transition hurdles toward high-income status.
+
+
 
 - [ ] Recorrido step 14 «Productividad» (`web/src/tour/productivity.ts`, `productivityData.json`): PWT 11.0 via FRED, 1955-2023, four countries; the data come from the human's `productivity_slide_spec.html` and were not re-downloaded by us. Verify the 15 FRED series (IDs in `docs/references.md` P7), the Argentine hours anomaly in 2021-2023, and the AI estimates quoted in step 5 (Acemoglu, Anthropic: cited, not opened). The INDEC 2016-2025 figures are verified in the PDF (P1) but the charts end in 2023; an extra step with the INDEC series (cuadros 12 y 13) was offered. Baumann Fonay (P2) is not verified and contradicts INDEC on 2024.
 - [ ] Simulador del PBI (`web/src/tour/simModel.ts`): plain arithmetic; every coefficient (AI ramp over 15 years, 0,1 pp per investment point, population around 0,5 %) and the 2025 GDP of 640 are made up; replace with the model's elasticities and sourced values and record them in `docs/assumptions.md`.
