@@ -14,6 +14,7 @@ import { Segmented } from '../ui/Segmented.js';
 import { TourChart } from './TourChart.js';
 import { DEFAULT_SIM, SIM_END, SIM_FIELDS, SIM_START, averageGrowth, doublingYears, simulate } from './simModel.js';
 import type { SimKey, SimParams } from './simModel.js';
+import { ARG_POP_2056, developedBenchmarks } from './rule70Convergence.js';
 import { useTimeline } from './useTimeline.js';
 
 const PlayIcon = () => (
@@ -106,6 +107,15 @@ export function Simulator() {
 
   const set = (key: SimKey, value: number) => setParams((p) => ({ ...p, [key]: value }));
 
+  const benchmarks = useMemo(() => developedBenchmarks(), []);
+  const [targetCode, setTargetCode] = useState<string>('ESP');
+  const targetCountry = useMemo(
+    () => benchmarks.find((b) => b.code === targetCode) ?? benchmarks[0]!,
+    [benchmarks, targetCode]
+  );
+  const perCapita2056 = Math.round((end * 1000) / ARG_POP_2056);
+  const convergencePct = Math.round((perCapita2056 / targetCountry.gdpPerCapita2024) * 100);
+
   return (
     <section className="gdp-step sim-step" aria-label={TITLE}>
       <header className="gdp-head">
@@ -192,6 +202,32 @@ export function Simulator() {
               <span className="sim-label">Crecimiento medio</span>
               <strong>{formatDecimal(growth)} % anual</strong>
               <span className="sim-label">{double === null ? 'No se duplica' : `Se duplica en ${Math.round(double)} años`}</span>
+            </div>
+          </div>
+
+          <div className="sim-convergence-target" style={{ margin: '0.75rem 0', padding: '0.75rem', background: 'rgba(255,255,255,0.04)', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.08)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.35rem' }}>
+              <span className="sim-label" style={{ fontWeight: 600, color: tokens.scenario.pessimistic }}>Convergencia con país desarrollado</span>
+              <select
+                aria-label="País desarrollado de referencia"
+                value={targetCode}
+                onChange={(e) => setTargetCode(e.target.value)}
+                style={{ background: '#1e293b', color: '#f8fafc', border: '1px solid #475569', borderRadius: '4px', padding: '0.2rem 0.4rem', fontSize: '0.8rem' }}
+              >
+                {benchmarks.map((b) => (
+                  <option key={b.code} value={b.code}>
+                    {b.name} (${formatDecimal(b.gdpPerCapita2024 / 1000)}k)
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div style={{ fontSize: '0.85rem', lineHeight: '1.4' }}>
+              <div>PBI pc en 2056: <strong>${formatDecimal(perCapita2056)} USD</strong> ({convergencePct} % de {targetCountry.name})</div>
+              <div style={{ color: tokens.muted, fontSize: '0.75rem', marginTop: '0.2rem' }}>
+                {convergencePct >= 100
+                  ? `Alcanza y supera el nivel de ${targetCountry.name} ($${formatDecimal(targetCountry.gdpPerCapita2024)} USD).`
+                  : `Queda a ${(100 - convergencePct)} puntos de ${targetCountry.name} ($${formatDecimal(targetCountry.gdpPerCapita2024)} USD).`}
+              </div>
             </div>
           </div>
 

@@ -5,6 +5,7 @@ import { Reveal } from '../motion/Reveal.js';
 import { Segmented } from '../ui/Segmented.js';
 import { RULE70_TITLE } from './slideTitles.js';
 import { TabbedChart } from '../ui/TabbedChart.js';
+import { ConvergencePlanner } from './ConvergencePlanner.js';
 import { CountryExplorer } from './CountryExplorer.js';
 import { ImfProjections } from './ImfProjections.js';
 import { ScenarioCompare } from './ScenarioCompare.js';
@@ -193,8 +194,8 @@ function Calculator() {
 }
 
 /**
- * Step 5 of the Recorrido, the rule of 70, in two tabs: the calculator (a rate chosen by the visitor and the year the GDP of Argentina
- * doubles at it) and the real countries (what happened in China, South Korea, India, the United States and Argentina, or any country), the comparison of two rates and the projections of the IMF.
+ * Step 5 of the Recorrido, the rule of 70, in tabs: the calculator, real countries, scenario comparison,
+ * convergence planning towards developed nations, and IMF projections.
  */
 export function Rule70Step() {
   return (
@@ -202,13 +203,14 @@ export function Rule70Step() {
       <header className="gdp-head">
         <Reveal k="head" className="gdp-title">
           <h2>{TITLE}</h2>
-          <p className="gdp-sub">Cuánto tarda en duplicarse algo que crece a una tasa constante: la fórmula exacta, las reglas del 70 y del 72, el PBI de Argentina y lo que pasó en países reales</p>
+          <p className="gdp-sub">Cuánto tarda en duplicarse algo que crece a una tasa constante: la fórmula exacta, las reglas del 70 y del 72, qué tasa necesita Argentina para converger con países desarrollados y lo que pasó en economías reales</p>
         </Reveal>
       </header>
       <TabbedChart
         label={TITLE}
         tabs={[
           { id: 'calculator', label: 'Calculadora', render: () => <Calculator /> },
+          { id: 'convergence', label: 'Convergencia y desarrollo', render: () => <ConvergencePlanner /> },
           { id: 'countries', label: 'Países reales', render: () => <CountryExplorer /> },
           { id: 'scenarios', label: 'Escenarios', render: () => <ScenarioCompare /> },
           { id: 'imf', label: 'Proyecciones del FMI', render: () => <ImfProjections /> }

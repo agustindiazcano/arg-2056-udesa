@@ -8,7 +8,7 @@
   "chunk_overrides": {
     "src/three/Chart3D.tsx": 409600,
     "src/three/ProjectionScenes.tsx": 409600,
-    "src/tour/TourStep.tsx": 339968,
+    "src/tour/TourStep.tsx": 368640,
     "src/scenes/andes/MapLibreRenderer.tsx": 516096
   }
 }
