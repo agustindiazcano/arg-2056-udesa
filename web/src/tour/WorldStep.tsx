@@ -60,7 +60,7 @@ export function WorldStep() {
   const today = series.values.at(-1) ?? 0;
   const regionNames = useMemo(regionCountries, []);
   // the bars of the region show one of three values, chosen by clicking their title
-  const [regionMetric, setRegionMetric] = useState<RegionMetric>('gdp');
+  const [regionMetric, setRegionMetric] = useState<RegionMetric>('percapita');
   const metricInfo = REGION_METRICS[regionMetric];
 
   const summary = `${SERIES_NAME} de ${FIRST_YEAR} a ${LAST_YEAR}: de ${formatValue(series.values[0] ?? null, WORLD_UNIT)} a ${formatValue(today, WORLD_UNIT)}`;
