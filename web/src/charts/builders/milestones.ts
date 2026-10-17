@@ -21,8 +21,10 @@ export function milestones(years: number[], values: Array<number | null>, multip
 export function addMilestones(option: object, years: number[], lines: Array<{ values: Array<number | null>; color: string }>, upTo = Infinity, baseValue?: number | null): object {
   const isCategory = (option as { xAxis?: { type?: string } })?.xAxis?.type === 'category';
   const dots = lines.map((line) => ({
-    type: 'scatter',
+    type: 'effectScatter',
     silent: true,
+    rippleEffect: { scale: 2.5, period: 3, brushType: 'stroke', color: line.color },
+    showEffectOn: 'render',
     z: 6,
     symbolSize: 8,
     itemStyle: { color: line.color, borderColor: '#ffffff', borderWidth: 2 },
