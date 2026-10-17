@@ -69,6 +69,12 @@ export function argentinaReal(): LongSeries {
   return { years: Array.from({ length: YEAR_COUNT }, (_, i) => FIRST_YEAR + i), values: arg.gdp.map((v) => v ?? 0) };
 }
 
+/** The series the big chart draws: the real GDP or the real GDP per person of a country (Argentina by default), one value per year; a year without data is 0, as in `argentinaReal`. */
+export function mainSeries(metric: RankMetric, country: string = HOME): LongSeries {
+  const years = Array.from({ length: YEAR_COUNT }, (_, i) => FIRST_YEAR + i);
+  return { years, values: years.map((y) => (metric === 'gdp' ? gdpAtYear(country, y) : gdpPerCapitaAt(country, y)) ?? 0) };
+}
+
 /** The real GDP of a country at a (fractional) year, in billions of 2015 USD (null without data). */
 export function gdpAtYear(country: string, year: number): number | null {
   const c = BY_NAME.get(country);

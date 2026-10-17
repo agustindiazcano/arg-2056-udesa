@@ -158,4 +158,27 @@ describe('step 0 of the Recorrido', () => {
     expect(card.querySelector('.tour-caption .tour-view-switch, .tour-caption-head .tour-view-switch')).toBeNull();
     expect(card.querySelector('.tour-chart > .tour-view-switch')).toBeTruthy();
   });
+
+  it('makes the two ranking tables buttons that choose what the big chart shows: PBI by default, PBI per cápita on click, and back', () => {
+    render(<WorldStep />);
+    const gdp = screen.getByRole('button', { name: 'Ver PBI real en el gráfico grande' });
+    const perCapita = screen.getByRole('button', { name: 'Ver PBI per cápita real en el gráfico grande' });
+    expect(gdp.getAttribute('aria-pressed')).toBe('true');
+    expect(perCapita.getAttribute('aria-pressed')).toBe('false');
+    expect(document.querySelector('.world-year span')?.textContent).toContain('miles de millones');
+    fireEvent.click(perCapita);
+    expect(perCapita.getAttribute('aria-pressed')).toBe('true');
+    expect(gdp.getAttribute('aria-pressed')).toBe('false');
+    expect(document.querySelector('.world-year span')?.textContent).toContain('por persona');
+    expect(screen.getByRole('img', { name: /PBI per cápita real de Argentina/ })).toBeTruthy();
+    fireEvent.click(gdp);
+    expect(document.querySelector('.world-year span')?.textContent).toContain('miles de millones');
+  });
+
+  it('puts the unit of the metric chosen first in the help of the title', () => {
+    render(<WorldStep />);
+    fireEvent.click(screen.getByRole('button', { name: 'Ver PBI per cápita real en el gráfico grande' }));
+    fireEvent.mouseEnter(screen.getByRole('button', { name: /Explicación: Dónde estuvo/ }));
+    expect(screen.getByRole('tooltip').querySelector('.chart-help-lead')?.textContent).toBe('USD de 2015 por persona');
+  });
 });

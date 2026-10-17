@@ -17,8 +17,8 @@ import { elapsedForYear, seriesFrame, valueAt, yearAtElapsed } from './worldAnim
 import { SPEEDS } from '../state/reducer.js';
 import { useTimeline } from './useTimeline.js';
 import { WorldTable } from './WorldTable.js';
-import { FIRST_YEAR, HOME, LAST_YEAR, REGION_METRICS, WORLD_SOURCE, WORLD_UNIT, argentinaReal, regionCountries, regionValuesAt } from './worldData.js';
-import type { RegionMetric } from './worldData.js';
+import { FIRST_YEAR, HOME, LAST_YEAR, REGION_METRICS, WORLD_SOURCE, WORLD_UNIT, mainSeries, regionCountries, regionValuesAt } from './worldData.js';
+import type { RankMetric, RegionMetric } from './worldData.js';
 
 const VIEWS = [
   { value: '2d', label: '2D' },
@@ -38,7 +38,11 @@ const PauseIcon = () => (
 const speedFormat = new Intl.NumberFormat('es-AR', { maximumFractionDigits: 2 });
 
 const TITLE = WORLD_TITLE;
-const SERIES_NAME = 'PBI real de Argentina';
+/** What the big chart shows for each metric of the ranking tables: its name, its unit and the label of the series. */
+const MAIN: Record<RankMetric, { name: string; unit: string }> = {
+  gdp: { name: 'PBI real de Argentina', unit: WORLD_UNIT },
+  percapita: { name: 'PBI per cápita real de Argentina', unit: REGION_METRICS.percapita.unit }
+};
 const REGION_OPTIONS = [
   { value: 'gdp', label: 'PBI' },
   { value: 'percapita', label: 'PBI per cápita' },
@@ -59,28 +63,31 @@ export function WorldStep() {
   const { elapsed, clock, seek, playing, play, pause } = useTimeline(run, reduced, speed);
   const stepSpeed = (by: 1 | -1) => setSpeed((v) => SPEEDS[Math.min(SPEEDS.length - 1, Math.max(0, SPEEDS.indexOf(v) + by))] ?? v);
 
-  const series = useMemo(argentinaReal, []);
+  // the big chart shows the metric of the ranking table that was clicked
+  const [mainMetric, setMainMetric] = useState<RankMetric>('gdp');
+  const { name: SERIES_NAME, unit: MAIN_UNIT } = MAIN[mainMetric];
+  const series = useMemo(() => mainSeries(mainMetric), [mainMetric]);
   const today = series.values.at(-1) ?? 0;
   const regionNames = useMemo(regionCountries, []);
   // the bars of the region show one of three values, chosen by clicking their title
   const [regionMetric, setRegionMetric] = useState<RegionMetric>('percapita');
   const metricInfo = REGION_METRICS[regionMetric];
 
-  const summary = `${SERIES_NAME} de ${FIRST_YEAR} a ${LAST_YEAR}: de ${formatValue(series.values[0] ?? null, WORLD_UNIT)} a ${formatValue(today, WORLD_UNIT)}`;
+  const summary = `${SERIES_NAME} de ${FIRST_YEAR} a ${LAST_YEAR}: de ${formatValue(series.values[0] ?? null, MAIN_UNIT)} a ${formatValue(today, MAIN_UNIT)}`;
   const frame = useMemo(() => seriesFrame(elapsed, series.years, series.values), [elapsed, series]);
-  const flat = useMemo(() => buildFollowedSeries(series.years, series.values, frame, { unit: WORLD_UNIT, name: SERIES_NAME, summary }), [series, frame, summary]);
+  const flat = useMemo(() => buildFollowedSeries(series.years, series.values, frame, { unit: MAIN_UNIT, name: SERIES_NAME, summary }), [series, frame, summary, MAIN_UNIT, SERIES_NAME]);
   // a new object on every run: the 3D chart draws itself again
   const spec = useMemo(
     () =>
       linesSpec({
         title: SERIES_NAME,
-        unit: WORLD_UNIT,
+        unit: MAIN_UNIT,
         xLabels: series.years.map(String),
         series: [{ name: SERIES_NAME, values: series.values, tone: 'highlight' }],
         follow: true,
         summary
       }),
-    [series, summary]
+    [series, summary, MAIN_UNIT, SERIES_NAME]
   );
   const lineSpec = useMemo(() => ({ ...spec, clock }), [spec, clock]);
 
@@ -116,7 +123,7 @@ export function WorldStep() {
         <Reveal k="head" className="gdp-title">
           <div className="slide-title-row">
             <h2>{TITLE}</h2>
-            <ChartHelp title={step0Info.heading} lead={WORLD_UNIT} paragraphs={step0Info.paragraphs} how={step0Info.how} refs={step0Info.refs} />
+            <ChartHelp title={step0Info.heading} lead={MAIN_UNIT} paragraphs={step0Info.paragraphs} how={step0Info.how} refs={step0Info.refs} />
           </div>
           <p className="gdp-sub">
             {FIRST_YEAR} a {LAST_YEAR} · <span className="gdp-source">{WORLD_SOURCE}</span> · <RefList ids={step0Info.refs} />
@@ -167,7 +174,7 @@ export function WorldStep() {
         <Reveal k="main" className="gdp-chart prov-map">
           <div className="world-year" aria-hidden="true">
             <strong>{shownYear}</strong>
-            <span>{formatValue(Math.round(shownValue), WORLD_UNIT)}</span>
+            <span>{formatValue(Math.round(shownValue), MAIN_UNIT)}</span>
           </div>
           <div className="tour-chart" key={`${mode}-${run}`}>
             <TourChart spec={lineSpec}>
@@ -194,6 +201,8 @@ export function WorldStep() {
                 unit={REGION_METRICS.gdp.unit}
                 help="Los países ordenados por su PBI real del año que marca la línea de tiempo. Argentina aparece aparte, con su puesto entre todos los países del Banco Mundial."
                 year={frame.year}
+                active={mainMetric === 'gdp'}
+                onSelect={() => setMainMetric('gdp')}
               />
               <WorldTable
                 metric="percapita"
@@ -201,6 +210,8 @@ export function WorldStep() {
                 unit={REGION_METRICS.percapita.unit}
                 help="El PBI real dividido por la población. Cuenta solo países de un millón de habitantes o más. Argentina aparece aparte, con su puesto."
                 year={frame.year}
+                active={mainMetric === 'percapita'}
+                onSelect={() => setMainMetric('percapita')}
               />
             </div>
           </Reveal>
