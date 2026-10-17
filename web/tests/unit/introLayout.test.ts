@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { pathBox, boxStyle, lightStep, TARGET_SHARE } from '../../src/intro/layout';
+import { pathBox, boxStyle, lightStep, loadLightPlan, TARGET_SHARE } from '../../src/intro/layout';
 
 describe('pathBox', () => {
   it('returns the bounding box of an SVG path padded on every side', () => {
@@ -55,5 +55,33 @@ describe('lightStep', () => {
 
   it('does nothing when there are no provinces', () => {
     expect(lightStep(new Set(), 0, () => 0.5)).toBeNull();
+  });
+});
+
+describe('loadLightPlan', () => {
+  const ids = Array.from({ length: 25 }, (_, i) => i + 1);
+  let seed = 11;
+  const random = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+
+  it('lights every province exactly once, inside the window, and the last one exactly at the end', () => {
+    const plan = loadLightPlan(ids, 300, 1300, random);
+    expect(plan).toHaveLength(ids.length);
+    expect(new Set(plan.map((p) => p.id))).toEqual(new Set(ids));
+    for (const p of plan) {
+      expect(p.at).toBeGreaterThanOrEqual(300);
+      expect(p.at).toBeLessThanOrEqual(1300);
+    }
+    expect(Math.max(...plan.map((p) => p.at))).toBe(1300);
+  });
+
+  it('is sorted by time and does not light them in the order of the list', () => {
+    const plan = loadLightPlan(ids, 300, 1300, random);
+    expect(plan.map((p) => p.at)).toEqual([...plan.map((p) => p.at)].sort((a, b) => a - b));
+    expect(plan.map((p) => p.id)).not.toEqual(ids);
+  });
+
+  it('has nothing to light without provinces, and lights a single one at the end', () => {
+    expect(loadLightPlan([], 300, 1300, random)).toEqual([]);
+    expect(loadLightPlan([7], 300, 1300, random)).toEqual([{ id: 7, at: 1300 }]);
   });
 });

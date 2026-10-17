@@ -47,3 +47,25 @@ export function lightStep(lit: ReadonlySet<number>, total: number, random: () =>
   const on = [...lit];
   return on.length ? { id: on[Math.floor(random() * on.length)] as number, on: false } : null;
 }
+
+/** While the flat map loads, the provinces light up inside this window of the load (ms), so all of them are lit just before the map tilts. */
+export const LOAD_LIGHT_FROM_MS = 300;
+export const LOAD_LIGHT_TO_MS = 1300;
+
+/**
+ * When each province lights during the load: in a shuffled order, evenly spread over `fromMs` to `toMs` with a little jitter, the last one
+ * exactly at `toMs`. Sorted by time.
+ */
+export function loadLightPlan(ids: readonly number[], fromMs: number, toMs: number, random: () => number): Array<{ id: number; at: number }> {
+  const order = [...ids];
+  for (let i = order.length - 1; i > 0; i--) {
+    const j = Math.floor(random() * (i + 1));
+    [order[i], order[j]] = [order[j] as number, order[i] as number];
+  }
+  const n = order.length;
+  const slot = n > 1 ? (toMs - fromMs) / (n - 1) : 0;
+  return order.map((id, i) => {
+    const jitter = i === 0 || i === n - 1 ? 0 : (random() - 0.5) * slot * 0.6;
+    return { id, at: n === 1 ? toMs : Math.round(fromMs + i * slot + jitter) };
+  });
+}
