@@ -87,7 +87,7 @@ button.brand {
 
 button.brand:hover .brand-a,
 button.brand:focus-visible .brand-a {
-  color: var(--gold);
+  color: var(--nav-gold);
 }
 
 button.brand:hover .brand-n,
@@ -2646,7 +2646,7 @@ main.scene-container {
 #overlay[data-section] .chrome,
 #overlay[data-scene] .chrome {
   background: linear-gradient(180deg, color-mix(in srgb, var(--intro-bg) 92%, transparent), color-mix(in srgb, var(--intro-black) 96%, transparent));
-  border-bottom: 1px solid color-mix(in srgb, var(--gold) 20%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--nav-gold) 20%, transparent);
   backdrop-filter: blur(16px) saturate(1.15);
 }
 
@@ -2667,25 +2667,25 @@ main.scene-container {
 .chrome .brand-n,
 #overlay .brand-n {
   font-weight: 800;
-  color: var(--gold);
-  background: linear-gradient(135deg, var(--gold-highlight) 0%, var(--gold) 38%, var(--gold-deep) 75%, var(--gold-shadow) 100%);
+  color: var(--nav-gold);
+  background: linear-gradient(135deg, var(--nav-gold-highlight) 0%, var(--nav-gold) 38%, var(--nav-gold-deep) 75%, var(--nav-gold-shadow) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 1px 1px var(--intro-black)) drop-shadow(0 0 10px color-mix(in srgb, var(--gold) 45%, transparent));
+  filter: drop-shadow(0 1px 1px var(--intro-black)) drop-shadow(0 0 10px color-mix(in srgb, var(--nav-gold) 45%, transparent));
   transition: filter 300ms ease;
 }
 
 button.brand:hover .brand-n,
 button.brand:focus-visible .brand-n {
-  background: linear-gradient(135deg, var(--gold-hover-highlight) 0%, color-mix(in srgb, var(--gold) 85%, white) 38%, var(--gold-hover-deep) 75%, var(--gold-hover-shadow) 100%);
+  background: linear-gradient(135deg, var(--nav-gold-hover-highlight) 0%, color-mix(in srgb, var(--nav-gold) 85%, white) 38%, var(--nav-gold-deep) 75%, var(--nav-gold-shadow) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 1px 1px var(--intro-black)) drop-shadow(0 0 16px color-mix(in srgb, var(--gold) 60%, transparent));
+  filter: drop-shadow(0 1px 1px var(--intro-black)) drop-shadow(0 0 16px color-mix(in srgb, var(--nav-gold) 60%, transparent));
 }
 
 button.brand:hover .brand-a,
 button.brand:focus-visible .brand-a {
-  color: color-mix(in srgb, var(--gold) 75%, white);
+  color: color-mix(in srgb, var(--nav-gold) 75%, white);
 }
 
 /* Nav buttons and chips: unified rounded-rectangle shape and refined gold aesthetics */
@@ -2709,10 +2709,10 @@ button.brand:focus-visible .brand-a {
 #overlay[data-section] .chrome .tab:hover,
 #overlay[data-section] .tour-steps .chip:hover:not(:disabled),
 #overlay[data-scene] .chrome .tab:hover {
-  color: var(--gold-highlight);
-  border-color: color-mix(in srgb, var(--gold) 65%, transparent);
-  background: color-mix(in srgb, var(--gold) 14%, var(--intro-bg));
-  box-shadow: 0 4px 16px color-mix(in srgb, var(--intro-black) 35%, transparent), 0 0 12px color-mix(in srgb, var(--gold) 20%, transparent);
+  color: var(--nav-gold-highlight);
+  border-color: color-mix(in srgb, var(--nav-gold) 65%, transparent);
+  background: color-mix(in srgb, var(--nav-gold) 14%, var(--intro-bg));
+  box-shadow: 0 4px 16px color-mix(in srgb, var(--intro-black) 35%, transparent), 0 0 12px color-mix(in srgb, var(--nav-gold) 20%, transparent);
   transform: translateY(-1px);
 }
 
@@ -2721,11 +2721,11 @@ button.brand:focus-visible .brand-a {
 #overlay[data-section] .chrome .tab[aria-selected='true'],
 #overlay[data-section] .tour-steps .chip[aria-pressed='true'],
 #overlay[data-scene] .chrome .tab[aria-selected='true'] {
-  color: var(--gold-highlight);
+  color: var(--nav-gold-highlight);
   font-weight: 600;
-  border-color: color-mix(in srgb, var(--gold) 80%, white 10%);
-  background: linear-gradient(180deg, color-mix(in srgb, var(--gold) 24%, var(--intro-bg)), color-mix(in srgb, var(--gold) 10%, var(--intro-bg)));
-  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--gold-highlight) 35%, transparent), 0 0 18px color-mix(in srgb, var(--gold) 28%, transparent);
+  border-color: color-mix(in srgb, var(--nav-gold) 80%, white 10%);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--nav-gold) 24%, var(--intro-bg)), color-mix(in srgb, var(--nav-gold) 10%, var(--intro-bg)));
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--nav-gold-highlight) 35%, transparent), 0 0 18px color-mix(in srgb, var(--nav-gold) 28%, transparent);
 }
 
 .chrome .tab[aria-selected='true']:hover,
@@ -2734,9 +2734,9 @@ button.brand:focus-visible .brand-a {
 #overlay[data-section] .tour-steps .chip[aria-pressed='true']:hover,
 #overlay[data-scene] .chrome .tab[aria-selected='true']:hover {
   color: var(--intro-white);
-  border-color: var(--gold-highlight);
-  background: linear-gradient(180deg, color-mix(in srgb, var(--gold) 30%, var(--intro-bg)), color-mix(in srgb, var(--gold) 14%, var(--intro-bg)));
-  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--intro-white) 40%, transparent), 0 0 22px color-mix(in srgb, var(--gold) 38%, transparent);
+  border-color: var(--nav-gold-highlight);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--nav-gold) 30%, var(--intro-bg)), color-mix(in srgb, var(--nav-gold) 14%, var(--intro-bg)));
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--intro-white) 40%, transparent), 0 0 22px color-mix(in srgb, var(--nav-gold) 38%, transparent);
   transform: translateY(-1px);
 }
 
@@ -2758,19 +2758,19 @@ button.brand:focus-visible .brand-a {
 }
 
 .chrome .header-end .data-button:hover {
-  color: var(--gold-highlight);
-  border-color: color-mix(in srgb, var(--gold) 65%, transparent);
-  background: color-mix(in srgb, var(--gold) 14%, var(--intro-bg));
-  box-shadow: 0 4px 16px color-mix(in srgb, var(--intro-black) 35%, transparent), 0 0 12px color-mix(in srgb, var(--gold) 20%, transparent);
+  color: var(--nav-gold-highlight);
+  border-color: color-mix(in srgb, var(--nav-gold) 65%, transparent);
+  background: color-mix(in srgb, var(--nav-gold) 14%, var(--intro-bg));
+  box-shadow: 0 4px 16px color-mix(in srgb, var(--intro-black) 35%, transparent), 0 0 12px color-mix(in srgb, var(--nav-gold) 20%, transparent);
   transform: translateY(-1px);
 }
 
 .chrome .header-end .data-button[aria-pressed='true'] {
-  color: var(--gold-highlight);
+  color: var(--nav-gold-highlight);
   font-weight: 600;
-  border-color: color-mix(in srgb, var(--gold) 80%, white 10%);
-  background: linear-gradient(180deg, color-mix(in srgb, var(--gold) 24%, var(--intro-bg)), color-mix(in srgb, var(--gold) 10%, var(--intro-bg)));
-  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--gold-highlight) 35%, transparent), 0 0 18px color-mix(in srgb, var(--gold) 28%, transparent);
+  border-color: color-mix(in srgb, var(--nav-gold) 80%, white 10%);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--nav-gold) 24%, var(--intro-bg)), color-mix(in srgb, var(--nav-gold) 10%, var(--intro-bg)));
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--nav-gold-highlight) 35%, transparent), 0 0 18px color-mix(in srgb, var(--nav-gold) 28%, transparent);
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -80,6 +80,12 @@
   --gold-hover-highlight: #fff2d6;
   --gold-hover-deep: #c48c28;
   --gold-hover-shadow: #945f10;
+  /* The gold of the navbar and of the lit provinces of the intro: the one of the «2056» of the home logo (--intro-light) and its shades */
+  --nav-gold: var(--intro-light);
+  --nav-gold-highlight: color-mix(in srgb, var(--intro-light) 55%, var(--intro-white));
+  --nav-gold-hover-highlight: color-mix(in srgb, var(--intro-light) 35%, var(--intro-white));
+  --nav-gold-deep: color-mix(in srgb, var(--intro-light) 75%, var(--intro-black));
+  --nav-gold-shadow: color-mix(in srgb, var(--intro-light) 45%, var(--intro-black));
   --intro-on-light: #14080a;
   --intro-line-tint: #aab6e8;
   --intro-grid: rgba(170, 182, 232, 0.24);
