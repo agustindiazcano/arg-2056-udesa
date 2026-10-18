@@ -47,12 +47,12 @@ describe('ProvinceProfileStep (C6: province-profile-slide)', () => {
     // Should show Salta in the profile header
     expect(screen.getByText(/Salta: ficha provincial/i)).toBeDefined();
     // Should show Salta's specific data
-    expect(screen.getByText(/11\.200 M USD/)).toBeDefined();
-    expect(screen.getByText(/7\.780 USD/)).toBeDefined();
+    expect(screen.getByText(/11\.340 M USD/)).toBeDefined();
+    expect(screen.getByText(/7\.871 USD/)).toBeDefined();
     expect(screen.getByText(/3,8 %/)).toBeDefined();
     expect(screen.getByText(/1\.440\.672 hab\./)).toBeDefined();
-    expect(screen.getByText(/49,5 %/)).toBeDefined();
-    expect(screen.getByText(/6,5 %/)).toBeDefined();
+    expect(screen.getByText(/53,3 %/)).toBeDefined();
+    expect(screen.getByText(/6,2 %/)).toBeDefined();
   });
 
   it('toggles between chart view and accessible table view', () => {
