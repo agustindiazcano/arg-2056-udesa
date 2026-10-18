@@ -364,6 +364,79 @@ export function buildSlides(): SlideData[] {
         ]
       },
       {
+        id: 'life-expectancy',
+        title: 'Esperanza de vida al nacer (Banco Mundial WDI, años)',
+        columns: ['País o Año', 'Valor', 'Fuente'],
+        rows: [
+          ['Argentina 1990', 71.6, 'Banco Mundial'],
+          ['Argentina 2000', 73.9, 'Banco Mundial'],
+          ['Argentina 2010', 75.7, 'Banco Mundial'],
+          ['Argentina 2019', 76.8, 'Banco Mundial'],
+          ['Argentina 2021 (COVID)', 73.9, 'Banco Mundial'],
+          ['Argentina 2023', 77.4, 'Banco Mundial'],
+          ['Argentina 2024', 77.5, 'Banco Mundial'],
+          ['Chile 2023', 81.2, 'Banco Mundial'],
+          ['Uruguay 2023', 78.1, 'Banco Mundial'],
+          ['Colombia 2023', 77.7, 'Banco Mundial'],
+          ['Brasil 2023', 75.8, 'Banco Mundial'],
+          ['México 2023', 75.1, 'Banco Mundial']
+        ]
+      },
+      {
+        id: 'infant-mortality',
+        title: 'Mortalidad infantil (Banco Mundial WDI / DEIS, defunciones por 1.000 nacidos vivos)',
+        columns: ['País o Año', 'Tasa', 'Fuente'],
+        rows: [
+          ['Argentina 1990', 24.8, 'Banco Mundial'],
+          ['Argentina 2000', 16.7, 'Banco Mundial'],
+          ['Argentina 2010', 12.4, 'Banco Mundial'],
+          ['Argentina 2020', 8.7, 'Banco Mundial'],
+          ['Argentina 2023', 8.2, 'Banco Mundial'],
+          ['Argentina 2024', 8.0, 'Banco Mundial'],
+          ['Chile 2023', 5.9, 'Banco Mundial'],
+          ['Uruguay 2023', 6.1, 'Banco Mundial'],
+          ['Colombia 2023', 10.8, 'Banco Mundial'],
+          ['Brasil 2023', 12.4, 'Banco Mundial'],
+          ['México 2023', 12.4, 'Banco Mundial']
+        ]
+      },
+      {
+        id: 'gini-index',
+        title: 'Coeficiente de Gini de desigualdad (Banco Mundial / INDEC SEDLAC, escala 0-100)',
+        columns: ['País o Año', 'Índice Gini', 'Fuente'],
+        rows: [
+          ['Argentina 1995', 48.9, 'Banco Mundial'],
+          ['Argentina 2002 (crisis)', 53.8, 'Banco Mundial'],
+          ['Argentina 2010', 43.7, 'Banco Mundial'],
+          ['Argentina 2018', 41.7, 'Banco Mundial'],
+          ['Argentina 2022', 40.7, 'Banco Mundial'],
+          ['Argentina 2023', 42.4, 'Banco Mundial'],
+          ['Argentina 2024', 42.4, 'Banco Mundial'],
+          ['Uruguay 2023', 40.9, 'Banco Mundial'],
+          ['Chile 2022', 43.2, 'Banco Mundial'],
+          ['México 2022', 43.5, 'Banco Mundial'],
+          ['Brasil 2023', 51.5, 'Banco Mundial'],
+          ['Colombia 2023', 54.6, 'Banco Mundial']
+        ]
+      },
+      {
+        id: 'schooling-years',
+        title: 'Años de escolaridad en adultos y expectativa infantil (PNUD Human Development Report)',
+        columns: ['País o Año', 'Años promedio (≥25 años)', 'Años esperados', 'Fuente'],
+        rows: [
+          ['Argentina 1990', 8.8, 13.2, 'PNUD'],
+          ['Argentina 2000', 9.6, 15.5, 'PNUD'],
+          ['Argentina 2010', 10.4, 16.8, 'PNUD'],
+          ['Argentina 2020', 10.9, 17.7, 'PNUD'],
+          ['Argentina 2023', 11.2, 18.8, 'PNUD'],
+          ['Chile 2022', 11.1, 16.8, 'PNUD'],
+          ['Uruguay 2022', 9.3, 17.3, 'PNUD'],
+          ['México 2022', 9.0, 14.9, 'PNUD'],
+          ['Colombia 2022', 8.9, 14.9, 'PNUD'],
+          ['Brasil 2022', 8.3, 15.6, 'PNUD']
+        ]
+      },
+      {
         id: 'pisa-argentina',
         title: 'Resultados PISA Argentina (puntajes medios 2012, 2018, 2022)',
         columns: ['Ciclo PISA', 'Lectura', 'Matemática', 'Ciencias', 'Fuente'],
@@ -401,7 +474,7 @@ export function buildSlides(): SlideData[] {
           ['PBI por habitante y salarios reales', 'Bienestar material', 'INDEC / FMI']
         ]
       }
-    ], false, ['D1', 'D2']),
+    ], false, ['D1', 'D2', 'W1', 'S3']),
     slide('17', FORECAST_UNCERTAINTY_TITLE, [
       {
         id: 'ai-training-costs',
