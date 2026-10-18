@@ -11,6 +11,7 @@ import { PROVINCES } from '../types/province.js';
 import type { ProvinceId } from '../types/province.js';
 import { MapSearch } from '../ui/MapSearch.js';
 import type { SearchResult } from '../ui/mapSearchLogic.js';
+import { RefList } from '../ui/RefLink.js';
 import {
   PROFILE_METRICS,
   PROVINCE_PROFILES,
@@ -96,7 +97,7 @@ export function ProvinceProfileStep({ embedded = false }: { embedded?: boolean }
         <Reveal k="head" className="gdp-title">
           {embedded ? <h3 className="composition-title">{PROFILE_TITLE}</h3> : <h2>{PROFILE_TITLE}</h2>}
           <p className="gdp-sub">
-            {activeMetricDef.sourceNote}; seleccioná un indicador y tocá una provincia para ver su ficha
+            {activeMetricDef.sourceNote} · <RefList ids={[activeMetricDef.refId]} />; seleccioná un indicador y tocá una provincia para ver su ficha
           </p>
         </Reveal>
         <div className="tour-controls">
