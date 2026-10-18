@@ -1,7 +1,10 @@
-import { describe, expect, it } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+// @vitest-environment jsdom
 import React from 'react';
+import { afterEach, describe, expect, it } from 'vitest';
+import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { DevelopmentStep } from '../../src/tour/DevelopmentStep.js';
+
+afterEach(cleanup);
 
 describe('DevelopmentStep', () => {
   it('renders the title and default indicator data', () => {

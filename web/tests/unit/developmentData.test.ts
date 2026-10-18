@@ -6,7 +6,7 @@ import {
   LATAM_HDI_2022,
   PISA_LATAM_MATH_2022
 } from '../../src/tour/developmentData.js';
-import { SLIDES } from '../../src/datasets/slides.js';
+import { slides } from '../../src/datasets/slides.js';
 import { TABLE_META, withMeta } from '../../src/datasets/quality.js';
 
 describe('developmentData', () => {
@@ -60,13 +60,15 @@ describe('developmentData', () => {
   });
 
   it('ensures slide 16 tables are registered with quality metadata', () => {
-    const slide16 = SLIDES.find((s) => s.id === '16');
+    const slideList = slides();
+    const slide16 = slideList.find((s) => s.id === '16');
     expect(slide16).toBeDefined();
 
     for (const table of slide16!.tables) {
       expect(TABLE_META[table.id]).toBeDefined();
       const enriched = withMeta(table);
       expect(enriched.quality).toBeDefined();
+      expect(typeof enriched.source).toBe('string');
       expect(enriched.source.length).toBeGreaterThan(5);
     }
   });
