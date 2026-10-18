@@ -18,5 +18,5 @@
 - **Datos**: Todo dato presentado debe incluir `source` y `retrieved_at`. Ningún mock sin documentar en `docs/mock-data.md`.
 
 ## Next
-- Subir rama `task/data-development-metrics`, verificar CI en GitHub Actions y abrir PR.
-- Proceder con la Fase 2: Incertidumbre tecnológica y costos de IA (Diapositiva 8 / `ForecastUncertaintyStep.tsx`).
+- CI verificado verde en GitHub Actions (`run 39172037778`). Abrir PR de la Fase 1 (`feat(tour): wire official health, education, and inequality metrics to development slide`).
+- Proceder con la Fase 2 del plan: Incertidumbre tecnológica, rezagos de difusión y curvas de costos de IA (Diapositiva 8 / `ForecastUncertaintyStep.tsx`).

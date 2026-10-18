@@ -20,6 +20,7 @@ Order: C8, C7, C2, C3, C4, C5, C1, C6.
   - C1: Potencial de molibdeno: 2,2+ Mt asociado a pórfidos de cobre (informes de Taca Taca, El Pachón, MARA).
   - C1: Taca Taca capex 4.232 M USD inicial (First Quantum NI 43-101 de 2026-02-19).
   - [x] C6: Figures for provincial profile slide (INDEC, Ministerio de Economía, Secretaría de Trabajo, SNIC - series oficiales S1 a S5 incorporadas y enlazadas con RefList).
+  - [ ] Slide 7: Indicadores de desarrollo humano y social (Banco Mundial SP.DYN.LE00.IN, DEIS Min. Salud, PNUD HDR 2024, OCDE PISA 2022, INDEC EPH CBT, SEDLAC Gini, ref W1/D1/S3).
 
 
 ## Task queue (in order)
