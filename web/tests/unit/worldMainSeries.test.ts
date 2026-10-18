@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { FIRST_YEAR, HOME, LAST_YEAR, argentinaReal, gdpPerCapitaAt, mainSeries, rankAt, rankingTable } from '../../src/tour/worldData';
+import { FIRST_YEAR, HOME, LAST_YEAR, argentinaReal, gdpPerCapitaAt, mainSeries, rankAt, rankingTable, regionGrowth } from '../../src/tour/worldData';
 
 describe('mainSeries', () => {
   it('is the real GDP of Argentina for the gdp metric', () => {
@@ -36,6 +36,26 @@ describe('rankAt', () => {
     expect(rankAt('Brasil', 2000.4, 'gdp')).toBe(rankAt('Brasil', 2000, 'gdp'));
     expect(rankAt('Brasil', 2000.6, 'gdp')).toBe(rankAt('Brasil', 2001, 'gdp'));
     expect(rankAt('Narnia', 2025, 'gdp')).toBeNull();
+  });
+});
+
+describe('regionGrowth', () => {
+  it('is the annual growth (%) of the real GDP of Latin America and the Caribbean, World Bank aggregate, one value per year', () => {
+    const g = regionGrowth();
+    expect(g.years[0]).toBe(FIRST_YEAR);
+    expect(g.years.at(-1)).toBe(LAST_YEAR);
+    expect(g.values).toHaveLength(g.years.length);
+    expect(g.source).toContain('Banco Mundial');
+    expect(g.name).toBe('América Latina y el Caribe');
+  });
+
+  it('keeps a missing year as null (no first-year growth) and has plausible rates', () => {
+    const g = regionGrowth();
+    expect(g.values[0]).toBeNull();
+    const rates = g.values.filter((v): v is number => v !== null);
+    expect(rates.length).toBeGreaterThan(60);
+    expect(Math.min(...rates)).toBeGreaterThan(-15);
+    expect(Math.max(...rates)).toBeLessThan(15);
   });
 });
 

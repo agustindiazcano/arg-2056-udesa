@@ -18,7 +18,7 @@ import { SPEEDS } from '../state/reducer.js';
 import { useTimeline } from './useTimeline.js';
 import { WorldTable } from './WorldTable.js';
 import { COMPARE_OPTIONS, DEFAULT_COMPARE, compareSeries, countryColor, flagSrc, isSquashed } from './worldCompare.js';
-import { FIRST_YEAR, HOME, LAST_YEAR, REGION_METRICS, WORLD_SOURCE, WORLD_UNIT, mainSeries, rankAt, regionCountries, regionValuesAt } from './worldData.js';
+import { FIRST_YEAR, HOME, LAST_YEAR, REGION_METRICS, WORLD_SOURCE, WORLD_UNIT, mainSeries, rankAt, regionCountries, regionGrowth, regionValuesAt } from './worldData.js';
 import type { RankMetric, RegionMetric } from './worldData.js';
 
 const VIEWS = [
@@ -40,6 +40,9 @@ const speedFormat = new Intl.NumberFormat('es-AR', { maximumFractionDigits: 2 })
 
 const TITLE = WORLD_TITLE;
 /** What the big chart shows for each metric of the ranking tables: its name, its unit and the label of the series. */
+const GROWTH_HELP =
+  'La línea punteada es el crecimiento anual del PBI real de América Latina y el Caribe (agregado del Banco Mundial, que pondera a cada país por su PBI), medido en % en el eje de la derecha. Se dibuja solo con el PBI y solo en la vista 2D.';
+
 const SCALES = [
   { value: 'linear', label: 'Lineal' },
   { value: 'log', label: 'Logarítmica' }
@@ -78,6 +81,9 @@ export function WorldStep() {
   const [compare, setCompare] = useState<string[]>([...DEFAULT_COMPARE]);
   const [logScale, setLogScale] = useState(false);
   const lines = useMemo(() => compareSeries(compare, mainMetric), [compare, mainMetric]);
+  const growth = useMemo(regionGrowth, []);
+  // the growth of the region is a rate: it is drawn on its own axis, only next to the PBI (not per person) and only in the flat chart
+  const showGrowth = mainMetric === 'gdp';
   const squashed = isSquashed(lines);
   const log = squashed && logScale;
   const toggleCountry = (name: string) => setCompare((cur) => (cur.includes(name) ? cur.filter((c) => c !== name) : [...cur, name]));
@@ -105,9 +111,9 @@ export function WorldStep() {
               tip: { flag: flagSrc(l.country), rank: rankAt(l.country, frame.year, mainMetric) }
             })),
             frame,
-            { unit: MAIN_UNIT, summary, log }
+            { unit: MAIN_UNIT, summary, log, growth: showGrowth ? { name: growth.name, values: growth.values, color: tokens.ink2 } : undefined }
           ),
-    [series, lines, frame, summary, MAIN_UNIT, SERIES_NAME, log, mainMetric]
+    [series, lines, frame, summary, MAIN_UNIT, SERIES_NAME, log, mainMetric, showGrowth, growth]
   );
   // a new object on every run: the 3D chart draws itself again
   const spec = useMemo(
@@ -161,7 +167,7 @@ export function WorldStep() {
         <Reveal k="head" className="gdp-title">
           <div className="slide-title-row">
             <h2>{TITLE}</h2>
-            <ChartHelp title={step0Info.heading} lead={MAIN_UNIT} paragraphs={step0Info.paragraphs} how={step0Info.how} refs={step0Info.refs} />
+            <ChartHelp title={step0Info.heading} lead={MAIN_UNIT} paragraphs={showGrowth ? [...step0Info.paragraphs, GROWTH_HELP] : step0Info.paragraphs} how={step0Info.how} refs={step0Info.refs} />
           </div>
           <p className="gdp-sub">
             {FIRST_YEAR} a {LAST_YEAR} · <span className="gdp-source">{WORLD_SOURCE}</span> · <RefList ids={step0Info.refs} />

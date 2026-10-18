@@ -49,4 +49,26 @@ describe('buildFollowedLines', () => {
     // the line itself carries no label
     expect(s[0]!.label).toBeUndefined();
   });
+
+  it('adds a dashed growth line on a second axis at the right, in %, drawn up to the year reached, with a gap kept as a gap', () => {
+    const growth = { name: 'Región', values: [null, 2, -1, 3] as Array<number | null>, color: 'gold' };
+    const o = buildFollowedLines(years, lines, frame, { unit: 'u', summary: 's', growth }).option;
+    const axes = o.yAxis as unknown as Array<{ position?: string; min: number; max: number; splitLine?: { show: boolean } }>;
+    expect(Array.isArray(axes)).toBe(true);
+    expect(axes).toHaveLength(2);
+    expect(axes[1]!.position).toBe('right');
+    expect(axes[1]!.min).toBeLessThanOrEqual(-1);
+    expect(axes[1]!.max).toBeGreaterThanOrEqual(3);
+    expect(axes[1]!.splitLine?.show).toBe(false);
+    const g = (o.series as Array<{ name: string; yAxisIndex?: number; lineStyle: { type?: string }; data: Array<[number, number | null]> }>).find((x) => x.name === 'Región')!;
+    expect(g.yAxisIndex).toBe(1);
+    expect(g.lineStyle.type).toBe('dashed');
+    expect(g.data.map((d) => d[0])).toEqual([2000, 2001, 2001.5]);
+    expect(g.data[0]![1]).toBeNull();
+  });
+
+  it('keeps the single left axis when there is no growth line', () => {
+    expect(Array.isArray(buildFollowedLines(years, lines, frame, { unit: 'u', summary: 's' }).option.yAxis)).toBe(false);
+  });
 });
+

@@ -1,5 +1,5 @@
 import { tokens } from '../../styles/tokens.js';
-import { formatAxisNumber, formatValue } from '../format.js';
+import { APP_LOCALE, formatAxisNumber, formatValue } from '../format.js';
 import { fade } from './gdp.js';
 
 const LINE = { color: tokens.grid } as const;
@@ -512,7 +512,7 @@ export function buildFollowedLines(
   years: number[],
   lines: FollowedLine[],
   frame: { year: number; xMin: number; xMax: number; yMax: number; visibleCount: number },
-  opts: { unit: string; summary: string; log?: boolean }
+  opts: { unit: string; summary: string; log?: boolean; growth?: { name: string; values: Array<number | null>; color: string } }
 ) {
   const positives = lines.flatMap((l) => l.values).filter((v) => v > 0);
   const logMin = positives.length ? 10 ** Math.floor(Math.log10(Math.min(...positives))) : 1;
@@ -527,6 +527,57 @@ export function buildFollowedLines(
     }
     return pts;
   };
+  // the growth line (a rate in %) has its own axis at the right, from the lowest to the highest rate of the whole period so the axis does not move
+  const g = opts.growth;
+  const rates = g ? g.values.filter((v): v is number => v !== null) : [];
+  const growthMin = rates.length ? Math.floor(Math.min(...rates)) : 0;
+  const growthMax = rates.length ? Math.ceil(Math.max(...rates)) : 1;
+  const growthSeries = g
+    ? (() => {
+        const pts: Array<[number, number | null]> = years.slice(0, frame.visibleCount).map((y, i) => [y, g.values[i] ?? null]);
+        const last = pts.at(-1);
+        const nextValue = g.values[frame.visibleCount];
+        if (last && last[1] !== null && next !== undefined && nextValue !== undefined && nextValue !== null && frame.year > last[0]) {
+          const t = (frame.year - last[0]) / (next - last[0]);
+          pts.push([frame.year, last[1] + (nextValue - last[1]) * t]);
+        }
+        const head = [...pts].reverse().find((p) => p[1] !== null);
+        return [
+          {
+            name: g.name,
+            type: 'line',
+            yAxisIndex: 1,
+            data: pts,
+            symbol: 'none',
+            connectNulls: false,
+            z: 2,
+            lineStyle: { width: 1.5, color: g.color, type: 'dashed', opacity: 0.65 },
+            itemStyle: { color: g.color }
+          },
+          {
+            name: `${g.name} hoy`,
+            type: 'line',
+            yAxisIndex: 1,
+            data: head ? [head] : [],
+            symbol: 'circle',
+            symbolSize: 7,
+            z: 5,
+            silent: true,
+            lineStyle: { opacity: 0 },
+            itemStyle: { color: g.color, borderColor: tokens.ink, borderWidth: 1 },
+            label: {
+              show: head !== undefined,
+              position: 'right',
+              distance: 8,
+              formatter: head ? `Región ${new Intl.NumberFormat(APP_LOCALE, { maximumFractionDigits: 1 }).format(head[1] as number)} %` : '',
+              color: g.color,
+              fontSize: 12,
+              fontWeight: 700
+            }
+          }
+        ];
+      })()
+    : [];
   const series = lines.flatMap((l) => {
     const pts = drawn(l);
     const head = pts.at(-1);
@@ -567,12 +618,33 @@ export function buildFollowedLines(
       }
     ];
   });
+  const levelAxis = {
+    type: opts.log ? 'log' : 'value',
+    min: opts.log ? logMin : 0,
+    max: frame.yMax,
+    splitLine: { lineStyle: LINE },
+    axisLabel: { color: tokens.muted, formatter: (v: number) => formatAxisNumber(v) }
+  };
+  // with the growth line: a second axis at the right in %, in the color of that line, without grid lines
+  const yAxes = g
+    ? [
+        levelAxis,
+        {
+          type: 'value',
+          position: 'right',
+          min: growthMin,
+          max: growthMax,
+          splitLine: { show: false },
+          axisLabel: { color: g.color, formatter: (v: number) => `${v} %` }
+        }
+      ]
+    : levelAxis;
   const option = {
     animation: false,
     backgroundColor: 'transparent',
     tooltip: { show: false },
     // room above the lines for the counter of the year and the flags that sit over the chart
-    grid: { left: 8, right: 36, top: 92, bottom: 8, containLabel: true },
+    grid: { left: 8, right: g ? 86 : 36, top: 92, bottom: 8, containLabel: true },
     xAxis: {
       type: 'value',
       min: frame.xMin,
@@ -583,14 +655,8 @@ export function buildFollowedLines(
       axisLabel: { color: tokens.muted, formatter: (v: number) => String(Math.round(v)) },
       splitLine: { show: false }
     },
-    yAxis: {
-      type: opts.log ? 'log' : 'value',
-      min: opts.log ? logMin : 0,
-      max: frame.yMax,
-      splitLine: { lineStyle: LINE },
-      axisLabel: { color: tokens.muted, formatter: (v: number) => formatAxisNumber(v) }
-    },
-    series
+    yAxis: yAxes,
+    series: [...series, ...growthSeries]
   };
   return { option, summary: opts.summary };
 }

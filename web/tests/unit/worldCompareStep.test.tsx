@@ -56,4 +56,16 @@ describe('slide 1: countries next to Argentina', () => {
     fireEvent.click(flag('Estados Unidos'));
     expect(screen.queryByRole('group', { name: 'Escala' })).toBeNull();
   });
+
+  it('explains the dashed regional growth line in the help of the title, only while the chart shows the PBI', () => {
+    render(<WorldStep />);
+    const help = () => screen.getByRole('button', { name: /Explicación: Dónde estuvo/ });
+    fireEvent.mouseEnter(help());
+    expect(screen.getByRole('tooltip').textContent).toContain('crecimiento anual');
+    fireEvent.mouseLeave(help());
+    fireEvent.click(screen.getByRole('button', { name: 'Ver PBI per cápita real en el gráfico grande' }));
+    fireEvent.mouseEnter(help());
+    expect(screen.getByRole('tooltip').textContent).not.toContain('línea punteada');
+  });
 });
+

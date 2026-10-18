@@ -83,6 +83,20 @@ export function rankAt(country: string, year: number, metric: RankMetric): numbe
   return (metric === 'gdp' ? ranks.gdp : ranks.perCapita)[Math.round(clampYear(year)) - FIRST_YEAR] ?? null;
 }
 
+export interface RegionGrowth {
+  name: string;
+  source: string;
+  years: number[];
+  /** annual growth of the real GDP in %, one per year; null where the World Bank has no value (the first year) */
+  values: Array<number | null>;
+}
+
+/** The annual growth (%) of the real GDP of Latin America and the Caribbean: the World Bank aggregate `LCN` (it weights every country by its GDP). */
+export function regionGrowth(): RegionGrowth {
+  const a = data.regionAggregate;
+  return { name: a.name, source: a.source, years: Array.from({ length: YEAR_COUNT }, (_, i) => FIRST_YEAR + i), values: a.growth as Array<number | null> };
+}
+
 /** The real GDP of a country at a (fractional) year, in billions of 2015 USD (null without data). */
 export function gdpAtYear(country: string, year: number): number | null {
   const c = BY_NAME.get(country);
