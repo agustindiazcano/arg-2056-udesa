@@ -39,8 +39,15 @@ export function layoutLines(spec: Lines3DSpec, opts: LinesOpts): LinesLayout {
   const all: number[] = [];
   for (const s of spec.series) for (const v of s.values) if (v !== null && Number.isFinite(v)) all.push(v);
   if (spec.band) for (const v of [...spec.band.lower, ...spec.band.upper]) if (v !== null && Number.isFinite(v)) all.push(v);
-  const top = all.length === 0 ? 1 : niceCeil(Math.max(...all));
-  const y = (v: number) => (Math.max(v, 0) / top) * maxHeight;
+  const logScale = spec.log === true && all.some((v) => v > 0);
+  const positives = all.filter((v) => v > 0);
+  // on a logarithmic scale the axis runs from the power of ten under the smallest value to the one over the largest
+  const logLo = logScale ? Math.floor(Math.log10(Math.min(...positives))) : 0;
+  const logHi = logScale ? Math.max(logLo + 1, Math.ceil(Math.log10(Math.max(...positives)))) : 0;
+  const top = logScale ? 10 ** logHi : all.length === 0 ? 1 : niceCeil(Math.max(...all));
+  const y = logScale
+    ? (v: number) => ((Math.log10(Math.max(v, 10 ** logLo)) - logLo) / (logHi - logLo)) * maxHeight
+    : (v: number) => (Math.max(v, 0) / top) * maxHeight;
 
   const lanes = spec.series.length;
   const series = spec.series.map((s, i) => ({
@@ -71,7 +78,9 @@ export function layoutLines(spec: Lines3DSpec, opts: LinesOpts): LinesLayout {
     flush();
   }
 
-  const ticks = [0, 1, 2, 3, 4].map((i) => ({ value: (top * i) / 4, height: (maxHeight * i) / 4 }));
+  const ticks = logScale
+    ? Array.from({ length: logHi - logLo + 1 }, (_, i) => ({ value: 10 ** (logLo + i), height: (maxHeight * i) / (logHi - logLo) }))
+    : [0, 1, 2, 3, 4].map((i) => ({ value: (top * i) / 4, height: (maxHeight * i) / 4 }));
   // about five labels along x, always the first and the last
   const every = Math.max(1, Math.ceil((n - 1) / 4));
   const xTicks = spec.xLabels

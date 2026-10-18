@@ -128,26 +128,19 @@ export function ChartStep({ step }: { step: number }) {
             <h2>{def.title}</h2>
             <ChartHelp
               title={info?.heading ?? def.title}
-              paragraphs={info?.paragraphs ?? [def.subtitle]}
+              lead={def.subtitle}
+              paragraphs={info?.paragraphs ?? []}
               how={info?.how}
               refs={info?.refs}
             />
           </div>
-          <p className="gdp-sub">
-            {def.subtitle}
-            {def.source && (
-              <>
-                {' · '}
-                <span className="gdp-source">{def.source}</span>
-              </>
-            )}
-            {info?.refs && info.refs.length > 0 && (
-              <>
-                {' · '}
-                <RefList ids={info.refs} />
-              </>
-            )}
-          </p>
+          {(def.source || (info?.refs && info.refs.length > 0)) && (
+            <p className="gdp-sub">
+              {def.source && <span className="gdp-source">{def.source}</span>}
+              {def.source && info?.refs && info.refs.length > 0 && ' · '}
+              {info?.refs && info.refs.length > 0 && <RefList ids={info.refs} />}
+            </p>
+          )}
           <Legend def={def} />
         </Reveal>
         <div className="tour-controls">

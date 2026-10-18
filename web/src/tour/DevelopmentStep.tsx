@@ -34,6 +34,7 @@ export function DevelopmentStep() {
             <h2>{DEVELOPMENT_TITLE}</h2>
             <ChartHelp
               title={DEVELOPMENT_TITLE}
+              lead="Dimensiones sociales y humanas del desarrollo económico"
               paragraphs={[
                 'El crecimiento del PBI por habitante resume la capacidad productiva agregada, pero el desarrollo humano requiere evaluar también salud, educación y distribución del ingreso.',
                 'Este panel organiza las dimensiones de salud, educación e igualdad bajo estándares comparables internacionalmente.'
@@ -43,7 +44,7 @@ export function DevelopmentStep() {
             />
           </div>
           <p className="gdp-sub">
-            Dimensiones sociales y humanas del desarrollo económico · <RefList ids={['W1', 'W3']} />
+            <RefList ids={['W1', 'W3']} />
           </p>
         </div>
         <span className="draft-status">Métricas de desarrollo</span>

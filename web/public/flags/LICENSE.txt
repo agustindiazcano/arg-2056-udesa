@@ -1,0 +1,4 @@
+flag-icons (https://github.com/lipis/flag-icons), version 7.2.3, MIT License, Copyright (c) 2013 Panayiotis Lipiridis.
+SVG files (4x3) copied from https://cdn.jsdelivr.net/npm/flag-icons@7.2.3/flags/4x3/ on 2026-10-17.
+
+The MIT License (MIT): permission is granted, free of charge, to use, copy, modify, merge, publish, distribute, sublicense and/or sell copies of the software and its files, subject to this notice being included in all copies or substantial portions. The software is provided "as is", without warranty of any kind. Full text: https://github.com/lipis/flag-icons/blob/main/LICENSE

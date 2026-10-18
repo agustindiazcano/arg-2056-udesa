@@ -87,7 +87,7 @@ button.brand {
 
 button.brand:hover .brand-a,
 button.brand:focus-visible .brand-a {
-  color: var(--gold);
+  color: var(--nav-gold);
 }
 
 button.brand:hover .brand-n,
@@ -1097,7 +1097,15 @@ main.scene-container {
   height: 100%;
 }
 
-/* the Gráfico | Tabla switch of the region sits in the top right corner of the card */
+/* the Gráfico | Tabla switch of the region sits in the top right corner of the card (the card, not the chart, is its frame) */
+.prov-bars {
+  position: relative;
+}
+
+.prov-bars > .tour-chart {
+  position: static;
+}
+
 .prov-bars > .tour-chart > .tour-view-switch {
   position: absolute;
   top: var(--space-md);
@@ -1261,6 +1269,28 @@ main.scene-container {
   gap: var(--space-xs);
   min-width: 0;
   min-height: 0;
+}
+
+/* the title of each ranking table is a button: the one pressed is what the big chart shows */
+.world-rank-pick {
+  padding: 0.1rem 0.45rem;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s ease-out, border-color 0.15s ease-out;
+}
+
+.world-rank-pick:hover {
+  background: color-mix(in srgb, var(--blue) 14%, transparent);
+}
+
+.world-rank-pick[aria-pressed='true'] {
+  border-color: color-mix(in srgb, var(--blue) 70%, transparent);
+  background: color-mix(in srgb, var(--blue) 22%, transparent);
 }
 
 .world-rank-head {
@@ -1985,9 +2015,13 @@ main.scene-container {
 }
 
 .prov-bars .tour-caption > strong {
-  flex: 1 1 100%;
-  padding-right: 9rem;
+  flex: 0 1 auto;
   white-space: normal;
+}
+
+.prov-bars .tour-caption {
+  align-items: center;
+  padding-right: 9rem;
 }
 
 .prov-bars .world-metric-pick {
@@ -2646,7 +2680,7 @@ main.scene-container {
 #overlay[data-section] .chrome,
 #overlay[data-scene] .chrome {
   background: linear-gradient(180deg, color-mix(in srgb, var(--intro-bg) 92%, transparent), color-mix(in srgb, var(--intro-black) 96%, transparent));
-  border-bottom: 1px solid color-mix(in srgb, var(--gold) 20%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--nav-gold) 20%, transparent);
   backdrop-filter: blur(16px) saturate(1.15);
 }
 
@@ -2667,25 +2701,25 @@ main.scene-container {
 .chrome .brand-n,
 #overlay .brand-n {
   font-weight: 800;
-  color: var(--gold);
-  background: linear-gradient(135deg, var(--gold-highlight) 0%, var(--gold) 38%, var(--gold-deep) 75%, var(--gold-shadow) 100%);
+  color: var(--nav-gold);
+  background: linear-gradient(135deg, var(--nav-gold-highlight) 0%, var(--nav-gold) 38%, var(--nav-gold-deep) 75%, var(--nav-gold-shadow) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 1px 1px var(--intro-black)) drop-shadow(0 0 10px color-mix(in srgb, var(--gold) 45%, transparent));
+  filter: drop-shadow(0 1px 1px var(--intro-black)) drop-shadow(0 0 10px color-mix(in srgb, var(--nav-gold) 45%, transparent));
   transition: filter 300ms ease;
 }
 
 button.brand:hover .brand-n,
 button.brand:focus-visible .brand-n {
-  background: linear-gradient(135deg, var(--gold-hover-highlight) 0%, color-mix(in srgb, var(--gold) 85%, white) 38%, var(--gold-hover-deep) 75%, var(--gold-hover-shadow) 100%);
+  background: linear-gradient(135deg, var(--nav-gold-hover-highlight) 0%, color-mix(in srgb, var(--nav-gold) 85%, white) 38%, var(--nav-gold-deep) 75%, var(--nav-gold-shadow) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 1px 1px var(--intro-black)) drop-shadow(0 0 16px color-mix(in srgb, var(--gold) 60%, transparent));
+  filter: drop-shadow(0 1px 1px var(--intro-black)) drop-shadow(0 0 16px color-mix(in srgb, var(--nav-gold) 60%, transparent));
 }
 
 button.brand:hover .brand-a,
 button.brand:focus-visible .brand-a {
-  color: color-mix(in srgb, var(--gold) 75%, white);
+  color: color-mix(in srgb, var(--nav-gold) 75%, white);
 }
 
 /* Nav buttons and chips: unified rounded-rectangle shape and refined gold aesthetics */
@@ -2709,10 +2743,10 @@ button.brand:focus-visible .brand-a {
 #overlay[data-section] .chrome .tab:hover,
 #overlay[data-section] .tour-steps .chip:hover:not(:disabled),
 #overlay[data-scene] .chrome .tab:hover {
-  color: var(--gold-highlight);
-  border-color: color-mix(in srgb, var(--gold) 65%, transparent);
-  background: color-mix(in srgb, var(--gold) 14%, var(--intro-bg));
-  box-shadow: 0 4px 16px color-mix(in srgb, var(--intro-black) 35%, transparent), 0 0 12px color-mix(in srgb, var(--gold) 20%, transparent);
+  color: var(--nav-gold-highlight);
+  border-color: color-mix(in srgb, var(--nav-gold) 65%, transparent);
+  background: color-mix(in srgb, var(--nav-gold) 14%, var(--intro-bg));
+  box-shadow: 0 4px 16px color-mix(in srgb, var(--intro-black) 35%, transparent), 0 0 12px color-mix(in srgb, var(--nav-gold) 20%, transparent);
   transform: translateY(-1px);
 }
 
@@ -2721,11 +2755,11 @@ button.brand:focus-visible .brand-a {
 #overlay[data-section] .chrome .tab[aria-selected='true'],
 #overlay[data-section] .tour-steps .chip[aria-pressed='true'],
 #overlay[data-scene] .chrome .tab[aria-selected='true'] {
-  color: var(--gold-highlight);
+  color: var(--nav-gold-highlight);
   font-weight: 600;
-  border-color: color-mix(in srgb, var(--gold) 80%, white 10%);
-  background: linear-gradient(180deg, color-mix(in srgb, var(--gold) 24%, var(--intro-bg)), color-mix(in srgb, var(--gold) 10%, var(--intro-bg)));
-  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--gold-highlight) 35%, transparent), 0 0 18px color-mix(in srgb, var(--gold) 28%, transparent);
+  border-color: color-mix(in srgb, var(--nav-gold) 80%, white 10%);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--nav-gold) 24%, var(--intro-bg)), color-mix(in srgb, var(--nav-gold) 10%, var(--intro-bg)));
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--nav-gold-highlight) 35%, transparent), 0 0 18px color-mix(in srgb, var(--nav-gold) 28%, transparent);
 }
 
 .chrome .tab[aria-selected='true']:hover,
@@ -2734,9 +2768,9 @@ button.brand:focus-visible .brand-a {
 #overlay[data-section] .tour-steps .chip[aria-pressed='true']:hover,
 #overlay[data-scene] .chrome .tab[aria-selected='true']:hover {
   color: var(--intro-white);
-  border-color: var(--gold-highlight);
-  background: linear-gradient(180deg, color-mix(in srgb, var(--gold) 30%, var(--intro-bg)), color-mix(in srgb, var(--gold) 14%, var(--intro-bg)));
-  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--intro-white) 40%, transparent), 0 0 22px color-mix(in srgb, var(--gold) 38%, transparent);
+  border-color: var(--nav-gold-highlight);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--nav-gold) 30%, var(--intro-bg)), color-mix(in srgb, var(--nav-gold) 14%, var(--intro-bg)));
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--intro-white) 40%, transparent), 0 0 22px color-mix(in srgb, var(--nav-gold) 38%, transparent);
   transform: translateY(-1px);
 }
 
@@ -2758,19 +2792,19 @@ button.brand:focus-visible .brand-a {
 }
 
 .chrome .header-end .data-button:hover {
-  color: var(--gold-highlight);
-  border-color: color-mix(in srgb, var(--gold) 65%, transparent);
-  background: color-mix(in srgb, var(--gold) 14%, var(--intro-bg));
-  box-shadow: 0 4px 16px color-mix(in srgb, var(--intro-black) 35%, transparent), 0 0 12px color-mix(in srgb, var(--gold) 20%, transparent);
+  color: var(--nav-gold-highlight);
+  border-color: color-mix(in srgb, var(--nav-gold) 65%, transparent);
+  background: color-mix(in srgb, var(--nav-gold) 14%, var(--intro-bg));
+  box-shadow: 0 4px 16px color-mix(in srgb, var(--intro-black) 35%, transparent), 0 0 12px color-mix(in srgb, var(--nav-gold) 20%, transparent);
   transform: translateY(-1px);
 }
 
 .chrome .header-end .data-button[aria-pressed='true'] {
-  color: var(--gold-highlight);
+  color: var(--nav-gold-highlight);
   font-weight: 600;
-  border-color: color-mix(in srgb, var(--gold) 80%, white 10%);
-  background: linear-gradient(180deg, color-mix(in srgb, var(--gold) 24%, var(--intro-bg)), color-mix(in srgb, var(--gold) 10%, var(--intro-bg)));
-  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--gold-highlight) 35%, transparent), 0 0 18px color-mix(in srgb, var(--gold) 28%, transparent);
+  border-color: color-mix(in srgb, var(--nav-gold) 80%, white 10%);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--nav-gold) 24%, var(--intro-bg)), color-mix(in srgb, var(--nav-gold) 10%, var(--intro-bg)));
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--nav-gold-highlight) 35%, transparent), 0 0 18px color-mix(in srgb, var(--nav-gold) 28%, transparent);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -3260,6 +3294,13 @@ button.brand:focus-visible .brand-a {
   font-weight: 600;
 }
 
+/* the clarifying line (unit, what is measured) is the first one read */
+.chart-help-lead {
+  margin: 0;
+  color: var(--sky-2);
+  font-weight: 500;
+}
+
 .chart-help-tooltip-p {
   margin: 0;
   color: var(--ink-2);
@@ -3363,3 +3404,210 @@ button.brand:focus-visible .brand-a {
   font-size: 0.82rem;
 }
 
+
+/* ---- the dropdown menu of «Hacia el 2056»: the list of slides, slide 0 (the index) first -------------------------- */
+
+.tour-menu {
+  position: relative;
+  display: inline-flex;
+}
+
+.tour-menu > .tab {
+  gap: 0.4em;
+}
+
+.tour-menu-chevron {
+  width: 0.8em;
+  height: 0.8em;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform 0.2s ease-out;
+}
+
+.tour-menu > .tab[aria-expanded='true'] .tour-menu-chevron {
+  transform: rotate(180deg);
+}
+
+/* the list hangs right under the tab (no gap to cross with the pointer) */
+.tour-menu-list {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 40;
+  min-width: 17rem;
+  max-width: min(26rem, 90vw);
+  margin: 0;
+  padding: var(--space-xs);
+  list-style: none;
+  background: var(--intro-bg);
+  border: 1px solid color-mix(in srgb, var(--intro-light) 45%, transparent);
+  border-radius: var(--radius-md);
+  box-shadow: 0 12px 32px color-mix(in srgb, var(--intro-black) 55%, transparent);
+  backdrop-filter: blur(14px);
+  pointer-events: auto;
+}
+
+.tour-menu-item {
+  display: block;
+  width: 100%;
+  padding: var(--space-xs) var(--space-sm);
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--intro-ink);
+  font: inherit;
+  font-size: var(--font-sm);
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.15s ease-out, color 0.15s ease-out;
+}
+
+.tour-menu-item:hover,
+.tour-menu-item:focus-visible {
+  color: var(--intro-white);
+  background: color-mix(in srgb, var(--intro-light) 22%, transparent);
+}
+
+.tour-menu-item[aria-current='step'] {
+  color: var(--intro-light);
+  font-weight: 600;
+  border-color: color-mix(in srgb, var(--intro-light) 55%, transparent);
+}
+
+/* ---- hover on the logo of the navbar: «Argentina» turns gold, «2056» turns white (a wipe from the left) and an underline grows, all eased ---- */
+#overlay .chrome button.brand {
+  position: relative;
+}
+
+#overlay .chrome button.brand::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -4px;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--nav-gold-highlight), var(--nav-gold));
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.5s ease-in-out;
+}
+
+#overlay .chrome button.brand:hover::after,
+#overlay .chrome button.brand:focus-visible::after {
+  transform: scaleX(1);
+}
+
+#overlay .chrome button.brand .brand-a {
+  transition: color 0.5s ease-in-out;
+}
+
+#overlay .chrome button.brand:hover .brand-a,
+#overlay .chrome button.brand:focus-visible .brand-a {
+  color: var(--nav-gold);
+}
+
+/* the white sits over the gold gradient and grows from the left: a gradient cannot be eased, its size can */
+#overlay .chrome button.brand .brand-n {
+  background:
+    linear-gradient(var(--intro-white), var(--intro-white)) no-repeat 0 0 / 0% 100%,
+    linear-gradient(135deg, var(--nav-gold-highlight) 0%, var(--nav-gold) 38%, var(--nav-gold-deep) 75%, var(--nav-gold-shadow) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  transition: background-size 0.6s ease-in-out, filter 0.5s ease-in-out;
+}
+
+#overlay .chrome button.brand:hover .brand-n,
+#overlay .chrome button.brand:focus-visible .brand-n {
+  background-size: 100% 100%, auto;
+}
+
+/* ---- slide 1: the flags that choose the countries next to Argentina, and the scale switch ----------------------------- */
+.world-compare {
+  position: absolute;
+  top: 2.9rem;
+  left: var(--space-md);
+  z-index: 3;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-xs);
+  max-width: 62%;
+  pointer-events: auto;
+}
+
+.world-flag {
+  position: relative;
+  display: inline-flex;
+  padding: 3px;
+  border: 2px solid transparent;
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--intro-bg) 80%, transparent);
+  opacity: 0.5;
+  cursor: pointer;
+  transition: opacity 0.15s ease-out, border-color 0.15s ease-out;
+}
+
+.world-flag img {
+  display: block;
+  border-radius: 2px;
+}
+
+.world-flag:hover,
+.world-flag[aria-pressed='true'] {
+  opacity: 1;
+}
+
+.world-flag[aria-pressed='true'] {
+  border-color: var(--line);
+}
+
+.world-flag--home {
+  cursor: default;
+  opacity: 1;
+  border-color: var(--ink);
+}
+
+/* the name of the country, in our own tooltip (no native title) */
+.world-flag::after {
+  content: attr(data-name);
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 50%;
+  z-index: 5;
+  padding: 0.15rem 0.45rem;
+  border-radius: var(--radius-sm);
+  background: var(--intro-bg);
+  color: var(--ink);
+  font-size: 0.75rem;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(-50%);
+  transition: opacity 0.12s ease-out;
+}
+
+.world-flag:hover::after,
+.world-flag:focus-visible::after {
+  opacity: 1;
+}
+
+.world-scale {
+  display: inline-flex;
+  flex-basis: 100%;
+  align-items: center;
+  gap: var(--space-xs);
+  margin-top: 1.2rem; /* room for the name of a flag under it */
+}
+
+/* the counter of the year keeps to the right, in at most two lines, so it does not run under the flags */
+.gdp-chart:has(> .world-compare) > .world-year span {
+  display: block;
+  max-width: 15rem;
+  margin-left: auto;
+  text-align: right;
+}

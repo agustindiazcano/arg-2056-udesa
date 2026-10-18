@@ -9,6 +9,7 @@
     "src/three/Chart3D.tsx": 409600,
     "src/three/ProjectionScenes.tsx": 409600,
     "src/tour/TourStep.tsx": 368640,
+    "src/tour/Simulator.tsx": 294912,
     "src/scenes/andes/MapLibreRenderer.tsx": 516096
   }
 }

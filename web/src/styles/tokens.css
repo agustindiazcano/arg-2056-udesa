@@ -80,6 +80,12 @@
   --gold-hover-highlight: #fff2d6;
   --gold-hover-deep: #c48c28;
   --gold-hover-shadow: #945f10;
+  /* The gold of the navbar and of the provinces lit all at once in the intro, and its shades (human choice of 2026-10-17: warm metallic gold) */
+  --nav-gold: #cfa968; /* warm champagne gold: less yellow than --gold and than #c9a24a (read as mustard) */
+  --nav-gold-highlight: color-mix(in srgb, var(--nav-gold) 55%, var(--intro-white));
+  --nav-gold-hover-highlight: color-mix(in srgb, var(--nav-gold) 35%, var(--intro-white));
+  --nav-gold-deep: #8c6a35;
+  --nav-gold-shadow: color-mix(in srgb, var(--nav-gold-deep) 55%, var(--intro-black));
   --intro-on-light: #14080a;
   --intro-line-tint: #aab6e8;
   --intro-grid: rgba(170, 182, 232, 0.24);
