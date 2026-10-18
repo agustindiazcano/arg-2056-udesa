@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 // @vitest-environment jsdom
 import React from 'react';
 import { describe, it, expect, afterEach, vi } from 'vitest';
-import { render, screen, cleanup, fireEvent } from '@testing-library/react';
+import { act, render, screen, cleanup, fireEvent } from '@testing-library/react';
 import { SHOW_DASHBOARD_KEY } from '../../src/content/sectionLabels';
 import { Intro } from '../../src/intro/Intro';
 import { Root } from '../../src/app/Root';
@@ -231,5 +231,27 @@ describe('Root', () => {
     window.localStorage.setItem('arg2056.skipIntro', '1');
     render(<Root />);
     expect(screen.getByText(/app view/)).toBeTruthy();
+  });
+
+  it('while the flat map loads, the provinces light up one by one and every one is lit when the map tilts', () => {
+    vi.useFakeTimers();
+    try {
+      render(<Intro onStart={() => {}} />);
+      const all = () => Array.from(document.querySelectorAll('.intro-prov'));
+      expect(all().filter((p) => p.classList.contains('lit'))).toHaveLength(0);
+      act(() => {
+        vi.advanceTimersByTime(800);
+      });
+      const half = all().filter((p) => p.classList.contains('lit')).length;
+      expect(half).toBeGreaterThan(0);
+      expect(half).toBeLessThan(all().length);
+      act(() => {
+        vi.advanceTimersByTime(1500);
+      });
+      expect(document.querySelector('.intro')!.getAttribute('data-tilted')).toBe('true');
+      expect(all().filter((p) => p.classList.contains('lit'))).toHaveLength(all().length);
+    } finally {
+      vi.useRealTimers();
+    }
   });
 });

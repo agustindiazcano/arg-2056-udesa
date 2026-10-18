@@ -8,6 +8,7 @@
   3. **Tests unitarios alineados**: actualizado `web/tests/unit/provinceProfile.test.ts` para verificar la serie oficial y los metadatos de fuentes (`source`, `refId`, `retrievedAt`, `sourceUrl`).
 
 - **Slide 1 (`docs/action-plan-slide1-visual.md`)**: PR #130 (`task/help-lead-text`, que ya incluye el #131): línea `lead` celeste en el `?` de `ChartHelp` y unidades en el `?`, tablas clickeables, banderas para comparar países, escala logarítmica condicional, bandera y puesto en las puntas, crecimiento de la región y el mismo criterio en las otras slides.
+- **Nav, dorado e intro** (PR #133, `task/intro-load-lights`): dorado champagne único (`--nav-gold*`), hover animado del logo y carga del intro con todas las provincias iluminadas al final.
 
 ## Reglas operativas vigentes
 - **RULE #1**: Tests corren exclusivamente en CI (GitHub Actions), nunca localmente.
