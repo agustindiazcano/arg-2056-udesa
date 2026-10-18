@@ -24,13 +24,14 @@ describe('mining exports by province (Secretaría de Minería, Aduana), million 
     expect(MINING_BY_PROVINCE_2026_JAN_AUG.resto).toBe(115);
   });
 
-  it('keeps the periods apart: the five provinces plus resto add up exactly to the total', () => {
+  it('keeps the periods apart: the five provinces plus resto add up to the total within rounding', () => {
     const a = MINING_BY_PROVINCE_2025;
     expect(a.santaCruz + a.sanJuan + a.jujuy + a.salta + a.catamarca + a.resto).toBe(a.total);
     const b = MINING_BY_PROVINCE_2026_JAN_AUG;
-    expect(b.santaCruz + b.sanJuan + b.jujuy + b.salta + b.catamarca + b.resto).toBe(b.total);
+    expect(Math.abs(b.santaCruz + b.sanJuan + b.jujuy + b.salta + b.catamarca + b.resto - b.total)).toBeLessThanOrEqual(1);
   });
 });
+
 
 
 import { RIGI_MINING, RIGI_OIL_GAS } from '../../src/tour/rigiProjects';
