@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { FIRST_YEAR, HOME, LAST_YEAR, argentinaReal, gdpPerCapitaAt, mainSeries } from '../../src/tour/worldData';
+import { FIRST_YEAR, HOME, LAST_YEAR, argentinaReal, gdpPerCapitaAt, mainSeries, rankAt, rankingTable } from '../../src/tour/worldData';
 
 describe('mainSeries', () => {
   it('is the real GDP of Argentina for the gdp metric', () => {
@@ -20,3 +20,22 @@ describe('mainSeries', () => {
     expect(s.values.some((v) => Number.isNaN(v))).toBe(false);
   });
 });
+
+describe('rankAt', () => {
+  it('is the place among every country of the World Bank in the year, for Argentina the one of the ranking table', () => {
+    for (const metric of ['gdp', 'percapita'] as const) {
+      for (const year of [1960, 1990, 2025]) {
+        expect(rankAt(HOME, year, metric), `${metric} ${year}`).toBe(rankingTable(year, metric, 1).home.rank);
+      }
+    }
+  });
+
+  it('knows the largest economy and a small one, rounds a fractional year and has no place for an unknown country', () => {
+    expect(rankAt('Estados Unidos', 2025, 'gdp')).toBe(1);
+    expect(rankAt('Uruguay', 2025, 'gdp')).toBeGreaterThan(50);
+    expect(rankAt('Brasil', 2000.4, 'gdp')).toBe(rankAt('Brasil', 2000, 'gdp'));
+    expect(rankAt('Brasil', 2000.6, 'gdp')).toBe(rankAt('Brasil', 2001, 'gdp'));
+    expect(rankAt('Narnia', 2025, 'gdp')).toBeNull();
+  });
+});
+

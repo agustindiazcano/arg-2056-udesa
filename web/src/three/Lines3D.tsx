@@ -33,7 +33,7 @@ import { QUALITY_PRESETS } from '../runtime/capabilities';
 import { useReducedMotion } from '../runtime/useReducedMotion';
 import { tokens } from '../styles/tokens';
 import { createFloor } from './floor';
-import { textSprite } from './labels';
+import { flagRankSprite, textSprite } from './labels';
 import { fitRadius, openingAngles } from '../charts3d/camera';
 import { FOLLOW_TOTAL_MS, followFrame, lerp } from '../charts3d/followAnim';
 import { createStage } from './stage';
@@ -250,7 +250,7 @@ export function Lines3D({ spec }: { spec: Lines3DSpec }) {
           dot.position.set(end.x, end.y, lane.z);
           grow.add(dot);
         }
-        const name = textSprite(s.name, s.tone === 'muted' ? tokens.ink2 : tokens.ink, 0.34, s.tone !== 'muted');
+        const name = s.tip ? flagRankSprite(s.tip.flag, s.tip.rank, tokens.ink, 0.42) : textSprite(s.name, s.tone === 'muted' ? tokens.ink2 : tokens.ink, 0.34, s.tone !== 'muted');
         name.position.set(end.x + 0.7, end.y + 0.25, lane.z);
         scene.add(name);
         if (follow) hiddenUntilDone.push(name);

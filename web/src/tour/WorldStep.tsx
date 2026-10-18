@@ -18,7 +18,7 @@ import { SPEEDS } from '../state/reducer.js';
 import { useTimeline } from './useTimeline.js';
 import { WorldTable } from './WorldTable.js';
 import { COMPARE_OPTIONS, DEFAULT_COMPARE, compareSeries, countryColor, flagSrc, isSquashed } from './worldCompare.js';
-import { FIRST_YEAR, HOME, LAST_YEAR, REGION_METRICS, WORLD_SOURCE, WORLD_UNIT, mainSeries, regionCountries, regionValuesAt } from './worldData.js';
+import { FIRST_YEAR, HOME, LAST_YEAR, REGION_METRICS, WORLD_SOURCE, WORLD_UNIT, mainSeries, rankAt, regionCountries, regionValuesAt } from './worldData.js';
 import type { RankMetric, RegionMetric } from './worldData.js';
 
 const VIEWS = [
@@ -93,14 +93,21 @@ export function WorldStep() {
   const flat = useMemo(
     () =>
       lines.length === 1
-        ? buildFollowedSeries(series.years, series.values, frame, { unit: MAIN_UNIT, name: SERIES_NAME, summary })
+        ? buildFollowedSeries(series.years, series.values, frame, { unit: MAIN_UNIT, name: SERIES_NAME, summary, tip: { flag: flagSrc(HOME), rank: rankAt(HOME, frame.year, mainMetric) } })
         : buildFollowedLines(
             series.years,
-            lines.map((l) => ({ name: l.country, values: l.values, color: countryColor(l.country), main: l.country === HOME })),
+            lines.map((l) => ({
+              name: l.country,
+              values: l.values,
+              color: countryColor(l.country),
+              main: l.country === HOME,
+              // at the tip of each line: the flag and the place in the ranking of the year the line has reached
+              tip: { flag: flagSrc(l.country), rank: rankAt(l.country, frame.year, mainMetric) }
+            })),
             frame,
             { unit: MAIN_UNIT, summary, log }
           ),
-    [series, lines, frame, summary, MAIN_UNIT, SERIES_NAME, log]
+    [series, lines, frame, summary, MAIN_UNIT, SERIES_NAME, log, mainMetric]
   );
   // a new object on every run: the 3D chart draws itself again
   const spec = useMemo(
@@ -109,12 +116,16 @@ export function WorldStep() {
         title: SERIES_NAME,
         unit: MAIN_UNIT,
         xLabels: series.years.map(String),
-        series: lines.map((l) => (l.country === HOME ? { name: SERIES_NAME, values: l.values, tone: 'highlight' as const } : { name: l.country, values: l.values, tone: 'muted' as const, color: countryColor(l.country) })),
+        series: lines.map((l) => {
+          // the 3D label shows the flag and the place of the last year, where the line ends
+          const tip = { flag: flagSrc(l.country), rank: rankAt(l.country, LAST_YEAR, mainMetric) };
+          return l.country === HOME ? { name: SERIES_NAME, values: l.values, tone: 'highlight' as const, tip } : { name: l.country, values: l.values, tone: 'muted' as const, color: countryColor(l.country), tip };
+        }),
         follow: true,
         log,
         summary
       }),
-    [series, lines, summary, MAIN_UNIT, SERIES_NAME, log]
+    [series, lines, summary, MAIN_UNIT, SERIES_NAME, log, mainMetric]
   );
   const lineSpec = useMemo(() => ({ ...spec, clock }), [spec, clock]);
 

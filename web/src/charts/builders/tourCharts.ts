@@ -422,7 +422,7 @@ export function buildFollowedSeries(
   years: number[],
   values: number[],
   frame: { year: number; xMin: number; xMax: number; yMax: number; visibleCount: number },
-  opts: { unit: string; name: string; summary: string }
+  opts: { unit: string; name: string; summary: string; tip?: { flag: string; rank: number | null } }
 ) {
   const drawn: Array<[number, number]> = years.slice(0, frame.visibleCount).map((y, i) => [y, values[i]!]);
   const last = drawn.at(-1);
@@ -476,7 +476,18 @@ export function buildFollowedSeries(
         z: 4,
         silent: true,
         lineStyle: { opacity: 0 },
-        itemStyle: { color: tokens.blue, borderColor: tokens.ink, borderWidth: 2, shadowBlur: 14, shadowColor: 'rgba(57,135,229,0.7)' }
+        itemStyle: { color: tokens.blue, borderColor: tokens.ink, borderWidth: 2, shadowBlur: 14, shadowColor: 'rgba(57,135,229,0.7)' },
+        ...(opts.tip
+          ? {
+              label: {
+                show: true,
+                position: 'right',
+                distance: 8,
+                formatter: opts.tip.rank === null ? '{f|}' : `{f|} {r|${opts.tip.rank}}`,
+                rich: { f: { width: 22, height: 16, backgroundColor: { image: opts.tip.flag } }, r: { color: tokens.ink, fontSize: 13, fontWeight: 700 } }
+              }
+            }
+          : {})
       }
     ]
   };
@@ -489,6 +500,8 @@ export interface FollowedLine {
   color: string;
   /** the line of the home country: thicker */
   main?: boolean;
+  /** at the tip of the line: the flag (an image) and the place in the ranking, instead of the name */
+  tip?: { flag: string; rank: number | null };
 }
 
 /**
@@ -536,7 +549,21 @@ export function buildFollowedLines(
         z: 5,
         silent: true,
         lineStyle: { opacity: 0 },
-        itemStyle: { color: l.color, borderColor: tokens.ink, borderWidth: l.main ? 2 : 1 }
+        itemStyle: { color: l.color, borderColor: tokens.ink, borderWidth: l.main ? 2 : 1 },
+        ...(l.tip
+          ? {
+              label: {
+                show: true,
+                position: 'right',
+                distance: 8,
+                formatter: l.tip.rank === null ? '{f|}' : `{f|} {r|${l.tip.rank}}`,
+                rich: {
+                  f: { width: 22, height: 16, backgroundColor: { image: l.tip.flag } },
+                  r: { color: tokens.ink, fontSize: 13, fontWeight: 700 }
+                }
+              }
+            }
+          : {})
       }
     ];
   });
@@ -544,7 +571,8 @@ export function buildFollowedLines(
     animation: false,
     backgroundColor: 'transparent',
     tooltip: { show: false },
-    grid: { left: 8, right: 28, top: 24, bottom: 8, containLabel: true },
+    // room above the lines for the counter of the year and the flags that sit over the chart
+    grid: { left: 8, right: 36, top: 92, bottom: 8, containLabel: true },
     xAxis: {
       type: 'value',
       min: frame.xMin,

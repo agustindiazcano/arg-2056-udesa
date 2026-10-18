@@ -30,4 +30,23 @@ describe('buildFollowedLines', () => {
     const s = buildFollowedLines(years, lines, frame, { unit: 'u', summary: 's' }).option.series as Array<{ lineStyle: { width: number } }>;
     expect(s[0]!.lineStyle.width).toBeGreaterThan(s[2]!.lineStyle.width);
   });
+
+  it('puts the flag and the place at the tip of a line, and not its name', () => {
+    const tipped = [
+      { ...lines[0]!, tip: { flag: '/flags/ar.svg', rank: 22 } },
+      { ...lines[1]!, tip: { flag: '/flags/br.svg', rank: null } }
+    ];
+    const s = buildFollowedLines(years, tipped, frame, { unit: 'u', summary: 's' }).option.series as Array<{
+      label?: { show: boolean; formatter: string; rich: Record<string, { backgroundColor?: { image: string } }> };
+    }>;
+    const head = s[1]!.label!;
+    expect(head.show).toBe(true);
+    expect(head.formatter).toContain('22');
+    expect(head.formatter).not.toContain('Argentina');
+    expect(head.rich.f!.backgroundColor!.image).toBe('/flags/ar.svg');
+    // without a place only the flag
+    expect(s[3]!.label!.formatter).not.toMatch(/\d/);
+    // the line itself carries no label
+    expect(s[0]!.label).toBeUndefined();
+  });
 });

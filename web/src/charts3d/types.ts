@@ -67,6 +67,8 @@ export interface Line3D {
   color?: string;
   /** drawn as a dashed line (a projection) */
   dashed?: boolean;
+  /** at the end of the line: the flag (an image) and the place in the ranking, instead of the name */
+  tip?: { flag: string; rank: number | null };
 }
 
 /** A line chart in space: each series is a wall in its own lane, the band a translucent wall. */
