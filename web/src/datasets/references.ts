@@ -96,5 +96,8 @@ export const REFERENCES: readonly Reference[] = [
   { id: 'D2', group: 'Educación', status: 'leída', label: 'OCDE, Resultados PISA (2012, 2018, 2022): puntajes en lectura, matemática y ciencias para Argentina y la región', url: 'https://www.oecd.org/pisa/' },
   { id: 'D3', group: 'Inteligencia artificial', status: 'leída', label: 'Stanford HAI, Artificial Intelligence Index Report 2024: costos de entrenamiento, cómputo y eficiencia de inferencia', url: 'https://aiindex.stanford.edu/report/' },
   { id: 'D4', group: 'Población', status: 'leída', label: 'INDEC, Censo Nacional de Población, Hogares y Viviendas 2022: resultados definitivos por provincia (45.892.285 hab.)', url: 'https://www.indec.gob.ar/indec/web/Nivel4-Tema-2-41-165' },
-  { id: 'D5', group: 'Economía', status: 'leída', label: 'INDEC, Origen provincial de las exportaciones (OPEX): informes técnicos 2023 y 2024 por provincia y grandes rubros', url: 'https://www.indec.gob.ar/indec/web/Nivel4-Tema-3-2-40' }
+  { id: 'D5', group: 'Economía', status: 'leída', label: 'INDEC, Origen provincial de las exportaciones (OPEX): informes técnicos 2023 y 2024 por provincia y grandes rubros', url: 'https://www.indec.gob.ar/indec/web/Nivel4-Tema-3-2-40' },
+  { id: 'E12', group: 'Agro', status: 'leída', label: 'SAGyP (Secretaría de Agricultura, Ganadería y Pesca), Estimaciones agrícolas por cultivo y provincia (campaña 2024/25, datos.gob.ar)', url: 'https://datos.magyp.gob.ar/dataset/estimaciones-agricolas' },
+  { id: 'E13', group: 'Minería', status: 'leída', label: 'Secretaría de Minería, Origen provincial de las exportaciones mineras (informe 2026.01, acumulado 12 meses 2025; desglose NOA: Catamarca USD 351 M, Salta USD 498 M, Jujuy USD 953 M)', url: 'https://www.argentina.gob.ar/sites/default/files/2026.01_origen_provincial_de_las_exportaciones_mineras.pdf' }
 ];
+

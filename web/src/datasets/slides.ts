@@ -226,10 +226,21 @@ const servicesTables = (): DataTable[] => [
 
 const miningByProvinceTable = (): DataTable => ({
   id: 'mining-provinces',
-  title: 'Exportaciones mineras por provincia (millones de USD FOB; el informe junta Catamarca, Jujuy y Salta como NOA y solo rotula Jujuy en 2026)',
-  columns: ['Período', 'Total', 'Santa Cruz', 'San Juan', 'Jujuy', 'NOA (Catamarca, Jujuy y Salta)'],
-  rows: [MINING_BY_PROVINCE_2025, MINING_BY_PROVINCE_2026_JAN_AUG].map((r) => [r.period, r.total, r.santaCruz, r.sanJuan, r.jujuy, r.noa])
+  title: 'Exportaciones mineras por provincia (millones de USD FOB; Secretaría de Minería con base Aduana)',
+  columns: ['Período', 'Total', 'Santa Cruz', 'San Juan', 'Jujuy', 'Salta', 'Catamarca', 'NOA total', 'Resto'],
+  rows: [MINING_BY_PROVINCE_2025, MINING_BY_PROVINCE_2026_JAN_AUG].map((r) => [
+    r.period,
+    r.total,
+    r.santaCruz,
+    r.sanJuan,
+    r.jujuy,
+    r.salta,
+    r.catamarca,
+    r.noa,
+    r.resto
+  ])
 });
+
 
 const miningTables = (): DataTable[] => [
   miningByProvinceTable(),
