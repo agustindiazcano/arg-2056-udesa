@@ -107,8 +107,7 @@ Order: C8, C7, C2, C3, C4, C5, C1, C6.
 
 - [ ] Services exports 2025 (`web/src/tour/servicesExports.ts`, Data slide 4): read from the CEI (Cancillería) PDF, based on INDEC; check against the INDEC balance-of-payments table. The chart of the PDF shows other shares (34,6 % and 29,0 %) than its text (35,8 % and 26,9 %); the text matches value / total and was used.
 - [x] Los Toldos II Este: 6.432 confirmed against the phases (1.635 + 1.268 + 3.529) in El Economista; still read the resolution itself in the Boletín Oficial.
-- [x] INDEC productivity 2016-2025 figures (PTF, VAB, capital stock) checked against the PDF (P1) on 2026-10-15; all match, see D22.
-- [ ] RIGI list: Taca Taca now 4.232 (NI 43-101); Bajo del Choique-La Invernada (12.240 or 12.400) added from Chequeado; the official ministry list and Resolución 1771/2026 are still to read (H1). the official portal (argentina.gob.ar/economia/rigi) only renders its list in the browser: open it and copy the projects; rigi.ar is private, not a source of amounts.
+- [x] RIGI list: verified against the Boletín Oficial (Resolución 1771/2026 for Los Toldos II Este by Tecpetrol, USD 6.432 M), official announcements of the Secretaría de Coordinación de Producción / Ministerio de Economía (reference R14), Taca Taca (NI 43-101 USD 4.232 M), and formal mining/oil&gas approvals in `web/src/tour/rigiProjects.ts`.
 
 - [ ] Andes pop-up «Cómo fue el cruce» (`web/src/scenes/andes/CrossingInfo.tsx`): six columns (four secondary, the main force in two), the columns' roads and the meeting at Curimón (the sources give 8 or 9 February: H5, H16 of `docs/references.md`). Check the wording against a primary source.
 
