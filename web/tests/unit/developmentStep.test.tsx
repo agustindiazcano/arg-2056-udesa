@@ -13,8 +13,8 @@ describe('DevelopmentStep', () => {
     // Check title and head
     expect(screen.getByRole('heading', { level: 2, name: /Indicadores de desarrollo/i })).toBeDefined();
 
-    // Check default indicator (Esperanza de vida al nacer)
-    expect(screen.getByText(/Esperanza de vida al nacer/i)).toBeDefined();
+    // Check default indicator (Esperanza de vida al nacer) appears in buttons and header
+    expect(screen.getAllByText(/Esperanza de vida al nacer/i).length).toBeGreaterThanOrEqual(1);
 
     // Check tabs
     expect(screen.getByRole('button', { name: 'Salud' })).toBeDefined();
@@ -42,7 +42,7 @@ describe('DevelopmentStep', () => {
     fireEvent.click(educacionBtn);
 
     expect(educacionBtn.getAttribute('aria-pressed')).toBe('true');
-    expect(screen.getByText(/Resultados PISA/i)).toBeDefined();
-    expect(screen.getByText(/Años de escolaridad/i)).toBeDefined();
+    expect(screen.getAllByText(/Resultados PISA/i).length).toBeGreaterThanOrEqual(1);
+    expect(screen.getAllByText(/Años de escolaridad/i).length).toBeGreaterThanOrEqual(1);
   });
 });
