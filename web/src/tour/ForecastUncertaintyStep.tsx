@@ -43,6 +43,7 @@ export function ForecastUncertaintyStep() {
             <h2>{FORECAST_UNCERTAINTY_TITLE}</h2>
             <ChartHelp
               title={FORECAST_UNCERTAINTY_TITLE}
+              lead="Una proyección orienta; no promete lo que ocurrirá"
               paragraphs={[
                 'Las proyecciones económicas a largo plazo dependen de supuestos sobre adopción tecnológica, costos de cómputo, marcos regulatorios y complementariedad con el empleo.',
                 'El abanico conceptual ilustra cómo la incertidumbre se amplía a medida que se extiende el horizonte temporal y por qué los escenarios deben leerse como rangos condicionales.'
@@ -52,7 +53,7 @@ export function ForecastUncertaintyStep() {
             />
           </div>
           <p className="gdp-sub">
-            Una proyección orienta; no promete lo que ocurrirá · <RefList ids={['A1', 'A5', 'F1']} />
+            <RefList ids={['A1', 'A5', 'F1']} />
           </p>
         </div>
         <span className="draft-status">Esquema conceptual</span>
