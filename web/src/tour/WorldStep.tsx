@@ -123,8 +123,8 @@ export function WorldStep() {
         unit: MAIN_UNIT,
         xLabels: series.years.map(String),
         series: lines.map((l) => {
-          // the 3D label shows the flag and the place of the last year, where the line ends
-          const tip = { flag: flagSrc(l.country), rank: rankAt(l.country, LAST_YEAR, mainMetric) };
+          // the 3D label travels with the head of the line and shows the place of the year it has reached
+          const tip = { flag: flagSrc(l.country), rank: rankAt(l.country, LAST_YEAR, mainMetric), ranks: series.years.map((y) => rankAt(l.country, y, mainMetric)) };
           return l.country === HOME ? { name: SERIES_NAME, values: l.values, tone: 'highlight' as const, tip } : { name: l.country, values: l.values, tone: 'muted' as const, color: countryColor(l.country), tip };
         }),
         follow: true,

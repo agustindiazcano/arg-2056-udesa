@@ -68,7 +68,12 @@ export interface Line3D {
   /** drawn as a dashed line (a projection) */
   dashed?: boolean;
   /** at the end of the line: the flag (an image) and the place in the ranking, instead of the name */
-  tip?: { flag: string; rank: number | null };
+  tip?: {
+    flag: string;
+    rank: number | null;
+    /** with `follow`: the place at each x, so the label shows the place of the year the line has reached while it draws */
+    ranks?: Array<number | null>;
+  };
 }
 
 /** A line chart in space: each series is a wall in its own lane, the band a translucent wall. */

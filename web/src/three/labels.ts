@@ -48,7 +48,8 @@ export function fitLabel(text: string, slot: number, color: string, height: numb
 
 /**
  * A flag and, next to it, a place in a ranking, as a sprite that always faces the camera. The flag is an image: the sprite shows the place at
- * once and gets the flag when the image has loaded. `height` is the height of the label in scene units.
+ * once and gets the flag when the image has loaded. `height` is the height of the label in scene units. The sprite has room for a place of
+ * up to three digits and `userData.setRank(rank)` redraws it with another place (`userData.rank` holds the one shown).
  */
 export function flagRankSprite(flag: string, rank: number | null, color: string, height: number): Sprite {
   const px = 64;
@@ -56,41 +57,51 @@ export function flagRankSprite(flag: string, rank: number | null, color: string,
   const font = `700 ${px}px "Clarity City", system-ui, -apple-system, "Segoe UI", sans-serif`;
   const canvas = document.createElement('canvas');
   const ctx = canvas.getContext('2d');
-  const text = rank === null ? '' : String(rank);
-  const gap = text ? 16 : 0;
+  const gap = 16;
   const pad = 8;
   const lineHeight = px + 16;
   let textW = 0;
   if (ctx) {
     ctx.font = font;
-    textW = text ? Math.ceil(ctx.measureText(text).width) : 0;
+    textW = Math.ceil(ctx.measureText('888').width);
   }
   canvas.width = pad * 2 + flagW + gap + textW;
   canvas.height = lineHeight;
   const texture = new CanvasTexture(canvas);
   texture.colorSpace = SRGBColorSpace;
-  const draw = (image?: HTMLImageElement) => {
+  let shown = rank;
+  let loaded: HTMLImageElement | undefined;
+  const draw = () => {
     if (!ctx) return;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    if (image) ctx.drawImage(image, pad, (lineHeight - px) / 2, flagW, px);
-    if (text) {
+    if (loaded) ctx.drawImage(loaded, pad, (lineHeight - px) / 2, flagW, px);
+    if (shown !== null) {
       ctx.font = font;
       ctx.fillStyle = color;
       ctx.textBaseline = 'middle';
       ctx.textAlign = 'left';
-      ctx.fillText(text, pad + flagW + gap, lineHeight / 2);
+      ctx.fillText(String(shown), pad + flagW + gap, lineHeight / 2);
     }
     texture.needsUpdate = true;
   };
   draw();
   if (typeof Image !== 'undefined') {
     const image = new Image();
-    image.onload = () => draw(image);
+    image.onload = () => {
+      loaded = image;
+      draw();
+    };
     image.src = flag;
   }
   const material = new SpriteMaterial({ map: texture, transparent: true, depthWrite: false });
   const sprite = new Sprite(material);
   const unit = height / lineHeight;
   sprite.scale.set(canvas.width * unit, canvas.height * unit, 1);
+  sprite.userData.rank = shown;
+  sprite.userData.setRank = (next: number | null) => {
+    shown = next;
+    sprite.userData.rank = next;
+    draw();
+  };
   return sprite;
 }
