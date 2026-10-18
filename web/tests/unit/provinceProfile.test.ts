@@ -10,7 +10,7 @@ import {
 
 describe('Province profile data & selectors C6 (province-profile-slide)', () => {
   it('covers all 24 provinces in Argentina', () => {
-    expect(getProfileMetric('AR-A', 'pbg_usd_m')).toBe(11200);
+    expect(getProfileMetric('AR-A', 'pbg_usd_m')).toBe(11340);
     for (const prov of PROVINCES) {
       const data = PROVINCE_PROFILES[prov.id];
       expect(data, `Province ${prov.id} (${prov.name}) should have profile data`).toBeDefined();
@@ -28,7 +28,7 @@ describe('Province profile data & selectors C6 (province-profile-slide)', () => 
     }
   });
 
-  it('provides all requested metrics in PROFILE_METRICS', () => {
+  it('provides all requested metrics in PROFILE_METRICS with official sources', () => {
     const metricKeys = PROFILE_METRICS.map((m) => m.id);
     expect(metricKeys).toContain('pbg_usd_m');
     expect(metricKeys).toContain('gdp_per_capita_usd');
@@ -39,6 +39,13 @@ describe('Province profile data & selectors C6 (province-profile-slide)', () => 
     expect(metricKeys).toContain('unemployment_pct');
     expect(metricKeys).toContain('registered_jobs_k');
     expect(metricKeys).toContain('security_rate');
+
+    for (const metric of PROFILE_METRICS) {
+      expect(metric.source.length).toBeGreaterThan(0);
+      expect(metric.refId.length).toBeGreaterThan(0);
+      expect(metric.retrievedAt).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+      expect(metric.sourceUrl).toMatch(/^https?:\/\//);
+    }
   });
 
   it('ranks provinces accurately by PBG', () => {

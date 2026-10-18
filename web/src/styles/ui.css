@@ -3405,6 +3405,78 @@ button.brand:focus-visible .brand-a {
 }
 
 
+/* ---- the dropdown menu of «Hacia el 2056»: the list of slides, slide 0 (the index) first -------------------------- */
+
+.tour-menu {
+  position: relative;
+  display: inline-flex;
+}
+
+.tour-menu > .tab {
+  gap: 0.4em;
+}
+
+.tour-menu-chevron {
+  width: 0.8em;
+  height: 0.8em;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform 0.2s ease-out;
+}
+
+.tour-menu > .tab[aria-expanded='true'] .tour-menu-chevron {
+  transform: rotate(180deg);
+}
+
+/* the list hangs right under the tab (no gap to cross with the pointer) */
+.tour-menu-list {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 40;
+  min-width: 17rem;
+  max-width: min(26rem, 90vw);
+  margin: 0;
+  padding: var(--space-xs);
+  list-style: none;
+  background: var(--intro-bg);
+  border: 1px solid color-mix(in srgb, var(--intro-light) 45%, transparent);
+  border-radius: var(--radius-md);
+  box-shadow: 0 12px 32px color-mix(in srgb, var(--intro-black) 55%, transparent);
+  backdrop-filter: blur(14px);
+  pointer-events: auto;
+}
+
+.tour-menu-item {
+  display: block;
+  width: 100%;
+  padding: var(--space-xs) var(--space-sm);
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--intro-ink);
+  font: inherit;
+  font-size: var(--font-sm);
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.15s ease-out, color 0.15s ease-out;
+}
+
+.tour-menu-item:hover,
+.tour-menu-item:focus-visible {
+  color: var(--intro-white);
+  background: color-mix(in srgb, var(--intro-light) 22%, transparent);
+}
+
+.tour-menu-item[aria-current='step'] {
+  color: var(--intro-light);
+  font-weight: 600;
+  border-color: color-mix(in srgb, var(--intro-light) 55%, transparent);
+}
+
 /* ---- slide 1: the flags that choose the countries next to Argentina, and the scale switch ----------------------------- */
 .world-compare {
   position: absolute;

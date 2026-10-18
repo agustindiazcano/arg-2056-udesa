@@ -1,14 +1,13 @@
 # LASTCONTEXT.md
 
 ## State
-- **Branch**: `task/archive-root-docs` (limpieza de raíz: briefs completados a `docs/archived/`, tareas pendientes a `docs/tasks/`, diseño y roadmap a `docs/`).
-- **Snapshot archivado**: ver [lastcontext-2026-10-17.md](file:///C:/projects/projects-github-agustindiazcano/arg-2056-udesa/docs/lastcontext-2026-10-17.md) para el registro completo de la jornada.
-- **Capacidades clave incorporadas**:
-  1. **Pestaña «Uso de AI»** (`AiUsageView.tsx` en `DataPage.tsx`): framework de contexto, orquestación multi-agente, comparativa técnica Gitflow vs. Worktrees, gobernanza HITL y stack completo de testing.
-  2. **Referencias numeradas interactivas** (`RefLink.tsx`): chips `[n]` con tooltip de metadatos de fuente y apertura en pestaña externa.
-  3. **Ayuda contextual accesible** (`ChartHelp.tsx`): botones `?` con tooltip ligero y modal accesible «Cómo leer este gráfico».
-  4. **Mapas y navegación**: transiciones suaves C7, límites de zoom C8, búsqueda de provincias y departamentos C5, drilldown con proyectos mineros C1-C4, panel de perfil provincial C6.
-  5. **Visualización y UI**: gráfico de economías regionales fijado en 2D (`WorldStep.tsx`) y badge de deadline en navbar (`Header.tsx`).
+- **Branch**: `task/data-province-profile` (sustitución de datos ilustrativos por series socioeconómicas oficiales de las 24 provincias).
+- **Hitos completados en la sesión**:
+  1. **Perfil Socioeconómico Provincial auditado** (`web/src/tour/provinceProfileData.ts`, `ProvinceProfileStep.tsx`, tests): incorporadas series oficiales recientes para las 24 jurisdicciones: PBG provincial / VAB geográfico (DNAP/INDEC), Empleo registrado formal privado y público (OEDE/SIPA), Pobreza e indigencia por aglomerado urbano (EPH INDEC), Coparticipación federal efectiva secundaria (Min. Economía/DNAP), Estadísticas criminales / tasas de seguridad (SNIC/Min. Seguridad), Exportaciones OPEX (INDEC) y Población Censo 2022 (INDEC).
+  2. **Trazabilidad y referencias formales**: registradas fuentes S1 a S5 en `docs/references.md` y `web/src/datasets/references.ts`; enlazado dinámico con `RefList` en el encabezado de la ficha provincial; actualizado `docs/mock-data.md` (removiendo `provinceProfileData.ts` de mock data), `PENDING.md` (C6 verificado) y `docs/data-requests.md` (D28 completado).
+  3. **Tests unitarios alineados**: actualizado `web/tests/unit/provinceProfile.test.ts` para verificar la serie oficial y los metadatos de fuentes (`source`, `refId`, `retrievedAt`, `sourceUrl`).
+
+- **Slide 1 (`docs/action-plan-slide1-visual.md`)**: PR #130 (`task/help-lead-text`, que ya incluye el #131): línea `lead` celeste en el `?` de `ChartHelp` y unidades en el `?`, tablas clickeables, banderas para comparar países, escala logarítmica condicional, bandera y puesto en las puntas, crecimiento de la región y el mismo criterio en las otras slides.
 
 ## Reglas operativas vigentes
 - **RULE #1**: Tests corren exclusivamente en CI (GitHub Actions), nunca localmente.
@@ -17,6 +16,6 @@
 - **Datos**: Todo dato presentado debe incluir `source` y `retrieved_at`. Ningún mock sin documentar en `docs/mock-data.md`.
 
 ## Next
-- PR #125 abierto (`task/archive-root-docs`), CI 100% verde. Pendiente aprobación humana para merge a `main`.
-- Próxima sesión: iniciar la búsqueda de datos según el plan de búsqueda (agro provincial, minería Catamarca/Salta, impacto IA, perfil socioeconómico provincial).
-
+- Verificar CI en GitHub Actions para `task/data-province-profile` y abrir PR.
+- Continuar con la Cartera RIGI e inversiones oficiales (`web/src/tour/rigiProjects.ts`).
+- Conectar `agroByProvince.json` al selector provincial y gráficos de las diapositivas 2 y 7.
