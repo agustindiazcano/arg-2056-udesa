@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import data from './provinces.json';
-import { boxStyle, lightStep, pathBox, type Box } from './layout';
+import { LOAD_LIGHT_FROM_MS, LOAD_LIGHT_TO_MS, boxStyle, lightStep, loadLightPlan, pathBox, type Box } from './layout';
 import { visibleSections } from '../content/sectionLabels';
 import type { Section } from '../types/scene';
 import './intro.css';
@@ -82,6 +82,18 @@ export function Intro({ onStart }: Props) {
     if (reduced) return;
     const t = setTimeout(() => setTilted(true), APPEAR_MS);
     return () => clearTimeout(t);
+  }, [reduced]);
+
+  // while the flat map loads the provinces light up one by one, so that all of them are lit when it tilts (the load keeps its length)
+  useEffect(() => {
+    if (reduced) return;
+    const plan = loadLightPlan(provinces.map((p) => p.id), LOAD_LIGHT_FROM_MS, LOAD_LIGHT_TO_MS, Math.random);
+    const timers = plan.map(({ id, at }) =>
+      setTimeout(() => {
+        setLit((cur) => new Set(cur).add(id));
+      }, at)
+    );
+    return () => timers.forEach(clearTimeout);
   }, [reduced]);
 
   // once the map is tilted the provinces light up and go out at random; under reduced motion a fixed few stay lit
