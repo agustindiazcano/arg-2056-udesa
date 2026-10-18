@@ -52,9 +52,8 @@ function Big({ def, form }: { def: TourChartDef; form: Form }) {
     <Reveal k={`${def.title}-${form}`} className="gdp-chart">
       <h3 className="composition-title">
         <span>{def.title}</span>
-        <ChartHelp title={def.title} paragraphs={[def.subtitle, ...step12Info.paragraphs]} how={step12Info.how} refs={step12Info.refs} />
+        <ChartHelp title={def.title} lead={def.subtitle} paragraphs={step12Info.paragraphs} how={step12Info.how} refs={step12Info.refs} />
       </h3>
-      <p className="gdp-sub">{def.subtitle}</p>
       <div className="tour-chart">
         {form === 'treemap' ? (
           <EChart option={built.option} aria-label={built.summary} />
@@ -105,10 +104,10 @@ export function CompositionStep() {
         <Reveal k="head" className="gdp-title">
           <div className="slide-title-row">
             <h2>{COMPOSITION_TITLE}</h2>
-            <ChartHelp title={step12Info.heading} paragraphs={step12Info.paragraphs} how={step12Info.how} refs={step12Info.refs} />
+            <ChartHelp title={step12Info.heading} lead="Valor agregado por sector y exportaciones por complejo" paragraphs={step12Info.paragraphs} how={step12Info.how} refs={step12Info.refs} />
           </div>
           <p className="gdp-sub">
-            Valor agregado por sector y exportaciones por complejo · <RefList ids={step12Info.refs} />
+            <RefList ids={step12Info.refs} />
           </p>
         </Reveal>
         <div className="tour-controls">

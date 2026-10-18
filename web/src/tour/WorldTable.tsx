@@ -12,16 +12,18 @@ const LISTED = 20;
 const HOME_BG = SEQUENTIAL_BLUE[8] ?? tokens.blue;
 
 /**
- * One ranking of the world in a year. Argentina is a cell of its own over the list, always in the same place, with its place
+ * One ranking of the world in a year; its title is a button that makes the big chart show this metric. Argentina is a cell of its own over the list, always in the same place, with its place
  * among everyone and its value; under it the other countries move up and down as the years go by.
  */
-export function WorldTable({ metric, title, unit, help, year }: { metric: RankMetric; title: string; unit: string; help: string; year: number }) {
+export function WorldTable({ metric, title, unit, help, year, active, onSelect }: { metric: RankMetric; title: string; unit: string; help: string; year: number; active: boolean; onSelect: () => void }) {
   const { home, others } = rankingTable(year, metric, LISTED);
   const number = (value: number) => formatValue(Math.round(value), '');
   return (
-    <div className="world-rank">
+    <div className="world-rank" data-active={active}>
       <div className="world-rank-head">
-        <strong>{title}</strong>
+        <button type="button" className="world-rank-pick" aria-pressed={active} aria-label={`Ver ${title} en el gráfico grande`} onClick={onSelect}>
+          {title}
+        </button>
         <ChartHelp title={title} lead={unit} paragraphs={[help]} />
       </div>
       <div className="world-home" data-home="true" data-testid={`home-${metric === 'gdp' ? 'gdp' : 'percapita'}`} style={{ background: HOME_BG, color: tokens.page }}>

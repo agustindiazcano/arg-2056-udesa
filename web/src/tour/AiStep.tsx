@@ -160,10 +160,10 @@ export function AiStep() {
         <Reveal k="head" className="gdp-title">
           <div className="slide-title-row">
             <h2>{AI_TITLE}</h2>
-            <ChartHelp title={step3Info.heading} paragraphs={step3Info.paragraphs} how={step3Info.how} refs={step3Info.refs} />
+            <ChartHelp title={step3Info.heading} lead={GDP_UNIT} paragraphs={step3Info.paragraphs} how={step3Info.how} refs={step3Info.refs} />
           </div>
           <p className="gdp-sub">
-            {GDP_UNIT}, {FIRST} a {LAST} · {from1960 ? 'historia observada (1960-2025) y tres escenarios con la IA hacia 2056' : 'tres escenarios con la IA como impulso a la productividad'} · <RefList ids={step3Info.refs} />
+            {FIRST} a {LAST} · {from1960 ? 'historia observada (1960-2025) y tres escenarios con la IA hacia 2056' : 'tres escenarios con la IA como impulso a la productividad'} · <RefList ids={step3Info.refs} />
           </p>
         </Reveal>
         <div className="tour-controls">
@@ -214,8 +214,8 @@ export function AiStep() {
         <Reveal k="main" className="gdp-chart rule70-card ai-main-card">
           <div className="rule70-card-head">
             <div className="ai-head-group">
-              <strong>PBI real de Argentina ({gdp.unit})</strong>
-              <ChartHelp title="Escenarios del PBI real con IA" paragraphs={[step3Info.paragraphs[0]!, step3Info.paragraphs[1]!]} how={step3Info.how} refs={step3Info.refs} />
+              <strong>PBI real de Argentina</strong>
+              <ChartHelp title="Escenarios del PBI real con IA" lead={gdp.unit} paragraphs={[step3Info.paragraphs[0]!, step3Info.paragraphs[1]!]} how={step3Info.how} refs={step3Info.refs} />
               <span className="ai-head-year">{shownYear}: {formatValue(gdpLines[1]!.values[at] ?? null, gdp.unit)}</span>
             </div>
             <div className="rule70-legend">

@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { EChart } from '../charts/EChart.js';
-import { buildColumns, buildFollowedSeries } from '../charts/builders/tourCharts.js';
+import { buildColumns, buildFollowedLines, buildFollowedSeries } from '../charts/builders/tourCharts.js';
 import { formatValue } from '../charts/format.js';
 import { TourChart } from './TourChart.js';
 import { barsSpec, linesSpec } from '../charts3d/specs.js';
@@ -17,8 +17,9 @@ import { elapsedForYear, seriesFrame, valueAt, yearAtElapsed } from './worldAnim
 import { SPEEDS } from '../state/reducer.js';
 import { useTimeline } from './useTimeline.js';
 import { WorldTable } from './WorldTable.js';
-import { FIRST_YEAR, HOME, LAST_YEAR, REGION_METRICS, WORLD_SOURCE, WORLD_UNIT, argentinaReal, regionCountries, regionValuesAt } from './worldData.js';
-import type { RegionMetric } from './worldData.js';
+import { COMPARE_OPTIONS, DEFAULT_COMPARE, compareSeries, countryColor, flagSrc, isSquashed } from './worldCompare.js';
+import { FIRST_YEAR, HOME, LAST_YEAR, REGION_METRICS, WORLD_SOURCE, WORLD_UNIT, mainSeries, rankAt, regionCountries, regionGrowth, regionValuesAt } from './worldData.js';
+import type { RankMetric, RegionMetric } from './worldData.js';
 
 const VIEWS = [
   { value: '2d', label: '2D' },
@@ -38,7 +39,19 @@ const PauseIcon = () => (
 const speedFormat = new Intl.NumberFormat('es-AR', { maximumFractionDigits: 2 });
 
 const TITLE = WORLD_TITLE;
-const SERIES_NAME = 'PBI real de Argentina';
+/** What the big chart shows for each metric of the ranking tables: its name, its unit and the label of the series. */
+const GROWTH_HELP =
+  'La línea punteada es el crecimiento anual del PBI real de América Latina y el Caribe (agregado del Banco Mundial, que pondera a cada país por su PBI), medido en % en el eje de la derecha. Se dibuja solo con el PBI y solo en la vista 2D.';
+
+const SCALES = [
+  { value: 'linear', label: 'Lineal' },
+  { value: 'log', label: 'Logarítmica' }
+] as const;
+
+const MAIN: Record<RankMetric, { name: string; unit: string }> = {
+  gdp: { name: 'PBI real de Argentina', unit: WORLD_UNIT },
+  percapita: { name: 'PBI per cápita real de Argentina', unit: REGION_METRICS.percapita.unit }
+};
 const REGION_OPTIONS = [
   { value: 'gdp', label: 'PBI' },
   { value: 'percapita', label: 'PBI per cápita' },
@@ -59,28 +72,66 @@ export function WorldStep() {
   const { elapsed, clock, seek, playing, play, pause } = useTimeline(run, reduced, speed);
   const stepSpeed = (by: 1 | -1) => setSpeed((v) => SPEEDS[Math.min(SPEEDS.length - 1, Math.max(0, SPEEDS.indexOf(v) + by))] ?? v);
 
-  const series = useMemo(argentinaReal, []);
+  // the big chart shows the metric of the ranking table that was clicked
+  const [mainMetric, setMainMetric] = useState<RankMetric>('gdp');
+  const { name: SERIES_NAME, unit: MAIN_UNIT } = MAIN[mainMetric];
+  const series = useMemo(() => mainSeries(mainMetric), [mainMetric]);
   const today = series.values.at(-1) ?? 0;
+  // the countries drawn next to Argentina (flags to switch them) and, only when a line is squashed, the logarithmic scale
+  const [compare, setCompare] = useState<string[]>([...DEFAULT_COMPARE]);
+  const [logScale, setLogScale] = useState(false);
+  const lines = useMemo(() => compareSeries(compare, mainMetric), [compare, mainMetric]);
+  const growth = useMemo(regionGrowth, []);
+  // the growth of the region is a rate: it is drawn on its own axis, only next to the PBI (not per person) and only in the flat chart
+  const showGrowth = mainMetric === 'gdp';
+  const squashed = isSquashed(lines);
+  const log = squashed && logScale;
+  const toggleCountry = (name: string) => setCompare((cur) => (cur.includes(name) ? cur.filter((c) => c !== name) : [...cur, name]));
+  // the view fits the highest line at every year
+  const envelope = useMemo(() => series.years.map((_, i) => Math.max(...lines.map((l) => l.values[i] ?? 0))), [series, lines]);
   const regionNames = useMemo(regionCountries, []);
   // the bars of the region show one of three values, chosen by clicking their title
   const [regionMetric, setRegionMetric] = useState<RegionMetric>('percapita');
   const metricInfo = REGION_METRICS[regionMetric];
 
-  const summary = `${SERIES_NAME} de ${FIRST_YEAR} a ${LAST_YEAR}: de ${formatValue(series.values[0] ?? null, WORLD_UNIT)} a ${formatValue(today, WORLD_UNIT)}`;
-  const frame = useMemo(() => seriesFrame(elapsed, series.years, series.values), [elapsed, series]);
-  const flat = useMemo(() => buildFollowedSeries(series.years, series.values, frame, { unit: WORLD_UNIT, name: SERIES_NAME, summary }), [series, frame, summary]);
+  const summary = `${SERIES_NAME} de ${FIRST_YEAR} a ${LAST_YEAR}: de ${formatValue(series.values[0] ?? null, MAIN_UNIT)} a ${formatValue(today, MAIN_UNIT)}`;
+  const frame = useMemo(() => seriesFrame(elapsed, series.years, envelope), [elapsed, series, envelope]);
+  const flat = useMemo(
+    () =>
+      lines.length === 1
+        ? buildFollowedSeries(series.years, series.values, frame, { unit: MAIN_UNIT, name: SERIES_NAME, summary, tip: { flag: flagSrc(HOME), rank: rankAt(HOME, frame.year, mainMetric) } })
+        : buildFollowedLines(
+            series.years,
+            lines.map((l) => ({
+              name: l.country,
+              values: l.values,
+              color: countryColor(l.country),
+              main: l.country === HOME,
+              // at the tip of each line: the flag and the place in the ranking of the year the line has reached
+              tip: { flag: flagSrc(l.country), rank: rankAt(l.country, frame.year, mainMetric) }
+            })),
+            frame,
+            { unit: MAIN_UNIT, summary, log, growth: showGrowth ? { name: growth.name, values: growth.values, color: tokens.ink2 } : undefined }
+          ),
+    [series, lines, frame, summary, MAIN_UNIT, SERIES_NAME, log, mainMetric, showGrowth, growth]
+  );
   // a new object on every run: the 3D chart draws itself again
   const spec = useMemo(
     () =>
       linesSpec({
         title: SERIES_NAME,
-        unit: WORLD_UNIT,
+        unit: MAIN_UNIT,
         xLabels: series.years.map(String),
-        series: [{ name: SERIES_NAME, values: series.values, tone: 'highlight' }],
+        series: lines.map((l) => {
+          // the 3D label travels with the head of the line and shows the place of the year it has reached
+          const tip = { flag: flagSrc(l.country), rank: rankAt(l.country, LAST_YEAR, mainMetric), ranks: series.years.map((y) => rankAt(l.country, y, mainMetric)) };
+          return l.country === HOME ? { name: SERIES_NAME, values: l.values, tone: 'highlight' as const, tip } : { name: l.country, values: l.values, tone: 'muted' as const, color: countryColor(l.country), tip };
+        }),
         follow: true,
+        log,
         summary
       }),
-    [series, summary]
+    [series, lines, summary, MAIN_UNIT, SERIES_NAME, log, mainMetric]
   );
   const lineSpec = useMemo(() => ({ ...spec, clock }), [spec, clock]);
 
@@ -116,7 +167,7 @@ export function WorldStep() {
         <Reveal k="head" className="gdp-title">
           <div className="slide-title-row">
             <h2>{TITLE}</h2>
-            <ChartHelp title={step0Info.heading} lead={WORLD_UNIT} paragraphs={step0Info.paragraphs} how={step0Info.how} refs={step0Info.refs} />
+            <ChartHelp title={step0Info.heading} lead={MAIN_UNIT} paragraphs={showGrowth ? [...step0Info.paragraphs, GROWTH_HELP] : step0Info.paragraphs} how={step0Info.how} refs={step0Info.refs} />
           </div>
           <p className="gdp-sub">
             {FIRST_YEAR} a {LAST_YEAR} · <span className="gdp-source">{WORLD_SOURCE}</span> · <RefList ids={step0Info.refs} />
@@ -167,7 +218,38 @@ export function WorldStep() {
         <Reveal k="main" className="gdp-chart prov-map">
           <div className="world-year" aria-hidden="true">
             <strong>{shownYear}</strong>
-            <span>{formatValue(Math.round(shownValue), WORLD_UNIT)}</span>
+            <span>{formatValue(Math.round(shownValue), MAIN_UNIT)}</span>
+          </div>
+          <div className="world-compare" role="group" aria-label="Países a comparar con Argentina">
+            <span className="world-flag world-flag--home" data-name={HOME} role="img" aria-label={`${HOME}, siempre en el gráfico`}>
+              <img src={flagSrc(HOME)} alt="" width={24} height={18} />
+            </span>
+            {COMPARE_OPTIONS.map((o) => (
+              <button
+                key={o.name}
+                type="button"
+                className="world-flag"
+                data-name={o.name}
+                aria-pressed={compare.includes(o.name)}
+                aria-label={o.name}
+                style={{ '--line': countryColor(o.name) } as React.CSSProperties}
+                onClick={() => toggleCountry(o.name)}
+              >
+                <img src={flagSrc(o.name)} alt="" width={24} height={18} />
+              </button>
+            ))}
+            {squashed && (
+              <span className="world-scale">
+                <Segmented label="Escala" options={SCALES} value={log ? 'log' : 'linear'} onChange={(next) => setLogScale(next === 'log')} />
+                <ChartHelp
+                  title="Escala logarítmica"
+                  paragraphs={[
+                    'Una línea queda aplastada cuando su valor es menos de una décima parte del de la más alta. Con la escala logarítmica cada marca del eje vale diez veces la anterior, así que se ve cuánto crece cada país sin que el más grande tape a los demás, y una recta es un crecimiento constante.',
+                    'Los valores no cambian: solo cambia cómo se reparte el eje. Por eso este botón aparece solo cuando hace falta.'
+                  ]}
+                />
+              </span>
+            )}
           </div>
           <div className="tour-chart" key={`${mode}-${run}`}>
             <TourChart spec={lineSpec}>
@@ -194,6 +276,8 @@ export function WorldStep() {
                 unit={REGION_METRICS.gdp.unit}
                 help="Los países ordenados por su PBI real del año que marca la línea de tiempo. Argentina aparece aparte, con su puesto entre todos los países del Banco Mundial."
                 year={frame.year}
+                active={mainMetric === 'gdp'}
+                onSelect={() => setMainMetric('gdp')}
               />
               <WorldTable
                 metric="percapita"
@@ -201,6 +285,8 @@ export function WorldStep() {
                 unit={REGION_METRICS.percapita.unit}
                 help="El PBI real dividido por la población. Cuenta solo países de un millón de habitantes o más. Argentina aparece aparte, con su puesto."
                 year={frame.year}
+                active={mainMetric === 'percapita'}
+                onSelect={() => setMainMetric('percapita')}
               />
             </div>
           </Reveal>
