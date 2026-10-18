@@ -6,8 +6,9 @@ import {
   LATAM_HDI_2022,
   PISA_LATAM_MATH_2022
 } from '../../src/tour/developmentData.js';
-import { slides } from '../../src/datasets/slides.js';
+import { buildSlides } from '../../src/datasets/slides.js';
 import { TABLE_META, withMeta } from '../../src/datasets/quality.js';
+import type { SlideData } from '../../src/datasets/types.js';
 
 describe('developmentData', () => {
   it('exposes historical series and peer comparisons with valid bounds', () => {
@@ -60,8 +61,8 @@ describe('developmentData', () => {
   });
 
   it('ensures slide 16 tables are registered with quality metadata', () => {
-    const slideList = slides();
-    const slide16 = slideList.find((s) => s.id === '16');
+    const slideList: SlideData[] = buildSlides();
+    const slide16 = slideList.find((s: SlideData) => s.id === '16');
     expect(slide16).toBeDefined();
 
     for (const table of slide16!.tables) {
@@ -69,7 +70,7 @@ describe('developmentData', () => {
       const enriched = withMeta(table);
       expect(enriched.quality).toBeDefined();
       expect(typeof enriched.source).toBe('string');
-      expect(enriched.source.length).toBeGreaterThan(5);
+      expect((enriched.source ?? '').length).toBeGreaterThan(5);
     }
   });
 });
