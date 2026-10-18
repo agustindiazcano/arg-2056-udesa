@@ -211,10 +211,16 @@ export function Rule70Step() {
         <Reveal k="head" className="gdp-title">
           <div className="slide-title-row">
             <h2>{TITLE}</h2>
-            <ChartHelp title={step5Info.heading} paragraphs={step5Info.paragraphs} how={step5Info.how} refs={step5Info.refs} />
+            <ChartHelp
+              title={step5Info.heading}
+              lead="Cuánto tarda en duplicarse algo que crece a una tasa constante: la fórmula exacta, las reglas del 70 y del 72, qué tasa necesita Argentina para converger con países desarrollados y lo que pasó en economías reales"
+              paragraphs={step5Info.paragraphs}
+              how={step5Info.how}
+              refs={step5Info.refs}
+            />
           </div>
           <p className="gdp-sub">
-            Cuánto tarda en duplicarse algo que crece a una tasa constante: la fórmula exacta, las reglas del 70 y del 72, qué tasa necesita Argentina para converger con países desarrollados y lo que pasó en economías reales · <RefList ids={step5Info.refs} />
+            <RefList ids={step5Info.refs} />
           </p>
         </Reveal>
       </header>

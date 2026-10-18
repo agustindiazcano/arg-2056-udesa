@@ -67,6 +67,13 @@ export interface Line3D {
   color?: string;
   /** drawn as a dashed line (a projection) */
   dashed?: boolean;
+  /** at the end of the line: the flag (an image) and the place in the ranking, instead of the name */
+  tip?: {
+    flag: string;
+    rank: number | null;
+    /** with `follow`: the place at each x, so the label shows the place of the year the line has reached while it draws */
+    ranks?: Array<number | null>;
+  };
 }
 
 /** A line chart in space: each series is a wall in its own lane, the band a translucent wall. */
@@ -76,6 +83,8 @@ export interface Lines3DSpec {
   unit: string;
   xLabels: string[];
   series: Line3D[];
+  /** logarithmic scale: every power of ten is one equal step of height (the lines need positive values) */
+  log?: boolean;
   /** a range drawn behind the lines (the p10 to p90 of the forecast) */
   band?: { lower: Array<number | null>; upper: Array<number | null> };
   /** index of the x label to mark (the playhead year) */

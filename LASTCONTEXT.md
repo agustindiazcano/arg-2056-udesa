@@ -7,6 +7,8 @@
   2. **Trazabilidad y referencias formales**: registradas fuentes S1 a S5 en `docs/references.md` y `web/src/datasets/references.ts`; enlazado dinámico con `RefList` en el encabezado de la ficha provincial; actualizado `docs/mock-data.md` (removiendo `provinceProfileData.ts` de mock data), `PENDING.md` (C6 verificado) y `docs/data-requests.md` (D28 completado).
   3. **Tests unitarios alineados**: actualizado `web/tests/unit/provinceProfile.test.ts` para verificar la serie oficial y los metadatos de fuentes (`source`, `refId`, `retrievedAt`, `sourceUrl`).
 
+- **Slide 1 (`docs/action-plan-slide1-visual.md`)**: PR #130 (`task/help-lead-text`, que ya incluye el #131): línea `lead` celeste en el `?` de `ChartHelp` y unidades en el `?`, tablas clickeables, banderas para comparar países, escala logarítmica condicional, bandera y puesto en las puntas, crecimiento de la región y el mismo criterio en las otras slides.
+
 ## Reglas operativas vigentes
 - **RULE #1**: Tests corren exclusivamente en CI (GitHub Actions), nunca localmente.
 - **Estilos**: Cero literales de color fuera de `tokens.css` (usar siempre `var(--token)` o `color-mix()`).

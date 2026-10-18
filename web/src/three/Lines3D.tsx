@@ -21,6 +21,7 @@ import {
   Plane,
   Shape,
   SphereGeometry,
+  Sprite,
   TubeGeometry,
   Vector3
 } from 'three';
@@ -33,7 +34,7 @@ import { QUALITY_PRESETS } from '../runtime/capabilities';
 import { useReducedMotion } from '../runtime/useReducedMotion';
 import { tokens } from '../styles/tokens';
 import { createFloor } from './floor';
-import { textSprite } from './labels';
+import { flagRankSprite, textSprite } from './labels';
 import { fitRadius, openingAngles } from '../charts3d/camera';
 import { FOLLOW_TOTAL_MS, followFrame, lerp } from '../charts3d/followAnim';
 import { createStage } from './stage';
@@ -132,6 +133,8 @@ export function Lines3D({ spec }: { spec: Lines3DSpec }) {
     const clip = follow ? [reveal] : undefined;
     if (follow) stage.renderer.localClippingEnabled = true;
     const hiddenUntilDone: Array<{ visible: boolean }> = [];
+    // the flag and place labels of a followed line travel with its head while it draws, then stay at its end
+    const followTips: Array<{ sprite: Sprite; lane: number; ranks?: Array<number | null> }> = [];
     scene.add(new AmbientLight(tokens.ink, 1.15));
     const sun = new DirectionalLight(tokens.ink, 2.2);
     sun.position.set(-5, 9, 7);
@@ -250,10 +253,13 @@ export function Lines3D({ spec }: { spec: Lines3DSpec }) {
           dot.position.set(end.x, end.y, lane.z);
           grow.add(dot);
         }
-        const name = textSprite(s.name, s.tone === 'muted' ? tokens.ink2 : tokens.ink, 0.34, s.tone !== 'muted');
+        const name = s.tip ? flagRankSprite(s.tip.flag, s.tip.ranks?.[0] ?? s.tip.rank, tokens.ink, 0.42) : textSprite(s.name, s.tone === 'muted' ? tokens.ink2 : tokens.ink, 0.34, s.tone !== 'muted');
         name.position.set(end.x + 0.7, end.y + 0.25, lane.z);
         scene.add(name);
-        if (follow) hiddenUntilDone.push(name);
+        if (follow && s.tip) {
+          name.visible = false;
+          followTips.push({ sprite: name, lane: i, ...(s.tip.ranks ? { ranks: s.tip.ranks } : {}) });
+        } else if (follow) hiddenUntilDone.push(name);
       }
     });
 
@@ -319,6 +325,22 @@ export function Lines3D({ spec }: { spec: Lines3DSpec }) {
             sphere.position.set(head, heightAtPoints(pts, head), lane.z);
           } else {
             sphere.visible = false;
+          }
+        });
+        followTips.forEach(({ sprite, lane: laneIndex, ranks }) => {
+          const lane = layout.series[laneIndex]!;
+          const pts = lane.segments.flat();
+          const end = pts.at(-1);
+          if (f.reveal <= 0 || !end) {
+            sprite.visible = false;
+            return;
+          }
+          sprite.visible = true;
+          const drawing = f.reveal < 1;
+          sprite.position.set((drawing ? head : end.x) + 0.7, (drawing ? heightAtPoints(pts, head) : end.y) + 0.25, lane.z);
+          if (ranks) {
+            const next = ranks[Math.round(f.reveal * (ranks.length - 1))] ?? null;
+            if (next !== sprite.userData.rank) (sprite.userData.setRank as (r: number | null) => void)(next);
           }
         });
         if (!handedOver) {

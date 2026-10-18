@@ -212,10 +212,10 @@ export function ResourcesStep() {
         <Reveal k="head" className="gdp-title">
           <div className="slide-title-row">
             <h2>{RESOURCES_TITLE}</h2>
-            <ChartHelp title={step8Info.heading} paragraphs={step8Info.paragraphs} how={step8Info.how} refs={step8Info.refs} />
+            <ChartHelp title={step8Info.heading} lead="Elegí un sector o el total; tocá una provincia del mapa para ver lo que produce" paragraphs={step8Info.paragraphs} how={step8Info.how} refs={step8Info.refs} />
           </div>
           <p className="gdp-sub">
-            Elegí un sector o el total; tocá una provincia del mapa para ver lo que produce · <RefList ids={step8Info.refs} />
+            <RefList ids={step8Info.refs} />
           </p>
         </Reveal>
         <div className="tour-controls">

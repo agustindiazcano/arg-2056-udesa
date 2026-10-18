@@ -72,4 +72,29 @@ describe('ChartHelp question-mark tooltip and popup', () => {
     fireEvent.click(screen.getByRole('button', { name: /Cerrar explicación/i }));
     expect(screen.queryByRole('dialog')).toBeNull();
   });
+
+  it('shows the clarifying line (`lead`) first, in sky blue, in the tooltip and in the popup', () => {
+    render(<ChartHelp title="PBI real" lead="miles de millones de USD de 2015" paragraphs={['Cuerpo del texto.']} how="Cómo se lee." />);
+    const btn = screen.getByRole('button', { name: /Explicación: PBI real/i });
+
+    fireEvent.mouseEnter(btn);
+    const tooltip = screen.getByRole('tooltip');
+    const tipLead = tooltip.querySelector('.chart-help-lead');
+    expect(tipLead?.textContent).toBe('miles de millones de USD de 2015');
+    // first line read: right after the title, before the body
+    expect(tipLead?.previousElementSibling?.classList.contains('chart-help-tooltip-title')).toBe(true);
+    expect(tipLead?.nextElementSibling?.textContent).toBe('Cuerpo del texto.');
+
+    fireEvent.click(btn);
+    const dialog = screen.getByRole('dialog');
+    const modalLead = dialog.querySelector('.chart-help-modal-body > .chart-help-lead');
+    expect(modalLead?.textContent).toBe('miles de millones de USD de 2015');
+    expect(dialog.querySelector('.chart-help-modal-body')?.firstElementChild).toBe(modalLead);
+  });
+
+  it('renders no lead line when none is given', () => {
+    render(<ChartHelp title="Algo" paragraphs={['Texto.']} />);
+    fireEvent.mouseEnter(screen.getByRole('button', { name: /Explicación: Algo/i }));
+    expect(screen.getByRole('tooltip').querySelector('.chart-help-lead')).toBeNull();
+  });
 });

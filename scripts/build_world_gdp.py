@@ -3,7 +3,8 @@ last year, from the World Bank WDI API (NY.GDP.MKTP.KD, SP.POP.TOTL). It feeds s
 
 Real GDP at constant prices is the one the project uses (human decision of 2026-10-13). The file keeps the countries that were among the 25 largest economies, or among the 25 richest per
 person (with at least one million people), in any year, plus the ten largest of Latin America and the Caribbean today and Uruguay; and, for Argentina, its place
-among every country of the World Bank in each year, computed here.
+among every country of the World Bank in each year, computed here. It also keeps that place (`ranks`) for the countries the big chart of slide 1 compares, and the
+World Bank aggregate of Latin America and the Caribbean (`LCN`: real GDP and its annual growth, `regionAggregate`).
 
 Run: python scripts/build_world_gdp.py
 """
@@ -40,6 +41,9 @@ ES = {
 # Argentina's own population is the official one: INDEC, "Estimaciones y proyecciones de población, por sexo y edad. Total del país. Años 2022-2040"
 # (Censo 2022, published in October 2025, mid-year, in millions). The World Bank has 45.85 for 2025 (the UN estimate) and the IMF 47.47 (the old INDEC
 # projection of 2010, before the census). Before 2022 the World Bank series is kept, so there is a break of about 1 % at 2022.
+# The countries whose place in the ranking the big chart of slide 1 shows at the tip of their line.
+COMPARED = ['ARG', 'BRA', 'MEX', 'USA', 'AUS', 'JPN', 'DEU', 'CHL', 'URY', 'ESP']
+
 ARG_POP_INDEC = {2022: 46.136, 2023: 46.214, 2024: 46.302, 2025: 46.387}
 
 
@@ -69,6 +73,7 @@ def main():
 
     chosen = set()
     rank_gdp, rank_pc = {}, {}
+    ranks = {c: {'gdp': [], 'perCapita': []} for c in COMPARED}
     for y in years:
         by_gdp = sorted(((v[y], c) for c, v in gdp.items() if y in v), reverse=True)
         chosen.update(c for _, c in by_gdp[:25])
@@ -76,6 +81,9 @@ def main():
         chosen.update(c for _, c in pc[:25])
         rank_gdp[y] = [c for _, c in by_gdp].index('ARG') + 1 if any(c == 'ARG' for _, c in by_gdp) else None
         rank_pc[y] = [c for _, c in pc].index('ARG') + 1 if any(c == 'ARG' for _, c in pc) else None
+        for c in COMPARED:
+            ranks[c]['gdp'].append([k for _, k in by_gdp].index(c) + 1 if any(k == c for _, k in by_gdp) else None)
+            ranks[c]['perCapita'].append([k for _, k in pc].index(c) + 1 if any(k == c for _, k in pc) else None)
     lac = [c for c, m in countries.items() if m['region']['id'] == 'LCN' and c in gdp and LAST in gdp[c]]
     lac = [c for c in lac if c != 'PRI']  # a territory, not a country
     region = sorted(lac, key=lambda c: -gdp[c][LAST])[:10]
@@ -84,6 +92,8 @@ def main():
     chosen.update(region)
     chosen.add('ARG')
 
+    lcn_gdp = {y: v for y, v in gdp_all.get('LCN', {}).items()}
+    lcn_growth = series('NY.GDP.MKTP.KD.ZG').get('LCN', {})
     for y, v in ARG_POP_INDEC.items():
         pop['ARG'][y] = v * 1e6
     out_countries = []
@@ -104,6 +114,14 @@ def main():
         'firstYear': FIRST, 'lastYear': LAST, 'years': years,
         'region': region,
         'argentinaRank': {'gdp': [rank_gdp[y] for y in years], 'perCapita': [rank_pc[y] for y in years]},
+        'ranks': ranks,
+        'regionAggregate': {
+            'code': 'LCN',
+            'name': 'América Latina y el Caribe',
+            'source': 'Banco Mundial, WDI, agregado LCN: NY.GDP.MKTP.KD (PBI en dólares constantes de 2015) y NY.GDP.MKTP.KD.ZG (crecimiento anual, %)',
+            'gdp': [round(lcn_gdp[y] / 1e9, 2) if y in lcn_gdp else None for y in years],
+            'growth': [round(lcn_growth[y], 3) if y in lcn_growth else None for y in years],
+        },
         'countries': out_countries,
     }, ensure_ascii=False, separators=(',', ':')), encoding='utf8')
     print(f'{len(out_countries)} countries, {OUT.stat().st_size // 1024} KB; region: {region}; English names left: {missing}')
