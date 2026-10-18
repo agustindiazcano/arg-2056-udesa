@@ -108,9 +108,12 @@ export function ProductivityStep() {
     <section className="gdp-step prov-step prod-step" aria-label="Productividad">
       <header className="gdp-head">
         <Reveal k="head" className="gdp-title">
-          <h2>{PRODUCTIVITY_TITLE}</h2>
+          <div className="slide-title-row">
+            <h2>{PRODUCTIVITY_TITLE}</h2>
+            <ChartHelp title={PRODUCTIVITY_TITLE} lead={`PTF y producto por hora trabajada, Argentina, Estados Unidos, Chile y Brasil, 1955 a ${LAST_YEAR}`} paragraphs={[]} />
+          </div>
           <p className="gdp-sub">
-            PTF y producto por hora trabajada, Argentina, Estados Unidos, Chile y Brasil, 1955 a {LAST_YEAR} · <Links links={DATA_SOURCES} />
+            <Links links={DATA_SOURCES} />
           </p>
         </Reveal>
         <div className="tour-controls">
@@ -130,8 +133,7 @@ export function ProductivityStep() {
         <Reveal k={`chart-${n}`} className="gdp-chart prov-map">
           <div className="tour-caption">
             <strong>{def.chart}</strong>
-            <span className="prod-unit">{def.unit}</span>
-            <ChartHelp title={def.heading} paragraphs={def.paragraphs} how={def.how} />
+            <ChartHelp title={def.heading} lead={def.unit} paragraphs={def.paragraphs} how={def.how} />
             {def.kind !== 'bars' && (
               <ul className="tour-legend" aria-label="Países">
                 {COUNTRIES.map((c) => (

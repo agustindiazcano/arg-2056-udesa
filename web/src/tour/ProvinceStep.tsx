@@ -94,10 +94,10 @@ export function ProvinceStep({ embedded = false }: { embedded?: boolean } = {}) 
         <Reveal k="head" className="gdp-title">
           <div className="slide-title-row">
             {embedded ? <h3 className="composition-title">{TITLE}</h3> : <h2>{TITLE}</h2>}
-            <ChartHelp title={step2Info.heading} paragraphs={step2Info.paragraphs} how={step2Info.how} refs={step2Info.refs} />
+            <ChartHelp title={step2Info.heading} lead={`${PRODUCTION_UNIT} por año; elegí un sector y tocá una provincia`} paragraphs={step2Info.paragraphs} how={step2Info.how} refs={step2Info.refs} />
           </div>
           <p className="gdp-sub">
-            {PRODUCTION_UNIT} por año; elegí un sector y tocá una provincia · <RefList ids={step2Info.refs} />
+            <RefList ids={step2Info.refs} />
           </p>
         </Reveal>
         <div className="tour-controls">

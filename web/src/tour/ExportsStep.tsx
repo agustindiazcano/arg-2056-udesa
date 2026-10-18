@@ -84,10 +84,10 @@ export function ExportsStep({ embedded = false }: { embedded?: boolean } = {}) {
         <Reveal k="head" className="gdp-title">
           <div className="slide-title-row">
             {embedded ? <h3 className="composition-title">{TITLE}</h3> : <h2>{TITLE}</h2>}
-            <ChartHelp title={step4Info.heading} paragraphs={step4Info.paragraphs} how={step4Info.how} refs={step4Info.refs} />
+            <ChartHelp title={step4Info.heading} lead={metric === 'usd' ? 'miles de millones de USD' : 'porcentaje del total exportado'} paragraphs={step4Info.paragraphs} how={step4Info.how} refs={step4Info.refs} />
           </div>
           <p className="gdp-sub">
-            {complex ? `${complex} en los años con datos` : `${year}`} · {metric === 'usd' ? 'miles de millones de USD' : 'porcentaje del total exportado'} · <span className="gdp-source">{EXPORTS_SOURCE}</span> · <RefList ids={step4Info.refs} />
+            {complex ? `${complex} en los años con datos` : `${year}`} · <span className="gdp-source">{EXPORTS_SOURCE}</span> · <RefList ids={step4Info.refs} />
           </p>
         </Reveal>
         <div className="tour-controls">

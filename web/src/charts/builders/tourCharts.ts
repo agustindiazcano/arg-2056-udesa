@@ -1,5 +1,5 @@
 import { tokens } from '../../styles/tokens.js';
-import { formatAxisNumber, formatValue } from '../format.js';
+import { APP_LOCALE, formatAxisNumber, formatValue } from '../format.js';
 import { fade } from './gdp.js';
 
 const LINE = { color: tokens.grid } as const;
@@ -422,7 +422,7 @@ export function buildFollowedSeries(
   years: number[],
   values: number[],
   frame: { year: number; xMin: number; xMax: number; yMax: number; visibleCount: number },
-  opts: { unit: string; name: string; summary: string }
+  opts: { unit: string; name: string; summary: string; tip?: { flag: string; rank: number | null } }
 ) {
   const drawn: Array<[number, number]> = years.slice(0, frame.visibleCount).map((y, i) => [y, values[i]!]);
   const last = drawn.at(-1);
@@ -476,9 +476,187 @@ export function buildFollowedSeries(
         z: 4,
         silent: true,
         lineStyle: { opacity: 0 },
-        itemStyle: { color: tokens.blue, borderColor: tokens.ink, borderWidth: 2, shadowBlur: 14, shadowColor: 'rgba(57,135,229,0.7)' }
+        itemStyle: { color: tokens.blue, borderColor: tokens.ink, borderWidth: 2, shadowBlur: 14, shadowColor: 'rgba(57,135,229,0.7)' },
+        ...(opts.tip
+          ? {
+              label: {
+                show: true,
+                position: 'right',
+                distance: 8,
+                formatter: opts.tip.rank === null ? '{f|}' : `{f|} {r|${opts.tip.rank}}`,
+                rich: { f: { width: 22, height: 16, backgroundColor: { image: opts.tip.flag } }, r: { color: tokens.ink, fontSize: 13, fontWeight: 700 } }
+              }
+            }
+          : {})
       }
     ]
+  };
+  return { option, summary: opts.summary };
+}
+
+export interface FollowedLine {
+  name: string;
+  values: number[];
+  color: string;
+  /** the line of the home country: thicker */
+  main?: boolean;
+  /** at the tip of the line: the flag (an image) and the place in the ranking, instead of the name */
+  tip?: { flag: string; rank: number | null };
+}
+
+/**
+ * Several lines as they are while the animation follows them (the countries of slide 1): each one drawn up to `frame.year` with a dot at its
+ * head, on a linear or, when `log` is on, a logarithmic scale whose floor is the power of ten under the smallest value.
+ */
+export function buildFollowedLines(
+  years: number[],
+  lines: FollowedLine[],
+  frame: { year: number; xMin: number; xMax: number; yMax: number; visibleCount: number },
+  opts: { unit: string; summary: string; log?: boolean; growth?: { name: string; values: Array<number | null>; color: string } }
+) {
+  const positives = lines.flatMap((l) => l.values).filter((v) => v > 0);
+  const logMin = positives.length ? 10 ** Math.floor(Math.log10(Math.min(...positives))) : 1;
+  const next = years[frame.visibleCount];
+  const drawn = (l: FollowedLine): Array<[number, number]> => {
+    const pts: Array<[number, number]> = years.slice(0, frame.visibleCount).map((y, i) => [y, l.values[i]!]);
+    const last = pts.at(-1);
+    const nextValue = l.values[frame.visibleCount];
+    if (last && next !== undefined && nextValue !== undefined && frame.year > last[0]) {
+      const t = (frame.year - last[0]) / (next - last[0]);
+      pts.push([frame.year, last[1] + (nextValue - last[1]) * t]);
+    }
+    return pts;
+  };
+  // the growth line (a rate in %) has its own axis at the right, from the lowest to the highest rate of the whole period so the axis does not move
+  const g = opts.growth;
+  const rates = g ? g.values.filter((v): v is number => v !== null) : [];
+  const growthMin = rates.length ? Math.floor(Math.min(...rates)) : 0;
+  const growthMax = rates.length ? Math.ceil(Math.max(...rates)) : 1;
+  const growthSeries = g
+    ? (() => {
+        const pts: Array<[number, number | null]> = years.slice(0, frame.visibleCount).map((y, i) => [y, g.values[i] ?? null]);
+        const last = pts.at(-1);
+        const nextValue = g.values[frame.visibleCount];
+        if (last && last[1] !== null && next !== undefined && nextValue !== undefined && nextValue !== null && frame.year > last[0]) {
+          const t = (frame.year - last[0]) / (next - last[0]);
+          pts.push([frame.year, last[1] + (nextValue - last[1]) * t]);
+        }
+        const head = [...pts].reverse().find((p) => p[1] !== null);
+        return [
+          {
+            name: g.name,
+            type: 'line',
+            yAxisIndex: 1,
+            data: pts,
+            symbol: 'none',
+            connectNulls: false,
+            z: 2,
+            lineStyle: { width: 1.5, color: g.color, type: 'dashed', opacity: 0.65 },
+            itemStyle: { color: g.color }
+          },
+          {
+            name: `${g.name} hoy`,
+            type: 'line',
+            yAxisIndex: 1,
+            data: head ? [head] : [],
+            symbol: 'circle',
+            symbolSize: 7,
+            z: 5,
+            silent: true,
+            lineStyle: { opacity: 0 },
+            itemStyle: { color: g.color, borderColor: tokens.ink, borderWidth: 1 },
+            label: {
+              show: head !== undefined,
+              position: 'right',
+              distance: 8,
+              formatter: head ? `Región ${new Intl.NumberFormat(APP_LOCALE, { maximumFractionDigits: 1 }).format(head[1] as number)} %` : '',
+              color: g.color,
+              fontSize: 12,
+              fontWeight: 700
+            }
+          }
+        ];
+      })()
+    : [];
+  const series = lines.flatMap((l) => {
+    const pts = drawn(l);
+    const head = pts.at(-1);
+    return [
+      {
+        name: l.name,
+        type: 'line',
+        data: pts,
+        symbol: 'none',
+        z: l.main ? 4 : 3,
+        lineStyle: { width: l.main ? 3.5 : 2, color: l.color },
+        itemStyle: { color: l.color }
+      },
+      {
+        name: `${l.name} hoy`,
+        type: 'line',
+        data: head ? [head] : [],
+        symbol: 'circle',
+        symbolSize: l.main ? 10 : 7,
+        z: 5,
+        silent: true,
+        lineStyle: { opacity: 0 },
+        itemStyle: { color: l.color, borderColor: tokens.ink, borderWidth: l.main ? 2 : 1 },
+        ...(l.tip
+          ? {
+              label: {
+                show: true,
+                position: 'right',
+                distance: 8,
+                formatter: l.tip.rank === null ? '{f|}' : `{f|} {r|${l.tip.rank}}`,
+                rich: {
+                  f: { width: 22, height: 16, backgroundColor: { image: l.tip.flag } },
+                  r: { color: tokens.ink, fontSize: 13, fontWeight: 700 }
+                }
+              }
+            }
+          : {})
+      }
+    ];
+  });
+  const levelAxis = {
+    type: opts.log ? 'log' : 'value',
+    min: opts.log ? logMin : 0,
+    max: frame.yMax,
+    splitLine: { lineStyle: LINE },
+    axisLabel: { color: tokens.muted, formatter: (v: number) => formatAxisNumber(v) }
+  };
+  // with the growth line: a second axis at the right in %, in the color of that line, without grid lines
+  const yAxes = g
+    ? [
+        levelAxis,
+        {
+          type: 'value',
+          position: 'right',
+          min: growthMin,
+          max: growthMax,
+          splitLine: { show: false },
+          axisLabel: { color: g.color, formatter: (v: number) => `${v} %` }
+        }
+      ]
+    : levelAxis;
+  const option = {
+    animation: false,
+    backgroundColor: 'transparent',
+    tooltip: { show: false },
+    // room above the lines for the counter of the year and the flags that sit over the chart
+    grid: { left: 8, right: g ? 86 : 36, top: 92, bottom: 8, containLabel: true },
+    xAxis: {
+      type: 'value',
+      min: frame.xMin,
+      max: frame.xMax,
+      minInterval: 1,
+      axisLine: { lineStyle: { color: tokens.baseline } },
+      axisTick: { show: false },
+      axisLabel: { color: tokens.muted, formatter: (v: number) => String(Math.round(v)) },
+      splitLine: { show: false }
+    },
+    yAxis: yAxes,
+    series: [...series, ...growthSeries]
   };
   return { option, summary: opts.summary };
 }

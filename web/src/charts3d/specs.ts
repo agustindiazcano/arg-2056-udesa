@@ -37,12 +37,13 @@ interface LinesSpecOpts {
   band?: Lines3DSpec['band'];
   marker?: number;
   follow?: boolean;
+  log?: boolean;
   summary?: string;
 }
 
 /** The data of a 3D line chart. */
 export function linesSpec(opts: LinesSpecOpts): Lines3DSpec {
-  const { title, unit, xLabels, series, band, marker, follow } = opts;
+  const { title, unit, xLabels, series, band, marker, follow, log } = opts;
   const span = xLabels.length > 1 ? `, de ${xLabels[0]} a ${xLabels[xLabels.length - 1]}` : '';
   return {
     kind: 'lines',
@@ -53,6 +54,7 @@ export function linesSpec(opts: LinesSpecOpts): Lines3DSpec {
     ...(band ? { band } : {}),
     ...(marker !== undefined ? { marker } : {}),
     ...(follow ? { follow } : {}),
+    ...(log ? { log } : {}),
     summary: opts.summary ?? `${title}, vista 3D de líneas${span}: ${series.map((s) => s.name).join(', ')}`
   };
 }
