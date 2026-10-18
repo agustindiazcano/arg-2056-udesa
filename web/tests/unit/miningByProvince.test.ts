@@ -45,4 +45,25 @@ describe('corrections of 2026-10-14 in the RIGI list', () => {
     expect(p.status).toBe('aprobado');
     expect(p.note).toContain('12.240');
   });
+
+  it('official RIGI portfolio includes formal resolutions and approved projects with R14 reference', () => {
+    const losToldos = RIGI_OIL_GAS.find((p) => p.name === 'Los Toldos II Este')!;
+    expect(losToldos.status).toBe('aprobado');
+    expect(losToldos.resolution).toBe('Resolución 1771/2026');
+    expect(losToldos.refs).toContain('R14');
+
+    const vicuna = RIGI_MINING.find((p) => p.name === 'Vicuña')!;
+    expect(vicuna.status).toBe('aprobado');
+    expect(vicuna.refs).toContain('R14');
+
+    const vmos = RIGI_OIL_GAS.find((p) => p.name.includes('VMOS'))!;
+    expect(vmos.status).toBe('aprobado');
+    expect(vmos.refs).toContain('R14');
+
+    const approvedMiningSum = RIGI_MINING.filter((p) => p.status === 'aprobado').reduce((sum, p) => sum + (p.investment ?? 0), 0);
+    expect(approvedMiningSum).toBeGreaterThan(25000);
+
+    const approvedOilGasSum = RIGI_OIL_GAS.filter((p) => p.status === 'aprobado').reduce((sum, p) => sum + (p.investment ?? 0), 0);
+    expect(approvedOilGasSum).toBeGreaterThan(25000);
+  });
 });

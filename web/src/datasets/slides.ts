@@ -322,7 +322,7 @@ export function buildSlides(): SlideData[] {
       provinces(),
       { id: 'provinces-value', title: `Valor productivo por provincia (${PRODUCTION_UNIT})`, columns: ['Provincia', 'Valor'], rows: PROVINCES.map((p, i) => [p.name, PROVINCE_VALUES[i] ?? null]) },
       hydrocarbonProvinces(),
-      indicators()], false, ['W3', 'E3', 'E5', 'E9', 'E11', 'R1', 'R2', 'R3', 'R4', 'R5', 'R9', 'R12', 'R13', 'E6', 'E4', 'R6', 'R7', 'R8', 'R10', 'R11', 'E8']),
+      indicators()], false, ['W3', 'E3', 'E5', 'E9', 'E11', 'R1', 'R2', 'R3', 'R4', 'R5', 'R9', 'R12', 'R13', 'R14', 'E6', 'E4', 'R6', 'R7', 'R8', 'R10', 'R11', 'E8']),
     slide('5', TOUR_CHARTS[5]!.title, [chartTable(5), errorTable(), argentinaTable(), convergenceTable(), countriesTable(), scenariosTable(), imfTable()], false),
     slide('12', COMPOSITION_TITLE, [
       chartTable(12),

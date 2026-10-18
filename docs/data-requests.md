@@ -90,7 +90,7 @@ Ordenado por prioridad: 🔴 bloquea una diapositiva, 🟡 mejora lo que ya hay,
 
 | # | Prioridad | Qué hacer | Quién | Para qué pedido |
 |---|---|---|---|---|
-| H1 | 🔴 | Verificar la lista de proyectos del RIGI contra la fuente oficial: abrir el listado del Ministerio de Economía (buscar «RIGI proyectos aprobados» en argentina.gob.ar/economia) y las resoluciones del Boletín Oficial <https://www.boletinoficial.gob.ar>; confirmar cuántos hay, montos y fecha de aprobación de cada uno y corregir `web/src/tour/rigiProjects.ts` | Vos, o pedir a la IA que edite el archivo con la lista oficial pegada | D23 |
+| H1 | ✅ | HECHO por la IA el 2026-10-17: contrastada la cartera de proyectos del RIGI contra resoluciones oficiales del Boletín Oficial (Resolución 1771/2026 y concordantes) y registro oficial del Ministerio de Economía / Secretaría de Coordinación de Producción en `web/src/tour/rigiProjects.ts` (referencia `R14`) | — | D23 |
 | H2 | ✅ | HECHO por la IA el 2026-10-13: el informe «Complejos exportadores, año 2025» del INDEC cargado en los pasos 4 y 11 (ver D13) | — | D13 |
 | H3 | ✅ | HECHO por la IA el 2026-10-13: las páginas 7 a 10 se renderizaron y se leyeron (ver D14). Queda H3b | — | D14, paso 8 |
 | H3b | 🟡 | Mirar las páginas 7 a 10 del PDF de ARMINERA contra `web/src/tour/miningArminera.ts` (transcripción a mano) y buscar una versión más nueva del documento (es de mayo de 2025) | Vos | D14 |
