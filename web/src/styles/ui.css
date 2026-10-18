@@ -3435,3 +3435,52 @@ button.brand:focus-visible .brand-a {
   font-weight: 600;
   border-color: color-mix(in srgb, var(--intro-light) 55%, transparent);
 }
+
+/* ---- hover on the logo of the navbar: «Argentina» turns gold, «2056» turns white (a wipe from the left) and an underline grows, all eased ---- */
+#overlay .chrome button.brand {
+  position: relative;
+}
+
+#overlay .chrome button.brand::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -4px;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--nav-gold-highlight), var(--nav-gold));
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.5s ease-in-out;
+}
+
+#overlay .chrome button.brand:hover::after,
+#overlay .chrome button.brand:focus-visible::after {
+  transform: scaleX(1);
+}
+
+#overlay .chrome button.brand .brand-a {
+  transition: color 0.5s ease-in-out;
+}
+
+#overlay .chrome button.brand:hover .brand-a,
+#overlay .chrome button.brand:focus-visible .brand-a {
+  color: var(--nav-gold);
+}
+
+/* the white sits over the gold gradient and grows from the left: a gradient cannot be eased, its size can */
+#overlay .chrome button.brand .brand-n {
+  background:
+    linear-gradient(var(--intro-white), var(--intro-white)) no-repeat 0 0 / 0% 100%,
+    linear-gradient(135deg, var(--nav-gold-highlight) 0%, var(--nav-gold) 38%, var(--nav-gold-deep) 75%, var(--nav-gold-shadow) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  transition: background-size 0.6s ease-in-out, filter 0.5s ease-in-out;
+}
+
+#overlay .chrome button.brand:hover .brand-n,
+#overlay .chrome button.brand:focus-visible .brand-n {
+  background-size: 100% 100%, auto;
+}
