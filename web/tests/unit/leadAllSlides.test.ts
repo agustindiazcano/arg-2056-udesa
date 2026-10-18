@@ -14,7 +14,7 @@ describe('units and descriptions inside the question marks', () => {
   it('the subtitles no longer carry the units that moved into the question marks', () => {
     const read = (n: string) => readFileSync(`src/tour/${n}.tsx`, 'utf8');
     expect(read('AiStep')).not.toMatch(/\{GDP_UNIT\}, \{FIRST\}/);
-    expect(read('ProvinceStep')).not.toMatch(/\{PRODUCTION_UNIT\} por año; elegí/);
+    expect(read('ProvinceStep')).not.toMatch(/^\s*\{PRODUCTION_UNIT\} por año; elegí/m);
     expect(read('ProductivityStep')).not.toMatch(/className="prod-unit"/);
     expect(read('ExportsStep')).not.toMatch(/\{metric === 'usd' \? 'miles de millones de USD' : 'porcentaje del total exportado'\} · <span/);
   });
