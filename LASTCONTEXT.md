@@ -2,7 +2,7 @@
 
 ## State (2026-10-17)
 - **Stack of three branches, all CI green, no PR opened** (merge in order; each is based on the previous): `task/tour-nav-menu` -> `task/nav-gold-palette` -> `task/intro-load-lights`.
-- **Separate branch, CI green, no PR**: `task/help-lead-text` (slide 1 step 1: `lead` line in `ChartHelp`, sky blue, first line of tooltip and popup; units moved into the `?`).
+- **Slide 1 (plan `docs/action-plan-slide1-visual.md`), CI green, no PR**: `task/help-lead-text` (step 1: `lead` line in `ChartHelp`) -> `task/slide1-main-metric` (steps 2 to 6: clickable ranking tables, flags to compare countries, log scale only when a line is squashed, flag + place at the tip of the lines, regional growth line on a right axis (2D, PBI only), `lead` on the other slides). Merge in that order; the nav stack above is independent of it (both touch `ui.css` at the end: expect a trivial conflict).
 - **Worktree** `../arg-2056-udesa-nav` (node_modules is a junction to the main checkout); the human works in the main checkout, so do not switch branches there.
 
 ## What was done
@@ -15,5 +15,5 @@
 - RULE #1: tests run only in CI. No colour literals outside `tokens.css`. Main chunk budget: do not import charts or data JSON from the app shell.
 
 ## Next
-- Open the PRs (human approves). Slide 1 plan: `docs/action-plan-slide1-visual.md`; next step `slide1-main-metric`, then compare countries (flags), flag + rank labels, region growth (LCN), `lead` in the other slides.
+- Open the PRs (human approves). One Andes unit test (`closes the crossing pop-up with Escape`) failed once in CI with no related change and passed on re-run: probably flaky.
 - Human: look at the menu, the gold and the intro load by eye.
