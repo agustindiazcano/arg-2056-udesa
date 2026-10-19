@@ -73,7 +73,7 @@ export function MapSearch({
     <div
       ref={wrapperRef}
       className={`map-search-container ${className}`}
-      style={{ position: 'relative', width: '100%', maxWidth: '320px' }}
+      style={{ position: 'relative', width: '100%', maxWidth: '320px', pointerEvents: 'auto' }}
     >
       <div
         style={{

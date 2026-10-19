@@ -11,7 +11,7 @@ import { PROVINCES } from '../types/province.js';
 import type { ProvinceId } from '../types/province.js';
 import { Segmented } from '../ui/Segmented.js';
 import { Spinner } from '../ui/Spinner.js';
-import { PRODUCTION_UNIT, PRODUCER_MIN, SECTOR_LABELS, SECTOR_VALUES, mapValuesOf, rankedProvinces } from './provinceMock.js';
+import { PRODUCTION_UNIT, PRODUCER_MIN, SECTOR_LABELS, SECTOR_VALUES, SHORT, mapValuesOf, rankedProvinces } from './provinceMock.js';
 import { RESOURCE_SECTORS, totals } from './resourcesData.js';
 import type { Part, ResourceSector } from './resourcesData.js';
 import { TourChart } from './TourChart.js';
@@ -127,10 +127,14 @@ export function ResourcesStep() {
   }, [label, drilldown]);
 
   const handleDrilldownClick = useCallback((params: ChartClickParams) => {
-    if (drilldown.kind === 'departments' && params.name) {
+    if (!params.name) return;
+    if (drilldown.kind === 'departments') {
       setSelectedDept((curr) => (curr === params.name ? null : params.name!));
+    } else if (drilldown.kind === 'provinces') {
+      const prov = PROVINCES.find((p) => (SHORT[p.id] ?? p.name) === params.name || p.name === params.name);
+      if (prov) select(prov.id);
     }
-  }, [drilldown.kind]);
+  }, [drilldown.kind, select]);
 
   const projects = useMemo(() => {
     if (!selected || !selectedDept) return [];
@@ -149,13 +153,15 @@ export function ResourcesStep() {
             values,
             metric: 'level',
             selectedId: selected,
+            selectedDepartment: selectedDept,
+            onSelectDepartment: setSelectedDept,
             formatValue: formatProduction,
             onSelect: select,
             upright: true,
             zoomToSelected: true,
             summary: mapSummary(values, 'level', `producción de ${label.toLowerCase()}`, 2025, PRODUCTION_UNIT)
           },
-    [provinces, values, selected, label, formatProduction, select]
+    [provinces, values, selected, selectedDept, label, formatProduction, select]
   );
   const pickSector = useCallback((name: string) => {
     const found = RESOURCE_SECTORS.find((s) => s.label === name);
@@ -354,6 +360,7 @@ export function ResourcesStep() {
                   year={2025}
                   observed
                   hideTitle
+                  zoomToSelected
                   onSelect={select}
                   selectedDepartment={selectedDept}
                   onSelectDepartment={setSelectedDept}

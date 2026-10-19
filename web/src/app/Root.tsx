@@ -1,6 +1,8 @@
 import React, { Suspense, lazy, useState } from 'react';
 import { App } from './App';
+import { consumeReloadSection } from './prefetch';
 import { useStore } from '../state/store';
+import { SECTIONS } from '../types/scene';
 import type { Section } from '../types/scene';
 import { YEAR_MIN } from '../types/year';
 
@@ -11,6 +13,11 @@ const Intro = lazy(() => import('../intro/Intro').then((m) => ({ default: m.Intr
 export const SKIP_INTRO_KEY = 'arg2056.skipIntro';
 
 function skipIntro(): boolean {
+  const reloadedSection = consumeReloadSection();
+  if (reloadedSection && (SECTIONS as readonly string[]).includes(reloadedSection)) {
+    useStore.getState().dispatch({ type: 'setSection', section: reloadedSection as Section });
+    return true;
+  }
   if (new URLSearchParams(window.location.search).get('intro') === '0') return true;
   try {
     return window.localStorage.getItem(SKIP_INTRO_KEY) === '1';

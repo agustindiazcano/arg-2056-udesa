@@ -50,6 +50,10 @@ export interface Map3DSpec {
   formatValue: (value: number) => string;
   /** a click on a province (null clears the selection) */
   onSelect: (id: string | null) => void;
+  /** currently selected department inside the selected province */
+  selectedDepartment?: string | null;
+  /** a click on a department inside the selected province (null clears the department selection) */
+  onSelectDepartment?: (dept: string | null) => void;
   /** the map stands upright, north up and seen almost from above (the Recorrido), not tilted on a table */
   upright?: boolean;
   /** the camera flies to the selected province and back to the whole map when nothing is selected */

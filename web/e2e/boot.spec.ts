@@ -18,4 +18,28 @@ test.describe('boot', () => {
       SCENE_TABS.filter((t) => t.scene !== 'andes').map((t) => t.tab)
     );
   });
+
+  test('opens the Data page when clicking the Data button in the header and renders all four data tabs', async ({ page }) => {
+    await page.goto('/');
+
+    const dataBtn = page.locator('.header-end').getByRole('button', { name: 'Data' });
+    await expect(dataBtn).toHaveAttribute('aria-pressed', 'false');
+    await dataBtn.click();
+    await expect(dataBtn).toHaveAttribute('aria-pressed', 'true');
+
+    const dataNav = page.getByRole('navigation', { name: 'Secciones de datos' });
+    await expect(dataNav).toBeVisible();
+    await expect(page.getByRole('combobox', { name: 'Diapositiva' })).toBeVisible();
+    await expect(page.getByRole('table').first()).toBeVisible();
+
+    await dataNav.getByRole('button', { name: 'Referencias' }).click();
+    await expect(page.getByRole('heading', { name: 'Referencias' })).toBeVisible();
+
+    await dataNav.getByRole('button', { name: 'Metodología' }).click();
+    await expect(page.getByRole('heading', { name: 'Metodología y pipeline de datos' })).toBeVisible();
+
+    await dataNav.getByRole('button', { name: 'Uso de AI' }).click();
+    await expect(page.getByRole('heading', { name: 'Uso de AI y flujo de ingeniería' })).toBeVisible();
+  });
 });
+

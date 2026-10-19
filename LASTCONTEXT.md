@@ -1,18 +1,18 @@
 # LASTCONTEXT.md
 
 ## State
-- **Branch**: `task/data-tech-uncertainty` (Fase 2: Series empíricas de rezagos de adopción tecnológica, deflación de costos de inferencia, escala de cómputo y revisiones de pronósticos del PBI en la Diapositiva 8).
+- **Branch**: `task/fix-slide2-map-click` (Fix province/department click interactions on Slide 2 Argentina map & fix DataPage chunk 404 / missing tests).
 - **Hitos completados en la sesión**:
-  1. **PR #135 abierto para Fase 1** (`task/data-development-metrics`): datos oficiales de desarrollo (salud, educación, Gini) verificados con CI verde (`run 39172037778`).
-  2. **Datasets de incertidumbre tecnológica** (`web/src/tour/techUncertaintyData.ts`):
-     - Rezagos de difusión masiva: series históricas del CHAT dataset (Comin & Hobijn / NBER) y Our World in Data (electricidad, telefonía, autos, PC, internet, smartphones, IA).
-     - Curva de costos de inferencia: caída de $20 a $0.07 por 1M tokens (>280x) en benchmark MMLU (Stanford HAI AI Index 2024/2025 y Artificial Analysis).
-     - Cómputo de entrenamiento: escala histórica en FLOPs (Perceptron a Gemini Ultra / GPT-4) de Epoch AI.
-     - Revisiones de pronósticos: desvíos empíricos observados vs proyecciones a 1 año del FMI WEO en Argentina (error medio absoluto ~3,9 pp).
-     - Canales del escenario adverso: mecanismos de la Curva J de productividad, automatización y desacoplamiento salarial (Acemoglu 2024 / Brynjolfsson).
-  3. **Diapositiva 8 conectada (`ForecastUncertaintyStep.tsx`)**: gráficos SVG interactivos por pestaña con selectores de tecnología, comparativa de pronósticos y visualización de costos.
-  4. **Metadatos y trazabilidad**: tablas registradas con `quality: 'real'` en `quality.ts`, `slides.ts`, `references.ts` (refs D6 y D7) y `docs/references.md`.
-  5. **Tests unitarios**: creados `techUncertaintyData.test.ts` y `forecastUncertaintyStep.test.tsx`. Presupuesto de chunks ajustado en `budgets.json`.
+  1. **Diagnóstico y solución de clicks en el mapa de la Diapositiva 2 (`ResourcesStep.tsx`, `ProvinceStep.tsx`, `ProvinceProfileStep.tsx`)**:
+     - En `web/src/styles/ui.css`, la regla `.res-grid .gdp-chart > .tour-chart > * { width: 100%; height: 100%; }` (especificidad `0,3,0`, línea 2385) carecía de `:not(.tour-view-switch)`, haciendo que `<div className="tour-view-switch">` (`position: absolute; z-index: 3; pointer-events: auto`) se estirara al 100% × 100% sobre el mapa e interceptara todos los clicks. Se agregó `:not(.tour-view-switch)` en `.tour-grid`, `.res-grid` y `.ai-grid`.
+     - En `web/src/charts3d/types.ts`, `web/src/three/Map3D.tsx` y `web/src/tour/ResourcesStep.tsx`: se conectaron `selectedDepartment` y `onSelectDepartment` en 3D con resaltado visual y migas de pan (`map-breadcrumb-bar`), se corrigió el radio base (`startRadius`) de `flyTo` al cambiar de provincia, y se habilitó seleccionar una provincia haciendo click en su barra del gráfico nacional.
+     - En `web/src/ui/MapSearch.tsx` y `web/src/tour/ProvinceProfileStep.tsx`: se aseguró `pointerEvents: 'auto'`.
+  2. **Diagnóstico y solución del error 404 al abrir la sección "Data" (`DataPage-*.js` / `simModel-*.js`)**:
+     - Causa raíz: `prefetchCharts` (`web/src/app/prefetch.ts`) precargaba `TourStep`, `TourChart3D` y `Chart3D`, pero omitía `DataPage` y `Simulator`. Si ocurría un nuevo deploy en Vercel con la pestaña abierta, al hacer click en `Data` el navegador pedía los hashes viejos (`DataPage-*.js` y `simModel-*.js`), recibía HTTP 404 y `React.lazy` lanzaba un `TypeError: Failed to fetch dynamically imported module` no capturado.
+     - Solución: se agregaron `Simulator` y `DataPage` a `CHART_LOADERS` en `prefetch.ts`; se implementó recuperación automática ante chunks obsoletos (`recoverChunkLoadError`, `consumeReloadSection`, listener `vite:preloadError`, y `SectionErrorBoundary` en `App.tsx` y `Root.tsx`) que recarga una vez preservando la sección `data`.
+  3. **Tests unitarios y E2E (TDD)**:
+     - Unitarios: `chart3dHostCss.test.ts`, `resourcesStepDrilldown.test.tsx`, `prefetch.test.ts`, y `shellUi.test.tsx` (esperando el render real de `<DataPage />` al hacer click en `Data`).
+     - E2E Playwright: `web/e2e/boot.spec.ts` ahora hace click en el botón `Data` del header y verifica que carguen las tablas y las 4 pestañas (`Data`, `Referencias`, `Metodología`, `Uso de AI`) sin errores 404 ni de consola.
 
 ## Reglas operativas vigentes
 - **RULE #1**: Tests corren exclusivamente en CI (GitHub Actions), nunca localmente.
@@ -20,5 +20,4 @@
 - **Datos**: Todo dato presentado debe incluir `source` y `retrieved_at`.
 
 ## Next
-- Subir rama `task/data-tech-uncertainty` al repositorio remoto y monitorear CI.
-- Una vez verificado verde en CI, abrir PR para la Fase 2 y continuar con la Fase 3 (Valuación Agro y Recursos en Slides 10 y 13).
+- Subir nuevo commit a `origin/task/fix-slide2-map-click`, verificar todos los jobs de CI en GitHub Actions y abrir el Pull Request.

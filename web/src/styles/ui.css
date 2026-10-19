@@ -752,7 +752,7 @@ main.scene-container {
   min-height: 0;
 }
 
-.tour-grid > .gdp-chart > .tour-chart > * {
+.tour-grid > .gdp-chart > .tour-chart > *:not(.tour-view-switch) {
   width: 100%;
   height: 100%;
 }
@@ -2382,7 +2382,7 @@ main.scene-container {
   min-height: 12rem;
 }
 
-.res-grid .gdp-chart > .tour-chart > * {
+.res-grid .gdp-chart > .tour-chart > *:not(.tour-view-switch) {
   width: 100%;
   height: 100%;
 }
@@ -2423,7 +2423,7 @@ main.scene-container {
   min-height: 12rem;
 }
 
-.ai-grid > .gdp-chart > .tour-chart > * {
+.ai-grid > .gdp-chart > .tour-chart > *:not(.tour-view-switch) {
   width: 100%;
   height: 100%;
 }
