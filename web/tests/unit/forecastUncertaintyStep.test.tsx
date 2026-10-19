@@ -4,13 +4,15 @@ import { afterEach, describe, expect, it } from 'vitest';
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { ForecastUncertaintyStep } from '../../src/tour/ForecastUncertaintyStep.js';
 
+import { FORECAST_UNCERTAINTY_TITLE } from '../../src/tour/slideTitles.js';
+
 afterEach(cleanup);
 
 describe('ForecastUncertaintyStep', () => {
   it('renders title and sections correctly', () => {
     render(<ForecastUncertaintyStep />);
 
-    expect(screen.getByRole('heading', { level: 2, name: /Incertidumbre, difusión y costos/i })).toBeDefined();
+    expect(screen.getByRole('heading', { level: 2, name: FORECAST_UNCERTAINTY_TITLE })).toBeDefined();
 
     // Check tabs
     expect(screen.getByRole('button', { name: 'Difusión tecnológica' })).toBeDefined();
