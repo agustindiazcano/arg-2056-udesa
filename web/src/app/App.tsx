@@ -1,5 +1,5 @@
 import React, { Component, Suspense, lazy, useCallback, useEffect, useRef } from 'react';
-import type { ComponentType, ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import { useStore } from '../state/store';
 import { useKeyboard } from '../state/useKeyboard';
 import { useTicker } from '../state/useTicker';
@@ -20,23 +20,21 @@ import { useSlots } from '../dashboard/slots';
 
 import { hasTourChart } from '../tour/chartSteps';
 
-function lazySection<P extends object = Record<string, never>>(loader: () => Promise<{ default: ComponentType<P> }>) {
-  return lazy(() =>
-    loader().catch((err: unknown) => {
-      if (recoverChunkLoadError(useStore.getState().section)) {
-        return new Promise<{ default: ComponentType<P> }>(() => {});
-      }
-      throw err;
-    })
-  );
+function withChunkRecovery<T>(promise: Promise<T>): Promise<T> {
+  return promise.catch((err: unknown) => {
+    if (recoverChunkLoadError(useStore.getState().section)) {
+      return new Promise<T>(() => {});
+    }
+    throw err;
+  });
 }
 
 /** The charts of the Recorrido draw with ECharts, which must stay out of the initial load. */
-const TourStep = lazySection(() => import('../tour/TourStep').then((m) => ({ default: m.TourStep })));
+const TourStep = lazy(() => withChunkRecovery(import('../tour/TourStep').then((m) => ({ default: m.TourStep }))));
 
-const Simulator = lazySection(() => import('../tour/Simulator').then((m) => ({ default: m.Simulator })));
+const Simulator = lazy(() => withChunkRecovery(import('../tour/Simulator').then((m) => ({ default: m.Simulator }))));
 
-const DataPage = lazySection(() => import('../datasets/DataPage').then((m) => ({ default: m.DataPage })));
+const DataPage = lazy(() => withChunkRecovery(import('../datasets/DataPage').then((m) => ({ default: m.DataPage }))));
 
 class SectionErrorBoundary extends Component<{ resetKey: string; children: ReactNode }, { failed: boolean }> {
   state = { failed: false };
