@@ -1,9 +1,28 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { prefetchCharts } from '../../src/app/prefetch';
+import {
+  CHART_LOADERS,
+  CHUNK_RELOAD_KEY,
+  RELOAD_SECTION_KEY,
+  consumeReloadSection,
+  installPreloadErrorHandler,
+  prefetchCharts,
+  recoverChunkLoadError
+} from '../../src/app/prefetch';
 
-afterEach(() => vi.unstubAllGlobals());
+afterEach(() => {
+  try {
+    window.sessionStorage?.clear();
+  } catch {
+    // ignore in plain node
+  }
+  vi.unstubAllGlobals();
+});
 
 describe('prefetchCharts', () => {
+  it('includes TourStep, TourChart3D, Chart3D, Simulator, and DataPage in CHART_LOADERS so DataPage is prefetched before a deploy can invalidate its hash', () => {
+    expect(CHART_LOADERS).toHaveLength(5);
+  });
+
   it('loads every chunk of the charts, one at a time, each when the browser is idle', async () => {
     const order: string[] = [];
     const loaders = ['tour', 'three', 'dashboard'].map((name) => () => {
@@ -41,3 +60,69 @@ describe('prefetchCharts', () => {
     expect(ok).toHaveBeenCalledOnce();
   });
 });
+
+describe('stale chunk 404 recovery (recoverChunkLoadError & consumeReloadSection)', () => {
+  const makeStorage = () => {
+    const store = new Map<string, string>();
+    return {
+      getItem: (k: string) => store.get(k) ?? null,
+      setItem: (k: string, v: string) => {
+        store.set(k, v);
+      },
+      removeItem: (k: string) => {
+        store.delete(k);
+      }
+    };
+  };
+
+  it('reloads once and saves the target section on first chunk load failure, then prevents infinite reload loops', () => {
+    const storage = makeStorage();
+    vi.stubGlobal('window', { sessionStorage: storage, addEventListener: vi.fn(), removeEventListener: vi.fn() });
+    const reload = vi.fn();
+
+    expect(recoverChunkLoadError('data', reload)).toBe(true);
+    expect(reload).toHaveBeenCalledOnce();
+    expect(storage.getItem(RELOAD_SECTION_KEY)).toBe('data');
+    expect(storage.getItem(CHUNK_RELOAD_KEY)).toBe('1');
+
+    // If the chunk still fails immediately after reload, do not reload in a loop
+    expect(recoverChunkLoadError('data', reload)).toBe(false);
+    expect(reload).toHaveBeenCalledOnce();
+  });
+
+  it('consumeReloadSection returns and clears the saved section after reload', () => {
+    const storage = makeStorage();
+    storage.setItem(RELOAD_SECTION_KEY, 'data');
+    storage.setItem(CHUNK_RELOAD_KEY, '1');
+    vi.stubGlobal('window', { sessionStorage: storage });
+
+    expect(consumeReloadSection()).toBe('data');
+    expect(storage.getItem(RELOAD_SECTION_KEY)).toBeNull();
+    expect(storage.getItem(CHUNK_RELOAD_KEY)).toBeNull();
+    expect(consumeReloadSection()).toBeNull();
+  });
+
+  it('installPreloadErrorHandler intercepts vite:preloadError and triggers a reload for the active section', () => {
+    const storage = makeStorage();
+    const listeners = new Map<string, EventListener>();
+    vi.stubGlobal('window', {
+      sessionStorage: storage,
+      addEventListener: (type: string, fn: EventListener) => listeners.set(type, fn),
+      removeEventListener: (type: string) => listeners.delete(type)
+    });
+    const reload = vi.fn();
+    const cleanup = installPreloadErrorHandler(() => 'data', reload);
+    const handler = listeners.get('vite:preloadError');
+    expect(handler).toBeTypeOf('function');
+
+    const evt = new Event('vite:preloadError', { cancelable: true });
+    handler!(evt);
+    expect(evt.defaultPrevented).toBe(true);
+    expect(reload).toHaveBeenCalledOnce();
+    expect(storage.getItem(RELOAD_SECTION_KEY)).toBe('data');
+
+    cleanup();
+    expect(listeners.has('vite:preloadError')).toBe(false);
+  });
+});
+

@@ -1,4 +1,5 @@
-import React, { Suspense, lazy, useCallback, useEffect, useRef } from 'react';
+import React, { Component, Suspense, lazy, useCallback, useEffect, useRef } from 'react';
+import type { ComponentType, ReactNode } from 'react';
 import { useStore } from '../state/store';
 import { useKeyboard } from '../state/useKeyboard';
 import { useTicker } from '../state/useTicker';
@@ -14,16 +15,53 @@ import { SceneHost } from './SceneHost';
 import { SceneTransition } from '../motion/SceneTransition';
 import { CapabilityProvider, QualityDebugLine } from '../runtime/CapabilityProvider';
 import { documentTitle } from './title';
+import { installPreloadErrorHandler, recoverChunkLoadError } from './prefetch';
 import { useSlots } from '../dashboard/slots';
 
 import { hasTourChart } from '../tour/chartSteps';
 
+function lazySection<P extends object = Record<string, never>>(loader: () => Promise<{ default: ComponentType<P> }>) {
+  return lazy(() =>
+    loader().catch((err: unknown) => {
+      if (recoverChunkLoadError(useStore.getState().section)) {
+        return new Promise<{ default: ComponentType<P> }>(() => {});
+      }
+      throw err;
+    })
+  );
+}
+
 /** The charts of the Recorrido draw with ECharts, which must stay out of the initial load. */
-const TourStep = lazy(() => import('../tour/TourStep').then((m) => ({ default: m.TourStep })));
+const TourStep = lazySection(() => import('../tour/TourStep').then((m) => ({ default: m.TourStep })));
 
-const Simulator = lazy(() => import('../tour/Simulator').then((m) => ({ default: m.Simulator })));
+const Simulator = lazySection(() => import('../tour/Simulator').then((m) => ({ default: m.Simulator })));
 
-const DataPage = lazy(() => import('../datasets/DataPage').then((m) => ({ default: m.DataPage })));
+const DataPage = lazySection(() => import('../datasets/DataPage').then((m) => ({ default: m.DataPage })));
+
+class SectionErrorBoundary extends Component<{ resetKey: string; children: ReactNode }, { failed: boolean }> {
+  state = { failed: false };
+  static getDerivedStateFromError() {
+    return { failed: true };
+  }
+  componentDidUpdate(prevProps: { resetKey: string }) {
+    if (prevProps.resetKey !== this.props.resetKey && this.state.failed) {
+      this.setState({ failed: false });
+    }
+  }
+  render() {
+    if (this.state.failed) {
+      return (
+        <div className="data-page" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '0.75rem', paddingTop: '2rem' }}>
+          <p style={{ margin: 0 }}>Hay una versión más reciente disponible de esta sección.</p>
+          <button type="button" className="btn btn--primary" onClick={() => window.location.reload()}>
+            Actualizar página
+          </button>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
 
 /** `onHome` is the way back to the intro: the brand in the header calls it. */
 export function App({ onHome }: { onHome?: () => void }) {
@@ -34,6 +72,8 @@ export function App({ onHome }: { onHome?: () => void }) {
   const section = useStore((s) => s.section);
   const tourStep = useStore((s) => s.tourStep);
   const filtersRef = useCallback((el: HTMLDivElement | null) => useSlots.getState().set('filters', el), []);
+
+  useEffect(() => installPreloadErrorHandler(() => useStore.getState().section), []);
 
   // the real height of the header and of the bottom bar, for a scene that floats its panels over a full-screen canvas (the Andes)
   const overlayRef = useRef<HTMLDivElement>(null);
@@ -76,23 +116,25 @@ export function App({ onHome }: { onHome?: () => void }) {
         </div>
         
         <main id="main" tabIndex={-1} className="scene-container" data-testid="scene">
-          {section === 'data' ? (
-            <Suspense fallback={<Spinner label="Cargando los datos..." />}>
-              <DataPage />
-            </Suspense>
-          ) : section === 'simulator' ? (
-            <Suspense fallback={<Spinner label="Cargando el simulador..." />}>
-              <Simulator />
-            </Suspense>
-          ) : section === 'tour' && hasTourChart(tourStep) ? (
-            <Suspense fallback={<Spinner label="Cargando el gráfico..." />}>
-              <TourStep step={tourStep} />
-            </Suspense>
-          ) : (
-            <SceneTransition sceneKey={scene}>
-              <SceneHost scene={scene} />
-            </SceneTransition>
-          )}
+          <SectionErrorBoundary resetKey={`${section}:${scene}:${tourStep}`}>
+            {section === 'data' ? (
+              <Suspense fallback={<Spinner label="Cargando los datos..." />}>
+                <DataPage />
+              </Suspense>
+            ) : section === 'simulator' ? (
+              <Suspense fallback={<Spinner label="Cargando el simulador..." />}>
+                <Simulator />
+              </Suspense>
+            ) : section === 'tour' && hasTourChart(tourStep) ? (
+              <Suspense fallback={<Spinner label="Cargando el gráfico..." />}>
+                <TourStep step={tourStep} />
+              </Suspense>
+            ) : (
+              <SceneTransition sceneKey={scene}>
+                <SceneHost scene={scene} />
+              </SceneTransition>
+            )}
+          </SectionErrorBoundary>
         </main>
         
         <footer className="bottom-bar">

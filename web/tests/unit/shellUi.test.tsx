@@ -99,7 +99,7 @@ describe('header', () => {
     expect(screen.getByRole('tab', { name: 'Andes' }).getAttribute('aria-selected')).toBe('false');
   });
 
-  it('has the skip link, and the Data button at the top right instead of the link to the sources', () => {
+  it('has the skip link, and the Data button at the top right loads and renders the Data page', async () => {
     render(<App />);
     expect(screen.getByRole('link', { name: 'Saltar al contenido principal' }).getAttribute('href')).toBe('#main');
     expect(screen.queryByRole('link', { name: 'Fuentes y métodos' })).toBeNull();
@@ -107,6 +107,15 @@ describe('header', () => {
     expect(button.getAttribute('aria-pressed')).toBe('false');
     fireEvent.click(button);
     expect(button.getAttribute('aria-pressed')).toBe('true');
+
+    const dataNav = await screen.findByRole('navigation', { name: 'Secciones de datos' });
+    expect(within(dataNav).getAllByRole('button').map((b) => b.textContent)).toEqual([
+      'Data',
+      'Referencias',
+      'Metodología',
+      'Uso de AI'
+    ]);
+    expect(screen.getByRole('combobox', { name: 'Diapositiva' })).toBeTruthy();
   });
 
   it('the document title is "<escena> | Argentina 2056"', () => {
