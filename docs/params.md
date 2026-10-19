@@ -12,7 +12,7 @@ Every parameter in `params.json` contains exactly 14 required fields (`additiona
 
 | Field | Type | Description |
 |---|---|---|
-| `name` | `string` | Unique parameter identifier (e.g. `pop.tfr_target`, `gro.alpha`, `res.va_unit_lithium`). Format: `^[a-z]{2,4}\.[a-z0-9_]+$`. |
+| `name` | `string` | Unique parameter identifier (e.g. `pop.tfr_target`, `gro.alpha`, `gro.gA`, `res.va_unit_lithium`). Format: `^[a-z]{2,4}\.[a-zA-Z0-9_]+$`. |
 | `symbol` | `string` | Mathematical notation used in equations and documentation (e.g. `TFR_T`, `alpha`, `v_r`). |
 | `value` | `number \| null` | Deterministic point value. `null` if the parameter is a random variable in Monte Carlo, uncalibrated, or awaiting a source. |
 | `unit` | `string` | Physical or economic measurement unit (e.g. `births per woman`, `1/year`, `fraction`, `constant USD per unit`). |
