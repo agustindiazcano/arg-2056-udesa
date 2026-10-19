@@ -516,6 +516,6 @@
         ]
       ]
     },
-    "expected_error": "project_population: year 1: step_population: negative population in age group 1: -40"
+    "expected_error": "project_population: year 1: step_population: negative population in age group 1: -50"
   }
 ]

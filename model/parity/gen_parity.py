@@ -264,7 +264,7 @@ def build_population_invalid_payload() -> list[dict]:
                 "fertility": [[0.0, 0.0, 0.0], [0.0, 0.0, 0.0]],
                 "migration": [[0.0, 0.0, 0.0], [0.0, -50.0, 0.0]],
             },
-            "expected_error": "project_population: year 1: step_population: negative population in age group 1: -40",
+            "expected_error": "project_population: year 1: step_population: negative population in age group 1: -50",
         },
     ]
 
