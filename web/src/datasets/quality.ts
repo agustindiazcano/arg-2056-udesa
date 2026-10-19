@@ -94,7 +94,10 @@ export const TABLE_META: Readonly<Record<string, TableMeta>> = {
   'schooling-years': meta('real', 'PNUD (Human Development Report) / UNESCO, años promedio y esperados de escolaridad', '2026-10-18'),
   'pisa-argentina': meta('real', 'OCDE, Programa para la Evaluación Internacional de Alumnos (PISA)', '2026-10-16'),
   'pisa-latam-math': meta('real', 'OCDE, PISA 2022 (Resultados de Matemática en América Latina)', '2026-10-16'),
-  'ai-training-costs': meta('real', 'Stanford HAI / Epoch AI, Artificial Intelligence Index Report 2024', '2026-10-16'),
+  'ai-training-costs': meta('real', 'Stanford HAI / Epoch AI, Artificial Intelligence Index Report 2024 / 2025', '2026-10-18'),
+  'tech-diffusion-lags': meta('real', 'Comin & Hobijn (CHAT dataset / NBER) y Our World in Data, rezagos de adopción', '2026-10-18'),
+  'ai-inference-costs': meta('real', 'Stanford HAI (AI Index 2025) y Artificial Analysis, costo por 1M tokens', '2026-10-18'),
+  'macro-forecast-errors': meta('real', 'FMI (WEO Historical Database) e INDEC, desvíos observados vs proyectados', '2026-10-18'),
   'development-draft': draft('Estructura conceptual de indicadores agregados, cobertura y dimensiones sociales'),
   'forecast-uncertainty-draft': draft('Estructura conceptual de difusión tecnológica, costos de computación y sensibilidad distributiva')
 };

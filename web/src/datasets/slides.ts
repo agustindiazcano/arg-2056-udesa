@@ -477,16 +477,59 @@ export function buildSlides(): SlideData[] {
     ], false, ['D1', 'D2', 'W1', 'S3']),
     slide('17', FORECAST_UNCERTAINTY_TITLE, [
       {
-        id: 'ai-training-costs',
-        title: 'Costo de cómputo estimado en entrenamiento de modelos frontera (Stanford AI Index 2024)',
-        columns: ['Modelo', 'Año', 'Costo estimado de cómputo (USD)', 'Fuente'],
+        id: 'tech-diffusion-lags',
+        title: 'Rezagos históricos de adopción tecnológica (Comin & Hobijn / Our World in Data)',
+        columns: ['Tecnología', 'Categoría', 'Año invención', 'Años adopción masiva (>50%)', 'Fuente'],
         rows: [
-          ['Transformer original', 2017, 'Cientos de USD', 'Stanford HAI / Epoch AI'],
-          ['BERT', 2018, '< 10.000', 'Stanford HAI / Epoch AI'],
-          ['GPT-2', 2019, '~50.000', 'Stanford HAI / Epoch AI'],
-          ['GPT-3', 2020, '4.600.000', 'Stanford HAI / Epoch AI'],
-          ['GPT-4', 2023, '78.000.000', 'Stanford HAI / Epoch AI'],
-          ['Gemini Ultra', 2023, '191.000.000', 'Stanford HAI / Epoch AI']
+          ['Electricidad residencial', 'Física / Red', 1879, 46, 'CHAT / NBER · OWID'],
+          ['Telefonía fija', 'Física / Red', 1876, 50, 'CHAT / NBER · OWID'],
+          ['Automóvil', 'Física / Red', 1886, 40, 'CHAT / NBER'],
+          ['Computadora personal', 'Digital / Software', 1975, 18, 'OWID · World Bank'],
+          ['Internet / WWW', 'Digital / Software', 1991, 7, 'OWID · ITU'],
+          ['Smartphones', 'Digital / Software', 2007, 10, 'Pew Research · OWID'],
+          ['IA Generativa (usuarios)', 'Inteligencia Artificial', 2022, 1, 'Stanford HAI AI Index'],
+          ['IA en procesos productivos core', 'Inteligencia Artificial', 2023, 8, 'Productivity J-Curve · Acemoglu']
+        ]
+      },
+      {
+        id: 'ai-inference-costs',
+        title: 'Evolución del costo de inferencia por 1M de tokens (Stanford HAI / Artificial Analysis)',
+        columns: ['Periodo', 'Modelo de referencia', 'Costo por 1M tokens (USD)', 'Benchmark'],
+        rows: [
+          ['Nov 2022', 'text-davinci-003', 20.0, 'GPT-3.5 benchmark base'],
+          ['Mar 2023', 'gpt-3.5-turbo (v1)', 2.0, 'GPT-3.5 benchmark'],
+          ['Nov 2023', 'gpt-3.5-turbo (v2)', 1.0, 'GPT-3.5 benchmark'],
+          ['Jun 2024', 'gpt-4o-mini', 0.15, 'MMLU 82.0%'],
+          ['Oct 2024', 'Gemini 1.5 Flash-8B', 0.07, 'GPT-3.5 benchmark (~280x caída)'],
+          ['2025 Ref', 'Destilados frontera', 0.04, 'Hardware optimizado']
+        ]
+      },
+      {
+        id: 'ai-training-costs',
+        title: 'Cómputo acumulado y costo de entrenamiento de modelos frontera (Epoch AI / Stanford HAI)',
+        columns: ['Modelo', 'Año', 'FLOPs estimados (log10)', 'Hardware representativo'],
+        rows: [
+          ['Perceptron Mark I', 1958, '8.8 (7e8)', 'Custom Analog / IBM 704'],
+          ['Deep Blue', 1997, '13.3 (2e13)', 'RS/6000 SP + ASICs'],
+          ['AlexNet', 2012, '17.1 (1.4e17)', '2x NVIDIA GTX 580'],
+          ['Transformer', 2017, '19.4 (2.3e19)', '8x NVIDIA P100'],
+          ['GPT-3 (175B)', 2020, '23.5 (3.1e23)', '10.000x NVIDIA V100'],
+          ['GPT-4', 2023, '25.3 (2.1e25)', '~25.000x NVIDIA A100'],
+          ['Gemini 1.0 Ultra', 2023, '25.7 (5.0e25)', 'Google TPU v4/v5e']
+        ]
+      },
+      {
+        id: 'macro-forecast-errors',
+        title: 'Desvíos históricos en pronósticos de PBI en Argentina (FMI WEO t-1 vs INDEC)',
+        columns: ['Año objetivo', 'Proyección FMI WEO (%)', 'PBI real observado (%)', 'Desvío absoluto (pp)'],
+        rows: [
+          [2018, 2.5, -2.6, 5.1],
+          [2019, 1.6, -2.0, 3.6],
+          [2020, -1.3, -9.9, 8.6],
+          [2021, 4.9, 10.7, 5.8],
+          [2022, 2.5, 5.0, 2.5],
+          [2023, 2.0, -1.6, 3.6],
+          [2024, -2.8, -3.5, 0.7]
         ]
       },
       {
@@ -502,7 +545,7 @@ export function buildSlides(): SlideData[] {
           ['Crecimiento, educación, ahorro e inversión', 'Canales de acumulación de capital físico y humano a largo plazo']
         ]
       }
-    ], false, ['D3', 'A1', 'A8']),
+    ], false, ['D3', 'A1', 'A8', 'F1']),
     slide('sim', 'Simulador del PBI', [
       { id: 'factors', title: 'Factores del escenario de referencia', columns: ['Factor', 'Valor', 'Unidad'], rows: SIM_FIELDS.map((f) => [f.label, DEFAULT_SIM[f.key], f.unit]) },
       { id: 'reference', title: 'PBI del escenario de referencia (miles de millones de USD)', columns: ['Año', 'PBI'], rows: sim.years.map((y, i) => [y, sim.gdp[i] ?? null]) }
