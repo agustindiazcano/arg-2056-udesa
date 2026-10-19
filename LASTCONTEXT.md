@@ -23,5 +23,5 @@
 - **TDD**: Commits atómicos separados en `test(...)` y `feat(...)`.
 
 ## Next
-- CI verificado en verde (run 39335417025). Apertura de PR para revisión y aprobación humana.
+- PR #140 abierto, CI verificado en verde (run 39335417025). Espera revisión y aprobación humana.
 - Iniciar la siguiente tarea en cola: `population-age-contract` (`docs/tasks/population-age-contract.md`).
