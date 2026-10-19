@@ -6,6 +6,10 @@ vi.mock('../../src/charts/EChart.js', () => ({
   EChart: ({ 'aria-label': label }: { 'aria-label'?: string }) => <div role="img" aria-label={label} data-testid="echart" />
 }));
 
+vi.mock('../../src/runtime/useReducedMotion.js', () => ({
+  useReducedMotion: () => true
+}));
+
 import { render, screen, fireEvent } from '@testing-library/react';
 import { milestones } from '../../src/charts/builders/milestones.js';
 import { AiStep } from '../../src/tour/AiStep.js';
