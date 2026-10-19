@@ -1,7 +1,7 @@
 # LASTCONTEXT.md
 
 ## State
-- **Branch**: `task/model-params` (Transcribe 35 forecasting parameters, Draft 2020-12 schema, frozen Param dataclass, loader, and tests).
+- **Branch**: `task/model-params` (Transcribe 35 forecasting parameters, Draft 2020-12 schema, frozen Param dataclass, loader, and tests). PR #139 abierto, CI en verde (run 39324325388).
 - **Hitos completados en la sesión**:
   1. **Especificación y transcripción de parámetros (`model/params/params.json`)**:
      - 35 parámetros de las tablas 2.1 a 2.6 de `docs/model-design.md`: 5 de demografía (`pop.*`), 5 de crecimiento/contabilidad (`gro.*`), 2 de IDH (`hdi.*`), 20 de recursos (`res.*`, incluyendo las 10 constantes de valor agregado $v_r$ según decisión `D-res-3`), 1 provincial (`prov.kappa`) y 2 de IA (`ai.*`).
@@ -20,10 +20,13 @@
   5. **Tests (`model/tests/test_params.py`)**:
      - Validación de esquema en casos positivos y rechazo en cada caso negativo.
      - Verificación exacta de los 35 IDs, rangos de diseño, ausencia de fuentes inventadas y existencia de todos los `assumption_id` en `docs/assumptions.md`.
+  6. **Aprobación en CI**:
+     - CI completo en verde (run 39324325388): jobs de `python` (ruff, pytest), `web` (lint, typecheck, vitest), `data` (schemas, validators), `terrain` (pytest) y `e2e` (Playwright) exitosos.
 
 ## Reglas operativas vigentes
 - **RULE #1**: Tests corren exclusivamente en CI (GitHub Actions), nunca localmente.
 - **Datos**: Ningún número ni fuente inventada; trazabilidad total a través de `docs/model-design.md` y `docs/assumptions.md`.
 
 ## Next
-- Hacer commit atómico, pushear rama `task/model-params`, verificar estado de CI en GitHub Actions y abrir PR.
+- Revisión y merge humano del PR #139.
+- Iniciar la siguiente tarea en cola: `model-population-hardening` (`docs/tasks/model-population-hardening.md`, branch `task/model-population-hardening`) para resolver hallazgos F5, F8 y F9 del modelo de cohortes.
