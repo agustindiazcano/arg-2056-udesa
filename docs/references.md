@@ -226,8 +226,9 @@ Fuentes primarias y metodológicas agregadas en la expansión de datos de octubr
 
 | # | Fuente | Qué se usa | Estado |
 |---|---|---|---|
-| D1 | PNUD (UNDP), *Human Development Report*. <https://hdr.undp.org/data-center/human-development-index> | Serie histórica del IDH de Argentina (1990-2023) y comparación LATAM 2022/2023 | **leída** (2026-10-16) |
+| D1 | PNUD (UNDP), *Human Development Report*. <https://hdr.undp.org/data-center/human-development-index> | Serie histórica del IDH de Argentina (1990-2023), años promedio y esperados de escolaridad y comparación LATAM 2022/2023 | **leída** (2026-10-18) |
 | D2 | OCDE, *Resultados PISA*. <https://www.oecd.org/pisa/> | Puntajes medios en lectura, matemática y ciencias (2012, 2018, 2022) y comparación regional en matemática | **leída** (2026-10-16) |
+| W1 | Banco Mundial, *World Development Indicators (WDI)*. <https://data.worldbank.org/indicator/> | Esperanza de vida al nacer (`SP.DYN.LE00.IN`, 1990-2024), Tasa de mortalidad infantil (`SP.DYN.IMRT.IN`, 1990-2024) e Índice de Gini (`SI.POV.GINI`, 1995-2024) para Argentina y países pares de LATAM | **leída** (API, 2026-10-18) |
 | D3 | Stanford HAI, *Artificial Intelligence Index Report 2024*. <https://aiindex.stanford.edu/report/> | Costos históricos y de frontera en cómputo de entrenamiento de modelos (Transformer a Gemini Ultra / GPT-4) y compresión de inferencia | **leída** (2026-10-16) |
 | D4 | INDEC, *Censo Nacional de Población, Hogares y Viviendas 2022*. <https://www.indec.gob.ar/indec/web/Nivel4-Tema-2-41-165> | Población definitiva por provincia (45.892.285 habitantes a nivel nacional) | **leída** (2026-10-16) |
 | D5 | INDEC, *Origen provincial de las exportaciones (OPEX)*. <https://www.indec.gob.ar/indec/web/Nivel4-Tema-3-2-40> | Informes técnicos de comercio exterior por provincia y grandes rubros (2023: 66.789 M USD; 2024: 79.721 M USD) | **leída** (2026-10-16) |

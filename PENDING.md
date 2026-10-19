@@ -20,6 +20,7 @@ Order: C8, C7, C2, C3, C4, C5, C1, C6.
   - C1: Potencial de molibdeno: 2,2+ Mt asociado a pórfidos de cobre (informes de Taca Taca, El Pachón, MARA).
   - C1: Taca Taca capex 4.232 M USD inicial (First Quantum NI 43-101 de 2026-02-19).
   - [x] C6: Figures for provincial profile slide (INDEC, Ministerio de Economía, Secretaría de Trabajo, SNIC - series oficiales S1 a S5 incorporadas y enlazadas con RefList).
+  - [ ] Slide 7: Indicadores de desarrollo humano y social (Banco Mundial SP.DYN.LE00.IN, DEIS Min. Salud, PNUD HDR 2024, OCDE PISA 2022, INDEC EPH CBT, SEDLAC Gini, ref W1/D1/S3).
 
 
 ## Task queue (in order)
@@ -86,7 +87,7 @@ Order: C8, C7, C2, C3, C4, C5, C1, C6.
 13. [ ] `mutation-testing` (optional): READY.
 14. [ ] `polish`: decisions taken (`D-polish-3` color still the human's); 3D items first (`D-3d-6`); by `AGENTS.md` section 8 it starts after the model and data tasks unless the human starts it earlier for the scenes that exist.
 15. [ ] `docs-submission` (draft brief) and `demo-video` (optional, draft brief): BLOCKED by the contest's rules.
-16. [ ] `development-indicators-maps`: interactive draft added as new slide 7 (`web/src/tour/DevelopmentStep.tsx`). Source audit, definitions, data contracts and the provincial resource/project explorer with 2D/3D transitions remain pending; no indicator figures are loaded.
+16. [x] `development-indicators-maps`: diapositiva 7 conectada con series auditadas oficiales de salud (esperanza de vida y mortalidad infantil del Banco Mundial WDI), educación (resultados PISA OCDE, años promedio/esperados PNUD, graduación STEM) e igualdad (Gini del Banco Mundial/INDEC y pobreza EPH) en `web/src/tour/DevelopmentStep.tsx` y `developmentData.ts`.
 17. [ ] `forecast-uncertainty`: interactive draft added as new slide 8 (`web/src/tour/ForecastUncertaintyStep.tsx`). Source historical innovations, AI model/cost evidence, forecast vintages and growth/development studies before adding data; do not invent a negative curve.
 
 ## Next on the Recorrido (human request 2026-10-12)
