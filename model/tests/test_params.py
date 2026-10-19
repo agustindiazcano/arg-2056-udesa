@@ -4,8 +4,6 @@ import json
 from pathlib import Path
 
 import pytest
-from jsonschema import Draft202012Validator
-
 from argmodel.params import (
     Param,
     ParamsError,
@@ -14,6 +12,7 @@ from argmodel.params import (
     load_params,
     summary,
 )
+from jsonschema import Draft202012Validator
 
 EXPECTED_PARAM_IDS = [
     # population (5)
@@ -304,7 +303,7 @@ class TestParamsDataset:
 
     def test_all_parameters_are_in_a_valid_state(self):
         params = load_params()
-        for name, param in params.items():
+        for param in params.values():
             assert param.state in ("sourced", "assumption", "needs_source")
             if param.state == "assumption":
                 assert param.assumption is True

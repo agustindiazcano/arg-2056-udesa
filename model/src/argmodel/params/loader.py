@@ -1,10 +1,11 @@
 """Loader and validator for forecasting model parameters."""
 
 import json
+from collections.abc import Mapping
 from dataclasses import dataclass
 from pathlib import Path
 from types import MappingProxyType
-from typing import Any, Literal, Mapping
+from typing import Any, Literal
 
 from jsonschema import Draft202012Validator
 
