@@ -29,7 +29,7 @@ Order: C8, C7, C2, C3, C4, C5, C1, C6.
 1. [x] `data-pipeline`: scripts and processed datasets with `source` + `retrieved_at` (resources, economy, population, provinces).
 2. [x] `shell`: Vite app, tabs, Zustand store, keyboard map, scene state machine, 2D/3D toggle, province filter.
 3. [ ] **Model** (`docs/model-design.md` section 8; the 14 tasks replace the old `model-py`, `backtest` and `model-ts` lines). Briefs written.
-   1. [ ] `model-params`: READY (`D-res-3` decided: ten value-added constants, 35 entries in all)
+   1. [x] `model-params`: 35 parameter entries transcribed into `model/params/params.json` with Draft 2020-12 schema `params.schema.json`, frozen dataclass `Param`, loader and validation functions in `argmodel.params`, full unit test suite `test_params.py`, documentation `docs/params.md`, decision `D-params-1`. Branch `task/model-params`.
    2. [ ] `model-population-hardening`: READY (audit F5, F8, F9)
    3. [ ] `population-age-contract`: READY
    4. [ ] `model-population-drivers`: BLOCKED by 1, 2, 3

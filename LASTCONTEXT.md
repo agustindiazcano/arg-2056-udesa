@@ -1,23 +1,29 @@
 # LASTCONTEXT.md
 
 ## State
-- **Branch**: `task/fix-slide2-map-click` (Fix province/department click interactions on Slide 2 Argentina map & fix DataPage chunk 404 / missing tests).
+- **Branch**: `task/model-params` (Transcribe 35 forecasting parameters, Draft 2020-12 schema, frozen Param dataclass, loader, and tests).
 - **Hitos completados en la sesión**:
-  1. **Diagnóstico y solución de clicks en el mapa de la Diapositiva 2 (`ResourcesStep.tsx`, `ProvinceStep.tsx`, `ProvinceProfileStep.tsx`)**:
-     - En `web/src/styles/ui.css`, la regla `.res-grid .gdp-chart > .tour-chart > * { width: 100%; height: 100%; }` (especificidad `0,3,0`, línea 2385) carecía de `:not(.tour-view-switch)`, haciendo que `<div className="tour-view-switch">` (`position: absolute; z-index: 3; pointer-events: auto`) se estirara al 100% × 100% sobre el mapa e interceptara todos los clicks. Se agregó `:not(.tour-view-switch)` en `.tour-grid`, `.res-grid` y `.ai-grid`.
-     - En `web/src/charts3d/types.ts`, `web/src/three/Map3D.tsx` y `web/src/tour/ResourcesStep.tsx`: se conectaron `selectedDepartment` y `onSelectDepartment` en 3D con resaltado visual y migas de pan (`map-breadcrumb-bar`), se corrigió el radio base (`startRadius`) de `flyTo` al cambiar de provincia, y se habilitó seleccionar una provincia haciendo click en su barra del gráfico nacional.
-     - En `web/src/ui/MapSearch.tsx` y `web/src/tour/ProvinceProfileStep.tsx`: se aseguró `pointerEvents: 'auto'`.
-  2. **Diagnóstico y solución del error 404 al abrir la sección "Data" (`DataPage-*.js` / `simModel-*.js`)**:
-     - Causa raíz: `prefetchCharts` (`web/src/app/prefetch.ts`) precargaba `TourStep`, `TourChart3D` y `Chart3D`, pero omitía `DataPage` y `Simulator`. Si ocurría un nuevo deploy en Vercel con la pestaña abierta, al hacer click en `Data` el navegador pedía los hashes viejos (`DataPage-*.js` y `simModel-*.js`), recibía HTTP 404 y `React.lazy` lanzaba un `TypeError: Failed to fetch dynamically imported module` no capturado.
-     - Solución: se agregaron `Simulator` y `DataPage` a `CHART_LOADERS` en `prefetch.ts`; se implementó recuperación automática ante chunks obsoletos (`recoverChunkLoadError`, `consumeReloadSection`, listener `vite:preloadError`, y `SectionErrorBoundary` en `App.tsx` y `Root.tsx`) que recarga una vez preservando la sección `data`.
-  3. **Tests unitarios y E2E (TDD)**:
-     - Unitarios: `chart3dHostCss.test.ts`, `resourcesStepDrilldown.test.tsx`, `prefetch.test.ts`, y `shellUi.test.tsx` (esperando el render real de `<DataPage />` al hacer click en `Data`).
-     - E2E Playwright: `web/e2e/boot.spec.ts` ahora hace click en el botón `Data` del header y verifica que carguen las tablas y las 4 pestañas (`Data`, `Referencias`, `Metodología`, `Uso de AI`) sin errores 404 ni de consola.
+  1. **Especificación y transcripción de parámetros (`model/params/params.json`)**:
+     - 35 parámetros de las tablas 2.1 a 2.6 de `docs/model-design.md`: 5 de demografía (`pop.*`), 5 de crecimiento/contabilidad (`gro.*`), 2 de IDH (`hdi.*`), 20 de recursos (`res.*`, incluyendo las 10 constantes de valor agregado $v_r$ según decisión `D-res-3`), 1 provincial (`prov.kappa`) y 2 de IA (`ai.*`).
+     - Distribución por rol: 23 fijos, 1 calibrado (`pop.kappa_f`), 11 aleatorios en Monte Carlo.
+     - Estados canónicos: 0 sourced, 20 assumption (con rangos y `assumption_id`), 15 needs_source (sin valor o rango inventado, `low/high/value: null`).
+  2. **Esquema JSON Draft 2020-12 (`model/params/params.schema.json`)**:
+     - `additionalProperties: false`, 14 campos requeridos por parámetro.
+     - `oneOf` que valida exhaustivamente los 3 estados (sourced, assumption, needs_source).
+     - `allOf` que exige `distribution: "fixed"` en roles fijos/calibrados, distribuciones no fijas en roles aleatorios, y rangos obligatorios para parámetros aleatorios con `needs_source: false`.
+  3. **Módulo de carga y validación (`model/src/argmodel/params/`)**:
+     - `Param` (dataclass inmutable congelado con propiedad de estado), `ParamsError`, `load_params()` (retorna `MappingProxyType` inmutable), `get()`, `by_component()` y `summary()`.
+     - Validaciones de consistencia cruzada: `low <= high`, `low <= value <= high`, unicidad de nombres.
+  4. **Documentación y decisiones**:
+     - `docs/params.md` creado detallando estructura, estados, tabla de recuentos, API y guía para fuentes.
+     - Decisión `D-params-1` registrada en `docs/decisions.md` (permitir cotas `low`/`high` en parámetros fijos para el análisis de sensibilidad).
+  5. **Tests (`model/tests/test_params.py`)**:
+     - Validación de esquema en casos positivos y rechazo en cada caso negativo.
+     - Verificación exacta de los 35 IDs, rangos de diseño, ausencia de fuentes inventadas y existencia de todos los `assumption_id` en `docs/assumptions.md`.
 
 ## Reglas operativas vigentes
 - **RULE #1**: Tests corren exclusivamente en CI (GitHub Actions), nunca localmente.
-- **Estilos**: Cero literales de color fuera de `tokens.css` (usar siempre `var(--token)` o `color-mix()`).
-- **Datos**: Todo dato presentado debe incluir `source` y `retrieved_at`.
+- **Datos**: Ningún número ni fuente inventada; trazabilidad total a través de `docs/model-design.md` y `docs/assumptions.md`.
 
 ## Next
-- Subir nuevo commit a `origin/task/fix-slide2-map-click`, verificar todos los jobs de CI en GitHub Actions y abrir el Pull Request.
+- Hacer commit atómico, pushear rama `task/model-params`, verificar estado de CI en GitHub Actions y abrir PR.

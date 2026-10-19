@@ -100,6 +100,12 @@ Confirmed as recommended: D-scen-1, D-res-1, D-ai-1, D-prov-1, D-bt-1, D-pop-1, 
 - Decision: create it (it is READY).
 - Consequences: `model-population-drivers` and `data-economy-population` wait for it.
 
+## D-params-1: Low/high bounds allowed on fixed parameters
+- Context: Section 7 of `docs/model-design.md` states that `low` and `high` are null for `fixed` parameters, but Section 6 moves every `[F]` parameter to its sensitivity range `low` and `high`.
+- Options: forbid `low`/`high` on `fixed` entries (requiring separate sensitivity tables); allow `low`/`high` bounds on `fixed` entries in the schema.
+- Decision: allow optional `low`/`high` numeric bounds on `fixed` entries in `model/params/params.schema.json`.
+- Consequences: fixed parameters can declare their literature/sensitivity analysis brackets directly in `params.json` without altering their deterministic fixed role.
+
 ### Assumptions the human had to decide (`docs/assumptions.md`)
 A10, A13, A15, A16, A24, A26, A31, A32 and A33 are accepted as written, with the ranges and rules in the register: A13 follows D-growth-1, A15 follows D-res-1 and D-res-3, A16 follows D-res-2, A24 follows D-prov-1, A26 follows D-ai-2, A31 follows D-scen-2, A32 keeps factor 1.25 at horizon 5 and 8 of 12 coverage (D-bt-1), A33 keeps 18 of 24 (D-prov-1). A10, A15 and A26 are accepted as the working design but still need a source for their values (status `needs_source`).
 
