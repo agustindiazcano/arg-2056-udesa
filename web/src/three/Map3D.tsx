@@ -52,6 +52,10 @@ export function Map3D({ spec, projection, free = false }: { spec: Map3DSpec; pro
   const grownFor = useRef<unknown>(null);
   const onSelectRef = useRef(spec.onSelect);
   onSelectRef.current = spec.onSelect;
+  const onSelectDeptRef = useRef(spec.onSelectDepartment);
+  onSelectDeptRef.current = spec.onSelectDepartment;
+  const selectedDeptRef = useRef(spec.selectedDepartment ?? null);
+  selectedDeptRef.current = spec.selectedDepartment ?? null;
   const reduced = useReducedMotion();
   const quality = useQualityOptional();
   const pixelRatioCap = QUALITY_PRESETS[quality?.tier ?? 'medium'].pixelRatioCap;
@@ -68,16 +72,17 @@ export function Map3D({ spec, projection, free = false }: { spec: Map3DSpec; pro
     if (!host) return;
     const map = projectFeatures(spec.geo);
     const aspect = host.clientHeight > 0 ? host.clientWidth / host.clientHeight : 0;
+    const startRadius = upright
+      ? fitRadius({ width: map.bounds.width, height: map.bounds.height }, 32, aspect, 1.1)
+      : side
+        ? fitRadius({ width: map.bounds.width, height: 3.2 }, 32, aspect, 1.02)
+        : tour
+          ? Math.max(7, map.bounds.height * 2.1)
+          : Math.max(7, map.bounds.height * 1.55) * (projection ? 1.9 : 1);
     const stage = createStage(host, {
       pixelRatioCap,
       target: side ? new Vector3(0, 0.9, 0) : new Vector3(0, upright ? 0 : 0.5 + (projection ? 0.8 : 0), 0),
-      radius: upright
-        ? fitRadius({ width: map.bounds.width, height: map.bounds.height }, 32, aspect, 1.1)
-        : side
-        ? fitRadius({ width: map.bounds.width, height: 3.2 }, 32, host.clientHeight > 0 ? host.clientWidth / host.clientHeight : 0, 1.02)
-        : tour
-          ? Math.max(7, map.bounds.height * 2.1)
-          : Math.max(7, map.bounds.height * 1.55) * (projection ? 1.9 : 1),
+      radius: startRadius,
       ...(upright ? { theta: 0, phi: UPRIGHT_PHI } : openingAngles(side, { theta: 0, phi: 0.05 })),
       box: { minX: -map.bounds.width / 2, maxX: map.bounds.width / 2, minY: 0, maxY: 3, minZ: -map.bounds.height / 2, maxZ: map.bounds.height / 2 },
       pose: poseRef.current ?? undefined,
@@ -97,7 +102,7 @@ export function Map3D({ spec, projection, free = false }: { spec: Map3DSpec; pro
         const [x0, x1, y0, y1] = [Math.min(...xs), Math.max(...xs), Math.min(...ys), Math.max(...ys)];
         const extent = Math.max(x1 - x0, y1 - y0, 0.6);
         const fit = fitRadius({ width: extent * ZOOM_FILL, height: extent * ZOOM_FILL }, 32, aspect, 1);
-        stage.nav.flyTo({ ...stage.pose, x: (x0 + x1) / 2, y: 0, z: -(y0 + y1) / 2, radius: Math.min(stage.pose.radius, fit), theta: 0, phi: UPRIGHT_PHI });
+        stage.nav.flyTo({ ...stage.pose, x: (x0 + x1) / 2, y: 0, z: -(y0 + y1) / 2, radius: Math.min(startRadius, fit), theta: 0, phi: UPRIGHT_PHI });
       } else stage.nav.reset();
     }
     const { scene } = stage;
@@ -182,6 +187,7 @@ export function Map3D({ spec, projection, free = false }: { spec: Map3DSpec; pro
         const selBase = (selMesh?.userData.base as number) || (0.05 + SELECTED_LIFT);
 
         for (const dept of depts) {
+          const isDeptSelected = spec.selectedDepartment === dept.name;
           // Department surface polygon
           for (const poly of dept.polygons) {
             const shape = new Shape(poly.outer.map(([x, y]) => new Vector2(x, y)));
@@ -189,11 +195,13 @@ export function Map3D({ spec, projection, free = false }: { spec: Map3DSpec; pro
             const geom = new ExtrudeGeometry(shape, { depth: 0.02, bevelEnabled: false });
             geom.rotateX(-Math.PI / 2);
             const mat = new MeshStandardMaterial({
-              color: new Color('#1e293b'),
+              color: new Color(isDeptSelected ? '#0284c7' : '#1e293b'),
+              emissive: new Color(isDeptSelected ? '#38bdf8' : tokens.page),
+              emissiveIntensity: isDeptSelected ? 0.35 : 0,
               roughness: 0.5,
               metalness: 0.1,
               transparent: true,
-              opacity: 0.85
+              opacity: isDeptSelected ? 0.95 : 0.85
             });
             const dMesh = new Mesh(geom, mat);
             dMesh.position.y = selBase + 0.005;
@@ -309,7 +317,15 @@ export function Map3D({ spec, projection, free = false }: { spec: Map3DSpec; pro
       if (!downAt || downAt.distanceTo(new Vector2(e.clientX, e.clientY)) > CLICK_SLOP) return;
       const hit = pick(e);
       if (!hit) return;
-      if (hit.userData.isDept) return;
+      if (hit.userData.isDept) {
+        const dName = hit.userData.deptName as string;
+        if (onSelectDeptRef.current) {
+          onSelectDeptRef.current(selectedDeptRef.current === dName ? null : dName);
+        } else {
+          onSelectRef.current(null);
+        }
+        return;
+      }
       const id = hit.userData.id as string;
       onSelectRef.current(id === spec.selectedId ? null : id);
     };
@@ -349,7 +365,7 @@ export function Map3D({ spec, projection, free = false }: { spec: Map3DSpec; pro
       stageRef.current = null;
       stage.dispose();
     };
-  }, [spec.geo, spec.values, spec.metric, spec.selectedId, spec.formatValue, spec.upright, spec.zoomToSelected, projection?.title, quality?.tier, pixelRatioCap, reduced, side, tour]);
+  }, [spec.geo, spec.values, spec.metric, spec.selectedId, spec.selectedDepartment, spec.formatValue, spec.upright, spec.zoomToSelected, projection?.title, quality?.tier, pixelRatioCap, reduced, side, tour]);
 
   return (
     <div className="chart3d-wrap">
@@ -358,14 +374,32 @@ export function Map3D({ spec, projection, free = false }: { spec: Map3DSpec; pro
           <button
             type="button"
             className="map-back-btn"
-            onClick={() => onSelectRef.current(null)}
+            onClick={() => {
+              onSelectDeptRef.current?.(null);
+              onSelectRef.current(null);
+            }}
             title="Volver a ver todo el país"
           >
             <span className="back-arrow">←</span> Argentina
           </button>
           <span className="breadcrumb-sep">›</span>
-          <span className="breadcrumb-current">{selectedProvince.name}</span>
-          {deptCount > 0 && <span className="dept-badge">{deptCount} departamentos y municipios</span>}
+          {spec.selectedDepartment ? (
+            <>
+              <button
+                type="button"
+                className="map-back-btn"
+                onClick={() => onSelectDeptRef.current?.(null)}
+                style={{ padding: '1px 6px' }}
+              >
+                {selectedProvince.name}
+              </button>
+              <span className="breadcrumb-sep">›</span>
+              <span className="breadcrumb-current">{spec.selectedDepartment}</span>
+            </>
+          ) : (
+            <span className="breadcrumb-current">{selectedProvince.name}</span>
+          )}
+          {deptCount > 0 && !spec.selectedDepartment && <span className="dept-badge">{deptCount} departamentos y municipios</span>}
         </div>
       )}
       <div ref={hostRef} className="chart3d" role="img" aria-label={spec.summary} data-chart3d="map">

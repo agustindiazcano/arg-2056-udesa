@@ -26,3 +26,15 @@ describe('where the styles of the 3D charts are loaded', () => {
     expect(tourStep).toMatch(/import\s+['"]\.\.\/dashboard\/dashboard\.css['"]/);
   });
 });
+
+describe('tour-chart child sizing in ui.css does not stretch .tour-view-switch over the map', () => {
+  const uiCss = readFileSync(new URL('../../src/styles/ui.css', import.meta.url), 'utf8');
+
+  it('excludes .tour-view-switch from every .tour-chart > * full-size rule so clicks reach the map', () => {
+    expect(uiCss).not.toMatch(/\.tour-chart\s*>\s*\*\s*\{/);
+    expect(uiCss).toContain('.res-grid .gdp-chart > .tour-chart > *:not(.tour-view-switch)');
+    expect(uiCss).toContain('.tour-grid > .gdp-chart > .tour-chart > *:not(.tour-view-switch)');
+    expect(uiCss).toContain('.ai-grid > .gdp-chart > .tour-chart > *:not(.tour-view-switch)');
+  });
+});
+

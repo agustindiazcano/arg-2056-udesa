@@ -268,7 +268,7 @@ export function ProvinceProfileStep({ embedded = false }: { embedded?: boolean }
 
             <div className="tour-chart" style={{ minHeight: '340px' }}>
               {showTable ? (
-                <div style={{ overflowX: 'auto', maxHeight: '340px' }}>
+                <div style={{ overflowX: 'auto', maxHeight: '340px', pointerEvents: 'auto' }}>
                   <table
                     style={{
                       width: '100%',

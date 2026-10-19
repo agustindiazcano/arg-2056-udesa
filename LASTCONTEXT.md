@@ -1,18 +1,18 @@
 # LASTCONTEXT.md
 
 ## State
-- **Branch**: `task/data-tech-uncertainty` (Fase 2: Series empíricas de rezagos de adopción tecnológica, deflación de costos de inferencia, escala de cómputo y revisiones de pronósticos del PBI en la Diapositiva 8).
+- **Branch**: `task/fix-slide2-map-click` (Fix province/department click interactions on the Slide 2 Argentina map).
 - **Hitos completados en la sesión**:
-  1. **PR #135 abierto para Fase 1** (`task/data-development-metrics`): datos oficiales de desarrollo (salud, educación, Gini) verificados con CI verde (`run 39172037778`).
-  2. **Datasets de incertidumbre tecnológica** (`web/src/tour/techUncertaintyData.ts`):
-     - Rezagos de difusión masiva: series históricas del CHAT dataset (Comin & Hobijn / NBER) y Our World in Data (electricidad, telefonía, autos, PC, internet, smartphones, IA).
-     - Curva de costos de inferencia: caída de $20 a $0.07 por 1M tokens (>280x) en benchmark MMLU (Stanford HAI AI Index 2024/2025 y Artificial Analysis).
-     - Cómputo de entrenamiento: escala histórica en FLOPs (Perceptron a Gemini Ultra / GPT-4) de Epoch AI.
-     - Revisiones de pronósticos: desvíos empíricos observados vs proyecciones a 1 año del FMI WEO en Argentina (error medio absoluto ~3,9 pp).
-     - Canales del escenario adverso: mecanismos de la Curva J de productividad, automatización y desacoplamiento salarial (Acemoglu 2024 / Brynjolfsson).
-  3. **Diapositiva 8 conectada (`ForecastUncertaintyStep.tsx`)**: gráficos SVG interactivos por pestaña con selectores de tecnología, comparativa de pronósticos y visualización de costos.
-  4. **Metadatos y trazabilidad**: tablas registradas con `quality: 'real'` en `quality.ts`, `slides.ts`, `references.ts` (refs D6 y D7) y `docs/references.md`.
-  5. **Tests unitarios**: creados `techUncertaintyData.test.ts` y `forecastUncertaintyStep.test.tsx`. Presupuesto de chunks ajustado en `budgets.json`.
+  1. **Diagnóstico de causa raíz en Diapositiva 2 (`ResourcesStep.tsx`, `ProvinceStep.tsx`, `ProvinceProfileStep.tsx`)**:
+     - En `web/src/styles/ui.css`, la regla `.res-grid .gdp-chart > .tour-chart > * { width: 100%; height: 100%; }` (especificidad `0,3,0`, línea 2385) carecía de `:not(.tour-view-switch)`, a diferencia de `.prov-map > .tour-chart > *:not(.tour-view-switch)` (`0,2,0`, línea 1022). Esto hacía que el contenedor `<div className="tour-view-switch">` (`position: absolute; z-index: 3; pointer-events: auto`) se expandiera al 100% × 100% sobre el mapa de Argentina e interceptara todos los clicks del mouse.
+     - En `web/src/three/Map3D.tsx`, al seleccionar una provincia y cargarse los departamentos (`hit.userData.isDept`), el handler `onUp` hacía `if (hit.userData.isDept) return;`, impidiendo seleccionar departamentos (para ver proyectos mineros en `ResourcesStep.tsx`) o deseleccionar la provincia. Además, el `flyTo` usaba `Math.min(stage.pose.radius, fit)` en lugar de `Math.min(startRadius, fit)`.
+  2. **Correcciones implementadas**:
+     - `web/src/styles/ui.css`: agregado `:not(.tour-view-switch)` en `.tour-grid > .gdp-chart > .tour-chart > *`, `.res-grid .gdp-chart > .tour-chart > *` y `.ai-grid > .gdp-chart > .tour-chart > *`.
+     - `web/src/charts3d/types.ts` y `web/src/three/Map3D.tsx`: soporte para `selectedDepartment` y `onSelectDepartment` en `Map3DSpec`, selección/deselección de departamentos en 3D con resaltado visual y migas de pan (`map-breadcrumb-bar`), y corrección de `startRadius` en `flyTo`.
+     - `web/src/tour/ResourcesStep.tsx`: conexión de `selectedDepartment` y `onSelectDepartment` en `mapSpec`, `zoomToSelected` en el fallback 2D `ProvinceMap`, y selección de provincia al hacer click en una barra del gráfico nacional de provincias (`drilldown.kind === 'provinces'`).
+     - `web/src/ui/MapSearch.tsx` y `web/src/tour/ProvinceProfileStep.tsx`: `pointerEvents: 'auto'` explícito en el contenedor del buscador y en la tabla accesible de perfiles provinciales.
+  3. **Tests unitarios (TDD)**:
+     - Actualizados `web/tests/unit/chart3dHostCss.test.ts` y `web/tests/unit/resourcesStepDrilldown.test.tsx`.
 
 ## Reglas operativas vigentes
 - **RULE #1**: Tests corren exclusivamente en CI (GitHub Actions), nunca localmente.
@@ -20,5 +20,4 @@
 - **Datos**: Todo dato presentado debe incluir `source` y `retrieved_at`.
 
 ## Next
-- Subir rama `task/data-tech-uncertainty` al repositorio remoto y monitorear CI.
-- Una vez verificado verde en CI, abrir PR para la Fase 2 y continuar con la Fase 3 (Valuación Agro y Recursos en Slides 10 y 13).
+- Subir rama `task/fix-slide2-map-click` a `origin`, verificar que todos los checks de GitHub Actions pasen en la nube (`gh run list` / `gh run watch`) y abrir el Pull Request.

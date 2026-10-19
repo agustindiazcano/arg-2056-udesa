@@ -11,17 +11,27 @@ afterEach(() => {
 // Mock ECharts to test interaction cleanly
 vi.mock('../../src/charts/EChart.js', () => ({
   EChart: ({ option, 'aria-label': ariaLabel, onClick }: { option?: object; 'aria-label'?: string; onClick?: (params: { name?: string }) => void }) => (
-    <button
-      type="button"
-      data-testid="echart-mock"
-      aria-label={ariaLabel}
-      onClick={() => {
-        // Mock clicking a bar with name "Los Andes"
-        onClick?.({ name: 'Los Andes' });
-      }}
-    >
-      {JSON.stringify(option)}
-    </button>
+    <div>
+      <button
+        type="button"
+        data-testid="echart-mock"
+        aria-label={ariaLabel}
+        onClick={() => {
+          onClick?.({ name: 'Los Andes' });
+        }}
+      >
+        {JSON.stringify(option)}
+      </button>
+      <button
+        type="button"
+        data-testid="echart-click-salta"
+        onClick={() => {
+          onClick?.({ name: 'Salta' });
+        }}
+      >
+        Click Salta bar
+      </button>
+    </div>
   )
 }));
 
@@ -40,7 +50,7 @@ vi.mock('../../src/scenes/forecast/ProvinceMap.js', () => ({
 }));
 
 describe('ResourcesStep drilldown (C3 & C4)', () => {
-  it('switches bottom-left chart to department ranking when Salta is selected', () => {
+  it('switches bottom-left chart to department ranking when Salta is selected on the map', () => {
     const { unmount } = render(<ResourcesStep />);
     
     // Initially shows provinces ranking
@@ -50,6 +60,17 @@ describe('ResourcesStep drilldown (C3 & C4)', () => {
     fireEvent.click(screen.getByTestId('select-salta'));
 
     // Now shows department ranking for Salta
+    expect(screen.getByText(/Salta: producción minera por departamento/i)).toBeDefined();
+    unmount();
+  });
+
+  it('selects a province when clicking its bar in the national provinces chart', () => {
+    const { unmount } = render(<ResourcesStep />);
+    expect(screen.getByText(/provincias que producen/i)).toBeDefined();
+
+    const saltaButtons = screen.getAllByTestId('echart-click-salta');
+    fireEvent.click(saltaButtons[saltaButtons.length - 1]!);
+
     expect(screen.getByText(/Salta: producción minera por departamento/i)).toBeDefined();
     unmount();
   });
@@ -70,3 +91,4 @@ describe('ResourcesStep drilldown (C3 & C4)', () => {
     unmount();
   });
 });
+
