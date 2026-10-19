@@ -23,6 +23,5 @@
 - **TDD**: Commits atómicos separados en `test(...)` y `feat(...)`.
 
 ## Next
-- Push a `origin task/model-population-hardening` y verificación de CI en GitHub Actions.
-- Apertura del Pull Request y revisión humana.
+- CI verificado en verde (run 39335417025). Apertura de PR para revisión y aprobación humana.
 - Iniciar la siguiente tarea en cola: `population-age-contract` (`docs/tasks/population-age-contract.md`).
