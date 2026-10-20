@@ -1,27 +1,26 @@
 # LASTCONTEXT.md
 
 ## State
-- **Branch**: `task/model-population-hardening`.
+- **Branch**: `task/slide2-unify-and-rigi`.
 - **Hitos completados en la sesión**:
-  1. **TDD estricto**:
-     - Commit 1 (`test(model)`): tests exhaustivos para Python (`model/tests/test_population.py`) y TypeScript (`web/tests/parity/population.test.ts`), suite de casos inválidos (`model/parity/population_invalid.json`) y actualización de `gen_parity.py` (con guard `sys.path` que resuelve F10).
-     - Commit 2 (`feat(model)`): implementación de validación de entradas y emisión de errores en `model/src/argmodel/population/cohort.py` y `web/src/model-ts/population.ts`.
-  2. **Cierre de hallazgos de auditoría (F5, F8, F9)**:
-     - **F5**: test de recomputación manual para `migration[0] != 0` (erradicando la mutación sobreviviente M1), lectura directa del archivo golden `population_parity.json` por parte de Python y verificación contra el generador.
-     - **F8**: validación explícita de `A < 2` (rechaza `A = 0` y `A = 1` con mensaje idéntico en ambos lenguajes, acepta `A = 2`).
-     - **F9**: validación completa de formas y rangos (finitos, `survival` en [0, 1], `fertility >= 0`, `n_t >= 0`) y emisión de `ValueError`/`Error` ante cohortes negativas según decisión `D-pop-1`.
-  3. **Paridad exacta entre Python y TypeScript**:
-     - Mensajes de error idénticos byte a byte verificados mediante `population_invalid.json`.
-     - Casos analíticos calculados a mano para cada término del modelo (nacimientos, envejecimiento, intervalo abierto, migración).
-     - Conservación de población según criterio C5 (`sum(n_next) = births + survivors + migration` con tolerancia relativa < 1e-9).
-     - Preservación byte a byte de los vectores golden `population_parity.json` para casos válidos.
-  4. **Decisiones documentadas**:
-     - Decisión `D-pop-1` aplicada como "raise" ante cohortes negativas.
+  1. **Fase 1 completada (`slide2-unify-and-rigi`)**:
+     - **Unificación en Diapositiva 2 (`ResourcesStep.tsx`)**: Eliminada la pestaña redundante "Producción por provincia" (`ProvinceStep`); selector superior "Mostrar" simplificado a dos opciones: `Recursos y RIGI` (activa por defecto) y `Perfil provincial`.
+     - **Capa RIGI en el Mapa Nacional**: Incorporado botón/toggle interactivo `★ RIGI` en la barra de controles; al activarse, el mapa colorea las provincias adheridas por volumen de inversión ($ M USD), despliega tiles de totales RIGI (inversión total, proyectos aprobados y en evaluación), y muestra marcadores geográficos (scatter pins) con tooltips enriquecidos (empresa, rubro, inversión, estado).
+     - **Drilldown Provincial y Departamental de Recursos y RIGI**: Al seleccionar una provincia, el mapa realiza zoom suave a sus departamentos mostrando tanto los proyectos de recursos habituales como los del RIGI; el panel inferior despliega las fichas técnicas con badges semánticos (mineral/obra, estado, `★ RIGI`, resolución oficial, inversión y referencias con `RefList`).
+  2. **Enriquecimiento del dataset RIGI (`rigiProjects.ts` y `provinceDrilldown.ts`)**:
+     - Agregadas coordenadas geográficas `[lng, lat]`, departamentos normalizados e identificadores provinciales (`provinceIds`) para todos los proyectos mineros y energéticos del RIGI.
+     - Funciones puras añadidas: `getAllRigiProjects`, `getRigiProjectsByProvince`, `getRigiProvinceTotals`, `getRigiTotalsSummary`, `rigiMapValues`, y `getProvinceProjects`.
+  3. **Sistema de diseño y tokens**:
+     - Adhesión estricta a la regla de no usar literales `#hex`/`rgba()` en archivos CSS fuera de `tokens.css` (verificado con `shellUi.test.tsx`).
+     - Estilos de tarjetas técnicas y badges implementados con `color-mix()` y variables semánticas (`--gold`, `--state-good`, `--state-warning`, `--blue`, `--surface`, `--ink`).
+  4. **TDD estricto**:
+     - Test unitario completo en `web/tests/unit/slide2RigiUnify.test.tsx` commiteado previamente a la implementación.
 
 ## Reglas operativas vigentes
 - **RULE #1**: Tests corren exclusivamente en CI (GitHub Actions), nunca localmente.
-- **TDD**: Commits atómicos separados en `test(...)` y `feat(...)`.
+- **TDD**: Commits atómicos separados en `test(...)`, `feat(...)` y `docs(...)`.
+- **Tokens de color**: Ningún `#hex`/`rgba()` en archivos `.tsx` ni en archivos CSS fuera de `tokens.css`.
 
 ## Next
-- PR #140 abierto, CI verificado en verde (run 39335417025). Espera revisión y aprobación humana.
-- Iniciar la siguiente tarea en cola: `population-age-contract` (`docs/tasks/population-age-contract.md`).
+- Pushear rama `task/slide2-unify-and-rigi` y verificar CI en GitHub Actions.
+- Iniciar Fase 2: `slide2-province-profile-traffic-light` (mapa semáforo y gráficos en perfil provincial).
