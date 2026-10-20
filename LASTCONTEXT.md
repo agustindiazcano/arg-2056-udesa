@@ -13,8 +13,9 @@
   3. **Sistema de diseño y tokens**:
      - Adhesión estricta a la regla de no usar literales `#hex`/`rgba()` en archivos CSS fuera de `tokens.css` (verificado con `shellUi.test.tsx`).
      - Estilos de tarjetas técnicas y badges implementados con `color-mix()` y variables semánticas (`--gold`, `--state-good`, `--state-warning`, `--blue`, `--surface`, `--ink`).
-  4. **TDD estricto**:
-     - Test unitario completo en `web/tests/unit/slide2RigiUnify.test.tsx` commiteado previamente a la implementación.
+  4. **TDD estricto y verificación CI en verde**:
+     - Test unitario completo en `web/tests/unit/slide2RigiUnify.test.tsx` cubriendo unificación, toggle RIGI y drilldown provincial.
+     - CI en GitHub Actions verificado en verde en run 39511316395 (python, web, e2e, terrain, data).
 
 ## Reglas operativas vigentes
 - **RULE #1**: Tests corren exclusivamente en CI (GitHub Actions), nunca localmente.
@@ -22,5 +23,5 @@
 - **Tokens de color**: Ningún `#hex`/`rgba()` en archivos `.tsx` ni en archivos CSS fuera de `tokens.css`.
 
 ## Next
-- Pushear rama `task/slide2-unify-and-rigi` y verificar CI en GitHub Actions.
+- PR para `task/slide2-unify-and-rigi` listo para revisión y aprobación humana.
 - Iniciar Fase 2: `slide2-province-profile-traffic-light` (mapa semáforo y gráficos en perfil provincial).
