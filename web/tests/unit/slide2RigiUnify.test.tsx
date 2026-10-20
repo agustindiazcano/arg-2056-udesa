@@ -77,9 +77,7 @@ vi.mock('../../src/scenes/forecast/ProvinceMap.js', () => ({
       </button>
       <div data-testid="markers-count">{projectMarkers ? projectMarkers.length : 0}</div>
       {projectMarkers?.map((m) => (
-        <span key={m.name} data-testid={`marker-${m.name}`}>
-          {m.name} ({m.isRigi ? 'RIGI' : 'Standard'})
-        </span>
+        <span key={m.name} data-testid={`marker-${m.name}`} data-marker-name={m.name} />
       ))}
     </div>
   )
@@ -89,12 +87,12 @@ describe('Fase 1: slide2-unify-and-rigi', () => {
   it('unifies Slide 2: top selector has only Recursos y RIGI and Perfil provincial', () => {
     const { unmount } = render(<ResourcesStep />);
 
-    // Check segmented options for "Mostrar"
-    expect(screen.getByRole('radio', { name: /Recursos y RIGI/i })).toBeDefined();
-    expect(screen.getByRole('radio', { name: /Perfil provincial/i })).toBeDefined();
+    // Check segmented buttons for "Mostrar"
+    expect(screen.getByRole('button', { name: /^Recursos y RIGI$/i })).toBeDefined();
+    expect(screen.getByRole('button', { name: /^Perfil provincial$/i })).toBeDefined();
 
     // Redundant "Producción por provincia" must be removed
-    expect(screen.queryByRole('radio', { name: /Producción por provincia/i })).toBeNull();
+    expect(screen.queryByRole('button', { name: /Producción por provincia/i })).toBeNull();
 
     unmount();
   });
@@ -102,7 +100,7 @@ describe('Fase 1: slide2-unify-and-rigi', () => {
   it('renders RIGI toggle button in the controls bar of Recursos y RIGI', () => {
     const { unmount } = render(<ResourcesStep />);
 
-    const rigiBtn = screen.getByRole('button', { name: /RIGI/i });
+    const rigiBtn = screen.getByRole('button', { name: /^★\s*RIGI$/i });
     expect(rigiBtn).toBeDefined();
     expect(rigiBtn.getAttribute('aria-pressed')).toBe('false');
 
@@ -112,7 +110,7 @@ describe('Fase 1: slide2-unify-and-rigi', () => {
   it('toggling RIGI switches to RIGI mode with dedicated investment totals and ranking', () => {
     const { unmount } = render(<ResourcesStep />);
 
-    const rigiBtn = screen.getByRole('button', { name: /RIGI/i });
+    const rigiBtn = screen.getByRole('button', { name: /^★\s*RIGI$/i });
     fireEvent.click(rigiBtn);
 
     expect(rigiBtn.getAttribute('aria-pressed')).toBe('true');
@@ -141,8 +139,8 @@ describe('Fase 1: slide2-unify-and-rigi', () => {
 
     // Should display technical project cards for San Juan
     expect(screen.getByText(/Proyectos mineros y estratégicos en San Juan/i)).toBeDefined();
-    expect(screen.getByText(/Vicuña/i)).toBeDefined();
-    expect(screen.getByText(/Los Azules/i)).toBeDefined();
+    expect(screen.getByText('Vicuña')).toBeDefined();
+    expect(screen.getByText('Los Azules')).toBeDefined();
 
     // Should render RIGI badge and mineral badge
     const rigiBadges = screen.getAllByText(/★ RIGI/i);
@@ -165,8 +163,8 @@ describe('Fase 1: slide2-unify-and-rigi', () => {
 
     // Should display projects in Los Andes
     expect(screen.getByText(/Proyectos mineros en Los Andes/i)).toBeDefined();
-    expect(screen.getByText(/Taca Taca/i)).toBeDefined();
-    expect(screen.getByText(/Centenario-Ratones/i)).toBeDefined();
+    expect(screen.getByText('Taca Taca')).toBeDefined();
+    expect(screen.getByText('Centenario-Ratones')).toBeDefined();
 
     unmount();
   });
