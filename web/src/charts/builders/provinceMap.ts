@@ -106,9 +106,8 @@ export function buildProvinceMap(input: ProvinceMapInput, opts: ProvinceMapOpts)
               }
             },
             data: projectMarkers.map((m) => ({
-              name: m.name,
-              value: [...m.coordinates, m.investment ?? 1],
-              ...m
+              ...m,
+              value: [...m.coordinates, m.investment ?? 1]
             }))
           }
         ]
@@ -291,9 +290,8 @@ export function buildDepartmentMap(
               }
             },
             data: filteredProjects.map((m) => ({
-              name: m.name,
-              value: [...m.coordinates, m.investment ?? 1],
-              ...m
+              ...m,
+              value: [...m.coordinates, m.investment ?? 1]
             }))
           }
         ]
