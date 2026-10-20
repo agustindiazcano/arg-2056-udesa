@@ -116,7 +116,7 @@ describe('Fase 1: slide2-unify-and-rigi', () => {
     expect(rigiBtn.getAttribute('aria-pressed')).toBe('true');
 
     // Totals should now reflect RIGI figures
-    expect(screen.getByText(/Inversión RIGI/i)).toBeDefined();
+    expect(screen.getAllByText(/Inversión RIGI/i).length).toBeGreaterThan(0);
     expect(screen.getByText(/Proyectos RIGI/i)).toBeDefined();
 
     // Province ranking chart should display RIGI investments
