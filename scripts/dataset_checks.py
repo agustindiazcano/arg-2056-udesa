@@ -184,3 +184,172 @@ def check_dataset_catalog(records):
         if acc == "not_opened" and rec is not None and not note:
             errors.append(f"access not_opened with recommended_use requires note in dataset_catalog.json for {key}")
     return errors
+
+
+def _check_record_provenance_and_nulls(r, i, file_name, value_fields):
+    errors = []
+    if not r.get("source"):
+        errors.append(f"missing source in {file_name} for record {i}")
+    if not r.get("retrieved_at"):
+        errors.append(f"missing retrieved_at in {file_name} for record {i}")
+    note = r.get("note")
+    for f in value_fields:
+        if r.get(f) is None and not note:
+            errors.append(f"null {f} without note in {file_name} for record {i}")
+    return errors
+
+
+def check_population_by_age(records, population_records=None):
+    errors = []
+    pop_map = {}
+    if population_records:
+        for p in population_records:
+            k = (p.get("geo"), p.get("year"))
+            val = p.get("value")
+            if val is not None:
+                pop_map[k] = val
+
+    by_pair = {}
+    for i, r in enumerate(records):
+        errors.extend(_check_record_provenance_and_nulls(r, i, "population_by_age.json", ["persons"]))
+        geo = r.get("geo")
+        year = r.get("year")
+        pair = (geo, year)
+        by_pair.setdefault(pair, []).append((i, r))
+
+        p = r.get("persons")
+        if p is not None and p < 0:
+            errors.append(f"negative persons {p} for age {r.get('age')} in ({geo}, {year}) in population_by_age.json")
+
+    for pair, rows in by_pair.items():
+        ages = [r.get("age") for _, r in rows]
+        if sorted(ages) != list(range(101)):
+            errors.append(f"ages 0 to 100 do not appear exactly once for {pair} in population_by_age.json")
+
+        if pair in pop_map:
+            pop_val = pop_map[pair]
+            sum_persons = sum(r.get("persons") or 0.0 for _, r in rows)
+            if pop_val > 0:
+                rel_diff = abs(sum_persons - pop_val) / pop_val
+                if rel_diff > 0.005:
+                    errors.append(
+                        f"population_by_age sum {sum_persons} differs from population {pop_val} by more than 0.5% for {pair} in population_by_age.json"
+                    )
+
+    return errors
+
+
+def check_fertility_schedule(records):
+    errors = []
+    by_pair = {}
+    for i, r in enumerate(records):
+        errors.extend(
+            _check_record_provenance_and_nulls(
+                r, i, "fertility_schedule.json", ["shape_f", "female_share", "tfr"]
+            )
+        )
+        geo = r.get("geo")
+        year = r.get("year")
+        pair = (geo, year)
+        by_pair.setdefault(pair, []).append((i, r))
+
+        fs = r.get("female_share")
+        if fs is not None and not (0 <= fs <= 1):
+            errors.append(
+                f"female_share {fs} outside [0, 1] for ({geo}, {year}, age {r.get('age')}) in fertility_schedule.json"
+            )
+
+    for pair, rows in by_pair.items():
+        shapes = [r.get("shape_f") for _, r in rows if r.get("shape_f") is not None]
+        sum_shape = sum(shapes)
+        if abs(sum_shape - 1.0) > 1e-9:
+            errors.append(f"shape_f sum {sum_shape} != 1.0 within 1e-9 for {pair} in fertility_schedule.json")
+
+        first_tfr = rows[0][1].get("tfr")
+        for _, r in rows[1:]:
+            tfr = r.get("tfr")
+            if tfr != first_tfr:
+                errors.append(f"tfr mismatch ({tfr} != {first_tfr}) for {pair} in fertility_schedule.json")
+                break
+
+    return errors
+
+
+def check_life_table(records):
+    errors = []
+    by_pair = {}
+    for i, r in enumerate(records):
+        errors.extend(_check_record_provenance_and_nulls(r, i, "life_table.json", ["survival", "e0"]))
+        geo = r.get("geo")
+        year = r.get("year")
+        pair = (geo, year)
+        by_pair.setdefault(pair, []).append((i, r))
+
+        s = r.get("survival")
+        if s is not None and not (0 <= s <= 1):
+            errors.append(f"survival {s} outside [0, 1] for age {r.get('age')} in {pair} in life_table.json")
+
+    for pair, rows in by_pair.items():
+        ages = [r.get("age") for _, r in rows]
+        if sorted(ages) != list(range(101)):
+            errors.append(f"ages 0 to 100 do not appear exactly once for {pair} in life_table.json")
+            continue
+
+        first_e0 = rows[0][1].get("e0")
+        for _, r in rows[1:]:
+            e0 = r.get("e0")
+            if e0 != first_e0:
+                errors.append(f"e0 mismatch ({e0} != {first_e0}) for {pair} in life_table.json")
+                break
+
+        rows_by_age = sorted(rows, key=lambda x: x[1].get("age"))
+        survivals = [r.get("survival") for _, r in rows_by_age]
+        if all(s is not None and 0 <= s <= 1 for s in survivals):
+            s100 = survivals[100]
+            if s100 >= 1.0:
+                errors.append(
+                    f"survival at age 100 must be < 1.0 to compute open interval for {pair} in life_table.json"
+                )
+            else:
+                l_surv = [1.0]
+                for a in range(100):
+                    l_surv.append(l_surv[-1] * survivals[a])
+                sum_l_mid = sum(0.5 * (l_surv[a] + l_surv[a + 1]) for a in range(100))
+                l_open = l_surv[100] / (1.0 - s100)
+                implied_e0 = sum_l_mid + l_open
+                if first_e0 is not None and abs(first_e0 - implied_e0) > 0.1:
+                    errors.append(
+                        f"e0 {first_e0} differs from implied life expectancy {implied_e0:.3f} by more than 0.1 years for {pair} in life_table.json"
+                    )
+
+    return errors
+
+
+def check_migration_schedule(records):
+    errors = []
+    by_pair = {}
+    for i, r in enumerate(records):
+        errors.extend(
+            _check_record_provenance_and_nulls(
+                r, i, "migration_schedule.json", ["shape_m", "net_migrants"]
+            )
+        )
+        geo = r.get("geo")
+        year = r.get("year")
+        pair = (geo, year)
+        by_pair.setdefault(pair, []).append((i, r))
+
+    for pair, rows in by_pair.items():
+        shapes = [r.get("shape_m") for _, r in rows if r.get("shape_m") is not None]
+        sum_shape = sum(shapes)
+        if abs(sum_shape - 1.0) > 1e-9:
+            errors.append(f"shape_m sum {sum_shape} != 1.0 within 1e-9 for {pair} in migration_schedule.json")
+
+        first_net = rows[0][1].get("net_migrants")
+        for _, r in rows[1:]:
+            net = r.get("net_migrants")
+            if net != first_net:
+                errors.append(f"net_migrants mismatch ({net} != {first_net}) for {pair} in migration_schedule.json")
+                break
+
+    return errors
