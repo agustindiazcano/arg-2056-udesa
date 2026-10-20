@@ -1,0 +1,5456 @@
+[
+  {
+    "age": 0,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.000254,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 1,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.000378,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 2,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.000554,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 3,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0008,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 4,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.001137,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 5,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.001591,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 6,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.002192,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 7,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.002973,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 8,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.003969,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 9,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.005218,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 10,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.006752,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 11,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.008602,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 12,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.01079,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 13,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.013323,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 14,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.016197,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 15,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.019385,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 16,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.022842,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 17,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.026497,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 18,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.03026,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 19,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.034022,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 20,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.037659,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 21,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.041039,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 22,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.044028,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 23,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.046503,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 24,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.048356,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 25,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.049502,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 26,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.049896,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 27,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.049502,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 28,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.048356,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 29,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.046503,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 30,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.044028,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 31,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.041039,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 32,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.037659,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 33,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.034022,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 34,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.03026,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 35,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.026497,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 36,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.022842,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 37,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.019385,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 38,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.016197,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 39,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.013323,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 40,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.01079,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 41,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.008602,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 42,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.006752,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 43,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.005218,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 44,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.003969,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 45,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.002973,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 46,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.002192,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 47,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.001591,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 48,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.001137,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 49,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0008,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 50,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.000554,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 51,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.000378,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 52,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.000254,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 53,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.000168,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 54,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.000109,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 55,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 7e-05,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 56,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 4.4e-05,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 57,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 2.7e-05,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 58,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 1.7e-05,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 59,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 1e-05,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 60,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 6e-06,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 61,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 3e-06,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 62,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 2e-06,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 63,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 1e-06,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 64,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 1e-06,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 65,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 66,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 67,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 68,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 69,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 70,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 71,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 72,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 73,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 74,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 75,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 76,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 77,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 78,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 79,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 80,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 81,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 82,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 83,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 84,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 85,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 86,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 87,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 88,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 89,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 90,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 91,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 92,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 93,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 94,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 95,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 96,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 97,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 98,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 99,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 100,
+    "geo": "AR",
+    "net_migrants": 5000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2000
+  },
+  {
+    "age": 0,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.000254,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 1,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.000378,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 2,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.000554,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 3,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0008,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 4,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.001137,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 5,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.001591,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 6,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.002192,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 7,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.002973,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 8,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.003969,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 9,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.005218,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 10,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.006752,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 11,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.008602,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 12,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.01079,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 13,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.013323,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 14,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.016197,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 15,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.019385,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 16,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.022842,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 17,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.026497,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 18,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.03026,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 19,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.034022,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 20,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.037659,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 21,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.041039,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 22,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.044028,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 23,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.046503,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 24,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.048356,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 25,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.049502,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 26,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.049896,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 27,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.049502,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 28,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.048356,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 29,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.046503,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 30,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.044028,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 31,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.041039,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 32,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.037659,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 33,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.034022,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 34,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.03026,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 35,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.026497,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 36,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.022842,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 37,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.019385,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 38,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.016197,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 39,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.013323,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 40,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.01079,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 41,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.008602,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 42,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.006752,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 43,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.005218,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 44,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.003969,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 45,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.002973,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 46,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.002192,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 47,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.001591,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 48,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.001137,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 49,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0008,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 50,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.000554,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 51,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.000378,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 52,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.000254,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 53,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.000168,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 54,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.000109,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 55,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 7e-05,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 56,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 4.4e-05,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 57,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 2.7e-05,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 58,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 1.7e-05,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 59,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 1e-05,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 60,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 6e-06,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 61,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 3e-06,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 62,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 2e-06,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 63,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 1e-06,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 64,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 1e-06,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 65,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 66,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 67,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 68,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 69,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 70,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 71,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 72,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 73,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 74,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 75,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 76,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 77,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 78,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 79,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 80,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 81,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 82,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 83,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 84,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 85,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 86,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 87,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 88,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 89,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 90,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 91,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 92,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 93,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 94,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 95,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 96,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 97,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 98,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 99,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 100,
+    "geo": "AR",
+    "net_migrants": 4800.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2001
+  },
+  {
+    "age": 0,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.000254,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 1,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.000378,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 2,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.000554,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 3,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0008,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 4,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.001137,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 5,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.001591,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 6,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.002192,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 7,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.002973,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 8,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.003969,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 9,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.005218,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 10,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.006752,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 11,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.008602,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 12,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.01079,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 13,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.013323,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 14,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.016197,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 15,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.019385,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 16,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.022842,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 17,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.026497,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 18,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.03026,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 19,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.034022,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 20,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.037659,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 21,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.041039,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 22,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.044028,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 23,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.046503,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 24,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.048356,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 25,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.049502,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 26,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.049896,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 27,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.049502,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 28,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.048356,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 29,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.046503,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 30,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.044028,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 31,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.041039,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 32,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.037659,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 33,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.034022,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 34,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.03026,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 35,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.026497,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 36,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.022842,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 37,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.019385,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 38,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.016197,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 39,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.013323,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 40,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.01079,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 41,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.008602,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 42,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.006752,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 43,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.005218,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 44,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.003969,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 45,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.002973,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 46,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.002192,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 47,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.001591,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 48,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.001137,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 49,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0008,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 50,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.000554,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 51,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.000378,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 52,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.000254,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 53,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.000168,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 54,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.000109,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 55,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 7e-05,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 56,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 4.4e-05,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 57,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 2.7e-05,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 58,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 1.7e-05,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 59,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 1e-05,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 60,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 6e-06,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 61,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 3e-06,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 62,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 2e-06,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 63,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 1e-06,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 64,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 1e-06,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 65,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 66,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 67,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 68,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 69,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 70,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 71,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 72,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 73,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 74,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 75,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 76,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 77,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 78,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 79,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 80,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 81,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 82,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 83,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 84,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 85,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 86,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 87,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 88,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 89,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 90,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 91,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 92,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 93,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 94,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 95,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 96,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 97,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 98,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 99,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 100,
+    "geo": "AR",
+    "net_migrants": 4600.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2002
+  },
+  {
+    "age": 0,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.000254,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 1,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.000378,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 2,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.000554,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 3,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0008,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 4,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.001137,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 5,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.001591,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 6,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.002192,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 7,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.002973,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 8,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.003969,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 9,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.005218,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 10,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.006752,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 11,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.008602,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 12,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.01079,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 13,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.013323,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 14,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.016197,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 15,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.019385,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 16,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.022842,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 17,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.026497,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 18,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.03026,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 19,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.034022,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 20,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.037659,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 21,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.041039,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 22,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.044028,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 23,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.046503,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 24,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.048356,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 25,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.049502,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 26,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.049896,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 27,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.049502,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 28,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.048356,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 29,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.046503,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 30,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.044028,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 31,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.041039,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 32,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.037659,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 33,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.034022,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 34,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.03026,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 35,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.026497,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 36,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.022842,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 37,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.019385,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 38,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.016197,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 39,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.013323,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 40,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.01079,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 41,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.008602,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 42,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.006752,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 43,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.005218,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 44,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.003969,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 45,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.002973,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 46,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.002192,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 47,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.001591,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 48,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.001137,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 49,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0008,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 50,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.000554,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 51,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.000378,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 52,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.000254,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 53,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.000168,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 54,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.000109,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 55,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 7e-05,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 56,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 4.4e-05,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 57,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 2.7e-05,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 58,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 1.7e-05,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 59,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 1e-05,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 60,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 6e-06,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 61,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 3e-06,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 62,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 2e-06,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 63,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 1e-06,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 64,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 1e-06,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 65,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 66,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 67,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 68,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 69,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 70,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 71,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 72,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 73,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 74,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 75,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 76,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 77,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 78,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 79,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 80,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 81,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 82,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 83,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 84,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 85,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 86,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 87,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 88,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 89,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 90,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 91,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 92,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 93,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 94,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 95,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 96,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 97,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 98,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 99,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 100,
+    "geo": "AR",
+    "net_migrants": 4400.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2003
+  },
+  {
+    "age": 0,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.000254,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 1,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.000378,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 2,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.000554,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 3,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0008,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 4,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.001137,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 5,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.001591,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 6,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.002192,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 7,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.002973,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 8,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.003969,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 9,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.005218,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 10,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.006752,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 11,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.008602,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 12,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.01079,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 13,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.013323,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 14,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.016197,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 15,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.019385,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 16,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.022842,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 17,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.026497,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 18,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.03026,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 19,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.034022,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 20,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.037659,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 21,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.041039,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 22,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.044028,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 23,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.046503,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 24,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.048356,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 25,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.049502,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 26,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.049896,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 27,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.049502,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 28,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.048356,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 29,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.046503,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 30,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.044028,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 31,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.041039,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 32,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.037659,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 33,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.034022,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 34,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.03026,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 35,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.026497,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 36,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.022842,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 37,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.019385,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 38,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.016197,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 39,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.013323,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 40,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.01079,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 41,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.008602,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 42,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.006752,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 43,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.005218,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 44,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.003969,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 45,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.002973,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 46,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.002192,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 47,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.001591,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 48,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.001137,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 49,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0008,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 50,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.000554,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 51,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.000378,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 52,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.000254,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 53,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.000168,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 54,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.000109,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 55,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 7e-05,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 56,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 4.4e-05,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 57,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 2.7e-05,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 58,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 1.7e-05,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 59,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 1e-05,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 60,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 6e-06,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 61,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 3e-06,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 62,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 2e-06,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 63,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 1e-06,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 64,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 1e-06,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 65,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 66,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 67,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 68,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 69,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 70,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 71,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 72,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 73,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 74,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 75,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 76,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 77,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 78,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 79,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 80,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 81,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 82,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 83,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 84,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 85,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 86,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 87,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 88,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 89,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 90,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 91,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 92,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 93,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 94,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 95,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 96,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 97,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 98,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 99,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 100,
+    "geo": "AR",
+    "net_migrants": 4200.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2004
+  },
+  {
+    "age": 0,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.000254,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 1,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.000378,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 2,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.000554,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 3,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0008,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 4,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.001137,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 5,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.001591,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 6,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.002192,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 7,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.002973,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 8,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.003969,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 9,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.005218,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 10,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.006752,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 11,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.008602,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 12,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.01079,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 13,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.013323,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 14,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.016197,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 15,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.019385,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 16,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.022842,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 17,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.026497,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 18,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.03026,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 19,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.034022,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 20,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.037659,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 21,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.041039,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 22,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.044028,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 23,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.046503,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 24,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.048356,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 25,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.049502,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 26,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.049896,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 27,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.049502,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 28,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.048356,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 29,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.046503,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 30,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.044028,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 31,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.041039,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 32,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.037659,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 33,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.034022,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 34,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.03026,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 35,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.026497,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 36,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.022842,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 37,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.019385,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 38,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.016197,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 39,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.013323,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 40,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.01079,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 41,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.008602,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 42,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.006752,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 43,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.005218,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 44,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.003969,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 45,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.002973,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 46,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.002192,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 47,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.001591,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 48,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.001137,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 49,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0008,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 50,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.000554,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 51,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.000378,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 52,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.000254,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 53,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.000168,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 54,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.000109,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 55,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 7e-05,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 56,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 4.4e-05,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 57,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 2.7e-05,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 58,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 1.7e-05,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 59,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 1e-05,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 60,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 6e-06,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 61,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 3e-06,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 62,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 2e-06,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 63,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 1e-06,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 64,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 1e-06,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 65,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 66,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 67,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 68,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 69,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 70,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 71,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 72,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 73,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 74,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 75,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 76,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 77,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 78,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 79,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 80,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 81,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 82,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 83,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 84,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 85,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 86,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 87,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 88,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 89,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 90,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 91,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 92,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 93,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 94,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 95,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 96,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 97,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 98,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 99,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2005
+  },
+  {
+    "age": 100,
+    "geo": "AR",
+    "net_migrants": 4000.0,
+    "retrieved_at": "2026-10-02",
+    "shape_m": 0.0,
+    "source": "MOCK",
+    "year": 2005
+  }
+]

@@ -1,0 +1,5456 @@
+[
+  {
+    "age": 0,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.985,
+    "year": 2000
+  },
+  {
+    "age": 1,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2000
+  },
+  {
+    "age": 2,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2000
+  },
+  {
+    "age": 3,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2000
+  },
+  {
+    "age": 4,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2000
+  },
+  {
+    "age": 5,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2000
+  },
+  {
+    "age": 6,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2000
+  },
+  {
+    "age": 7,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2000
+  },
+  {
+    "age": 8,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2000
+  },
+  {
+    "age": 9,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2000
+  },
+  {
+    "age": 10,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2000
+  },
+  {
+    "age": 11,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2000
+  },
+  {
+    "age": 12,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2000
+  },
+  {
+    "age": 13,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2000
+  },
+  {
+    "age": 14,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2000
+  },
+  {
+    "age": 15,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2000
+  },
+  {
+    "age": 16,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2000
+  },
+  {
+    "age": 17,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2000
+  },
+  {
+    "age": 18,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2000
+  },
+  {
+    "age": 19,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2000
+  },
+  {
+    "age": 20,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2000
+  },
+  {
+    "age": 21,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2000
+  },
+  {
+    "age": 22,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2000
+  },
+  {
+    "age": 23,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2000
+  },
+  {
+    "age": 24,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2000
+  },
+  {
+    "age": 25,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2000
+  },
+  {
+    "age": 26,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2000
+  },
+  {
+    "age": 27,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2000
+  },
+  {
+    "age": 28,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2000
+  },
+  {
+    "age": 29,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2000
+  },
+  {
+    "age": 30,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2000
+  },
+  {
+    "age": 31,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2000
+  },
+  {
+    "age": 32,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2000
+  },
+  {
+    "age": 33,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2000
+  },
+  {
+    "age": 34,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2000
+  },
+  {
+    "age": 35,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2000
+  },
+  {
+    "age": 36,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2000
+  },
+  {
+    "age": 37,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2000
+  },
+  {
+    "age": 38,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2000
+  },
+  {
+    "age": 39,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2000
+  },
+  {
+    "age": 40,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2000
+  },
+  {
+    "age": 41,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.996,
+    "year": 2000
+  },
+  {
+    "age": 42,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.994,
+    "year": 2000
+  },
+  {
+    "age": 43,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.992,
+    "year": 2000
+  },
+  {
+    "age": 44,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.99,
+    "year": 2000
+  },
+  {
+    "age": 45,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.988,
+    "year": 2000
+  },
+  {
+    "age": 46,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.986,
+    "year": 2000
+  },
+  {
+    "age": 47,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.984,
+    "year": 2000
+  },
+  {
+    "age": 48,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.982,
+    "year": 2000
+  },
+  {
+    "age": 49,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.98,
+    "year": 2000
+  },
+  {
+    "age": 50,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.978,
+    "year": 2000
+  },
+  {
+    "age": 51,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.976,
+    "year": 2000
+  },
+  {
+    "age": 52,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.974,
+    "year": 2000
+  },
+  {
+    "age": 53,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.972,
+    "year": 2000
+  },
+  {
+    "age": 54,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.97,
+    "year": 2000
+  },
+  {
+    "age": 55,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.968,
+    "year": 2000
+  },
+  {
+    "age": 56,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.966,
+    "year": 2000
+  },
+  {
+    "age": 57,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.964,
+    "year": 2000
+  },
+  {
+    "age": 58,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.962,
+    "year": 2000
+  },
+  {
+    "age": 59,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.96,
+    "year": 2000
+  },
+  {
+    "age": 60,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.958,
+    "year": 2000
+  },
+  {
+    "age": 61,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.956,
+    "year": 2000
+  },
+  {
+    "age": 62,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.954,
+    "year": 2000
+  },
+  {
+    "age": 63,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.952,
+    "year": 2000
+  },
+  {
+    "age": 64,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.95,
+    "year": 2000
+  },
+  {
+    "age": 65,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.948,
+    "year": 2000
+  },
+  {
+    "age": 66,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.946,
+    "year": 2000
+  },
+  {
+    "age": 67,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.944,
+    "year": 2000
+  },
+  {
+    "age": 68,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.942,
+    "year": 2000
+  },
+  {
+    "age": 69,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.94,
+    "year": 2000
+  },
+  {
+    "age": 70,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.938,
+    "year": 2000
+  },
+  {
+    "age": 71,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.923,
+    "year": 2000
+  },
+  {
+    "age": 72,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.908,
+    "year": 2000
+  },
+  {
+    "age": 73,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.893,
+    "year": 2000
+  },
+  {
+    "age": 74,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.878,
+    "year": 2000
+  },
+  {
+    "age": 75,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.863,
+    "year": 2000
+  },
+  {
+    "age": 76,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.848,
+    "year": 2000
+  },
+  {
+    "age": 77,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.833,
+    "year": 2000
+  },
+  {
+    "age": 78,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.818,
+    "year": 2000
+  },
+  {
+    "age": 79,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.803,
+    "year": 2000
+  },
+  {
+    "age": 80,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.788,
+    "year": 2000
+  },
+  {
+    "age": 81,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.773,
+    "year": 2000
+  },
+  {
+    "age": 82,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.758,
+    "year": 2000
+  },
+  {
+    "age": 83,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.743,
+    "year": 2000
+  },
+  {
+    "age": 84,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.728,
+    "year": 2000
+  },
+  {
+    "age": 85,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.713,
+    "year": 2000
+  },
+  {
+    "age": 86,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.698,
+    "year": 2000
+  },
+  {
+    "age": 87,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.683,
+    "year": 2000
+  },
+  {
+    "age": 88,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.668,
+    "year": 2000
+  },
+  {
+    "age": 89,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.653,
+    "year": 2000
+  },
+  {
+    "age": 90,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.638,
+    "year": 2000
+  },
+  {
+    "age": 91,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.623,
+    "year": 2000
+  },
+  {
+    "age": 92,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.608,
+    "year": 2000
+  },
+  {
+    "age": 93,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.593,
+    "year": 2000
+  },
+  {
+    "age": 94,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.578,
+    "year": 2000
+  },
+  {
+    "age": 95,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.563,
+    "year": 2000
+  },
+  {
+    "age": 96,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.548,
+    "year": 2000
+  },
+  {
+    "age": 97,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.533,
+    "year": 2000
+  },
+  {
+    "age": 98,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.518,
+    "year": 2000
+  },
+  {
+    "age": 99,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.503,
+    "year": 2000
+  },
+  {
+    "age": 100,
+    "e0": 61.03,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.65,
+    "year": 2000
+  },
+  {
+    "age": 0,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.986,
+    "year": 2001
+  },
+  {
+    "age": 1,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2001
+  },
+  {
+    "age": 2,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2001
+  },
+  {
+    "age": 3,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2001
+  },
+  {
+    "age": 4,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2001
+  },
+  {
+    "age": 5,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2001
+  },
+  {
+    "age": 6,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2001
+  },
+  {
+    "age": 7,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2001
+  },
+  {
+    "age": 8,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2001
+  },
+  {
+    "age": 9,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2001
+  },
+  {
+    "age": 10,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2001
+  },
+  {
+    "age": 11,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2001
+  },
+  {
+    "age": 12,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2001
+  },
+  {
+    "age": 13,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2001
+  },
+  {
+    "age": 14,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2001
+  },
+  {
+    "age": 15,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2001
+  },
+  {
+    "age": 16,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2001
+  },
+  {
+    "age": 17,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2001
+  },
+  {
+    "age": 18,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2001
+  },
+  {
+    "age": 19,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2001
+  },
+  {
+    "age": 20,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2001
+  },
+  {
+    "age": 21,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2001
+  },
+  {
+    "age": 22,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2001
+  },
+  {
+    "age": 23,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2001
+  },
+  {
+    "age": 24,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2001
+  },
+  {
+    "age": 25,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2001
+  },
+  {
+    "age": 26,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2001
+  },
+  {
+    "age": 27,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2001
+  },
+  {
+    "age": 28,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2001
+  },
+  {
+    "age": 29,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2001
+  },
+  {
+    "age": 30,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2001
+  },
+  {
+    "age": 31,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2001
+  },
+  {
+    "age": 32,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2001
+  },
+  {
+    "age": 33,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2001
+  },
+  {
+    "age": 34,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2001
+  },
+  {
+    "age": 35,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2001
+  },
+  {
+    "age": 36,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2001
+  },
+  {
+    "age": 37,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2001
+  },
+  {
+    "age": 38,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2001
+  },
+  {
+    "age": 39,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2001
+  },
+  {
+    "age": 40,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2001
+  },
+  {
+    "age": 41,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.996,
+    "year": 2001
+  },
+  {
+    "age": 42,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.994,
+    "year": 2001
+  },
+  {
+    "age": 43,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.992,
+    "year": 2001
+  },
+  {
+    "age": 44,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.99,
+    "year": 2001
+  },
+  {
+    "age": 45,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.988,
+    "year": 2001
+  },
+  {
+    "age": 46,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.986,
+    "year": 2001
+  },
+  {
+    "age": 47,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.984,
+    "year": 2001
+  },
+  {
+    "age": 48,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.982,
+    "year": 2001
+  },
+  {
+    "age": 49,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.98,
+    "year": 2001
+  },
+  {
+    "age": 50,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.978,
+    "year": 2001
+  },
+  {
+    "age": 51,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.976,
+    "year": 2001
+  },
+  {
+    "age": 52,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.974,
+    "year": 2001
+  },
+  {
+    "age": 53,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.972,
+    "year": 2001
+  },
+  {
+    "age": 54,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.97,
+    "year": 2001
+  },
+  {
+    "age": 55,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.968,
+    "year": 2001
+  },
+  {
+    "age": 56,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.966,
+    "year": 2001
+  },
+  {
+    "age": 57,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.964,
+    "year": 2001
+  },
+  {
+    "age": 58,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.962,
+    "year": 2001
+  },
+  {
+    "age": 59,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.96,
+    "year": 2001
+  },
+  {
+    "age": 60,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.958,
+    "year": 2001
+  },
+  {
+    "age": 61,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.956,
+    "year": 2001
+  },
+  {
+    "age": 62,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.954,
+    "year": 2001
+  },
+  {
+    "age": 63,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.952,
+    "year": 2001
+  },
+  {
+    "age": 64,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.95,
+    "year": 2001
+  },
+  {
+    "age": 65,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.948,
+    "year": 2001
+  },
+  {
+    "age": 66,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.946,
+    "year": 2001
+  },
+  {
+    "age": 67,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.944,
+    "year": 2001
+  },
+  {
+    "age": 68,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.942,
+    "year": 2001
+  },
+  {
+    "age": 69,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.94,
+    "year": 2001
+  },
+  {
+    "age": 70,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.938,
+    "year": 2001
+  },
+  {
+    "age": 71,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.923,
+    "year": 2001
+  },
+  {
+    "age": 72,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.908,
+    "year": 2001
+  },
+  {
+    "age": 73,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.893,
+    "year": 2001
+  },
+  {
+    "age": 74,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.878,
+    "year": 2001
+  },
+  {
+    "age": 75,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.863,
+    "year": 2001
+  },
+  {
+    "age": 76,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.848,
+    "year": 2001
+  },
+  {
+    "age": 77,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.833,
+    "year": 2001
+  },
+  {
+    "age": 78,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.818,
+    "year": 2001
+  },
+  {
+    "age": 79,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.803,
+    "year": 2001
+  },
+  {
+    "age": 80,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.788,
+    "year": 2001
+  },
+  {
+    "age": 81,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.773,
+    "year": 2001
+  },
+  {
+    "age": 82,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.758,
+    "year": 2001
+  },
+  {
+    "age": 83,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.743,
+    "year": 2001
+  },
+  {
+    "age": 84,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.728,
+    "year": 2001
+  },
+  {
+    "age": 85,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.713,
+    "year": 2001
+  },
+  {
+    "age": 86,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.698,
+    "year": 2001
+  },
+  {
+    "age": 87,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.683,
+    "year": 2001
+  },
+  {
+    "age": 88,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.668,
+    "year": 2001
+  },
+  {
+    "age": 89,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.653,
+    "year": 2001
+  },
+  {
+    "age": 90,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.638,
+    "year": 2001
+  },
+  {
+    "age": 91,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.623,
+    "year": 2001
+  },
+  {
+    "age": 92,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.608,
+    "year": 2001
+  },
+  {
+    "age": 93,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.593,
+    "year": 2001
+  },
+  {
+    "age": 94,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.578,
+    "year": 2001
+  },
+  {
+    "age": 95,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.563,
+    "year": 2001
+  },
+  {
+    "age": 96,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.548,
+    "year": 2001
+  },
+  {
+    "age": 97,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.533,
+    "year": 2001
+  },
+  {
+    "age": 98,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.518,
+    "year": 2001
+  },
+  {
+    "age": 99,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.503,
+    "year": 2001
+  },
+  {
+    "age": 100,
+    "e0": 61.1,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.65,
+    "year": 2001
+  },
+  {
+    "age": 0,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.987,
+    "year": 2002
+  },
+  {
+    "age": 1,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2002
+  },
+  {
+    "age": 2,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2002
+  },
+  {
+    "age": 3,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2002
+  },
+  {
+    "age": 4,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2002
+  },
+  {
+    "age": 5,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2002
+  },
+  {
+    "age": 6,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2002
+  },
+  {
+    "age": 7,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2002
+  },
+  {
+    "age": 8,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2002
+  },
+  {
+    "age": 9,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2002
+  },
+  {
+    "age": 10,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2002
+  },
+  {
+    "age": 11,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2002
+  },
+  {
+    "age": 12,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2002
+  },
+  {
+    "age": 13,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2002
+  },
+  {
+    "age": 14,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2002
+  },
+  {
+    "age": 15,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2002
+  },
+  {
+    "age": 16,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2002
+  },
+  {
+    "age": 17,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2002
+  },
+  {
+    "age": 18,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2002
+  },
+  {
+    "age": 19,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2002
+  },
+  {
+    "age": 20,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2002
+  },
+  {
+    "age": 21,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2002
+  },
+  {
+    "age": 22,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2002
+  },
+  {
+    "age": 23,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2002
+  },
+  {
+    "age": 24,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2002
+  },
+  {
+    "age": 25,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2002
+  },
+  {
+    "age": 26,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2002
+  },
+  {
+    "age": 27,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2002
+  },
+  {
+    "age": 28,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2002
+  },
+  {
+    "age": 29,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2002
+  },
+  {
+    "age": 30,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2002
+  },
+  {
+    "age": 31,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2002
+  },
+  {
+    "age": 32,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2002
+  },
+  {
+    "age": 33,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2002
+  },
+  {
+    "age": 34,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2002
+  },
+  {
+    "age": 35,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2002
+  },
+  {
+    "age": 36,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2002
+  },
+  {
+    "age": 37,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2002
+  },
+  {
+    "age": 38,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2002
+  },
+  {
+    "age": 39,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2002
+  },
+  {
+    "age": 40,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2002
+  },
+  {
+    "age": 41,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.996,
+    "year": 2002
+  },
+  {
+    "age": 42,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.994,
+    "year": 2002
+  },
+  {
+    "age": 43,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.992,
+    "year": 2002
+  },
+  {
+    "age": 44,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.99,
+    "year": 2002
+  },
+  {
+    "age": 45,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.988,
+    "year": 2002
+  },
+  {
+    "age": 46,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.986,
+    "year": 2002
+  },
+  {
+    "age": 47,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.984,
+    "year": 2002
+  },
+  {
+    "age": 48,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.982,
+    "year": 2002
+  },
+  {
+    "age": 49,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.98,
+    "year": 2002
+  },
+  {
+    "age": 50,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.978,
+    "year": 2002
+  },
+  {
+    "age": 51,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.976,
+    "year": 2002
+  },
+  {
+    "age": 52,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.974,
+    "year": 2002
+  },
+  {
+    "age": 53,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.972,
+    "year": 2002
+  },
+  {
+    "age": 54,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.97,
+    "year": 2002
+  },
+  {
+    "age": 55,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.968,
+    "year": 2002
+  },
+  {
+    "age": 56,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.966,
+    "year": 2002
+  },
+  {
+    "age": 57,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.964,
+    "year": 2002
+  },
+  {
+    "age": 58,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.962,
+    "year": 2002
+  },
+  {
+    "age": 59,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.96,
+    "year": 2002
+  },
+  {
+    "age": 60,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.958,
+    "year": 2002
+  },
+  {
+    "age": 61,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.956,
+    "year": 2002
+  },
+  {
+    "age": 62,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.954,
+    "year": 2002
+  },
+  {
+    "age": 63,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.952,
+    "year": 2002
+  },
+  {
+    "age": 64,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.95,
+    "year": 2002
+  },
+  {
+    "age": 65,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.948,
+    "year": 2002
+  },
+  {
+    "age": 66,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.946,
+    "year": 2002
+  },
+  {
+    "age": 67,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.944,
+    "year": 2002
+  },
+  {
+    "age": 68,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.942,
+    "year": 2002
+  },
+  {
+    "age": 69,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.94,
+    "year": 2002
+  },
+  {
+    "age": 70,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.938,
+    "year": 2002
+  },
+  {
+    "age": 71,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.923,
+    "year": 2002
+  },
+  {
+    "age": 72,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.908,
+    "year": 2002
+  },
+  {
+    "age": 73,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.893,
+    "year": 2002
+  },
+  {
+    "age": 74,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.878,
+    "year": 2002
+  },
+  {
+    "age": 75,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.863,
+    "year": 2002
+  },
+  {
+    "age": 76,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.848,
+    "year": 2002
+  },
+  {
+    "age": 77,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.833,
+    "year": 2002
+  },
+  {
+    "age": 78,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.818,
+    "year": 2002
+  },
+  {
+    "age": 79,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.803,
+    "year": 2002
+  },
+  {
+    "age": 80,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.788,
+    "year": 2002
+  },
+  {
+    "age": 81,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.773,
+    "year": 2002
+  },
+  {
+    "age": 82,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.758,
+    "year": 2002
+  },
+  {
+    "age": 83,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.743,
+    "year": 2002
+  },
+  {
+    "age": 84,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.728,
+    "year": 2002
+  },
+  {
+    "age": 85,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.713,
+    "year": 2002
+  },
+  {
+    "age": 86,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.698,
+    "year": 2002
+  },
+  {
+    "age": 87,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.683,
+    "year": 2002
+  },
+  {
+    "age": 88,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.668,
+    "year": 2002
+  },
+  {
+    "age": 89,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.653,
+    "year": 2002
+  },
+  {
+    "age": 90,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.638,
+    "year": 2002
+  },
+  {
+    "age": 91,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.623,
+    "year": 2002
+  },
+  {
+    "age": 92,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.608,
+    "year": 2002
+  },
+  {
+    "age": 93,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.593,
+    "year": 2002
+  },
+  {
+    "age": 94,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.578,
+    "year": 2002
+  },
+  {
+    "age": 95,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.563,
+    "year": 2002
+  },
+  {
+    "age": 96,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.548,
+    "year": 2002
+  },
+  {
+    "age": 97,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.533,
+    "year": 2002
+  },
+  {
+    "age": 98,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.518,
+    "year": 2002
+  },
+  {
+    "age": 99,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.503,
+    "year": 2002
+  },
+  {
+    "age": 100,
+    "e0": 61.16,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.65,
+    "year": 2002
+  },
+  {
+    "age": 0,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.988,
+    "year": 2003
+  },
+  {
+    "age": 1,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2003
+  },
+  {
+    "age": 2,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2003
+  },
+  {
+    "age": 3,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2003
+  },
+  {
+    "age": 4,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2003
+  },
+  {
+    "age": 5,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2003
+  },
+  {
+    "age": 6,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2003
+  },
+  {
+    "age": 7,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2003
+  },
+  {
+    "age": 8,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2003
+  },
+  {
+    "age": 9,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2003
+  },
+  {
+    "age": 10,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2003
+  },
+  {
+    "age": 11,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2003
+  },
+  {
+    "age": 12,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2003
+  },
+  {
+    "age": 13,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2003
+  },
+  {
+    "age": 14,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2003
+  },
+  {
+    "age": 15,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2003
+  },
+  {
+    "age": 16,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2003
+  },
+  {
+    "age": 17,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2003
+  },
+  {
+    "age": 18,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2003
+  },
+  {
+    "age": 19,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2003
+  },
+  {
+    "age": 20,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2003
+  },
+  {
+    "age": 21,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2003
+  },
+  {
+    "age": 22,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2003
+  },
+  {
+    "age": 23,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2003
+  },
+  {
+    "age": 24,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2003
+  },
+  {
+    "age": 25,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2003
+  },
+  {
+    "age": 26,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2003
+  },
+  {
+    "age": 27,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2003
+  },
+  {
+    "age": 28,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2003
+  },
+  {
+    "age": 29,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2003
+  },
+  {
+    "age": 30,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2003
+  },
+  {
+    "age": 31,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2003
+  },
+  {
+    "age": 32,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2003
+  },
+  {
+    "age": 33,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2003
+  },
+  {
+    "age": 34,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2003
+  },
+  {
+    "age": 35,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2003
+  },
+  {
+    "age": 36,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2003
+  },
+  {
+    "age": 37,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2003
+  },
+  {
+    "age": 38,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2003
+  },
+  {
+    "age": 39,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2003
+  },
+  {
+    "age": 40,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2003
+  },
+  {
+    "age": 41,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.996,
+    "year": 2003
+  },
+  {
+    "age": 42,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.994,
+    "year": 2003
+  },
+  {
+    "age": 43,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.992,
+    "year": 2003
+  },
+  {
+    "age": 44,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.99,
+    "year": 2003
+  },
+  {
+    "age": 45,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.988,
+    "year": 2003
+  },
+  {
+    "age": 46,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.986,
+    "year": 2003
+  },
+  {
+    "age": 47,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.984,
+    "year": 2003
+  },
+  {
+    "age": 48,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.982,
+    "year": 2003
+  },
+  {
+    "age": 49,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.98,
+    "year": 2003
+  },
+  {
+    "age": 50,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.978,
+    "year": 2003
+  },
+  {
+    "age": 51,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.976,
+    "year": 2003
+  },
+  {
+    "age": 52,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.974,
+    "year": 2003
+  },
+  {
+    "age": 53,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.972,
+    "year": 2003
+  },
+  {
+    "age": 54,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.97,
+    "year": 2003
+  },
+  {
+    "age": 55,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.968,
+    "year": 2003
+  },
+  {
+    "age": 56,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.966,
+    "year": 2003
+  },
+  {
+    "age": 57,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.964,
+    "year": 2003
+  },
+  {
+    "age": 58,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.962,
+    "year": 2003
+  },
+  {
+    "age": 59,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.96,
+    "year": 2003
+  },
+  {
+    "age": 60,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.958,
+    "year": 2003
+  },
+  {
+    "age": 61,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.956,
+    "year": 2003
+  },
+  {
+    "age": 62,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.954,
+    "year": 2003
+  },
+  {
+    "age": 63,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.952,
+    "year": 2003
+  },
+  {
+    "age": 64,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.95,
+    "year": 2003
+  },
+  {
+    "age": 65,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.948,
+    "year": 2003
+  },
+  {
+    "age": 66,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.946,
+    "year": 2003
+  },
+  {
+    "age": 67,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.944,
+    "year": 2003
+  },
+  {
+    "age": 68,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.942,
+    "year": 2003
+  },
+  {
+    "age": 69,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.94,
+    "year": 2003
+  },
+  {
+    "age": 70,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.938,
+    "year": 2003
+  },
+  {
+    "age": 71,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.923,
+    "year": 2003
+  },
+  {
+    "age": 72,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.908,
+    "year": 2003
+  },
+  {
+    "age": 73,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.893,
+    "year": 2003
+  },
+  {
+    "age": 74,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.878,
+    "year": 2003
+  },
+  {
+    "age": 75,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.863,
+    "year": 2003
+  },
+  {
+    "age": 76,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.848,
+    "year": 2003
+  },
+  {
+    "age": 77,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.833,
+    "year": 2003
+  },
+  {
+    "age": 78,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.818,
+    "year": 2003
+  },
+  {
+    "age": 79,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.803,
+    "year": 2003
+  },
+  {
+    "age": 80,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.788,
+    "year": 2003
+  },
+  {
+    "age": 81,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.773,
+    "year": 2003
+  },
+  {
+    "age": 82,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.758,
+    "year": 2003
+  },
+  {
+    "age": 83,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.743,
+    "year": 2003
+  },
+  {
+    "age": 84,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.728,
+    "year": 2003
+  },
+  {
+    "age": 85,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.713,
+    "year": 2003
+  },
+  {
+    "age": 86,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.698,
+    "year": 2003
+  },
+  {
+    "age": 87,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.683,
+    "year": 2003
+  },
+  {
+    "age": 88,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.668,
+    "year": 2003
+  },
+  {
+    "age": 89,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.653,
+    "year": 2003
+  },
+  {
+    "age": 90,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.638,
+    "year": 2003
+  },
+  {
+    "age": 91,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.623,
+    "year": 2003
+  },
+  {
+    "age": 92,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.608,
+    "year": 2003
+  },
+  {
+    "age": 93,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.593,
+    "year": 2003
+  },
+  {
+    "age": 94,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.578,
+    "year": 2003
+  },
+  {
+    "age": 95,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.563,
+    "year": 2003
+  },
+  {
+    "age": 96,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.548,
+    "year": 2003
+  },
+  {
+    "age": 97,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.533,
+    "year": 2003
+  },
+  {
+    "age": 98,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.518,
+    "year": 2003
+  },
+  {
+    "age": 99,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.503,
+    "year": 2003
+  },
+  {
+    "age": 100,
+    "e0": 61.22,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.65,
+    "year": 2003
+  },
+  {
+    "age": 0,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.989,
+    "year": 2004
+  },
+  {
+    "age": 1,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2004
+  },
+  {
+    "age": 2,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2004
+  },
+  {
+    "age": 3,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2004
+  },
+  {
+    "age": 4,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2004
+  },
+  {
+    "age": 5,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2004
+  },
+  {
+    "age": 6,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2004
+  },
+  {
+    "age": 7,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2004
+  },
+  {
+    "age": 8,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2004
+  },
+  {
+    "age": 9,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2004
+  },
+  {
+    "age": 10,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2004
+  },
+  {
+    "age": 11,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2004
+  },
+  {
+    "age": 12,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2004
+  },
+  {
+    "age": 13,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2004
+  },
+  {
+    "age": 14,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2004
+  },
+  {
+    "age": 15,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2004
+  },
+  {
+    "age": 16,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2004
+  },
+  {
+    "age": 17,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2004
+  },
+  {
+    "age": 18,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2004
+  },
+  {
+    "age": 19,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2004
+  },
+  {
+    "age": 20,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2004
+  },
+  {
+    "age": 21,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2004
+  },
+  {
+    "age": 22,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2004
+  },
+  {
+    "age": 23,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2004
+  },
+  {
+    "age": 24,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2004
+  },
+  {
+    "age": 25,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2004
+  },
+  {
+    "age": 26,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2004
+  },
+  {
+    "age": 27,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2004
+  },
+  {
+    "age": 28,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2004
+  },
+  {
+    "age": 29,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2004
+  },
+  {
+    "age": 30,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2004
+  },
+  {
+    "age": 31,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2004
+  },
+  {
+    "age": 32,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2004
+  },
+  {
+    "age": 33,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2004
+  },
+  {
+    "age": 34,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2004
+  },
+  {
+    "age": 35,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2004
+  },
+  {
+    "age": 36,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2004
+  },
+  {
+    "age": 37,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2004
+  },
+  {
+    "age": 38,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2004
+  },
+  {
+    "age": 39,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2004
+  },
+  {
+    "age": 40,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2004
+  },
+  {
+    "age": 41,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.996,
+    "year": 2004
+  },
+  {
+    "age": 42,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.994,
+    "year": 2004
+  },
+  {
+    "age": 43,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.992,
+    "year": 2004
+  },
+  {
+    "age": 44,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.99,
+    "year": 2004
+  },
+  {
+    "age": 45,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.988,
+    "year": 2004
+  },
+  {
+    "age": 46,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.986,
+    "year": 2004
+  },
+  {
+    "age": 47,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.984,
+    "year": 2004
+  },
+  {
+    "age": 48,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.982,
+    "year": 2004
+  },
+  {
+    "age": 49,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.98,
+    "year": 2004
+  },
+  {
+    "age": 50,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.978,
+    "year": 2004
+  },
+  {
+    "age": 51,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.976,
+    "year": 2004
+  },
+  {
+    "age": 52,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.974,
+    "year": 2004
+  },
+  {
+    "age": 53,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.972,
+    "year": 2004
+  },
+  {
+    "age": 54,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.97,
+    "year": 2004
+  },
+  {
+    "age": 55,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.968,
+    "year": 2004
+  },
+  {
+    "age": 56,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.966,
+    "year": 2004
+  },
+  {
+    "age": 57,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.964,
+    "year": 2004
+  },
+  {
+    "age": 58,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.962,
+    "year": 2004
+  },
+  {
+    "age": 59,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.96,
+    "year": 2004
+  },
+  {
+    "age": 60,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.958,
+    "year": 2004
+  },
+  {
+    "age": 61,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.956,
+    "year": 2004
+  },
+  {
+    "age": 62,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.954,
+    "year": 2004
+  },
+  {
+    "age": 63,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.952,
+    "year": 2004
+  },
+  {
+    "age": 64,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.95,
+    "year": 2004
+  },
+  {
+    "age": 65,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.948,
+    "year": 2004
+  },
+  {
+    "age": 66,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.946,
+    "year": 2004
+  },
+  {
+    "age": 67,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.944,
+    "year": 2004
+  },
+  {
+    "age": 68,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.942,
+    "year": 2004
+  },
+  {
+    "age": 69,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.94,
+    "year": 2004
+  },
+  {
+    "age": 70,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.938,
+    "year": 2004
+  },
+  {
+    "age": 71,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.923,
+    "year": 2004
+  },
+  {
+    "age": 72,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.908,
+    "year": 2004
+  },
+  {
+    "age": 73,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.893,
+    "year": 2004
+  },
+  {
+    "age": 74,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.878,
+    "year": 2004
+  },
+  {
+    "age": 75,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.863,
+    "year": 2004
+  },
+  {
+    "age": 76,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.848,
+    "year": 2004
+  },
+  {
+    "age": 77,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.833,
+    "year": 2004
+  },
+  {
+    "age": 78,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.818,
+    "year": 2004
+  },
+  {
+    "age": 79,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.803,
+    "year": 2004
+  },
+  {
+    "age": 80,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.788,
+    "year": 2004
+  },
+  {
+    "age": 81,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.773,
+    "year": 2004
+  },
+  {
+    "age": 82,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.758,
+    "year": 2004
+  },
+  {
+    "age": 83,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.743,
+    "year": 2004
+  },
+  {
+    "age": 84,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.728,
+    "year": 2004
+  },
+  {
+    "age": 85,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.713,
+    "year": 2004
+  },
+  {
+    "age": 86,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.698,
+    "year": 2004
+  },
+  {
+    "age": 87,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.683,
+    "year": 2004
+  },
+  {
+    "age": 88,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.668,
+    "year": 2004
+  },
+  {
+    "age": 89,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.653,
+    "year": 2004
+  },
+  {
+    "age": 90,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.638,
+    "year": 2004
+  },
+  {
+    "age": 91,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.623,
+    "year": 2004
+  },
+  {
+    "age": 92,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.608,
+    "year": 2004
+  },
+  {
+    "age": 93,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.593,
+    "year": 2004
+  },
+  {
+    "age": 94,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.578,
+    "year": 2004
+  },
+  {
+    "age": 95,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.563,
+    "year": 2004
+  },
+  {
+    "age": 96,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.548,
+    "year": 2004
+  },
+  {
+    "age": 97,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.533,
+    "year": 2004
+  },
+  {
+    "age": 98,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.518,
+    "year": 2004
+  },
+  {
+    "age": 99,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.503,
+    "year": 2004
+  },
+  {
+    "age": 100,
+    "e0": 61.28,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.65,
+    "year": 2004
+  },
+  {
+    "age": 0,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.99,
+    "year": 2005
+  },
+  {
+    "age": 1,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2005
+  },
+  {
+    "age": 2,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2005
+  },
+  {
+    "age": 3,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2005
+  },
+  {
+    "age": 4,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2005
+  },
+  {
+    "age": 5,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2005
+  },
+  {
+    "age": 6,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2005
+  },
+  {
+    "age": 7,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2005
+  },
+  {
+    "age": 8,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2005
+  },
+  {
+    "age": 9,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2005
+  },
+  {
+    "age": 10,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2005
+  },
+  {
+    "age": 11,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2005
+  },
+  {
+    "age": 12,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2005
+  },
+  {
+    "age": 13,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2005
+  },
+  {
+    "age": 14,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2005
+  },
+  {
+    "age": 15,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2005
+  },
+  {
+    "age": 16,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2005
+  },
+  {
+    "age": 17,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2005
+  },
+  {
+    "age": 18,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2005
+  },
+  {
+    "age": 19,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2005
+  },
+  {
+    "age": 20,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2005
+  },
+  {
+    "age": 21,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2005
+  },
+  {
+    "age": 22,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2005
+  },
+  {
+    "age": 23,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2005
+  },
+  {
+    "age": 24,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2005
+  },
+  {
+    "age": 25,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2005
+  },
+  {
+    "age": 26,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2005
+  },
+  {
+    "age": 27,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2005
+  },
+  {
+    "age": 28,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2005
+  },
+  {
+    "age": 29,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2005
+  },
+  {
+    "age": 30,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2005
+  },
+  {
+    "age": 31,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2005
+  },
+  {
+    "age": 32,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2005
+  },
+  {
+    "age": 33,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2005
+  },
+  {
+    "age": 34,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2005
+  },
+  {
+    "age": 35,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2005
+  },
+  {
+    "age": 36,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2005
+  },
+  {
+    "age": 37,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2005
+  },
+  {
+    "age": 38,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2005
+  },
+  {
+    "age": 39,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2005
+  },
+  {
+    "age": 40,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.998,
+    "year": 2005
+  },
+  {
+    "age": 41,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.996,
+    "year": 2005
+  },
+  {
+    "age": 42,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.994,
+    "year": 2005
+  },
+  {
+    "age": 43,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.992,
+    "year": 2005
+  },
+  {
+    "age": 44,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.99,
+    "year": 2005
+  },
+  {
+    "age": 45,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.988,
+    "year": 2005
+  },
+  {
+    "age": 46,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.986,
+    "year": 2005
+  },
+  {
+    "age": 47,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.984,
+    "year": 2005
+  },
+  {
+    "age": 48,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.982,
+    "year": 2005
+  },
+  {
+    "age": 49,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.98,
+    "year": 2005
+  },
+  {
+    "age": 50,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.978,
+    "year": 2005
+  },
+  {
+    "age": 51,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.976,
+    "year": 2005
+  },
+  {
+    "age": 52,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.974,
+    "year": 2005
+  },
+  {
+    "age": 53,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.972,
+    "year": 2005
+  },
+  {
+    "age": 54,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.97,
+    "year": 2005
+  },
+  {
+    "age": 55,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.968,
+    "year": 2005
+  },
+  {
+    "age": 56,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.966,
+    "year": 2005
+  },
+  {
+    "age": 57,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.964,
+    "year": 2005
+  },
+  {
+    "age": 58,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.962,
+    "year": 2005
+  },
+  {
+    "age": 59,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.96,
+    "year": 2005
+  },
+  {
+    "age": 60,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.958,
+    "year": 2005
+  },
+  {
+    "age": 61,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.956,
+    "year": 2005
+  },
+  {
+    "age": 62,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.954,
+    "year": 2005
+  },
+  {
+    "age": 63,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.952,
+    "year": 2005
+  },
+  {
+    "age": 64,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.95,
+    "year": 2005
+  },
+  {
+    "age": 65,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.948,
+    "year": 2005
+  },
+  {
+    "age": 66,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.946,
+    "year": 2005
+  },
+  {
+    "age": 67,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.944,
+    "year": 2005
+  },
+  {
+    "age": 68,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.942,
+    "year": 2005
+  },
+  {
+    "age": 69,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.94,
+    "year": 2005
+  },
+  {
+    "age": 70,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.938,
+    "year": 2005
+  },
+  {
+    "age": 71,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.923,
+    "year": 2005
+  },
+  {
+    "age": 72,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.908,
+    "year": 2005
+  },
+  {
+    "age": 73,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.893,
+    "year": 2005
+  },
+  {
+    "age": 74,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.878,
+    "year": 2005
+  },
+  {
+    "age": 75,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.863,
+    "year": 2005
+  },
+  {
+    "age": 76,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.848,
+    "year": 2005
+  },
+  {
+    "age": 77,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.833,
+    "year": 2005
+  },
+  {
+    "age": 78,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.818,
+    "year": 2005
+  },
+  {
+    "age": 79,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.803,
+    "year": 2005
+  },
+  {
+    "age": 80,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.788,
+    "year": 2005
+  },
+  {
+    "age": 81,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.773,
+    "year": 2005
+  },
+  {
+    "age": 82,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.758,
+    "year": 2005
+  },
+  {
+    "age": 83,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.743,
+    "year": 2005
+  },
+  {
+    "age": 84,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.728,
+    "year": 2005
+  },
+  {
+    "age": 85,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.713,
+    "year": 2005
+  },
+  {
+    "age": 86,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.698,
+    "year": 2005
+  },
+  {
+    "age": 87,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.683,
+    "year": 2005
+  },
+  {
+    "age": 88,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.668,
+    "year": 2005
+  },
+  {
+    "age": 89,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.653,
+    "year": 2005
+  },
+  {
+    "age": 90,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.638,
+    "year": 2005
+  },
+  {
+    "age": 91,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.623,
+    "year": 2005
+  },
+  {
+    "age": 92,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.608,
+    "year": 2005
+  },
+  {
+    "age": 93,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.593,
+    "year": 2005
+  },
+  {
+    "age": 94,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.578,
+    "year": 2005
+  },
+  {
+    "age": 95,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.563,
+    "year": 2005
+  },
+  {
+    "age": 96,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.548,
+    "year": 2005
+  },
+  {
+    "age": 97,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.533,
+    "year": 2005
+  },
+  {
+    "age": 98,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.518,
+    "year": 2005
+  },
+  {
+    "age": 99,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.503,
+    "year": 2005
+  },
+  {
+    "age": 100,
+    "e0": 61.34,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "source": "MOCK",
+    "survival": 0.65,
+    "year": 2005
+  }
+]

@@ -1,0 +1,2102 @@
+[
+  {
+    "age": 15,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.009169,
+    "source": "MOCK",
+    "tfr": 2.4,
+    "year": 2000
+  },
+  {
+    "age": 16,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.01262,
+    "source": "MOCK",
+    "tfr": 2.4,
+    "year": 2000
+  },
+  {
+    "age": 17,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.016894,
+    "source": "MOCK",
+    "tfr": 2.4,
+    "year": 2000
+  },
+  {
+    "age": 18,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.021995,
+    "source": "MOCK",
+    "tfr": 2.4,
+    "year": 2000
+  },
+  {
+    "age": 19,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.027853,
+    "source": "MOCK",
+    "tfr": 2.4,
+    "year": 2000
+  },
+  {
+    "age": 20,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.034304,
+    "source": "MOCK",
+    "tfr": 2.4,
+    "year": 2000
+  },
+  {
+    "age": 21,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.041092,
+    "source": "MOCK",
+    "tfr": 2.4,
+    "year": 2000
+  },
+  {
+    "age": 22,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.047875,
+    "source": "MOCK",
+    "tfr": 2.4,
+    "year": 2000
+  },
+  {
+    "age": 23,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.05425,
+    "source": "MOCK",
+    "tfr": 2.4,
+    "year": 2000
+  },
+  {
+    "age": 24,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.059789,
+    "source": "MOCK",
+    "tfr": 2.4,
+    "year": 2000
+  },
+  {
+    "age": 25,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.064088,
+    "source": "MOCK",
+    "tfr": 2.4,
+    "year": 2000
+  },
+  {
+    "age": 26,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.066815,
+    "source": "MOCK",
+    "tfr": 2.4,
+    "year": 2000
+  },
+  {
+    "age": 27,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.067749,
+    "source": "MOCK",
+    "tfr": 2.4,
+    "year": 2000
+  },
+  {
+    "age": 28,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.066815,
+    "source": "MOCK",
+    "tfr": 2.4,
+    "year": 2000
+  },
+  {
+    "age": 29,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.064088,
+    "source": "MOCK",
+    "tfr": 2.4,
+    "year": 2000
+  },
+  {
+    "age": 30,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.059789,
+    "source": "MOCK",
+    "tfr": 2.4,
+    "year": 2000
+  },
+  {
+    "age": 31,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.05425,
+    "source": "MOCK",
+    "tfr": 2.4,
+    "year": 2000
+  },
+  {
+    "age": 32,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.047875,
+    "source": "MOCK",
+    "tfr": 2.4,
+    "year": 2000
+  },
+  {
+    "age": 33,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.041092,
+    "source": "MOCK",
+    "tfr": 2.4,
+    "year": 2000
+  },
+  {
+    "age": 34,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.034304,
+    "source": "MOCK",
+    "tfr": 2.4,
+    "year": 2000
+  },
+  {
+    "age": 35,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.027853,
+    "source": "MOCK",
+    "tfr": 2.4,
+    "year": 2000
+  },
+  {
+    "age": 36,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.021995,
+    "source": "MOCK",
+    "tfr": 2.4,
+    "year": 2000
+  },
+  {
+    "age": 37,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.016894,
+    "source": "MOCK",
+    "tfr": 2.4,
+    "year": 2000
+  },
+  {
+    "age": 38,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.01262,
+    "source": "MOCK",
+    "tfr": 2.4,
+    "year": 2000
+  },
+  {
+    "age": 39,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.009169,
+    "source": "MOCK",
+    "tfr": 2.4,
+    "year": 2000
+  },
+  {
+    "age": 40,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.006479,
+    "source": "MOCK",
+    "tfr": 2.4,
+    "year": 2000
+  },
+  {
+    "age": 41,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.004453,
+    "source": "MOCK",
+    "tfr": 2.4,
+    "year": 2000
+  },
+  {
+    "age": 42,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.002977,
+    "source": "MOCK",
+    "tfr": 2.4,
+    "year": 2000
+  },
+  {
+    "age": 43,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.001935,
+    "source": "MOCK",
+    "tfr": 2.4,
+    "year": 2000
+  },
+  {
+    "age": 44,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.001224,
+    "source": "MOCK",
+    "tfr": 2.4,
+    "year": 2000
+  },
+  {
+    "age": 45,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.000753,
+    "source": "MOCK",
+    "tfr": 2.4,
+    "year": 2000
+  },
+  {
+    "age": 46,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.00045,
+    "source": "MOCK",
+    "tfr": 2.4,
+    "year": 2000
+  },
+  {
+    "age": 47,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.000262,
+    "source": "MOCK",
+    "tfr": 2.4,
+    "year": 2000
+  },
+  {
+    "age": 48,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.000148,
+    "source": "MOCK",
+    "tfr": 2.4,
+    "year": 2000
+  },
+  {
+    "age": 49,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 8.2e-05,
+    "source": "MOCK",
+    "tfr": 2.4,
+    "year": 2000
+  },
+  {
+    "age": 15,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.009169,
+    "source": "MOCK",
+    "tfr": 2.38,
+    "year": 2001
+  },
+  {
+    "age": 16,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.01262,
+    "source": "MOCK",
+    "tfr": 2.38,
+    "year": 2001
+  },
+  {
+    "age": 17,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.016894,
+    "source": "MOCK",
+    "tfr": 2.38,
+    "year": 2001
+  },
+  {
+    "age": 18,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.021995,
+    "source": "MOCK",
+    "tfr": 2.38,
+    "year": 2001
+  },
+  {
+    "age": 19,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.027853,
+    "source": "MOCK",
+    "tfr": 2.38,
+    "year": 2001
+  },
+  {
+    "age": 20,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.034304,
+    "source": "MOCK",
+    "tfr": 2.38,
+    "year": 2001
+  },
+  {
+    "age": 21,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.041092,
+    "source": "MOCK",
+    "tfr": 2.38,
+    "year": 2001
+  },
+  {
+    "age": 22,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.047875,
+    "source": "MOCK",
+    "tfr": 2.38,
+    "year": 2001
+  },
+  {
+    "age": 23,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.05425,
+    "source": "MOCK",
+    "tfr": 2.38,
+    "year": 2001
+  },
+  {
+    "age": 24,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.059789,
+    "source": "MOCK",
+    "tfr": 2.38,
+    "year": 2001
+  },
+  {
+    "age": 25,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.064088,
+    "source": "MOCK",
+    "tfr": 2.38,
+    "year": 2001
+  },
+  {
+    "age": 26,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.066815,
+    "source": "MOCK",
+    "tfr": 2.38,
+    "year": 2001
+  },
+  {
+    "age": 27,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.067749,
+    "source": "MOCK",
+    "tfr": 2.38,
+    "year": 2001
+  },
+  {
+    "age": 28,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.066815,
+    "source": "MOCK",
+    "tfr": 2.38,
+    "year": 2001
+  },
+  {
+    "age": 29,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.064088,
+    "source": "MOCK",
+    "tfr": 2.38,
+    "year": 2001
+  },
+  {
+    "age": 30,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.059789,
+    "source": "MOCK",
+    "tfr": 2.38,
+    "year": 2001
+  },
+  {
+    "age": 31,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.05425,
+    "source": "MOCK",
+    "tfr": 2.38,
+    "year": 2001
+  },
+  {
+    "age": 32,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.047875,
+    "source": "MOCK",
+    "tfr": 2.38,
+    "year": 2001
+  },
+  {
+    "age": 33,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.041092,
+    "source": "MOCK",
+    "tfr": 2.38,
+    "year": 2001
+  },
+  {
+    "age": 34,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.034304,
+    "source": "MOCK",
+    "tfr": 2.38,
+    "year": 2001
+  },
+  {
+    "age": 35,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.027853,
+    "source": "MOCK",
+    "tfr": 2.38,
+    "year": 2001
+  },
+  {
+    "age": 36,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.021995,
+    "source": "MOCK",
+    "tfr": 2.38,
+    "year": 2001
+  },
+  {
+    "age": 37,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.016894,
+    "source": "MOCK",
+    "tfr": 2.38,
+    "year": 2001
+  },
+  {
+    "age": 38,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.01262,
+    "source": "MOCK",
+    "tfr": 2.38,
+    "year": 2001
+  },
+  {
+    "age": 39,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.009169,
+    "source": "MOCK",
+    "tfr": 2.38,
+    "year": 2001
+  },
+  {
+    "age": 40,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.006479,
+    "source": "MOCK",
+    "tfr": 2.38,
+    "year": 2001
+  },
+  {
+    "age": 41,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.004453,
+    "source": "MOCK",
+    "tfr": 2.38,
+    "year": 2001
+  },
+  {
+    "age": 42,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.002977,
+    "source": "MOCK",
+    "tfr": 2.38,
+    "year": 2001
+  },
+  {
+    "age": 43,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.001935,
+    "source": "MOCK",
+    "tfr": 2.38,
+    "year": 2001
+  },
+  {
+    "age": 44,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.001224,
+    "source": "MOCK",
+    "tfr": 2.38,
+    "year": 2001
+  },
+  {
+    "age": 45,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.000753,
+    "source": "MOCK",
+    "tfr": 2.38,
+    "year": 2001
+  },
+  {
+    "age": 46,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.00045,
+    "source": "MOCK",
+    "tfr": 2.38,
+    "year": 2001
+  },
+  {
+    "age": 47,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.000262,
+    "source": "MOCK",
+    "tfr": 2.38,
+    "year": 2001
+  },
+  {
+    "age": 48,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.000148,
+    "source": "MOCK",
+    "tfr": 2.38,
+    "year": 2001
+  },
+  {
+    "age": 49,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 8.2e-05,
+    "source": "MOCK",
+    "tfr": 2.38,
+    "year": 2001
+  },
+  {
+    "age": 15,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.009169,
+    "source": "MOCK",
+    "tfr": 2.36,
+    "year": 2002
+  },
+  {
+    "age": 16,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.01262,
+    "source": "MOCK",
+    "tfr": 2.36,
+    "year": 2002
+  },
+  {
+    "age": 17,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.016894,
+    "source": "MOCK",
+    "tfr": 2.36,
+    "year": 2002
+  },
+  {
+    "age": 18,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.021995,
+    "source": "MOCK",
+    "tfr": 2.36,
+    "year": 2002
+  },
+  {
+    "age": 19,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.027853,
+    "source": "MOCK",
+    "tfr": 2.36,
+    "year": 2002
+  },
+  {
+    "age": 20,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.034304,
+    "source": "MOCK",
+    "tfr": 2.36,
+    "year": 2002
+  },
+  {
+    "age": 21,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.041092,
+    "source": "MOCK",
+    "tfr": 2.36,
+    "year": 2002
+  },
+  {
+    "age": 22,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.047875,
+    "source": "MOCK",
+    "tfr": 2.36,
+    "year": 2002
+  },
+  {
+    "age": 23,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.05425,
+    "source": "MOCK",
+    "tfr": 2.36,
+    "year": 2002
+  },
+  {
+    "age": 24,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.059789,
+    "source": "MOCK",
+    "tfr": 2.36,
+    "year": 2002
+  },
+  {
+    "age": 25,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.064088,
+    "source": "MOCK",
+    "tfr": 2.36,
+    "year": 2002
+  },
+  {
+    "age": 26,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.066815,
+    "source": "MOCK",
+    "tfr": 2.36,
+    "year": 2002
+  },
+  {
+    "age": 27,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.067749,
+    "source": "MOCK",
+    "tfr": 2.36,
+    "year": 2002
+  },
+  {
+    "age": 28,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.066815,
+    "source": "MOCK",
+    "tfr": 2.36,
+    "year": 2002
+  },
+  {
+    "age": 29,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.064088,
+    "source": "MOCK",
+    "tfr": 2.36,
+    "year": 2002
+  },
+  {
+    "age": 30,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.059789,
+    "source": "MOCK",
+    "tfr": 2.36,
+    "year": 2002
+  },
+  {
+    "age": 31,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.05425,
+    "source": "MOCK",
+    "tfr": 2.36,
+    "year": 2002
+  },
+  {
+    "age": 32,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.047875,
+    "source": "MOCK",
+    "tfr": 2.36,
+    "year": 2002
+  },
+  {
+    "age": 33,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.041092,
+    "source": "MOCK",
+    "tfr": 2.36,
+    "year": 2002
+  },
+  {
+    "age": 34,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.034304,
+    "source": "MOCK",
+    "tfr": 2.36,
+    "year": 2002
+  },
+  {
+    "age": 35,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.027853,
+    "source": "MOCK",
+    "tfr": 2.36,
+    "year": 2002
+  },
+  {
+    "age": 36,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.021995,
+    "source": "MOCK",
+    "tfr": 2.36,
+    "year": 2002
+  },
+  {
+    "age": 37,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.016894,
+    "source": "MOCK",
+    "tfr": 2.36,
+    "year": 2002
+  },
+  {
+    "age": 38,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.01262,
+    "source": "MOCK",
+    "tfr": 2.36,
+    "year": 2002
+  },
+  {
+    "age": 39,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.009169,
+    "source": "MOCK",
+    "tfr": 2.36,
+    "year": 2002
+  },
+  {
+    "age": 40,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.006479,
+    "source": "MOCK",
+    "tfr": 2.36,
+    "year": 2002
+  },
+  {
+    "age": 41,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.004453,
+    "source": "MOCK",
+    "tfr": 2.36,
+    "year": 2002
+  },
+  {
+    "age": 42,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.002977,
+    "source": "MOCK",
+    "tfr": 2.36,
+    "year": 2002
+  },
+  {
+    "age": 43,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.001935,
+    "source": "MOCK",
+    "tfr": 2.36,
+    "year": 2002
+  },
+  {
+    "age": 44,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.001224,
+    "source": "MOCK",
+    "tfr": 2.36,
+    "year": 2002
+  },
+  {
+    "age": 45,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.000753,
+    "source": "MOCK",
+    "tfr": 2.36,
+    "year": 2002
+  },
+  {
+    "age": 46,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.00045,
+    "source": "MOCK",
+    "tfr": 2.36,
+    "year": 2002
+  },
+  {
+    "age": 47,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.000262,
+    "source": "MOCK",
+    "tfr": 2.36,
+    "year": 2002
+  },
+  {
+    "age": 48,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.000148,
+    "source": "MOCK",
+    "tfr": 2.36,
+    "year": 2002
+  },
+  {
+    "age": 49,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 8.2e-05,
+    "source": "MOCK",
+    "tfr": 2.36,
+    "year": 2002
+  },
+  {
+    "age": 15,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.009169,
+    "source": "MOCK",
+    "tfr": 2.34,
+    "year": 2003
+  },
+  {
+    "age": 16,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.01262,
+    "source": "MOCK",
+    "tfr": 2.34,
+    "year": 2003
+  },
+  {
+    "age": 17,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.016894,
+    "source": "MOCK",
+    "tfr": 2.34,
+    "year": 2003
+  },
+  {
+    "age": 18,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.021995,
+    "source": "MOCK",
+    "tfr": 2.34,
+    "year": 2003
+  },
+  {
+    "age": 19,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.027853,
+    "source": "MOCK",
+    "tfr": 2.34,
+    "year": 2003
+  },
+  {
+    "age": 20,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.034304,
+    "source": "MOCK",
+    "tfr": 2.34,
+    "year": 2003
+  },
+  {
+    "age": 21,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.041092,
+    "source": "MOCK",
+    "tfr": 2.34,
+    "year": 2003
+  },
+  {
+    "age": 22,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.047875,
+    "source": "MOCK",
+    "tfr": 2.34,
+    "year": 2003
+  },
+  {
+    "age": 23,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.05425,
+    "source": "MOCK",
+    "tfr": 2.34,
+    "year": 2003
+  },
+  {
+    "age": 24,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.059789,
+    "source": "MOCK",
+    "tfr": 2.34,
+    "year": 2003
+  },
+  {
+    "age": 25,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.064088,
+    "source": "MOCK",
+    "tfr": 2.34,
+    "year": 2003
+  },
+  {
+    "age": 26,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.066815,
+    "source": "MOCK",
+    "tfr": 2.34,
+    "year": 2003
+  },
+  {
+    "age": 27,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.067749,
+    "source": "MOCK",
+    "tfr": 2.34,
+    "year": 2003
+  },
+  {
+    "age": 28,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.066815,
+    "source": "MOCK",
+    "tfr": 2.34,
+    "year": 2003
+  },
+  {
+    "age": 29,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.064088,
+    "source": "MOCK",
+    "tfr": 2.34,
+    "year": 2003
+  },
+  {
+    "age": 30,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.059789,
+    "source": "MOCK",
+    "tfr": 2.34,
+    "year": 2003
+  },
+  {
+    "age": 31,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.05425,
+    "source": "MOCK",
+    "tfr": 2.34,
+    "year": 2003
+  },
+  {
+    "age": 32,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.047875,
+    "source": "MOCK",
+    "tfr": 2.34,
+    "year": 2003
+  },
+  {
+    "age": 33,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.041092,
+    "source": "MOCK",
+    "tfr": 2.34,
+    "year": 2003
+  },
+  {
+    "age": 34,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.034304,
+    "source": "MOCK",
+    "tfr": 2.34,
+    "year": 2003
+  },
+  {
+    "age": 35,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.027853,
+    "source": "MOCK",
+    "tfr": 2.34,
+    "year": 2003
+  },
+  {
+    "age": 36,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.021995,
+    "source": "MOCK",
+    "tfr": 2.34,
+    "year": 2003
+  },
+  {
+    "age": 37,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.016894,
+    "source": "MOCK",
+    "tfr": 2.34,
+    "year": 2003
+  },
+  {
+    "age": 38,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.01262,
+    "source": "MOCK",
+    "tfr": 2.34,
+    "year": 2003
+  },
+  {
+    "age": 39,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.009169,
+    "source": "MOCK",
+    "tfr": 2.34,
+    "year": 2003
+  },
+  {
+    "age": 40,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.006479,
+    "source": "MOCK",
+    "tfr": 2.34,
+    "year": 2003
+  },
+  {
+    "age": 41,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.004453,
+    "source": "MOCK",
+    "tfr": 2.34,
+    "year": 2003
+  },
+  {
+    "age": 42,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.002977,
+    "source": "MOCK",
+    "tfr": 2.34,
+    "year": 2003
+  },
+  {
+    "age": 43,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.001935,
+    "source": "MOCK",
+    "tfr": 2.34,
+    "year": 2003
+  },
+  {
+    "age": 44,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.001224,
+    "source": "MOCK",
+    "tfr": 2.34,
+    "year": 2003
+  },
+  {
+    "age": 45,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.000753,
+    "source": "MOCK",
+    "tfr": 2.34,
+    "year": 2003
+  },
+  {
+    "age": 46,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.00045,
+    "source": "MOCK",
+    "tfr": 2.34,
+    "year": 2003
+  },
+  {
+    "age": 47,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.000262,
+    "source": "MOCK",
+    "tfr": 2.34,
+    "year": 2003
+  },
+  {
+    "age": 48,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.000148,
+    "source": "MOCK",
+    "tfr": 2.34,
+    "year": 2003
+  },
+  {
+    "age": 49,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 8.2e-05,
+    "source": "MOCK",
+    "tfr": 2.34,
+    "year": 2003
+  },
+  {
+    "age": 15,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.009169,
+    "source": "MOCK",
+    "tfr": 2.32,
+    "year": 2004
+  },
+  {
+    "age": 16,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.01262,
+    "source": "MOCK",
+    "tfr": 2.32,
+    "year": 2004
+  },
+  {
+    "age": 17,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.016894,
+    "source": "MOCK",
+    "tfr": 2.32,
+    "year": 2004
+  },
+  {
+    "age": 18,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.021995,
+    "source": "MOCK",
+    "tfr": 2.32,
+    "year": 2004
+  },
+  {
+    "age": 19,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.027853,
+    "source": "MOCK",
+    "tfr": 2.32,
+    "year": 2004
+  },
+  {
+    "age": 20,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.034304,
+    "source": "MOCK",
+    "tfr": 2.32,
+    "year": 2004
+  },
+  {
+    "age": 21,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.041092,
+    "source": "MOCK",
+    "tfr": 2.32,
+    "year": 2004
+  },
+  {
+    "age": 22,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.047875,
+    "source": "MOCK",
+    "tfr": 2.32,
+    "year": 2004
+  },
+  {
+    "age": 23,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.05425,
+    "source": "MOCK",
+    "tfr": 2.32,
+    "year": 2004
+  },
+  {
+    "age": 24,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.059789,
+    "source": "MOCK",
+    "tfr": 2.32,
+    "year": 2004
+  },
+  {
+    "age": 25,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.064088,
+    "source": "MOCK",
+    "tfr": 2.32,
+    "year": 2004
+  },
+  {
+    "age": 26,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.066815,
+    "source": "MOCK",
+    "tfr": 2.32,
+    "year": 2004
+  },
+  {
+    "age": 27,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.067749,
+    "source": "MOCK",
+    "tfr": 2.32,
+    "year": 2004
+  },
+  {
+    "age": 28,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.066815,
+    "source": "MOCK",
+    "tfr": 2.32,
+    "year": 2004
+  },
+  {
+    "age": 29,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.064088,
+    "source": "MOCK",
+    "tfr": 2.32,
+    "year": 2004
+  },
+  {
+    "age": 30,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.059789,
+    "source": "MOCK",
+    "tfr": 2.32,
+    "year": 2004
+  },
+  {
+    "age": 31,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.05425,
+    "source": "MOCK",
+    "tfr": 2.32,
+    "year": 2004
+  },
+  {
+    "age": 32,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.047875,
+    "source": "MOCK",
+    "tfr": 2.32,
+    "year": 2004
+  },
+  {
+    "age": 33,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.041092,
+    "source": "MOCK",
+    "tfr": 2.32,
+    "year": 2004
+  },
+  {
+    "age": 34,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.034304,
+    "source": "MOCK",
+    "tfr": 2.32,
+    "year": 2004
+  },
+  {
+    "age": 35,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.027853,
+    "source": "MOCK",
+    "tfr": 2.32,
+    "year": 2004
+  },
+  {
+    "age": 36,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.021995,
+    "source": "MOCK",
+    "tfr": 2.32,
+    "year": 2004
+  },
+  {
+    "age": 37,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.016894,
+    "source": "MOCK",
+    "tfr": 2.32,
+    "year": 2004
+  },
+  {
+    "age": 38,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.01262,
+    "source": "MOCK",
+    "tfr": 2.32,
+    "year": 2004
+  },
+  {
+    "age": 39,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.009169,
+    "source": "MOCK",
+    "tfr": 2.32,
+    "year": 2004
+  },
+  {
+    "age": 40,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.006479,
+    "source": "MOCK",
+    "tfr": 2.32,
+    "year": 2004
+  },
+  {
+    "age": 41,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.004453,
+    "source": "MOCK",
+    "tfr": 2.32,
+    "year": 2004
+  },
+  {
+    "age": 42,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.002977,
+    "source": "MOCK",
+    "tfr": 2.32,
+    "year": 2004
+  },
+  {
+    "age": 43,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.001935,
+    "source": "MOCK",
+    "tfr": 2.32,
+    "year": 2004
+  },
+  {
+    "age": 44,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.001224,
+    "source": "MOCK",
+    "tfr": 2.32,
+    "year": 2004
+  },
+  {
+    "age": 45,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.000753,
+    "source": "MOCK",
+    "tfr": 2.32,
+    "year": 2004
+  },
+  {
+    "age": 46,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.00045,
+    "source": "MOCK",
+    "tfr": 2.32,
+    "year": 2004
+  },
+  {
+    "age": 47,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.000262,
+    "source": "MOCK",
+    "tfr": 2.32,
+    "year": 2004
+  },
+  {
+    "age": 48,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.000148,
+    "source": "MOCK",
+    "tfr": 2.32,
+    "year": 2004
+  },
+  {
+    "age": 49,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 8.2e-05,
+    "source": "MOCK",
+    "tfr": 2.32,
+    "year": 2004
+  },
+  {
+    "age": 15,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.009169,
+    "source": "MOCK",
+    "tfr": 2.3,
+    "year": 2005
+  },
+  {
+    "age": 16,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.01262,
+    "source": "MOCK",
+    "tfr": 2.3,
+    "year": 2005
+  },
+  {
+    "age": 17,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.016894,
+    "source": "MOCK",
+    "tfr": 2.3,
+    "year": 2005
+  },
+  {
+    "age": 18,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.021995,
+    "source": "MOCK",
+    "tfr": 2.3,
+    "year": 2005
+  },
+  {
+    "age": 19,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.027853,
+    "source": "MOCK",
+    "tfr": 2.3,
+    "year": 2005
+  },
+  {
+    "age": 20,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.034304,
+    "source": "MOCK",
+    "tfr": 2.3,
+    "year": 2005
+  },
+  {
+    "age": 21,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.041092,
+    "source": "MOCK",
+    "tfr": 2.3,
+    "year": 2005
+  },
+  {
+    "age": 22,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.047875,
+    "source": "MOCK",
+    "tfr": 2.3,
+    "year": 2005
+  },
+  {
+    "age": 23,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.05425,
+    "source": "MOCK",
+    "tfr": 2.3,
+    "year": 2005
+  },
+  {
+    "age": 24,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.059789,
+    "source": "MOCK",
+    "tfr": 2.3,
+    "year": 2005
+  },
+  {
+    "age": 25,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.064088,
+    "source": "MOCK",
+    "tfr": 2.3,
+    "year": 2005
+  },
+  {
+    "age": 26,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.066815,
+    "source": "MOCK",
+    "tfr": 2.3,
+    "year": 2005
+  },
+  {
+    "age": 27,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.067749,
+    "source": "MOCK",
+    "tfr": 2.3,
+    "year": 2005
+  },
+  {
+    "age": 28,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.066815,
+    "source": "MOCK",
+    "tfr": 2.3,
+    "year": 2005
+  },
+  {
+    "age": 29,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.064088,
+    "source": "MOCK",
+    "tfr": 2.3,
+    "year": 2005
+  },
+  {
+    "age": 30,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.059789,
+    "source": "MOCK",
+    "tfr": 2.3,
+    "year": 2005
+  },
+  {
+    "age": 31,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.05425,
+    "source": "MOCK",
+    "tfr": 2.3,
+    "year": 2005
+  },
+  {
+    "age": 32,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.047875,
+    "source": "MOCK",
+    "tfr": 2.3,
+    "year": 2005
+  },
+  {
+    "age": 33,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.041092,
+    "source": "MOCK",
+    "tfr": 2.3,
+    "year": 2005
+  },
+  {
+    "age": 34,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.034304,
+    "source": "MOCK",
+    "tfr": 2.3,
+    "year": 2005
+  },
+  {
+    "age": 35,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.027853,
+    "source": "MOCK",
+    "tfr": 2.3,
+    "year": 2005
+  },
+  {
+    "age": 36,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.021995,
+    "source": "MOCK",
+    "tfr": 2.3,
+    "year": 2005
+  },
+  {
+    "age": 37,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.016894,
+    "source": "MOCK",
+    "tfr": 2.3,
+    "year": 2005
+  },
+  {
+    "age": 38,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.01262,
+    "source": "MOCK",
+    "tfr": 2.3,
+    "year": 2005
+  },
+  {
+    "age": 39,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.009169,
+    "source": "MOCK",
+    "tfr": 2.3,
+    "year": 2005
+  },
+  {
+    "age": 40,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.006479,
+    "source": "MOCK",
+    "tfr": 2.3,
+    "year": 2005
+  },
+  {
+    "age": 41,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.004453,
+    "source": "MOCK",
+    "tfr": 2.3,
+    "year": 2005
+  },
+  {
+    "age": 42,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.002977,
+    "source": "MOCK",
+    "tfr": 2.3,
+    "year": 2005
+  },
+  {
+    "age": 43,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.001935,
+    "source": "MOCK",
+    "tfr": 2.3,
+    "year": 2005
+  },
+  {
+    "age": 44,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.001224,
+    "source": "MOCK",
+    "tfr": 2.3,
+    "year": 2005
+  },
+  {
+    "age": 45,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.000753,
+    "source": "MOCK",
+    "tfr": 2.3,
+    "year": 2005
+  },
+  {
+    "age": 46,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.00045,
+    "source": "MOCK",
+    "tfr": 2.3,
+    "year": 2005
+  },
+  {
+    "age": 47,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.000262,
+    "source": "MOCK",
+    "tfr": 2.3,
+    "year": 2005
+  },
+  {
+    "age": 48,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 0.000148,
+    "source": "MOCK",
+    "tfr": 2.3,
+    "year": 2005
+  },
+  {
+    "age": 49,
+    "female_share": 0.49,
+    "geo": "AR",
+    "retrieved_at": "2026-10-02",
+    "shape_f": 8.2e-05,
+    "source": "MOCK",
+    "tfr": 2.3,
+    "year": 2005
+  }
+]
