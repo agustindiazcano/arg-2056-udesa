@@ -17,7 +17,7 @@ const SCHEMAS = path.resolve(__dirname, '../../../data/schemas');
 afterEach(() => vi.unstubAllGlobals());
 
 describe('SCHEMA_FILES', () => {
-  it('names these sixteen validators, each backed by an existing schema file', () => {
+  it('names these twenty validators, each backed by an existing schema file', () => {
     expect(Object.keys(SCHEMA_FILES).sort()).toEqual([
       'aiEstimates',
       'andesEvents',
@@ -26,10 +26,14 @@ describe('SCHEMA_FILES', () => {
       'datasetCatalog',
       'economy',
       'externalForecasts',
+      'fertilitySchedule',
       'forecast',
       'forecastVintages',
       'geoMeta',
+      'lifeTable',
+      'migrationSchedule',
       'population',
+      'populationByAge',
       'productionProjections',
       'projects',
       'provincesGeo',
