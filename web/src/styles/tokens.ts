@@ -22,6 +22,7 @@ export const tokens = {
   },
 
   blue: '#3987e5',
+  gold: '#dfa73f',
 
   /** Distinct colors for the parts of a whole (the sectors of a treemap, pie, and bars); each keeps white text readable. */
   categorical: [

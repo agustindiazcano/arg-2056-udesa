@@ -1,3 +1,8 @@
+import type { ProvinceId } from '../types/province.js';
+import type { MapValues } from '../scenes/forecast/mapSelectors.js';
+import { PROVINCES } from '../types/province.js';
+import { mapValuesOf } from './provinceMock.js';
+
 /**
  * Proyectos de minería, petróleo, gas, GNL y energía renovable aprobados o en evaluación bajo el RIGI (Régimen de Incentivo para Grandes Inversiones, Ley 27.742, Dec. 749/2024).
  * Contrastados contra resoluciones del Boletín Oficial y el registro oficial de la Secretaría de Coordinación de Producción / Ministerio de Economía.
@@ -7,6 +12,9 @@ export interface RigiProject {
   name: string;
   company: string;
   province: string;
+  provinceIds: ProvinceId[];
+  department?: string;
+  coordinates: [number, number]; // [lng, lat]
   /** "Minería" o "Petróleo y gas" */
   sector: 'Minería' | 'Petróleo y gas';
   /** El mineral o tipo de obra / instalación */
@@ -24,6 +32,9 @@ export const RIGI_MINING: readonly RigiProject[] = [
     name: 'Vicuña',
     company: 'BHP y Lundin Mining',
     province: 'San Juan',
+    provinceIds: ['AR-J'],
+    department: 'Iglesia',
+    coordinates: [-69.55, -28.43],
     sector: 'Minería',
     kind: 'Cobre, oro y plata',
     investment: 9737,
@@ -35,6 +46,9 @@ export const RIGI_MINING: readonly RigiProject[] = [
     name: 'Alumbrera-Agua Rica (MARA)',
     company: 'Glencore',
     province: 'Catamarca',
+    provinceIds: ['AR-K'],
+    department: 'Andalgalá',
+    coordinates: [-66.31, -27.43],
     sector: 'Minería',
     kind: 'Cobre, oro, plata y molibdeno',
     investment: 4000,
@@ -46,6 +60,9 @@ export const RIGI_MINING: readonly RigiProject[] = [
     name: 'Rincón',
     company: 'Rio Tinto (Rincon Mining)',
     province: 'Salta',
+    provinceIds: ['AR-A'],
+    department: 'Los Andes',
+    coordinates: [-67.12, -24.08],
     sector: 'Minería',
     kind: 'Litio',
     investment: 2744,
@@ -57,6 +74,9 @@ export const RIGI_MINING: readonly RigiProject[] = [
     name: 'Los Azules',
     company: 'McEwen Copper (McEwen Mining y Stellantis)',
     province: 'San Juan',
+    provinceIds: ['AR-J'],
+    department: 'Calingasta',
+    coordinates: [-70.21, -31.11],
     sector: 'Minería',
     kind: 'Cobre',
     investment: 2672,
@@ -68,6 +88,9 @@ export const RIGI_MINING: readonly RigiProject[] = [
     name: 'Cauchari-Olaroz (ampliación)',
     company: 'Minera Exar (Ganfeng Lithium y Lithium Americas)',
     province: 'Jujuy',
+    provinceIds: ['AR-Y'],
+    department: 'Susques',
+    coordinates: [-66.81, -23.65],
     sector: 'Minería',
     kind: 'Litio',
     investment: 1241,
@@ -79,6 +102,9 @@ export const RIGI_MINING: readonly RigiProject[] = [
     name: 'PSJ Cobre Mendocino',
     company: 'Minera San Jorge (Solway Investment Group)',
     province: 'Mendoza',
+    provinceIds: ['AR-M'],
+    department: 'Las Heras',
+    coordinates: [-69.35, -32.59],
     sector: 'Minería',
     kind: 'Cobre (oro como subproducto)',
     investment: 891,
@@ -90,6 +116,9 @@ export const RIGI_MINING: readonly RigiProject[] = [
     name: 'Diablillos',
     company: 'AbraSilver Resource Corp.',
     province: 'Salta y Catamarca',
+    provinceIds: ['AR-A', 'AR-K'],
+    department: 'Los Andes',
+    coordinates: [-66.83, -25.32],
     sector: 'Minería',
     kind: 'Oro y plata',
     investment: 764,
@@ -101,6 +130,9 @@ export const RIGI_MINING: readonly RigiProject[] = [
     name: 'Tres Quebradas (3Q)',
     company: 'Liex S.A. (Zijin Mining)',
     province: 'Catamarca',
+    provinceIds: ['AR-K'],
+    department: 'Tinogasta',
+    coordinates: [-68.58, -27.42],
     sector: 'Minería',
     kind: 'Litio',
     investment: 710,
@@ -112,6 +144,9 @@ export const RIGI_MINING: readonly RigiProject[] = [
     name: 'Gualcamayo (carbonatos profundos)',
     company: 'Minas Argentinas (Eris LLC)',
     province: 'San Juan',
+    provinceIds: ['AR-J'],
+    department: 'Jáchal',
+    coordinates: [-68.64, -30.01],
     sector: 'Minería',
     kind: 'Oro y plata',
     investment: 665,
@@ -123,6 +158,9 @@ export const RIGI_MINING: readonly RigiProject[] = [
     name: 'Sal de Oro II',
     company: 'POSCO Argentina',
     province: 'Salta y Catamarca',
+    provinceIds: ['AR-A', 'AR-K'],
+    department: 'Los Andes',
+    coordinates: [-67.01, -25.42],
     sector: 'Minería',
     kind: 'Litio',
     investment: 547,
@@ -134,6 +172,9 @@ export const RIGI_MINING: readonly RigiProject[] = [
     name: 'Fénix (ampliación fase 1B)',
     company: 'Arcadium Lithium (Rio Tinto)',
     province: 'Catamarca',
+    provinceIds: ['AR-K'],
+    department: 'Antofagasta de la Sierra',
+    coordinates: [-67.05, -25.35],
     sector: 'Minería',
     kind: 'Potasio y litio',
     investment: 531,
@@ -145,6 +186,9 @@ export const RIGI_MINING: readonly RigiProject[] = [
     name: 'Veladero (fases 8 y 9)',
     company: 'Minera Argentina Gold (Barrick y Shandong Gold)',
     province: 'San Juan',
+    provinceIds: ['AR-J'],
+    department: 'Iglesia',
+    coordinates: [-69.95, -29.38],
     sector: 'Minería',
     kind: 'Oro',
     investment: 436,
@@ -156,6 +200,9 @@ export const RIGI_MINING: readonly RigiProject[] = [
     name: 'Hombre Muerto Oeste (HMW)',
     company: 'Galan Lithium',
     province: 'Catamarca',
+    provinceIds: ['AR-K'],
+    department: 'Antofagasta de la Sierra',
+    coordinates: [-67.15, -25.4],
     sector: 'Minería',
     kind: 'Litio',
     investment: 292,
@@ -167,6 +214,9 @@ export const RIGI_MINING: readonly RigiProject[] = [
     name: 'Pachón',
     company: 'Glencore',
     province: 'San Juan',
+    provinceIds: ['AR-J'],
+    department: 'Calingasta',
+    coordinates: [-70.43, -31.75],
     sector: 'Minería',
     kind: 'Cobre',
     investment: 9533,
@@ -178,6 +228,9 @@ export const RIGI_MINING: readonly RigiProject[] = [
     name: 'Sal de Vida',
     company: 'Arcadium Lithium (Rio Tinto)',
     province: 'Catamarca',
+    provinceIds: ['AR-K'],
+    department: 'Antofagasta de la Sierra',
+    coordinates: [-66.98, -25.38],
     sector: 'Minería',
     kind: 'Litio',
     investment: 818,
@@ -189,6 +242,9 @@ export const RIGI_MINING: readonly RigiProject[] = [
     name: 'Taca Taca',
     company: 'First Quantum (Corriente Argentina S.A.)',
     province: 'Salta',
+    provinceIds: ['AR-A'],
+    department: 'Los Andes',
+    coordinates: [-67.75, -24.52],
     sector: 'Minería',
     kind: 'Cobre',
     investment: 4232,
@@ -200,6 +256,9 @@ export const RIGI_MINING: readonly RigiProject[] = [
     name: 'Arenas de Cercanías',
     company: 'Minera del Mojotoro y Minera Orosmayo',
     province: 'Río Negro',
+    provinceIds: ['AR-R'],
+    department: 'General Roca',
+    coordinates: [-67.55, -39.03],
     sector: 'Minería',
     kind: 'Arena para fractura (frac sand)',
     investment: 232,
@@ -214,6 +273,9 @@ export const RIGI_OIL_GAS: readonly RigiProject[] = [
     name: 'Argentina LNG (licuefacción en el golfo San Matías)',
     company: 'Southern Energy (PAE y Golar LNG)',
     province: 'Río Negro',
+    provinceIds: ['AR-R'],
+    department: 'San Antonio',
+    coordinates: [-65.1, -40.75],
     sector: 'Petróleo y gas',
     kind: 'GNL, exportación',
     investment: 6878,
@@ -225,6 +287,9 @@ export const RIGI_OIL_GAS: readonly RigiProject[] = [
     name: 'Oleoducto Vaca Muerta Sur (VMOS)',
     company: 'Consorcio VMOS (YPF, PAE, Vista, Pampa, Pluspetrol, Chevron y Shell)',
     province: 'Neuquén y Río Negro',
+    provinceIds: ['AR-Q', 'AR-R'],
+    department: 'San Antonio',
+    coordinates: [-65.05, -41.69],
     sector: 'Petróleo y gas',
     kind: 'Oleoducto de 437 km (Allen a Punta Colorada)',
     investment: 2900,
@@ -236,6 +301,9 @@ export const RIGI_OIL_GAS: readonly RigiProject[] = [
     name: 'Gasoducto dedicado a San Matías',
     company: 'Southern Energy',
     province: 'Río Negro',
+    provinceIds: ['AR-R'],
+    department: 'San Antonio',
+    coordinates: [-65.3, -40.6],
     sector: 'Petróleo y gas',
     kind: 'Gasoducto de 27 a 30 millones de m³ por día',
     investment: 1300,
@@ -247,6 +315,9 @@ export const RIGI_OIL_GAS: readonly RigiProject[] = [
     name: 'Los Toldos II Este',
     company: 'Tecpetrol',
     province: 'Neuquén',
+    provinceIds: ['AR-Q'],
+    department: 'Añelo',
+    coordinates: [-68.78, -37.89],
     sector: 'Petróleo y gas',
     kind: 'Producción no convencional (Vaca Muerta)',
     investment: 6432,
@@ -259,6 +330,9 @@ export const RIGI_OIL_GAS: readonly RigiProject[] = [
     name: 'Bajo del Choique-La Invernada',
     company: 'Pluspetrol y GyP',
     province: 'Neuquén',
+    provinceIds: ['AR-Q'],
+    department: 'Pehuenches',
+    coordinates: [-68.95, -37.45],
     sector: 'Petróleo y gas',
     kind: 'Producción no convencional (Vaca Muerta)',
     investment: 12400,
@@ -270,6 +344,9 @@ export const RIGI_OIL_GAS: readonly RigiProject[] = [
     name: 'Rincón de Aranda',
     company: 'Pampa Energía',
     province: 'Neuquén',
+    provinceIds: ['AR-Q'],
+    department: 'Añelo',
+    coordinates: [-68.65, -38.05],
     sector: 'Petróleo y gas',
     kind: 'Vaca Muerta: ductos y plantas de tratamiento',
     investment: 4521,
@@ -281,6 +358,9 @@ export const RIGI_OIL_GAS: readonly RigiProject[] = [
     name: 'Parques Solares y Renovables RIGI',
     company: 'YPF Luz y 360 Energy',
     province: 'San Juan y Catamarca',
+    provinceIds: ['AR-J', 'AR-K'],
+    department: 'Iglesia',
+    coordinates: [-69.2, -30.5],
     sector: 'Petróleo y gas',
     kind: 'Generación solar fotovoltaica para industria y minería',
     investment: 520,
@@ -292,6 +372,9 @@ export const RIGI_OIL_GAS: readonly RigiProject[] = [
     name: 'Los Toldos (primera etapa)',
     company: 'Tecpetrol',
     province: 'Neuquén',
+    provinceIds: ['AR-Q'],
+    department: 'Añelo',
+    coordinates: [-68.75, -37.92],
     sector: 'Petróleo y gas',
     kind: 'Infraestructura de hidrocarburos',
     investment: 1006,
@@ -303,6 +386,9 @@ export const RIGI_OIL_GAS: readonly RigiProject[] = [
     name: 'LNG del Plata',
     company: 'Camuzzi',
     province: 'Buenos Aires',
+    provinceIds: ['AR-B'],
+    department: 'Bahía Blanca',
+    coordinates: [-62.27, -38.78],
     sector: 'Petróleo y gas',
     kind: 'GNL',
     investment: null,
@@ -314,6 +400,9 @@ export const RIGI_OIL_GAS: readonly RigiProject[] = [
     name: 'LLL Oil',
     company: 'YPF',
     province: 'Neuquén',
+    provinceIds: ['AR-Q'],
+    department: 'Añelo',
+    coordinates: [-68.85, -38.15],
     sector: 'Petróleo y gas',
     kind: 'Exportación de crudo: 1.152 pozos, 240.000 bbl/d desde 2032',
     investment: 25000,
@@ -325,6 +414,9 @@ export const RIGI_OIL_GAS: readonly RigiProject[] = [
     name: 'GNL integrado de YPF, ENI y XRG',
     company: 'YPF, ENI y XRG',
     province: 'Río Negro',
+    provinceIds: ['AR-R'],
+    department: 'San Antonio',
+    coordinates: [-65.12, -41.7],
     sector: 'Petróleo y gas',
     kind: 'GNL y gasoductos dedicados',
     investment: null,
@@ -333,3 +425,69 @@ export const RIGI_OIL_GAS: readonly RigiProject[] = [
     note: 'Esquema integrado de exportación de GNL mediante consorcio internacional'
   }
 ];
+
+export const ALL_RIGI_PROJECTS: readonly RigiProject[] = [...RIGI_MINING, ...RIGI_OIL_GAS];
+
+/**
+ * Returns all RIGI projects associated with a given province ID.
+ */
+export function getRigiProjectsByProvince(provinceId: ProvinceId): RigiProject[] {
+  return ALL_RIGI_PROJECTS.filter((p) => p.provinceIds.includes(provinceId));
+}
+
+/**
+ * Aggregates committed and proposed RIGI investment by province (in million USD).
+ * Shared projects across two provinces allocate half to each province.
+ */
+export function getRigiProvinceTotals(): Record<ProvinceId, number> {
+  const totals: Partial<Record<ProvinceId, number>> = {};
+  for (const prov of PROVINCES) {
+    totals[prov.id] = 0;
+  }
+
+  for (const p of ALL_RIGI_PROJECTS) {
+    if (!p.investment || p.provinceIds.length === 0) continue;
+    const split = p.investment / p.provinceIds.length;
+    for (const provId of p.provinceIds) {
+      totals[provId] = (totals[provId] ?? 0) + split;
+    }
+  }
+
+  return totals as Record<ProvinceId, number>;
+}
+
+/**
+ * Returns national RIGI totals for KPI tiles.
+ */
+export function getRigiTotalsSummary() {
+  let totalInvestment = 0;
+  let approvedCount = 0;
+  let evalCount = 0;
+  const adheringProvinces = new Set<ProvinceId>();
+
+  for (const p of ALL_RIGI_PROJECTS) {
+    if (p.investment) totalInvestment += p.investment;
+    if (p.status === 'aprobado') approvedCount += 1;
+    else evalCount += 1;
+    for (const provId of p.provinceIds) {
+      adheringProvinces.add(provId);
+    }
+  }
+
+  return {
+    totalInvestment,
+    totalProjects: ALL_RIGI_PROJECTS.length,
+    approvedCount,
+    evalCount,
+    adheringProvincesCount: adheringProvinces.size
+  };
+}
+
+/**
+ * Generates MapValues for national RIGI choropleth.
+ */
+export function rigiMapValues(): MapValues {
+  const totals = getRigiProvinceTotals();
+  const rawValues = PROVINCES.map((p) => totals[p.id] ?? 0);
+  return mapValuesOf(rawValues);
+}

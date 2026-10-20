@@ -6,6 +6,7 @@ import { buildPie } from '../charts/builders/pie.js';
 import { formatValue } from '../charts/format.js';
 import { Reveal } from '../motion/Reveal.js';
 import { ProvinceMap, useProvinces } from '../scenes/forecast/ProvinceMap.js';
+import type { ProjectMapMarker } from '../charts/builders/provinceMap.js';
 import { tokens } from '../styles/tokens.js';
 import { PROVINCES } from '../types/province.js';
 import type { ProvinceId } from '../types/province.js';
@@ -17,11 +18,17 @@ import type { Part, ResourceSector } from './resourcesData.js';
 import { TourChart } from './TourChart.js';
 import type { Map3DSpec } from '../charts3d/types.js';
 import { mapSummary } from '../scenes/forecast/mapSelectors.js';
-import { ProvinceStep } from './ProvinceStep.js';
 import { ProvinceProfileStep } from './ProvinceProfileStep.js';
 import { RESOURCES_TITLE } from './slideTitles.js';
 import { provinceSectorBreakdown } from './provinceSectorBreakdown.js';
-import { getDepartmentProjects, provinceDrilldownData } from './provinceDrilldown.js';
+import { getProvinceProjects, provinceDrilldownData } from './provinceDrilldown.js';
+import type { DepartmentProject } from './provinceDrilldown.js';
+import {
+  ALL_RIGI_PROJECTS,
+  getRigiProvinceTotals,
+  getRigiTotalsSummary,
+  rigiMapValues
+} from './rigiProjects.js';
 import { MapSearch } from '../ui/MapSearch.js';
 import type { SearchResult } from '../ui/mapSearchLogic.js';
 import { ChartHelp } from '../ui/ChartHelp.js';
@@ -33,9 +40,8 @@ export { PRODUCER_MIN };
 type View = ResourceSector | 'total';
 
 const PARTS = [
-  { value: 'resources', label: 'Recursos' },
-  { value: 'provinces', label: 'Producción por provincia' },
-  { value: 'profile', label: 'Perfil por provincia' }
+  { value: 'resources', label: 'Recursos y RIGI' },
+  { value: 'profile', label: 'Perfil provincial' }
 ] as const;
 
 type Pane = (typeof PARTS)[number]['value'];
@@ -91,19 +97,20 @@ function Parts({ title, unit, parts, form, onPick }: { title: string; unit: stri
 }
 
 /**
- * Step 8 of the Recorrido, "Recursos naturales": on the left what the chosen sector is made of (minerals, provinces or crops; the three sectors for
- * Total) as a treemap, a pie or bars, and the bars of the provinces that produce it; on the right the big map of Argentina for the same view.
- * It replaces the old steps 8, 9, 10 and 13; their tables stay in the Data page.
+ * Slide 2 (Step 8 of Recorrido): "Recursos y RIGI" unified.
+ * Provides interactive resource maps, RIGI commitments layer, and provincial/department drilldown.
  */
 export function ResourcesStep() {
   const provinces = useProvinces();
   const [form, setForm] = useState<Form>('treemap');
   const [view, setView] = useState<View>('mineria');
   const [part, setPart] = useState<Pane>('resources');
+  const [isRigi, setIsRigi] = useState(false);
   const [selected, setSelected] = useState<ProvinceId | null>(null);
   const [selectedDept, setSelectedDept] = useState<string | null>(null);
-  const label = view === 'total' ? 'Total' : SECTOR_LABELS[view];
-  const parts = useMemo(() => provinceSectorBreakdown(view, selected), [view, selected]);
+
+  const label = isRigi ? 'RIGI' : view === 'total' ? 'Total' : SECTOR_LABELS[view];
+
   const select = useCallback((id: string | null) => {
     setSelected((current) => {
       const next = id === null || id === current ? null : (id as ProvinceId);
@@ -111,44 +118,171 @@ export function ResourcesStep() {
       return next;
     });
   }, []);
-  const tiles = useMemo(() => totals(view), [view]);
-  const values = useMemo(() => mapValuesOf(viewValues(view)), [view]);
 
-  const drilldown = useMemo(() => provinceDrilldownData(view, selected), [view, selected]);
+  const rigiSummary = useMemo(() => getRigiTotalsSummary(), []);
+
+  const tiles = useMemo(() => {
+    if (isRigi) {
+      return [
+        { label: 'Inversión RIGI', value: `$ ${rigiSummary.totalInvestment.toLocaleString('es-AR')}`, unit: 'M USD' },
+        { label: 'Proyectos RIGI', value: String(rigiSummary.totalProjects), unit: 'proyectos' },
+        { label: 'Aprobados', value: String(rigiSummary.approvedCount), unit: 'proyectos' },
+        { label: 'En evaluación', value: String(rigiSummary.evalCount), unit: 'proyectos' }
+      ];
+    }
+    return totals(view);
+  }, [isRigi, rigiSummary, view]);
+
+  const values = useMemo(() => {
+    if (isRigi) {
+      return rigiMapValues();
+    }
+    return mapValuesOf(viewValues(view));
+  }, [isRigi, view]);
+
+  const parts = useMemo(() => {
+    if (isRigi) {
+      if (selected) {
+        const provProjects = getProvinceProjects(selected);
+        const partsList = provProjects
+          .filter((p) => p.investment)
+          .map((p) => ({ label: p.name, value: p.investment! }));
+        return {
+          title: `Inversión RIGI por proyecto`,
+          unit: 'M USD',
+          parts: partsList.length > 0 ? partsList : [{ label: 'En evaluación', value: 1 }]
+        };
+      }
+      const miningSum = ALL_RIGI_PROJECTS.filter((p) => p.sector === 'Minería').reduce((s, p) => s + (p.investment ?? 0), 0);
+      const oilGasSum = ALL_RIGI_PROJECTS.filter((p) => p.sector === 'Petróleo y gas').reduce((s, p) => s + (p.investment ?? 0), 0);
+      return {
+        title: 'Inversión RIGI por sector',
+        unit: 'M USD',
+        parts: [
+          { label: 'Minería', value: miningSum },
+          { label: 'Petróleo y gas', value: oilGasSum }
+        ]
+      };
+    }
+    return provinceSectorBreakdown(view, selected);
+  }, [isRigi, selected, view]);
+
+  const drilldown = useMemo(() => {
+    if (isRigi) {
+      if (selected === null) {
+        const totalsByProv = getRigiProvinceTotals();
+        const rows = PROVINCES.map((p) => ({
+          name: SHORT[p.id] ?? p.name,
+          value: Math.round(totalsByProv[p.id] ?? 0)
+        }))
+          .filter((r) => r.value > 0)
+          .sort((a, b) => b.value - a.value);
+        return {
+          kind: 'provinces' as const,
+          title: 'RIGI: inversión por provincia',
+          unit: 'M USD',
+          rows
+        };
+      }
+      const provProjects = getProvinceProjects(selected);
+      const rows = provProjects.map((p) => ({
+        name: p.name,
+        value: p.investment ?? 1
+      }));
+      return {
+        kind: 'minerals' as const,
+        title: 'Proyectos RIGI en la provincia',
+        unit: 'M USD',
+        rows
+      };
+    }
+    return provinceDrilldownData(view, selected);
+  }, [isRigi, selected, view]);
+
   const drilldownBars = useMemo(() => {
     const title = drilldown.title;
     const summary = `${title}, de mayor a menor (${drilldown.unit}): ${drilldown.rows.map((r) => `${r.name} ${formatValue(r.value, drilldown.unit)}`).join(', ')}`;
-    const { option } = buildColumns(drilldown.rows.map((r) => r.name), [{ name: label, values: drilldown.rows.map((r) => r.value), color: tokens.muted }], {
-      unit: drilldown.unit,
-      summary,
-      dense: { barWidth: 14, rotate: drilldown.rows.length > 5 ? 55 : 0 }
-    });
+    const { option } = buildColumns(
+      drilldown.rows.map((r) => r.name),
+      [{ name: label, values: drilldown.rows.map((r) => r.value), color: isRigi ? tokens.gold : tokens.muted }],
+      {
+        unit: drilldown.unit,
+        summary,
+        dense: { barWidth: 14, rotate: drilldown.rows.length > 5 ? 55 : 0 }
+      }
+    );
     return { title, option, summary, kind: drilldown.kind };
-  }, [label, drilldown]);
+  }, [label, drilldown, isRigi]);
 
-  const handleDrilldownClick = useCallback((params: ChartClickParams) => {
-    if (!params.name) return;
-    if (drilldown.kind === 'departments') {
-      setSelectedDept((curr) => (curr === params.name ? null : params.name!));
-    } else if (drilldown.kind === 'provinces') {
-      const prov = PROVINCES.find((p) => (SHORT[p.id] ?? p.name) === params.name || p.name === params.name);
-      if (prov) select(prov.id);
+  const handleDrilldownClick = useCallback(
+    (params: ChartClickParams) => {
+      if (!params.name) return;
+      if (drilldown.kind === 'departments') {
+        setSelectedDept((curr) => (curr === params.name ? null : params.name!));
+      } else if (drilldown.kind === 'provinces') {
+        const prov = PROVINCES.find((p) => (SHORT[p.id] ?? p.name) === params.name || p.name === params.name);
+        if (prov) select(prov.id);
+      }
+    },
+    [drilldown.kind, select]
+  );
+
+  const projects = useMemo<DepartmentProject[]>(() => {
+    if (!selected) return [];
+    const list = getProvinceProjects(selected, selectedDept);
+    if (isRigi) {
+      return list.filter((p) => p.isRigi);
     }
-  }, [drilldown.kind, select]);
+    return list;
+  }, [selected, selectedDept, isRigi]);
 
-  const projects = useMemo(() => {
-    if (!selected || !selectedDept) return [];
-    return getDepartmentProjects(selected, selectedDept);
-  }, [selected, selectedDept]);
+  const allProjectMarkers = useMemo<ProjectMapMarker[]>(() => {
+    if (isRigi) {
+      return ALL_RIGI_PROJECTS.map((p) => ({
+        name: p.name,
+        coordinates: p.coordinates,
+        provinceId: p.provinceIds[0]!,
+        department: p.department,
+        company: p.company,
+        sector: p.sector,
+        kind: p.kind,
+        investment: p.investment,
+        status: p.status,
+        isRigi: true
+      }));
+    }
+    // Resource markers: include registered projects that have coordinates
+    const list: ProjectMapMarker[] = [];
+    for (const prov of PROVINCES) {
+      const provProjs = getProvinceProjects(prov.id);
+      for (const p of provProjs) {
+        if (p.coordinates) {
+          list.push({
+            name: p.name,
+            coordinates: p.coordinates,
+            provinceId: prov.id,
+            department: p.department,
+            company: p.company,
+            kind: p.kind,
+            investment: p.investment,
+            status: p.status,
+            isRigi: p.isRigi
+          });
+        }
+      }
+    }
+    return list;
+  }, [isRigi]);
 
-  const formatProduction = useCallback((v: number) => formatValue(v, PRODUCTION_UNIT), []);
+  const formatProduction = useCallback((v: number) => formatValue(v, isRigi ? 'M USD' : PRODUCTION_UNIT), [isRigi]);
+
   const mapSpec = useMemo<Map3DSpec | null>(
     () =>
       provinces.status !== 'success'
         ? null
         : {
             kind: 'map',
-            title: `${label} por provincia`,
+            title: isRigi ? 'Inversión RIGI por provincia' : `${label} por provincia`,
             geo: provinces.geo,
             values,
             metric: 'level',
@@ -159,10 +293,11 @@ export function ResourcesStep() {
             onSelect: select,
             upright: true,
             zoomToSelected: true,
-            summary: mapSummary(values, 'level', `producción de ${label.toLowerCase()}`, 2025, PRODUCTION_UNIT)
+            summary: mapSummary(values, 'level', isRigi ? 'inversión RIGI' : `producción de ${label.toLowerCase()}`, 2025, isRigi ? 'M USD' : PRODUCTION_UNIT)
           },
-    [provinces, values, selected, selectedDept, label, formatProduction, select]
+    [provinces, isRigi, label, values, selected, selectedDept, formatProduction, select]
   );
+
   const pickSector = useCallback((name: string) => {
     const found = RESOURCE_SECTORS.find((s) => s.label === name);
     if (found) {
@@ -181,21 +316,7 @@ export function ResourcesStep() {
       setSelectedDept(null);
     }
   }, []);
-  if (part === 'provinces') {
-    return (
-      <section className="gdp-step" aria-label={RESOURCES_TITLE}>
-        <header className="gdp-head">
-          <Reveal k="head" className="gdp-title">
-            <h2>{RESOURCES_TITLE}</h2>
-          </Reveal>
-          <div className="tour-controls">
-            <Segmented label="Mostrar" options={PARTS} value={part} onChange={setPart} />
-          </div>
-        </header>
-        <ProvinceStep embedded />
-      </section>
-    );
-  }
+
   if (part === 'profile') {
     return (
       <section className="gdp-step" aria-label={RESOURCES_TITLE}>
@@ -211,14 +332,23 @@ export function ResourcesStep() {
       </section>
     );
   }
+
   const step8Info = STEP_INFO[8]!;
+  const selectedProvinceName = selected ? PROVINCES.find((p) => p.id === selected)?.name ?? selected : null;
+
   return (
     <section className="gdp-step res-step" aria-label={RESOURCES_TITLE}>
       <header className="gdp-head">
         <Reveal k="head" className="gdp-title">
           <div className="slide-title-row">
             <h2>{RESOURCES_TITLE}</h2>
-            <ChartHelp title={step8Info.heading} lead="Elegí un sector o el total; tocá una provincia del mapa para ver lo que produce" paragraphs={step8Info.paragraphs} how={step8Info.how} refs={step8Info.refs} />
+            <ChartHelp
+              title={step8Info.heading}
+              lead="Elegí un sector o el total; tocá una provincia del mapa para ver lo que produce o activá el RIGI"
+              paragraphs={step8Info.paragraphs}
+              how={step8Info.how}
+              refs={step8Info.refs}
+            />
           </div>
           <p className="gdp-sub">
             <RefList ids={step8Info.refs} />
@@ -226,10 +356,23 @@ export function ResourcesStep() {
         </Reveal>
         <div className="tour-controls">
           <Segmented label="Mostrar" options={PARTS} value={part} onChange={setPart} />
-          <Segmented label="Sector" options={VIEWS_OF_SECTOR} value={view} onChange={setView} />
+          {!isRigi && <Segmented label="Sector" options={VIEWS_OF_SECTOR} value={view} onChange={setView} />}
           <Segmented label="Gráfico" options={FORMS} value={form} onChange={setForm} />
+          <button
+            type="button"
+            className={`btn tour-rigi-btn ${isRigi ? 'active' : ''}`}
+            onClick={() => {
+              setIsRigi((r) => !r);
+              setSelectedDept(null);
+            }}
+            aria-pressed={isRigi}
+            title="Activar o desactivar visualización de proyectos RIGI"
+          >
+            ★ RIGI
+          </button>
         </div>
       </header>
+
       <ul className="res-totals" aria-label={`Totales de ${label.toLowerCase()}`}>
         {tiles.map((t) => (
           <li key={t.label} className="res-total">
@@ -239,10 +382,11 @@ export function ResourcesStep() {
           </li>
         ))}
       </ul>
+
       <div className="res-grid">
         <div className="res-left">
           {parts ? (
-            <Reveal k={`parts-${view}-${form}-${selected ?? 'all'}`} className="gdp-chart">
+            <Reveal k={`parts-${isRigi ? 'rigi' : view}-${form}-${selected ?? 'all'}`} className="gdp-chart">
               <strong className="composition-title">
                 <span>{`${parts.title} (${parts.unit})`}</span>
                 <ChartHelp title={parts.title} paragraphs={[step8Info.paragraphs[0]!, step8Info.paragraphs[1]!]} how={step8Info.how} refs={step8Info.refs} />
@@ -252,7 +396,7 @@ export function ResourcesStep() {
                   </button>
                 )}
               </strong>
-              <Parts title={parts.title} unit={parts.unit} parts={parts.parts} form={form} onPick={view === 'total' && !selected ? pickSector : undefined} />
+              <Parts title={parts.title} unit={parts.unit} parts={parts.parts} form={form} onPick={view === 'total' && !selected && !isRigi ? pickSector : undefined} />
             </Reveal>
           ) : selected ? (
             <div className="gdp-chart">
@@ -263,7 +407,8 @@ export function ResourcesStep() {
               </strong>
             </div>
           ) : null}
-          <Reveal k={`bars-${view}-${selected ?? 'all'}`} delay={0.07} className="gdp-chart">
+
+          <Reveal k={`bars-${isRigi ? 'rigi' : view}-${selected ?? 'all'}`} delay={0.07} className="gdp-chart">
             <strong className="composition-title">
               <span>{`${drilldownBars.title} (${drilldown.unit})`}</span>
               <ChartHelp title={drilldownBars.title} paragraphs={[step8Info.paragraphs[2]!, step8Info.paragraphs[3]!]} how={step8Info.how} refs={step8Info.refs} />
@@ -272,66 +417,75 @@ export function ResourcesStep() {
               <EChart option={drilldownBars.option} aria-label={drilldownBars.summary} onClick={handleDrilldownClick} />
             </div>
           </Reveal>
-          {projects.length > 0 && selectedDept && (
-            <Reveal k={`projects-${selected}-${selectedDept}`} delay={0.1} className="gdp-chart dept-projects-card">
+
+          {selected && projects.length > 0 && (
+            <Reveal k={`projects-${selected}-${selectedDept ?? 'all'}`} delay={0.1} className="gdp-chart dept-projects-card">
               <div className="dept-projects-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-sm)' }}>
                 <strong className="composition-title" style={{ margin: 0 }}>
-                  Proyectos mineros en {selectedDept} ({projects.length})
+                  {selectedDept
+                    ? `Proyectos mineros en ${selectedDept} (${projects.length})`
+                    : `Proyectos mineros y estratégicos en ${selectedProvinceName} (${projects.length})`}
                 </strong>
-                <button
-                  type="button"
-                  className="btn"
-                  style={{ fontSize: '0.75rem', padding: '2px 8px' }}
-                  onClick={() => setSelectedDept(null)}
-                >
-                  Cerrar
-                </button>
+                {selectedDept ? (
+                  <button type="button" className="btn" style={{ fontSize: '0.75rem', padding: '2px 8px' }} onClick={() => setSelectedDept(null)}>
+                    Ver todos de {selectedProvinceName}
+                  </button>
+                ) : (
+                  <button type="button" className="btn" style={{ fontSize: '0.75rem', padding: '2px 8px' }} onClick={() => setSelected(null)}>
+                    Cerrar
+                  </button>
+                )}
               </div>
-              <ul className="dept-projects-list" style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              <div className="project-cards-container">
                 {projects.map((proj) => (
-                  <li
-                    key={proj.name}
-                    style={{
-                      background: 'rgba(255, 255, 255, 0.04)',
-                      borderRadius: '6px',
-                      padding: '10px 12px',
-                      border: '1px solid rgba(255, 255, 255, 0.08)'
-                    }}
-                  >
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '4px' }}>
-                      <strong style={{ fontSize: '0.95rem', color: 'var(--ink)' }}>{proj.name}</strong>
-                      <span
-                        style={{
-                          fontSize: '0.75rem',
-                          padding: '2px 6px',
-                          borderRadius: '4px',
-                          background: proj.status === 'Producción' ? 'rgba(34, 197, 94, 0.15)' : 'rgba(56, 189, 248, 0.15)',
-                          color: proj.status === 'Producción' ? '#4ade80' : '#38bdf8'
-                        }}
-                      >
-                        {proj.status}
-                      </span>
-                    </div>
-                    <div style={{ fontSize: '0.82rem', color: 'var(--ink-muted)', marginBottom: '2px' }}>
-                      <span>{proj.company}</span> • <span>{proj.kind}</span>
-                    </div>
-                    {proj.capacity && (
-                      <div style={{ fontSize: '0.78rem', color: 'var(--ink-muted)' }}>
-                        Capacidad: {proj.capacity}
+                  <article key={proj.name} className={`project-card ${proj.isRigi ? 'project-card--rigi' : ''}`}>
+                    <div className="project-card-header">
+                      <strong className="project-card-title">{proj.name}</strong>
+                      <div className="project-card-badges">
+                        {proj.isRigi && <span className="project-badge project-badge--rigi">★ RIGI</span>}
+                        <span className="project-badge">{proj.kind}</span>
+                        <span
+                          className={`project-badge ${
+                            proj.status.toLowerCase().includes('aprobado') || proj.status.toLowerCase().includes('producción')
+                              ? 'project-badge--approved'
+                              : 'project-badge--eval'
+                          }`}
+                        >
+                          {proj.status}
+                        </span>
+                        {proj.resolution && <span className="project-badge">{proj.resolution}</span>}
                       </div>
-                    )}
-                    {proj.investment && (
-                      <div style={{ fontSize: '0.78rem', color: 'var(--ink-muted)' }}>
-                        Inversión: {proj.investment.toLocaleString('es-AR')} millones de USD
-                      </div>
-                    )}
-                  </li>
+                    </div>
+                    <div className="project-card-company">
+                      <span>{proj.company}</span>
+                    </div>
+                    <div className="project-card-meta">
+                      {proj.investment && (
+                        <div>
+                          <strong>Inversión:</strong> {proj.investment.toLocaleString('es-AR')} millones de USD
+                        </div>
+                      )}
+                      {proj.capacity && (
+                        <div>
+                          <strong>Capacidad:</strong> {proj.capacity}
+                        </div>
+                      )}
+                      {proj.refs && proj.refs.length > 0 && (
+                        <div style={{ marginTop: '2px' }}>
+                          <span style={{ marginRight: '6px' }}>Referencias:</span>
+                          <RefList ids={proj.refs} />
+                        </div>
+                      )}
+                    </div>
+                    {proj.note && <p className="project-card-note">{proj.note}</p>}
+                  </article>
                 ))}
-              </ul>
+              </div>
             </Reveal>
           )}
         </div>
-        <Reveal k={`map-${view}`} delay={0.14} className="gdp-chart prov-map res-map">
+
+        <Reveal k={`map-${isRigi ? 'rigi' : view}`} delay={0.14} className="gdp-chart prov-map res-map">
           <strong
             className="composition-title"
             style={{
@@ -342,19 +496,21 @@ export function ResourcesStep() {
               flexWrap: 'wrap'
             }}
           >
-            <span>{`${label} por provincia`}</span>
+            <span>{isRigi ? 'Proyectos e inversión RIGI por provincia' : `${label} por provincia`}</span>
             <MapSearch onSelect={handleSearchSelect} />
           </strong>
           <div className="tour-chart">
             {provinces.status === 'loading' && <Spinner label="Cargando el mapa de las provincias..." />}
-            {provinces.status === 'error' && <p style={{ color: 'var(--state-warning)' }}>{`La geometría de las provincias no está disponible: ${provinces.message}`}</p>}
+            {provinces.status === 'error' && (
+              <p style={{ color: 'var(--state-warning)' }}>{`La geometría de las provincias no está disponible: ${provinces.message}`}</p>
+            )}
             {provinces.status === 'success' && (
               <TourChart spec={mapSpec ?? undefined} mode="3d">
                 <ProvinceMap
                   geo={provinces.geo}
                   values={values}
-                  unit={PRODUCTION_UNIT}
-                  indicatorLabel={`producción de ${label.toLowerCase()}`}
+                  unit={isRigi ? 'M USD' : PRODUCTION_UNIT}
+                  indicatorLabel={isRigi ? 'inversión RIGI' : `producción de ${label.toLowerCase()}`}
                   metric="level"
                   selectedId={selected}
                   year={2025}
@@ -364,6 +520,7 @@ export function ResourcesStep() {
                   onSelect={select}
                   selectedDepartment={selectedDept}
                   onSelectDepartment={setSelectedDept}
+                  projectMarkers={allProjectMarkers}
                 />
               </TourChart>
             )}

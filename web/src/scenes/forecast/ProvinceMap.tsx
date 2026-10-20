@@ -7,6 +7,7 @@ import { cameraAnimation, drillViewKey, useDrillTransition } from '../../charts/
 import { useReducedMotion } from '../../runtime/useReducedMotion.js';
 import { NavControls } from '../../ui/NavControls.js';
 import { MAP_NAME, buildDepartmentMap, buildProvinceMap } from '../../charts/builders/provinceMap.js';
+import type { ProjectMapMarker } from '../../charts/builders/provinceMap.js';
 import { DataTable } from '../../charts/DataTable.js';
 import { EChart } from '../../charts/EChart.js';
 import type { ChartClickParams } from '../../charts/EChart.js';
@@ -82,6 +83,8 @@ interface ProvinceMapProps {
   onSelect: (id: ProvinceId | null) => void;
   selectedDepartment?: string | null;
   onSelectDepartment?: (dept: string | null) => void;
+  projectMarkers?: ProjectMapMarker[];
+  onSelectProject?: (proj: ProjectMapMarker) => void;
 }
 
 const NO_DATA_TEXT = 'sin datos';
@@ -101,7 +104,9 @@ export function ProvinceMap({
   zoomToSelected = false,
   onSelect,
   selectedDepartment = null,
-  onSelectDepartment
+  onSelectDepartment,
+  projectMarkers,
+  onSelectProject
 }: ProvinceMapProps) {
   const [asTable, setAsTable] = useState(false);
   const [deptGeo, setDeptGeo] = useState<DepartmentsGeo | null>(null);
@@ -138,16 +143,16 @@ export function ProvinceMap({
   const built = useMemo(
     () =>
       buildProvinceMap(
-        { geo, values, centroids, smallIds, unit, indicatorLabel },
+        { geo, values, centroids, smallIds, unit, indicatorLabel, projectMarkers },
         { metric, selectedId, scenario, year, observed }
       ),
-    [geo, values, centroids, smallIds, unit, indicatorLabel, metric, selectedId, scenario, year, observed]
+    [geo, values, centroids, smallIds, unit, indicatorLabel, projectMarkers, metric, selectedId, scenario, year, observed]
   );
 
   const deptBuilt = useMemo(() => {
     if (!selectedId || !deptGeo) return null;
-    return buildDepartmentMap(deptGeo, selectedProvince?.name ?? selectedId);
-  }, [selectedId, deptGeo, selectedProvince]);
+    return buildDepartmentMap(deptGeo, selectedProvince?.name ?? selectedId, projectMarkers);
+  }, [selectedId, deptGeo, selectedProvince, projectMarkers]);
 
   const reducedMotion = useReducedMotion();
   // the drill fires when the drawn map changes (country <-> departments), once per change
@@ -171,6 +176,18 @@ export function ProvinceMap({
   }, [selectedId, zoomToSelected, geo, bbox, deptBuilt, reducedMotion]);
 
   const handleClick = (params: ChartClickParams) => {
+    if (params.data && 'company' in params.data) {
+      const proj = params.data as ProjectMapMarker;
+      onSelectProject?.(proj);
+      if (proj.provinceId && isProvinceId(proj.provinceId) && proj.provinceId !== selectedId) {
+        onSelect(proj.provinceId);
+      }
+      if (proj.department) {
+        onSelectDepartment?.(proj.department === selectedDepartment ? null : proj.department);
+      }
+      return;
+    }
+
     if (deptBuilt) {
       if (params.name) {
         onSelectDepartment?.(params.name === selectedDepartment ? null : params.name);

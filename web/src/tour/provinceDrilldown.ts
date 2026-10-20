@@ -16,6 +16,12 @@ export interface DepartmentProject {
   status: string;
   capacity?: string;
   investment?: number;
+  isRigi?: boolean;
+  resolution?: string;
+  refs?: string[];
+  note?: string;
+  department?: string;
+  coordinates?: [number, number];
 }
 
 /** Department-level mining production estimates (million USD), summing to provincial totals. */
@@ -68,72 +74,433 @@ const DEPT_HC_PRODUCTION: Partial<Record<ProvinceId, DepartmentProductionRow[]>>
     { name: 'Malargüe', value: 3400 },
     { name: 'Tupungato', value: 500 },
     { name: 'Luján de Cuyo', value: 300 }
+  ],
+  'AR-R': [
+    { name: 'General Roca', value: 1400 },
+    { name: 'San Antonio', value: 800 },
+    { name: 'Catriel / Peñas Blancas', value: 200 }
   ]
 };
 
-/** Registered mining projects by province and normalized department name. */
+/** Registered projects by province and normalized department name. */
 const DEPARTMENT_PROJECTS: Record<string, Record<string, DepartmentProject[]>> = {
   'AR-A': {
     'los andes': [
-      { name: 'Taca Taca', company: 'First Quantum Minerals', kind: 'Cobre, molibdeno y oro', status: 'Factibilidad', investment: 4232, capacity: 'Cobre 227 kt; molibdeno 2.205 t; oro 106 koz' },
-      { name: 'Centenario-Ratones', company: 'Eramet', kind: 'Litio', status: 'Producción', capacity: '24.000 t de LCE' },
-      { name: 'Lindero', company: 'Mansfield / Fortuna Silver', kind: 'Oro', status: 'Producción', capacity: '100 koz/año' },
-      { name: 'Mariana', company: 'Ganfeng Lithium', kind: 'Litio', status: 'Producción', capacity: '20.000 t de LCE' },
-      { name: 'Salar del Rincón', company: 'Rio Tinto', kind: 'Litio', status: 'Factibilidad y construcción', investment: 2744, capacity: '60.000 t de LCE' },
-      { name: 'Rincón', company: 'Argosy Minerals', kind: 'Litio', status: 'Construcción', capacity: '12.000 t de LCE' },
-      { name: 'Sal de los Ángeles', company: 'Revotech Asia / Tibet Summit', kind: 'Litio', status: 'Construcción', capacity: '20.000 t de LCE' },
-      { name: 'Sal de Oro', company: 'Posco Argentina', kind: 'Litio', status: 'Producción', investment: 547, capacity: '25.000 t (hidróxido de litio)' },
-      { name: 'Diablillos', company: 'AbraSilver', kind: 'Oro y plata', status: 'Aprobado RIGI', investment: 764 }
+      {
+        name: 'Taca Taca',
+        company: 'First Quantum Minerals',
+        kind: 'Cobre, molibdeno y oro',
+        status: 'En evaluación RIGI',
+        isRigi: true,
+        investment: 4232,
+        capacity: 'Cobre 227 kt; molibdeno 2.205 t; oro 106 koz',
+        refs: ['R9', 'E11', 'R14'],
+        coordinates: [-67.75, -24.52]
+      },
+      {
+        name: 'Salar del Rincón',
+        company: 'Rio Tinto',
+        kind: 'Litio',
+        status: 'Aprobado RIGI',
+        isRigi: true,
+        investment: 2744,
+        capacity: '60.000 t de LCE',
+        refs: ['R1', 'R2', 'R3', 'R14'],
+        coordinates: [-67.12, -24.08]
+      },
+      {
+        name: 'Centenario-Ratones',
+        company: 'Eramet',
+        kind: 'Litio',
+        status: 'Producción',
+        capacity: '24.000 t de LCE',
+        coordinates: [-66.85, -24.3]
+      },
+      {
+        name: 'Diablillos',
+        company: 'AbraSilver Resource Corp.',
+        kind: 'Oro y plata',
+        status: 'Aprobado RIGI',
+        isRigi: true,
+        investment: 764,
+        refs: ['R1', 'R5', 'R14'],
+        coordinates: [-66.83, -25.32]
+      },
+      {
+        name: 'Sal de Oro',
+        company: 'Posco Argentina',
+        kind: 'Litio',
+        status: 'Aprobado RIGI',
+        isRigi: true,
+        investment: 547,
+        capacity: '25.000 t (hidróxido de litio)',
+        refs: ['R1', 'R14'],
+        coordinates: [-67.01, -25.42]
+      },
+      {
+        name: 'Lindero',
+        company: 'Mansfield / Fortuna Silver',
+        kind: 'Oro',
+        status: 'Producción',
+        capacity: '100 koz/año',
+        coordinates: [-67.78, -25.1]
+      },
+      {
+        name: 'Mariana',
+        company: 'Ganfeng Lithium',
+        kind: 'Litio',
+        status: 'Producción',
+        capacity: '20.000 t de LCE',
+        coordinates: [-67.9, -24.7]
+      },
+      {
+        name: 'Rincón (Argosy)',
+        company: 'Argosy Minerals',
+        kind: 'Litio',
+        status: 'Construcción',
+        capacity: '12.000 t de LCE',
+        coordinates: [-67.15, -24.12]
+      },
+      {
+        name: 'Sal de los Ángeles',
+        company: 'Revotech Asia / Tibet Summit',
+        kind: 'Litio',
+        status: 'Construcción',
+        capacity: '20.000 t de LCE',
+        coordinates: [-67.1, -24.5]
+      }
     ],
     'general guemes': [
-      { name: 'Planta Comercial Posco', company: 'Posco Argentina', kind: 'Procesamiento de hidróxido de litio', status: 'Producción' }
+      {
+        name: 'Planta Comercial Posco',
+        company: 'Posco Argentina',
+        kind: 'Procesamiento de hidróxido de litio',
+        status: 'Producción',
+        coordinates: [-65.05, -24.67]
+      }
     ]
   },
   'AR-J': {
     iglesia: [
-      { name: 'Veladero', company: 'Barrick Gold y Shandong Gold', kind: 'Oro y plata', status: 'Producción' },
-      { name: 'Josemaría (Vicuña)', company: 'Lundin Mining y BHP', kind: 'Cobre, oro y plata', status: 'Construcción', capacity: 'Cobre 131 kt; oro 224 koz' },
-      { name: 'Filo del Sol (Vicuña)', company: 'Lundin Mining y BHP', kind: 'Cobre, oro y plata', status: 'Prefactibilidad' }
+      {
+        name: 'Vicuña',
+        company: 'BHP y Lundin Mining',
+        kind: 'Cobre, oro y plata',
+        status: 'Aprobado RIGI',
+        isRigi: true,
+        investment: 9737,
+        capacity: 'Josemaría: 131 kt Cu; Filo del Sol integrado',
+        refs: ['R1', 'R3', 'R14'],
+        coordinates: [-69.55, -28.43]
+      },
+      {
+        name: 'Veladero',
+        company: 'Minera Argentina Gold (Barrick y Shandong)',
+        kind: 'Oro y plata',
+        status: 'Aprobado RIGI',
+        isRigi: true,
+        investment: 436,
+        refs: ['R1', 'R5', 'R14'],
+        coordinates: [-69.95, -29.38]
+      },
+      {
+        name: 'Parques Solares RIGI Iglesia',
+        company: 'YPF Luz y 360 Energy',
+        kind: 'Energía solar fotovoltaica para minería',
+        status: 'Aprobado RIGI',
+        isRigi: true,
+        investment: 520,
+        refs: ['R14'],
+        coordinates: [-69.2, -30.5]
+      }
     ],
     calingasta: [
-      { name: 'Los Azules', company: 'McEwen Mining y Stellantis', kind: 'Cobre', status: 'Evaluación económica preliminar', capacity: 'Cobre 175 kt' },
-      { name: 'El Pachón', company: 'Glencore', kind: 'Cobre y molibdeno', status: 'Factibilidad', capacity: 'Cobre 280 kt; molibdeno 9 kt' },
-      { name: 'Altar', company: 'Aldebaran Resources y Sibanye Stillwater', kind: 'Cobre y oro', status: 'Exploración', capacity: 'Cobre 127 kt' }
+      {
+        name: 'Los Azules',
+        company: 'McEwen Copper (McEwen Mining y Stellantis)',
+        kind: 'Cobre',
+        status: 'Aprobado RIGI',
+        isRigi: true,
+        investment: 2672,
+        capacity: 'Cobre 175 kt LME Grado A',
+        refs: ['R1', 'R2', 'R14'],
+        coordinates: [-70.21, -31.11]
+      },
+      {
+        name: 'Pachón',
+        company: 'Glencore',
+        kind: 'Cobre y molibdeno',
+        status: 'En evaluación RIGI',
+        isRigi: true,
+        investment: 9533,
+        capacity: 'Cobre 280 kt; molibdeno 9 kt',
+        refs: ['R2', 'R14'],
+        coordinates: [-70.43, -31.75]
+      },
+      {
+        name: 'Altar',
+        company: 'Aldebaran Resources y Sibanye Stillwater',
+        kind: 'Cobre y oro',
+        status: 'Exploración',
+        capacity: 'Cobre 127 kt',
+        coordinates: [-70.18, -31.48]
+      }
     ],
     jachal: [
-      { name: 'Gualcamayo', company: 'Minas Argentinas', kind: 'Oro y plata', status: 'Producción y reactivación' }
+      {
+        name: 'Gualcamayo (carbonatos profundos)',
+        company: 'Minas Argentinas (Eris LLC)',
+        kind: 'Oro y plata',
+        status: 'Aprobado RIGI',
+        isRigi: true,
+        investment: 665,
+        refs: ['R1', 'R2', 'R14'],
+        coordinates: [-68.64, -30.01]
+      }
     ]
   },
   'AR-K': {
     'antofagasta de la sierra': [
-      { name: 'Fénix', company: 'Rio Tinto Group / Arcadium', kind: 'Litio', status: 'Producción', capacity: '25.000 t de LCE' },
-      { name: 'Sal de Vida', company: 'Rio Tinto Group', kind: 'Litio', status: 'Construcción', capacity: '15.000 t de LCE' },
-      { name: 'Hombre Muerto Oeste', company: 'Galán Litio', kind: 'Litio', status: 'Construcción', capacity: '20.000 t de LCE' }
+      {
+        name: 'Fénix (ampliación fase 1B)',
+        company: 'Arcadium Lithium (Rio Tinto)',
+        kind: 'Potasio y litio',
+        status: 'Aprobado RIGI',
+        isRigi: true,
+        investment: 531,
+        capacity: '25.000 t de LCE',
+        refs: ['R1', 'R14'],
+        coordinates: [-67.05, -25.35]
+      },
+      {
+        name: 'Sal de Vida',
+        company: 'Arcadium Lithium (Rio Tinto)',
+        kind: 'Litio',
+        status: 'En evaluación RIGI',
+        isRigi: true,
+        investment: 818,
+        capacity: '15.000 t de carbonato de litio',
+        refs: ['R2', 'R14'],
+        coordinates: [-66.98, -25.38]
+      },
+      {
+        name: 'Hombre Muerto Oeste (HMW)',
+        company: 'Galan Lithium',
+        kind: 'Litio',
+        status: 'Aprobado RIGI',
+        isRigi: true,
+        investment: 292,
+        capacity: '20.000 t de LCE',
+        refs: ['R1', 'R2', 'R14'],
+        coordinates: [-67.15, -25.4]
+      }
     ],
     andalgala: [
-      { name: 'MARA (Agua Rica - Alumbrera)', company: 'Glencore', kind: 'Cobre, oro y molibdeno', status: 'Factibilidad', capacity: '533 millones de libras concentrado' }
+      {
+        name: 'Alumbrera-Agua Rica (MARA)',
+        company: 'Glencore',
+        kind: 'Cobre, oro, plata y molibdeno',
+        status: 'Aprobado RIGI',
+        isRigi: true,
+        investment: 4000,
+        capacity: '200.000 t/año de cobre concentrado',
+        refs: ['R1', 'R14'],
+        coordinates: [-66.31, -27.43]
+      }
     ],
     tinogasta: [
-      { name: 'Tres Quebradas', company: 'Zijin Mining', kind: 'Litio', status: 'Construcción', capacity: '20.000 t de LCE' }
+      {
+        name: 'Tres Quebradas (3Q)',
+        company: 'Liex S.A. (Zijin Mining)',
+        kind: 'Litio',
+        status: 'Aprobado RIGI',
+        isRigi: true,
+        investment: 710,
+        capacity: '20.000 t de LCE en Fiambalá',
+        refs: ['R1', 'R14'],
+        coordinates: [-68.58, -27.42]
+      }
     ]
   },
   'AR-Y': {
     susques: [
-      { name: 'Cauchari-Olaroz', company: 'Ganfeng Lithium y Lithium Argentina', kind: 'Litio', status: 'Producción', capacity: '40.000 t de LCE' },
-      { name: 'Olaroz', company: 'Rio Tinto Group / Arcadium', kind: 'Litio', status: 'Producción', capacity: '20.000 t de LCE' }
+      {
+        name: 'Cauchari-Olaroz (ampliación)',
+        company: 'Minera Exar (Ganfeng y Lithium Americas)',
+        kind: 'Litio',
+        status: 'Aprobado RIGI',
+        isRigi: true,
+        investment: 1241,
+        capacity: '40.000 t de LCE',
+        refs: ['R1', 'R4', 'R14'],
+        coordinates: [-66.81, -23.65]
+      },
+      {
+        name: 'Olaroz',
+        company: 'Rio Tinto Group / Arcadium',
+        kind: 'Litio',
+        status: 'Producción',
+        capacity: '20.000 t de LCE',
+        coordinates: [-66.85, -23.7]
+      }
     ],
     rinconada: [
-      { name: 'Chinchillas - Mina Pirquitas', company: 'SSR Mining', kind: 'Plata, plomo y cinc', status: 'Producción' }
+      {
+        name: 'Chinchillas - Mina Pirquitas',
+        company: 'SSR Mining',
+        kind: 'Plata, plomo y cinc',
+        status: 'Producción',
+        coordinates: [-66.5, -22.5]
+      }
+    ]
+  },
+  'AR-Q': {
+    anelo: [
+      {
+        name: 'Los Toldos II Este',
+        company: 'Tecpetrol',
+        kind: 'Producción no convencional (Vaca Muerta)',
+        status: 'Aprobado RIGI',
+        isRigi: true,
+        investment: 6432,
+        resolution: 'Resolución 1771/2026',
+        refs: ['R8', 'R13', 'R14'],
+        coordinates: [-68.78, -37.89]
+      },
+      {
+        name: 'Rincón de Aranda',
+        company: 'Pampa Energía',
+        kind: 'Vaca Muerta: ductos y plantas de tratamiento',
+        status: 'Aprobado RIGI',
+        isRigi: true,
+        investment: 4521,
+        refs: ['R3', 'R14'],
+        coordinates: [-68.65, -38.05]
+      },
+      {
+        name: 'LLL Oil',
+        company: 'YPF',
+        kind: 'Exportación de crudo: 1.152 pozos',
+        status: 'En evaluación RIGI',
+        isRigi: true,
+        investment: 25000,
+        refs: ['R10', 'R14'],
+        coordinates: [-68.85, -38.15]
+      },
+      {
+        name: 'Los Toldos (primera etapa)',
+        company: 'Tecpetrol',
+        kind: 'Infraestructura de hidrocarburos',
+        status: 'En evaluación RIGI',
+        isRigi: true,
+        investment: 1006,
+        refs: ['R2', 'R14'],
+        coordinates: [-68.75, -37.92]
+      }
+    ],
+    pehuenches: [
+      {
+        name: 'Bajo del Choique-La Invernada',
+        company: 'Pluspetrol y GyP',
+        kind: 'Producción no convencional (Vaca Muerta)',
+        status: 'Aprobado RIGI',
+        isRigi: true,
+        investment: 12400,
+        refs: ['R12', 'R14'],
+        coordinates: [-68.95, -37.45]
+      }
+    ]
+  },
+  'AR-R': {
+    'san antonio': [
+      {
+        name: 'Argentina LNG (San Matías)',
+        company: 'Southern Energy (PAE y Golar LNG)',
+        kind: 'GNL, exportación flotante',
+        status: 'Aprobado RIGI',
+        isRigi: true,
+        investment: 6878,
+        refs: ['R2', 'R3', 'R14'],
+        coordinates: [-65.1, -40.75]
+      },
+      {
+        name: 'Oleoducto Vaca Muerta Sur (VMOS)',
+        company: 'Consorcio VMOS (YPF, PAE, Vista, etc.)',
+        kind: 'Oleoducto de 437 km a Punta Colorada',
+        status: 'Aprobado RIGI',
+        isRigi: true,
+        investment: 2900,
+        refs: ['R2', 'R3', 'R6', 'R14'],
+        coordinates: [-65.05, -41.69]
+      },
+      {
+        name: 'Gasoducto dedicado a San Matías',
+        company: 'Southern Energy',
+        kind: 'Gasoducto de 27 a 30 millones de m³/d',
+        status: 'Aprobado RIGI',
+        isRigi: true,
+        investment: 1300,
+        refs: ['R3', 'R7', 'R14'],
+        coordinates: [-65.3, -40.6]
+      },
+      {
+        name: 'GNL integrado de YPF, ENI y XRG',
+        company: 'YPF, ENI y XRG',
+        kind: 'GNL y gasoductos dedicados',
+        status: 'En evaluación RIGI',
+        isRigi: true,
+        refs: ['R3', 'R14'],
+        coordinates: [-65.12, -41.7]
+      }
+    ],
+    'general roca': [
+      {
+        name: 'Arenas de Cercanías',
+        company: 'Minera del Mojotoro y Orosmayo',
+        kind: 'Arena para fractura (frac sand)',
+        status: 'En evaluación RIGI',
+        isRigi: true,
+        investment: 232,
+        refs: ['R2', 'R14'],
+        coordinates: [-67.55, -39.03]
+      }
+    ]
+  },
+  'AR-M': {
+    'las heras': [
+      {
+        name: 'PSJ Cobre Mendocino',
+        company: 'Minera San Jorge (Solway Group)',
+        kind: 'Cobre y oro',
+        status: 'Aprobado RIGI',
+        isRigi: true,
+        investment: 891,
+        refs: ['R1', 'R3', 'R4', 'R14'],
+        coordinates: [-69.35, -32.59]
+      }
+    ]
+  },
+  'AR-B': {
+    'bahia blanca': [
+      {
+        name: 'LNG del Plata',
+        company: 'Camuzzi',
+        kind: 'GNL y logística portuaria',
+        status: 'En evaluación RIGI',
+        isRigi: true,
+        refs: ['R2', 'R14'],
+        coordinates: [-62.27, -38.78]
+      }
     ]
   },
   'AR-Z': {
     deseado: [
-      { name: 'Cerro Negro', company: 'Newmont', kind: 'Oro y plata', status: 'Producción' },
-      { name: 'Cerro Moro', company: 'Pan American Silver', kind: 'Oro y plata', status: 'Producción' },
-      { name: 'San José', company: 'Hochschild Mining', kind: 'Plata y oro', status: 'Producción' }
+      { name: 'Cerro Negro', company: 'Newmont', kind: 'Oro y plata', status: 'Producción', coordinates: [-70.1, -46.9] },
+      { name: 'Cerro Moro', company: 'Pan American Silver', kind: 'Oro y plata', status: 'Producción', coordinates: [-66.5, -48.0] },
+      { name: 'San José', company: 'Hochschild Mining', kind: 'Plata y oro', status: 'Producción', coordinates: [-70.3, -46.8] }
     ],
     magallanes: [
-      { name: 'Cerro Vanguardia', company: 'AngloGold Ashanti', kind: 'Oro y plata', status: 'Producción' }
+      { name: 'Cerro Vanguardia', company: 'AngloGold Ashanti', kind: 'Oro y plata', status: 'Producción', coordinates: [-68.2, -48.4] }
     ]
   }
 };
@@ -171,7 +538,35 @@ export function getDepartmentProjects(
   const provMap = DEPARTMENT_PROJECTS[provinceId];
   if (!provMap) return [];
   const normalized = normalizeName(departmentName);
-  return provMap[normalized] ?? [];
+  const found = provMap[normalized];
+  if (found) return found;
+
+  // Try partial or match
+  for (const [deptKey, projs] of Object.entries(provMap)) {
+    if (normalized.includes(deptKey) || deptKey.includes(normalized)) {
+      return projs;
+    }
+  }
+  return [];
+}
+
+/**
+ * Returns all registered projects for a province (across all departments or filtered to a department).
+ */
+export function getProvinceProjects(
+  provinceId: string,
+  departmentName?: string | null
+): DepartmentProject[] {
+  const provMap = DEPARTMENT_PROJECTS[provinceId];
+  if (!provMap) return [];
+  if (departmentName) {
+    return getDepartmentProjects(provinceId, departmentName);
+  }
+  const all: DepartmentProject[] = [];
+  for (const projs of Object.values(provMap)) {
+    all.push(...projs);
+  }
+  return all;
 }
 
 export type DrilldownKind = 'provinces' | 'departments' | 'minerals';
@@ -275,6 +670,12 @@ const DEPT_CANONICAL_NAMES: Record<string, string> = {
   'tinogasta': 'Tinogasta',
   'susques': 'Susques',
   'rinconada': 'Rinconada',
+  'anelo': 'Añelo',
+  'pehuenches': 'Pehuenches',
+  'san antonio': 'San Antonio',
+  'general roca': 'General Roca',
+  'las heras': 'Las Heras',
+  'bahia blanca': 'Bahía Blanca',
   'deseado': 'Deseado',
   'magallanes': 'Magallanes'
 };
@@ -300,4 +701,3 @@ export function getAllMiningProjects(): ProjectCatalogEntry[] {
   }
   return list;
 }
-

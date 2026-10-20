@@ -12,6 +12,19 @@ import { ZOOM_MAX, ZOOM_MIN } from '../navState.js';
 /** Name under which the component registers the GeoJSON with echarts. */
 export const MAP_NAME = 'ar-provinces';
 
+export interface ProjectMapMarker {
+  name: string;
+  coordinates: [number, number];
+  provinceId: string;
+  department?: string;
+  company?: string;
+  sector?: string;
+  kind?: string;
+  investment?: number | null;
+  status?: string;
+  isRigi?: boolean;
+}
+
 export interface ProvinceMapInput {
   geo: ProvincesGeo;
   values: MapValues;
@@ -19,6 +32,7 @@ export interface ProvinceMapInput {
   smallIds: string[];
   unit: string;
   indicatorLabel: string;
+  projectMarkers?: ProjectMapMarker[];
 }
 
 export interface ProvinceMapOpts {
@@ -31,16 +45,24 @@ export interface ProvinceMapOpts {
   observed?: boolean;
 }
 
-
 const nameOf = (id: string) => PROVINCES.find((p) => p.id === id)?.name;
 
 interface TooltipParams {
   name?: string;
-  data?: { provinceId?: string };
+  seriesType?: string;
+  data?: {
+    provinceId?: string;
+    company?: string;
+    kind?: string;
+    investment?: number | null;
+    status?: string;
+    isRigi?: boolean;
+    department?: string;
+  };
 }
 
 export function buildProvinceMap(input: ProvinceMapInput, opts: ProvinceMapOpts) {
-  const { geo, values, centroids, smallIds, unit, indicatorLabel } = input;
+  const { geo, values, centroids, smallIds, unit, indicatorLabel, projectMarkers } = input;
   const { metric, selectedId, scenario = 'expected', year, observed = false } = opts;
 
   const show = (x: number) => (metric === 'level' ? formatValue(x, unit) : `${formatPercent(x)} por año`);
@@ -55,6 +77,43 @@ export function buildProvinceMap(input: ProvinceMapInput, opts: ProvinceMapOpts)
     .filter((id) => centroids[id] !== undefined)
     .map((id) => ({ name: nameOf(id) ?? id, value: centroids[id]!, provinceId: id }));
 
+  const projectSeries =
+    projectMarkers && projectMarkers.length > 0
+      ? [
+          {
+            name: 'Proyectos',
+            type: 'scatter',
+            coordinateSystem: 'geo',
+            geoIndex: 0,
+            symbol: 'pin',
+            symbolSize: 22,
+            itemStyle: {
+              color: (p: { data?: { isRigi?: boolean } }) => (p?.data?.isRigi ? tokens.gold : tokens.blue),
+              borderColor: tokens.ink,
+              borderWidth: 1.5
+            },
+            emphasis: {
+              itemStyle: {
+                borderColor: tokens.ink,
+                borderWidth: 2
+              },
+              label: {
+                show: true,
+                position: 'top',
+                formatter: '{b}',
+                color: tokens.ink,
+                fontSize: 11
+              }
+            },
+            data: projectMarkers.map((m) => ({
+              name: m.name,
+              value: [...m.coordinates, m.investment ?? 1],
+              ...m
+            }))
+          }
+        ]
+      : [];
+
   const regions: Array<Record<string, unknown>> = [];
   if (selectedId !== null) {
     regions.push({ name: selectedId, itemStyle: { borderColor: tokens.ink, borderWidth: 2 } });
@@ -66,6 +125,21 @@ export function buildProvinceMap(input: ProvinceMapInput, opts: ProvinceMapOpts)
   });
 
   const tooltipFormatter = (params: TooltipParams): string => {
+    if (params.data && 'company' in params.data) {
+      const proj = params.data as ProjectMapMarker;
+      const invText = proj.investment ? `${proj.investment.toLocaleString('es-AR')} M USD` : 'A definir';
+      return [
+        `<strong>${params.name ?? ''}</strong>${proj.isRigi ? ' <span style="font-weight:bold;">★ RIGI</span>' : ''}`,
+        `Empresa: <strong>${proj.company ?? 'N/D'}</strong>`,
+        `Rubro: ${proj.kind ?? 'N/D'}`,
+        `Inversión: <strong>${invText}</strong>`,
+        `Estado: <strong>${proj.status ?? 'N/D'}</strong>`,
+        proj.department ? `Departamento: ${proj.department}` : ''
+      ]
+        .filter(Boolean)
+        .join('<br/>');
+    }
+
     const id = params.data?.provinceId ?? params.name ?? '';
     if (id === MALVINAS_ID) {
       return 'Islas Malvinas';
@@ -143,7 +217,8 @@ export function buildProvinceMap(input: ProvinceMapInput, opts: ProvinceMapOpts)
         itemStyle: { color: tokens.ink2, borderWidth: 2 },
         label: { show: true, position: 'right', formatter: '{b}', color: tokens.ink2 },
         data: markers
-      }
+      },
+      ...projectSeries
     ]
   };
 
@@ -169,7 +244,11 @@ export interface DepartmentGeoForMap {
   features: DepartmentFeatureForMap[];
 }
 
-export function buildDepartmentMap(deptGeo: DepartmentGeoForMap, provinceName: string) {
+export function buildDepartmentMap(
+  deptGeo: DepartmentGeoForMap,
+  provinceName: string,
+  projectMarkers?: ProjectMapMarker[]
+) {
   const mapName = `ar-dept-${deptGeo.provinceId}`;
   const items = deptGeo.features.map((f) => ({
     name: f.properties.departamento,
@@ -181,6 +260,45 @@ export function buildDepartmentMap(deptGeo: DepartmentGeoForMap, provinceName: s
     cabecera: f.properties.cabecera
   }));
 
+  const filteredProjects = projectMarkers ? projectMarkers.filter((p) => p.provinceId === deptGeo.provinceId) : [];
+
+  const projectSeries =
+    filteredProjects.length > 0
+      ? [
+          {
+            name: 'Proyectos departamentales',
+            type: 'scatter',
+            coordinateSystem: 'geo',
+            geoIndex: 0,
+            symbol: 'pin',
+            symbolSize: 24,
+            itemStyle: {
+              color: (p: { data?: { isRigi?: boolean } }) => (p?.data?.isRigi ? tokens.gold : tokens.blue),
+              borderColor: tokens.ink,
+              borderWidth: 1.5
+            },
+            emphasis: {
+              itemStyle: {
+                borderColor: tokens.ink,
+                borderWidth: 2
+              },
+              label: {
+                show: true,
+                position: 'top',
+                formatter: '{b}',
+                color: tokens.ink,
+                fontSize: 11
+              }
+            },
+            data: filteredProjects.map((m) => ({
+              name: m.name,
+              value: [...m.coordinates, m.investment ?? 1],
+              ...m
+            }))
+          }
+        ]
+      : [];
+
   const option = {
     animation: false,
     tooltip: {
@@ -189,7 +307,33 @@ export function buildDepartmentMap(deptGeo: DepartmentGeoForMap, provinceName: s
       borderColor: '#38bdf8',
       borderWidth: 1,
       textStyle: { color: tokens.ink },
-      formatter: (params: { data?: { cabecera?: string }; name?: string }) => {
+      formatter: (params: {
+        data?: {
+          cabecera?: string;
+          company?: string;
+          kind?: string;
+          investment?: number | null;
+          status?: string;
+          isRigi?: boolean;
+          department?: string;
+        };
+        name?: string;
+      }) => {
+        if (params.data && 'company' in params.data) {
+          const proj = params.data;
+          const invText = proj.investment ? `${proj.investment.toLocaleString('es-AR')} M USD` : 'A definir';
+          return [
+            `<strong>${params.name ?? ''}</strong>${proj.isRigi ? ' <span style="font-weight:bold;">★ RIGI</span>' : ''}`,
+            `Empresa: <strong>${proj.company ?? 'N/D'}</strong>`,
+            `Rubro: ${proj.kind ?? 'N/D'}`,
+            `Inversión: <strong>${invText}</strong>`,
+            `Estado: <strong>${proj.status ?? 'N/D'}</strong>`,
+            proj.department ? `Departamento: ${proj.department}` : ''
+          ]
+            .filter(Boolean)
+            .join('<br/>');
+        }
+
         const dName = params.name ?? '';
         const cabecera = params.data?.cabecera ?? deptGeo.features.find((f) => f.properties.departamento === dName)?.properties.cabecera ?? '';
         return `<strong>${dName}</strong><br/><span style="color:#94a3b8">Municipio / Cabecera:</span> <strong>${cabecera}</strong><br/><span style="color:#64748b">${provinceName}</span>`;
@@ -240,7 +384,8 @@ export function buildDepartmentMap(deptGeo: DepartmentGeoForMap, provinceName: s
           fontSize: 10
         },
         data: markers
-      }
+      },
+      ...projectSeries
     ]
   };
 
@@ -250,4 +395,3 @@ export function buildDepartmentMap(deptGeo: DepartmentGeoForMap, provinceName: s
     summary: `${provinceName}: división en ${deptGeo.features.length} departamentos y municipios.`
   };
 }
-
