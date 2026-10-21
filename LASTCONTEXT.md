@@ -10,9 +10,10 @@
   2. **Enriquecimiento del dataset RIGI (`rigiProjects.ts` y `provinceDrilldown.ts`)**:
      - Agregadas coordenadas geográficas `[lng, lat]`, departamentos normalizados e identificadores provinciales (`provinceIds`) para todos los proyectos mineros y energéticos del RIGI.
      - Funciones puras añadidas: `getAllRigiProjects`, `getRigiProjectsByProvince`, `getRigiProvinceTotals`, `getRigiTotalsSummary`, `rigiMapValues`, y `getProvinceProjects`.
-  3. **Corrección de test intermitente en CI (`andesScene.test.tsx` y `CrossingInfo.tsx`)**:
-     - `CrossingInfo`: Se aseguró captura en `window` y `document`, y se añadió handler `onKeyDown` nativo en el elemento `<section role="dialog">`.
-     - `andesScene.test.tsx`: La prueba `'closes the crossing pop-up with Escape'` ahora ejecuta el despacho de `Escape` sobre `document` y `document.body` dentro de `waitFor(..., { timeout: 5000 })`, evitando flakes por retrasos en el ciclo de vida de React bajo carga extrema de CI con 227 workers concurrentes.
+  3. **Estabilización de tests y listeners (`CrossingInfo.tsx`, `andesScene.test.tsx`, `aiStepCharts.test.tsx`)**:
+     - `CrossingInfo`: Se simplificó a listener estándar en `window` en fase bubble, permitiendo que la captura en `index.tsx` maneje el deseleccionado de eventos prioritariamente (evitando bloquear e2e) y cerrando el pop-up cuando no hay evento seleccionado.
+     - `andesScene.test.tsx`: Despacha `Escape` dentro de `waitFor(..., { timeout: 5000 })` para amortiguar la carga de concurrencia de CI.
+     - `aiStepCharts.test.tsx`: Añadido `unmount()` para cancelar `requestAnimationFrame` de `useTimeline`, previniendo errores residuales de scheduler post-teardown.
 
 ## Reglas operativas vigentes
 - **RULE #1**: Tests corren exclusivamente en CI (GitHub Actions), nunca localmente.

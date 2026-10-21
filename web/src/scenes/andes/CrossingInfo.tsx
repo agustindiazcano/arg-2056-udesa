@@ -10,15 +10,10 @@ export function CrossingInfo({ onClose }: { onClose: () => void }) {
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key !== 'Escape') return;
-      e.stopPropagation();
       onClose();
     };
-    window.addEventListener('keydown', onKey, true);
-    document.addEventListener('keydown', onKey, true);
-    return () => {
-      window.removeEventListener('keydown', onKey, true);
-      document.removeEventListener('keydown', onKey, true);
-    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
   }, [onClose]);
 
   return (
