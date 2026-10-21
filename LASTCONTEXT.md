@@ -10,12 +10,9 @@
   2. **Enriquecimiento del dataset RIGI (`rigiProjects.ts` y `provinceDrilldown.ts`)**:
      - Agregadas coordenadas geográficas `[lng, lat]`, departamentos normalizados e identificadores provinciales (`provinceIds`) para todos los proyectos mineros y energéticos del RIGI.
      - Funciones puras añadidas: `getAllRigiProjects`, `getRigiProjectsByProvince`, `getRigiProvinceTotals`, `getRigiTotalsSummary`, `rigiMapValues`, y `getProvinceProjects`.
-  3. **Sistema de diseño y tokens**:
-     - Adhesión estricta a la regla de no usar literales `#hex`/`rgba()` en archivos CSS fuera de `tokens.css` (verificado con `shellUi.test.tsx`).
-     - Estilos de tarjetas técnicas y badges implementados con `color-mix()` y variables semánticas (`--gold`, `--state-good`, `--state-warning`, `--blue`, `--surface`, `--ink`).
-  4. **TDD estricto y verificación CI en verde**:
-     - Test unitario completo en `web/tests/unit/slide2RigiUnify.test.tsx` cubriendo unificación, toggle RIGI y drilldown provincial.
-     - CI en GitHub Actions verificado en verde en run 39511316395 (python, web, e2e, terrain, data).
+  3. **Corrección de test intermitente en CI (`andesScene.test.tsx` y `CrossingInfo.tsx`)**:
+     - `CrossingInfo`: Se aseguró captura en `window` y `document`, y se añadió handler `onKeyDown` nativo en el elemento `<section role="dialog">`.
+     - `andesScene.test.tsx`: La prueba `'closes the crossing pop-up with Escape'` ahora ejecuta el despacho de `Escape` sobre `document` y `document.body` dentro de `waitFor(..., { timeout: 5000 })`, evitando flakes por retrasos en el ciclo de vida de React bajo carga extrema de CI con 227 workers concurrentes.
 
 ## Reglas operativas vigentes
 - **RULE #1**: Tests corren exclusivamente en CI (GitHub Actions), nunca localmente.
