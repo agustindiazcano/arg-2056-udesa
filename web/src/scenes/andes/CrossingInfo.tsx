@@ -13,12 +13,26 @@ export function CrossingInfo({ onClose }: { onClose: () => void }) {
       e.stopPropagation();
       onClose();
     };
+    window.addEventListener('keydown', onKey, true);
     document.addEventListener('keydown', onKey, true);
-    return () => document.removeEventListener('keydown', onKey, true);
+    return () => {
+      window.removeEventListener('keydown', onKey, true);
+      document.removeEventListener('keydown', onKey, true);
+    };
   }, [onClose]);
 
   return (
-    <section className="andes-crossing andes-glass" role="dialog" aria-labelledby="andes-crossing-title">
+    <section
+      className="andes-crossing andes-glass"
+      role="dialog"
+      aria-labelledby="andes-crossing-title"
+      onKeyDown={(e) => {
+        if (e.key === 'Escape') {
+          e.stopPropagation();
+          onClose();
+        }
+      }}
+    >
       <header>
         <h2 id="andes-crossing-title">Cómo fue el cruce</h2>
         <button type="button" className="chip" aria-label="Cerrar" onClick={onClose}>
