@@ -70,7 +70,7 @@ describe('Slide 3 / AiStep charts matching Slide 5 styles and palette', () => {
   });
 
   it('AiStep renders clean cards with rule70-card classes, headers and legend', () => {
-    const { container } = render(<AiStep />);
+    const { container, unmount } = render(<AiStep />);
 
     // Cards use rule70-card and rule70-card-head
     const cards = container.querySelectorAll('.rule70-card');
@@ -86,5 +86,7 @@ describe('Slide 3 / AiStep charts matching Slide 5 styles and palette', () => {
     // Indicators table uses rule70-table
     const table = container.querySelector('table.rule70-table');
     expect(table).not.toBeNull();
+
+    unmount();
   });
 });

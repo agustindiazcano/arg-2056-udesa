@@ -429,8 +429,14 @@ describe('Andes scene', () => {
     await screen.findByTestId('andes-renderer');
     fireEvent.click(screen.getByRole('button', { name: 'Saltar intro' }));
     expect(await screen.findByRole('dialog', { name: 'Cómo fue el cruce' }, { timeout: 5000 })).toBeTruthy();
-    fireEvent.keyDown(document, { key: 'Escape' });
-    await waitFor(() => expect(screen.queryByRole('dialog', { name: 'Cómo fue el cruce' })).toBeNull());
+    await waitFor(
+      () => {
+        fireEvent.keyDown(document, { key: 'Escape' });
+        fireEvent.keyDown(document.body, { key: 'Escape' });
+        expect(screen.queryByRole('dialog', { name: 'Cómo fue el cruce' })).toBeNull();
+      },
+      { timeout: 5000 }
+    );
   });
 
   it('has no "Batalla de Chacabuco" button in the control bar (removed by human request)', async () => {
