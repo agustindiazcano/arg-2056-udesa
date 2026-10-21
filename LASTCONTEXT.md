@@ -23,10 +23,14 @@
      - Entradas opcionales (`requiredBy: []`) en `web/src/data/registry.ts`.
   5. **Documentación**:
      - `docs/data-dictionary.md`: documentación completa de los cuatro contratos y fórmula matemática explícita de consistencia actuarial para $e_0$.
+  6. **Estabilización de tests y listeners (`CrossingInfo.tsx`, `andesScene.test.tsx`, `aiStepCharts.test.tsx`)**:
+     - `CrossingInfo`: Se simplificó a listener estándar en `window` en fase bubble, resolviendo la carrera en el cierre del modal con `Escape`.
+     - `andesScene.test.tsx`: Despacha `Escape` dentro de `waitFor(..., { timeout: 5000 })` en `document` y `document.body` para eliminar flakiness en CI bajo concurrencia.
+     - `aiStepCharts.test.tsx`: Llamada a `unmount()` para cancelar el rAF pendiente del hook antes del teardown.
 
 ## Reglas operativas vigentes
 - **RULE #1**: Tests corren exclusivamente en CI (GitHub Actions), nunca localmente.
-- Commits atómicos: `test(...)`, `feat(...)`, `data(...)`, `docs(...)`.
+- Commits atómicos: `test(...)`, `feat(...)`, `data(...)`, `docs(...)`, `fix(...)`.
 - Sin dependencias nuevas, sin silenciamiento de checkers.
 
 ## Next
