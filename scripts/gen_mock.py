@@ -1075,6 +1075,132 @@ def gen_dataset_catalog(rng):
     data.append(rec_no)
     return data
 
+
+def gen_population_by_age(rng, pop_data=None):
+    """Population by age (0-100) and year for AR, 2000 to 2005. Sum matches population.json."""
+    pop_map = {}
+    if pop_data:
+        for p in pop_data:
+            if p.get("geo") == "AR":
+                pop_map[p.get("year")] = p.get("value")
+
+    w_raw = [max(0.0001, (1.0 - (a / 105.0) ** 1.8)) * math.exp(-0.005 * a) for a in range(101)]
+    w_sum = sum(w_raw)
+    weights = [w / w_sum for w in w_raw]
+
+    data = []
+    for year in range(2000, 2006):
+        if year in pop_map:
+            total_pop = pop_map[year]
+        else:
+            total_pop = round(interp_log(POPULATION_ANCHORS["ARG"], year))
+
+        persons = [round(total_pop * w) for w in weights]
+        diff = total_pop - sum(persons)
+        persons[30] += diff
+
+        for a in range(101):
+            data.append({
+                "geo": "AR",
+                "year": year,
+                "age": a,
+                "sex": "both",
+                "persons": float(persons[a]),
+                "source": "MOCK",
+                "retrieved_at": RETRIEVED_AT,
+            })
+    return data
+
+
+def gen_fertility_schedule(rng):
+    """Age pattern of fertility (15-49) and year for AR, 2000 to 2005. shape_f sums to 1."""
+    ages = range(15, 50)
+    raw_shape = [math.exp(-0.5 * ((a - 27.0) / 6.0) ** 2) for a in ages]
+    s_sum = sum(raw_shape)
+    shape = [round(s / s_sum, 6) for s in raw_shape]
+    diff = round(1.0 - sum(shape), 6)
+    shape[27 - 15] = round(shape[27 - 15] + diff, 6)
+
+    data = []
+    for year in range(2000, 2006):
+        tfr = round(2.40 - 0.02 * (year - 2000), 2)
+        for a in ages:
+            data.append({
+                "geo": "AR",
+                "year": year,
+                "age": a,
+                "shape_f": shape[a - 15],
+                "female_share": 0.49,
+                "tfr": tfr,
+                "source": "MOCK",
+                "retrieved_at": RETRIEVED_AT,
+            })
+    return data
+
+
+def gen_life_table(rng):
+    """Standard life table (ages 0-100) for AR, 2000 to 2005. e0 matches implied survivorship."""
+    data = []
+    for year in range(2000, 2006):
+        survivals = []
+        for a in range(101):
+            if a == 0:
+                s = 0.985 + 0.001 * (year - 2000)
+            elif a <= 40:
+                s = 0.998
+            elif a <= 70:
+                s = 0.998 - 0.002 * (a - 40)
+            elif a < 100:
+                s = 0.938 - 0.015 * (a - 70)
+            else:
+                s = 0.65
+            survivals.append(round(max(0.1, min(0.999, s)), 5))
+
+        l_surv = [1.0]
+        for a in range(100):
+            l_surv.append(l_surv[-1] * survivals[a])
+        sum_l_mid = sum(0.5 * (l_surv[a] + l_surv[a + 1]) for a in range(100))
+        l_open = l_surv[100] / (1.0 - survivals[100])
+        e0 = round(sum_l_mid + l_open, 2)
+
+        for a in range(101):
+            data.append({
+                "geo": "AR",
+                "year": year,
+                "age": a,
+                "survival": survivals[a],
+                "e0": e0,
+                "source": "MOCK",
+                "retrieved_at": RETRIEVED_AT,
+            })
+    return data
+
+
+def gen_migration_schedule(rng):
+    """Age pattern of migration (0-100) for AR, 2000 to 2005. shape_m sums to 1."""
+    ages = range(101)
+    raw_shape = [math.exp(-0.5 * ((a - 26.0) / 8.0) ** 2) for a in ages]
+    m_sum = sum(raw_shape)
+    shape = [round(s / m_sum, 6) for s in raw_shape]
+    diff = round(1.0 - sum(shape), 6)
+    shape[26] = round(shape[26] + diff, 6)
+
+    data = []
+    for year in range(2000, 2006):
+        net_migrants = round(5000.0 - 200.0 * (year - 2000), 1)
+        for a in ages:
+            data.append({
+                "geo": "AR",
+                "year": year,
+                "age": a,
+                "shape_m": shape[a],
+                "net_migrants": net_migrants,
+                "source": "MOCK",
+                "retrieved_at": RETRIEVED_AT,
+            })
+    return data
+
+
 def main(out_dir: str):
     rng = random.Random(SEED)
     out = Path(out_dir)
@@ -1088,6 +1214,18 @@ def main(out_dir: str):
     
     pop = gen_population(rng)
     dump_json(pop, out / "population.json")
+
+    pop_age = gen_population_by_age(rng, pop)
+    dump_json(pop_age, out / "population_by_age.json")
+
+    fert = gen_fertility_schedule(rng)
+    dump_json(fert, out / "fertility_schedule.json")
+
+    lt = gen_life_table(rng)
+    dump_json(lt, out / "life_table.json")
+
+    mig = gen_migration_schedule(rng)
+    dump_json(mig, out / "migration_schedule.json")
     
     andes = gen_andes_events(rng)
     dump_json(andes, out / "andes_events.json")

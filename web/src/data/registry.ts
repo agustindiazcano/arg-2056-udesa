@@ -10,6 +10,7 @@ import { parseReferences } from '../types/references';
 import { parseAiEstimates, parseBaseRates, parseDatasetCatalog, parseExternalForecasts, parseForecastVintages } from '../types/research';
 import { parseResourceProduction } from '../types/resourceProduction';
 import { parseAndesEvents } from '../scenes/andes/data';
+import { parseFertilitySchedule, parseLifeTable, parseMigrationSchedule, parsePopulationByAge } from '../types/populationAge';
 
 export interface Dataset {
   /** file name inside public/data */
@@ -39,9 +40,13 @@ export const DATASETS: readonly Dataset[] = [
   { file: 'dataset_catalog.json', parse: parseDatasetCatalog, requiredBy: [] },
   { file: 'economy_series.json', parse: parseEconomySeries, requiredBy: ['economy'] },
   { file: 'external_forecasts.json', parse: parseExternalForecasts, requiredBy: [] },
+  { file: 'fertility_schedule.json', parse: parseFertilitySchedule, requiredBy: [] },
   { file: 'forecast_output.json', parse: parseForecastOutput, requiredBy: ['forecast', 'sandbox'] },
   { file: 'forecast_vintages.json', parse: parseForecastVintages, requiredBy: [] },
+  { file: 'life_table.json', parse: parseLifeTable, requiredBy: [] },
+  { file: 'migration_schedule.json', parse: parseMigrationSchedule, requiredBy: [] },
   { file: 'population.json', parse: schemaParser('population', 'population'), requiredBy: [] },
+  { file: 'population_by_age.json', parse: parsePopulationByAge, requiredBy: [] },
   { file: 'production_projections.json', parse: parseProductionProjections, requiredBy: [] },
   { file: 'projects.json', parse: parseProjects, requiredBy: ['resources'] },
   // written by scripts/build_references.py and read by the standalone References page, not by a scene

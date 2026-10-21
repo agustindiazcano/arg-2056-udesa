@@ -35,10 +35,10 @@ def main():
             has_errors = True
             continue
             
-        with open(schema_path) as f:
+        with open(schema_path, encoding="utf-8") as f:
             schema = json.load(f)
             
-        with open(data_file) as f:
+        with open(data_file, encoding="utf-8") as f:
             data = json.load(f)
             
         validator = Draft202012Validator(schema, format_checker=FormatChecker())
@@ -84,7 +84,7 @@ def main():
                 
                 projects = []
                 if projects_path.exists():
-                    with open(projects_path) as pf:
+                    with open(projects_path, encoding="utf-8") as pf:
                         projects = json.load(pf)
                 
                 from dataset_checks import check_projections
@@ -137,6 +137,47 @@ def main():
                 if extra_errors:
                     for e in extra_errors:
                         print(f"ERROR: {data_file.name} failed dataset_catalog checks: {e}", file=sys.stderr)
+                    has_errors = True
+                else:
+                    print(f"OK: {data_file.name}")
+            elif data_file.name == "population_by_age.json":
+                from dataset_checks import check_population_by_age
+                pop_records = None
+                pop_path = processed_dir / "population.json"
+                if pop_path.exists():
+                    with open(pop_path, encoding="utf-8") as pf:
+                        pop_records = json.load(pf)
+                extra_errors = check_population_by_age(data, pop_records)
+                if extra_errors:
+                    for e in extra_errors:
+                        print(f"ERROR: {data_file.name} failed population_by_age checks: {e}", file=sys.stderr)
+                    has_errors = True
+                else:
+                    print(f"OK: {data_file.name}")
+            elif data_file.name == "fertility_schedule.json":
+                from dataset_checks import check_fertility_schedule
+                extra_errors = check_fertility_schedule(data)
+                if extra_errors:
+                    for e in extra_errors:
+                        print(f"ERROR: {data_file.name} failed fertility_schedule checks: {e}", file=sys.stderr)
+                    has_errors = True
+                else:
+                    print(f"OK: {data_file.name}")
+            elif data_file.name == "life_table.json":
+                from dataset_checks import check_life_table
+                extra_errors = check_life_table(data)
+                if extra_errors:
+                    for e in extra_errors:
+                        print(f"ERROR: {data_file.name} failed life_table checks: {e}", file=sys.stderr)
+                    has_errors = True
+                else:
+                    print(f"OK: {data_file.name}")
+            elif data_file.name == "migration_schedule.json":
+                from dataset_checks import check_migration_schedule
+                extra_errors = check_migration_schedule(data)
+                if extra_errors:
+                    for e in extra_errors:
+                        print(f"ERROR: {data_file.name} failed migration_schedule checks: {e}", file=sys.stderr)
                     has_errors = True
                 else:
                     print(f"OK: {data_file.name}")

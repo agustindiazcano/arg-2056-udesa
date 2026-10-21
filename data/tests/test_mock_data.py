@@ -37,7 +37,7 @@ def test_determinism(tmp_path):
     files1 = sorted(dir1.glob("*.json"))
     files2 = sorted(dir2.glob("*.json"))
     
-    assert len(files1) == 13
+    assert len(files1) == 17
     assert len(files1) == len(files2)
     
     for f1, f2 in zip(files1, files2):
@@ -45,7 +45,12 @@ def test_determinism(tmp_path):
         assert f1.read_bytes() == f2.read_bytes()
 
 def test_schemas(generated_mock_data):
-    files = ["economy_series", "resource_production", "population", "andes_events", "composition", "projects", "production_projections", "external_forecasts", "forecast_vintages", "base_rates", "ai_estimates", "dataset_catalog"]
+    files = [
+        "economy_series", "resource_production", "population", "andes_events",
+        "composition", "projects", "production_projections", "external_forecasts",
+        "forecast_vintages", "base_rates", "ai_estimates", "dataset_catalog",
+        "population_by_age", "fertility_schedule", "life_table", "migration_schedule"
+    ]
     for fname in files:
         data_path = generated_mock_data / f"{fname}.json"
         assert data_path.exists(), f"{fname}.json not generated"
