@@ -22,17 +22,7 @@ export function CrossingInfo({ onClose }: { onClose: () => void }) {
   }, [onClose]);
 
   return (
-    <section
-      className="andes-crossing andes-glass"
-      role="dialog"
-      aria-labelledby="andes-crossing-title"
-      onKeyDown={(e) => {
-        if (e.key === 'Escape') {
-          e.stopPropagation();
-          onClose();
-        }
-      }}
-    >
+    <section className="andes-crossing andes-glass" role="dialog" aria-labelledby="andes-crossing-title">
       <header>
         <h2 id="andes-crossing-title">Cómo fue el cruce</h2>
         <button type="button" className="chip" aria-label="Cerrar" onClick={onClose}>
