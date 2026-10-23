@@ -1,5 +1,6 @@
 import agro from './agroArgentina.json';
 import energy from './energyArgentina.json';
+import { livestockParts } from './livestockArgentina.js';
 import { EXPORT_COMPLEXES } from './tourData.js';
 
 /** Years of the crop series shown in the Resources slide (campaign start years in the MAGyP files). */
@@ -93,9 +94,9 @@ export function breakdown(sector: ResourceSector): Breakdown {
   const { campaigns, series } = agroTonnes();
   const i = campaigns.indexOf(2024);
   return {
-    title: 'Agro: producción de la campaña 2024/25 por cultivo',
+    title: 'Agro: cultivos de la campaña 2024/25 y ganadería de 2025',
     unit: 'millones de toneladas',
-    parts: series.map((s) => ({ label: s.crop, value: s.values[i] ?? 0 })).filter((p) => p.value > 0)
+    parts: [...series.map((s) => ({ label: s.crop, value: s.values[i] ?? 0 })).filter((p) => p.value > 0), ...livestockParts()]
   };
 }
 
@@ -115,8 +116,10 @@ const es = (v: number, digits = 1): string => v.toLocaleString('es-AR', { minimu
 export function totals(view: ResourceSector | 'total'): Total[] {
   const exportsBn = sectorExports();
   const bySector = (label: string) => exportsBn.find((p) => p.label === label)?.value ?? 0;
-  const crops = breakdown('agro').parts;
+  const cropLabels = new Set(agroTonnes().series.map((s) => s.crop));
+  const crops = breakdown('agro').parts.filter((p) => cropLabels.has(p.label));
   const cropsMt = crops.reduce((sum, p) => sum + p.value, 0);
+  const meatMt = livestockParts().filter((p) => p.label.startsWith('Carne')).reduce((sum, p) => sum + p.value, 0);
   const oil2025 = (energy.national as Record<string, { oil_kbd: number; gas_mmm3d: number }>)['2025']!;
   const provedOilMm3 = energy.reserves.proved.oil_mm3;
   const provedGas = energy.reserves.proved.gas_mmm3;
@@ -140,7 +143,8 @@ export function totals(view: ResourceSector | 'total'): Total[] {
   ];
   const agro: Total[] = [
     { label: 'Exportaciones del agro, 2025', value: es(bySector('Agro')), unit: 'miles de millones de USD' },
-    { label: 'Cosecha 2024/25 de soja, maíz, trigo y girasol', value: es(cropsMt), unit: 'millones de toneladas' }
+    { label: 'Cosecha 2024/25 de soja, maíz, trigo y girasol', value: es(cropsMt), unit: 'millones de toneladas' },
+    { label: 'Producción de carne en 2025 (bovina, aviar y porcina)', value: es(meatMt), unit: 'millones de toneladas' }
   ];
   if (view === 'mineria') return mineria;
   if (view === 'hidrocarburos') return hidrocarburos;
