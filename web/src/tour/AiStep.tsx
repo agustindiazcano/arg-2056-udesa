@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { EChart } from '../charts/EChart.js';
 import { addMilestones } from '../charts/builders/milestones.js';
+import { addReferenceLines } from '../charts/builders/referenceLines.js';
 import { buildFluidLines } from '../charts/builders/tourCharts.js';
 import { formatValue } from '../charts/format.js';
 import { FOLLOW_MS, followFrame } from '../charts3d/followAnim.js';
@@ -15,6 +16,8 @@ import { TourChart } from './TourChart.js';
 import { tokens } from '../styles/tokens.js';
 import { AI_SCENARIOS } from './aiScenarios.js';
 import { perCapitaSeries, populationPath, summaries } from './aiModel.js';
+import { countryReferences } from './countryReferences.js';
+import type { CountryReference } from './countryReferences.js';
 import { GDP_UNIT } from './gdpFacts.js';
 import { AI_TITLE } from './slideTitles.js';
 import { STEP_INFO } from './stepInfo.js';
@@ -58,7 +61,8 @@ function lineOption(
   summary: string,
   withDots = false,
   baseValue?: number | null,
-  labelEvery = 5
+  labelEvery = 5,
+  refs: readonly CountryReference[] = []
 ) {
   const { option } = buildFluidLines(years, series, year, {
     unit,
@@ -66,7 +70,14 @@ function lineOption(
     summary,
     showHead: true
   });
-  return withDots ? addMilestones(option, years, series, year, baseValue) : option;
+  const withRefs = addReferenceLines(option, refs, { range: axisRange(series).max - axisRange(series).min, unit });
+  return withDots ? addMilestones(withRefs, years, series, year, baseValue) : withRefs;
+}
+
+/** The y range `buildFluidLines` gives the axis of these lines (the same margins). */
+function axisRange(series: Line[]): { min: number; max: number } {
+  const all = series.flatMap((s) => s.values.filter((v): v is number => v !== null && Number.isFinite(v)));
+  return { min: Math.floor(Math.min(...all) * 0.97), max: Math.ceil(Math.max(...all) * 1.02) };
 }
 
 /**
@@ -126,13 +137,17 @@ export function AiStep() {
   const bigInterval = from1960 ? 15 : 5;
   const smallInterval = from1960 ? 25 : 10;
 
+  // where each compared country stands today: only those inside the range of the chart, so they never stretch the axis
+  const gdpRefs = useMemo(() => countryReferences('gdp', axisRange(gdpLines)), [gdpLines]);
+  const perCapitaRefs = useMemo(() => countryReferences('percapita', { ...axisRange(perCapitaLines), scale: 1000 }), [perCapitaLines]);
+
   const big = useMemo(
-    () => lineOption(activeYears, gdpLines, year, gdp.unit, gdpSummary, true, gdp.series[0]!.values[0], bigInterval),
-    [activeYears, gdpLines, year, gdp, gdpSummary, bigInterval]
+    () => lineOption(activeYears, gdpLines, year, gdp.unit, gdpSummary, true, gdp.series[0]!.values[0], bigInterval, gdpRefs),
+    [activeYears, gdpLines, year, gdp, gdpSummary, bigInterval, gdpRefs]
   );
   const small = useMemo(
-    () => lineOption(perCapitaYears, perCapitaLines, year, perCapita.unit, perCapitaSummary, false, undefined, smallInterval),
-    [perCapitaYears, perCapitaLines, year, perCapita, perCapitaSummary, smallInterval]
+    () => lineOption(perCapitaYears, perCapitaLines, year, perCapita.unit, perCapitaSummary, false, undefined, smallInterval, perCapitaRefs),
+    [perCapitaYears, perCapitaLines, year, perCapita, perCapitaSummary, smallInterval, perCapitaRefs]
   );
   const bigSpec = useMemo(
     () =>
