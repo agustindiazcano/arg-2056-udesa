@@ -2522,6 +2522,35 @@ main.scene-container {
 
 .ai-subcard .rule70-card-head {
   font-size: 0.82rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.35rem;
+}
+
+.ai-subcard--pick {
+  cursor: pointer;
+}
+
+.ai-expand {
+  padding: 0.1rem 0.5rem;
+  font-size: 0.75rem;
+}
+
+/* the right column keeps the charts and the indicators on screen: the indicators scroll instead of being cut */
+.ai-side-col {
+  grid-template-rows: minmax(9rem, 0.8fr) minmax(0, 1.2fr);
+}
+
+.ai-side-col > .ai-numbers {
+  overflow-y: auto;
+}
+
+.ai-numbers th,
+.ai-numbers td,
+.ai-summary li {
+  overflow-wrap: anywhere;
 }
 
 .ai-subcard-chart {
