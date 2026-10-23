@@ -14,7 +14,7 @@ import { INDEX_STEP, TOUR_ORDER, stepNumber } from '../../src/tour/chartSteps';
 import { indexItems } from '../../src/tour/indexData';
 import { ExportsStep } from '../../src/tour/ExportsStep';
 import { Rule70Step } from '../../src/tour/Rule70Step';
-import { COMPOSITION_TITLE, EXPORTS_TITLE, FORECAST_UNCERTAINTY_TITLE, PRODUCTIVITY_TITLE, RULE70_TITLE } from '../../src/tour/slideTitles';
+import { COMPOSITION_TITLE, EXPORTS_TITLE, AI_PYRAMID_TITLE, FORECAST_UNCERTAINTY_TITLE, PRODUCTIVITY_TITLE, RULE70_TITLE } from '../../src/tour/slideTitles';
 import { TOUR_CHARTS } from '../../src/tour/tourCharts';
 import { useStore } from '../../src/state/store';
 import { useTourLayout } from '../../src/tour/useTourLayout';
@@ -48,7 +48,8 @@ describe('the first slide: the title and the index', () => {
     expect(list.map((li) => li.textContent)).toEqual(indexItems().map((i) => `${i.number} · ${i.title}`));
     expect(list[0]!.textContent).toBe('1 · El PBI de Argentina desde 1960');
     expect(list[4]!.textContent).toBe(`5 · ${PRODUCTIVITY_TITLE}`);
-    expect(list.at(-1)!.textContent).toBe(`${rest.length} · ${FORECAST_UNCERTAINTY_TITLE}`);
+    expect(list[7]!.textContent).toBe(`8 · ${FORECAST_UNCERTAINTY_TITLE}`);
+    expect(list.at(-1)!.textContent).toBe(`${rest.length} · ${AI_PYRAMID_TITLE}`);
   });
 
   it('uses the title each slide shows as its own heading', () => {

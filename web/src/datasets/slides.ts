@@ -21,7 +21,9 @@ import { stepNumber } from '../tour/chartSteps.js';
 import { AGRO_TONNES_CHART, AGRO_USD_CHART, EXPORT_COMPOSITION_CHART, HYDROCARBONS_CHART, STOCK_CHART, TOUR_CHARTS } from '../tour/tourCharts.js';
 import { perCapitaSeries, populationPath } from '../tour/aiModel.js';
 import { AI_ANALYSTS, AI_SCENARIOS, US_SCENARIOS } from '../tour/aiScenarios.js';
-import { COMPOSITION_TITLE, DEVELOPMENT_TITLE, FORECAST_UNCERTAINTY_TITLE, RESOURCES_TITLE } from '../tour/slideTitles.js';
+import { ACCESS_COUNTRIES, PLANS, accessRows } from '../tour/aiAccess.js';
+import { DRAFT_SLIDES } from '../tour/draftSlides.js';
+import { AI_ACCESS_TITLE, COMPOSITION_TITLE, DEVELOPMENT_TITLE, FORECAST_UNCERTAINTY_TITLE, RESOURCES_TITLE } from '../tour/slideTitles.js';
 import { exportRows } from '../tour/exportsData.js';
 import { countriesTable } from '../tour/rule70Countries.js';
 import { imfTable } from '../tour/rule70Imf.js';
@@ -546,6 +548,21 @@ export function buildSlides(): SlideData[] {
         ]
       }
     ], false, ['D3', 'A1', 'A8', 'F1']),
+    slide('21', AI_ACCESS_TITLE, [
+      {
+        id: 'ai-plans-cost',
+        title: 'Costo mensual de los planes de IA con impuestos, pagando con tarjeta (USD)',
+        columns: ['País', 'Plan (USD)', 'Impuestos (%)', 'Impuestos (USD)', 'Total por mes (USD)', 'De más por año (USD)'],
+        rows: PLANS.flatMap((p) => accessRows(p.price).map((r) => [r.country, p.price, ACCESS_COUNTRIES.find((c) => c.name === r.country)!.taxes.reduce((s, t) => s + t.pct, 0), Math.round(r.taxes * 100) / 100, Math.round(r.total * 100) / 100, Math.round(r.yearlyExtra * 100) / 100]))
+      },
+      {
+        id: 'ai-plans-taxes',
+        title: 'Impuestos que se suman al precio de lista por país',
+        columns: ['País', 'Impuesto', 'Porcentaje'],
+        rows: ACCESS_COUNTRIES.flatMap((c) => (c.taxes.length === 0 ? [[c.name, 'Sin impuesto nacional', 0]] : c.taxes.map((t) => [c.name, t.label, t.pct])))
+      }
+    ], false, ['A20', 'A21', 'A22']),
+    ...DRAFT_SLIDES.map((d) => slide(String(d.id), d.title, [{ id: `draft-${d.id}`, title: 'Temas de la diapositiva', columns: ['Tema', 'Descripción'], rows: d.topics.map((t) => [t.heading, t.text]) }], false)),
     slide('sim', 'Simulador del PBI', [
       { id: 'factors', title: 'Factores del escenario de referencia', columns: ['Factor', 'Valor', 'Unidad'], rows: SIM_FIELDS.map((f) => [f.label, DEFAULT_SIM[f.key], f.unit]) },
       { id: 'reference', title: 'PBI del escenario de referencia (miles de millones de USD)', columns: ['Año', 'PBI'], rows: sim.years.map((y, i) => [y, sim.gdp[i] ?? null]) }
