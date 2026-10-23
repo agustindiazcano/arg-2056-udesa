@@ -99,7 +99,14 @@ export const TABLE_META: Readonly<Record<string, TableMeta>> = {
   'ai-inference-costs': meta('real', 'Stanford HAI (AI Index 2025) y Artificial Analysis, costo por 1M tokens', '2026-10-18'),
   'macro-forecast-errors': meta('real', 'FMI (WEO Historical Database) e INDEC, desvíos observados vs proyectados', '2026-10-18'),
   'development-draft': draft('Estructura conceptual de indicadores agregados, cobertura y dimensiones sociales'),
-  'forecast-uncertainty-draft': draft('Estructura conceptual de difusión tecnológica, costos de computación y sensibilidad distributiva')
+  'forecast-uncertainty-draft': draft('Estructura conceptual de difusión tecnológica, costos de computación y sensibilidad distributiva'),
+  'ai-plans-cost': meta('partial', 'Precios de lista de OpenAI, Anthropic y Google según blogs de comparación; impuestos de Argentina (RG 4240 y RG 5617) según notas contables; IVA general de cada país', '2026-10-23'),
+  'ai-plans-taxes': meta('partial', 'Notas contables sobre RG 4240 y RG 5617 (Argentina); tasas generales de IVA o GST de cada país', '2026-10-23'),
+  'draft-22': draft('Esquema de temas del borrador'),
+  'draft-23': draft('Esquema de temas del borrador'),
+  'draft-24': draft('Esquema de temas del borrador'),
+  'draft-25': draft('Esquema de temas del borrador'),
+  'draft-26': draft('Esquema de temas del borrador')
 };
 
 /** The table with its quality, source and retrieval date; throws if the registry does not know it, so a new table cannot go without them. */
