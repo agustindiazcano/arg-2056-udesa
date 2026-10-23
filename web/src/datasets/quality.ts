@@ -74,6 +74,7 @@ export const TABLE_META: Readonly<Record<string, TableMeta>> = {
   'rigi-oil-gas': meta('partial', PRESS, '2026-10-13'),
   'chart-10': made(),
   'agro-tonnes': meta('real', 'MAGyP, series anuales nacionales (datos.gob.ar); millones de toneladas', '2026-10-13'),
+  'agro-livestock': meta('partial', 'Bolsa de Comercio de Rosario, balance cárnico y lácteo 2025 (estimación, con datos de la SAGyP y del OCLA)', '2026-10-23'),
   'agro-production': meta('real', 'MAGyP, series nacionales anuales (datos.gob.ar)', '2026-10-13'),
   'chart-11': meta('real', INDEC_X, '2026-10-13'),
   'exports-shares': meta('real', `${INDEC_X}; porcentajes calculados`, '2026-10-13'),
