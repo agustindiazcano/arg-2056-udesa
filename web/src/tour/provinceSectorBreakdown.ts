@@ -1,5 +1,6 @@
 import { PROVINCES } from '../types/province.js';
 import type { ProvinceId } from '../types/province.js';
+import { agroParts } from './agroProvince.js';
 import { PRODUCTION_UNIT, PRODUCER_MIN, SECTOR_VALUES } from './provinceMock.js';
 import type { Sector } from './provinceMock.js';
 import { RESOURCE_SECTORS, breakdown, sectorExports } from './resourcesData.js';
@@ -118,107 +119,10 @@ export const PROVINCE_HYDROCARBONS_BREAKDOWN: Partial<Record<ProvinceId, Part[]>
   ]
 };
 
-/** Detailed agro production by province (million USD), matching SECTOR_VALUES.agro. */
-export const PROVINCE_AGRO_BREAKDOWN: Partial<Record<ProvinceId, Part[]>> = {
-  'AR-B': [
-    { label: 'Soja', value: 6200 },
-    { label: 'Maíz', value: 4100 },
-    { label: 'Trigo', value: 3100 },
-    { label: 'Bovinos y lácteos', value: 2100 }
-  ],
-  'AR-S': [
-    { label: 'Soja', value: 5500 },
-    { label: 'Maíz', value: 3800 },
-    { label: 'Lácteos y bovinos', value: 2300 },
-    { label: 'Trigo y girasol', value: 1200 }
-  ],
-  'AR-X': [
-    { label: 'Maíz', value: 4800 },
-    { label: 'Soja', value: 4500 },
-    { label: 'Maní y especialidades', value: 1500 },
-    { label: 'Lácteos y carne', value: 1000 }
-  ],
-  'AR-E': [
-    { label: 'Avícola y porcino', value: 1400 },
-    { label: 'Soja y maíz', value: 1300 },
-    { label: 'Arroz y cítricos', value: 1200 }
-  ],
-  'AR-L': [
-    { label: 'Ganadería bovina', value: 1200 },
-    { label: 'Trigo y cebada', value: 900 },
-    { label: 'Girasol y maíz', value: 700 }
-  ],
-  'AR-G': [
-    { label: 'Soja y maíz', value: 1600 },
-    { label: 'Algodón', value: 700 },
-    { label: 'Ganadería', value: 400 }
-  ],
-  'AR-M': [
-    { label: 'Vitivinicultura (uva y vino)', value: 1600 },
-    { label: 'Frutas y hortalizas', value: 700 }
-  ],
-  'AR-H': [
-    { label: 'Algodón', value: 900 },
-    { label: 'Soja y maíz', value: 800 },
-    { label: 'Girasol', value: 400 }
-  ],
-  'AR-W': [
-    { label: 'Arroz', value: 700 },
-    { label: 'Cítricos y forestal', value: 600 },
-    { label: 'Ganadería', value: 400 }
-  ],
-  'AR-A': [
-    { label: 'Granos y oleaginosas', value: 750 },
-    { label: 'Legumbres (porotos)', value: 380 },
-    { label: 'Tabaco', value: 220 },
-    { label: 'Azúcar y cítricos', value: 150 }
-  ],
-  'AR-T': [
-    { label: 'Azúcar y bioetanol', value: 750 },
-    { label: 'Limón y cítricos', value: 650 }
-  ],
-  'AR-D': [
-    { label: 'Maíz y soja', value: 700 },
-    { label: 'Ganadería bovina', value: 600 }
-  ],
-  'AR-N': [
-    { label: 'Yerba mate y té', value: 850 },
-    { label: 'Forestal', value: 350 }
-  ],
-  'AR-R': [
-    { label: 'Manzanas y peras', value: 800 },
-    { label: 'Hortalizas y frutos secos', value: 300 }
-  ],
-  'AR-P': [
-    { label: 'Ganadería', value: 350 },
-    { label: 'Algodón y granos', value: 300 }
-  ],
-  'AR-J': [
-    { label: 'Vid y olivo', value: 300 },
-    { label: 'Hortalizas y semillas', value: 150 }
-  ],
-  'AR-Y': [
-    { label: 'Caña de azúcar', value: 250 },
-    { label: 'Tabaco y cítricos', value: 200 }
-  ],
-  'AR-U': [
-    { label: 'Ovina y lana', value: 250 },
-    { label: 'Cerezas y frutos finos', value: 100 }
-  ],
-  'AR-Q': [
-    { label: 'Frutas de pepita', value: 200 },
-    { label: 'Hortalizas y pasturas', value: 100 }
-  ],
-  'AR-Z': [{ label: 'Ganadería ovina (lana y carne)', value: 280 }],
-  'AR-F': [
-    { label: 'Olivo y aceite', value: 150 },
-    { label: 'Vid y nueces', value: 100 }
-  ],
-  'AR-K': [
-    { label: 'Olivo y nueces', value: 130 },
-    { label: 'Vid y forrajes', value: 90 }
-  ]
-};
+/** What the four main crops of each province are worth (million USD, MAGyP campaign 2024/25 at FOB prices), matching SECTOR_VALUES.agro. */
+export const PROVINCE_AGRO_BREAKDOWN: Partial<Record<ProvinceId, Part[]>> = Object.fromEntries(
+  PROVINCES.map((p) => [p.id, agroParts(p.id).map((x) => ({ label: x.label, value: Math.round(x.value) }))] as const).filter(([, parts]) => parts.length > 0)
+);
 
 const SECTOR_PROVINCE_TABLES: Record<Sector, Partial<Record<ProvinceId, Part[]>>> = {
   mineria: PROVINCE_MINING_BREAKDOWN,
