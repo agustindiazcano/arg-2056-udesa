@@ -3828,3 +3828,21 @@ button.brand:focus-visible .brand-a {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
+
+.semaphore-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin: 0 0 0.35rem;
+  font-size: 0.75rem;
+  color: var(--ink-2);
+}
+
+.semaphore-legend i,
+.semaphore-dot {
+  display: inline-block;
+  width: 0.65rem;
+  height: 0.65rem;
+  margin-right: 0.35rem;
+  border-radius: 50%;
+}
