@@ -74,8 +74,8 @@ describe('the Data page after the series migration', () => {
 
   it('marks as placeholder the tables that are made up and as real the ones that are not', () => {
     const q = (id: string) => slides.flatMap((s) => s.tables).find((t) => t.id === id)!.quality;
-    for (const id of ['provinces-value', 'chart-10', 'chart-13', 'factors']) expect(q(id), id).toBe('placeholder');
-    expect(q('provinces'), 'provinces').toBe('partial'); // agro is real, the other columns are still made up
+    for (const id of ['chart-10', 'chart-13', 'factors']) expect(q(id), id).toBe('placeholder');
+    for (const id of ['provinces', 'provinces-value']) expect(q(id), id).toBe('partial'); // agro is real, the other columns are still made up
     for (const id of ['gdp-real', 'hydrocarbons-provinces', 'complexes', 'oil-gas-national', 'agro-production', 'reserves', 'external-oecd']) expect(q(id), id).toBe('real');
   });
 });
