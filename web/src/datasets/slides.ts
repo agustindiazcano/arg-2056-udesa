@@ -21,6 +21,7 @@ import { stepNumber } from '../tour/chartSteps.js';
 import { AGRO_TONNES_CHART, AGRO_USD_CHART, EXPORT_COMPOSITION_CHART, HYDROCARBONS_CHART, STOCK_CHART, TOUR_CHARTS } from '../tour/tourCharts.js';
 import { perCapitaSeries, populationPath } from '../tour/aiModel.js';
 import { AI_ANALYSTS, AI_SCENARIOS, US_SCENARIOS } from '../tour/aiScenarios.js';
+import { LIVESTOCK, LITRES_TO_TONNES, livestockParts } from '../tour/livestockArgentina.js';
 import { ACCESS_COUNTRIES, PLANS, accessRows } from '../tour/aiAccess.js';
 import { DRAFT_SLIDES } from '../tour/draftSlides.js';
 import { AI_ACCESS_TITLE, COMPOSITION_TITLE, DEVELOPMENT_TITLE, FORECAST_UNCERTAINTY_TITLE, RESOURCES_TITLE } from '../tour/slideTitles.js';
@@ -41,6 +42,16 @@ const indicators = (): DataTable => ({
   columns: ['Indicador', 'Valor', 'Unidad', 'Año', 'Fuente'],
   rows: TOUR_INDICATORS.map((i) => [i.label, i.value, i.unit, INDICATORS_YEAR, 'Banco Mundial (WDI)'])
 });
+
+/** Livestock production of 2025 as the agro treemap shows it. */
+function livestockTable(): DataTable {
+  return {
+    id: 'agro-livestock',
+    title: `Ganadería: producción de ${LIVESTOCK.year} (millones de toneladas; leche a ${LITRES_TO_TONNES} kg por litro)`,
+    columns: ['Producto', 'Millones de toneladas', 'Base'],
+    rows: livestockParts().map((p) => [p.label, Math.round(p.value * 1000) / 1000, p.label === 'Carne aviar' ? 'Peso producto' : p.label === 'Leche' ? `${LIVESTOCK.milk_million_litres} millones de litros` : 'Res con hueso'])
+  };
+}
 
 function slide(id: string, title: string, tables: DataTable[], mock = true, refs: string[] = []): SlideData {
   return { id, label: id === 'sim' ? `Simulador del PBI` : `${stepNumber(Number(id))} · ${title}`, title, mock, tables: tables.map(withMeta), refs };
@@ -324,7 +335,8 @@ export function buildSlides(): SlideData[] {
       provinces(),
       { id: 'provinces-value', title: `Valor productivo por provincia (${PRODUCTION_UNIT})`, columns: ['Provincia', 'Valor'], rows: PROVINCES.map((p, i) => [p.name, PROVINCE_VALUES[i] ?? null]) },
       hydrocarbonProvinces(),
-      indicators()], false, ['W3', 'E3', 'E5', 'E9', 'E11', 'R1', 'R2', 'R3', 'R4', 'R5', 'R9', 'R12', 'R13', 'R14', 'E6', 'E4', 'R6', 'R7', 'R8', 'R10', 'R11', 'E8']),
+      livestockTable(),
+      indicators()], false, ['R15', 'W3', 'E3', 'E5', 'E9', 'E11', 'R1', 'R2', 'R3', 'R4', 'R5', 'R9', 'R12', 'R13', 'R14', 'E6', 'E4', 'R6', 'R7', 'R8', 'R10', 'R11', 'E8']),
     slide('5', TOUR_CHARTS[5]!.title, [chartTable(5), errorTable(), argentinaTable(), convergenceTable(), countriesTable(), scenariosTable(), imfTable()], false),
     slide('12', COMPOSITION_TITLE, [
       chartTable(12),
