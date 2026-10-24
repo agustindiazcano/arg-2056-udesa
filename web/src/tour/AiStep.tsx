@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { EChart } from '../charts/EChart.js';
 import { addMilestones } from '../charts/builders/milestones.js';
+import { addReferenceLines } from '../charts/builders/referenceLines.js';
 import { buildFluidLines } from '../charts/builders/tourCharts.js';
 import { formatValue } from '../charts/format.js';
 import { FOLLOW_MS, followFrame } from '../charts3d/followAnim.js';
@@ -15,6 +16,8 @@ import { TourChart } from './TourChart.js';
 import { tokens } from '../styles/tokens.js';
 import { AI_SCENARIOS } from './aiScenarios.js';
 import { perCapitaSeries, populationPath, summaries } from './aiModel.js';
+import { countryReferences } from './countryReferences.js';
+import type { CountryReference } from './countryReferences.js';
 import { GDP_UNIT } from './gdpFacts.js';
 import { AI_TITLE } from './slideTitles.js';
 import { STEP_INFO } from './stepInfo.js';
@@ -47,6 +50,11 @@ const num = (v: number, digits = 1): string => v.toLocaleString('es-AR', { minim
 /** How each scenario is called in the summary, next to its name. */
 const TONE: Record<string, string> = { base: 'neutro', moderate: 'intermedio', optimistic: 'favorable' };
 
+type ChartKind = 'gdp' | 'percapita' | 'population';
+
+const CHART_TITLES: Record<ChartKind, string> = { gdp: 'PBI real de Argentina', percapita: 'PBI per cápita (miles de USD)', population: 'Población (millones)' };
+const CHART_ORDER: readonly ChartKind[] = ['gdp', 'percapita', 'population'];
+
 type Line = { name: string; values: Array<number | null>; color: string };
 
 /** The lines drawn up to `year`, on axes that do not move while they draw (the whole range of the data is fixed). */
@@ -58,7 +66,8 @@ function lineOption(
   summary: string,
   withDots = false,
   baseValue?: number | null,
-  labelEvery = 5
+  labelEvery = 5,
+  refs: readonly CountryReference[] = []
 ) {
   const { option } = buildFluidLines(years, series, year, {
     unit,
@@ -66,7 +75,14 @@ function lineOption(
     summary,
     showHead: true
   });
-  return withDots ? addMilestones(option, years, series, year, baseValue) : option;
+  const withRefs = addReferenceLines(option, refs, { range: axisRange(series).max - axisRange(series).min, unit });
+  return withDots ? addMilestones(withRefs, years, series, year, baseValue) : withRefs;
+}
+
+/** The y range `buildFluidLines` gives the axis of these lines (the same margins). */
+function axisRange(series: Line[]): { min: number; max: number } {
+  const all = series.flatMap((s) => s.values.filter((v): v is number => v !== null && Number.isFinite(v)));
+  return { min: Math.floor(Math.min(...all) * 0.97), max: Math.ceil(Math.max(...all) * 1.02) };
 }
 
 /**
@@ -81,6 +97,8 @@ export function AiStep() {
   const [from1960, setFrom1960] = useState(false);
   // the chart draws itself in 2D; the 3D view shows the whole path with a marker on the year on screen
   const [view, setView] = useState<'2d' | '3d'>('2d');
+  // the chart shown big on the left; the other two are small on the right and a click swaps them
+  const [focus, setFocus] = useState<ChartKind>('gdp');
   const { elapsed, clock, seek, playing, play, pause } = useTimeline(run, reduced, speed);
   const stepSpeed = (by: 1 | -1) => setSpeed((v) => SPEEDS[Math.min(SPEEDS.length - 1, Math.max(0, SPEEDS.indexOf(v) + by))] ?? v);
 
@@ -126,14 +144,28 @@ export function AiStep() {
   const bigInterval = from1960 ? 15 : 5;
   const smallInterval = from1960 ? 25 : 10;
 
-  const big = useMemo(
-    () => lineOption(activeYears, gdpLines, year, gdp.unit, gdpSummary, true, gdp.series[0]!.values[0], bigInterval),
-    [activeYears, gdpLines, year, gdp, gdpSummary, bigInterval]
-  );
-  const small = useMemo(
-    () => lineOption(perCapitaYears, perCapitaLines, year, perCapita.unit, perCapitaSummary, false, undefined, smallInterval),
-    [perCapitaYears, perCapitaLines, year, perCapita, perCapitaSummary, smallInterval]
-  );
+  // where each compared country stands today: only those inside the range of the chart, so they never stretch the axis
+  const gdpRefs = useMemo(() => countryReferences('gdp', axisRange(gdpLines)), [gdpLines]);
+  const perCapitaRefs = useMemo(() => countryReferences('percapita', { ...axisRange(perCapitaLines), scale: 1000 }), [perCapitaLines]);
+
+  const options = useMemo(() => {
+    const perCapitaBase = perCapita.series[0]!.values[0];
+    return {
+      gdp: {
+        big: lineOption(activeYears, gdpLines, year, gdp.unit, gdpSummary, true, gdp.series[0]!.values[0], bigInterval, gdpRefs),
+        small: lineOption(activeYears, gdpLines, year, gdp.unit, gdpSummary, false, undefined, smallInterval, gdpRefs)
+      },
+      percapita: {
+        big: lineOption(perCapitaYears, perCapitaLines, year, perCapita.unit, perCapitaSummary, true, perCapitaBase, bigInterval, perCapitaRefs),
+        small: lineOption(perCapitaYears, perCapitaLines, year, perCapita.unit, perCapitaSummary, false, undefined, smallInterval, perCapitaRefs)
+      },
+      population: {
+        big: lineOption(popYears, popLines, year, 'M', popSummary, false, undefined, bigInterval),
+        small: lineOption(popYears, popLines, year, 'M', popSummary, false, undefined, smallInterval)
+      }
+    };
+  }, [activeYears, gdpLines, year, gdp, gdpSummary, bigInterval, smallInterval, gdpRefs, perCapitaYears, perCapitaLines, perCapita, perCapitaSummary, perCapitaRefs, popYears, popLines, popSummary]);
+  const summaries3: Record<ChartKind, string> = { gdp: gdpSummary, percapita: perCapitaSummary, population: popSummary };
   const bigSpec = useMemo(
     () =>
       linesSpec({
@@ -148,11 +180,13 @@ export function AiStep() {
   );
   // a new clock object is part of the spec: the 3D chart draws itself from the same time as the flat one
   const bigSpecTimed = useMemo(() => ({ ...bigSpec, clock }), [bigSpec, clock]);
-  const popOption = useMemo(
-    () => lineOption(popYears, popLines, year, 'M', popSummary, false, undefined, smallInterval),
-    [popYears, popLines, year, popSummary, smallInterval]
-  );
   const step3Info = STEP_INFO[3]!;
+  const headValue =
+    focus === 'gdp'
+      ? formatValue(gdpLines[1]!.values[at] ?? null, gdp.unit)
+      : focus === 'percapita'
+        ? formatValue(perCapitaLines[1]!.values[at] ?? null, perCapita.unit)
+        : `${num(popLines[0]!.values[Math.min(at, popLines[0]!.values.length - 1)] ?? 0)} M`;
 
   return (
     <section className="gdp-step prov-step" aria-label={AI_TITLE}>
@@ -214,9 +248,9 @@ export function AiStep() {
         <Reveal k="main" className="gdp-chart rule70-card ai-main-card">
           <div className="rule70-card-head">
             <div className="ai-head-group">
-              <strong>PBI real de Argentina</strong>
+              <strong>{focus === 'gdp' ? CHART_TITLES.gdp : CHART_TITLES[focus]}</strong>
               <ChartHelp title="Escenarios del PBI real con IA" lead={gdp.unit} paragraphs={[step3Info.paragraphs[0]!, step3Info.paragraphs[1]!]} how={step3Info.how} refs={step3Info.refs} />
-              <span className="ai-head-year">{shownYear}: {formatValue(gdpLines[1]!.values[at] ?? null, gdp.unit)}</span>
+              <span className="ai-head-year">{shownYear}: {headValue}</span>
             </div>
             <div className="rule70-legend">
               {AI_SCENARIOS.map((s) => (
@@ -227,31 +261,33 @@ export function AiStep() {
             </div>
           </div>
           <div className="rule70-chart ai-main-chart">
-            <TourChart spec={bigSpecTimed} mode={view} key={`${run}-${from1960}`}>
-              <EChart option={big} aria-label={gdpSummary} />
-            </TourChart>
+            {focus === 'gdp' ? (
+              <TourChart spec={bigSpecTimed} mode={view} key={`${run}-${from1960}`}>
+                <EChart option={options.gdp.big} aria-label={gdpSummary} />
+              </TourChart>
+            ) : (
+              <EChart option={options[focus].big} aria-label={summaries3[focus]} />
+            )}
           </div>
         </Reveal>
 
         <div className="prov-side ai-side-col">
-          <Reveal k="small" delay={0.07} className="gdp-chart rule70-card ai-small" role="region" aria-label="PBI per cápita y población">
+          <Reveal k="small" delay={0.07} className="gdp-chart rule70-card ai-small" role="region" aria-label="Otros gráficos, tocá uno para verlo grande">
             <div className="ai-small-charts">
-              <div className="ai-subcard">
-                <div className="rule70-card-head">
-                  <strong>PBI per cápita (miles de USD)</strong>
+              {CHART_ORDER.filter((k) => k !== focus).map((k) => (
+                <div key={k} className="ai-subcard ai-subcard--pick">
+                  <div className="rule70-card-head">
+                    <strong>{CHART_TITLES[k]}</strong>
+                    <button type="button" className="btn ai-expand" aria-label={`Ver en grande: ${CHART_TITLES[k]}`} onClick={() => setFocus(k)}>
+                      Ver grande
+                    </button>
+                  </div>
+                  <div className="rule70-chart ai-subcard-chart">
+                    <EChart option={options[k].small} aria-label={summaries3[k]} />
+                    <button type="button" className="ai-pick-overlay" aria-hidden="true" tabIndex={-1} onClick={() => setFocus(k)} />
+                  </div>
                 </div>
-                <div className="rule70-chart ai-subcard-chart">
-                  <EChart option={small} aria-label={perCapitaSummary} />
-                </div>
-              </div>
-              <div className="ai-subcard">
-                <div className="rule70-card-head">
-                  <strong>Población (millones)</strong>
-                </div>
-                <div className="rule70-chart ai-subcard-chart">
-                  <EChart option={popOption} aria-label={popSummary} />
-                </div>
-              </div>
+              ))}
             </div>
           </Reveal>
 
