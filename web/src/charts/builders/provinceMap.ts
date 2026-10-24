@@ -29,6 +29,8 @@ export interface ProvinceMapOpts {
   year: number;
   /** Observed data (no p10-p90 range, no scenario): the tooltip shows the value and the rank only. */
   observed?: boolean;
+  /** A colour for each province (id to hex), for a map coloured by a traffic light instead of the blue ramp: no colour scale is drawn. */
+  provinceColors?: Record<string, string>;
 }
 
 
@@ -41,14 +43,14 @@ interface TooltipParams {
 
 export function buildProvinceMap(input: ProvinceMapInput, opts: ProvinceMapOpts) {
   const { geo, values, centroids, smallIds, unit, indicatorLabel } = input;
-  const { metric, selectedId, scenario = 'expected', year, observed = false } = opts;
+  const { metric, selectedId, scenario = 'expected', year, observed = false, provinceColors } = opts;
 
   const show = (x: number) => (metric === 'level' ? formatValue(x, unit) : `${formatPercent(x)} por año`);
 
   const items = geo.features
     .map((f) => f.properties.id as string)
     .filter((id) => values.values[id] !== undefined)
-    .map((id) => ({ name: id, value: values.values[id]!.plotted }));
+    .map((id) => ({ name: id, value: values.values[id]!.plotted, ...(provinceColors?.[id] ? { itemStyle: { areaColor: provinceColors[id] } } : {}) }));
 
   const markers = smallIds
     .filter((id) => values.values[id] !== undefined || id === selectedId)
@@ -83,7 +85,7 @@ export function buildProvinceMap(input: ProvinceMapInput, opts: ProvinceMapOpts)
   };
 
   const domain = values.domain;
-  const visualMap = domain
+  const visualMap = domain && !provinceColors
     ? {
         type: 'continuous',
         min: domain[0],
