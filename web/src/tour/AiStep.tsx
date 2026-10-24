@@ -275,7 +275,7 @@ export function AiStep() {
           <Reveal k="small" delay={0.07} className="gdp-chart rule70-card ai-small" role="region" aria-label="Otros gráficos, tocá uno para verlo grande">
             <div className="ai-small-charts">
               {CHART_ORDER.filter((k) => k !== focus).map((k) => (
-                <div key={k} className="ai-subcard ai-subcard--pick" onClick={() => setFocus(k)}>
+                <div key={k} className="ai-subcard ai-subcard--pick">
                   <div className="rule70-card-head">
                     <strong>{CHART_TITLES[k]}</strong>
                     <button type="button" className="btn ai-expand" aria-label={`Ver en grande: ${CHART_TITLES[k]}`} onClick={() => setFocus(k)}>
@@ -284,6 +284,7 @@ export function AiStep() {
                   </div>
                   <div className="rule70-chart ai-subcard-chart">
                     <EChart option={options[k].small} aria-label={summaries3[k]} />
+                    <button type="button" className="ai-pick-overlay" aria-hidden="true" tabIndex={-1} onClick={() => setFocus(k)} />
                   </div>
                 </div>
               ))}

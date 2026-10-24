@@ -103,6 +103,19 @@ Order: C8, C7, C2, C3, C4, C5, C1, C6.
 | 6 | 🟡 | **`nav-gold-palette`: one gold across the navbar and the intro.** Navbar buttons and the «2056» of the navbar logo take the gold of the «2056» of the home logo (`--intro-light`); the provinces lit all at once on hover of "Hacia el 2056" use that same gold, not the saturated yellow (`--gold`). | Done on `task/nav-gold-palette` (CI green, no PR yet; stacked on 5). Human: judge the muted gold by eye, it is now the same as the home «2056». |
 | 7 | 🟡 | **`intro-load-lights`: the intro loading ends with every province lit.** The flat black map with outlines keeps its current duration and speed; during it the provinces light up one by one so that all are lit at the end, right before the tilt. | Done on `task/intro-load-lights` (CI green, no PR yet; stacked on 6, merge in order 5, 6, 7). Lights from 300 to 1300 ms, tilt at 2300 ms; reduced motion unchanged. |
 
+## Human requests of 2026-10-23 (queue, one branch per task)
+
+| # | | Task | Status |
+|---|---|---|---|
+| 1 | ✅ | Slide 6 (IA): horizontal lines with flags for the compared countries on the GDP and GDP per capita charts | Done on `task/ai-country-reference-lines` (commit, CI not run) |
+| 2 | ✅ | Slide 6: click a chart to see it big on the left, the other two small on the right; indicators scroll | Done on the same branch (CI not run) |
+| 3 | 🟡 | Slides 9 to 14: slide 9 «¿Puede Argentina perderse la ola de la IA?» (cost of AI plans by country, taxes) and five outlines (10 to 14: shocks, resource limits, peer economies, forecast limits, usage pyramid); the human says what each one holds | Done on `task/new-draft-slides` (CI not run). Human: verify the list prices (A22) and the Argentine taxes (A20, A21) in ARCA and the official pricing pages; the VAT rates of the other countries are the general ones; wage share per plan not built (needs sourced wages) |
+| 4 | 🟡 | Slide 7 (desarrollo): small buttons on top, small indicator boxes, a big chart on the left with the last years year by year and several countries, and on the right a regional ranking table per indicator | Not started |
+| 5 | 🟡 | Slide 3 agro: livestock (beef, poultry, pork, milk) and «Otros cultivos», in tonnes, with official sources | Not started |
+| 6 | 🟡 | Slide 2: «Recursos» and «Producción por provincia» as one screen with the Recursos look; province indicator button (GDP, per capita, population, HDI, education, life expectancy) with traffic-light colours | Not started |
+| 7 | 🟢 | RIGI map with the projects of `web/src/tour/rigiProjects.ts` | Not started |
+| 8 | 🟢 | Audit the data documents against the slides and list what was not put in | Partly: the unbuilt themes of this file became slides 10 to 14 |
+
 ## Data to verify (human, against original source)
 
 - [x] Mining exports by province (`web/src/tour/miningByProvince.ts`, Data slide 8): verified from the official treemaps of the Secretaría de Minería (informes 2026.01 y 2026.09); Catamarca (351 M USD en 2025, 419 M USD en ene-ago 2026) y Salta (498 M USD en 2025, 706 M USD en ene-ago 2026) están desagregadas y cierran con Jujuy, San Juan, Santa Cruz y Resto.
