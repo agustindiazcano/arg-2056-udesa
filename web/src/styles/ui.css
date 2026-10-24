@@ -3883,3 +3883,13 @@ button.brand:focus-visible .brand-a {
   color: var(--ink-2);
   border: 1px solid var(--border);
 }
+
+.profile-kpis {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2, 0.5rem);
+}
+
+.profile-kpis .res-totals {
+  padding: var(--space-2, 0.5rem) var(--space-3);
+}

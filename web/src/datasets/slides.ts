@@ -21,6 +21,7 @@ import { stepNumber } from '../tour/chartSteps.js';
 import { AGRO_TONNES_CHART, AGRO_USD_CHART, EXPORT_COMPOSITION_CHART, HYDROCARBONS_CHART, STOCK_CHART, TOUR_CHARTS } from '../tour/tourCharts.js';
 import { perCapitaSeries, populationPath } from '../tour/aiModel.js';
 import { AI_ANALYSTS, AI_SCENARIOS, US_SCENARIOS } from '../tour/aiScenarios.js';
+import { OTHER_CROPS } from '../tour/agroOtherCrops.js';
 import { LIVESTOCK, LITRES_TO_TONNES, livestockParts } from '../tour/livestockArgentina.js';
 import { ACCESS_COUNTRIES, PLANS, accessRows } from '../tour/aiAccess.js';
 import { DRAFT_SLIDES } from '../tour/draftSlides.js';
@@ -50,6 +51,16 @@ function livestockTable(): DataTable {
     title: `Ganadería: producción de ${LIVESTOCK.year} (millones de toneladas; leche a ${LITRES_TO_TONNES} kg por litro)`,
     columns: ['Producto', 'Millones de toneladas', 'Base'],
     rows: livestockParts().map((p) => [p.label, Math.round(p.value * 1000) / 1000, p.label === 'Carne aviar' ? 'Peso producto' : p.label === 'Leche' ? `${LIVESTOCK.milk_million_litres} millones de litros` : 'Res con hueso'])
+  };
+}
+
+/** The crops that make up «Otros cultivos» in the agro treemap. */
+function otherCropsTable(): DataTable {
+  return {
+    id: 'agro-other-crops',
+    title: `Otros cultivos: producción de la campaña ${OTHER_CROPS.campaign} (toneladas)`,
+    columns: ['Cultivo', 'Toneladas'],
+    rows: OTHER_CROPS.rows.map((r) => [r.crop, r.tonnes])
   };
 }
 
@@ -336,6 +347,7 @@ export function buildSlides(): SlideData[] {
       { id: 'provinces-value', title: `Valor productivo por provincia (${PRODUCTION_UNIT})`, columns: ['Provincia', 'Valor'], rows: PROVINCES.map((p, i) => [p.name, PROVINCE_VALUES[i] ?? null]) },
       hydrocarbonProvinces(),
       livestockTable(),
+      otherCropsTable(),
       indicators()], false, ['R15', 'W3', 'E3', 'E5', 'E9', 'E11', 'R1', 'R2', 'R3', 'R4', 'R5', 'R9', 'R12', 'R13', 'R14', 'E6', 'E4', 'R6', 'R7', 'R8', 'R10', 'R11', 'E8']),
     slide('5', TOUR_CHARTS[5]!.title, [chartTable(5), errorTable(), argentinaTable(), convergenceTable(), countriesTable(), scenariosTable(), imfTable()], false),
     slide('12', COMPOSITION_TITLE, [
