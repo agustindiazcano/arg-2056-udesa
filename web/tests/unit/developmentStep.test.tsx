@@ -1,7 +1,14 @@
 // @vitest-environment jsdom
 import React from 'react';
-import { afterEach, describe, expect, it } from 'vitest';
-import { cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { afterEach, describe, expect, it, vi } from 'vitest';
+
+vi.mock('../../src/charts/EChart.js', () => ({
+  EChart: ({ option, 'aria-label': label }: { option?: object; 'aria-label'?: string }) => (
+    <div role="img" aria-label={label} data-testid="echart" data-option={JSON.stringify(option)} />
+  )
+}));
+
+import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
 import { DevelopmentStep } from '../../src/tour/DevelopmentStep.js';
 
 afterEach(cleanup);
@@ -22,17 +29,26 @@ describe('DevelopmentStep', () => {
     expect(screen.getByRole('button', { name: 'Igualdad' })).toBeDefined();
   });
 
-  it('switches between time series and regional comparison mode', () => {
+  it('shows the regional ranking of the indicator with Argentina marked, and changes it with the indicator', () => {
     render(<DevelopmentStep />);
+    const table = screen.getByRole('table', { name: /Ranking regional de Esperanza de vida al nacer/i });
+    const rows = within(table).getAllByRole('row').slice(1);
+    expect(rows).toHaveLength(6);
+    expect(rows[0]!.textContent).toContain('1.º');
+    expect(rows.some((r) => r.className.includes('dev-rank-row--home') && r.textContent!.includes('Argentina'))).toBe(true);
 
-    const regionalBtn = screen.getByRole('button', { name: 'Comparación regional' });
-    fireEvent.click(regionalBtn);
+    fireEvent.click(screen.getByRole('button', { name: 'Mortalidad infantil' }));
+    expect(screen.getByRole('table', { name: /Ranking regional de Tasa de mortalidad infantil/i })).toBeDefined();
+    expect(screen.getByText('más bajo es mejor')).toBeDefined();
+  });
 
-    expect(regionalBtn.getAttribute('aria-pressed')).toBe('true');
-    expect(screen.getByText(/Comparación con países pares de América Latina/i)).toBeDefined();
-
-    // Should include Argentina as national reference
-    expect(screen.getByText(/Argentina \(Referencia nacional\)/i)).toBeDefined();
+  it('draws a big chart with Argentina and its peers year by year', () => {
+    render(<DevelopmentStep />);
+    const chart = screen.getByTestId('echart');
+    const option = JSON.parse(chart.getAttribute('data-option')!) as { series: Array<{ name: string; data: unknown[] }> };
+    expect(option.series.map((s) => s.name)).toContain('Argentina');
+    expect(option.series.length).toBeGreaterThan(5);
+    expect(option.series[0]!.data).toHaveLength(2024 - 2005 + 1);
   });
 
   it('changes category and updates available indicators', () => {
