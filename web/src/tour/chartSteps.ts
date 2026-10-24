@@ -7,7 +7,7 @@ export const INDEX_STEP = 20;
  * call it); the number on the button and in the Data page is its position here (0, 1, 2...). Human order of 2026-10-15: Productividad
  * (id 14) goes right after the GDP slide (id 1). New interactive draft slides use ids 16 (development) and 17 (forecast uncertainty). Ids 6, 11 and 15 do not exist; 20 is the index.
  */
-export const TOUR_ORDER: readonly number[] = [INDEX_STEP, 0, 8, 5, 12, 14, 3, 16, 17];
+export const TOUR_ORDER: readonly number[] = [INDEX_STEP, 0, 8, 5, 12, 14, 3, 16, 17, 21, 22, 23, 24, 25, 26];
 
 export const CHART_STEPS: ReadonlySet<number> = new Set(TOUR_ORDER);
 
