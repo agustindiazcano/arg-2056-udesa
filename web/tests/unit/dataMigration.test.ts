@@ -14,7 +14,8 @@ describe('the Data page after the series migration', () => {
   // Slide 11 (shares of the exports) was merged into slide 4 (Exports) on the same day: its table lives there now.
   // Tables whose cells were corrected on purpose on 2026-10-14 (task/revalidate-sources): Taca Taca capex 3.583 -> 4.232 (NI 43-101) and
   // the RIGI approval of Bajo del Choique-La Invernada. Their columns are still compared; their rows are checked in the tests of the new data.
-  const CORRECTED = ['rigi-mining', 'rigi-oil-gas'];
+  // 'provinces': the agro column is the real MAGyP series at FOB prices since 2026-10-23 (it was made up), so its rows changed on purpose.
+  const CORRECTED = ['rigi-mining', 'rigi-oil-gas', 'provinces'];
   // the AI slide (3) has three scenarios instead of two made-up lines since 2026-10-15 (human order): its chart table changed on purpose
   const REPLACED = ['chart-3', 'factors', 'reference']; // the simulator defaults changed on purpose (3.0 % and 0.4 points of AI)
   const REMOVED = ['6'];
@@ -73,7 +74,8 @@ describe('the Data page after the series migration', () => {
 
   it('marks as placeholder the tables that are made up and as real the ones that are not', () => {
     const q = (id: string) => slides.flatMap((s) => s.tables).find((t) => t.id === id)!.quality;
-    for (const id of ['provinces', 'provinces-value', 'chart-10', 'chart-13', 'factors']) expect(q(id), id).toBe('placeholder');
+    for (const id of ['provinces-value', 'chart-10', 'chart-13', 'factors']) expect(q(id), id).toBe('placeholder');
+    expect(q('provinces'), 'provinces').toBe('partial'); // agro is real, the other columns are still made up
     for (const id of ['gdp-real', 'hydrocarbons-provinces', 'complexes', 'oil-gas-national', 'agro-production', 'reserves', 'external-oecd']) expect(q(id), id).toBe('real');
   });
 });
