@@ -1,5 +1,6 @@
 import agro from './agroArgentina.json';
 import energy from './energyArgentina.json';
+import { otherCropsMt } from './agroOtherCrops.js';
 import { livestockParts } from './livestockArgentina.js';
 import { EXPORT_COMPLEXES } from './tourData.js';
 
@@ -96,7 +97,7 @@ export function breakdown(sector: ResourceSector): Breakdown {
   return {
     title: 'Agro: cultivos de la campaña 2024/25 y ganadería de 2025',
     unit: 'millones de toneladas',
-    parts: [...series.map((s) => ({ label: s.crop, value: s.values[i] ?? 0 })).filter((p) => p.value > 0), ...livestockParts()]
+    parts: [...series.map((s) => ({ label: s.crop, value: s.values[i] ?? 0 })).filter((p) => p.value > 0), { label: 'Otros cultivos', value: otherCropsMt() }, ...livestockParts()]
   };
 }
 

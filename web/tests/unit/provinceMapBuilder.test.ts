@@ -262,3 +262,16 @@ describe('buildProvinceMap', () => {
     }
   });
 });
+
+describe('buildProvinceMap with province colours (traffic light)', () => {
+  it('paints each province with its colour and draws no blue colour scale', () => {
+    const colored = { values: { 'AR-A': { plotted: 1, p10: 1, p50: 1, p90: 1, rank: 1 }, 'AR-B': { plotted: 2, p10: 2, p50: 2, p90: 2, rank: 2 } }, missing: [], domain: [1, 2] as [number, number], excluded: 0 } satisfies MapValues;
+    const built = buildProvinceMap(
+      { geo: { type: 'FeatureCollection', features } as unknown as ProvincesGeo, values: colored, centroids: {}, smallIds: [], unit: 'u', indicatorLabel: 'x' },
+      { metric: 'level', selectedId: null, year: 2025, observed: true, provinceColors: { 'AR-A': '#0ca30c', 'AR-B': '#d03b3b' } }
+    );
+    const option = built.option as unknown as { visualMap?: unknown; series: Array<{ data: Array<{ name: string; itemStyle?: { areaColor: string } }> }> };
+    expect(option.visualMap).toBeUndefined();
+    expect(option.series[0]!.data.map((d) => [d.name, d.itemStyle?.areaColor])).toEqual([['AR-A', '#0ca30c'], ['AR-B', '#d03b3b']]);
+  });
+});
