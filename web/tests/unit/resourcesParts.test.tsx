@@ -32,4 +32,16 @@ describe('Recursos: one look, only the title changes', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Recursos' }));
     expect(screen.getByRole('heading', { level: 2 }).textContent).toBe('Recursos naturales');
   });
+
+  it('has the RIGI map as a third part: its own title, totals and the projects of a province on the same layout', () => {
+    const { container } = render(<ResourcesStep />);
+    fireEvent.click(screen.getByRole('button', { name: 'Mapa del RIGI' }));
+    expect(screen.getByRole('heading', { level: 2 }).textContent).toBe('Mapa del RIGI');
+    expect(container.querySelector('section.res-step')).not.toBeNull();
+    expect(screen.getByLabelText('Totales del RIGI')).toBeDefined();
+    fireEvent.click(screen.getByRole('button', { name: /San Juan/ }));
+    expect(screen.getByRole('region', { name: 'Proyectos del RIGI en San Juan' }).textContent).toMatch(/Vicuña/);
+    fireEvent.click(screen.getByRole('button', { name: 'Aprobados' }));
+    expect(screen.getByRole('region', { name: 'Proyectos del RIGI en San Juan' })).toBeDefined();
+  });
 });
