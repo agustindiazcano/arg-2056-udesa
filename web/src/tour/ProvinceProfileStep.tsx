@@ -188,6 +188,11 @@ export function ProvinceProfileStep({ embedded = false }: { embedded?: boolean }
                   <span className="tour-ind-value">{selectedProfile.registered_jobs_k.toLocaleString('es-AR')} mil</span>
                   <span className="tour-ind-unit">{selectedProfile.private_jobs_k}k privados · {selectedProfile.public_jobs_k}k públicos</span>
                 </div>
+                <div role="listitem" className="res-total" style={tileStyle('hdi')}>
+                  <span className="tour-ind-label">Desarrollo humano</span>
+                  <span className="tour-ind-value">{selectedProfile.hdi.toLocaleString('es-AR', { minimumFractionDigits: 3, maximumFractionDigits: 3 })}</span>
+                  <span className="tour-ind-unit">IDH provincial, PNUD</span>
+                </div>
                 <div role="listitem" className="res-total" style={tileStyle('security_rate')}>
                   <span className="tour-ind-label">Seguridad</span>
                   <span className="tour-ind-value">{selectedProfile.security_rate.toLocaleString('es-AR')}</span>

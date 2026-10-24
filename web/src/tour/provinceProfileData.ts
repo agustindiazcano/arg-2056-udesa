@@ -17,6 +17,8 @@ export interface ProvinceProfile {
   public_jobs_k: number;
   registered_jobs_k: number;
   security_rate: number;
+  /** Human Development Index of the province (UNDP Argentina, 2021) */
+  hdi: number;
 }
 
 export type ProfileMetric =
@@ -28,7 +30,8 @@ export type ProfileMetric =
   | 'poverty_pct'
   | 'unemployment_pct'
   | 'registered_jobs_k'
-  | 'security_rate';
+  | 'security_rate'
+  | 'hdi';
 
 export interface MetricDefinition {
   id: ProfileMetric;
@@ -135,6 +138,17 @@ export const PROFILE_METRICS: MetricDefinition[] = [
     retrievedAt: '2026-10-17'
   },
   {
+    id: 'hdi',
+    label: 'Índice de Desarrollo Humano',
+    shortLabel: 'IDH',
+    unit: 'índice de 0 a 1',
+    source: 'PNUD Argentina, El Mapa del Desarrollo Humano en Argentina (IDH provincial, 2021)',
+    sourceNote: 'Combina salud, educación e ingreso en un índice de 0 a 1 para cada jurisdicción',
+    refId: 'S6',
+    sourceUrl: 'https://www.undp.org/es/argentina/publicaciones/el-mapa-del-desarrollo-humano-en-argentina',
+    retrievedAt: '2026-10-23'
+  },
+  {
     id: 'security_rate',
     label: 'Seguridad',
     shortLabel: 'Seguridad',
@@ -163,6 +177,7 @@ export const PROVINCE_PROFILES: Record<ProvinceId, ProvinceProfile> = {
     private_jobs_k: 1920,
     public_jobs_k: 630,
     registered_jobs_k: 2550,
+    hdi: 0.842,
     security_rate: 3550
   },
   'AR-C': {
@@ -179,6 +194,7 @@ export const PROVINCE_PROFILES: Record<ProvinceId, ProvinceProfile> = {
     private_jobs_k: 1520,
     public_jobs_k: 210,
     registered_jobs_k: 1730,
+    hdi: 0.882,
     security_rate: 3850
   },
   'AR-X': {
@@ -195,6 +211,7 @@ export const PROVINCE_PROFILES: Record<ProvinceId, ProvinceProfile> = {
     private_jobs_k: 515,
     public_jobs_k: 155,
     registered_jobs_k: 670,
+    hdi: 0.841,
     security_rate: 3240
   },
   'AR-S': {
@@ -211,6 +228,7 @@ export const PROVINCE_PROFILES: Record<ProvinceId, ProvinceProfile> = {
     private_jobs_k: 505,
     public_jobs_k: 160,
     registered_jobs_k: 665,
+    hdi: 0.841,
     security_rate: 3720
   },
   'AR-M': {
@@ -227,6 +245,7 @@ export const PROVINCE_PROFILES: Record<ProvinceId, ProvinceProfile> = {
     private_jobs_k: 240,
     public_jobs_k: 115,
     registered_jobs_k: 355,
+    hdi: 0.848,
     security_rate: 3150
   },
   'AR-Q': {
@@ -243,6 +262,7 @@ export const PROVINCE_PROFILES: Record<ProvinceId, ProvinceProfile> = {
     private_jobs_k: 142,
     public_jobs_k: 72,
     registered_jobs_k: 214,
+    hdi: 0.832,
     security_rate: 3400
   },
   'AR-E': {
@@ -259,6 +279,7 @@ export const PROVINCE_PROFILES: Record<ProvinceId, ProvinceProfile> = {
     private_jobs_k: 135,
     public_jobs_k: 95,
     registered_jobs_k: 230,
+    hdi: 0.836,
     security_rate: 2650
   },
   'AR-T': {
@@ -275,6 +296,7 @@ export const PROVINCE_PROFILES: Record<ProvinceId, ProvinceProfile> = {
     private_jobs_k: 175,
     public_jobs_k: 120,
     registered_jobs_k: 295,
+    hdi: 0.841,
     security_rate: 2920
   },
   'AR-U': {
@@ -291,6 +313,7 @@ export const PROVINCE_PROFILES: Record<ProvinceId, ProvinceProfile> = {
     private_jobs_k: 98,
     public_jobs_k: 55,
     registered_jobs_k: 153,
+    hdi: 0.858,
     security_rate: 3100
   },
   'AR-A': {
@@ -307,6 +330,7 @@ export const PROVINCE_PROFILES: Record<ProvinceId, ProvinceProfile> = {
     private_jobs_k: 120,
     public_jobs_k: 98,
     registered_jobs_k: 218,
+    hdi: 0.844,
     security_rate: 2850
   },
   'AR-Z': {
@@ -323,6 +347,7 @@ export const PROVINCE_PROFILES: Record<ProvinceId, ProvinceProfile> = {
     private_jobs_k: 61,
     public_jobs_k: 46,
     registered_jobs_k: 107,
+    hdi: 0.854,
     security_rate: 2700
   },
   'AR-J': {
@@ -339,6 +364,7 @@ export const PROVINCE_PROFILES: Record<ProvinceId, ProvinceProfile> = {
     private_jobs_k: 90,
     public_jobs_k: 58,
     registered_jobs_k: 148,
+    hdi: 0.838,
     security_rate: 2800
   },
   'AR-R': {
@@ -355,6 +381,7 @@ export const PROVINCE_PROFILES: Record<ProvinceId, ProvinceProfile> = {
     private_jobs_k: 110,
     public_jobs_k: 62,
     registered_jobs_k: 172,
+    hdi: 0.844,
     security_rate: 3350
   },
   'AR-N': {
@@ -371,6 +398,7 @@ export const PROVINCE_PROFILES: Record<ProvinceId, ProvinceProfile> = {
     private_jobs_k: 105,
     public_jobs_k: 70,
     registered_jobs_k: 175,
+    hdi: 0.842,
     security_rate: 2200
   },
   'AR-H': {
@@ -387,6 +415,7 @@ export const PROVINCE_PROFILES: Record<ProvinceId, ProvinceProfile> = {
     private_jobs_k: 75,
     public_jobs_k: 92,
     registered_jobs_k: 167,
+    hdi: 0.808,
     security_rate: 2750
   },
   'AR-W': {
@@ -403,6 +432,7 @@ export const PROVINCE_PROFILES: Record<ProvinceId, ProvinceProfile> = {
     private_jobs_k: 78,
     public_jobs_k: 80,
     registered_jobs_k: 158,
+    hdi: 0.839,
     security_rate: 2400
   },
   'AR-G': {
@@ -419,6 +449,7 @@ export const PROVINCE_PROFILES: Record<ProvinceId, ProvinceProfile> = {
     private_jobs_k: 52,
     public_jobs_k: 88,
     registered_jobs_k: 140,
+    hdi: 0.833,
     security_rate: 2100
   },
   'AR-D': {
@@ -435,6 +466,7 @@ export const PROVINCE_PROFILES: Record<ProvinceId, ProvinceProfile> = {
     private_jobs_k: 64,
     public_jobs_k: 40,
     registered_jobs_k: 104,
+    hdi: 0.843,
     security_rate: 2600
   },
   'AR-Y': {
@@ -451,6 +483,7 @@ export const PROVINCE_PROFILES: Record<ProvinceId, ProvinceProfile> = {
     private_jobs_k: 60,
     public_jobs_k: 78,
     registered_jobs_k: 138,
+    hdi: 0.84,
     security_rate: 2350
   },
   'AR-V': {
@@ -467,6 +500,7 @@ export const PROVINCE_PROFILES: Record<ProvinceId, ProvinceProfile> = {
     private_jobs_k: 42,
     public_jobs_k: 24,
     registered_jobs_k: 66,
+    hdi: 0.856,
     security_rate: 1850
   },
   'AR-L': {
@@ -483,6 +517,7 @@ export const PROVINCE_PROFILES: Record<ProvinceId, ProvinceProfile> = {
     private_jobs_k: 39,
     public_jobs_k: 31,
     registered_jobs_k: 70,
+    hdi: 0.861,
     security_rate: 2500
   },
   'AR-K': {
@@ -499,6 +534,7 @@ export const PROVINCE_PROFILES: Record<ProvinceId, ProvinceProfile> = {
     private_jobs_k: 36,
     public_jobs_k: 52,
     registered_jobs_k: 88,
+    hdi: 0.844,
     security_rate: 2250
   },
   'AR-F': {
@@ -515,6 +551,7 @@ export const PROVINCE_PROFILES: Record<ProvinceId, ProvinceProfile> = {
     private_jobs_k: 31,
     public_jobs_k: 54,
     registered_jobs_k: 85,
+    hdi: 0.84,
     security_rate: 2150
   },
   'AR-P': {
@@ -531,6 +568,7 @@ export const PROVINCE_PROFILES: Record<ProvinceId, ProvinceProfile> = {
     private_jobs_k: 26,
     public_jobs_k: 58,
     registered_jobs_k: 84,
+    hdi: 0.822,
     security_rate: 1950
   }
 };
@@ -578,5 +616,7 @@ export function formatProfileValue(metric: ProfileMetric, value: number): string
       return `${value.toLocaleString('es-AR')} mil puestos`;
     case 'security_rate':
       return `${value.toLocaleString('es-AR')} / 100k hab.`;
+    case 'hdi':
+      return value.toLocaleString('es-AR', { minimumFractionDigits: 3, maximumFractionDigits: 3 });
   }
 }
