@@ -93,9 +93,10 @@ describe('provinceSectorBreakdown', () => {
       const labels = res?.parts.map((p) => p.label) ?? [];
       expect(labels).not.toContain('Minería');
       expect(labels).not.toContain('Hidrocarburos');
-      expect(labels).toContain('Granos y oleaginosas');
+      expect(labels).toContain('Maíz');
       const sum = res?.parts.reduce((acc, p) => acc + p.value, 0);
-      expect(sum).toBe(1500);
+      // 740,812 t of soja at 420, 1,570,901 t of maíz at 180, 78,665 t of trigo at 230 and 494 t of girasol at 410 USD/t (MAGyP 2024/25)
+      expect(sum).toBeCloseTo(612, 0);
     });
 
     it('shows multi-sector breakdown when view is total', () => {
