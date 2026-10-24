@@ -82,6 +82,8 @@ interface ProvinceMapProps {
   onSelect: (id: ProvinceId | null) => void;
   selectedDepartment?: string | null;
   onSelectDepartment?: (dept: string | null) => void;
+  /** A colour for each province (id to hex): the map is drawn with them (a traffic light) instead of the blue ramp. */
+  provinceColors?: Record<string, string>;
 }
 
 const NO_DATA_TEXT = 'sin datos';
@@ -101,7 +103,8 @@ export function ProvinceMap({
   zoomToSelected = false,
   onSelect,
   selectedDepartment = null,
-  onSelectDepartment
+  onSelectDepartment,
+  provinceColors
 }: ProvinceMapProps) {
   const [asTable, setAsTable] = useState(false);
   const [deptGeo, setDeptGeo] = useState<DepartmentsGeo | null>(null);
@@ -139,9 +142,9 @@ export function ProvinceMap({
     () =>
       buildProvinceMap(
         { geo, values, centroids, smallIds, unit, indicatorLabel },
-        { metric, selectedId, scenario, year, observed }
+        { metric, selectedId, scenario, year, observed, provinceColors }
       ),
-    [geo, values, centroids, smallIds, unit, indicatorLabel, metric, selectedId, scenario, year, observed]
+    [geo, values, centroids, smallIds, unit, indicatorLabel, metric, selectedId, scenario, year, observed, provinceColors]
   );
 
   const deptBuilt = useMemo(() => {
