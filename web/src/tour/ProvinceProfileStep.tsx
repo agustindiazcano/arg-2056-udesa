@@ -12,6 +12,9 @@ import type { ProvinceId } from '../types/province.js';
 import { MapSearch } from '../ui/MapSearch.js';
 import type { SearchResult } from '../ui/mapSearchLogic.js';
 import { RefList } from '../ui/RefLink.js';
+import { useCompact } from './compact.js';
+import { PanelRail, panelAttrs } from './PanelRail.js';
+import type { PanelItem } from './PanelRail.js';
 import {
   PROFILE_METRICS,
   PROVINCE_PROFILES,
@@ -25,8 +28,18 @@ import { TONE_COLORS, TONE_HEX, TONE_LABELS, hasSemaphore, semaphoreTones } from
 
 export const PROFILE_TITLE = 'Perfil por provincia: indicadores socioeconómicos';
 
+type ProfilePanel = 'chart' | 'map';
+
+// on a short laptop screen the ranking and the map do not fit together: one is big and the other is a small button
+const PROFILE_PANELS: ReadonlyArray<PanelItem<ProfilePanel>> = [
+  { key: 'chart', title: 'Ranking', icon: 'bars' },
+  { key: 'map', title: 'Mapa', icon: 'map' }
+];
+
 export function ProvinceProfileStep({ embedded = false }: { embedded?: boolean } = {}) {
   const provinces = useProvinces();
+  const compact = useCompact();
+  const [panel, setPanel] = useState<ProfilePanel>('chart');
   const [metric, setMetric] = useState<ProfileMetric>('pbg_usd_m');
   const [selected, setSelected] = useState<ProvinceId | null>(null);
   const [selectedDept, setSelectedDept] = useState<string | null>(null);
@@ -108,7 +121,8 @@ export function ProvinceProfileStep({ embedded = false }: { embedded?: boolean }
         <Reveal k="head" className="gdp-title">
           {embedded ? null : <h2>{PROFILE_TITLE}</h2>}
           <p className="gdp-sub">
-            {activeMetricDef.sourceNote} · <RefList ids={[activeMetricDef.refId]} />; seleccioná un indicador y tocá una provincia para ver su ficha
+            {activeMetricDef.sourceNote}
+            {compact ? '; ' : <> · <RefList ids={[activeMetricDef.refId]} />; </>}seleccioná un indicador y tocá una provincia para ver su ficha
           </p>
         </Reveal>
         <div className="tour-controls">
@@ -247,10 +261,11 @@ export function ProvinceProfileStep({ embedded = false }: { embedded?: boolean }
         </div>
       </Reveal>
 
-      <div className="res-grid">
+      <PanelRail compact={compact} items={PROFILE_PANELS} active={panel} onPick={setPanel} />
+      <div className="res-grid" data-compact={compact || undefined}>
         {/* Left Side: Ranking and Accessible Table */}
         <div className="res-left">
-          <Reveal k={`chart-${metric}`} delay={0.1} className="gdp-chart">
+          <Reveal k={`chart-${metric}`} delay={0.1} className="gdp-chart" {...panelAttrs(compact, panel, 'chart')}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
               <strong className="composition-title">
                 {`${activeMetricDef.label} por provincia (${activeMetricDef.unit})`}
@@ -330,7 +345,7 @@ export function ProvinceProfileStep({ embedded = false }: { embedded?: boolean }
         </div>
 
         {/* Right Side: Province Map with Search */}
-        <Reveal k={`map-${metric}`} delay={0.14} className="gdp-chart prov-map res-map">
+        <Reveal k={`map-${metric}`} delay={0.14} className="gdp-chart prov-map res-map" {...panelAttrs(compact, panel, 'map')}>
           <strong
             className="composition-title"
             style={{
