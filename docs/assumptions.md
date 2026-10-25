@@ -39,3 +39,4 @@ Status: `needs_source` (a verifiable source should replace the value), `assumpti
 | A32 | Backtest criteria numbers: factor 1.25 at horizon 5, 8 of 12 coverage | backtest | pre-registered criteria C2, C3 | 1.1 to 1.5; 7 to 10 of 12 | low | assumption | null | human (accepted 2026-10-04) |
 | A33 | Provincial drift kept only if better in at least 18 of 24 provinces | provinces | pre-registered selection rule | 13 to 20 of 24 | low | assumption | null | human (accepted 2026-10-04) |
 | A34 | Rule of 70 as the approximation of doubling time | sandbox | explainer | not applicable | low | assumption | null | design |
+| A35 | Working-age population is ages 15 to 64 (both included), `WORKING_AGE` in `argmodel.population.drivers` | population | the labor force of growth accounting is `L = W * pi` and the design does not define `W` | 15 to 64 (alternatives 15 to 59, 20 to 64) | medium | assumption | null | human |
