@@ -32,9 +32,9 @@ Order: C8, C7, C2, C3, C4, C5, C1, C6.
    1. [x] `model-params`: 35 parameter entries transcribed into `model/params/params.json` with Draft 2020-12 schema `params.schema.json`, frozen dataclass `Param`, loader and validation functions in `argmodel.params`, full unit test suite `test_params.py`, documentation `docs/params.md`, decision `D-params-1`. Branch `task/model-params`.
    2. [x] `model-population-hardening`: cohort model input validation and error raising (audit F5, F8, F9), identical error messages across Python and TS, hand-computed tests, parity tests against golden and invalid vectors. Branch `task/model-population-hardening`.
    3. [x] \population-age-contract\: 4 JSON Schemas, consistency checks in \scripts/dataset_checks.py\, deterministic mock in \scripts/gen_mock.py\, TypeScript types and parsers in \web/src/types/populationAge.ts\, schema registration in \web/src/validation/schemaNames.ts\ and regenerated validators, registry entries in \web/src/data/registry.ts\, documentation in \docs/data-dictionary.md\. Branch \	ask/population-age-contract\.
-   4. [ ] \model-population-drivers\: READY (unblocked by 1, 2, 3; calibration needs real series)
+   4. [x] `model-population-drivers`: `drivers.py` (TFR and e0 paths, fertility and migration patterns, one-parameter relational life table), `projection.py` (loop over the validated cohort step), `calibrate.py` (`kappa_F`, training window only), tests, `docs/population-model.md`, assumption A35 (working age 15 to 64). Branch `task/model-population-drivers`. Human: check the relational table choice and A35; `kappa_F` needs real fertility data.
    5. [ ] `model-growth-core`: BLOCKED by 1, 2
-   6. [ ] `model-hdi`: BLOCKED by 1, 4, 5; the goalposts are `needs_source`
+   6. [ ] `model-hdi`: BLOCKED by 5 (1 and 4 are done); the goalposts are `needs_source`
    7. [ ] `model-resources`: BLOCKED by 1 (works on mock)
    8. [ ] `model-ai-overlay`: BLOCKED by 1 (5 should be merged)
    9. [ ] `model-montecarlo`: BLOCKED by 4 to 8; real runs need parameter values
@@ -175,7 +175,7 @@ Order: C8, C7, C2, C3, C4, C5, C1, C6.
 
 ## Model assumptions (record in `docs/assumptions.md`)
 
-- [ ] 34 entries A01-A34 in `docs/assumptions.md`, all unsourced. Accepted by the human on 2026-10-04: A10, A13, A15, A16, A24, A26, A31, A32, A33. `model-population-drivers` will add one more (the working-age range 15 to 64).
+- [ ] 35 entries A01-A35 in `docs/assumptions.md`, all unsourced. Accepted by the human on 2026-10-04: A10, A13, A15, A16, A24, A26, A31, A32, A33. A35 (working-age range 15 to 64) was added by `model-population-drivers`.
 
 ## Visual debt (deliberately left rough until `polish`)
 
