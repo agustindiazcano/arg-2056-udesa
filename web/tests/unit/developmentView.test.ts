@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { chartSeries, rankingRows } from '../../src/tour/developmentView';
+import { chartSeries, lineOption, rankingRows } from '../../src/tour/developmentView';
+import { tokens } from '../../src/styles/tokens';
 import { DEVELOPMENT_INDICATORS_DATA } from '../../src/tour/developmentData';
 
 describe('developmentView.rankingRows', () => {
@@ -37,5 +38,45 @@ describe('developmentView.chartSeries', () => {
     const c = chartSeries('Resultados PISA');
     expect(c.series.map((s) => s.name)).toEqual(['Argentina']);
     expect(c.years.length).toBe(DEVELOPMENT_INDICATORS_DATA['Resultados PISA']!.timeSeries.length);
+  });
+});
+
+describe('developmentView.chartSeries colors', () => {
+  it('gives every peer its own color from the validated palette and Argentina the ink color', () => {
+    const c = chartSeries('Esperanza de vida al nacer');
+    const colors = c.series.map((s) => s.color);
+    expect(new Set(colors).size).toBe(colors.length);
+    expect(c.series[0]!.color).toBe(tokens.ink);
+    c.series.slice(1).forEach((s) => expect(tokens.categorical.slice(0, 8)).toContain(s.color));
+  });
+
+  it('keeps the color of a country when the indicator changes', () => {
+    const a = chartSeries('Esperanza de vida al nacer').series;
+    const b = chartSeries('Mortalidad infantil').series;
+    for (const s of a) {
+      const same = b.find((o) => o.name === s.name);
+      if (same) expect(same.color, s.name).toBe(s.color);
+    }
+  });
+});
+
+describe('developmentView.lineOption', () => {
+  it('fits the value axis to the data instead of starting at zero, and draws Argentina on top and thicker', () => {
+    const c = chartSeries('Esperanza de vida al nacer');
+    const option = lineOption(c, { unit: 'años', summary: 'resumen' });
+    expect((option.yAxis as { scale?: boolean }).scale).toBe(true);
+    const widths = (option.series as Array<{ name: string; lineStyle: { width: number }; z: number }>).map((s) => [s.name, s.lineStyle.width, s.z] as const);
+    const ar = widths.find((w) => w[0] === 'Argentina')!;
+    for (const w of widths.filter((x) => x[0] !== 'Argentina')) {
+      expect(ar[1]).toBeGreaterThan(w[1]);
+      expect(ar[2]).toBeGreaterThan(w[2]);
+    }
+  });
+
+  it('labels the end of the line of Argentina only', () => {
+    const c = chartSeries('Esperanza de vida al nacer');
+    const option = lineOption(c, { unit: 'años', summary: 'resumen' });
+    const labelled = (option.series as Array<{ name: string; endLabel?: { show: boolean } }>).filter((s) => s.endLabel?.show).map((s) => s.name);
+    expect(labelled).toEqual(['Argentina']);
   });
 });
