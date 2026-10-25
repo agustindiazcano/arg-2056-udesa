@@ -23,6 +23,9 @@ import { AI_TITLE } from './slideTitles.js';
 import { STEP_INFO } from './stepInfo.js';
 import { aiImpactData } from './tourData.js';
 import { useTimeline } from './useTimeline.js';
+import { useCompact } from './compact.js';
+import { PanelRail, panelAttrs } from './PanelRail.js';
+import type { PanelItem } from './PanelRail.js';
 import { argentinaReal, populationAt } from './worldData.js';
 
 const LAST = 2056;
@@ -90,7 +93,18 @@ function axisRange(series: Line[]): { min: number; max: number } {
  * itself, year by year, with the three scenarios when the visitor presses play; on the right the GDP per person and the population (small), a table of
  * indicators at the year on screen and a summary of each scenario. There are no buttons to the charts of other slides.
  */
+type AiPanel = 'main' | 'small' | 'numbers';
+
+// on a short laptop screen the panels do not fit together: one is big and the others are small buttons
+const AI_PANELS: ReadonlyArray<PanelItem<AiPanel>> = [
+  { key: 'main', title: 'PBI real', icon: 'line' },
+  { key: 'small', title: 'Per cápita y población', icon: 'grid' },
+  { key: 'numbers', title: 'Indicadores', icon: 'table' }
+];
+
 export function AiStep() {
+  const compact = useCompact();
+  const [panel, setPanel] = useState<AiPanel>('main');
   const reduced = useReducedMotion();
   const [run, setRun] = useState(0);
   const [speed, setSpeed] = useState(1);
@@ -197,7 +211,8 @@ export function AiStep() {
             <ChartHelp title={step3Info.heading} lead={GDP_UNIT} paragraphs={step3Info.paragraphs} how={step3Info.how} refs={step3Info.refs} />
           </div>
           <p className="gdp-sub">
-            {FIRST} a {LAST} · {from1960 ? 'historia observada (1960-2025) y tres escenarios con la IA hacia 2056' : 'tres escenarios con la IA como impulso a la productividad'} · <RefList ids={step3Info.refs} />
+            {FIRST} a {LAST} · {from1960 ? 'historia observada (1960-2025) y tres escenarios con la IA hacia 2056' : 'tres escenarios con la IA como impulso a la productividad'}
+            {!compact && <> · <RefList ids={step3Info.refs} /></>}
           </p>
         </Reveal>
         <div className="tour-controls">
@@ -244,8 +259,9 @@ export function AiStep() {
         </div>
       </header>
 
-      <div className="prov-grid ai-grid-layout">
-        <Reveal k="main" className="gdp-chart rule70-card ai-main-card">
+      <PanelRail compact={compact} items={AI_PANELS} active={panel} onPick={setPanel} />
+      <div className="prov-grid ai-grid-layout" data-compact={compact || undefined}>
+        <Reveal k="main" className="gdp-chart rule70-card ai-main-card" {...panelAttrs(compact, panel, 'main')}>
           <div className="rule70-card-head">
             <div className="ai-head-group">
               <strong>{focus === 'gdp' ? CHART_TITLES.gdp : CHART_TITLES[focus]}</strong>
@@ -272,7 +288,7 @@ export function AiStep() {
         </Reveal>
 
         <div className="prov-side ai-side-col">
-          <Reveal k="small" delay={0.07} className="gdp-chart rule70-card ai-small" role="region" aria-label="Otros gráficos, tocá uno para verlo grande">
+          <Reveal k="small" delay={0.07} className="gdp-chart rule70-card ai-small" {...panelAttrs(compact, panel, 'small')} role="region" aria-label="Otros gráficos, tocá uno para verlo grande">
             <div className="ai-small-charts">
               {CHART_ORDER.filter((k) => k !== focus).map((k) => (
                 <div key={k} className="ai-subcard ai-subcard--pick">
@@ -291,7 +307,7 @@ export function AiStep() {
             </div>
           </Reveal>
 
-          <Reveal k="numbers" delay={0.14} className="gdp-chart rule70-card ai-numbers" role="region" aria-label={`Indicadores en ${shownYear}`}>
+          <Reveal k="numbers" delay={0.14} className="gdp-chart rule70-card ai-numbers" {...panelAttrs(compact, panel, 'numbers')} role="region" aria-label={`Indicadores en ${shownYear}`}>
             <div className="rule70-card-head">
               <strong>Indicadores en {shownYear}</strong>
             </div>

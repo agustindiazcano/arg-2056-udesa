@@ -23,16 +23,19 @@ export const tokens = {
 
   blue: '#3987e5',
 
-  /** Distinct colors for the parts of a whole (the sectors of a treemap, pie, and bars); each keeps white text readable. */
+  /**
+   * Distinct colors for the parts of a whole (the sectors of a treemap, pie, and bars); each keeps white text readable. The first eight are in
+   * the order that passes `validate_palette.js --mode dark` (every adjacent pair is separable with color-vision deficiency); the rest are extra.
+   */
   categorical: [
     '#3987e5',
-    '#199e70',
-    '#c27b00',
     '#d95926',
+    '#199e70',
     '#8e6bd8',
-    '#d14d8f',
+    '#c27b00',
     '#2a9fb3',
     '#7f9a1f',
+    '#d14d8f',
     '#b5513a',
     '#6f6e68',
     '#2563eb',

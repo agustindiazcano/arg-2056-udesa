@@ -21,12 +21,16 @@
 - Education and life expectancy by province: no data in the repo yet.
 - Sugar cane is not in the MAGyP file, so it is not in «Otros cultivos».
 
+- **Also merged into `main` before this stack** (PR #151, `task/laptop-recorrido-layout`): the Recorrido on a short laptop screen. Slides 1, 2 and 6 show one chart big and the others behind small buttons when the screen is at most 820 px tall (`web/src/tour/compact.ts`, `PanelRail.tsx`, CSS at the end of `ui.css`; plan `docs/action-plan-laptop-recorrido.md`). `tokens.categorical` and `--cat-1..8` reordered so the first eight pass `validate_palette.js --mode dark`; colors 9 to 16 not validated.
+
 ## Reglas operativas vigentes
 - **RULE #1**: Tests corren exclusivamente en CI (GitHub Actions), nunca localmente (solo los tests puntuales de lo tocado).
 - Nunca mergear ni pushear a `main`; un humano aprueba cada PR.
 - Commits atómicos: `test(...)`, `feat(...)`, `data(...)`, `docs(...)`, `fix(...)`.
 
 ## Next
-- Read the CI of the 9 branches and merge the stack in order (each PR is against the previous branch).
+- Merge PR #152 (the whole stack, now merged with `main`); the stack branches are already merged into each other.
 - Fill the human checks above; then the education and life expectancy by province.
 - Fill the content of slides 10 to 14 once the human decides what each one holds.
+- Human: look at slides 1, 2 and 6 on a real laptop (totals row of Recursos scrolls sideways at 1366 px; the reference lines of the AI per-capita chart overlap their labels).
+- Then `model-population-drivers` (`docs/tasks/model-population-drivers.md`), unblocked by `population-age-contract`.

@@ -27,6 +27,9 @@ import type { SearchResult } from '../ui/mapSearchLogic.js';
 import { ChartHelp } from '../ui/ChartHelp.js';
 import { RefList } from '../ui/RefLink.js';
 import { STEP_INFO } from './stepInfo.js';
+import { useCompact } from './compact.js';
+import { PanelRail, panelAttrs } from './PanelRail.js';
+import type { PanelItem } from './PanelRail.js';
 
 export { PRODUCER_MIN };
 
@@ -98,7 +101,18 @@ function Parts({ title, unit, parts, form, onPick }: { title: string; unit: stri
  * Total) as a treemap, a pie or bars, and the bars of the provinces that produce it; on the right the big map of Argentina for the same view.
  * It replaces the old steps 8, 9, 10 and 13; their tables stay in the Data page.
  */
+type ResPanel = 'parts' | 'bars' | 'map';
+
+// on a short laptop screen the charts do not fit together: one is big and the others are small buttons
+const RES_PANELS: ReadonlyArray<PanelItem<ResPanel>> = [
+  { key: 'parts', title: 'Composición', icon: 'treemap' },
+  { key: 'bars', title: 'Por provincia', icon: 'bars' },
+  { key: 'map', title: 'Mapa', icon: 'map' }
+];
+
 export function ResourcesStep() {
+  const compact = useCompact();
+  const [panel, setPanel] = useState<ResPanel>('parts');
   const provinces = useProvinces();
   const [form, setForm] = useState<Form>('treemap');
   const [view, setView] = useState<View>('mineria');
@@ -242,10 +256,11 @@ export function ResourcesStep() {
           </li>
         ))}
       </ul>
-      <div className="res-grid">
+      <PanelRail compact={compact} items={RES_PANELS} active={panel} onPick={setPanel} />
+      <div className="res-grid" data-compact={compact || undefined}>
         <div className="res-left">
           {parts ? (
-            <Reveal k={`parts-${view}-${form}-${selected ?? 'all'}`} className="gdp-chart">
+            <Reveal k={`parts-${view}-${form}-${selected ?? 'all'}`} className="gdp-chart" {...panelAttrs(compact, panel, 'parts')}>
               <strong className="composition-title">
                 <span>{`${parts.title} (${parts.unit})`}</span>
                 <ChartHelp title={parts.title} paragraphs={[step8Info.paragraphs[0]!, step8Info.paragraphs[1]!]} how={step8Info.how} refs={step8Info.refs} />
@@ -258,7 +273,7 @@ export function ResourcesStep() {
               <Parts title={parts.title} unit={parts.unit} parts={parts.parts} form={form} onPick={view === 'total' && !selected ? pickSector : undefined} />
             </Reveal>
           ) : selected ? (
-            <div className="gdp-chart">
+            <div className="gdp-chart" {...panelAttrs(compact, panel, 'parts')}>
               <strong className="composition-title">
                 <button type="button" className="btn" onClick={() => setSelected(null)}>
                   Todo el país
@@ -266,7 +281,7 @@ export function ResourcesStep() {
               </strong>
             </div>
           ) : null}
-          <Reveal k={`bars-${view}-${selected ?? 'all'}`} delay={0.07} className="gdp-chart">
+          <Reveal k={`bars-${view}-${selected ?? 'all'}`} delay={0.07} className="gdp-chart" {...panelAttrs(compact, panel, 'bars')}>
             <strong className="composition-title">
               <span>{`${drilldownBars.title} (${drilldown.unit})`}</span>
               <ChartHelp title={drilldownBars.title} paragraphs={[step8Info.paragraphs[2]!, step8Info.paragraphs[3]!]} how={step8Info.how} refs={step8Info.refs} />
@@ -276,7 +291,7 @@ export function ResourcesStep() {
             </div>
           </Reveal>
           {projects.length > 0 && selectedDept && (
-            <Reveal k={`projects-${selected}-${selectedDept}`} delay={0.1} className="gdp-chart dept-projects-card">
+            <Reveal k={`projects-${selected}-${selectedDept}`} delay={0.1} className="gdp-chart dept-projects-card" {...panelAttrs(compact, panel, 'bars')}>
               <div className="dept-projects-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-sm)' }}>
                 <strong className="composition-title" style={{ margin: 0 }}>
                   Proyectos mineros en {selectedDept} ({projects.length})
@@ -334,7 +349,7 @@ export function ResourcesStep() {
             </Reveal>
           )}
         </div>
-        <Reveal k={`map-${view}`} delay={0.14} className="gdp-chart prov-map res-map">
+        <Reveal k={`map-${view}`} delay={0.14} className="gdp-chart prov-map res-map" {...panelAttrs(compact, panel, 'map')}>
           <strong
             className="composition-title"
             style={{

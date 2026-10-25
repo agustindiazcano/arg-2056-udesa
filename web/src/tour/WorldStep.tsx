@@ -17,6 +17,9 @@ import { elapsedForYear, seriesFrame, valueAt, yearAtElapsed } from './worldAnim
 import { SPEEDS } from '../state/reducer.js';
 import { useTimeline } from './useTimeline.js';
 import { WorldTable } from './WorldTable.js';
+import { useCompact } from './compact.js';
+import { PanelRail, panelAttrs } from './PanelRail.js';
+import type { PanelItem } from './PanelRail.js';
 import { COMPARE_OPTIONS, DEFAULT_COMPARE, compareSeries, countryColor, flagSrc, isSquashed } from './worldCompare.js';
 import { FIRST_YEAR, HOME, LAST_YEAR, REGION_METRICS, WORLD_SOURCE, WORLD_UNIT, mainSeries, rankAt, regionCountries, regionGrowth, regionValuesAt } from './worldData.js';
 import type { RankMetric, RegionMetric } from './worldData.js';
@@ -63,7 +66,18 @@ const REGION_OPTIONS = [
  * follows it, and pulls back when it reaches the last year (in 2D and in 3D); on the right the top 20 of the world's economies
  * and the largest economies of the region. Made-up values.
  */
+type WorldPanel = 'main' | 'ranks' | 'region';
+
+// on a short laptop screen the three panels do not fit together: one is big and the other two are small buttons
+const WORLD_PANELS: ReadonlyArray<PanelItem<WorldPanel>> = [
+  { key: 'main', title: 'PBI en el tiempo', icon: 'line' },
+  { key: 'ranks', title: 'Ranking mundial', icon: 'table' },
+  { key: 'region', title: 'Región', icon: 'bars' }
+];
+
 export function WorldStep() {
+  const compact = useCompact();
+  const [panel, setPanel] = useState<WorldPanel>('main');
   const mode = useStore((s) => s.mode);
   const dispatch = useStore((s) => s.dispatch);
   const reduced = useReducedMotion();
@@ -170,7 +184,7 @@ export function WorldStep() {
             <ChartHelp title={step0Info.heading} lead={MAIN_UNIT} paragraphs={showGrowth ? [...step0Info.paragraphs, GROWTH_HELP] : step0Info.paragraphs} how={step0Info.how} refs={step0Info.refs} />
           </div>
           <p className="gdp-sub">
-            {FIRST_YEAR} a {LAST_YEAR} · <span className="gdp-source">{WORLD_SOURCE}</span> · <RefList ids={step0Info.refs} />
+            {FIRST_YEAR} a {LAST_YEAR} · <span className="gdp-source">{WORLD_SOURCE}</span>{!compact && <> · <RefList ids={step0Info.refs} /></>}
           </p>
         </Reveal>
         <div className="tour-controls">
@@ -214,8 +228,9 @@ export function WorldStep() {
         </div>
       </header>
 
-      <div className="prov-grid">
-        <Reveal k="main" className="gdp-chart prov-map">
+      <PanelRail compact={compact} items={WORLD_PANELS} active={panel} onPick={setPanel} />
+      <div className="prov-grid" data-compact={compact || undefined}>
+        <Reveal k="main" className="gdp-chart prov-map" {...panelAttrs(compact, panel, 'main')}>
           <div className="world-year" aria-hidden="true">
             <strong>{shownYear}</strong>
             <span>{formatValue(Math.round(shownValue), MAIN_UNIT)}</span>
@@ -259,7 +274,7 @@ export function WorldStep() {
         </Reveal>
 
         <div className="prov-side">
-          <Reveal k="top" delay={0.07} className="gdp-chart prov-rank" role="region" aria-label="Rankings mundiales de PBI y de PBI per cápita">
+          <Reveal k="top" delay={0.07} className="gdp-chart prov-rank" {...panelAttrs(compact, panel, 'ranks')} role="region" aria-label="Rankings mundiales de PBI y de PBI per cápita">
             <div className="prov-rank-head">
               <strong>Ranking mundial en {shownYear}</strong>
               <ChartHelp
@@ -291,7 +306,7 @@ export function WorldStep() {
             </div>
           </Reveal>
 
-          <Reveal k="region" delay={0.14} className="gdp-chart prov-bars" role="region" aria-label="Mayores economías de la región">
+          <Reveal k="region" delay={0.14} className="gdp-chart prov-bars" {...panelAttrs(compact, panel, 'region')} role="region" aria-label="Mayores economías de la región">
             <div className="tour-caption">
               <strong>Mayores economías de la región</strong>
               <ChartHelp

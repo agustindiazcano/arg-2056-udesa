@@ -3893,3 +3893,83 @@ button.brand:focus-visible .brand-a {
 .profile-kpis .res-totals {
   padding: var(--space-2, 0.5rem) var(--space-3);
 }
+
+/* ---- Recorrido on a short laptop screen: one chart big, the others behind small buttons (docs/action-plan-laptop-recorrido.md) ---- */
+
+.panel-rail {
+  display: flex;
+  flex: none;
+  gap: var(--space-2, 0.5rem);
+  overflow-x: auto;
+  pointer-events: auto;
+}
+
+.panel-rail-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex: none;
+  padding: 0.3rem 0.7rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md, 8px);
+  background: var(--glass);
+  color: var(--muted);
+  font: inherit;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.panel-rail-btn:hover {
+  color: var(--ink);
+  border-color: var(--blue);
+}
+
+.panel-rail-btn[aria-pressed='true'] {
+  color: var(--ink);
+  border-color: var(--blue);
+  background: color-mix(in srgb, var(--blue) 16%, transparent);
+}
+
+.panel-rail-btn:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+[data-hidden='true'] {
+  display: none !important;
+}
+
+@media (max-height: 820px) and (min-width: 901px) {
+  .prov-grid[data-compact],
+  .res-grid[data-compact] {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr);
+  }
+
+  /* the ranking and the bars (and the left column of Recursos) are grid items of their own, so each can be the big one */
+  .prov-grid[data-compact] > .prov-side,
+  .res-grid[data-compact] > .res-left {
+    display: contents;
+  }
+
+  /* the references are in the side panel; the chips under the title cost two lines of the chart */
+  .tour-frame .gdp-sub .ref-chip-list {
+    display: none;
+  }
+
+  .tour-side {
+    flex-basis: min(19rem, 26vw);
+  }
+
+  /* the totals of Recursos in one row */
+  .res-totals {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    gap: var(--space-4, 1.5rem);
+    padding: var(--space-1, 0.25rem) var(--space-3);
+  }
+
+  .res-total {
+    flex: none;
+  }
+}
