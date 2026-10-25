@@ -184,7 +184,7 @@ export function WorldStep() {
             <ChartHelp title={step0Info.heading} lead={MAIN_UNIT} paragraphs={showGrowth ? [...step0Info.paragraphs, GROWTH_HELP] : step0Info.paragraphs} how={step0Info.how} refs={step0Info.refs} />
           </div>
           <p className="gdp-sub">
-            {FIRST_YEAR} a {LAST_YEAR} · <span className="gdp-source">{WORLD_SOURCE}</span> · <RefList ids={step0Info.refs} />
+            {FIRST_YEAR} a {LAST_YEAR} · <span className="gdp-source">{WORLD_SOURCE}</span>{!compact && <> · <RefList ids={step0Info.refs} /></>}
           </p>
         </Reveal>
         <div className="tour-controls">

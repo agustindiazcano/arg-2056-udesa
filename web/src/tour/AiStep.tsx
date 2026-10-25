@@ -211,7 +211,8 @@ export function AiStep() {
             <ChartHelp title={step3Info.heading} lead={GDP_UNIT} paragraphs={step3Info.paragraphs} how={step3Info.how} refs={step3Info.refs} />
           </div>
           <p className="gdp-sub">
-            {FIRST} a {LAST} · {from1960 ? 'historia observada (1960-2025) y tres escenarios con la IA hacia 2056' : 'tres escenarios con la IA como impulso a la productividad'} · <RefList ids={step3Info.refs} />
+            {FIRST} a {LAST} · {from1960 ? 'historia observada (1960-2025) y tres escenarios con la IA hacia 2056' : 'tres escenarios con la IA como impulso a la productividad'}
+            {!compact && <> · <RefList ids={step3Info.refs} /></>}
           </p>
         </Reveal>
         <div className="tour-controls">

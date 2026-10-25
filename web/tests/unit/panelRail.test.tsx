@@ -1,6 +1,7 @@
+// @vitest-environment jsdom
 import React from 'react';
-import { describe, expect, it, vi } from 'vitest';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { afterEach, describe, expect, it, vi } from 'vitest';
+import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { PanelRail, panelAttrs } from '../../src/tour/PanelRail';
 import { isCompact } from '../../src/tour/compact';
 
@@ -9,6 +10,8 @@ const ITEMS = [
   { key: 'b', title: 'Ranking', icon: 'table' },
   { key: 'c', title: 'Región', icon: 'bars' }
 ] as const;
+
+afterEach(cleanup);
 
 describe('isCompact', () => {
   it('is true on a short laptop screen', () => {
