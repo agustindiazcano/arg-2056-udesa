@@ -17,8 +17,8 @@ import type { Part, ResourceSector } from './resourcesData.js';
 import { TourChart } from './TourChart.js';
 import type { Map3DSpec } from '../charts3d/types.js';
 import { mapSummary } from '../scenes/forecast/mapSelectors.js';
-import { ProvinceStep } from './ProvinceStep.js';
 import { ProvinceProfileStep } from './ProvinceProfileStep.js';
+import { RigiMapStep } from './RigiMapStep.js';
 import { RESOURCES_TITLE } from './slideTitles.js';
 import { provinceSectorBreakdown } from './provinceSectorBreakdown.js';
 import { getDepartmentProjects, provinceDrilldownData } from './provinceDrilldown.js';
@@ -35,10 +35,13 @@ export { PRODUCER_MIN };
 
 type View = ResourceSector | 'total';
 
+/** The title of the slide while the province indicators are shown: only the title changes, the look stays the one of Recursos. */
+const PROFILE_SLIDE_TITLE = 'Perfil por provincia';
+
 const PARTS = [
   { value: 'resources', label: 'Recursos' },
-  { value: 'provinces', label: 'Producción por provincia' },
-  { value: 'profile', label: 'Perfil por provincia' }
+  { value: 'profile', label: 'Perfil por provincia' },
+  { value: 'rigi', label: 'Mapa del RIGI' }
 ] as const;
 
 type Pane = (typeof PARTS)[number]['value'];
@@ -195,27 +198,27 @@ export function ResourcesStep() {
       setSelectedDept(null);
     }
   }, []);
-  if (part === 'provinces') {
+  if (part === 'rigi') {
     return (
-      <section className="gdp-step" aria-label={RESOURCES_TITLE}>
+      <section className="gdp-step res-step" aria-label="Mapa del RIGI">
         <header className="gdp-head">
           <Reveal k="head" className="gdp-title">
-            <h2>{RESOURCES_TITLE}</h2>
+            <h2>Mapa del RIGI</h2>
           </Reveal>
           <div className="tour-controls">
             <Segmented label="Mostrar" options={PARTS} value={part} onChange={setPart} />
           </div>
         </header>
-        <ProvinceStep embedded />
+        <RigiMapStep />
       </section>
     );
   }
   if (part === 'profile') {
     return (
-      <section className="gdp-step" aria-label={RESOURCES_TITLE}>
+      <section className="gdp-step res-step" aria-label={PROFILE_SLIDE_TITLE}>
         <header className="gdp-head">
           <Reveal k="head" className="gdp-title">
-            <h2>{RESOURCES_TITLE}</h2>
+            <h2>{PROFILE_SLIDE_TITLE}</h2>
           </Reveal>
           <div className="tour-controls">
             <Segmented label="Mostrar" options={PARTS} value={part} onChange={setPart} />

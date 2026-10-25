@@ -12,6 +12,9 @@ import { Rule70Step } from './Rule70Step.js';
 import { ProductivityStep } from './ProductivityStep.js';
 import { WorldStep } from './WorldStep.js';
 import { DevelopmentStep } from './DevelopmentStep.js';
+import { AiAccessStep } from './AiAccessStep.js';
+import { DraftSlide } from './DraftSlide.js';
+import { DRAFT_SLIDES } from './draftSlides.js';
 import { ForecastUncertaintyStep } from './ForecastUncertaintyStep.js';
 import { INDEX_STEP } from './chartSteps.js';
 import { TourSidebar } from './TourSidebar.js';
@@ -22,6 +25,9 @@ export function TourStep({ step }: { step: number }) {
   if (step === 14) return <ProductivityStep />;
   if (step === 16) return <DevelopmentStep />;
   if (step === 17) return <ForecastUncertaintyStep />;
+  if (step === 21) return <AiAccessStep />;
+  const draft = DRAFT_SLIDES.find((d) => d.id === step);
+  if (draft) return <DraftSlide def={draft} />;
   // every other step has the side panel with the text and the references, next to its chart
   return (
     <div className="tour-frame">

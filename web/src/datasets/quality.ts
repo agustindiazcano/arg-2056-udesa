@@ -38,7 +38,7 @@ export const TABLE_META: Readonly<Record<string, TableMeta>> = {
   'external-oecd': meta('real', 'OCDE, Economic Outlook 117 long-term scenarios (DSD_EO_LTB)', '2026-10-14'),
   'external-un': meta('real', 'ONU, World Population Prospects 2024', '2026-10-14'),
   indicators: meta('real', 'Banco Mundial (WDI) e INDEC (población), 2025', '2026-10-12'),
-  provinces: made(),
+  provinces: meta('partial', 'Agro: MAGyP, campaña 2024/25 de soja, maíz, trigo y girasol a precios FOB de la campaña; minería e hidrocarburos de prueba', '2026-10-23'),
   'hydrocarbons-provinces': meta('real', `${ENERGIA}, producción 2025 por provincia`, '2026-10-13'),
   'chart-3': meta('partial', REPORT, '2026-10-15'),
   'ai-scenarios': meta('partial', REPORT, '2026-10-15'),
@@ -50,7 +50,7 @@ export const TABLE_META: Readonly<Record<string, TableMeta>> = {
   complexes: meta('real', INDEC_X, '2026-10-13'),
   'great-items': meta('real', 'INDEC, Intercambio comercial argentino (informe de agosto de 2026)', '2026-10-13'),
   'chart-5': meta('real', 'Cálculo propio: 70 dividido la tasa de crecimiento, sin dato externo', '2026-10-14'),
-  'provinces-value': made(),
+  'provinces-value': meta('partial', 'Agro: MAGyP, campaña 2024/25 de soja, maíz, trigo y girasol a precios FOB de la campaña; minería e hidrocarburos de prueba', '2026-10-23'),
   'rule70-errors': meta('real', CALC, '2026-10-15'),
   'rule70-argentina': meta('real', `${CALC}; PBI real de 2026: Banco Mundial y FMI`, '2026-10-15'),
   'rule70-countries': meta('real', `${WB}; PBI per cápita: PBI sobre población del mismo archivo; tasas calculadas`, '2026-10-15'),
@@ -74,6 +74,8 @@ export const TABLE_META: Readonly<Record<string, TableMeta>> = {
   'rigi-oil-gas': meta('partial', PRESS, '2026-10-13'),
   'chart-10': made(),
   'agro-tonnes': meta('real', 'MAGyP, series anuales nacionales (datos.gob.ar); millones de toneladas', '2026-10-13'),
+  'agro-other-crops': meta('real', 'MAGyP, Estimaciones agrícolas (datos.magyp.gob.ar), serie completa por campaña; sin la caña de azúcar, que no está en el archivo', '2026-10-23'),
+  'agro-livestock': meta('partial', 'Bolsa de Comercio de Rosario, balance cárnico y lácteo 2025 (estimación, con datos de la SAGyP y del OCLA)', '2026-10-23'),
   'agro-production': meta('real', 'MAGyP, series nacionales anuales (datos.gob.ar)', '2026-10-13'),
   'chart-11': meta('real', INDEC_X, '2026-10-13'),
   'exports-shares': meta('real', `${INDEC_X}; porcentajes calculados`, '2026-10-13'),
@@ -99,7 +101,14 @@ export const TABLE_META: Readonly<Record<string, TableMeta>> = {
   'ai-inference-costs': meta('real', 'Stanford HAI (AI Index 2025) y Artificial Analysis, costo por 1M tokens', '2026-10-18'),
   'macro-forecast-errors': meta('real', 'FMI (WEO Historical Database) e INDEC, desvíos observados vs proyectados', '2026-10-18'),
   'development-draft': draft('Estructura conceptual de indicadores agregados, cobertura y dimensiones sociales'),
-  'forecast-uncertainty-draft': draft('Estructura conceptual de difusión tecnológica, costos de computación y sensibilidad distributiva')
+  'forecast-uncertainty-draft': draft('Estructura conceptual de difusión tecnológica, costos de computación y sensibilidad distributiva'),
+  'ai-plans-cost': meta('partial', 'Precios de lista de OpenAI, Anthropic y Google según blogs de comparación; impuestos de Argentina (RG 4240 y RG 5617) según notas contables; IVA general de cada país', '2026-10-23'),
+  'ai-plans-taxes': meta('partial', 'Notas contables sobre RG 4240 y RG 5617 (Argentina); tasas generales de IVA o GST de cada país', '2026-10-23'),
+  'draft-22': draft('Esquema de temas del borrador'),
+  'draft-23': draft('Esquema de temas del borrador'),
+  'draft-24': draft('Esquema de temas del borrador'),
+  'draft-25': draft('Esquema de temas del borrador'),
+  'draft-26': draft('Esquema de temas del borrador')
 };
 
 /** The table with its quality, source and retrieval date; throws if the registry does not know it, so a new table cannot go without them. */
