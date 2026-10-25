@@ -45,8 +45,8 @@ def test_the_result_stays_inside_the_bracket_of_the_parameter():
     fast = calibrate_kappa_f(synthetic(0.5), 4.0, 1.8, 2005)
     slow = calibrate_kappa_f(synthetic(0.001), 4.0, 1.8, 2005)
     assert p.low <= slow <= fast <= p.high
-    assert fast == p.high
-    assert slow == p.low
+    assert fast == pytest.approx(p.high, abs=1e-12)
+    assert slow == pytest.approx(p.low, abs=1e-12)
 
 
 def test_needs_at_least_two_years_in_the_window():

@@ -34,7 +34,8 @@ def test_e0_path_values_at_origin_one_year_and_limit():
     # e0_1 = 86 - (86 - 70) * exp(-0.1)
     assert path[1] == pytest.approx(86.0 - 16.0 * math.exp(-0.1), abs=1e-12)
     assert path[2] == pytest.approx(86.0 - 16.0 * math.exp(-0.2), abs=1e-12)
-    assert e0_path(70.0, 86.0, 0.1, 200)[-1] == pytest.approx(86.0, abs=1e-9)
+    # 16 * exp(-0.1 * 400) is about 7e-17
+    assert e0_path(70.0, 86.0, 0.1, 400)[-1] == pytest.approx(86.0, abs=1e-9)
 
 
 def test_paths_reject_a_negative_horizon():
