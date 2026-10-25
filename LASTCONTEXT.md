@@ -13,6 +13,12 @@
   8. `task/province-hdi`: provincial HDI (PNUD 2021, values copied from the Wikipedia table that reproduces the report) as a metric.
   9. `task/agro-by-province-real`: agro by province from `agroByProvince.json` (real MAGyP, checked against the full series) instead of made-up values; livestock, fruit and industrial crops by province are no longer shown.
 
+- **Branch `task/new-slides-laptop-dataviz`** (2026-10-25, on top of `main` with the stack merged): review of the new slides against the dataviz guide and the laptop (1366x768).
+  - Slide 7 (desarrollo) chart: `lineOption` in `developmentView.ts`: value axis fitted to the data (it started at 0 and the lines were flat), Argentina white, thicker and on top with its name at the end of the line, one fixed validated color per peer (Colombia and Uruguay had the same pink before), room on the right for the label.
+  - Slide 2 «Perfil por provincia»: rail Ranking / Mapa on a short screen (`ProvinceProfileStep.tsx`), tighter header and KPI strip.
+  - Slide 9 (costo de la IA) fits and follows the guide; slides 10 to 14 are text outlines (no data, nothing to chart), they fit.
+  - Not done: the RIGI list card scrolls inside at 768 px; the bottom border of the profile card is cut by about 8 px at 768 px.
+
 ## Human checks pending
 - AI plan list prices (A22) and Argentine taxes (A20, A21) against ARCA and the official pricing pages; VAT rates of the other countries are the general ones; Brazil left out.
 - Livestock figures (BCR, 2025 estimates) against SAGyP and the Anuario Porcino; milk density assumption.
