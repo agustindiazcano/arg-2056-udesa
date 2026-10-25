@@ -3972,4 +3972,26 @@ button.brand:focus-visible .brand-a {
   .res-total {
     flex: none;
   }
+
+  /* the charts give up their minimum height so the card fits the screen */
+  .res-grid[data-compact] {
+    overflow: hidden;
+  }
+
+  .res-grid[data-compact] .gdp-chart > .tour-chart {
+    min-height: 0;
+  }
+
+  .profile-kpis .res-total .tour-ind-unit {
+    display: none;
+  }
+
+  /* the title row and the controls under it sit closer */
+  .prov-step .gdp-head {
+    row-gap: var(--space-1, 0.25rem);
+  }
+
+  .prov-step .gdp-sub {
+    margin-top: 0;
+  }
 }

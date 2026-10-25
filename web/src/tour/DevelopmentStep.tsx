@@ -1,13 +1,12 @@
 import React, { useMemo, useState } from 'react';
 import { EChart } from '../charts/EChart.js';
-import { buildLines } from '../charts/builders/tourCharts.js';
 import { Reveal } from '../motion/Reveal.js';
 import { ChartHelp } from '../ui/ChartHelp.js';
 import { RefList } from '../ui/RefLink.js';
 import { DEVELOPMENT_TITLE } from './slideTitles.js';
 import { DEVELOPMENT_INDICATORS_DATA } from './developmentData.js';
 import type { IndicatorData } from './developmentData.js';
-import { chartSeries, flagOf, higherIsBetter, rankingRows } from './developmentView.js';
+import { chartSeries, flagOf, higherIsBetter, lineOption, rankingRows } from './developmentView.js';
 
 const INDICATORS = {
   Salud: ['Esperanza de vida al nacer', 'Mortalidad infantil', 'IDH · salud'],
@@ -45,7 +44,7 @@ export function DevelopmentStep() {
 
   const summary = `${data.title}, ${chart.years[0]} a ${chart.years.at(-1)}: ${chart.series.map((s) => `${s.name} ${fmt(s.values.filter((v): v is number => v !== null).at(-1))}`).join(', ')}`;
   const option = useMemo(
-    () => buildLines(chart.years.map(String), chart.series, { unit: data.unit, labelEvery: chart.years.length > 12 ? 2 : 0, summary }).option,
+    () => lineOption(chart, { unit: data.unit, summary }),
     [chart, data.unit, summary]
   );
 
