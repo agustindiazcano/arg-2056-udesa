@@ -273,5 +273,8 @@ describe('buildProvinceMap with province colours (traffic light)', () => {
     const option = built.option as unknown as { visualMap?: unknown; series: Array<{ data: Array<{ name: string; itemStyle?: { areaColor: string } }> }> };
     expect(option.visualMap).toBeUndefined();
     expect(option.series[0]!.data.map((d) => [d.name, d.itemStyle?.areaColor])).toEqual([['AR-A', '#0ca30c'], ['AR-B', '#d03b3b']]);
+    // the map series shares the geo component, so the colours must also be in its regions or the map is drawn grey
+    const regions = (built.option as unknown as { geo: { regions: Array<{ name: string; itemStyle?: { areaColor?: string } }> } }).geo.regions;
+    expect(regions.filter((r) => r.name !== MALVINAS_ID).map((r) => [r.name, r.itemStyle?.areaColor])).toEqual([['AR-A', '#0ca30c'], ['AR-B', '#d03b3b']]);
   });
 });
