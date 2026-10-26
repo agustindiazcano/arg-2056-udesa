@@ -1,14 +1,11 @@
 # LASTCONTEXT.md
 
 ## State
-- **Branch**: `task/model-population-drivers` (from `main` after PR #152; `main` merged back in on 2026-10-25). CI green; PR #154.
-- **Task done**: the mechanisms of section 2.1 on top of the validated cohort step. No change to `step_population` or `project_population`. No real data, no random draws, no new dependency.
-  - `model/src/argmodel/population/drivers.py`: `tfr_path`, `e0_path`, `fertility_by_age`, `migration_by_age`, `life_expectancy`, `survival_for_e0` (one-parameter relational life table, Brass with slope 1, bisection on the logit shift in [-2, 2], tolerance 1e-10 years), `WORKING_AGE = (15, 64)`.
-  - `projection.py`: `PopulationParams`, `ProjectionResult` (read-only arrays), `project`; a negative cohort raises `project: year t: step_population: ...`.
-  - `calibrate.py`: `calibrate_kappa_f` (training window only; grid of 801 points over the bracket of `pop.kappa_f` plus golden-section refinement; a gap in the window raises).
-  - Tests: `model/tests/test_population_drivers.py`, `test_population_projection.py`, `test_population_calibrate.py` (includes a scan that fails on a numeric literal outside a named constant in the three modules). Written before the code; not run locally (RULE #1), only a scratch check of the reachable e0 range of the test standard table (29.8 to 94.7 years).
-  - Docs: `docs/population-model.md`; assumption A35 (working age 15 to 64) in `docs/assumptions.md`.
-- **Deviation from the brief**: `life_expectancy` is written again in `argmodel` (the model package cannot import from `scripts/`); it is the same formula as `check_life_table`; the doc says they must stay equal.
+- **Branch**: `task/slide2-layout-fixes` (from `main` after PR #154). Human review of slides 2, 6 and 7 by eye (1366x768 and 1920x1080).
+- **Slide 2** (Recursos / Perfil por provincia / Mapa del RIGI): one layout for the three parts (the «Mostrar» buttons under the title on the left; the embedded part has no second padding); a single card in the left column takes the full height (`res-left--single`); standalone buttons use `.btn` (they were `.seg`, only styled inside `.segmented`); the table of the profile is a real styled table (`.prov-table`); the traffic light of the profile map is now drawn: `buildProvinceMap` puts the colours in `geo.regions` (the map series shares the geo component through `geoIndex`, so colours only on the series data came out grey).
+- **Slide 6** (IA): the country reference lines (flags) are only on the big chart, not on the small ones.
+- **Slide 7** (desarrollo), education against peers: four World Bank WDI series for Argentina and seven peers (`SE.SEC.ENRR`, `SE.TER.ENRR`, `SE.SCH.LIFE`, `SE.XPD.TOTL.GD.ZS`; `scripts/build_development_series.py`, `developmentSeries.json`, entries built in `developmentData.ts`); PISA mathematics 2012, 2018, 2022 for the eight countries (`scripts/build_pisa_series.py`, `pisaSeries.json`; OECD tables via Our World in Data; 2015 left out, Argentina did not take part nationally); España and Estados Unidos added to the PISA ranking.
+- Tests: targeted only (`provinceMapBuilder`, `developmentData`, `developmentView`, `developmentStep`, `provinceProfileStep`, `resourcesParts`); the rest runs in CI.
 
 ## Already in `main` (merged before this task)
 - **PR #151** (merged first, `task/laptop-recorrido-layout`): the Recorrido on a short laptop screen. Slides 1, 2 and 6 show one chart big and the others behind small buttons when the screen is at most 820 px tall (`web/src/tour/compact.ts`, `PanelRail.tsx`, CSS at the end of `ui.css`; plan `docs/action-plan-laptop-recorrido.md`). `tokens.categorical` and `--cat-1..8` reordered so the first eight pass `validate_palette.js --mode dark`; colors 9 to 16 not validated.
@@ -46,5 +43,5 @@
 - Relational life table choice, working age 15 to 64 (A35), `kappa_F` once real fertility data exist.
 
 ## Next
-- Human: approve PR #154 and the open items above; then the next task.
+- Human: approve PR #154 and the slide 2, 6, 7 PR and the open items above; then the next task.
 - Then `backtest-baselines` (READY for the code) or `model-growth-core` (blocked by 1 and 2, which are done: check the brief).

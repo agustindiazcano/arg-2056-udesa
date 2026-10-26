@@ -34,10 +34,19 @@ describe('developmentView.chartSeries', () => {
     c.series.forEach((s) => expect(s.values).toHaveLength(c.years.length));
   });
 
-  it('falls back to the series of Argentina alone for an indicator with no yearly series of the peers', () => {
+  it('draws PISA with Argentina and the seven peers in the editions 2012, 2018 and 2022', () => {
     const c = chartSeries('Resultados PISA');
+    expect(c.years).toEqual([2012, 2018, 2022]);
+    expect(c.series[0]!.name).toBe('Argentina');
+    expect(c.series).toHaveLength(8);
+    expect(c.series[0]!.values).toEqual(DEVELOPMENT_INDICATORS_DATA['Resultados PISA']!.timeSeries.map((p) => p.value));
+    c.series.forEach((s) => expect(s.values).toHaveLength(3));
+  });
+
+  it('falls back to the series of Argentina alone for an indicator with no series of the peers', () => {
+    const c = chartSeries('Graduación STEM');
     expect(c.series.map((s) => s.name)).toEqual(['Argentina']);
-    expect(c.years.length).toBe(DEVELOPMENT_INDICATORS_DATA['Resultados PISA']!.timeSeries.length);
+    expect(c.years.length).toBe(DEVELOPMENT_INDICATORS_DATA['Graduación STEM']!.timeSeries.length);
   });
 });
 

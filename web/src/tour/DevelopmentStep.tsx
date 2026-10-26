@@ -10,7 +10,7 @@ import { chartSeries, flagOf, higherIsBetter, lineOption, rankingRows } from './
 
 const INDICATORS = {
   Salud: ['Esperanza de vida al nacer', 'Mortalidad infantil', 'IDH · salud'],
-  Educación: ['Resultados PISA', 'Años de escolaridad', 'Población graduada universitaria', 'Graduación STEM', 'IDH · educación'],
+  Educación: ['Resultados PISA', 'Años de escolaridad', 'Escolaridad esperada', 'Matrícula secundaria', 'Matrícula terciaria', 'Gasto público en educación', 'Población graduada universitaria', 'Graduación STEM', 'IDH · educación'],
   Igualdad: ['Índice de Gini', 'Pobreza monetaria', 'IDH general']
 } as const;
 

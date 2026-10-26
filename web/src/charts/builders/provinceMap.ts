@@ -57,9 +57,12 @@ export function buildProvinceMap(input: ProvinceMapInput, opts: ProvinceMapOpts)
     .filter((id) => centroids[id] !== undefined)
     .map((id) => ({ name: nameOf(id) ?? id, value: centroids[id]!, provinceId: id }));
 
-  const regions: Array<Record<string, unknown>> = [];
+  // the traffic light goes in the regions of the geo component: the map series shares it (`geoIndex`), so a colour only on the series data is not drawn
+  const regions: Array<Record<string, unknown>> = Object.entries(provinceColors ?? {})
+    .filter(([id]) => id !== selectedId)
+    .map(([id, areaColor]) => ({ name: id, itemStyle: { areaColor } }));
   if (selectedId !== null) {
-    regions.push({ name: selectedId, itemStyle: { borderColor: tokens.ink, borderWidth: 2 } });
+    regions.push({ name: selectedId, itemStyle: { ...(provinceColors?.[selectedId] ? { areaColor: provinceColors[selectedId] } : {}), borderColor: tokens.ink, borderWidth: 2 } });
   }
   regions.push({
     name: MALVINAS_ID,

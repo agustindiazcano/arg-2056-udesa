@@ -3995,3 +3995,86 @@ button.brand:focus-visible .brand-a {
     margin-top: 0;
   }
 }
+
+/* ---- Slide 2 (Recursos, Perfil por provincia, Mapa del RIGI): the three parts share one layout ---- */
+
+/* the «Mostrar» buttons sit under the title on the left in the three parts, whatever the width */
+.res-step > .gdp-head {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2, 0.5rem);
+}
+
+/* the part inside the slide is not a slide of its own: no second padding and it fills what the header leaves */
+.res-step > .gdp-step {
+  flex: 1 1 auto;
+  min-height: 0;
+  height: auto;
+  padding: 0;
+}
+
+/* a single card in the left column takes all the height, not one of two rows */
+.res-left--single {
+  grid-template-rows: minmax(0, 1fr);
+}
+
+.prov-card-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2, 0.5rem);
+}
+
+.prov-table-wrap {
+  height: 100%;
+  overflow: auto;
+  pointer-events: auto;
+}
+
+.prov-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+  color: var(--ink);
+}
+
+.prov-table th,
+.prov-table td {
+  padding: 0.35rem 0.5rem;
+  text-align: right;
+  font-weight: 400;
+  font-variant-numeric: tabular-nums;
+  border-bottom: 1px solid var(--border);
+}
+
+.prov-table thead th {
+  position: sticky;
+  top: 0;
+  background: var(--surface);
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.prov-table th:nth-child(1),
+.prov-table td:nth-child(1) {
+  color: var(--muted);
+  text-align: left;
+}
+
+.prov-table th:nth-child(2) {
+  text-align: left;
+}
+
+.prov-table tbody tr {
+  cursor: pointer;
+}
+
+.prov-table tbody tr:hover,
+.prov-table tbody tr[data-selected] {
+  background: color-mix(in srgb, var(--blue) 16%, transparent);
+}
+
+.prov-table tbody tr[data-selected] th {
+  font-weight: 700;
+}

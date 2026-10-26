@@ -89,7 +89,7 @@ export function RigiMapStep() {
       </ul>
 
       <div className="res-grid">
-        <div className="res-left">
+        <div className={selected ? 'res-left' : 'res-left res-left--single'}>
           <Reveal k={`rigi-rank-${metric}-${filter}`} className="gdp-chart">
             <strong className="composition-title">{`Provincias por ${metric === 'investment' ? 'inversión' : 'cantidad de proyectos'} (${UNIT[metric]})`}</strong>
             <ol className="prov-rank-list">

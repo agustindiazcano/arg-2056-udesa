@@ -167,11 +167,11 @@ export function AiStep() {
     return {
       gdp: {
         big: lineOption(activeYears, gdpLines, year, gdp.unit, gdpSummary, true, gdp.series[0]!.values[0], bigInterval, gdpRefs),
-        small: lineOption(activeYears, gdpLines, year, gdp.unit, gdpSummary, false, undefined, smallInterval, gdpRefs)
+        small: lineOption(activeYears, gdpLines, year, gdp.unit, gdpSummary, false, undefined, smallInterval)
       },
       percapita: {
         big: lineOption(perCapitaYears, perCapitaLines, year, perCapita.unit, perCapitaSummary, true, perCapitaBase, bigInterval, perCapitaRefs),
-        small: lineOption(perCapitaYears, perCapitaLines, year, perCapita.unit, perCapitaSummary, false, undefined, smallInterval, perCapitaRefs)
+        small: lineOption(perCapitaYears, perCapitaLines, year, perCapita.unit, perCapitaSummary, false, undefined, smallInterval)
       },
       population: {
         big: lineOption(popYears, popLines, year, 'M', popSummary, false, undefined, bigInterval),

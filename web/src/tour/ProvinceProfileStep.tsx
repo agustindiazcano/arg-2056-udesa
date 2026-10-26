@@ -151,8 +151,7 @@ export function ProvinceProfileStep({ embedded = false }: { embedded?: boolean }
                   setSelected(null);
                   setSelectedDept(null);
                 }}
-                className="seg"
-                style={{ fontSize: '0.8rem', padding: '3px 10px' }}
+                className="btn"
               >
                 ← Ver todo el país
               </button>
@@ -264,17 +263,17 @@ export function ProvinceProfileStep({ embedded = false }: { embedded?: boolean }
       <PanelRail compact={compact} items={PROFILE_PANELS} active={panel} onPick={setPanel} />
       <div className="res-grid" data-compact={compact || undefined}>
         {/* Left Side: Ranking and Accessible Table */}
-        <div className="res-left">
+        <div className="res-left res-left--single">
           <Reveal k={`chart-${metric}`} delay={0.1} className="gdp-chart" {...panelAttrs(compact, panel, 'chart')}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+            <div className="prov-card-head">
               <strong className="composition-title">
                 {`${activeMetricDef.label} por provincia (${activeMetricDef.unit})`}
               </strong>
               <button
                 type="button"
                 onClick={() => setShowTable((t) => !t)}
-                className="seg"
-                style={{ fontSize: '0.8rem', padding: '2px 8px' }}
+                className="btn"
+                aria-pressed={showTable}
               >
                 {showTable ? 'Ver gráfico' : 'Ver tabla'}
               </button>
@@ -289,48 +288,32 @@ export function ProvinceProfileStep({ embedded = false }: { embedded?: boolean }
                 ))}
               </p>
             )}
-            <div className="tour-chart" style={{ minHeight: '340px' }}>
+            <div className="tour-chart">
               {showTable ? (
-                <div style={{ overflowX: 'auto', maxHeight: '340px', pointerEvents: 'auto' }}>
-                  <table
-                    style={{
-                      width: '100%',
-                      borderCollapse: 'collapse',
-                      fontSize: '0.85rem',
-                      color: 'var(--ink)'
-                    }}
-                  >
+                <div className="prov-table-wrap">
+                  <table className="prov-table">
                     <thead>
-                      <tr style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.2)', textAlign: 'left' }}>
-                        <th style={{ padding: '6px' }}>#</th>
-                        <th style={{ padding: '6px' }}>Provincia</th>
-                        <th style={{ padding: '6px', textAlign: 'right' }}>{activeMetricDef.shortLabel}</th>
-                        <th style={{ padding: '6px', textAlign: 'right' }}>PBI per cápita</th>
-                        <th style={{ padding: '6px', textAlign: 'right' }}>Pobreza</th>
+                      <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Provincia</th>
+                        <th scope="col">{activeMetricDef.shortLabel}</th>
+                        <th scope="col">PBI per cápita</th>
+                        <th scope="col">Pobreza</th>
                       </tr>
                     </thead>
                     <tbody>
                       {rankedRows.map((r, idx) => {
                         const prof = PROVINCE_PROFILES[r.id];
-                        const isSelected = r.id === selected;
                         return (
-                          <tr
-                            key={r.id}
-                            onClick={() => setSelected((curr) => (curr === r.id ? null : r.id))}
-                            style={{
-                              borderBottom: '1px solid rgba(255, 255, 255, 0.05)',
-                              cursor: 'pointer',
-                              background: isSelected ? 'rgba(56, 189, 248, 0.15)' : 'transparent'
-                            }}
-                          >
-                            <td style={{ padding: '6px', color: 'var(--ink-muted)' }}>{idx + 1}</td>
-                            <td style={{ padding: '6px', fontWeight: isSelected ? 700 : 400 }}>
+                          <tr key={r.id} data-selected={r.id === selected || undefined} onClick={() => setSelected((curr) => (curr === r.id ? null : r.id))}>
+                            <td>{idx + 1}</td>
+                            <th scope="row">
                               {withSemaphore && <i className="semaphore-dot" style={{ background: TONE_COLORS[tones.get(r.id) ?? 'mid'] }} role="img" aria-label={TONE_LABELS[tones.get(r.id) ?? 'mid']} />}
                               {r.name}
-                            </td>
-                            <td style={{ padding: '6px', textAlign: 'right' }}>{formatProfileValue(metric, r.value)}</td>
-                            <td style={{ padding: '6px', textAlign: 'right' }}>{formatProfileValue('gdp_per_capita_usd', prof.gdp_per_capita_usd)}</td>
-                            <td style={{ padding: '6px', textAlign: 'right' }}>{formatProfileValue('poverty_pct', prof.poverty_pct)}</td>
+                            </th>
+                            <td>{formatProfileValue(metric, r.value)}</td>
+                            <td>{formatProfileValue('gdp_per_capita_usd', prof.gdp_per_capita_usd)}</td>
+                            <td>{formatProfileValue('poverty_pct', prof.poverty_pct)}</td>
                           </tr>
                         );
                       })}

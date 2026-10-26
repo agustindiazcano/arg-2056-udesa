@@ -1,0 +1,52 @@
+{
+ "source": "OCDE, PISA (puntaje medio de matemática), publicado por Our World in Data",
+ "sourceUrl": "https://ourworldindata.org/grapher/pisa-test-score-mean-performance-on-the-mathematics-scale",
+ "retrieved_at": "2026-10-25",
+ "years": [
+  2012,
+  2018,
+  2022
+ ],
+ "countries": {
+  "Argentina": [
+   388,
+   379,
+   378
+  ],
+  "Brasil": [
+   389,
+   384,
+   379
+  ],
+  "Chile": [
+   423,
+   417,
+   412
+  ],
+  "Uruguay": [
+   409,
+   418,
+   409
+  ],
+  "México": [
+   413,
+   409,
+   395
+  ],
+  "Colombia": [
+   376,
+   391,
+   383
+  ],
+  "España": [
+   484,
+   481,
+   473
+  ],
+  "Estados Unidos": [
+   481,
+   478,
+   465
+  ]
+ }
+}
