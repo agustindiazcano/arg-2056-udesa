@@ -1,6 +1,7 @@
 import { tokens } from '../styles/tokens.js';
 import { DEVELOPMENT_INDICATORS_DATA } from './developmentData.js';
 import series from './developmentSeries.json';
+import pisa from './pisaSeries.json';
 import { buildLines } from '../charts/builders/tourCharts.js';
 import { flagSrc } from './worldCompare.js';
 
@@ -35,8 +36,15 @@ export interface ChartSeries {
 
 const YEARLY = series.indicators as Record<string, { countries: Record<string, Array<number | null>> }>;
 
+/** PISA is measured every three years, so its chart has its own years (`pisaSeries.json`, mathematics) instead of the yearly ones of the World Bank. */
+const PISA_INDICATOR = 'Resultados PISA';
+
 /** What the big chart draws: Argentina and its peers year by year where there is a yearly series, otherwise the series of Argentina alone. */
 export function chartSeries(indicator: string): { years: number[]; series: ChartSeries[] } {
+  if (indicator === PISA_INDICATOR) {
+    const names = Object.keys(pisa.countries).sort((a, b) => (a === 'Argentina' ? -1 : b === 'Argentina' ? 1 : a.localeCompare(b)));
+    return { years: pisa.years, series: names.map((name) => ({ name, values: (pisa.countries as Record<string, Array<number | null>>)[name]!, color: seriesColor(name) })) };
+  }
   const yearly = YEARLY[indicator];
   if (yearly) {
     const years = Array.from({ length: series.lastYear - series.firstYear + 1 }, (_, i) => series.firstYear + i);
@@ -73,6 +81,8 @@ export function lineOption(chart: { years: number[]; series: ChartSeries[] }, op
       const home = s.name === 'Argentina';
       return {
         ...s,
+        // a series of a few editions (PISA) shows its points and joins them with straight segments
+        ...(chart.years.length <= 6 ? { smooth: false, showSymbol: true, symbolSize: home ? 9 : 6 } : {}),
         z: home ? 5 : 3,
         lineStyle: { ...s.lineStyle, width: home ? 4 : 2 },
         ...(home ? { endLabel: { show: true, formatter: '{a}', color: tokens.ink, distance: 6 } } : {})
