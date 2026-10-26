@@ -6,6 +6,7 @@ import {
   LATAM_HDI_2022,
   PISA_LATAM_MATH_2022
 } from '../../src/tour/developmentData.js';
+import { chartSeries } from '../../src/tour/developmentView.js';
 import { buildSlides } from '../../src/datasets/slides.js';
 import { TABLE_META, withMeta } from '../../src/datasets/quality.js';
 import type { SlideData } from '../../src/datasets/types.js';
@@ -15,7 +16,7 @@ describe('developmentData', () => {
     expect(ARGENTINA_HDI_SERIES.length).toBeGreaterThanOrEqual(10);
     expect(LATAM_HDI_2022.length).toBe(6);
     expect(ARGENTINA_PISA_SERIES.length).toBe(3);
-    expect(PISA_LATAM_MATH_2022.length).toBe(6);
+    expect(PISA_LATAM_MATH_2022.length).toBe(8);
 
     const latestHdi = ARGENTINA_HDI_SERIES[ARGENTINA_HDI_SERIES.length - 1]!;
     expect(latestHdi.hdi).toBeGreaterThan(0.85);
@@ -57,6 +58,14 @@ describe('developmentData', () => {
       // Verify regional comparison contains Argentina
       const hasArgentina = item!.regionalComparison.some((r) => r.country === 'Argentina');
       expect(hasArgentina, `${key} regional comparison must include Argentina`).toBe(true);
+    }
+  });
+
+  it('compares Argentina with the seven peers in every education indicator that has a World Bank series', () => {
+    for (const key of ['Resultados PISA', 'Matrícula secundaria', 'Matrícula terciaria', 'Escolaridad esperada', 'Gasto público en educación']) {
+      const countries = DEVELOPMENT_INDICATORS_DATA[key]!.regionalComparison.map((r) => r.country).sort();
+      expect(countries, key).toEqual(['Argentina', 'Brasil', 'Chile', 'Colombia', 'España', 'Estados Unidos', 'México', 'Uruguay']);
+      expect(chartSeries(key).series.length, key).toBeGreaterThanOrEqual(key === 'Resultados PISA' ? 1 : 8);
     }
   });
 

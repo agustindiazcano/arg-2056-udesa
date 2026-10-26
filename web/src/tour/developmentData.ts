@@ -1,3 +1,5 @@
+import yearlySeries from './developmentSeries.json';
+
 export interface HdiEntry {
   year: number;
   hdi: number;
@@ -78,8 +80,64 @@ export const PISA_LATAM_MATH_2022: ReadonlyArray<{ country: string; math: number
   { country: 'México', math: 395 },
   { country: 'Colombia', math: 383 },
   { country: 'Brasil', math: 379 },
-  { country: 'Argentina', math: 378 }
+  { country: 'Argentina', math: 378 },
+  { country: 'España', math: 473 },
+  { country: 'Estados Unidos', math: 465 }
 ];
+
+/**
+ * The education indicators of the World Bank (WDI) that have a yearly series for Argentina and its peers (`developmentSeries.json`): Argentina's own series
+ * for the boxes and the last value of each country for the ranking. A year or a country without a value is left out, nothing is filled in.
+ */
+const WDI_EDUCATION_META: Record<string, { title: string; unit: string; definition: string }> = {
+  'Matrícula secundaria': {
+    title: 'Matrícula en la escuela secundaria',
+    unit: '% bruto',
+    definition: 'Alumnos de secundaria como porcentaje de la población en edad de cursarla (tasa bruta; supera 100 % cuando hay alumnos mayores o repitentes).'
+  },
+  'Matrícula terciaria': {
+    title: 'Matrícula en la educación superior',
+    unit: '% bruto',
+    definition: 'Alumnos de educación superior como porcentaje de la población de los cinco años posteriores a la secundaria (tasa bruta; puede superar 100 %).'
+  },
+  'Escolaridad esperada': {
+    title: 'Años esperados de escolaridad',
+    unit: 'Años',
+    definition: 'Años de escolarización, de primaria a superior, que se espera que complete un niño que hoy entra a la escuela (UNESCO).'
+  },
+  'Gasto público en educación': {
+    title: 'Gasto público en educación',
+    unit: '% del PBI',
+    definition: 'Gasto total del gobierno en educación como porcentaje del PBI.'
+  }
+};
+
+const YEARLY_EDUCATION = yearlySeries.indicators as Record<string, { code: string; countries: Record<string, Array<number | null>> }>;
+
+function wdiEducation(name: string): IndicatorData {
+  const meta = WDI_EDUCATION_META[name]!;
+  const yearly = YEARLY_EDUCATION[name]!;
+  const years = Array.from({ length: yearlySeries.lastYear - yearlySeries.firstYear + 1 }, (_, i) => yearlySeries.firstYear + i);
+  const lastOf = (values: Array<number | null>): MetricSeriesEntry | undefined => {
+    const at = values.map((v, i) => ({ v, i })).filter((p): p is { v: number; i: number } => p.v !== null).at(-1);
+    return at ? { year: years[at.i]!, value: at.v } : undefined;
+  };
+  const round = (v: number): number => Math.round(v * 10) / 10;
+  return {
+    ...meta,
+    source: `Banco Mundial (WDI, ${yearly.code})`,
+    sourceUrl: `https://data.worldbank.org/indicator/${yearly.code}`,
+    refId: 'W1',
+    retrievedAt: yearlySeries.retrieved_at,
+    timeSeries: (yearly.countries['Argentina'] ?? []).flatMap((v, i) => (v === null ? [] : [{ year: years[i]!, value: round(v) }])),
+    regionalComparison: Object.entries(yearly.countries).flatMap(([country, values]) => {
+      const last = lastOf(values);
+      return last ? [{ country, value: round(last.value), note: String(last.year) }] : [];
+    })
+  };
+}
+
+const WDI_EDUCATION_DATA: Record<string, IndicatorData> = Object.fromEntries(Object.keys(WDI_EDUCATION_META).map((name) => [name, wdiEducation(name)]));
 
 /** Comprehensive indicators mapping for DevelopmentStep. */
 export const DEVELOPMENT_INDICATORS_DATA: Record<string, IndicatorData> = {
@@ -171,7 +229,7 @@ export const DEVELOPMENT_INDICATORS_DATA: Record<string, IndicatorData> = {
   'Resultados PISA': {
     title: 'Puntajes de aprendizaje PISA',
     unit: 'Puntaje medio estandarizado',
-    definition: 'Puntaje medio obtenido por estudiantes de 15 años en la evaluación internacional PISA de la OCDE.',
+    definition: 'Puntaje medio de matemática de los estudiantes de 15 años en la evaluación internacional PISA de la OCDE (ediciones 2012, 2018 y 2022; los países que no participaron figuran sin dato).',
     source: 'OCDE (Programme for International Student Assessment)',
     sourceUrl: 'https://www.oecd.org/pisa/',
     refId: 'D2',
@@ -181,14 +239,7 @@ export const DEVELOPMENT_INDICATORS_DATA: Record<string, IndicatorData> = {
       { year: 2018, value: 379, note: 'Matemática (Lectura: 402, Ciencias: 404)' },
       { year: 2022, value: 378, note: 'Matemática (Lectura: 401, Ciencias: 406)' }
     ],
-    regionalComparison: [
-      { country: 'Chile', value: 412 },
-      { country: 'Uruguay', value: 409 },
-      { country: 'México', value: 395 },
-      { country: 'Colombia', value: 383 },
-      { country: 'Brasil', value: 379 },
-      { country: 'Argentina', value: 378 }
-    ]
+    regionalComparison: PISA_LATAM_MATH_2022.map((c) => ({ country: c.country, value: c.math, note: 'Matemática 2022' }))
   },
   'Años de escolaridad': {
     title: 'Años promedio y esperados de escolaridad',
@@ -355,5 +406,6 @@ export const DEVELOPMENT_INDICATORS_DATA: Record<string, IndicatorData> = {
     retrievedAt: '2026-10-18',
     timeSeries: ARGENTINA_HDI_SERIES.map((h) => ({ year: h.year, value: h.hdi })),
     regionalComparison: LATAM_HDI_2022.map((c) => ({ country: c.country, value: c.hdi, note: c.rank }))
-  }
+  },
+  ...WDI_EDUCATION_DATA
 };
