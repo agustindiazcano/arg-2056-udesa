@@ -21,7 +21,7 @@ COUNTRIES = {'Argentina': 'Argentina', 'Brazil': 'Brasil', 'Chile': 'Chile', 'Ur
 def main() -> None:
     with urllib.request.urlopen(URL, timeout=60) as r:
         rows = list(csv.DictReader(io.StringIO(r.read().decode('utf-8'))))
-    column = [c for c in rows[0] if c.startswith('pisa_')][0]
+    column = next(c for c in rows[0] if c.startswith('pisa_'))
     by = {(row['entity'], int(row['year'])): float(row[column]) for row in rows}
     data = {
         'source': 'OCDE, PISA (puntaje medio de matemática), publicado por Our World in Data',
