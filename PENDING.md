@@ -265,3 +265,33 @@ Order: C8, C7, C2, C3, C4, C5, C1, C6.
 - [x] Generate black README banner from the two newest test images dated 2026-10-30 and place it above the title.
 
 - [x] Department minimap labels appear only on hover or selection; idle municipality labels hidden (task/department-hover-labels). CI regression tests added; no local tests run.
+
+## IA: acceso, adopción, tokens e I+D (2026-10-30)
+
+### Done
+- [x] Diapositiva 9: subtítulo de sobrecosto argentino, referencia mensual de 20 USD, niveles de 100/200 USD, mapa LATAM y tabla de precios API por millón de tokens.
+- [x] Al final: adopción empresarial (27), consumo/percentiles (28), pirámide documentada (26, reemplaza el esquema previo) e I+D (29); menú, índice, Data y exportación conectados.
+- [x] Fuentes AI30–AI55 incorporadas en Data y README. Registro metodológico: docs/ai-evidence-2026-10-30.md.
+- [x] arXiv y cartografía archivados con SOURCE.md; agregación reproducible sin red. Tests escritos para CI, no ejecutados localmente.
+
+### Data to verify (human)
+- [ ] Claude Pro/Max/Ultra: 20/100/200 USD mensuales (AI30, consulta 30-10-2026), condiciones y nombres actuales; no equivalencia de cupos.
+- [ ] Tarifas API, USD por millón, entrada/salida/lectura de caché: Sonnet 4.6 3/15/0,30; GPT-6.1 Sol Standard contexto corto 2/10/0,10; Gemini 2.5 Pro Standard prompt hasta 200k 1,25/10/0,125; Grok 4.7 2/6/caché null. Validar AI30–AI33 y tratamientos de contexto/herramientas.
+- [ ] Cursor: 0,25 USD adicionales por millón en modelos elegibles Teams/Enterprise (AI34); no todos los planes.
+- [ ] Semáforo conserva supuestos de Argentina 21+30=51 %, Chile 19 %, Uruguay 22 %, México 16 %; contrastar aplicación concreta al checkout y forma de pago con ARCA/SII/DGI/SAT (AI48–AI52). Otros países grises.
+- [ ] Gallup IT Q4 2025: 77 % algún uso, 57 % frecuente, 31 % diario; crecimiento trimestral 76→77 % (AI35). Categorías anidadas.
+- [ ] S&P 500 2025: 11 % integración profunda y 10 % adicional productiva (AI36, preprint, clasificación de 10-K).
+- [ ] Encuestas nov. 2025–ene. 2026: aproximadamente 70 % adopción y 89 % sin impacto declarado en ventas por empleado en los tres años anteriores (AI37); no mezclar muestras.
+- [ ] OpenAI: >50 millones de suscriptores de consumo y >900 millones de usuarios semanales (27-02-2026, AI38), no todos de 20 USD ni todos los LLM. ONU: 8.200 millones en 2024 (AI39). 50/8200≈0,61 % es comparación de escala con fechas distintas, no tasa exacta ni cota superior.
+- [ ] Google: >3,2×10^15 tokens/mes, todos sus productos/APIs (junio 2026, AI41); OpenAI: >15.000 millones tokens/min en API (abril 2026, AI42). No ChatGPT/Gemini app exclusivamente.
+- [ ] Investigadores internos de OpenAI, agosto 2026: mediana >600 y p90 >7.000 USD/día equivalentes a tarifa API (AI55), no tokens ni factura real. No extrapolar percentiles al público.
+- [ ] Autor: 8.000 millones tokens Claude Code últimos 30 días, declarado el 30-10-2026; confirmar desglose entrada/salida/caché. Percentil y composición caché null.
+- [ ] arXiv nuevos envíos 2020–2025: 178.329; 181.630; 185.692; 208.493; 244.031; 284.486 (AI44, CSV archivado). Preprints.org 31.691 publicados y SocArXiv 3.162 aceptados en 2025 (AI45–AI46); no sumables.
+- [ ] AI co-scientist: reconstrucción de hipótesis con experimentos humanos previos, no reemplazo de todo el proceso; no afirmar genéricamente que meses de ciencia se vuelven días (AI47).
+
+### Model assumptions
+- [ ] Ratificar bandas visuales del semáforo (<20 verde, 20–25 ámbar, >25 rojo). No afectan escenarios.
+- [ ] Pirámides conceptuales: anchos ilustrativos, no proporciones de población ni gasto. Falta una distribución pública comparable de tokens por usuario-mes; no se fabrican umbrales.
+
+### Visual debt
+- [ ] Revisión humana de cuatro nuevas láminas y mapa LATAM en 1366×768 y pantalla grande.

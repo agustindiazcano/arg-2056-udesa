@@ -5,7 +5,7 @@
 Un relato interactivo, con datos, que une el Cruce de los Andes (1817) con el desafío de Argentina hacia 2056: recursos, economía, población y el impacto de la inteligencia artificial y la automatización (la «Cuarta Revolución Industrial» en el sentido de Klaus Schwab, Foro Económico Mundial).
 
 - **Los Andes**: mapa 3D con satélite y relieve reales; la marcha de la columna principal del Ejército de los Andes, las otras columnas del cruce y el encuentro de las fuerzas, con figuras en miniatura.
-- **Hacia el 2056** (antes «Recorrido»): una presentación guiada, con un índice y 13 diapositivas, con gráficos 2D y 3D (cada gráfico tiene su tabla). Incluye la diapositiva de **productividad** (PTF y producto por hora, Argentina, EE. UU., Chile y Brasil, con datos de la Penn World Table).
+- **Hacia el 2056** (antes «Recorrido»): una presentación guiada, con un índice y 17 diapositivas, con gráficos 2D y 3D (cada gráfico tiene su tabla). Incluye la diapositiva de **productividad** (PTF y producto por hora, Argentina, EE. UU., Chile y Brasil, con datos de la Penn World Table).
 - **Simulador del PBI**: un gráfico grande del PBI hasta 2056 y, a la derecha, factores que se pueden mover (crecimiento base, IA, población, productividad, inversión). Usa aritmética simple sobre los supuestos elegidos.
 - **Data**: una página con scroll con los datos de cada diapositiva en tablas, un selector (número y título de la diapositiva) para descargar sus datos como CSV, la descarga de cada tabla y, al final, los enlaces de las referencias (también descargables en CSV).
 - **Proyecciones de otros organismos**: el FMI, la OCDE y la ONU están cargados con el pipeline de datos (`data/processed/external_forecasts.json`, `scripts/fetch_external_forecasts.py`) y se muestran en la página Data, en la diapositiva 2.
@@ -257,6 +257,38 @@ Enlaces adicionales del catálogo de la sección Data (`web/src/datasets/referen
 - **S4** (leída): Ministerio de Economía, Dirección Nacional de Asuntos Provinciales (DNAP), Coparticipación federal y transferencias automáticas a provincias. <https://www.argentina.gob.ar/economia/hacienda/asuntosprovinciales/transferencias-gobiernos-locales>
 - **S6** (citada): PNUD Argentina, El Mapa del Desarrollo Humano en Argentina (IDH provincial, 2021); los valores se tomaron de la tabla de Wikipedia que lo reproduce. <https://www.undp.org/es/argentina/publicaciones/el-mapa-del-desarrollo-humano-en-argentina>
 - **S5** (leída): Ministerio de Seguridad de la Nación, Sistema Nacional de Información Criminal (SNIC), Tasas de presuntos hechos delictuosos por provincia cada 100.000 habitantes. <https://www.argentina.gob.ar/seguridad/estadisticas-criminales>
+
+
+### IA: acceso, adopción, tokens e I+D (consulta 30-10-2026)
+
+La diapositiva 9 incorpora mapa LATAM y precios por token. Al final se agregan adopción empresarial, consumo de tokens, pirámide de adopción e I+D. Definiciones y límites: [registro de evidencia](docs/ai-evidence-2026-10-30.md).
+
+- **AI55** (leída): OpenAI, Research acceleration: The view inside OpenAI (06-09-2026): encuesta y telemetría interna; evidencia autodeclarada, no ensayo causal. <https://openai.com/index/research-acceleration-view-inside-openai/>
+- **AI30** (leída): Anthropic, precios oficiales de Claude Pro, Max, Ultra y API (consulta 30-10-2026). <https://claude.com/pricing>
+- **AI31** (leída): OpenAI, precios oficiales de API: GPT-6.1 Sol, tarifa Standard, contexto corto. <https://developers.openai.com/api/docs/pricing>
+- **AI32** (leída): Google, precios de Gemini API: Gemini 2.5 Pro, Standard, contexto hasta 200.000 tokens. <https://ai.google.dev/gemini-api/docs/pricing>
+- **AI33** (leída): xAI / SpaceXSI, Grok 4.7: modelos y precios de API. <https://docs.x.ai/developers/models>
+- **AI34** (leída): Cursor, Models & Pricing: costos dependen del modelo, del plan y del uso. <https://cursor.com/docs/models-and-pricing>
+- **AI35** (leída): Gallup, Frequent Use of AI in the Workplace Continued to Rise in Q4 (25-01-2026; trabajo de campo Q4 2025, EE. UU.). <https://www.gallup.com/workplace/701195/frequent-workplace-continued-rise.aspx>
+- **AI36** (leída): Yu et al., MIT FutureTech / CMU, AI Adoption in S&P 500 Firms (2026): integración empresarial en 2025; preprint. <https://arxiv.org/abs/2607.08920>
+- **AI37** (leída): Yotzov et al., Firms predict an AI productivity boom is coming, VoxEU/CEPR (2026), autores de Firm Data on AI, NBER 34836. <https://cepr.org/voxeu/columns/firms-predict-ai-productivity-boom-coming>
+- **AI38** (leída): OpenAI, Scaling AI for everyone (27-02-2026): más de 900 millones de usuarios semanales y 50 millones de suscriptores de consumo. <https://openai.com/index/scaling-ai-for-everyone/>
+- **AI39** (leída): ONU, World Population Prospects 2024, Summary of Results: población mundial de 8.200 millones en 2024. <https://www.un.org/development/desa/pd/sites/www.un.org.development.desa.pd/files/wpp2024_summary_of_results_final_web.pdf>
+- **AI40** (leída): Anthropic Economic Index, Cadences (26-06-2026): tokens por conversación y artefacto; percentiles normalizados, no usuarios mensuales. <https://www.anthropic.com/research/economic-index-june-2026-report>
+- **AI41** (leída): Google, Alphabet investor presentation (junio 2026): 3,2 × 10^15 tokens mensuales en sus productos y APIs. <https://blog.google/alphabet/investor-presentation-june-2026/>
+- **AI42** (leída): OpenAI, The next phase of enterprise AI (08-04-2026): más de 15.000 millones de tokens por minuto en API. <https://openai.com/index/next-phase-of-enterprise-ai/>
+- **AI43** (leída): OpenRouter, State of AI 2025: más de 100 billones (10^14) de tokens de su plataforma; muestra no representativa del mercado entero. <https://openrouter.ai/state-of-ai>
+- **AI44** (leída): arXiv, Monthly Submissions: conteos mensuales oficiales de nuevos envíos; CSV consultado el 30-10-2026. <https://arxiv.org/stats/monthly_submissions>
+- **AI45** (leída): Preprints.org, Annual Report 2025, página 3: 31.691 preprints publicados en 2025. <https://www.preprints.org/frontend/home/report/2025-annual-report>
+- **AI46** (leída): SocArXiv, informe de 2025 (2026): 3.162 trabajos aceptados; no equivale al total de envíos. <https://socopen.org/2026/>
+- **AI47** (leída): Google Research, Accelerating scientific breakthroughs with an AI co-scientist (2025): hipótesis y validación experimental previa. <https://research.google/blog/accelerating-scientific-breakthroughs-with-an-ai-co-scientist/>
+- **AI48** (leída): ARCA, percepción por operaciones en moneda extranjera: alícuota del 30 %, según operación y forma de pago. <https://www.afip.gob.ar/regimen-devolucion-percepciones/percepcion/importe.asp>
+- **AI49** (leída): ARCA, servicios digitales: IVA sobre servicios consumidos en Argentina y prestados desde el exterior. <https://www.afip.gob.ar/iva/servicios-digitales/obligados.asp>
+- **AI50** (leída): SII Chile, Circular 42/2020, IVA a servicios digitales prestados desde el exterior. <https://www.sii.cl/normativa_legislacion/circulares/2020/circu42.pdf>
+- **AI51** (leída): SAT México, guía de declaración del IVA de servicios digitales: tasa del 16 %. <https://sat.gob.mx/cs/Satellite?blobcol=urldata&blobkey=id&blobtable=MungoBlobs&blobwhere=1461175010301&ssbinary=true>
+- **AI52** (leída): DGI Uruguay, bienes y servicios gravados a la tasa básica del 22 %. <https://www.gub.uy/direccion-general-impositiva/comunicacion/publicaciones/son-bienes-servicios-gravados-tasa-basica-del-22>
+- **AI53** (usada): Natural Earth, Admin 0 Countries 1:110m, dominio público; geometría ilustrativa de América Latina. <https://www.naturalearthdata.com/downloads/110m-cultural-vectors/110m-admin-0-countries/>
+- **AI54** (contexto): Global AI Adoption Visualization, AI Bear: referencia visual de la infografía viral; cifras reemplazadas por fuentes primarias, sin sumar usuarios de distintas plataformas. <https://www.ai-bear.io/p/are-you-among-16-of-free-ai-users>
 
 > Las posiciones de los lugares son aproximadas, las fechas intermedias entre las documentadas son estimaciones marcadas como tales, y las cifras de efectivos varían según la fuente. Todo está señalado en [`docs/references.md`](docs/references.md).
 

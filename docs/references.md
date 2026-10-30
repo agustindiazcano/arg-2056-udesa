@@ -254,3 +254,7 @@ Fuentes primarias y metodológicas agregadas en la expansión de datos de octubr
 - El nombre de pila de Cabot (Juan Manuel o Juan Carlos) y sus efectivos al salir (65 o 140).
 - Las cifras de Chacabuco (patriotas 3.500 o 3.600; realistas 2.080 a 2.500) contra el parte de San Martín y el orden de batalla original.
 - La altura del Espinacito (4.476, 4.800 o 5.000 m) y dónde queda exactamente, para poder dibujarlo.
+
+## IA: acceso, adopción, tokens e investigación (30-10-2026)
+
+Fuentes primarias y límites por indicador: [registro de evidencia](ai-evidence-2026-10-30.md). El catálogo completo, con enlaces e identificadores AI30–AI55, está en README y en la sección Data de la aplicación.

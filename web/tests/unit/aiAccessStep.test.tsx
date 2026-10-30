@@ -28,6 +28,7 @@ describe('AiAccessStep', () => {
   it('changes the table and the chart with the plan', () => {
     render(<AiAccessStep />);
     fireEvent.click(screen.getByRole('button', { name: 'Plan de 200 USD' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Barras' }));
     expect(screen.getAllByRole('row')[1]!.textContent).toContain('302,0 USD');
     expect(screen.getByTestId('echart').getAttribute('aria-label')).toContain('plan de 200 usd');
   });

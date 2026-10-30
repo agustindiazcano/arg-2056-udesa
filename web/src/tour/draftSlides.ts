@@ -1,4 +1,4 @@
-import { AI_PYRAMID_TITLE, ENCLAVE_TITLE, FORECAST_LIMITS_TITLE, PEERS_TITLE, SHOCKS_TITLE } from './slideTitles.js';
+import { ENCLAVE_TITLE, FORECAST_LIMITS_TITLE, PEERS_TITLE, SHOCKS_TITLE } from './slideTitles.js';
 
 export interface DraftTopic {
   heading: string;
@@ -57,17 +57,6 @@ export const DRAFT_SLIDES: readonly DraftSlideDef[] = [
       { heading: 'Pronósticos que fallaron', text: 'Analistas e instituciones descartaron cripto, Tesla o SpaceX en sus primeros años; las consultoras políticas fallaron con los outsiders.' },
       { heading: 'La IA generativa en 2021 y hoy', text: 'Casi sin atención en la política y las empresas en 2021, y foco universal hoy.' },
       { heading: 'Ambigüedad y emoción', text: 'Medirlas hace falta pero no alcanza: las narrativas rotan más rápido que los datos.' }
-    ]
-  },
-  {
-    id: 26,
-    title: AI_PYRAMID_TITLE,
-    lead: 'De la consulta gratuita al agente que trabaja solo',
-    topics: [
-      { heading: 'Base: chats gratuitos', text: 'Enorme cantidad de consultas, poco cómputo por consulta.' },
-      { heading: 'Medio: APIs y asistentes de código', text: 'Integración de desarrolladores, editores y modelos ajustados a un dominio.' },
-      { heading: 'Cima: razonamiento y agentes', text: 'Razonamiento extendido, bucles de agentes e investigación profunda: pocas consultas, el mayor gasto de tokens.' },
-      { heading: 'Consumo global de tokens', text: 'Volumen por proveedor y peso de la programación frente al texto general.' }
     ]
   }
 ];

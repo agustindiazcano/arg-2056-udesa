@@ -1,4 +1,6 @@
 import { withMeta } from './quality.js';
+import { aiEvidenceTables, apiPricesTable } from './aiEvidenceTables.js';
+import { AI_EVIDENCE_SLIDES } from '../tour/aiEvidence.js';
 import { PROVINCES } from '../types/province.js';
 import { GDP_MOCK } from '../tour/gdpMock.js';
 import agro from '../tour/agroArgentina.json';
@@ -584,9 +586,11 @@ export function buildSlides(): SlideData[] {
         title: 'Impuestos que se suman al precio de lista por país',
         columns: ['País', 'Impuesto', 'Porcentaje'],
         rows: ACCESS_COUNTRIES.flatMap((c) => (c.taxes.length === 0 ? [[c.name, 'Sin impuesto nacional', 0]] : c.taxes.map((t) => [c.name, t.label, t.pct])))
-      }
-    ], false, ['A20', 'A21', 'A22']),
-    ...DRAFT_SLIDES.map((d) => slide(String(d.id), d.title, [{ id: `draft-${d.id}`, title: 'Temas de la diapositiva', columns: ['Tema', 'Descripción'], rows: d.topics.map((t) => [t.heading, t.text]) }], false)),
+      },
+      apiPricesTable()
+    ], false, ['AI30', 'AI31', 'AI32', 'AI33', 'AI34', 'AI48', 'AI49', 'AI50', 'AI51', 'AI52', 'AI53']),
+    ...DRAFT_SLIDES.filter((d) => d.id !== 26).map((d) => slide(String(d.id), d.title, [{ id: `draft-${d.id}`, title: 'Temas de la diapositiva', columns: ['Tema', 'Descripción'], rows: d.topics.map((t) => [t.heading, t.text]) }], false)),
+    ...AI_EVIDENCE_SLIDES.map((d) => slide(String(d.id), d.title, aiEvidenceTables(d.id), false, [...d.refs])),
     slide('sim', 'Simulador del PBI', [
       { id: 'factors', title: 'Factores del escenario de referencia', columns: ['Factor', 'Valor', 'Unidad'], rows: SIM_FIELDS.map((f) => [f.label, DEFAULT_SIM[f.key], f.unit]) },
       { id: 'reference', title: 'PBI del escenario de referencia (miles de millones de USD)', columns: ['Año', 'PBI'], rows: sim.years.map((y, i) => [y, sim.gdp[i] ?? null]) }

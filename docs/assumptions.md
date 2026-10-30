@@ -40,3 +40,7 @@ Status: `needs_source` (a verifiable source should replace the value), `assumpti
 | A33 | Provincial drift kept only if better in at least 18 of 24 provinces | provinces | pre-registered selection rule | 13 to 20 of 24 | low | assumption | null | human (accepted 2026-10-04) |
 | A34 | Rule of 70 as the approximation of doubling time | sandbox | explainer | not applicable | low | assumption | null | design |
 | A35 | Working-age population is ages 15 to 64 (both included), `WORKING_AGE` in `argmodel.population.drivers` | population | the labor force of growth accounting is `L = W * pi` and the design does not define `W` | 15 to 64 (alternatives 15 to 59, 20 to 64) | medium | assumption | null | human |
+
+## Visualización de acceso y adopción de IA (30-10-2026)
+
+Semáforo del recargo: menos de 20 % verde, 20–25 % ámbar y más de 25 % rojo; gris para países sin dato comparable. Es una regla de presentación, no clasificación tributaria. Las pirámides tienen anchos conceptuales, no áreas proporcionales. La base demográfica de 2024 y los indicadores de producto de 2026 se identifican con sus fechas. Ver docs/ai-evidence-2026-10-30.md. No cambia ningún parámetro de escenarios ni proyecciones.

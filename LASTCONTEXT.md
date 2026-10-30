@@ -1,9 +1,11 @@
 # Current state
-- Branch: task/department-hover-labels, based on task/readme-banner.
-- Department minimap: hide idle municipality labels; department name shows on geo hover and persists only for selectedDepartment.
-- ProvinceMap passes selectedDepartment into buildDepartmentMap; deselection clears the persistent name.
-- Regression coverage: web/tests/unit/departmentMapLabels.test.ts. Local tests not run (CI only).
-- Earlier work in branch ancestry: README banner, reference URLs, search SVG, RIGI scroll, removed nav development badge.
-- Previous CI failed at web npm test; GitHub log downloads denied HTTP 403.
-- Server last verified at http://localhost:5174/.
-- Next: push branch, read CI, open PR only after checks pass.
+- Branch: task/ai-access-evidence (based on task/department-hover-labels).
+- Slide 9: cost subtitle, 20/100/200 USD reference tiers, LATAM map with explicit gaps and surcharge bands, API prices for named models.
+- Final slides: enterprise adoption 27, token metrics/limited internal percentiles 28, sourced adoption pyramid 26, research output 29. Menu/index/Data wired; old draft 26 replaced.
+- Source ledger: docs/ai-evidence-2026-10-30.md. AI30–AI55 in Data and README. Every new UI number in PENDING human verification list.
+- arXiv CSV and Natural Earth archived unchanged with SOURCE.md. scripts/build_ai_evidence.mjs builds annual counts and SVG geometry without network.
+- 8 billion Claude Code tokens / last 30 days: author declaration; cache composition and population percentile null.
+- No global user-month token percentiles invented; internal OpenAI p50/p90 are USD-equivalent daily inference, explicitly narrow sample.
+- Tests written, never run locally. Need push and inspect CI before PR; previous branches failed web npm test and log access returned 403.
+- Development server last verified at http://localhost:5174/.
+- Next: cloud CI and browser layout inspection; fix failures before any PR.

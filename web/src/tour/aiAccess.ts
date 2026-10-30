@@ -18,7 +18,7 @@ export interface Plan {
   price: number;
 }
 
-/** The monthly plans of the main assistants: the 20-dollar tier (ChatGPT Plus, Claude Pro, Google AI Pro) and the 100 and 200 dollar tiers (Claude Max, ChatGPT Pro, Google AI Ultra). */
+/** Reference monthly tiers, not interchangeable products: Claude Pro 20 USD, Max 100 USD, Ultra 200 USD. Official list consulted 2026-10-30 (AI30). */
 export const PLANS: readonly Plan[] = [
   { id: 'p20', label: 'Plan de 20 USD', price: 20 },
   { id: 'p100', label: 'Plan de 100 USD', price: 100 },

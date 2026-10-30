@@ -108,7 +108,15 @@ export const TABLE_META: Readonly<Record<string, TableMeta>> = {
   'draft-23': draft('Esquema de temas del borrador'),
   'draft-24': draft('Esquema de temas del borrador'),
   'draft-25': draft('Esquema de temas del borrador'),
-  'draft-26': draft('Esquema de temas del borrador')
+  'draft-26': draft('Esquema histórico reemplazado por la pirámide documentada'),
+  'ai-api-prices': meta('real', 'Listas oficiales de Anthropic, OpenAI, Google y xAI; modelos y condiciones en cada fila', '2026-10-30'),
+  'ai-enterprise-adoption': meta('real', 'Gallup Q4 2025; Yu et al. (2026), S&P 500; Yotzov et al., CEPR (2026). Muestras distintas, no sumables.', '2026-10-30'),
+  'ai-token-publications': meta('partial', 'Publicaciones oficiales de Anthropic, Google, OpenAI, Cursor y OpenRouter; percentiles mensuales de usuarios no disponibles en estas fuentes', '2026-10-30'),
+  'ai-token-percentiles': meta('real', 'OpenAI, Research acceleration: The view inside OpenAI (06-09-2026), telemetría interna, equivalencia de precios API', '2026-10-30'),
+  'ai-personal-tokens': meta('partial', 'Observación personal declarada por el autor el 30-10-2026; sin auditoría ni desglose de caché', '2026-10-30'),
+  'ai-adoption-pyramid': meta('real', 'OpenAI (27-02-2026), ChatGPT; ONU WPP 2024. Diagrama conceptual, fechas y definiciones distintas.', '2026-10-30'),
+  'ai-research-arxiv': meta('real', 'arXiv Monthly Submissions, CSV archivado; suma reproducible de meses de años completos', '2026-10-30'),
+  'ai-research-platforms': meta('real', 'Preprints.org Annual Report 2025 y SocArXiv informe de 2025; métricas distintas, no sumables', '2026-10-30')
 };
 
 /** The table with its quality, source and retrieval date; throws if the registry does not know it, so a new table cannot go without them. */

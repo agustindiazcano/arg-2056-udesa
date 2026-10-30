@@ -75,7 +75,8 @@ describe('Recorrido steps in the navbar', () => {
     expect(stepWindow(3)).toEqual([14, 3, 16]);
     expect(stepWindow(16)).toEqual([3, 16, 17]);
     expect(stepWindow(17)).toEqual([16, 17, 21]);
-    expect(stepWindow(26)).toEqual([24, 25, 26]);
+    expect(stepWindow(26)).toEqual([28, 26, 29]);
+    expect(stepWindow(29)).toEqual([28, 26, 29]);
   });
 
   it('Anterior and Siguiente move one step, and the last step disables Siguiente', () => {
@@ -88,7 +89,7 @@ describe('Recorrido steps in the navbar', () => {
     expect(steps().getAllByRole('button').map((b) => b.textContent)).toEqual(['Anterior', '2', '3', '4', 'Siguiente']);
     fireEvent.click(steps().getByRole('button', { name: 'Anterior' }));
     expect(useStore.getState().tourStep).toBe(8);
-    act(() => useStore.setState({ tourStep: 26 }));
+    act(() => useStore.setState({ tourStep: 29 }));
     expect((steps().getByRole('button', { name: 'Siguiente' }) as HTMLButtonElement).disabled).toBe(true);
   });
 
