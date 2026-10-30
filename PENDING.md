@@ -259,3 +259,5 @@ Order: C8, C7, C2, C3, C4, C5, C1, C6.
 - [x] Remove the development deadline badge from the navbar (task/remove-dev-badge).
 
 - [x] Enable scrolling in the lower-left RIGI projects list with constrained flex height and pointer events (task/rigi-projects-scroll).
+
+- [x] Replace map search emoji with SVG and include all Data reference URLs in README (39 missing links added).

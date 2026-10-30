@@ -182,5 +182,79 @@ Escenarios de crecimiento de Argentina con IA y estimaciones de otros analistas.
 71. INDEC, Censo Nacional de Población, Hogares y Viviendas 2022: resultados definitivos por provincia (45.892.285 habitantes). <https://www.indec.gob.ar/indec/web/Nivel4-Tema-2-41-165>
 72. INDEC, Origen provincial de las exportaciones (OPEX): informes técnicos anuales 2023 y 2024 por provincia y grandes rubros. <https://www.indec.gob.ar/indec/web/Nivel4-Tema-3-2-40>
 
+
+### Referencias complementarias de Data
+
+Enlaces adicionales del catálogo de la sección Data (`web/src/datasets/references.ts`). Se conservan sus identificadores y estados de verificación; su inclusión no implica una nueva verificación de las fuentes originales.
+
+**Cruce de los Andes**
+
+- **H6** (leída): UNCuyo, Historia virtual de Mendoza, «El Cruce de los Andes». <https://historiavirtual.mza.uncu.edu.ar/mendoza-independiente/cruce.html>
+- **H8** (por informe): Estado general del Ejército de los Andes (31-12-1816), en Espejo, El paso de los Andes. <https://archive.org/details/elpasodelosande00espegoog>
+
+**Productividad**
+
+- **P3** (citada): Baumann Fonay, serie de PTF y PIB potencial en Alphacast (los datos piden login). <https://www.alphacast.io/datasets/potential-gross-domestic-product-output-gap-tfp-9670>
+- **P4** (leída): Baumann Fonay en X (análisis de productividad y PTF). <https://x.com/ivanfbf/status/2050931628965278028>
+- **P5** (leída): Ministerio de Hacienda (2018), Crecimiento económico, PTF y PIB potencial en Argentina, Documento de trabajo n.º 1. <https://www.argentina.gob.ar/sites/default/files/crecimiento-economico-ptf-y-pib-potencial-en-argentina_1.pdf>
+- **P9** (leída): Anthropic, Estimating productivity gains. <https://www.anthropic.com/research/estimating-productivity-gains>
+- **P10c** (leída): METR (2025), Measuring the Impact of Early-2025 AI on Experienced Open-Source Developer Productivity: 19 % más tiempo con IA (desactualizado según METR). <https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/>
+- **P10d** (leída): Becker, Rush, Barnes y Rein (2025), el mismo estudio de METR en arXiv. <https://arxiv.org/abs/2507.09089>
+- **P10a** (citada): METR (19 % más lentos con IA), vía InfoQ. <https://www.infoq.com/news/2025/07/ai-productivity>
+- **P10b** (citada): METR, vía eWeek. <https://www.eweek.com/news/news-ai-tools-slow-developer-productivity-study/>
+- **P11a** (contexto): BID/INTAL, la IA en América Latina y el Caribe. <https://www.iadb.org/es/noticias/inteligencia-artificial-trae-amplios-beneficios-america-latina-y-el-caribe-estudio-bid>
+- **P11b** (contexto): FGV IBRE, productividad de Brasil 2024. <https://blogdoibre.fgv.br/node/2057>
+- **P11c** (contexto): BLS, productividad de Estados Unidos. <https://www.bls.gov/news.release/prod2.nr0.htm>
+- **P11d** (contexto): OECD, PBI por hora trabajada. <https://www.oecd.org/es/data/indicators/gdp-per-hour-worked.html>
+- **P11e** (contexto): DBnomics, espejo de la Penn World Table 10. <https://db.nomics.world/GGDC/penn10>
+- **P11f** (contexto): ABC (Paraguay), productividad regional. <https://www.abc.com.py/economia/2026/07/31/la-productividad-regional-cayo-04-anual-la-ia-busca-revertir-la-tendencia/>
+- **P12** (descartada): The Conference Board, TED summary tables (daba +6,8 % para Brasil en 2024, contradice a FGV). <https://www.conference-board.org/pdf_free/TED-SummaryTables-Charts-sep2025.pdf>
+- **P13a** (secundaria): El Observador (Uruguay) sobre el documento del INDEC. <https://www.elobservador.com.uy/argentina/economia-y-negocios/la-productividad-argentina-crecio-al-ritmo-mas-alto-1996-pero-cae-la-calidad-del-empleo-n6042872>
+- **P13b** (secundaria): Derecha Diario sobre el documento del INDEC. <https://derechadiario.com.ar/economia/productividad-registro-en-2025-mayor-avance-en-20-anos-bajo-gobierno-milei>
+
+**Desarrollo social**
+
+- **W1** (leída): Banco Mundial, World Development Indicators (WDI): esperanza de vida al nacer (SP.DYN.LE00.IN), mortalidad infantil (SP.DYN.IMRT.IN), índice de Gini (SI.POV.GINI), matrícula secundaria y terciaria (SE.SEC.ENRR, SE.TER.ENRR), años esperados de escolaridad (SE.SCH.LIFE) y gasto público en educación (SE.XPD.TOTL.GD.ZS). <https://data.worldbank.org/indicator/>
+
+**Recursos naturales**
+
+- **R15** (citada): Bolsa de Comercio de Rosario, Balance cárnico y lácteo 2025 (Expoagro, 2026-01-05): carne bovina, aviar y porcina y leche de 2025, estimados. <https://www.expoagro.com.ar/balance-carnico-y-lacteo-2025/>
+
+**Proyectos RIGI**
+
+- **R14** (leída): Ministerio de Economía y Secretaría de Coordinación de Producción, Registro oficial del RIGI y resoluciones publicadas en el Boletín Oficial (Resolución 1771/2026 y concordantes). <https://www.boletinoficial.gob.ar>
+
+**Mapa**
+
+- **M1** (usada): MapTiler, imágenes satelitales. <https://www.maptiler.com/cloud/>
+- **M2** (usada): MapTiler, modelo de elevación Terrain-RGB v2. <https://docs.maptiler.com/cloud/api/tiles/>
+- **M3** (usada): MapTiler Geocoding. <https://docs.maptiler.com/cloud/api/geocoding/>
+- **M6** (usada): MapLibre GL JS. <https://maplibre.org>
+- **M7** (usada): Three.js. <https://threejs.org>
+
+**Inteligencia artificial**
+
+- **A20** (citada): IVA RG 4240: qué es y cuánto se paga en 2026 (IVA de 21 % sobre servicios digitales del exterior). <https://nacho.com.ar/iva-netflix-cobraran-el-impuesto-a-los-usuarios-de-servicios-digitales/>
+- **A21** (citada): Global66, impuestos y percepción de Ganancias del 30 % (RG 5617) en compras y suscripciones en dólares, 2026. <https://www.global66.com/blog/como-afectan-los-impuestos-a-tus-gastos-digitales/>
+- **A22** (citada): SentiSight, precios de las suscripciones de IA en 2026 (ChatGPT, Claude, Gemini). <https://www.sentisight.ai/ai-price-comparison-gemini-chatgpt-claude-grok/>
+- **D7** (leída): Epoch AI, Compute Trends Across Three Eras of Machine Learning: cómputo de entrenamiento en FLOPs. <https://epoch.ai/blog/compute-trends-across-three-eras-of-machine-learning>
+
+**Difusión tecnológica**
+
+- **D6** (leída): Comin & Hobijn / NBER & Our World in Data, CHAT dataset: rezagos históricos de adopción masiva (>50%). <https://ourworldindata.org/technology-adoption>
+
+**Agro**
+
+- **E12** (leída): SAGyP (Secretaría de Agricultura, Ganadería y Pesca), Estimaciones agrícolas por cultivo y provincia (campaña 2024/25, datos.gob.ar). <https://datos.magyp.gob.ar/dataset/estimaciones-agricolas>
+
+**Perfil provincial**
+
+- **S1** (leída): Dirección Nacional de Asuntos Provinciales (DNAP) y Secretaría de Hacienda (Ministerio de Economía), Distribución geográfica del Producto Bruto y Valor Agregado Bruto provincial. <https://www.argentina.gob.ar/economia/hacienda/asuntosprovinciales>
+- **S2** (leída): Secretaría de Trabajo, Empleo y Seguridad Social (Ministerio de Capital Humano), OEDE / SIPA: Puestos de trabajo registrados del sector privado y público por provincia (2024-2025). <https://www.trabajo.gob.ar/estadisticas/oede/estadisticasprovinciales.asp>
+- **S3** (leída): INDEC, Encuesta Permanente de Hogares (EPH), Tasas de pobreza e indigencia por aglomerados urbanos (2024-2025). <https://www.indec.gob.ar/indec/web/Nivel4-Tema-4-46-152>
+- **S4** (leída): Ministerio de Economía, Dirección Nacional de Asuntos Provinciales (DNAP), Coparticipación federal y transferencias automáticas a provincias. <https://www.argentina.gob.ar/economia/hacienda/asuntosprovinciales/transferencias-gobiernos-locales>
+- **S6** (citada): PNUD Argentina, El Mapa del Desarrollo Humano en Argentina (IDH provincial, 2021); los valores se tomaron de la tabla de Wikipedia que lo reproduce. <https://www.undp.org/es/argentina/publicaciones/el-mapa-del-desarrollo-humano-en-argentina>
+- **S5** (leída): Ministerio de Seguridad de la Nación, Sistema Nacional de Información Criminal (SNIC), Tasas de presuntos hechos delictuosos por provincia cada 100.000 habitantes. <https://www.argentina.gob.ar/seguridad/estadisticas-criminales>
+
 > Las posiciones de los lugares son aproximadas, las fechas intermedias entre las documentadas son estimaciones marcadas como tales, y las cifras de efectivos varían según la fuente. Todo está señalado en [`docs/references.md`](docs/references.md).
 
