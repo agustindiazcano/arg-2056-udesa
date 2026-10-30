@@ -149,8 +149,8 @@ export function ProvinceMap({
 
   const deptBuilt = useMemo(() => {
     if (!selectedId || !deptGeo) return null;
-    return buildDepartmentMap(deptGeo, selectedProvince?.name ?? selectedId);
-  }, [selectedId, deptGeo, selectedProvince]);
+    return buildDepartmentMap(deptGeo, selectedProvince?.name ?? selectedId, selectedDepartment);
+  }, [selectedId, deptGeo, selectedProvince, selectedDepartment]);
 
   const reducedMotion = useReducedMotion();
   // the drill fires when the drawn map changes (country <-> departments), once per change

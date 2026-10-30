@@ -1,9 +1,9 @@
 # Current state
-- Branch: task/readme-banner, based on task/search-icon-references.
-- Generated docs/assets/readme-banner.png from test/2026_10_30_0va_Kleki.png and test/2026_10_30_0va_Kleki (1).png (the two newest images dated 2026-10-30).
-- Built-in image generation; black wide banner, Argentina 2056 above institutional logos; inspected visually.
-- README embeds the banner above its heading; source images unchanged.
-- Previous changes: navbar badge removed, RIGI projects scroll enabled, search SVG, all 111 Data URLs in README.
-- Local tests not run. Previous CI failed in web npm test; GitHub log access returned HTTP 403.
-- Server last checked HTTP 200 at http://localhost:5174/.
-- Next: push banner branch, read CI; PR only after checks pass.
+- Branch: task/department-hover-labels, based on task/readme-banner.
+- Department minimap: hide idle municipality labels; department name shows on geo hover and persists only for selectedDepartment.
+- ProvinceMap passes selectedDepartment into buildDepartmentMap; deselection clears the persistent name.
+- Regression coverage: web/tests/unit/departmentMapLabels.test.ts. Local tests not run (CI only).
+- Earlier work in branch ancestry: README banner, reference URLs, search SVG, RIGI scroll, removed nav development badge.
+- Previous CI failed at web npm test; GitHub log downloads denied HTTP 403.
+- Server last verified at http://localhost:5174/.
+- Next: push branch, read CI, open PR only after checks pass.

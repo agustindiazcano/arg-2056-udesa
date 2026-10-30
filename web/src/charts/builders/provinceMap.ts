@@ -174,7 +174,7 @@ export interface DepartmentGeoForMap {
   features: DepartmentFeatureForMap[];
 }
 
-export function buildDepartmentMap(deptGeo: DepartmentGeoForMap, provinceName: string) {
+export function buildDepartmentMap(deptGeo: DepartmentGeoForMap, provinceName: string, selectedDepartment: string | null = null) {
   const mapName = `ar-dept-${deptGeo.provinceId}`;
   const items = deptGeo.features.map((f) => ({
     name: f.properties.departamento,
@@ -205,6 +205,12 @@ export function buildDepartmentMap(deptGeo: DepartmentGeoForMap, provinceName: s
       roam: true,
       scaleLimit: { min: ZOOM_MIN, max: ZOOM_MAX },
       label: { show: false },
+      regions: deptGeo.features
+        .filter((f) => f.properties.departamento === selectedDepartment)
+        .map((f) => ({
+          name: f.properties.departamento,
+          label: { show: true, color: tokens.ink, fontSize: 11 }
+        })),
       itemStyle: {
         areaColor: tokens.surface,
         borderColor: '#38bdf8',
@@ -231,6 +237,7 @@ export function buildDepartmentMap(deptGeo: DepartmentGeoForMap, provinceName: s
         coordinateSystem: 'geo',
         geoIndex: 0,
         symbol: 'circle',
+        silent: true,
         symbolSize: 7,
         itemStyle: {
           color: '#38bdf8',
@@ -238,7 +245,7 @@ export function buildDepartmentMap(deptGeo: DepartmentGeoForMap, provinceName: s
           borderWidth: 1.5
         },
         label: {
-          show: true,
+          show: false,
           position: 'top',
           formatter: (p: { data?: { cabecera?: string } }) => p.data?.cabecera ?? '',
           color: tokens.ink,

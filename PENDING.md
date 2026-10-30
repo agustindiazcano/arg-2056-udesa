@@ -263,3 +263,5 @@ Order: C8, C7, C2, C3, C4, C5, C1, C6.
 - [x] Replace map search emoji with SVG and include all Data reference URLs in README (39 missing links added).
 
 - [x] Generate black README banner from the two newest test images dated 2026-10-30 and place it above the title.
+
+- [x] Department minimap labels appear only on hover or selection; idle municipality labels hidden (task/department-hover-labels). CI regression tests added; no local tests run.
