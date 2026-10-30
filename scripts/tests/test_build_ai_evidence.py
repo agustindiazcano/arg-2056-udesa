@@ -25,7 +25,7 @@ def test_builds_complete_years_in_temporary_workspace(tmp_path):
 
     fixtures(tmp_path)
     result = subprocess.run(
-        ["node", str(SCRIPT), str(tmp_path)], capture_output=True, text=True
+        ["node", str(SCRIPT), str(tmp_path)], check=False, capture_output=True, text=True
     )
     assert result.returncode == 0
     assert "Built 6 arXiv annual counts" in result.stdout
@@ -39,7 +39,7 @@ def test_rejects_an_incomplete_year(tmp_path):
     path = tmp_path / "data/raw/arxiv/monthly-submissions-2026-10-30.csv"
     path.write_text(path.read_text().replace("2020-01,10,0\n", ""))
     result = subprocess.run(
-        ["node", str(SCRIPT), str(tmp_path)], capture_output=True, text=True
+        ["node", str(SCRIPT), str(tmp_path)], check=False, capture_output=True, text=True
     )
     assert result.returncode == 1
     assert "Incomplete year: 2020" in result.stderr
@@ -50,7 +50,7 @@ def test_rejects_a_malformed_month(tmp_path):
     path = tmp_path / "data/raw/arxiv/monthly-submissions-2026-10-30.csv"
     path.write_text("month,submissions\nbroken,5\n")
     result = subprocess.run(
-        ["node", str(SCRIPT), str(tmp_path)], capture_output=True, text=True
+        ["node", str(SCRIPT), str(tmp_path)], check=False, capture_output=True, text=True
     )
     assert result.returncode == 1
     assert "Invalid arXiv row" in result.stderr

@@ -14,7 +14,7 @@ describe('department map labels', () => {
     expect(option.geo.label.show).toBe(false);
     expect(option.geo.emphasis.label.show).toBe(true);
     expect(option.geo.regions).toEqual([]);
-    expect(option.series[1].label?.show).toBe(false);
+    expect(option.series[1]?.label?.show).toBe(false);
   });
 
   it('keeps only the selected department named and clears it on deselection', () => {
