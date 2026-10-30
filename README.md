@@ -1,3 +1,5 @@
+![Argentina 2056 — Universidad de San Andrés, Data Science Lab y Contar con datos](docs/assets/readme-banner.png)
+
 # Argentina 2056: del Cruce de los Andes a la Cuarta Revolución Industrial
 
 Un relato interactivo, con datos, que une el Cruce de los Andes (1817) con el desafío de Argentina hacia 2056: recursos, economía, población y el impacto de la inteligencia artificial y la automatización (la «Cuarta Revolución Industrial» en el sentido de Klaus Schwab, Foro Económico Mundial).

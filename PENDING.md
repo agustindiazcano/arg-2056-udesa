@@ -261,3 +261,5 @@ Order: C8, C7, C2, C3, C4, C5, C1, C6.
 - [x] Enable scrolling in the lower-left RIGI projects list with constrained flex height and pointer events (task/rigi-projects-scroll).
 
 - [x] Replace map search emoji with SVG and include all Data reference URLs in README (39 missing links added).
+
+- [x] Generate black README banner from the two newest test images dated 2026-10-30 and place it above the title.
