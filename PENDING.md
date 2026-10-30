@@ -257,3 +257,5 @@ Order: C8, C7, C2, C3, C4, C5, C1, C6.
 - [ ] `map3d-hover-zoom` (branch `task/map3d-hover-zoom`): the 3D charts of the Recorrido no longer grow, zoom or vanish by themselves (canvas laid over its box, `dashboard.css` loaded by the Recorrido, hover never navigates); step 0 with a timeline bar, GDP and GDP per capita tables (Argentina pinned) and region bars that follow the clock; all 3D bars open from almost the side; cleaner floor; only +, - and reset buttons; spinner and chunk prefetch; Data Dashboard hidden (flag `arg2056.showDashboard`). Waiting for CI and review. Open: delete the unused code (`tour3d/` still-camera and SVG versions, `TourChart.tsx` passes through to `tour3d/TourChart3D.tsx`), the other Recorrido slides still use made-up data, and the 3D lines of step 0 keep their own camera.
 
 - [x] Remove the development deadline badge from the navbar (task/remove-dev-badge).
+
+- [x] Enable scrolling in the lower-left RIGI projects list with constrained flex height and pointer events (task/rigi-projects-scroll).

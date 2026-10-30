@@ -3820,6 +3820,9 @@ button.brand:focus-visible .brand-a {
 }
 
 .rigi-projects {
+  flex: 1 1 auto;
+  min-height: 0;
+  pointer-events: auto;
   margin: 0;
   padding: 0;
   list-style: none;
