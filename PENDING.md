@@ -295,3 +295,5 @@ Order: C8, C7, C2, C3, C4, C5, C1, C6.
 
 ### Visual debt
 - [ ] Revisión humana de cuatro nuevas láminas y mapa LATAM en 1366×768 y pantalla grande.
+
+- [x] Revisión del agente en navegador a 1366×768: pirámides, adopción e I+D; corregido ancho de las bandas y scroll de costos. Captura local tmp/ai-evidence/research-preview.png. Se mantiene revisión humana pendiente.

@@ -1,11 +1,12 @@
 # Current state
 - Branch: task/ai-access-evidence (based on task/department-hover-labels).
-- Slide 9: cost subtitle, 20/100/200 USD reference tiers, LATAM map with explicit gaps and surcharge bands, API prices for named models.
-- Final slides: enterprise adoption 27, token metrics/limited internal percentiles 28, sourced adoption pyramid 26, research output 29. Menu/index/Data wired; old draft 26 replaced.
-- Source ledger: docs/ai-evidence-2026-10-30.md. AI30–AI55 in Data and README. Every new UI number in PENDING human verification list.
-- arXiv CSV and Natural Earth archived unchanged with SOURCE.md. scripts/build_ai_evidence.mjs builds annual counts and SVG geometry without network.
-- 8 billion Claude Code tokens / last 30 days: author declaration; cache composition and population percentile null.
-- No global user-month token percentiles invented; internal OpenAI p50/p90 are USD-equivalent daily inference, explicitly narrow sample.
-- Tests written, never run locally. Need push and inspect CI before PR; previous branches failed web npm test and log access returned 403.
-- Development server last verified at http://localhost:5174/.
-- Next: cloud CI and browser layout inspection; fix failures before any PR.
+- Slide 9: cost subtitle, Claude 20/100/200 USD reference tiers, LATAM map (4 covered countries; explicit gaps), named API model prices.
+- Final slides: 14 enterprise adoption (id27), 15 tokens (28), 16 sourced adoption pyramid (26), 17 research (29). Menu/index/Data and CSV/JSON exports wired.
+- Sources AI30–AI55 in Data/README. Evidence ledger docs/ai-evidence-2026-10-30.md; every new number in PENDING for human verification.
+- arXiv and Natural Earth raw archives with SOURCE.md; offline generator, temporary-fixture CI tests.
+- No global monthly token percentiles invented. Internal OpenAI p50/p90 are USD-equivalent daily inference; author 8bn tokens/30 days remains self-report, cache and percentile null.
+- Cloud run 41138350858 at commit 8d8ad08: web tests/typecheck/lint, Python, data, terrain passed; e2e last read in progress. Final CSS width fix needs its own final CI.
+- Previous failures corrected: stale slide-order expectations, removed badge expectation, orphan metadata, strict optional index, explicit subprocess check=False. No thresholds lowered.
+- Browser review: 1366x768, new pyramid/adoption/research layouts. Fixed cost scroll and pyramid horizontal overflow.
+- Preview screenshot: tmp/ai-evidence/research-preview.png (not committed). Server http://localhost:5174/.
+- Next: final push and verify all cloud checks before PR. No local test suites run.
