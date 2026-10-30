@@ -12,7 +12,7 @@ import { AiAccessMap } from './AiAccessMap.js';
 import { AiTokenPrices } from './AiTokenPrices.js';
 import './aiEvidence.css';
 
-const REFS = ['AI30', 'AI48', 'AI49'] as const;
+const REFS = ['AI30', 'AI48', 'AI49', 'AI50', 'AI63', 'AI64', 'AI65'] as const;
 const usd = (v: number, digits = 1): string => `${formatNumber(v, digits)} USD`;
 
 /**
@@ -42,14 +42,14 @@ export function AiAccessStep() {
               paragraphs={[
                 'Tomamos 20 USD mensuales como referencia de entrada, el precio mensual de Claude Pro. También se comparan 100 USD (Claude Max) y 200 USD (Claude Ultra), según la lista consultada el 30 de octubre de 2026. No todos los productos ofrecen los mismos planes.',
                 `En el supuesto argentino de un servicio digital del exterior alcanzado por IVA (21 %) y cancelación de tarjeta en pesos alcanzada por percepción (30 %), el desembolso suma ${taxPct(argCountry)} % sobre el precio de lista. El tratamiento puede variar con la forma de pago. Se excluyen Ingresos Brutos y comisiones.`,
-                'En los otros países el recargo es el IVA general (el 10 % de Japón y Australia, el 22 % de Uruguay); en Estados Unidos no hay impuesto nacional y el impuesto estatal a las ventas varía.'
+                'En el resto de América Latina rige el IVA digital o general sobre servicios transfronterizos (Uruguay 22 %, Chile y Colombia 19 %, Perú y Rep. Dominicana 18 %, México y Venezuela 16 %, Ecuador, Honduras y Nicaragua 15 %, Costa Rica, El Salvador y Bolivia 13 %, Guatemala 12 %, Paraguay 10 %, Panamá 7 %) o el IOF de Brasil (3,5 %); en Estados Unidos no hay impuesto nacional.'
               ]}
               how="Elegí plan y vista: mapa de LATAM, barras por país o precios de API por millón de tokens. El semáforo mide el recargo del supuesto tributario, no calidad ni poder adquisitivo."
               refs={[...REFS]}
             />
           </div>
           <p className="gdp-sub">
-            ¿Cuánto más cuesta en Argentina acceder a modelos de IA? · Referencia: planes de 20 USD/mes · <RefList ids={REFS} />
+            ¿Cuánto más cuesta en Argentina acceder a modelos de IA frente a EE. UU., Chile, Perú y toda la región? · Referencia: planes de 20 USD/mes · <RefList ids={REFS} />
           </p>
         </Reveal>
         <div className="tour-controls">
@@ -94,7 +94,7 @@ export function AiAccessStep() {
                 {rows.map((r) => (
                   <tr key={r.country}>
                     <th scope="row">
-                      <img src={r.flag} alt="" width={20} height={15} />
+                      {r.flag ? <img src={r.flag} alt="" width={20} height={15} /> : null}
                       {r.country}
                     </th>
                     <td>{usd(r.taxes)}</td>
@@ -108,15 +108,19 @@ export function AiAccessStep() {
 
           <Reveal k="notes" delay={0.14} className="gdp-chart rule70-card" role="region" aria-label="Qué significa">
             <div className="rule70-card-head">
-              <strong>Qué significa para Argentina</strong>
+              <strong>Qué significa para Argentina y la región</strong>
             </div>
             <ul className="ai-access-notes">
               <li>
-                El {plan.label.toLowerCase()} sale {usd(arg.total)} por mes: {usd(arg.taxes)} más que el precio de lista, {usd(arg.yearlyExtra, 0)} por año.
+                El {plan.label.toLowerCase()} sale {usd(arg.total)} por mes en Argentina (+51 %): {usd(arg.taxes)} más que en Estados Unidos (0 % nacional, {usd(plan.price, 1)}), {usd(arg.yearlyExtra, 0)} de sobrecosto al año.
               </li>
-              <li>Referencia de precios: Pro 20 USD, Max 100 USD y Ultra 200 USD de Claude. Son abonos con límites, no bolsas fijas de tokens API.</li>
-              <li>En este supuesto de tarjeta en pesos, el recargo argentino es {taxPct(argCountry)} %. Pagar con dólares propios puede cambiar la percepción. El impuesto estatal de EE. UU. queda fuera de la comparación.</li>
-              <li>Con el 30 % a cuenta de Ganancias o Bienes Personales, parte puede recuperarse en la declaración anual; el IVA no.</li>
+              <li>
+                En la región el recargo típico es el IVA digital: Uruguay 22 %, Chile y Colombia 19 %, Perú y Rep. Dominicana 18 %, México y Venezuela 16 %, Ecuador 15 %, Costa Rica y Bolivia 13 %, Paraguay 10 %, Panamá 7 % y Brasil 3,5 % (IOF).
+              </li>
+              <li>
+                Para empresas argentinas (B2B por giro al exterior), al no existir convenio de doble imposición con EE. UU., rige retención de Ganancias (Art. 104 inc. i) con grossing-up del 45,99 % más ~2,5 % de IIBB (+48,5 % de costo hundido).
+              </li>
+              <li>Con tarjeta en pesos, el 30 % (RG 5617) es percepción a cuenta de Ganancias o Bienes Personales; para monotributistas, informales o estudiantes opera como costo directo.</li>
             </ul>
           </Reveal>
         </div>

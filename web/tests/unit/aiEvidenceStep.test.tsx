@@ -23,19 +23,32 @@ describe('sourced AI slides', () => {
       for (const row of table.rows) expect(row).toHaveLength(table.columns.length);
     }
   });
-  it('lets readers inspect each token provider without inventing monthly percentiles', () => {
+  it('lets readers inspect each token provider and the 7-tier token pyramid with the 30-day author point', () => {
     render(<AiEvidenceStep step={28} />);
+    expect(screen.getByText(/8\.000\.000\.000 tokens · últimos 30 días/)).toBeDefined();
+    expect(screen.getByText(/156,8× la mediana de ingeniería/)).toBeDefined();
     fireEvent.click(screen.getByRole('button', { name: 'Gemini' }));
     expect(screen.getByText('>3,2 × 10¹⁵ tokens/mes')).toBeDefined();
     expect(screen.getByText(/no solamente la app Gemini/)).toBeDefined();
     fireEvent.click(screen.getByRole('button', { name: 'ChatGPT' }));
     expect(screen.getByText(/no tráfico exclusivo de ChatGPT/)).toBeDefined();
   });
-  it('shows a keyboard-operable LATAM map and separates API from subscriptions', () => {
+  it('shows by default the world population share that pays for LLMs and why those frontier models drive high productivity', () => {
+    render(<AiEvidenceStep step={26} />);
+    const defaultBtn = screen.getByRole('button', { name: /Población mundial que paga LLMs/ });
+    expect(defaultBtn.getAttribute('aria-pressed')).toBe('true');
+    expect(screen.getAllByText(/0,61 %/).length).toBeGreaterThan(0);
+    expect(screen.getByText(/modelos verdaderamente inteligentes/)).toBeDefined();
+    expect(screen.getByText(/incrementan la productividad de forma alta/)).toBeDefined();
+  });
+  it('shows a keyboard-operable LATAM map including Chile and Peru and separates API from subscriptions', () => {
     render(<AiAccessStep />);
     const chile = screen.getByRole('button', { name: /Chile: 19/ });
     fireEvent.keyDown(chile, { key: 'Enter' });
     expect(chile.getAttribute('aria-pressed')).toBe('true');
+    const peru = screen.getByRole('button', { name: /Perú: 18/ });
+    fireEvent.click(peru);
+    expect(peru.getAttribute('aria-pressed')).toBe('true');
     fireEvent.click(screen.getByRole('button', { name: 'Costo por token' }));
     expect(screen.getByRole('table', { name: 'Precios de API por millón de tokens' })).toBeDefined();
     expect(screen.getByText(/Una suscripción mensual no compra/)).toBeDefined();

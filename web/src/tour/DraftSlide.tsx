@@ -15,7 +15,6 @@ export function DraftSlide({ def }: { def: DraftSlideDef }) {
           </div>
           <p className="gdp-sub">{def.lead}</p>
         </div>
-        <span className="draft-status">Borrador</span>
       </header>
       <div className="draft-topics">
         {def.topics.map((t, i) => (

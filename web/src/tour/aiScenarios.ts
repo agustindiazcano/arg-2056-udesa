@@ -57,6 +57,120 @@ export const AI_SCENARIOS: readonly AiScenario[] = [
   }
 ];
 
+export interface CurveCountryFlag {
+  country: string;
+  flag: string;
+}
+
+/** Representative countries on each curve: Frontier compute exporters (Optimistic/Green), Fast followers (Moderate/Blue), and Emerging economies with structural/tax friction like Argentina (Base/Red). */
+export const SCENARIO_CURVE_FLAGS: Readonly<Record<AiScenario['id'], readonly CurveCountryFlag[]>> = {
+  optimistic: [
+    { country: 'Estados Unidos', flag: '/flags/us.svg' },
+    { country: 'Australia', flag: '/flags/au.svg' },
+    { country: 'Alemania', flag: '/flags/de.svg' }
+  ],
+  moderate: [
+    { country: 'España', flag: '/flags/es.svg' },
+    { country: 'Chile', flag: '/flags/cl.svg' },
+    { country: 'Uruguay', flag: '/flags/uy.svg' }
+  ],
+  base: [
+    { country: 'Argentina', flag: '/flags/ar.svg' },
+    { country: 'Brasil', flag: '/flags/br.svg' },
+    { country: 'México', flag: '/flags/mx.svg' }
+  ]
+};
+
+export type AiProjectionScope = 'arg' | 'world' | 'groups';
+
+export interface ScopeScenarioRate {
+  id: 'base' | 'moderate' | 'optimistic';
+  name: string;
+  color: string;
+  annualGrowthPct: number;
+  aiBoostPp: string;
+  countriesLabel: string;
+  detail: string;
+}
+
+/**
+ * Calibrated annual growth rates (2026-2056) for World and Frontier vs. Emerging-with-friction groups,
+ * synthesized from Goldman Sachs (Briggs & Kodnani, 2023), IMF WP/25/76 ("Mind the Gap"), IMF AIPI (0.68 vs 0.47),
+ * Acemoglu (NBER w32487, Hulten's theorem) and Anthropic Economic Index (arXiv:2511.15080).
+ */
+export const WORLD_RATES: readonly ScopeScenarioRate[] = [
+  {
+    id: 'base',
+    name: 'Pesimista mundial',
+    color: tokens.scenario.pessimistic,
+    annualGrowthPct: 2.62,
+    aiBoostPp: '+0,12 pp/año IA (+0,08 a +0,15)',
+    countriesLabel: 'Promedio global con fricción energética y regulatoria (Acemoglu)',
+    detail: 'Base global 2,50 % + 0,12 pp de IA: automatización acotada a tareas rutinarias sin transformación estructural.'
+  },
+  {
+    id: 'moderate',
+    name: 'Neutro mundial',
+    color: tokens.scenario.expected,
+    annualGrowthPct: 3.0,
+    aiBoostPp: '+0,50 pp/año IA (+0,40 a +0,60)',
+    countriesLabel: 'Consenso FMI (WP/25/76) y OCDE para el PBI global',
+    detail: 'Base global 2,50 % + 0,50 pp de IA: difusión gradual con brecha persistente entre economías avanzadas y emergentes.'
+  },
+  {
+    id: 'optimistic',
+    name: 'Optimista mundial',
+    color: tokens.scenario.optimistic,
+    annualGrowthPct: 3.45,
+    aiBoostPp: '+0,95 pp/año IA (+0,80 a +1,10)',
+    countriesLabel: 'Escenario global de alta difusión agéntica (Goldman Sachs +7 % PBI)',
+    detail: 'Base global 2,50 % + 0,95 pp de IA: despliegue masivo de agentes autónomos e I+D acelerada.'
+  }
+];
+
+export const GROUP_COMPARISON_RATES: readonly ScopeScenarioRate[] = [
+  {
+    id: 'base',
+    name: 'Como Argentina (fricción +51 %, AIPI 0,47)',
+    color: tokens.scenario.pessimistic,
+    annualGrowthPct: 2.17,
+    aiBoostPp: '+0,17 pp/año IA (rango 0,00 a +0,42 pp)',
+    countriesLabel: 'Argentina, Brasil, México (importadores netos de cómputo con alta informalidad)',
+    detail: 'Descuento estructural por teorema de Hulten, AIPI 0,47 vs. 0,68, ~45 % de informalidad y recargo impositivo del +48,5 % al +51 % sobre tokens importados.'
+  },
+  {
+    id: 'moderate',
+    name: 'Seguidores rápidos (AIPI ~0,60)',
+    color: tokens.scenario.expected,
+    annualGrowthPct: 2.52,
+    aiBoostPp: '+0,52 pp/año IA (rango +0,35 a +0,72 pp)',
+    countriesLabel: 'España, Chile, Uruguay (adopción abierta sin aranceles al cómputo)',
+    detail: 'Economías integradas que importan tecnología sin sobrecostos cambiarios y capturan ganancias en servicios modernos.'
+  },
+  {
+    id: 'optimistic',
+    name: 'Se suben a la ola: Frontera (AIPI 0,68+)',
+    color: tokens.scenario.optimistic,
+    annualGrowthPct: 3.2,
+    aiBoostPp: '+1,40 pp/año IA (rango +0,72 a +1,60 pp)',
+    countriesLabel: 'EE. UU., Australia, Alemania (productores de cómputo y modelos frontera)',
+    detail: 'Capturan la renta de infraestructura de IA, la compresión del ciclo de I+D y el salto de productividad de Goldman Sachs (+1,5 pp/año).'
+  }
+];
+
+export function buildScopeIndexSeries(scope: 'world' | 'groups', years: number[]): { unit: string; series: Array<{ name: string; color: string; values: number[] }>; rates: readonly ScopeScenarioRate[] } {
+  const rates = scope === 'world' ? WORLD_RATES : GROUP_COMPARISON_RATES;
+  const series = rates.map((r) => {
+    let level = 100;
+    const values = years.map((y, i) => {
+      if (i > 0 && y > 2026) level *= 1 + r.annualGrowthPct / 100;
+      return Math.round(level * 10) / 10;
+    });
+    return { name: r.name, color: r.color, values };
+  });
+  return { unit: 'Índice 2026 = 100 (PBI real)', series, rates };
+}
+
 const mid = (r: readonly [number, number]): number => (r[0] + r[1]) / 2;
 
 /** The yearly growth used for a scenario in a year after 2026, % (the middle of the range of its period). */

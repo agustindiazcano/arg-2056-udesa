@@ -1,12 +1,9 @@
 # Current state
-- Branch: task/ai-access-evidence (based on task/department-hover-labels).
-- Slide 9: cost subtitle, Claude 20/100/200 USD reference tiers, LATAM map (4 covered countries; explicit gaps), named API model prices.
-- Final slides: 14 enterprise adoption (id27), 15 tokens (28), 16 sourced adoption pyramid (26), 17 research (29). Menu/index/Data and CSV/JSON exports wired.
-- Sources AI30–AI55 in Data/README. Evidence ledger docs/ai-evidence-2026-10-30.md; every new number in PENDING for human verification.
-- arXiv and Natural Earth raw archives with SOURCE.md; offline generator, temporary-fixture CI tests.
-- No global monthly token percentiles invented. Internal OpenAI p50/p90 are USD-equivalent daily inference; author 8bn tokens/30 days remains self-report, cache and percentile null.
-- Cloud run 41138350858 at commit 8d8ad08: web tests/typecheck/lint, Python, data, terrain passed; e2e last read in progress. Final CSS width fix needs its own final CI.
-- Previous failures corrected: stale slide-order expectations, removed badge expectation, orphan metadata, strict optional index, explicit subprocess check=False. No thresholds lowered.
-- Browser review: 1366x768, new pyramid/adoption/research layouts. Fixed cost scroll and pyramid horizontal overflow.
-- Preview screenshot: tmp/ai-evidence/research-preview.png (not committed). Server http://localhost:5174/.
-- Next: final push and verify all cloud checks before PR. No local test suites run.
+- Branch: `task/ai-access-evidence`.
+- Slide 6 (`step === 3`, 4th Industrial Revolution): added `Proyección` toggle (`Argentina` | `Mundo` | `Se suben a la ola vs. Como Argentina`), literature contrast callout banner (Goldman Sachs +7% / +1.5 pp vs. Acemoglu +0.06% PTFA vs. IMF WP/25/76 & AIPI 0.68 vs. 0.47), explaining why the green Optimistic curve corresponds to frontier compute-producing countries and Argentina today is not on that train; added 3 country flags per curve (`us`/`au`/`de` on green, `es`/`cl`/`uy` on blue, `ar`/`br`/`mx` on red) on the chart and legend. Kept `AI_SCENARIOS`, `US_SCENARIOS`, and `AI_ANALYSTS` intact so `dataMigration.test.ts` remains green.
+- Slide 9 (`step === 21`, AI Access & LATAM Taxes): expanded `ACCESS_COUNTRIES` from 9 to 23 countries covering 18 Latin American economies plus US, Spain, Germany, Japan, and Australia; added `web/public/flags/pe.svg`; wired all 18 LATAM countries in `AiAccessMap.tsx` (`ARG`, `URY`, `CHL`, `COL`, `PER`, `DOM`, `MEX`, `VEN`, `ECU`, `HND`, `NIC`, `CRI`, `SLV`, `BOL`, `GTM`, `PRY`, `PAN`, `BRA`) with sourced digital VAT / IOF rates (`AI48`–`AI52`, `AI63`–`AI65`) and B2B grossing-up note (+48.5% vs +51% card in Argentina).
+- Slide 15 (`step === 28`, Tokens): integrated interactive 7-tier token consumption pyramid, author's 30-day Claude Code personal token consumption (`8.000 millones de tokens en los últimos 30 días`, 156,8× engineer median), and logarithmic scale comparator ($10^6$ to $10^{11}$ tokens/month).
+- Slide 16 (`step === 26`, LLM Adoption Pyramid, replaces old aide-mémoire slide 14): added default-selected button (`Población mundial que paga LLMs (por defecto)`) showing `%` (`0,61 %` documented ChatGPT to `~0,7–1,0 %` total paid LLMs) and headcount (`>50.000.000` to `~60–80 M` out of `8.200 M`) and why frontier paid models drive high productivity; removed `Borrador` badge from `DraftSlide.tsx`.
+- Sources `AI56`–`AI65` added to `aiEvidenceRefs.ts`, `slides.ts`, `stepInfo.ts`, `README.md`, and `PENDING.md`.
+- Local dev server running on `http://localhost:5174/`.
+- Next: verify GitHub Actions CI run on `origin/task/ai-access-evidence`. No local test suites run per RULE #1.

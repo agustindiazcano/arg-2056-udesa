@@ -3,7 +3,19 @@ import { EChart } from '../charts/EChart.js';
 import { tokens } from '../styles/tokens.js';
 import { RefList } from '../ui/RefLink.js';
 import { Segmented } from '../ui/Segmented.js';
-import { ADOPTION, AI_EVIDENCE_SLIDES, ENTERPRISE, PERSONAL_USAGE, PYRAMID_LEVELS, RESEARCH_PLATFORMS, TOKEN_PROVIDERS, paidPopulationShare } from './aiEvidence.js';
+import {
+  ADOPTION,
+  AI_EVIDENCE_SLIDES,
+  ENTERPRISE,
+  PAID_LLM_WORLD_ESTIMATE,
+  PERSONAL_USAGE,
+  PYRAMID_LEVELS,
+  RESEARCH_PLATFORMS,
+  TOKEN_LOG_BENCHMARKS,
+  TOKEN_PROVIDERS,
+  TOKEN_PYRAMID_TIERS,
+  paidPopulationShare
+} from './aiEvidence.js';
 import arxiv from './aiResearchCounts.json';
 import './aiEvidence.css';
 
@@ -31,30 +43,126 @@ function AdoptionContent() {
 
 function TokensContent() {
   const [provider, setProvider] = useState('Claude');
+  const [tierId, setTierId] = useState('author');
   const record = TOKEN_PROVIDERS.find((p) => p.name === provider) ?? TOKEN_PROVIDERS[0];
+  const activeTier = TOKEN_PYRAMID_TIERS.find((t) => t.id === tierId) ?? TOKEN_PYRAMID_TIERS[1]!;
   return <div className="ai-evidence-grid">
-    <article className="ai-evidence-card"><h3>La concentración del uso intensivo</h3><p>Percentiles publicados: investigadores internos de OpenAI · agosto de 2026</p>
-      <div className="ai-percentile-pyramid" role="img" aria-label="Investigadores de OpenAI: percentil 90, más de 7.000 USD por día; mediana, más de 600 USD por día. Consumo valuado a precios de API, no cantidad de tokens ni facturación real.">
-        <div className="ai-pyramid-band ai-pyramid-band--top"><strong>P90 · &gt;7.000 USD/día</strong><span>consumo equivalente API</span></div>
-        <div className="ai-pyramid-band ai-pyramid-band--base"><strong>P50 · &gt;600 USD/día</strong><span>mediana de investigadores</span></div>
+    <article className="ai-evidence-card">
+      <h3>Pirámide de consumo de tokens (7 niveles + caso real en Claude Code)</h3>
+      <p>De usuarios de chat a agentes autónomos · seleccioná un escalón para ver su escala</p>
+      <div className="ai-token-tier-list" role="group" aria-label="Pirámide de consumo mensual de tokens">
+        {TOKEN_PYRAMID_TIERS.map((t) => (
+          <button
+            type="button"
+            key={t.id}
+            className={`ai-token-tier-btn ${t.id === 'author' ? 'ai-token-tier-btn--author' : ''}`}
+            aria-pressed={tierId === t.id}
+            onClick={() => setTierId(t.id)}
+          >
+            <span className="ai-token-tier-tag">{t.tier}</span>
+            <strong>{t.monthlyTokens}</strong>
+          </button>
+        ))}
       </div>
-      <p className="ai-evidence-caption">Esquema de concentración: anchos ilustrativos, no proporcionales al gasto. Son umbrales reportados de valor API del consumo, no pagos reales ni una distribución de tokens mensuales del mercado. <RefList ids={['AI55']} /></p>
-      <div className="ai-personal"><strong>{count(PERSONAL_USAGE.tokens)} tokens</strong><span>Claude Code · últimos {PERSONAL_USAGE.days} días</span><p>Consumo personal declarado por el autor el 30-10-2026. Sin desglose de caché ni percentil asignado; no se compara con la muestra interna ni se convierte en una factura.</p></div>
+      <div className="ai-personal">
+        <strong>{count(PERSONAL_USAGE.tokens)} tokens · últimos {PERSONAL_USAGE.days} días (Claude Code)</strong>
+        <span>{activeTier.title} · {activeTier.actors}</span>
+        <p>{activeTier.detail} <RefList ids={[activeTier.ref, 'AI55', 'AI56']} /></p>
+      </div>
+      <div className="ai-log-scale" aria-label="Comparador en escala logarítmica de tokens mensuales">
+        <strong className="ai-log-title">Escala logarítmica (10⁶ a 10¹¹ tokens/mes): 8.000 M = 156,8× la mediana de ingeniería (51 M)</strong>
+        {TOKEN_LOG_BENCHMARKS.map((b) => {
+          const widthPct = Math.max(8, Math.min(100, ((b.exp - 5.8) / (11.2 - 5.8)) * 100));
+          return (
+            <div key={b.label} className={`ai-log-row ${b.tone === 'author' ? 'ai-log-row--author' : ''}`}>
+              <span>{b.label}</span>
+              <div className="ai-log-bar-track">
+                <div className={`ai-log-bar-fill ai-log-bar-fill--${b.tone}`} style={{ width: `${widthPct}%` }} />
+              </div>
+            </div>
+          );
+        })}
+      </div>
     </article>
-    <article className="ai-evidence-card"><h3>Qué publica cada proveedor</h3><Segmented label="Proveedor" options={TOKEN_PROVIDERS.map((p) => ({ value: p.name, label: p.name }))} value={provider} onChange={setProvider} /><strong className="ai-provider-figure">{record.figure}</strong><p>{record.scope}</p><RefList ids={[record.ref]} /><div className="ai-evidence-callout"><strong>Un total de plataforma no revela el percentil de una persona</strong><p>Los percentiles mensuales por usuario de estos cinco productos no están disponibles de forma comparable en las fuentes citadas. Por eso no se deducen a partir de tokens agregados, planes o mensajes.</p></div><p className="ai-evidence-caption">Anthropic también publica percentiles por artefacto normalizados respecto de la mediana de conversación: otra unidad de análisis. OpenRouter observa su propia plataforma, con una mezcla de modelos y clientes distinta del mercado completo.</p></article>
+    <article className="ai-evidence-card">
+      <h3>Qué publica cada proveedor y telemetría interna</h3>
+      <Segmented label="Proveedor" options={TOKEN_PROVIDERS.map((p) => ({ value: p.name, label: p.name }))} value={provider} onChange={setProvider} />
+      <strong className="ai-provider-figure">{record.figure}</strong>
+      <p>{record.scope}</p>
+      <RefList ids={[record.ref]} />
+      <div className="ai-percentile-pyramid" role="img" aria-label="Investigadores de OpenAI: percentil 90, más de 7.000 USD por día; mediana, más de 600 USD por día. Consumo valuado a precios de API, no cantidad de tokens ni facturación real.">
+        <div className="ai-pyramid-band ai-pyramid-band--top"><strong>OpenAI P90 · &gt;7.000 USD/día</strong><span>consumo equivalente API en investigación</span></div>
+        <div className="ai-pyramid-band ai-pyramid-band--base"><strong>OpenAI P50 · &gt;600 USD/día · Jellyfish P50 · 51 M tokens/mes</strong><span>mediana de investigadores internos vs. mediana de ingenieros corporativos</span></div>
+      </div>
+      <div className="ai-evidence-callout">
+        <strong>Por qué 8.000 M de tokens en 30 días es posible en programación agéntica</strong>
+        <p>En agentes de consola como Claude Code, cada iteración re-lee el contexto del repositorio: cerca del 99,5 % del volumen son tokens de entrada y lectura de caché (0,30 USD/M), y menos del 0,5 % es generación nueva (15 USD/M). Los percentiles mensuales de usuarios generales no se publican de forma uniforme entre plataformas. <RefList ids={['AI55', 'AI56', 'AI57', 'AI58']} /></p>
+      </div>
+    </article>
   </div>;
 }
 
 function PyramidContent() {
-  const [selected, setSelected] = useState(0);
-  const level = PYRAMID_LEVELS[selected]!;
+  const [mode, setMode] = useState<'paid' | '0' | '1' | '2'>('paid');
+  const selectedIndex = mode === 'paid' ? 0 : Number(mode);
+  const level = PYRAMID_LEVELS[selectedIndex]!;
   const ratio = paidPopulationShare(PYRAMID_LEVELS[0].count, PYRAMID_LEVELS[2].count);
+  const weeklyRatio = paidPopulationShare(PYRAMID_LEVELS[1].count, PYRAMID_LEVELS[2].count);
   return <div className="ai-evidence-grid">
-    <article className="ai-evidence-card"><h3>Del alcance al pago</h3><p>ChatGPT como caso documentado; no suma de todos los LLM</p>
+    <article className="ai-evidence-card">
+      <h3>Del alcance global al acceso a modelos verdaderamente inteligentes</h3>
+      <Segmented
+        label="Foco"
+        options={[
+          { value: 'paid', label: 'Población mundial que paga LLMs (por defecto)' },
+          { value: '0', label: '>50 M pagos (0,61 %)' },
+          { value: '1', label: '>900 M semanales (11 %)' },
+          { value: '2', label: '8.200 M mundo (100 %)' }
+        ]}
+        value={mode}
+        onChange={setMode}
+      />
       <div className="ai-adoption-pyramid" role="group" aria-label="Pirámide conceptual de alcance y suscripción">
-        {PYRAMID_LEVELS.map((r, i) => <button type="button" key={r.label} className={`ai-pyramid-band ai-pyramid-level-${i}`} aria-pressed={selected === i} onClick={() => setSelected(i)}><strong>{r.qualifier === 'Más de' ? '>' : '≈'}{i === 2 ? '8.200' : i === 1 ? '900' : '50'} millones</strong><span>{r.label}</span><small>{r.period}</small></button>)}
-      </div><p className="ai-evidence-caption">Diagrama conceptual: áreas y anchos no proporcionales. Usuarios semanales y suscriptores son métricas distintas; los pagos no se restan de los activos semanales. La base es una referencia demográfica de 2024.</p><RefList ids={['AI38', 'AI39']} /></article>
-    <article className="ai-evidence-card"><h3>{level.label}</h3><strong className="ai-provider-figure">{level.qualifier} {count(level.count)}</strong><p>{level.note}</p><RefList ids={[level.ref]} /><div className="ai-evidence-callout"><strong>{ratio.toLocaleString('es-AR', { maximumFractionDigits: 2 })} % como comparación de escala</strong><p>50 millones divididos por 8.200 millones. El numerador publicado es “más de 50 millones”; no es el total mundial de personas que pagan IA ni una tasa precisa actual.</p></div><p>El plan de 20 USD es una referencia de acceso, pero la cifra de suscriptores de OpenAI no distingue cuánto paga cada uno. No permite afirmar que todos pagan 20 USD.</p><p className="ai-evidence-caption">Redibujo propio del formato de pirámide/embudo de adopción. Inspiración visual: AI Bear; cifras y definiciones reemplazadas por OpenAI y ONU. <RefList ids={['AI54']} /></p></article>
+        {PYRAMID_LEVELS.map((r, i) => (
+          <button
+            type="button"
+            key={r.label}
+            className={`ai-pyramid-band ai-pyramid-level-${i}`}
+            aria-pressed={selectedIndex === i}
+            onClick={() => setMode(i === 0 ? 'paid' : (String(i) as '1' | '2'))}
+          >
+            <strong>
+              {r.qualifier === 'Más de' ? '>' : '≈'}
+              {i === 2 ? '8.200' : i === 1 ? '900' : '50'} millones ({i === 0 ? '0,61 % del mundo' : i === 1 ? '≈11 % del mundo' : '100 % población mundial'})
+            </strong>
+            <span>{r.label}</span>
+            <small>{r.period}</small>
+          </button>
+        ))}
+      </div>
+      <p className="ai-evidence-caption">Diagrama conceptual: áreas y anchos no proporcionales. Usuarios semanales y suscriptores son métricas distintas. La base es la población mundial de 2024 (8.200 millones). <RefList ids={['AI38', 'AI39']} /></p>
+    </article>
+    <article className="ai-evidence-card">
+      <h3>{mode === 'paid' ? '¿Cuántas personas del mundo pagan LLMs y por qué multiplican la productividad?' : level.label}</h3>
+      <div className="ai-stat-pair">
+        <div>
+          <strong>{ratio.toLocaleString('es-AR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} %</strong>
+          <span>piso documentado (&gt;50 M en ChatGPT / 8.200 M)</span>
+        </div>
+        <div>
+          <strong>~0,7 a 1,0 %</strong>
+          <span>estimado global (~60–80 M sumando todos los LLMs pagos)</span>
+        </div>
+      </div>
+      <strong className="ai-provider-figure">{level.qualifier} {count(level.count)} personas ({selectedIndex === 0 ? `${ratio.toLocaleString('es-AR', { maximumFractionDigits: 2 })} % del mundo` : selectedIndex === 1 ? `${weeklyRatio.toLocaleString('es-AR', { maximumFractionDigits: 1 })} % del mundo` : 'total mundial'})</strong>
+      <p>{level.note}</p>
+      <RefList ids={[level.ref]} />
+      <div className="ai-evidence-callout">
+        <strong>Los modelos verdaderamente inteligentes están en el &lt;1 % pago</strong>
+        <p>{PAID_LLM_WORLD_ESTIMATE.whyItMatters}</p>
+      </div>
+      <p className="ai-evidence-caption">50 millones divididos por 8.200 millones = {ratio.toLocaleString('es-AR', { maximumFractionDigits: 2 })} % como comparación de escala. El plan de 20 USD es la puerta de entrada a modelos de razonamiento, mientras que los planes de 100 y 200 USD habilitan uso intensivo de agentes como Claude Code. Redibujo propio con datos de OpenAI y ONU. <RefList ids={['AI38', 'AI39', 'AI54']} /></p>
+    </article>
   </div>;
 }
 

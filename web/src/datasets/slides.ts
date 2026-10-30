@@ -370,7 +370,7 @@ export function buildSlides(): SlideData[] {
       ...servicesTables()
     ], true, ['W3', 'W5', 'I1', 'F1', 'X1', 'X2', 'X3', 'E2', 'E7', 'E1', 'E10']),
     slide('14', 'Productividad', productivityTables(), false, ['P6', 'P7', 'P7b', 'P1', 'P8', 'P9']),
-    slide('3', TOUR_CHARTS[3]!.title, [chartTable(3), ...aiTables(), perCapitaTable(), aiPopulationTable()], true, ['A1', 'A2', 'A3', 'A4', 'A5', 'A6', 'A7', 'A8', 'A9', 'A10']),
+    slide('3', TOUR_CHARTS[3]!.title, [chartTable(3), ...aiTables(), perCapitaTable(), aiPopulationTable()], true, ['A1', 'A2', 'A3', 'A4', 'A5', 'A6', 'A7', 'A8', 'A9', 'A10', 'P8', 'P9', 'AI59', 'AI60', 'AI61', 'AI62']),
     slide('16', DEVELOPMENT_TITLE, [
       {
         id: 'hdi-series',
@@ -588,7 +588,7 @@ export function buildSlides(): SlideData[] {
         rows: ACCESS_COUNTRIES.flatMap((c) => (c.taxes.length === 0 ? [[c.name, 'Sin impuesto nacional', 0]] : c.taxes.map((t) => [c.name, t.label, t.pct])))
       },
       apiPricesTable()
-    ], false, ['AI30', 'AI31', 'AI32', 'AI33', 'AI34', 'AI48', 'AI49', 'AI50', 'AI51', 'AI52', 'AI53']),
+    ], false, ['AI30', 'AI31', 'AI32', 'AI33', 'AI34', 'AI48', 'AI49', 'AI50', 'AI51', 'AI52', 'AI53', 'AI63', 'AI64', 'AI65']),
     ...DRAFT_SLIDES.filter((d) => d.id !== 26).map((d) => slide(String(d.id), d.title, [{ id: `draft-${d.id}`, title: 'Temas de la diapositiva', columns: ['Tema', 'Descripción'], rows: d.topics.map((t) => [t.heading, t.text]) }], false)),
     ...AI_EVIDENCE_SLIDES.map((d) => slide(String(d.id), d.title, aiEvidenceTables(d.id), false, [...d.refs])),
     slide('sim', 'Simulador del PBI', [
