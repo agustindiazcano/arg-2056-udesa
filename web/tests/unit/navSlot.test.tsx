@@ -39,11 +39,10 @@ describe('navbar slot', () => {
     expect(css).toMatch(/\.header-row--sub:has\(> \.nav-slot:empty\)[^{]*\{\s*display: none;/);
   });
 
-  it('renders the development deadline badge to the right of the buttons', () => {
+  it('removes the development deadline badge while keeping the Data control', () => {
     render(<Header />);
-    const badge = screen.getByText(/En desarrollo hasta el deadline 31\/10/i);
-    expect(badge).toBeTruthy();
-    expect(badge.closest('.dev-deadline-badge')).toBeTruthy();
+    expect(screen.queryByText(/En desarrollo hasta el deadline 31\/10/i)).toBeNull();
+    expect(screen.getByRole('button', { name: 'Data' })).toBeDefined();
   });
 });
 

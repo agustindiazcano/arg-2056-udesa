@@ -34,6 +34,8 @@ button.ai-pyramid-band[aria-pressed='true'], button.ai-pyramid-band:focus-visibl
 .ai-research-flow { display: flex; align-items: center; justify-content: space-around; gap: var(--space-2); padding: var(--space-3) 0; color: var(--blue); }
 .ai-research-flow span { font-size: .8rem; }
 .ai-access-main { overflow: auto; pointer-events: auto; }
+.ai-access-step .prov-side { grid-template-rows: minmax(0, 1.4fr) minmax(0, 1fr); }
+.ai-access-step .prov-side > .gdp-chart { overflow: auto; pointer-events: auto; }
 .ai-token-prices { padding: var(--space-2); font-size: .85rem; }
 .ai-token-prices small { display: block; font-size: .7rem; font-weight: 400; }
 .ai-token-prices p { margin: var(--space-2) 0; }

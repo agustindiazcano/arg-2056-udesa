@@ -31,7 +31,7 @@ export function AiAccessStep() {
   const chart = useMemo(() => buildAccessStack(rows, { summary }), [rows, summary]);
 
   return (
-    <section className="gdp-step prov-step" aria-label={AI_ACCESS_TITLE}>
+    <section className="gdp-step prov-step ai-access-step" aria-label={AI_ACCESS_TITLE}>
       <header className="gdp-head">
         <Reveal k="head" className="gdp-title">
           <div className="slide-title-row">

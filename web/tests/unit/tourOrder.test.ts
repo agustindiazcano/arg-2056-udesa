@@ -6,7 +6,7 @@ import { buildSlides } from '../../src/datasets/slides';
 // first slide is the index (id 20, the title "Argentina 2056" and the list of the others). The numbers are the position: 0, 1, 2...
 describe('the order and the numbers of the slides of Hacia el 2056', () => {
   it('opens with the index and shows Productividad right after the GDP slide', () => {
-    expect(TOUR_ORDER).toEqual([20, 0, 8, 5, 12, 14, 3, 16, 17, 21, 22, 23, 24, 25, 26]);
+    expect(TOUR_ORDER).toEqual([20, 0, 8, 5, 12, 14, 3, 16, 17, 21, 22, 23, 24, 25, 27, 28, 26, 29]);
     expect(TOUR_ORDER[0]).toBe(INDEX_STEP);
   });
 
@@ -37,7 +37,7 @@ describe('the order and the numbers of the slides of Hacia el 2056', () => {
 });
 
 describe('the slides after the 8th', () => {
-  it('are numbered 9 to 14 after the existing ones, the first being the AI access slide', () => {
-    expect([21, 22, 23, 24, 25, 26].map(stepNumber)).toEqual([9, 10, 11, 12, 13, 14]);
+  it('keeps access at 9 and appends adoption, tokens, the pyramid and research at 14 to 17', () => {
+    expect([21, 22, 23, 24, 25, 27, 28, 26, 29].map(stepNumber)).toEqual([9, 10, 11, 12, 13, 14, 15, 16, 17]);
   });
 });
