@@ -38,8 +38,8 @@ describe('sourced AI slides', () => {
     const defaultBtn = screen.getByRole('button', { name: /Población mundial que paga LLMs/ });
     expect(defaultBtn.getAttribute('aria-pressed')).toBe('true');
     expect(screen.getAllByText(/0,61 %/).length).toBeGreaterThan(0);
-    expect(screen.getByText(/modelos verdaderamente inteligentes/)).toBeDefined();
-    expect(screen.getByText(/incrementan la productividad de forma alta/)).toBeDefined();
+    expect(screen.getAllByText(/modelos verdaderamente inteligentes/).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/incrementan la productividad de forma alta/).length).toBeGreaterThan(0);
   });
   it('shows a keyboard-operable LATAM map including Chile and Peru and separates API from subscriptions', () => {
     render(<AiAccessStep />);
