@@ -317,3 +317,13 @@ Order: C8, C7, C2, C3, C4, C5, C1, C6.
 ## Done · Índice del README (2026-10-30)
 
 - [x] Índice con enlaces a todas las secciones y subsecciones, anclas explícitas y títulos enlazados de vuelta al índice.
+
+
+## Done · Modelos 3D de uniformes y Cruce de los Andes (2026-10-30)
+
+- [x] Fusil de chispa (`musket.glb`) montado en diagonal sobre la espalda (`mixamorig:Spine2`) de los dos soldados (`soldier-blue.glb` y `soldier-red.glb`).
+- [x] Botón `"Modelos detallados"` en los controles del Cruce de los Andes (`web/src/scenes/andes/index.tsx` y `MapLibreRenderer.tsx`) para activar los modelos 3D GLB en la infantería del cruce.
+- [x] Botón `"Ver uniformes"` en la barra de navegación (`web/src/app/Header.tsx`) que abre el pop-up 3D (`web/src/app/UniformsModal.tsx`) con los 3 modelos (`San Martín`, `Soldado de Uniforme Azul`, `Soldado de Uniforme Rojo` con fusiles a la espalda).
+- [x] En la pantalla de cielo celeste al abrir `"Cruce de los Andes"` (`web/src/scenes/andes/AndesIntro.tsx`), marcha 3D de San Martín adelante con 5 soldados detrás (3 azules y 2 rojos).
+- [x] Al hacer hover sobre el botón `"Cruce de los Andes"` en la intro (`web/src/intro/Intro.tsx`), aparece a la derecha encima del mapa de Argentina San Martín escoltado por dos granaderos.
+- [ ] Revisión humana visual de la escala y orientación del fusil en la espalda y las animaciones 3D en navegador.

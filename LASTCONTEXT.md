@@ -1,8 +1,11 @@
 # Current state
-- Branch: `task/readme-index`, based on main with PR #159 merged.
-- README has a table of contents covering every level 2 and level 3 section.
-- Each section has an explicit anchor; each section title links back to the index.
-- Existing hackathon, institutional, author and screenshot links preserved.
-- Documentation only; CI paths-ignore excludes Markdown-only changes. No local tests run.
-- Untracked user folders test/, tmp/ and web/public/models/ preserved.
-- Next: push, inspect CI availability and open PR for human review; never merge automatically.
+- Branch: `task/andes-uniform-models`.
+- Added optimized 3D `.glb` assets under `web/public/models/` (`san-martin.glb`, `soldier-blue.glb`, `soldier-red.glb`, `musket.glb`) from `test/`.
+- Implemented `web/src/scenes/andes/uniformModels.ts` (`attachMusketToBack` mounts the flintlock musket onto `mixamorig:Spine2` on the back of both soldiers; `ANDES_INTRO_MARCH_FORMATION`; `INTRO_HOVER_ESCORT_FORMATION`; `UNIFORM_MODELS`; `loadUniformAssets`).
+- Implemented `web/src/scenes/andes/CharacterStage3D.tsx` for rendering animated 3D formations and the interactive uniform showcase without adding `three` to the initial bundle.
+- Added `"Ver uniformes"` button in `web/src/app/Header.tsx` opening `web/src/app/UniformsModal.tsx` with the 3 3D models.
+- Updated `web/src/scenes/andes/AndesIntro.tsx` to show San Martín walking in front with 5 soldiers behind (3 blue, 2 red) under the celeste sky.
+- Updated `web/src/intro/Intro.tsx` to show San Martín escorted by 2 grenadiers on the right over the Argentina map when hovering `"Cruce de los Andes"`.
+- Added `"Modelos detallados"` toggle in `web/src/scenes/andes/index.tsx` and `MapLibreRenderer.tsx` / `figures3d.ts` so the Andes crossing infantry uses the 3D GLB models when enabled.
+- Added unit tests in `web/tests/unit/andesUniforms.test.tsx` and `web/tests/unit/andesScene.test.tsx`.
+- Next: push `task/andes-uniform-models` to remote and verify GitHub Actions CI run status (`gh run list` / `gh run watch`).

@@ -2,7 +2,8 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { MercatorCoordinate, Map as MapLibreMap, setWorkerUrl } from 'maplibre-gl';
 import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?url';
 import type { CustomLayerInterface, CustomRenderMethodInput, GeoJSONSource, MapLayerMouseEvent } from 'maplibre-gl';
-import { AmbientLight, BufferAttribute, BufferGeometry, Color, DataTexture, DirectionalLight, InstancedMesh, Matrix4, MeshStandardMaterial, PerspectiveCamera, Points, PointsMaterial, Quaternion, RGBAFormat, Scene, SphereGeometry, Vector3, WebGLRenderer } from 'three';
+import { AmbientLight, AnimationMixer, BufferAttribute, BufferGeometry, Color, DataTexture, DirectionalLight, Group, InstancedMesh, Matrix4, MeshStandardMaterial, PerspectiveCamera, Points, PointsMaterial, Quaternion, RGBAFormat, Scene, SphereGeometry, Vector3, WebGLRenderer } from 'three';
+import { loadUniformAssets } from './uniformModels';
 import { QUALITY_PRESETS } from '../../runtime/capabilities';
 import { NavControls } from '../../ui/NavControls';
 import { columnSlots, figureCount, startingMen } from './column';
@@ -83,6 +84,8 @@ export interface MapLibreRendererProps {
   selectedId: string | null;
   camera: CameraMode;
   graphics: Graphics;
+  /** when true, infantry slots use the 3D GLB models (San Martín, blue soldier, red soldier with muskets on their backs) */
+  detailedModels?: boolean;
   /** the force the camera follows as the clock runs (null: the camera is free of any force) */
   followId?: string | null;
   onSelect: (id: string | null) => void;
@@ -359,6 +362,10 @@ class ArmyLayer implements CustomLayerInterface {
   private readonly scene = new Scene();
   private readonly camera = new PerspectiveCamera();
   private column: FigureColumn | null = null;
+  private detailedModelsOn = false;
+  private detailedGroup: Group | null = null;
+  private detailedActors: Array<{ holder: Group; mixer: AnimationMixer | null }> = [];
+  private lastAnimMs = 0;
   private dust: Points | null = null;
   private dustCount = 0;
   private readonly dustSlots: ReturnType<typeof columnSlots>;
@@ -392,7 +399,75 @@ class ArmyLayer implements CustomLayerInterface {
     this.scene.add(sun);
   }
 
+  setDetailedModels(on: boolean): void {
+    if (this.detailedModelsOn === on) return;
+    this.detailedModelsOn = on;
+    if (on) {
+      this.syncDetailedGroup();
+    } else {
+      this.clearDetailedGroup();
+    }
+    this.map?.triggerRepaint();
+  }
+
+  private clearDetailedGroup(): void {
+    for (const actor of this.detailedActors) {
+      actor.mixer?.stopAllAction();
+    }
+    this.detailedActors = [];
+    if (this.detailedGroup) {
+      this.scene.remove(this.detailedGroup);
+      this.detailedGroup = null;
+    }
+  }
+
+  private syncDetailedGroup(): void {
+    this.clearDetailedGroup();
+    if (!this.detailedModelsOn || !this.column || this.palette) return;
+    const targetColumn = this.column;
+    void loadUniformAssets()
+      .then((assets) => {
+        if (!this.detailedModelsOn || this.column !== targetColumn) return;
+        const group = new Group();
+        const actors: Array<{ holder: Group; mixer: AnimationMixer | null }> = [];
+        for (const pose of targetColumn.infantryPoses) {
+          const modelId =
+            pose.kind === 'leader'
+              ? 'san-martin'
+              : pose.kind === 'foot_afro'
+                ? 'soldier-red'
+                : 'soldier-blue';
+          const withMusket = pose.kind !== 'leader';
+          const { scene: charScene, animations } = assets.cloneCharacter(modelId, withMusket);
+          const holder = new Group();
+          holder.add(charScene);
+          group.add(holder);
+
+          const walkClip =
+            animations.find((c) => c.name === 'Walking') ??
+            animations.find((c) => c.name.toLowerCase().includes('walk')) ??
+            animations[0];
+          let mixer: AnimationMixer | null = null;
+          if (walkClip) {
+            mixer = new AnimationMixer(charScene);
+            const action = mixer.clipAction(walkClip);
+            action.play();
+            mixer.update(pose.phase);
+          }
+          actors.push({ holder, mixer });
+        }
+        this.detailedGroup = group;
+        this.detailedActors = actors;
+        this.scene.add(group);
+        this.map?.triggerRepaint();
+      })
+      .catch(() => {
+        // Ignore asset errors in offline/test environments
+      });
+  }
+
   onRemove(): void {
+    this.clearDetailedGroup();
     this.column?.mesh.geometry.dispose();
     this.disposeDust();
     this.renderer?.dispose();
@@ -475,6 +550,7 @@ class ArmyLayer implements CustomLayerInterface {
     this.column = createFigureColumn(this.count, this.path, groundAt, 1, this.palette);
     this.column.mesh.frustumCulled = false;
     this.scene.add(this.column.mesh);
+    if (this.detailedModelsOn) this.syncDetailedGroup();
     this.buildDust();
   }
 
@@ -497,7 +573,23 @@ class ArmyLayer implements CustomLayerInterface {
     const index = (km - this.pathKm0) / this.pathStepKm;
     const now = performance.now();
     const amount = gaitAmount(now, this.lastMovedMs);
-    this.column.update(arcAt(this.path, index), gaitPhaseAt(now), amount, this.formation);
+    const hasDetailed = this.detailedModelsOn && this.detailedGroup !== null && this.detailedActors.length === this.column.infantryPoses.length;
+    this.column.update(arcAt(this.path, index), gaitPhaseAt(now), amount, this.formation, hasDetailed);
+    if (hasDetailed) {
+      const dt = this.lastAnimMs > 0 ? Math.min(0.05, (now - this.lastAnimMs) / 1000) : 0;
+      this.lastAnimMs = now;
+      const poses = this.column.infantryPoses;
+      for (let i = 0; i < poses.length; i += 1) {
+        const pose = poses[i]!;
+        const actor = this.detailedActors[i]!;
+        actor.holder.position.set(pose.x, pose.y, pose.z);
+        actor.holder.rotation.y = pose.heading + Math.PI;
+        actor.holder.scale.setScalar(pose.scale * 0.62);
+        if (amount > 0 && dt > 0) {
+          actor.mixer?.update(dt * amount);
+        }
+      }
+    }
     if (this.dust && this.path) {
       const path = this.path;
       const geometry = this.dust.geometry;
@@ -568,7 +660,7 @@ function createLight(map: MapLibreMap, svg: SVGSVGElement) {
 /** How long the light over the battle takes to come up, stays, and goes (ms): the camera leaves for the battle when it starts to go. */
 const BATTLE_LIGHT = { in: 1100, hold: 3600, out: 4300 };
 
-export function MapLibreRenderer({ initialView, route, columns, day, selectedId, camera, graphics, followId = null, onSelect, onTimeScale, onReady, cameraApi, onView, tourPlay = 0, onTourEnd, onIntroEnd, battleShow = 0, focusForce = null, onFocusForce, label }: MapLibreRendererProps) {
+export function MapLibreRenderer({ initialView, route, columns, day, selectedId, camera, graphics, detailedModels = false, followId = null, onSelect, onTimeScale, onReady, cameraApi, onView, tourPlay = 0, onTourEnd, onIntroEnd, battleShow = 0, focusForce = null, onFocusForce, label }: MapLibreRendererProps) {
   const reduced = useReducedMotion();
   const hostRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<MapLibreMap | null>(null);
@@ -789,6 +881,8 @@ export function MapLibreRenderer({ initialView, route, columns, day, selectedId,
       id: c.id,
       layer: new ArmyLayer(c.route, figureCount(figureMen(c.id, forceMen(c.route.points)), particleScale).count, `army-figures-${c.id}`)
     }));
+    layer.setDetailedModels(detailedModels);
+    for (const o of otherArmiesRef.current) o.layer.setDetailedModels(detailedModels);
 
     map.on('load', () => {
       if (!missingKey) {
@@ -1268,6 +1362,11 @@ export function MapLibreRenderer({ initialView, route, columns, day, selectedId,
       window.cancelAnimationFrame(raf);
     };
   }, []);
+
+  useEffect(() => {
+    layerRef.current?.setDetailedModels(detailedModels);
+    for (const o of otherArmiesRef.current) o.layer.setDetailedModels(detailedModels);
+  }, [detailedModels]);
 
   // a force chosen in a button: the map goes to it
   useEffect(() => {

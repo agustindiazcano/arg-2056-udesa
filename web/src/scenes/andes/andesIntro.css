@@ -146,3 +146,27 @@
   cursor: pointer;
   backdrop-filter: blur(8px);
 }
+
+
+/* 3D march formation in the celeste sky: San Martín in front + 5 soldiers behind (3 blue, 2 red) */
+.andes-intro-march {
+  position: absolute;
+  left: 50%;
+  bottom: 4%;
+  transform: translateX(-50%);
+  width: min(860px, 92vw);
+  height: clamp(240px, 46vh, 420px);
+  z-index: 1;
+  pointer-events: none;
+  transition: opacity 0.45s ease, transform 0.8s ease;
+}
+
+.andes-intro.is-leaving .andes-intro-march {
+  opacity: 0;
+  transform: translateX(-50%) scale(1.04);
+}
+
+.andes-intro-march-stage {
+  width: 100%;
+  height: 100%;
+}

@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useReducedMotion } from '../../runtime/useReducedMotion';
+import { CharacterStage3D } from './CharacterStage3D';
+import { ANDES_INTRO_MARCH_FORMATION } from './uniformModels';
 import './andesIntro.css';
 
 /** The least time the loading screen stays, so the title can be read even when the map is ready at once. */
@@ -35,11 +37,12 @@ interface AndesIntroProps {
   onDone?: (skipped: boolean) => void;
 }
 
+const BLUE_SOLDIER_COUNT = ANDES_INTRO_MARCH_FORMATION.filter((p) => p.model === 'soldier-blue').length;
+const RED_SOLDIER_COUNT = ANDES_INTRO_MARCH_FORMATION.filter((p) => p.model === 'soldier-red').length;
+
 /**
- * The screen the Andes open with: a sky with three layers of clouds drifting at their own pace, "Cruce de los Andes" and under it "1817". It
- * covers the loading of the map (and of the chunk that draws it) and leaves when the map is ready: the clouds fade out layer by layer
- * (they do not move). It lets the clicks through and is hidden from the screen readers (the scene under it has the content). With reduced motion the
- * clouds do not drift and it leaves quickly. With `skip` it leaves at once (the scene has the button "Saltar intro").
+ * The screen the Andes open with: a sky with three layers of clouds drifting at their own pace, "Cruce de los Andes" and under it "1817",
+ * accompanied by San Martín walking in front with 5 soldiers behind him (3 blue and 2 red uniforms).
  */
 export function AndesIntro({ ready, skip = false, onDone }: AndesIntroProps) {
   const reduced = useReducedMotion();
@@ -74,6 +77,23 @@ export function AndesIntro({ ready, skip = false, onDone }: AndesIntroProps) {
     <div className={`andes-intro${leaving ? ' is-leaving' : ''}${reduced ? ' is-still' : ''}`} data-testid="andes-intro" aria-hidden="true">
       <CloudLayer id="andes-cloud-back" seed={4} base="0.0045 0.011" gain={2.6} cut={-1.05} className="andes-cloud-back" />
       <CloudLayer id="andes-cloud-mid" seed={11} base="0.006 0.014" gain={3.2} cut={-1.5} className="andes-cloud-mid" />
+      <div
+        className="andes-intro-march"
+        data-testid="andes-intro-march"
+        data-leader="san-martin"
+        data-blue-soldiers={String(BLUE_SOLDIER_COUNT)}
+        data-red-soldiers={String(RED_SOLDIER_COUNT)}
+      >
+        <CharacterStage3D
+          placements={ANDES_INTRO_MARCH_FORMATION}
+          animationMode="walk"
+          cameraPosition={[0, 1.85, 4.9]}
+          cameraLookAt={[0, 0.9, 0]}
+          cameraFov={36}
+          marchBob
+          className="andes-intro-march-stage"
+        />
+      </div>
       <CloudLayer id="andes-cloud-front" seed={27} base="0.0035 0.009" gain={3.6} cut={-1.8} className="andes-cloud-front" />
       <div className="andes-intro-text">
         <p className="andes-intro-title">Cruce de los Andes</p>

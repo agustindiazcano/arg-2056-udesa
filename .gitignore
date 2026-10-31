@@ -27,3 +27,5 @@ web/test-results/
 test/*.png
 visual-corrections/
 .gemini/
+test/*.glb
+test/*.html
