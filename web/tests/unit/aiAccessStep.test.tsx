@@ -20,6 +20,7 @@ describe('AiAccessStep', () => {
   it('shows the title and the 20 dollar plan first, with Argentina as the most expensive country', () => {
     render(<AiAccessStep />);
     expect(screen.getByRole('heading', { level: 2, name: AI_ACCESS_TITLE })).toBeDefined();
+    expect(screen.getByText(/¿Cuánto más cuesta en Argentina acceder a la tecnología/)).toBeDefined();
     const rows = screen.getAllByRole('row').slice(1);
     expect(rows[0]!.textContent).toContain('Argentina');
     expect(rows[0]!.textContent).toContain('30,2 USD');

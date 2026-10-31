@@ -16,9 +16,11 @@ import { buildPath } from '../../src/scenes/andes/pathAlong';
 import { AndesIntro } from '../../src/scenes/andes/AndesIntro';
 import { Intro } from '../../src/intro/Intro';
 import { Header } from '../../src/app/Header';
+import { useStore } from '../../src/state/store';
 
 afterEach(() => {
   cleanup();
+  useStore.setState({ section: 'andes' });
   window.localStorage.clear();
 });
 
@@ -120,6 +122,16 @@ describe('Intro hover escort on Cruce de los Andes button', () => {
 });
 
 describe('Header "Ver uniformes" button and 3D uniforms popup', () => {
+  it('only shows the uniforms control in Andes and closes it when leaving', async () => {
+    render(<Header />);
+    fireEvent.click(screen.getByRole('button', { name: /Ver uniformes/i }));
+    expect(await screen.findByRole('dialog', { name: /Uniformes del Ejército de los Andes/i })).toBeTruthy();
+    act(() => useStore.setState({ section: 'tour' }));
+    expect(screen.queryByRole('button', { name: /Ver uniformes/i })).toBeNull();
+    expect(screen.queryByRole('dialog', { name: /Uniformes del Ejército de los Andes/i })).toBeNull();
+    act(() => useStore.setState({ section: 'andes' }));
+    expect(screen.getByRole('button', { name: /Ver uniformes/i }).getAttribute('aria-expanded')).toBe('false');
+  });
   it('opens a popup with the 3 3D uniform models, supports zooming out ("Alejar zoom"), and closes on Cerrar', async () => {
     render(<Header />);
     const btn = screen.getByRole('button', { name: /Ver uniformes/i });

@@ -4,6 +4,9 @@ Every task below has a brief (`docs/tasks/<slug>.md`, historical briefs in `docs
 
 ## New corrections (`test/correcciones-nuevas.png`, plan in `docs/action-plan-correcciones-nuevas.md`)
 
+- [ ] Replace slide reference chips with a references dialog and adapt slides for laptop/narrow screens with a secondary-chart carousel. Plan: `docs/tasks/references-responsive-carousel.md`.
+- [x] Update slide 4 subtitle and show the uniforms control only in Andes. Branch `task/slide4-header-plans`.
+
 Order: C8, C7, C2, C3, C4, C5, C1, C6.
 - [x] C8 `map-zoom-limits`: ZOOM_MAX 8 -> 32 in `web/src/charts/navState.ts` (country and department maps); tests updated. Branch `task/map-zoom-limits`.
 - [x] C7 `map-drill-transition`: smooth transition between country, province and department. Camera glides to the selected province (`animationDurationUpdate` 450 ms, cubicInOut) and the drawn map settles in (fade + scale) when it swaps country <-> departments; instant with reduced motion. `web/src/charts/drillTransition.ts`, tests `drillTransition.test.tsx`, `mapDrillTransition.test.tsx`. Branch `task/map-drill-transition`.

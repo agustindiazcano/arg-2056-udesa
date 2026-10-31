@@ -49,7 +49,7 @@ export function AiAccessStep() {
             />
           </div>
           <p className="gdp-sub">
-            ¿Cuánto más cuesta en Argentina acceder a modelos de IA frente a EE. UU., Chile, Perú y toda la región? · Referencia: planes de 20 USD/mes · <RefList ids={REFS} />
+            ¿Cuánto más cuesta en Argentina acceder a la tecnología que puede acelerar tareas de meses a días? · Referencia: planes de 20 USD/mes · <RefList ids={REFS} />
           </p>
         </Reveal>
         <div className="tour-controls">
