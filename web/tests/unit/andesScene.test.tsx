@@ -16,6 +16,7 @@ vi.mock('../../src/scenes/andes/MapLibreRenderer', async () => {
       selectedId,
       camera,
       graphics,
+      detailedModels,
       followId,
       focusForce,
       battleShow,
@@ -27,7 +28,8 @@ vi.mock('../../src/scenes/andes/MapLibreRenderer', async () => {
       followId?: string | null;
       battleShow?: number;
       focusForce?: { id: string; n: number; near?: boolean } | null;
-      detailedModels?: boolean;
+      detailedModels?: boolean;
+
       graphics: { tier: string; snow: boolean; trees: boolean; textures: boolean; shadows: boolean };
       label: string;
     }) => {
@@ -47,7 +49,8 @@ vi.mock('../../src/scenes/andes/MapLibreRenderer', async () => {
           data-focus={focusForce?.id ?? ''}
           data-battle={battleShow}
           data-near={String(focusForce?.near ?? false)}
-          data-detailed-models={String(Boolean(detailedModels))}
+          data-detailed-models={String(Boolean(detailedModels))}
+
           data-tier={graphics.tier}
           data-snow={String(graphics.snow)}
           data-trees={String(graphics.trees)}
@@ -483,19 +486,32 @@ describe('Andes scene', () => {
     await waitFor(() => expect(screen.getByText(/No se pudieron cargar los datos/)).toBeTruthy());
   });
 
-  it('toggles "Modelos detallados" to activate the 3D GLB infantry models in the crossing', async () => {
-    stubFetch();
-    renderScene();
-    await screen.findByTestId('andes-renderer');
-    const btn = screen.getByRole('button', { name: 'Modelos detallados' });
-    expect(btn.getAttribute('aria-pressed')).toBe('false');
-    expect(screen.getByTestId('andes-renderer').getAttribute('data-detailed-models')).toBe('false');
-
-    fireEvent.click(btn);
-    expect(btn.getAttribute('aria-pressed')).toBe('true');
-    expect(screen.getByTestId('andes-renderer').getAttribute('data-detailed-models')).toBe('true');
-  });
-
+  it('toggles "Modelos detallados" to activate the 3D GLB infantry models in the crossing', async () => {
+
+    stubFetch();
+
+    renderScene();
+
+    await screen.findByTestId('andes-renderer');
+
+    const btn = screen.getByRole('button', { name: 'Modelos detallados' });
+
+    expect(btn.getAttribute('aria-pressed')).toBe('false');
+
+    expect(screen.getByTestId('andes-renderer').getAttribute('data-detailed-models')).toBe('false');
+
+
+
+    fireEvent.click(btn);
+
+    expect(btn.getAttribute('aria-pressed')).toBe('true');
+
+    expect(screen.getByTestId('andes-renderer').getAttribute('data-detailed-models')).toBe('true');
+
+  });
+
+
+
   it('mounts and unmounts the renderer without leaving one behind', async () => {
     stubFetch();
     for (let i = 0; i < 3; i += 1) {

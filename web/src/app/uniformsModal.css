@@ -17,8 +17,9 @@
 }
 
 .uniforms-modal {
-  width: min(1040px, 95vw);
-  max-height: min(88vh, 820px);
+  width: min(1120px, 95vw);
+  height: 90vh;
+  max-height: 90vh;
   display: flex;
   flex-direction: column;
   gap: var(--space-md);
@@ -85,7 +86,8 @@
 .uniforms-stage-wrap {
   position: relative;
   width: 100%;
-  height: clamp(270px, 42vh, 390px);
+  flex: 1 1 auto;
+  min-height: 360px;
   border-radius: var(--radius-md);
   border: 1px solid var(--border);
   background:

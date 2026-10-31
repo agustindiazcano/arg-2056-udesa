@@ -7,14 +7,24 @@ import {
   type UniformModelId
 } from './uniformModels';
 
+if (typeof window !== 'undefined' && 'WebGLRenderingContext' in window) {
+  void loadUniformAssets().catch(() => undefined);
+}
+
+export const MIN_ZOOM_SCALE = 0.55;
+export const MAX_ZOOM_SCALE = 2.6;
+
 export interface CharacterStage3DProps {
   placements: readonly CharacterPlacement[];
   animationMode?: 'walk' | 'idle';
   cameraPosition?: readonly [number, number, number];
   cameraLookAt?: readonly [number, number, number];
   cameraFov?: number;
+  zoomScale?: number;
+  onZoomScaleChange?: (nextScale: number) => void;
   autoRotate?: boolean;
   interactiveOrbit?: boolean;
+  interactiveZoom?: boolean;
   showPedestals?: boolean;
   marchBob?: boolean;
   className?: string;
@@ -46,8 +56,11 @@ export const CharacterStage3D: React.FC<CharacterStage3DProps> = ({
   cameraPosition = [0, 1.55, 4.35],
   cameraLookAt = [0, 0.92, 0],
   cameraFov = 34,
+  zoomScale = 1,
+  onZoomScaleChange,
   autoRotate = false,
   interactiveOrbit = false,
+  interactiveZoom = false,
   showPedestals = false,
   marchBob = false,
   className
@@ -55,6 +68,8 @@ export const CharacterStage3D: React.FC<CharacterStage3DProps> = ({
   const hostRef = useRef<HTMLDivElement | null>(null);
   const [loaded, setLoaded] = useState(false);
   const yawOffsetRef = useRef(0);
+  const zoomScaleRef = useRef(zoomScale);
+  zoomScaleRef.current = zoomScale;
   const dragRef = useRef<{ active: boolean; lastX: number }>({ active: false, lastX: 0 });
 
   useEffect(() => {
@@ -93,9 +108,21 @@ export const CharacterStage3D: React.FC<CharacterStage3DProps> = ({
         host.appendChild(canvas);
 
         const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(cameraFov, width / height, 0.1, 50);
-        camera.position.set(cameraPosition[0], cameraPosition[1], cameraPosition[2]);
-        camera.lookAt(cameraLookAt[0], cameraLookAt[1], cameraLookAt[2]);
+        const camera = new THREE.PerspectiveCamera(cameraFov, width / height, 0.1, 60);
+
+        const updateCameraFromZoom = () => {
+          const zFactor = Math.min(Math.max(zoomScaleRef.current, MIN_ZOOM_SCALE), MAX_ZOOM_SCALE);
+          const dx = cameraPosition[0] - cameraLookAt[0];
+          const dy = cameraPosition[1] - cameraLookAt[1];
+          const dz = cameraPosition[2] - cameraLookAt[2];
+          camera.position.set(
+            cameraLookAt[0] + dx * zFactor,
+            cameraLookAt[1] + dy * (0.75 + 0.25 * zFactor),
+            cameraLookAt[2] + dz * zFactor
+          );
+          camera.lookAt(cameraLookAt[0], cameraLookAt[1], cameraLookAt[2]);
+        };
+        updateCameraFromZoom();
 
         const ambient = new THREE.AmbientLight(0xffffff, 1.35);
         const hemi = new THREE.HemisphereLight(0xd8ecff, 0x2a3242, 1.15);
@@ -184,6 +211,8 @@ export const CharacterStage3D: React.FC<CharacterStage3DProps> = ({
           if (cancelled) return;
           const dt = Math.min(clock.getDelta(), 0.05);
           const elapsed = clock.elapsedTime;
+
+          updateCameraFromZoom();
 
           if (!prefersReducedMotion) {
             for (const mixer of mixers) {
@@ -280,15 +309,29 @@ export const CharacterStage3D: React.FC<CharacterStage3DProps> = ({
     dragRef.current.active = false;
   };
 
+  const handleWheel = (e: React.WheelEvent<HTMLDivElement>) => {
+    if (!interactiveZoom) return;
+    e.preventDefault();
+    const step = e.deltaY > 0 ? 0.16 : -0.16;
+    const next = Math.min(
+      Math.max(Number((zoomScaleRef.current + step).toFixed(2)), MIN_ZOOM_SCALE),
+      MAX_ZOOM_SCALE
+    );
+    zoomScaleRef.current = next;
+    onZoomScaleChange?.(next);
+  };
+
   return (
     <div
       ref={hostRef}
       className={className}
       data-stage-loaded={loaded ? 'true' : 'false'}
+      data-zoom-scale={zoomScale.toFixed(2)}
       onPointerDown={handlePointerDown}
       onPointerMove={handlePointerMove}
       onPointerUp={handlePointerUp}
       onPointerLeave={handlePointerUp}
+      onWheel={handleWheel}
     />
   );
 };

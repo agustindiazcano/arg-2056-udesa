@@ -2,7 +2,7 @@
 import React from 'react';
 import { act, cleanup, fireEvent, render, screen, within } from '@testing-library/react';
 import { Group, Object3D } from 'three';
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, describe, expect, it } from 'vitest';
 import {
   ANDES_INTRO_MARCH_FORMATION,
   INTRO_HOVER_ESCORT_FORMATION,
@@ -64,26 +64,31 @@ describe('uniformModels and musket on back', () => {
 });
 
 describe('AndesIntro march formation (San Martín + 5 soldiers: 3 blue, 2 red)', () => {
-  it('places San Martín in front followed by 3 blue soldiers and 2 red soldiers, all soldiers with rifles on their backs', () => {
+  it('places San Martín in front followed by 3 blue soldiers and 2 red soldiers, scaled larger with rifles on their backs', () => {
     expect(ANDES_INTRO_MARCH_FORMATION).toHaveLength(6);
     const [leader, ...soldiers] = ANDES_INTRO_MARCH_FORMATION;
     expect(leader!.model).toBe('san-martin');
     expect(leader!.hasMusketOnBack).toBe(false);
+    expect(leader!.scale).toBeGreaterThan(1.2);
     expect(soldiers).toHaveLength(5);
     expect(soldiers.filter((s) => s.model === 'soldier-blue')).toHaveLength(3);
     expect(soldiers.filter((s) => s.model === 'soldier-red')).toHaveLength(2);
     for (const s of soldiers) {
       expect(s.hasMusketOnBack).toBe(true);
       expect(s.z).toBeLessThan(leader!.z);
+      expect(s.scale).toBeGreaterThan(1.15);
     }
   });
 
-  it('renders the 3D march formation inside AndesIntro while the celeste sky is shown', () => {
+  it('renders the 3D march formation right above the "Cruce de los Andes" / "1817" text in AndesIntro', () => {
     render(<AndesIntro ready={false} />);
     const march = screen.getByTestId('andes-intro-march');
     expect(march.getAttribute('data-leader')).toBe('san-martin');
     expect(march.getAttribute('data-blue-soldiers')).toBe('3');
     expect(march.getAttribute('data-red-soldiers')).toBe('2');
+    const nextSibling = march.nextElementSibling;
+    expect(nextSibling?.className).toContain('andes-intro-text');
+    expect(nextSibling?.textContent).toContain('1817');
   });
 });
 
@@ -115,7 +120,7 @@ describe('Intro hover escort on Cruce de los Andes button', () => {
 });
 
 describe('Header "Ver uniformes" button and 3D uniforms popup', () => {
-  it('opens a popup with the 3 3D uniform models when clicking "Ver uniformes" in the navbar and closes on Escape or Cerrar', async () => {
+  it('opens a popup with the 3 3D uniform models, supports zooming out ("Alejar zoom"), and closes on Cerrar', async () => {
     render(<Header />);
     const btn = screen.getByRole('button', { name: /Ver uniformes/i });
     expect(btn.getAttribute('aria-expanded')).toBe('false');
@@ -128,6 +133,13 @@ describe('Header "Ver uniformes" button and 3D uniforms popup', () => {
       expect(within(dialog).getByText(model.title)).toBeTruthy();
     }
     expect(within(dialog).getAllByText(/Fusil de chispa en la espalda/i).length).toBeGreaterThanOrEqual(2);
+
+    const stageCanvas = dialog.querySelector('.uniforms-stage-canvas')!;
+    expect(stageCanvas.getAttribute('data-zoom-scale')).toBe('1.00');
+
+    const zoomOutBtn = within(dialog).getByRole('button', { name: /Alejar zoom/i });
+    fireEvent.click(zoomOutBtn);
+    expect(Number(stageCanvas.getAttribute('data-zoom-scale'))).toBeGreaterThan(1);
 
     const closeBtn = within(dialog).getByRole('button', { name: 'Cerrar' });
     fireEvent.click(closeBtn);

@@ -1,6 +1,10 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { CharacterStage3D } from '../scenes/andes/CharacterStage3D';
+import {
+  CharacterStage3D,
+  MAX_ZOOM_SCALE,
+  MIN_ZOOM_SCALE
+} from '../scenes/andes/CharacterStage3D';
 import {
   UNIFORM_MODELS,
   type CharacterPlacement,
@@ -53,6 +57,7 @@ const ALL_SHOWCASE_PLACEMENTS: readonly CharacterPlacement[] = [
 export const UniformsModal: React.FC<UniformsModalProps> = ({ onClose }) => {
   const [focus, setFocus] = useState<FocusSelection>('all');
   const [animMode, setAnimMode] = useState<'walk' | 'idle'>('walk');
+  const [zoomScale, setZoomScale] = useState<number>(1);
 
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
@@ -93,13 +98,14 @@ export const UniformsModal: React.FC<UniformsModalProps> = ({ onClose }) => {
     [focus]
   );
 
+  const adjustZoom = (delta: number) => {
+    setZoomScale((cur) =>
+      Math.min(Math.max(Number((cur + delta).toFixed(2)), MIN_ZOOM_SCALE), MAX_ZOOM_SCALE)
+    );
+  };
+
   const modalContent = (
-    <div
-      className="uniforms-modal-backdrop"
-      onClick={(e) => {
-        if (e.target === e.currentTarget) onClose();
-      }}
-    >
+    <div className="uniforms-modal-backdrop">
       <div
         className="uniforms-modal"
         role="dialog"
@@ -142,7 +148,32 @@ export const UniformsModal: React.FC<UniformsModalProps> = ({ onClose }) => {
             ))}
           </div>
 
-          <div className="uniforms-modal-tabs" role="group" aria-label="Animación">
+          <div className="uniforms-modal-tabs" role="group" aria-label="Zoom y animación">
+            <button
+              type="button"
+              className="chip"
+              aria-label="Alejar zoom"
+              onClick={() => adjustZoom(0.25)}
+            >
+              Alejar zoom −
+            </button>
+            <button
+              type="button"
+              className="chip"
+              aria-label="Acercar zoom"
+              onClick={() => adjustZoom(-0.25)}
+            >
+              Acercar zoom +
+            </button>
+            {zoomScale !== 1 && (
+              <button
+                type="button"
+                className="chip"
+                onClick={() => setZoomScale(1)}
+              >
+                Restablecer zoom
+              </button>
+            )}
             <button
               type="button"
               className="chip"
@@ -169,12 +200,17 @@ export const UniformsModal: React.FC<UniformsModalProps> = ({ onClose }) => {
             cameraPosition={cameraPosition}
             cameraLookAt={[0, 0.92, 0]}
             cameraFov={34}
+            zoomScale={zoomScale}
+            onZoomScaleChange={setZoomScale}
             autoRotate
             interactiveOrbit
+            interactiveZoom
             showPedestals
             className="uniforms-stage-canvas"
           />
-          <span className="uniforms-stage-hint">Arrastrá para rotar los modelos 3D</span>
+          <span className="uniforms-stage-hint">
+            Arrastrá para rotar · Rueda o botones para acercar y alejar zoom
+          </span>
         </div>
 
         <div className="uniforms-cards">

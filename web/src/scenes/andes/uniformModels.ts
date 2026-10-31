@@ -86,9 +86,9 @@ export interface CharacterPlacement {
 }
 
 /**
- * AndesIntro march formation under the celeste sky:
+ * AndesIntro march formation under the celeste sky, positioned right above the 1817 title:
  * San Martín walking in front + 5 soldiers behind him (3 blue uniforms, 2 red uniforms),
- * with the flintlock musket mounted on the back of every soldier.
+ * scaled up so all 6 models read clearly and prominently.
  */
 export const ANDES_INTRO_MARCH_FORMATION: readonly CharacterPlacement[] = [
   {
@@ -96,9 +96,9 @@ export const ANDES_INTRO_MARCH_FORMATION: readonly CharacterPlacement[] = [
     model: 'san-martin',
     role: 'leader',
     x: 0,
-    z: 1.35,
-    rotationY: 0.18,
-    scale: 1.06,
+    z: 0.95,
+    rotationY: 0.16,
+    scale: 1.38,
     hasMusketOnBack: false,
     phaseOffset: 0
   },
@@ -106,10 +106,10 @@ export const ANDES_INTRO_MARCH_FORMATION: readonly CharacterPlacement[] = [
     id: 'march-blue-1',
     model: 'soldier-blue',
     role: 'infantry-blue',
-    x: -1.15,
-    z: 0.15,
-    rotationY: 0.18,
-    scale: 0.98,
+    x: -1.12,
+    z: -0.05,
+    rotationY: 0.16,
+    scale: 1.24,
     hasMusketOnBack: true,
     phaseOffset: 0.35
   },
@@ -117,10 +117,10 @@ export const ANDES_INTRO_MARCH_FORMATION: readonly CharacterPlacement[] = [
     id: 'march-blue-2',
     model: 'soldier-blue',
     role: 'infantry-blue',
-    x: 0.05,
-    z: -0.05,
-    rotationY: 0.18,
-    scale: 0.98,
+    x: 0.02,
+    z: -0.2,
+    rotationY: 0.16,
+    scale: 1.24,
     hasMusketOnBack: true,
     phaseOffset: 0.7
   },
@@ -128,10 +128,10 @@ export const ANDES_INTRO_MARCH_FORMATION: readonly CharacterPlacement[] = [
     id: 'march-blue-3',
     model: 'soldier-blue',
     role: 'infantry-blue',
-    x: 1.2,
-    z: 0.1,
-    rotationY: 0.18,
-    scale: 0.98,
+    x: 1.14,
+    z: -0.05,
+    rotationY: 0.16,
+    scale: 1.24,
     hasMusketOnBack: true,
     phaseOffset: 1.05
   },
@@ -139,10 +139,10 @@ export const ANDES_INTRO_MARCH_FORMATION: readonly CharacterPlacement[] = [
     id: 'march-red-1',
     model: 'soldier-red',
     role: 'infantry-red',
-    x: -0.68,
-    z: -1.15,
-    rotationY: 0.18,
-    scale: 0.96,
+    x: -0.66,
+    z: -1.05,
+    rotationY: 0.16,
+    scale: 1.22,
     hasMusketOnBack: true,
     phaseOffset: 1.4
   },
@@ -150,10 +150,10 @@ export const ANDES_INTRO_MARCH_FORMATION: readonly CharacterPlacement[] = [
     id: 'march-red-2',
     model: 'soldier-red',
     role: 'infantry-red',
-    x: 0.68,
-    z: -1.15,
-    rotationY: 0.18,
-    scale: 0.96,
+    x: 0.66,
+    z: -1.05,
+    rotationY: 0.16,
+    scale: 1.22,
     hasMusketOnBack: true,
     phaseOffset: 1.75
   }
@@ -171,7 +171,7 @@ export const INTRO_HOVER_ESCORT_FORMATION: readonly CharacterPlacement[] = [
     x: 0,
     z: 0.65,
     rotationY: -0.15,
-    scale: 1.08,
+    scale: 1.22,
     hasMusketOnBack: false,
     phaseOffset: 0
   },
@@ -182,7 +182,7 @@ export const INTRO_HOVER_ESCORT_FORMATION: readonly CharacterPlacement[] = [
     x: -1.05,
     z: -0.35,
     rotationY: -0.08,
-    scale: 0.98,
+    scale: 1.12,
     hasMusketOnBack: true,
     phaseOffset: 0.45
   },
@@ -193,7 +193,7 @@ export const INTRO_HOVER_ESCORT_FORMATION: readonly CharacterPlacement[] = [
     x: 1.05,
     z: -0.35,
     rotationY: -0.22,
-    scale: 0.98,
+    scale: 1.12,
     hasMusketOnBack: true,
     phaseOffset: 0.9
   }
