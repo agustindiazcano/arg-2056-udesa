@@ -2,8 +2,8 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { MercatorCoordinate, Map as MapLibreMap, setWorkerUrl } from 'maplibre-gl';
 import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?url';
 import type { CustomLayerInterface, CustomRenderMethodInput, GeoJSONSource, MapLayerMouseEvent } from 'maplibre-gl';
-import { AmbientLight, AnimationMixer, BufferAttribute, BufferGeometry, Color, DataTexture, DirectionalLight, Group, InstancedMesh, Matrix4, MeshStandardMaterial, PerspectiveCamera, Points, PointsMaterial, Quaternion, RGBAFormat, Scene, SphereGeometry, Vector3, WebGLRenderer } from 'three';
-import { loadUniformAssets } from './uniformModels';
+import { AmbientLight, BufferAttribute, BufferGeometry, Color, DataTexture, DirectionalLight, InstancedMesh, Matrix4, MeshStandardMaterial, PerspectiveCamera, Points, PointsMaterial, Quaternion, RGBAFormat, Scene, SphereGeometry, Vector3, WebGLRenderer } from 'three';
+import type { AnimationMixer, Group } from 'three';
 import { QUALITY_PRESETS } from '../../runtime/capabilities';
 import { NavControls } from '../../ui/NavControls';
 import { columnSlots, figureCount, startingMen } from './column';
@@ -425,10 +425,13 @@ class ArmyLayer implements CustomLayerInterface {
     this.clearDetailedGroup();
     if (!this.detailedModelsOn || !this.column || this.palette) return;
     const targetColumn = this.column;
-    void loadUniformAssets()
-      .then((assets) => {
+    void Promise.all([import('./stageThreeRuntime'), import('./uniformModels')])
+      .then(([{ AnimationMixer: MixerCtor, Group: GroupCtor }, { loadUniformAssets }]) =>
+        loadUniformAssets().then((assets) => ({ MixerCtor, GroupCtor, assets }))
+      )
+      .then(({ MixerCtor, GroupCtor, assets }) => {
         if (!this.detailedModelsOn || this.column !== targetColumn) return;
-        const group = new Group();
+        const group = new GroupCtor();
         const actors: Array<{ holder: Group; mixer: AnimationMixer | null }> = [];
         for (const pose of targetColumn.infantryPoses) {
           const modelId =
@@ -439,7 +442,7 @@ class ArmyLayer implements CustomLayerInterface {
                 : 'soldier-blue';
           const withMusket = pose.kind !== 'leader';
           const { scene: charScene, animations } = assets.cloneCharacter(modelId, withMusket);
-          const holder = new Group();
+          const holder = new GroupCtor();
           holder.add(charScene);
           group.add(holder);
 
@@ -449,7 +452,7 @@ class ArmyLayer implements CustomLayerInterface {
             animations[0];
           let mixer: AnimationMixer | null = null;
           if (walkClip) {
-            mixer = new AnimationMixer(charScene);
+            mixer = new MixerCtor(charScene);
             const action = mixer.clipAction(walkClip);
             action.play();
             mixer.update(pose.phase);

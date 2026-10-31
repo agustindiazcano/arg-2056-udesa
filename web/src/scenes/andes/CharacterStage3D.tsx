@@ -81,7 +81,7 @@ export const CharacterStage3D: React.FC<CharacterStage3DProps> = ({
     let rafId = 0;
     let cleanupFn: (() => void) | null = null;
 
-    void Promise.all([import('three'), loadUniformAssets()])
+    void Promise.all([import('./stageThreeRuntime'), loadUniformAssets()])
       .then(([THREE, assets]) => {
         if (cancelled || !hostRef.current) return;
 

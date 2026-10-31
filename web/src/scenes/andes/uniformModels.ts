@@ -280,10 +280,7 @@ export function loadUniformAssets(): Promise<LoadedUniformAssets> {
   if (cachedAssetsPromise) return cachedAssetsPromise;
 
   cachedAssetsPromise = (async () => {
-    const [{ GLTFLoader }, { clone: cloneSkeleton }] = await Promise.all([
-      import('three/examples/jsm/loaders/GLTFLoader.js'),
-      import('three/examples/jsm/utils/SkeletonUtils.js')
-    ]);
+    const { GLTFLoader, cloneSkeleton } = await import('./stageThreeRuntime');
 
     const loader = new GLTFLoader();
     const loadGltf = (url: string) =>

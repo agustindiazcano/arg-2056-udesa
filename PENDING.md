@@ -327,3 +327,4 @@ Order: C8, C7, C2, C3, C4, C5, C1, C6.
 - [x] En la pantalla de cielo celeste al abrir `"Cruce de los Andes"` (`web/src/scenes/andes/AndesIntro.tsx`), marcha 3D de San Martín adelante con 5 soldados detrás (3 azules y 2 rojos).
 - [x] Al hacer hover sobre el botón `"Cruce de los Andes"` en la intro (`web/src/intro/Intro.tsx`), aparece a la derecha encima del mapa de Argentina San Martín escoltado por dos granaderos.
 - [ ] Revisión humana visual de la escala y orientación del fusil en la espalda y las animaciones 3D en navegador.
+- [x] `README.md`: agregada sección e índice de «Modelos 3D del Ejército de los Andes (Meshy AI)» con capturas (`docs/assets/models/*.jpg`), enlaces directos a cada `.glb` en el repositorio y mención explícita de que fueron hechos con Meshy AI y son *free to use* sin necesidad de dar créditos.

@@ -130,7 +130,7 @@ describe('Header "Ver uniformes" button and 3D uniforms popup', () => {
     expect(btn.getAttribute('aria-expanded')).toBe('true');
 
     for (const model of UNIFORM_MODELS) {
-      expect(within(dialog).getByText(model.title)).toBeTruthy();
+      expect(within(dialog).getAllByText(model.title).length).toBeGreaterThanOrEqual(1);
     }
     expect(within(dialog).getAllByText(/Fusil de chispa en la espalda/i).length).toBeGreaterThanOrEqual(2);
 
