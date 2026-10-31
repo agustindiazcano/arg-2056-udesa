@@ -72,7 +72,7 @@ describe('the first slide: the title and the index', () => {
 
   it('opens a slide when its title is chosen', () => {
     render(<IndexStep />);
-    fireEvent.click(screen.getByRole('button', { name: `5 · ${PRODUCTIVITY_TITLE}` }));
+    fireEvent.click(screen.getByRole('button', { name: `10 · ${PRODUCTIVITY_TITLE}` }));
     expect(useStore.getState().tourStep).toBe(14);
   });
 
