@@ -58,7 +58,7 @@ export const PERSONAL_USAGE = {
   ratioVsEngineerMedian: 156.8,
   source: { name: 'Consumo personal declarado por el autor en Claude Code, últimos 30 días; conversación del 30-10-2026', url: null },
   retrieved_at: EVIDENCE_DATE,
-  note: '8.000 millones de tokens en los últimos 30 días en Claude Code (≈266,7 M/día; 156,8× la mediana de ingeniería P50 = 51 M de Jellyfish).'
+  note: 'Consumo personal declarado por el autor en los últimos 30 días en Claude Code (sin percentil poblacional asignado).'
 } as const;
 
 export interface TokenPyramidTier {
@@ -74,7 +74,7 @@ export interface TokenPyramidTier {
 export const TOKEN_PYRAMID_TIERS: readonly TokenPyramidTier[] = [
   {
     id: 't1',
-    tier: 'Nivel 1 · Cúspide 24/7',
+    tier: 'Nivel 1 · 24/7',
     title: 'Enjambres autónomos y loops continuos',
     monthlyTokens: '25.000 M – 100.000 M+ / mes',
     actors: 'Clusters agénticos 24/7 y refactorización continua sin intervención humana',
@@ -83,7 +83,7 @@ export const TOKEN_PYRAMID_TIERS: readonly TokenPyramidTier[] = [
   },
   {
     id: 't2',
-    tier: 'Nivel 2 · Frontera / P99',
+    tier: 'Nivel 2 · P99',
     title: 'Cola extrema P99 de ingeniería e investigadores de frontera',
     monthlyTokens: '1.350 M – 5.000 M / mes',
     actors: 'P99 corporativo (≥1.350 M), top 2 % de ingeniería (~2.000–2.200 M/mes) y P99 de Claude Code (~4.800 M/mes)',
@@ -92,7 +92,7 @@ export const TOKEN_PYRAMID_TIERS: readonly TokenPyramidTier[] = [
   },
   {
     id: 't3',
-    tier: 'Nivel 3 · P90 Ingeniería',
+    tier: 'Nivel 3 · P90',
     title: 'Power users agénticos (planes Max / Ultra / Enterprise)',
     monthlyTokens: '250 M – 1.000 M / mes (P90 = 380 M)',
     actors: 'Top 10 % de desarrolladores profesionales con agentes en consola e IDE',
@@ -101,7 +101,7 @@ export const TOKEN_PYRAMID_TIERS: readonly TokenPyramidTier[] = [
   },
   {
     id: 't4',
-    tier: 'Nivel 4 · P50 Ingeniería',
+    tier: 'Nivel 4 · P50',
     title: 'Desarrollador profesional activo (mediana corporativa)',
     monthlyTokens: '40 M – 150 M / mes (P50 = 51 M)',
     actors: 'Mediana de ingenieros de software en empresas con herramientas de IA',
@@ -110,7 +110,7 @@ export const TOKEN_PYRAMID_TIERS: readonly TokenPyramidTier[] = [
   },
   {
     id: 't5',
-    tier: 'Nivel 5 · Suscriptor Pro',
+    tier: 'Nivel 5 · Pro',
     title: 'Profesional con suscripción paga estándar (20 USD)',
     monthlyTokens: '5 M – 30 M / mes',
     actors: 'Suscriptores pagos de ChatGPT, Claude Pro, Gemini Advanced y Copilot',
@@ -119,7 +119,7 @@ export const TOKEN_PYRAMID_TIERS: readonly TokenPyramidTier[] = [
   },
   {
     id: 't6',
-    tier: 'Nivel 6 · Base gratuita',
+    tier: 'Nivel 6 · Base',
     title: 'Chat web gratuito y resto del mundo',
     monthlyTokens: '0 a 3 M / mes',
     actors: '>1.200 M usuarios gratuitos de LLMs y población sin uso directo',
@@ -135,8 +135,8 @@ export const TOKEN_LOG_BENCHMARKS = [
   { label: 'Ingeniero P90 Jellyfish (380 M)', tokensMillions: 380, exp: 8.58, tone: 'blue' },
   { label: 'Umbral P99 corporativo Jellyfish (1.350 M)', tokensMillions: 1350, exp: 9.13, tone: 'warning' },
   { label: 'Quintil superior Jellyfish (~2.500 M)', tokensMillions: 2500, exp: 9.4, tone: 'warning' },
-  { label: 'Claude Code P99 VibeCafé (~4.800 M)', tokensMillions: 4800, exp: 9.68, tone: 'author' },
-  { label: 'Loop autónomo 24/7 (99.500 M)', tokensMillions: 99500, exp: 11.0, tone: 'optimistic' }
+  { label: 'Claude Code P99 VibeCafé (~4.800 M)', tokensMillions: 4800, exp: 9.68, tone: 'warning' },
+  { label: 'Loop autónomo 24/7 (25.000 M+)', tokensMillions: 25000, exp: 10.4, tone: 'optimistic' }
 ] as const;
 
 export const TOKEN_PROVIDERS = [

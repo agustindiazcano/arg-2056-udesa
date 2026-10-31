@@ -26,7 +26,6 @@ import { AI_ANALYSTS, AI_SCENARIOS, US_SCENARIOS } from '../tour/aiScenarios.js'
 import { OTHER_CROPS } from '../tour/agroOtherCrops.js';
 import { LIVESTOCK, LITRES_TO_TONNES, livestockParts } from '../tour/livestockArgentina.js';
 import { ACCESS_COUNTRIES, PLANS, accessRows } from '../tour/aiAccess.js';
-import { DRAFT_SLIDES } from '../tour/draftSlides.js';
 import { AI_ACCESS_TITLE, COMPOSITION_TITLE, DEVELOPMENT_TITLE, FORECAST_UNCERTAINTY_TITLE, RESOURCES_TITLE } from '../tour/slideTitles.js';
 import { exportRows } from '../tour/exportsData.js';
 import { countriesTable } from '../tour/rule70Countries.js';
@@ -590,7 +589,6 @@ export function buildSlides(): SlideData[] {
         ]
       }
     ], false, ['D3', 'A1', 'A8', 'F1']),
-    ...DRAFT_SLIDES.filter((d) => d.id !== 26).map((d) => slide(String(d.id), d.title, [{ id: `draft-${d.id}`, title: 'Temas de la diapositiva', columns: ['Tema', 'Descripción'], rows: d.topics.map((t) => [t.heading, t.text]) }], false)),
     slide('sim', 'Simulador del PBI', [
       { id: 'factors', title: 'Factores del escenario de referencia', columns: ['Factor', 'Valor', 'Unidad'], rows: SIM_FIELDS.map((f) => [f.label, DEFAULT_SIM[f.key], f.unit]) },
       { id: 'reference', title: 'PBI del escenario de referencia (miles de millones de USD)', columns: ['Año', 'PBI'], rows: sim.years.map((y, i) => [y, sim.gdp[i] ?? null]) }

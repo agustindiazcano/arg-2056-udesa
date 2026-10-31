@@ -1,0 +1,1126 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La Piramide del Consumo de Tokens de IA y Asimetria Macroeconomica (2026)</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter & JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        obsidian: '#0a0e17',
+                        slateCard: '#111827',
+                        slateBorder: '#1f2937',
+                        authorRed: '#ef4444',
+                        frontierCyan: '#06b6d4',
+                        amberWarn: '#f59e0b',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #0a0e17;
+            color: #f3f4f6;
+            font-family: 'Inter', sans-serif;
+            background-image: 
+                radial-gradient(circle at 15% 15%, rgba(239, 68, 68, 0.06) 0%, transparent 35%),
+                radial-gradient(circle at 85% 30%, rgba(6, 182, 212, 0.06) 0%, transparent 40%),
+                linear-gradient(to bottom, rgba(17, 24, 39, 0.4) 1px, transparent 1px),
+                linear-gradient(to right, rgba(17, 24, 39, 0.4) 1px, transparent 1px);
+            background-size: 100% 100%, 100% 100%, 40px 40px, 40px 40px;
+        }
+
+        /* Pulsing Red Author Indicator */
+        @keyframes pulse-ring {
+            0% {
+                transform: scale(0.85);
+                opacity: 0.9;
+            }
+            70% {
+                transform: scale(2.3);
+                opacity: 0;
+            }
+            100% {
+                transform: scale(2.3);
+                opacity: 0;
+            }
+        }
+        @keyframes pulse-core {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 0 18px #ef4444, 0 0 36px rgba(239, 68, 68, 0.6);
+            }
+            50% {
+                transform: scale(1.12);
+                box-shadow: 0 0 25px #ef4444, 0 0 50px rgba(239, 68, 68, 0.9);
+            }
+        }
+        .author-dot-ring {
+            animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+        }
+        .author-dot-core {
+            animation: pulse-core 2s ease-in-out infinite;
+        }
+
+        /* Pyramid Stepped Trapezoid Visual Styling */
+        .tier-row {
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .tier-row:hover {
+            transform: translateY(-2px);
+        }
+        .tier-active {
+            border-color: #38bdf8 !important;
+            box-shadow: 0 0 25px rgba(56, 189, 248, 0.15);
+        }
+        .tier-author-highlight {
+            border-color: rgba(239, 68, 68, 0.75) !important;
+            background: linear-gradient(90deg, rgba(239, 68, 68, 0.14) 0%, rgba(17, 24, 39, 0.92) 45%, rgba(239, 68, 68, 0.08) 100%);
+            box-shadow: 0 0 30px rgba(239, 68, 68, 0.18);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0a0e17;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1f2937;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #374151;
+        }
+    </style>
+</head>
+<body class="min-h-screen antialiased selection:bg-red-500/30 selection:text-red-200 pb-16">
+
+    <!-- Top Navigation / Publication Header -->
+    <header class="border-b border-slate-800/80 bg-[#0a0e17]/90 backdrop-blur-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-wrap items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <div class="w-3 h-3 rounded-full bg-cyan-400 shadow-[0_0_10px_#22d3ee]"></div>
+                <span class="font-mono text-xs uppercase tracking-widest text-slate-400">Reporte de Investigacion Economica y Computo IA (Oct 2026)</span>
+            </div>
+            <div class="flex items-center gap-3">
+                <div class="flex items-center gap-2 bg-red-950/60 border border-red-500/50 rounded-full px-3.5 py-1">
+                    <span class="relative flex h-2.5 w-2.5">
+                        <span class="author-dot-ring absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500"></span>
+                    </span>
+                    <span class="font-mono text-xs font-semibold text-red-200">PUNTO AUTOR: 8,000M (8.0B) tokens/mes (P99.95% Devs)</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 space-y-12">
+
+        <!-- Hero Title & Executive Summary -->
+        <section class="space-y-6">
+            <div class="max-w-4xl space-y-3">
+                <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded bg-slate-800/80 border border-slate-700 text-cyan-400 font-mono text-xs">
+                    <span>LEY DE POTENCIA DE INFERENCIA &bull; TEOREMA DE HULTEN AJUSTADO</span>
+                </div>
+                <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white leading-tight">
+                    La Piramide del Consumo de Tokens de IA y Asimetria Macroeconomica (2026)
+                </h1>
+                <p class="text-slate-400 text-base sm:text-lg leading-relaxed">
+                    Distribucion empirica del consumo mensual de tokens en modelos de frontera (Claude, Gemini, ChatGPT/Codex, Grok) frente a la brecha de productividad del PBI entre economias productoras de computo y economias emergentes importadoras netas con friccion impositiva.
+                </p>
+            </div>
+
+            <!-- Key Telemetry KPIs -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <!-- KPI 1: Author Position -->
+                <div class="bg-gradient-to-br from-red-950/40 via-slate-900 to-slate-900 border border-red-500/50 rounded-xl p-4 relative overflow-hidden">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="font-mono text-xs uppercase text-red-300 font-semibold">Posicion del Autor</span>
+                        <span class="relative flex h-3 w-3">
+                            <span class="author-dot-ring absolute inline-flex h-full w-full rounded-full bg-red-400"></span>
+                            <span class="author-dot-core relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
+                        </span>
+                    </div>
+                    <div class="font-mono text-2xl sm:text-3xl font-bold text-white">8,000M <span class="text-sm font-normal text-red-300">tok/mes</span></div>
+                    <div class="mt-2 flex items-center justify-between text-xs text-slate-300 font-mono">
+                        <span>Percentil 99.95% Devs</span>
+                        <span class="px-1.5 py-0.5 rounded bg-red-500/20 text-red-300 border border-red-500/30">156.8x Mediana P50</span>
+                    </div>
+                </div>
+
+                <!-- KPI 2: Median vs P90 -->
+                <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-4">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="font-mono text-xs uppercase text-slate-400">Mediana Ingenieria (P50)</span>
+                        <svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+                    </div>
+                    <div class="font-mono text-2xl sm:text-3xl font-bold text-white">51M <span class="text-sm font-normal text-slate-400">tok/mes</span></div>
+                    <div class="mt-2 flex items-center justify-between text-xs text-slate-400 font-mono">
+                        <span>Gasto P50: $52.38/mes</span>
+                        <span class="text-cyan-400">P90: 380M ($691/m)</span>
+                    </div>
+                </div>
+
+                <!-- KPI 3: Global Inference Volume -->
+                <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-4">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="font-mono text-xs uppercase text-slate-400">Escala Global (Google 2026)</span>
+                        <svg class="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                    </div>
+                    <div class="font-mono text-2xl sm:text-3xl font-bold text-white">3.2 Q <span class="text-sm font-normal text-slate-400">tok/mes</span></div>
+                    <div class="mt-2 flex items-center justify-between text-xs text-slate-400 font-mono">
+                        <span>3.2 Cuatrillones (330x vs 2024)</span>
+                        <span class="text-indigo-400">99.5% Input/Cache</span>
+                    </div>
+                </div>
+
+                <!-- KPI 4: Tax & Macro Friction -->
+                <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-4">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="font-mono text-xs uppercase text-amber-400">Sobrecosto Token Local</span>
+                        <svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    </div>
+                    <div class="font-mono text-2xl sm:text-3xl font-bold text-white">+13.6% a +53%</div>
+                    <div class="mt-2 flex items-center justify-between text-xs text-slate-400 font-mono">
+                        <span>Grossing-up B2B / Tarjeta</span>
+                        <span class="text-amber-400">AIPI Arg: 0.47</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CORE FEATURE 1: THE 7-TIER INTERACTIVE PYRAMID -->
+        <section class="bg-slate-900/60 border border-slate-800 rounded-2xl p-5 sm:p-8 space-y-6">
+            <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-slate-800 pb-5">
+                <div>
+                    <div class="flex items-center gap-2">
+                        <span class="font-mono text-xs uppercase tracking-wider text-cyan-400 font-semibold">Seccion 01 &bull; Distribucion de Pareto del Computo</span>
+                    </div>
+                    <h2 class="text-2xl sm:text-3xl font-bold text-white mt-1">
+                        Piramide Global de Consumo Mensual de Tokens (7 Escalones)
+                    </h2>
+                    <p class="text-sm text-slate-400 mt-1">
+                        Haz clic en cualquier nivel de la piramide para inspeccionar su telemetria y comparar la distancia frente al consumo del <strong class="text-red-400">Autor (8,000M tokens/mes)</strong>.
+                    </p>
+                </div>
+
+                <!-- Legend -->
+                <div class="flex flex-wrap items-center gap-3 text-xs font-mono">
+                    <div class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-red-950/60 border border-red-500/40 text-red-200">
+                        <span class="w-2.5 h-2.5 rounded-full bg-red-500 inline-block shadow-[0_0_8px_#ef4444]"></span>
+                        <span>Ubicacion Autor (Nivel 2: 8.0B/mes)</span>
+                    </div>
+                    <div class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-800/80 border border-slate-700 text-slate-300">
+                        <span class="w-2.5 h-2.5 rounded-full bg-cyan-400 inline-block"></span>
+                        <span>Benchmarks Jellyfish / Anthropic / CCgather</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Grid: Left Pyramid Visual (7 cols) + Right Inspector Panel (5 cols) -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                
+                <!-- Stepped Visual Pyramid Container -->
+                <div class="lg:col-span-7 space-y-3 flex flex-col items-center w-full" id="pyramid-container">
+                    <!-- Populated dynamically via JS for crisp interactivity, with static fallback structure -->
+                </div>
+
+                <!-- Right Side: Interactive Inspector & Author Comparator -->
+                <div class="lg:col-span-5 bg-slate-950/90 border border-slate-800 rounded-xl p-5 sm:p-6 sticky top-20 space-y-5" id="tier-inspector">
+                    <!-- Dynamic Inspector Content populated by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- CORE FEATURE 2: LOGARITHMIC SCALE COMPARATOR -->
+        <section class="bg-slate-900/60 border border-slate-800 rounded-2xl p-5 sm:p-8 space-y-6">
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+                <div>
+                    <span class="font-mono text-xs uppercase tracking-wider text-red-400 font-semibold">Seccion 02 &bull; Calibracion en Escala Logaritmica (Base 10)</span>
+                    <h2 class="text-2xl font-bold text-white mt-1">
+                        Posicion del Autor (8,000M/mes) frente a los Hitos de la Industria
+                    </h2>
+                    <p class="text-sm text-slate-400 mt-1">
+                        Debido a que el coding agentico autonomo consume ~1,000x mas tokens que el chat web, una escala lineal oculta al 99% de los usuarios. La escala logaritmica revela la ubicacion exacta de los 8.0B mensuales.
+                    </p>
+                </div>
+                <div class="font-mono text-xs text-slate-400 bg-slate-950 px-3.5 py-2 rounded-lg border border-slate-800">
+                    Rango: <span class="text-white font-semibold">10<sup>5</sup> (100K)</span> a <span class="text-white font-semibold">10<sup>11.5</sup> (300B)</span> tok/mes
+                </div>
+            </div>
+
+            <!-- Log Scale Track Wrapper -->
+            <div class="pt-12 pb-16 px-4 sm:px-8 bg-slate-950/80 border border-slate-800/90 rounded-xl relative overflow-x-auto">
+                <div class="min-w-[720px] relative">
+                    
+                    <!-- Decade Grid Lines -->
+                    <div class="flex justify-between text-[11px] font-mono text-slate-500 mb-2">
+                        <span>100K (10<sup>5</sup>)</span>
+                        <span>1M (10<sup>6</sup>)</span>
+                        <span>10M (10<sup>7</sup>)</span>
+                        <span>100M (10<sup>8</sup>)</span>
+                        <span>1B / 1,000M (10<sup>9</sup>)</span>
+                        <span>10B / 10,000M (10<sup>10</sup>)</span>
+                        <span>100B+ (10<sup>11</sup>)</span>
+                    </div>
+
+                    <!-- Horizontal Bar Track -->
+                    <div class="h-5 w-full rounded-full bg-slate-900 border border-slate-700 relative overflow-visible flex items-center">
+                        <!-- Gradient fill up to Author -->
+                        <div class="h-full rounded-l-full bg-gradient-to-r from-slate-700 via-cyan-500/60 to-red-500" style="width: 74.5%;"></div>
+
+                        <!-- Benchmark Markers (Positioned logarithmically from 10^5 to 10^11.5, total span = 6.5 log units) -->
+                        <!-- 1. Chat Free (500K -> log10 = 5.70 -> (5.7-5)/6.5 = 10.7%) -->
+                        <button onclick="selectLogBenchmark(0)" class="group absolute -top-1.5 transform -translate-x-1/2 focus:outline-none" style="left: 10.7%;">
+                            <div class="w-3.5 h-8 rounded bg-slate-500 group-hover:bg-white transition border border-slate-950"></div>
+                            <div class="mt-2 text-[10px] font-mono text-slate-400 group-hover:text-white whitespace-nowrap -translate-x-1/3">Free (500K)</div>
+                        </button>
+
+                        <!-- 2. P50 Dev Jellyfish (51M -> log10 = 7.707 -> (7.707-5)/6.5 = 41.6%) -->
+                        <button onclick="selectLogBenchmark(1)" class="group absolute -top-1.5 transform -translate-x-1/2 focus:outline-none" style="left: 41.6%;">
+                            <div class="w-3.5 h-8 rounded bg-cyan-400 group-hover:bg-white transition border border-slate-950 shadow-[0_0_8px_#22d3ee]"></div>
+                            <div class="mt-2 text-[11px] font-mono text-cyan-300 font-semibold group-hover:text-white whitespace-nowrap">P50 Dev (51M)</div>
+                        </button>
+
+                        <!-- 3. P90 Dev Jellyfish (380M -> log10 = 8.58 -> (8.58-5)/6.5 = 55.1%) -->
+                        <button onclick="selectLogBenchmark(2)" class="group absolute -top-1.5 transform -translate-x-1/2 focus:outline-none" style="left: 55.1%;">
+                            <div class="w-3.5 h-8 rounded bg-cyan-400 group-hover:bg-white transition border border-slate-950"></div>
+                            <div class="mt-2 text-[11px] font-mono text-cyan-300 group-hover:text-white whitespace-nowrap">P90 Dev (380M)</div>
+                        </button>
+
+                        <!-- 4. P99 Dev Jellyfish (1.35B -> log10 = 9.13 -> (9.13-5)/6.5 = 63.5%) -->
+                        <button onclick="selectLogBenchmark(3)" class="group absolute -top-1.5 transform -translate-x-1/2 focus:outline-none" style="left: 63.5%;">
+                            <div class="w-3.5 h-8 rounded bg-indigo-400 group-hover:bg-white transition border border-slate-950"></div>
+                            <div class="mt-2 text-[11px] font-mono text-indigo-300 group-hover:text-white whitespace-nowrap">P99 Dev (1.35B)</div>
+                        </button>
+
+                        <!-- 5. Axios Sigrid Jin (4.16B -> log10 = 9.62 -> (9.62-5)/6.5 = 71.0%) -->
+                        <button onclick="selectLogBenchmark(4)" class="group absolute -top-1.5 transform -translate-x-1/2 focus:outline-none" style="left: 70.5%;">
+                            <div class="w-3 h-7 rounded bg-amber-400 group-hover:bg-white transition border border-slate-950"></div>
+                            <div class=" -top-8 absolute left-1/2 -translate-x-1/2 text-[10px] font-mono text-amber-300 whitespace-nowrap">Axios (4.16B)</div>
+                        </button>
+
+                        <!-- 6. AUTHOR RED DOT (8.0B -> log10 = 9.903 -> (9.903-5)/6.5 = 75.4%) -->
+                        <button onclick="selectLogBenchmark(5)" class="group absolute -top-3 transform -translate-x-1/2 z-30 focus:outline-none" style="left: 75.4%;">
+                            <div class="relative flex items-center justify-center">
+                                <span class="author-dot-ring absolute inline-flex h-9 w-9 rounded-full bg-red-500"></span>
+                                <span class="author-dot-core relative inline-flex rounded-full h-6 w-6 bg-red-500 border-2 border-white"></span>
+                            </div>
+                            <div class="mt-3 px-2.5 py-1 rounded bg-red-600 text-white font-mono text-xs font-bold whitespace-nowrap shadow-lg border border-red-300">
+                                AUTOR: 8.0B (8,000M)
+                            </div>
+                        </button>
+
+                        <!-- 7. CCgather #1 (97.1B -> log10 = 10.987 -> (10.987-5)/6.5 = 92.1%) -->
+                        <button onclick="selectLogBenchmark(6)" class="group absolute -top-1.5 transform -translate-x-1/2 focus:outline-none" style="left: 91.5%;">
+                            <div class="w-3.5 h-8 rounded bg-purple-400 group-hover:bg-white transition border border-slate-950"></div>
+                            <div class="mt-2 text-[10px] font-mono text-purple-300 group-hover:text-white whitespace-nowrap">CCgather #1 (97B)</div>
+                        </button>
+
+                        <!-- 8. Meta Top #1 (281B -> log10 = 11.448 -> (11.448-5)/6.5 = 99.2%) -->
+                        <button onclick="selectLogBenchmark(7)" class="group absolute -top-1.5 transform -translate-x-1/2 focus:outline-none" style="left: 98.5%;">
+                            <div class="w-3.5 h-8 rounded bg-fuchsia-400 group-hover:bg-white transition border border-slate-950"></div>
+                            <div class="-top-8 absolute right-0 text-[10px] font-mono text-fuchsia-300 whitespace-nowrap">Meta #1 (281B)</div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interactive Comparison Output Box -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 bg-slate-950/90 border border-slate-800 rounded-xl p-4" id="log-comparison-box">
+                <div>
+                    <span class="text-xs font-mono text-slate-400 uppercase">Hito Seleccionado en la Escala</span>
+                    <div class="text-lg font-bold text-white mt-0.5" id="log-selected-name">Mediana P50 Ingenieria (Jellyfish)</div>
+                    <div class="text-xs font-mono text-cyan-400 mt-0.5" id="log-selected-vol">51,000,000 tokens/mes ($52.38 USD/mes)</div>
+                </div>
+                <div class="border-t md:border-t-0 md:border-l border-slate-800 pt-3 md:pt-0 md:pl-4">
+                    <span class="text-xs font-mono text-red-400 uppercase">Multiplicador del Autor (8,000M/mes)</span>
+                    <div class="text-2xl font-mono font-extrabold text-white mt-0.5" id="log-multiplier">156.86x veces mayor</div>
+                    <div class="text-xs text-slate-400 mt-0.5" id="log-diff-desc">Equivale al consumo combinado de 157 ingenieros de software medianos.</div>
+                </div>
+                <div class="border-t md:border-t-0 md:border-l border-slate-800 pt-3 md:pt-0 md:pl-4">
+                    <span class="text-xs font-mono text-slate-400 uppercase">Composicion Tecnica (8.0B/mes)</span>
+                    <div class="text-sm font-mono text-slate-200 mt-1">
+                        Input + Cache Read (99.5%): <strong class="text-white">7,960M tok</strong>
+                    </div>
+                    <div class="text-sm font-mono text-slate-200">
+                        Output Generado (0.5%): <strong class="text-cyan-400">40M tok</strong>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CORE FEATURE 3: MACROECONOMIC ASYMMETRY & TAX FRICTION DASHBOARD -->
+        <section class="space-y-8">
+            <div class="border-b border-slate-800 pb-4">
+                <span class="font-mono text-xs uppercase tracking-wider text-amber-400 font-semibold">Seccion 03 &bull; Correccion Macroeconomica y Friccion Tributaria</span>
+                <h2 class="text-2xl sm:text-3xl font-bold text-white mt-1">
+                    Por que el Boom de Tokens No Impacta Igual en el PBI de Argentina y LatAm
+                </h2>
+                <p class="text-slate-400 text-sm sm:text-base mt-1 max-w-4xl">
+                    Los modelos de Goldman Sachs (+1.5 pp/año) asumen alta densidad STEM, salarios elevados que incentivan la automatizacion y captura local del gasto en computo. Al aplicar el descuento estructural del Teorema de Hulten (Acemoglu) y el indice AIPI del FMI (0.47 en Argentina vs 0.68 en economias avanzadas), el impacto local converge a un escenario neutro.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                
+                <!-- Left Column (7 cols): Interactive GDP Growth Scenarios Chart & Table -->
+                <div class="lg:col-span-7 bg-slate-900/60 border border-slate-800 rounded-2xl p-5 sm:p-6 space-y-6 flex flex-col justify-between">
+                    <div class="space-y-4">
+                        <div class="flex flex-wrap items-center justify-between gap-2">
+                            <h3 class="text-lg font-bold text-white">
+                                Impacto Anualizado en el Crecimiento del PBI (Ventana a 10 Años)
+                            </h3>
+                            <span class="font-mono text-xs px-2.5 py-1 rounded bg-slate-800 text-slate-300">Puntos Porcentuales Adicionales / Año (pp)</span>
+                        </div>
+
+                        <!-- Scenario Filter Buttons -->
+                        <div class="flex flex-wrap gap-2 pt-1">
+                            <button onclick="setMacroScenario('all')" id="btn-scen-all" class="px-3 py-1.5 rounded-lg font-mono text-xs font-semibold bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 transition">
+                                Ver 3 Escenarios Comparados
+                            </button>
+                            <button onclick="setMacroScenario('optimista')" id="btn-scen-optimista" class="px-3 py-1.5 rounded-lg font-mono text-xs bg-slate-800 text-slate-400 border border-slate-700 hover:text-white transition">
+                                Positivo (Goldman / McKinsey)
+                            </button>
+                            <button onclick="setMacroScenario('neutro')" id="btn-scen-neutro" class="px-3 py-1.5 rounded-lg font-mono text-xs bg-slate-800 text-slate-400 border border-slate-700 hover:text-white transition">
+                                Neutro (FMI WP/25/76 / Hatzius)
+                            </button>
+                            <button onclick="setMacroScenario('pesimista')" id="btn-scen-pesimista" class="px-3 py-1.5 rounded-lg font-mono text-xs bg-slate-800 text-slate-400 border border-slate-700 hover:text-white transition">
+                                Pesimista (Acemoglu NBER 32487)
+                            </button>
+                        </div>
+
+                        <!-- Visual Horizontal Bar Chart by Region -->
+                        <div class="space-y-5 pt-3" id="macro-bars-container">
+                            <!-- Region 1: US & Tech Frontier -->
+                            <div class="space-y-2 bg-slate-950/70 p-4 rounded-xl border border-slate-800/80">
+                                <div class="flex justify-between items-center">
+                                    <div>
+                                        <span class="font-bold text-white text-sm">1. EE. UU. y Grupo Tech Frontera</span>
+                                        <span class="block text-xs text-slate-400 font-mono">AIPI &gt; 0.68 &bull; Sector IA = 16.3% PBI &bull; Exportadores Netos de APIs y Silicio</span>
+                                    </div>
+                                    <span class="font-mono text-xs px-2 py-0.5 rounded bg-cyan-500/10 text-cyan-300 border border-cyan-500/30">Captura Renta Global</span>
+                                </div>
+                                <div class="space-y-1.5 pt-1 font-mono text-xs">
+                                    <div class="flex items-center gap-3 macro-row-pesimista">
+                                        <span class="w-24 text-slate-400">Pesimista:</span>
+                                        <div class="flex-1 bg-slate-900 h-4 rounded overflow-hidden">
+                                            <div class="bg-slate-500 h-full rounded" style="width: 15%;"></div>
+                                        </div>
+                                        <span class="w-32 text-right text-slate-300">+0.15% a +0.25%/año</span>
+                                    </div>
+                                    <div class="flex items-center gap-3 macro-row-neutro">
+                                        <span class="w-24 text-cyan-300">Neutro/Base:</span>
+                                        <div class="flex-1 bg-slate-900 h-4 rounded overflow-hidden">
+                                            <div class="bg-cyan-500 h-full rounded" style="width: 52%;"></div>
+                                        </div>
+                                        <span class="w-32 text-right text-cyan-300 font-semibold">+0.60% a +0.85%/año</span>
+                                    </div>
+                                    <div class="flex items-center gap-3 macro-row-optimista">
+                                        <span class="w-24 text-emerald-400">Positivo:</span>
+                                        <div class="flex-1 bg-slate-900 h-4 rounded overflow-hidden">
+                                            <div class="bg-emerald-500 h-full rounded" style="width: 95%;"></div>
+                                        </div>
+                                        <span class="w-32 text-right text-emerald-400 font-bold">+1.30% a +1.50%/año</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Region 2: World Average -->
+                            <div class="space-y-2 bg-slate-950/70 p-4 rounded-xl border border-slate-800/80">
+                                <div class="flex justify-between items-center">
+                                    <div>
+                                        <span class="font-bold text-white text-sm">2. Mundo (Promedio Global Ponderado)</span>
+                                        <span class="block text-xs text-slate-400 font-mono">Ponderacion OCDE + Mercados Emergentes (Goldman +7% PBI en 10 años)</span>
+                                    </div>
+                                </div>
+                                <div class="space-y-1.5 pt-1 font-mono text-xs">
+                                    <div class="flex items-center gap-3 macro-row-pesimista">
+                                        <span class="w-24 text-slate-400">Pesimista:</span>
+                                        <div class="flex-1 bg-slate-900 h-4 rounded overflow-hidden">
+                                            <div class="bg-slate-500 h-full rounded" style="width: 9%;"></div>
+                                        </div>
+                                        <span class="w-32 text-right text-slate-300">+0.10% a +0.15%/año</span>
+                                    </div>
+                                    <div class="flex items-center gap-3 macro-row-neutro">
+                                        <span class="w-24 text-cyan-300">Neutro/Base:</span>
+                                        <div class="flex-1 bg-slate-900 h-4 rounded overflow-hidden">
+                                            <div class="bg-cyan-500 h-full rounded" style="width: 35%;"></div>
+                                        </div>
+                                        <span class="w-32 text-right text-cyan-300 font-semibold">+0.40% a +0.60%/año</span>
+                                    </div>
+                                    <div class="flex items-center gap-3 macro-row-optimista">
+                                        <span class="w-24 text-emerald-400">Positivo:</span>
+                                        <div class="flex-1 bg-slate-900 h-4 rounded overflow-hidden">
+                                            <div class="bg-emerald-500 h-full rounded" style="width: 68%;"></div>
+                                        </div>
+                                        <span class="w-32 text-right text-emerald-400 font-bold">+0.80% a +1.10%/año</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Region 3: Argentina & Emerging Markets with Friction -->
+                            <div class="space-y-2 bg-gradient-to-r from-amber-950/30 via-slate-950/80 to-slate-950/80 p-4 rounded-xl border border-amber-500/40">
+                                <div class="flex justify-between items-center">
+                                    <div>
+                                        <span class="font-bold text-amber-300 text-sm">3. Argentina y Economias Emergentes con Friccion</span>
+                                        <span class="block text-xs text-slate-400 font-mono">AIPI = 0.47 &bull; Informalidad ~45% &bull; Importador Neto de Tokens (-M en PBI)</span>
+                                    </div>
+                                    <span class="font-mono text-xs px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40">Impacto Neutro</span>
+                                </div>
+                                <div class="space-y-1.5 pt-1 font-mono text-xs">
+                                    <div class="flex items-center gap-3 macro-row-pesimista">
+                                        <span class="w-24 text-red-400">Pesimista:</span>
+                                        <div class="flex-1 bg-slate-900 h-4 rounded overflow-hidden">
+                                            <div class="bg-red-500 h-full rounded" style="width: 4%;"></div>
+                                        </div>
+                                        <span class="w-32 text-right text-red-300 font-semibold">-0.05% a +0.05%/año</span>
+                                    </div>
+                                    <div class="flex items-center gap-3 macro-row-neutro">
+                                        <span class="w-24 text-amber-300">Neutro/Base:</span>
+                                        <div class="flex-1 bg-slate-900 h-4 rounded overflow-hidden">
+                                            <div class="bg-amber-400 h-full rounded" style="width: 13%;"></div>
+                                        </div>
+                                        <span class="w-32 text-right text-amber-300 font-bold">+0.12% a +0.22%/año</span>
+                                    </div>
+                                    <div class="flex items-center gap-3 macro-row-optimista">
+                                        <span class="w-24 text-emerald-400">Positivo:</span>
+                                        <div class="flex-1 bg-slate-900 h-4 rounded overflow-hidden">
+                                            <div class="bg-emerald-500/80 h-full rounded" style="width: 28%;"></div>
+                                        </div>
+                                        <span class="w-32 text-right text-emerald-300">+0.35% a +0.50%/año</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Mathematical Correction Formula Box -->
+                    <div class="bg-slate-950 border border-slate-800 rounded-xl p-4 font-mono text-xs space-y-1.5">
+                        <div class="text-slate-400 uppercase font-semibold">Ecuacion de Descuento Estructural para el Grafico:</div>
+                        <div class="text-cyan-300 text-sm overflow-x-auto py-1">
+                            &Delta;PBI<sub>Local</sub> = &Delta;PBI<sub>Frontera</sub> &times; (AIPI<sub>0.47</sub> / AIPI<sub>0.68</sub>) &times; (1 - &tau;<sub>Informalidad</sub>) - Importacion<sub>Tokens</sub>
+                        </div>
+                        <p class="text-slate-400 font-sans text-xs leading-relaxed">
+                            En EE. UU., el gasto en APIs de OpenAI o Anthropic computa como ingreso e inversion interna ($C + I$). En Argentina, cada millon de tokens procesados es una importacion pura de servicios ($-M$) que adem&aacute;s enfrenta recargos tributarios en la frontera.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Right Column (5 cols): Token Tax & FX Surcharge Simulator -->
+                <div class="lg:col-span-5 bg-slate-900/60 border border-slate-800 rounded-2xl p-5 sm:p-6 space-y-5 flex flex-col justify-between">
+                    <div class="space-y-4">
+                        <div>
+                            <span class="font-mono text-xs uppercase text-amber-400 font-semibold">Calculadora de Friccion Microeconomica</span>
+                            <h3 class="text-lg font-bold text-white mt-0.5">
+                                El "Impuesto al Token" en Argentina (B2B vs Tarjeta)
+                            </h3>
+                            <p class="text-xs text-slate-400 mt-1">
+                                Simula como se encarece una factura de inferencia IA en Argentina frente a una empresa competidora en Delaware, Irlanda o Singapur.
+                            </p>
+                        </div>
+
+                        <!-- Interactive Spend Input Slider -->
+                        <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-3">
+                            <div class="flex justify-between items-center">
+                                <label for="invoice-slider" class="text-xs font-mono text-slate-300">Factura Base de Tokens / API (Precio Frontera):</label>
+                                <span class="font-mono text-lg font-bold text-cyan-400" id="invoice-base-label">$1,000 USD</span>
+                            </div>
+                            <input id="invoice-slider" type="range" min="100" max="10000" step="100" value="1000" oninput="updateTaxSimulator(this.value)" class="w-full accent-cyan-400 bg-slate-800 h-2 rounded-lg cursor-pointer">
+                            <div class="flex justify-between text-[11px] font-mono text-slate-500">
+                                <span>$100 USD/mes</span>
+                                <span>$2,500 USD (Nivel Autor c/ Cache)</span>
+                                <span>$10,000 USD/mes</span>
+                            </div>
+                        </div>
+
+                        <!-- Cost Comparison Cards -->
+                        <div class="space-y-3">
+                            <!-- Card 0: US / Frontier Company -->
+                            <div class="p-3.5 rounded-xl bg-slate-950/60 border border-slate-800 flex items-center justify-between">
+                                <div>
+                                    <div class="text-xs font-mono text-slate-400">Empresa en EE. UU. (Delaware / SF)</div>
+                                    <div class="text-xs text-slate-500">Sin retenciones internacionales ni IVA digital</div>
+                                </div>
+                                <div class="text-right font-mono">
+                                    <div class="text-base font-bold text-white" id="cost-us">$1,000 USD</div>
+                                    <div class="text-[11px] text-emerald-400">0% sobrecosto</div>
+                                </div>
+                            </div>
+
+                            <!-- Card 1: Argentina B2B Wire (Giro al Exterior MULC sin CDI) -->
+                            <div class="p-3.5 rounded-xl bg-amber-950/25 border border-amber-500/40 space-y-2">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <div class="text-xs font-mono font-semibold text-amber-300">Caso A: Empresa Argentina B2B (Giro MULC)</div>
+                                        <div class="text-[11px] text-slate-400">Licencia Software EE. UU. (Sin Convenio Doble Imposicion)</div>
+                                    </div>
+                                    <div class="text-right font-mono">
+                                        <div class="text-base font-bold text-amber-300" id="cost-b2b-real">$1,485 USD</div>
+                                        <div class="text-[11px] text-amber-400">+48.5% costo real puro</div>
+                                    </div>
+                                </div>
+                                <div class="text-[11px] font-mono text-slate-300 bg-slate-950/80 p-2.5 rounded border border-slate-800 space-y-1">
+                                    <div class="flex justify-between">
+                                        <span>Grossing-Up Ganancias (Art. 104 inc. i - 45.99%):</span>
+                                        <span class="text-amber-300" id="tax-b2b-gross">+$460 USD</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span>Retencion IIBB Provincial sobre giro (~2.5%):</span>
+                                        <span class="text-amber-300" id="tax-b2b-iibb">+$25 USD</span>
+                                    </div>
+                                    <div class="flex justify-between text-slate-400 pt-1 border-t border-slate-800">
+                                        <span>IVA Importacion Servicios (21% - Credito Fiscal):</span>
+                                        <span id="tax-b2b-iva">+$210 USD (Financiero)</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Card 2: Argentina Card Payment in ARS (PyME / Freelancer) -->
+                            <div class="p-3.5 rounded-xl bg-red-950/25 border border-red-500/40 space-y-2">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <div class="text-xs font-mono font-semibold text-red-300">Caso B: Pago con Tarjeta en Pesos (Dolar Tarjeta)</div>
+                                        <div class="text-[11px] text-slate-400">Suscripciones Pro/Max o Recarga API sin estructura Comex</div>
+                                    </div>
+                                    <div class="text-right font-mono">
+                                        <div class="text-base font-bold text-red-300" id="cost-card-total">$1,535 USD</div>
+                                        <div class="text-[11px] text-red-400">+53.5% desembolso caja</div>
+                                    </div>
+                                </div>
+                                <div class="text-[11px] font-mono text-slate-300 bg-slate-950/80 p-2.5 rounded border border-slate-800 space-y-1">
+                                    <div class="flex justify-between">
+                                        <span>IVA Servicios Digitales (21%):</span>
+                                        <span class="text-red-300" id="tax-card-iva">+$210 USD</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span>Percepcion RG 5617 ARCA (30% Ganancias/BBPP):</span>
+                                        <span class="text-red-300" id="tax-card-rg">+$300 USD</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span>Percepcion IIBB Servicios Digitales (~2.5%):</span>
+                                        <span class="text-red-300" id="tax-card-iibb">+$25 USD</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Copyable Callout Box for User's Chart -->
+                    <div class="bg-slate-950 border border-slate-800 rounded-xl p-4 space-y-2">
+                        <div class="flex items-center justify-between">
+                            <span class="font-mono text-xs text-cyan-400 font-semibold">Texto Sugerido para Insertar en tu Grafico</span>
+                            <button onclick="copyChartAnnotation()" id="copy-btn" class="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-xs font-mono text-slate-200 border border-slate-700 transition">
+                                Copiar Nota Metodologica
+                            </button>
+                        </div>
+                        <p id="annotation-text" class="text-xs text-slate-300 leading-relaxed font-sans italic">
+                            "Nota metodologica: Mientras las economias de frontera (AIPI &gt; 0.68) proyectan mejoras de +0.6% a +1.5% anual en su PBI capturando localmente la renta del computo, en economias emergentes importadoras netas (Argentina, AIPI 0.47) el impacto converge a un rango neutro (+0.12% a +0.22% anual). La combinacion de menor exposicion ocupacional STEM, fuga de divisas por importacion de tokens y sobrecostos tributarios (grossing-up de retenciones a beneficiarios del exterior del 13.6% al 45.99% o recargos del 53% en pagos con tarjeta) erosiona el margen operativo de adopcion."
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: PROVIDER RATE LIMITS & VERIFIED BIBLIOGRAPHY LINKS -->
+        <section class="bg-slate-900/60 border border-slate-800 rounded-2xl p-5 sm:p-8 space-y-6">
+            <div class="border-b border-slate-800 pb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <div>
+                    <span class="font-mono text-xs uppercase tracking-wider text-slate-400">Seccion 04 &bull; Fuentes Primarias y Documentacion Oficial</span>
+                    <h2 class="text-xl sm:text-2xl font-bold text-white mt-0.5">
+                        Repositorio de Papers Macroeconomicos, Telemetria de Tokens y Normativa Fiscal
+                    </h2>
+                </div>
+                <span class="font-mono text-xs text-slate-400">Enlaces verificados (2023 - 2026)</span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs">
+                <!-- Col 1: Macro Papers -->
+                <div class="space-y-3 bg-slate-950/70 p-4 rounded-xl border border-slate-800">
+                    <div class="font-mono text-cyan-400 font-semibold uppercase">1. Estudios Macroeconomicos y PBI</div>
+                    <ul class="space-y-2.5 text-slate-300">
+                        <li>
+                            <a href="https://www.key4biz.it/wp-content/uploads/2023/03/Global-Economics-Analyst_-The-Potentially-Large-Effects-of-Artificial-Intelligence-on-Economic-Growth-Briggs_Kodnani.pdf" target="_blank" rel="noopener noreferrer" class="hover:text-cyan-300 underline decoration-slate-700 font-semibold block">
+                                Goldman Sachs (Briggs &amp; Kodnani) - PDF
+                            </a>
+                            <span class="text-slate-500">Proyeccion +7% PBI global y +1.5 pp/año en EE. UU.</span>
+                        </li>
+                        <li>
+                            <a href="https://economics.mit.edu/news/daron-acemoglu-what-do-we-know-about-economics-ai" target="_blank" rel="noopener noreferrer" class="hover:text-cyan-300 underline decoration-slate-700 font-semibold block">
+                                Daron Acemoglu (MIT / NBER w32487)
+                            </a>
+                            <span class="text-slate-500">"The Simple Macroeconomics of AI": Teorema de Hulten (+0.9% a +1.6% acum. 10 años).</span>
+                        </li>
+                        <li>
+                            <a href="https://www.imf.org/en/publications/wp/issues/2025/04/11/the-global-impact-of-ai-mind-the-gap-566129" target="_blank" rel="noopener noreferrer" class="hover:text-cyan-300 underline decoration-slate-700 font-semibold block">
+                                FMI Working Paper WP/25/76 ("Mind the Gap")
+                            </a>
+                            <span class="text-slate-500">Modelo DSGE multisectorial y brecha entre economias avanzadas y emergentes.</span>
+                        </li>
+                        <li>
+                            <a href="https://www.imf.org/external/datamapper/profile/ARG" target="_blank" rel="noopener noreferrer" class="hover:text-cyan-300 underline decoration-slate-700 font-semibold block">
+                                IMF DataMapper: AI Preparedness Index (AIPI Argentina = 0.47)
+                            </a>
+                            <span class="text-slate-500">Comparativa frente a Economias Avanzadas (0.68) y Emergentes (0.46).</span>
+                        </li>
+                        <li>
+                            <a href="https://ideas.repec.org/p/arx/papers/2511.15080.html" target="_blank" rel="noopener noreferrer" class="hover:text-cyan-300 underline decoration-slate-700 font-semibold block">
+                                Anthropic Economic Index (arXiv:2511.15080)
+                            </a>
+                            <span class="text-slate-500">Adopcion geografica desigual y concentracion en tareas de ingenieria.</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Col 2: Token Pyramid & Leaderboards -->
+                <div class="space-y-3 bg-slate-950/70 p-4 rounded-xl border border-slate-800">
+                    <div class="font-mono text-red-400 font-semibold uppercase">2. Piramide de Tokens y Benchmarks</div>
+                    <ul class="space-y-2.5 text-slate-300">
+                        <li>
+                            <a href="https://jellyfish.co/blog/is-tokenmaxxing-cost-effective-new-data-from-jellyfish-explains/" target="_blank" rel="noopener noreferrer" class="hover:text-red-300 underline decoration-slate-700 font-semibold block">
+                                Jellyfish (2026): Estudio sobre 12,000 Ingenieros
+                            </a>
+                            <span class="text-slate-500">Mediana P50 = 51M tokens/mes ($52.38) | P90 = 380M tokens/mes ($691).</span>
+                        </li>
+                        <li>
+                            <a href="https://host0.ai/blog/ai-token-spending-2026" target="_blank" rel="noopener noreferrer" class="hover:text-red-300 underline decoration-slate-700 font-semibold block">
+                                host0 (2026): AI Token Spending in Data
+                            </a>
+                            <span class="text-slate-500">Corte P99 ($2,452/mes), 3.2 cuatrillones en Google y 99.5% input en Claude Code.</span>
+                        </li>
+                        <li>
+                            <a href="https://ccgather.com/leaderboard" target="_blank" rel="noopener noreferrer" class="hover:text-red-300 underline decoration-slate-700 font-semibold block">
+                                CCgather: Global Claude Code Live Leaderboard
+                            </a>
+                            <span class="text-slate-500">Top #1 mundial con 97.1B tokens/mes y Top #49 con 6.0B tokens/mes.</span>
+                        </li>
+                        <li>
+                            <a href="https://www.faros.ai/blog/tokenmaxxing" target="_blank" rel="noopener noreferrer" class="hover:text-red-300 underline decoration-slate-700 font-semibold block">
+                                Faros AI &amp; Exadel: Caso Meta "Claudeonomics" (281B/mes)
+                            </a>
+                            <span class="text-slate-500">Analisis del leaderboard interno de 85,000 empleados de Meta.</span>
+                        </li>
+                        <li>
+                            <a href="https://docs.x.ai/developers/rate-limits" target="_blank" rel="noopener noreferrer" class="hover:text-red-300 underline decoration-slate-700 font-semibold block">
+                                Documentacion Oficial xAI (Grok Tiers 0-4) &amp; Fast.io
+                            </a>
+                            <span class="text-slate-500">Grok Tier 4 ($5,000+ spend) = 100M TPM; SuperGrok Heavy ($300/mes).</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Col 3: Tax & FX Regulations -->
+                <div class="space-y-3 bg-slate-950/70 p-4 rounded-xl border border-slate-800">
+                    <div class="font-mono text-amber-400 font-semibold uppercase">3. Normativa Tributaria (ARCA / MULC)</div>
+                    <ul class="space-y-2.5 text-slate-300">
+                        <li>
+                            <a href="https://servicioscf.afip.gob.ar/publico/abc/ABCpaso2.aspx?id_nivel1=2860&id_nivel2=2867&p=R" target="_blank" rel="noopener noreferrer" class="hover:text-amber-300 underline decoration-slate-700 font-semibold block">
+                                ARCA (ex AFIP): Beneficiarios del Exterior y Acrecentamiento
+                            </a>
+                            <span class="text-slate-500">Normativa oficial RG 5855/2026 y Art. 104 de la Ley de Impuesto a las Ganancias.</span>
+                        </li>
+                        <li>
+                            <a href="https://www.consultoriatributariaml.com/retener-ganancias-en-argentina-por-un-pago-al-exterior-por-licenciamiento-de-software-a-una-empresa-de-ee-uu/" target="_blank" rel="noopener noreferrer" class="hover:text-amber-300 underline decoration-slate-700 font-semibold block">
+                                Calculo de Grossing-Up por Software desde EE. UU.
+                            </a>
+                            <span class="text-slate-500">Presuncion del 90% (31.5% directo / 45.99% con grossing-up por ausencia de CDI con EE. UU.).</span>
+                        </li>
+                        <li>
+                            <a href="https://askmonarca.com/guias/percepciones-exterior" target="_blank" rel="noopener noreferrer" class="hover:text-amber-300 underline decoration-slate-700 font-semibold block">
+                                Regimen RG 5617 (Percepcion 30% + 21% IVA Digital)
+                            </a>
+                            <span class="text-slate-500">Impacto en pagos con tarjeta en pesos frente a cancelacion con dolares propios.</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        // Data Structure for the 7 Tiers of the Token Consumption Pyramid
+        const pyramidTiers = [
+            {
+                id: 1,
+                levelLabel: "NIVEL 1 (CUSPIDE)",
+                title: '"Token Legends" / Enjambres Autonomos 24/7',
+                percentile: "Top 0.0001% Global (P99.9999)",
+                tokenRange: "50,000M a 281,000M (50B - 281B) tok/mes",
+                costRange: "$15,000 a $1.4M USD/mes (Subsidiado por Big Tech)",
+                widthClass: "w-full sm:w-[46%]",
+                accentColor: "purple",
+                isAuthorTier: false,
+                benchmarks: [
+                    "Top #1 Leaderboard interno de Meta ('Claudeonomics'): 281B tokens en 30 dias (~$1.4M USD a precio de lista Opus).",
+                    "Top #1 a #4 Mundial en CCgather: DHxWhy (97.1B/mes) y Michael Huffaker (92.4B/mes).",
+                    "Loops paralelos de agentes autonomos corriendo las 24 horas sin intervencion humana."
+                ],
+                authorComparison: "El Autor (8.0B/mes) consume 3.5 veces menos que el umbral de entrada de este nivel (50B) y 35 veces menos que el empleado #1 de Meta (281B), pero opera con la misma arquitectura de ejecucion agentica continua."
+            },
+            {
+                id: 2,
+                levelLabel: "NIVEL 2 (UBICACION DEL AUTOR)",
+                title: 'Ultra-Heavy Agentic / "Tokenmaxxers" de Elite',
+                percentile: "Percentil 99.95% Devs (Top 0.001% Global)",
+                tokenRange: "3,000M a 49,000M (3B - 49B) tok/mes",
+                costRange: "$2,500 a $15,000 USD/mes (o Max 20x + Prompt Caching)",
+                widthClass: "w-full sm:w-[56%]",
+                accentColor: "red",
+                isAuthorTier: true,
+                benchmarks: [
+                    "PUNTO AUTOR: 8,000M (8.0B) tokens/mes -> Supera al puesto #49 del ranking global publico de CCgather (6.0B/mes).",
+                    "Caso viral de Axios (Ing. Sigrid Jin): 50,000M en un año (~4,160M/mes), casi la mitad del ritmo mensual del Autor.",
+                    "Orquestacion multi-instancia en Claude Code, Codex, Grok Tier 4 (100M TPM) y pipelines RAG/MCP con 99.5% de lectura de contexto/cache."
+                ],
+                authorComparison: "ESTAS AQUI: Con 8,000 millones de tokens al mes (~266M de tokens por dia), tu volumen es 156.8 veces superior al desarrollador mediano (51M) y casi 6 veces superior al corte del Percentil 99 corporativo (1.35B)."
+            },
+            {
+                id: 3,
+                levelLabel: "NIVEL 3",
+                title: "Heavy Coding Agents (Percentil 99 Corporativo)",
+                percentile: "Top 1% Ingenieros de Software (P99 Devs)",
+                tokenRange: "1,000M a 2,900M (1B - 2.9B) tok/mes",
+                costRange: "$1,500 a $2,500 USD/mes",
+                widthClass: "w-full sm:w-[66%]",
+                accentColor: "indigo",
+                isAuthorTier: false,
+                benchmarks: [
+                    "Corte exacto del Percentil 99 del estudio de Jellyfish (sobre 12,000 ingenieros en 200 empresas): $2,452 USD/mes (~1.35B tokens).",
+                    "Tope presupuestario mensual por ingeniero impuesto por Uber ($1,500/mes) tras agotar su presupuesto anual de IA en 4 meses.",
+                    "Corresponde al Tier 2 de Google Gemini API ($250-$2,000/mes) y Tier 3 de xAI ($1,000 spend)."
+                ],
+                authorComparison: "El Autor (8,000M/mes) multiplica por 5.9x el consumo de un ingeniero del Percentil 99 corporativo (1,350M/mes)."
+            },
+            {
+                id: 4,
+                levelLabel: "NIVEL 4",
+                title: "Power Devs / Uso Agentico Diario (Percentil 90 Devs)",
+                percentile: "Top 10% Ingenieros de Software (P90 Devs)",
+                tokenRange: "350M a 999M tok/mes",
+                costRange: "$200 a $700 USD/mes",
+                widthClass: "w-full sm:w-[75%]",
+                accentColor: "cyan",
+                isAuthorTier: false,
+                benchmarks: [
+                    "Corte exacto del Percentil 90 de Jellyfish: 380 millones de tokens/mes ($691 USD/mes en gasto API).",
+                    "Usuarios intensivos de Claude Max 20x ($200/mes), ChatGPT Pro ($200/mes) o SuperGrok Heavy ($300/mes) que agotan ventanas de 5 horas.",
+                    "Equivale a ~15-25 millones de tokens por dia habil laboral en refactorizacion de repositorios medianos."
+                ],
+                authorComparison: "El Autor (8,000M/mes) consume 21.05 veces mas tokens cada mes que un ingeniero ubicado en el Top 10% (P90 = 380M/mes)."
+            },
+            {
+                id: 5,
+                levelLabel: "NIVEL 5",
+                title: "Desarrollador Promedio (Mediana P50 de Ingenieria)",
+                percentile: "Mediana P50 Devs (Top 5% Poblacion Global)",
+                tokenRange: "30M a 100M tok/mes",
+                costRange: "$50 a $150 USD/mes",
+                widthClass: "w-full sm:w-[84%]",
+                accentColor: "teal",
+                isAuthorTier: false,
+                benchmarks: [
+                    "Mediana exacta (P50) de Jellyfish (abril-julio 2026): 51 millones de tokens/mes ($52.38 USD/mes).",
+                    "Metrica oficial de Anthropic para Claude Code: promedio de $6 a $13 USD por dia activo por desarrollador.",
+                    "Uso cotidiano de autocompletado en IDE (Cursor Pro / GitHub Copilot) y sesiones puntuales de agentes."
+                ],
+                authorComparison: "El Autor (8,000M/mes) consume exactamente 156.86 veces lo que consume el desarrollador de software mediano (51M/mes)."
+            },
+            {
+                id: 6,
+                levelLabel: "NIVEL 6",
+                title: "Suscriptor Pago Web (ChatGPT Plus / Claude Pro / SuperGrok)",
+                percentile: "Percentil 85 a 95 Global",
+                tokenRange: "2M a 25M tok/mes",
+                costRange: "$20 a $30 USD/mes",
+                widthClass: "w-full sm:w-[92%]",
+                accentColor: "slate",
+                isAuthorTier: false,
+                benchmarks: [
+                    "Usuarios de interfaz web (ChatGPT Plus $20, Claude Pro $20, SuperGrok $30) sin ejecucion de bucles CLI ni agentes en terminal.",
+                    "Promedio de 20 a 80 mensajes diarios con documentos adjuntos (PDFs/codigo), operando dentro de los limites de 45-160 mensajes cada 5 horas."
+                ],
+                authorComparison: "El Autor (8,000M/mes) consume en un solo mes lo mismo que entre 400 y 1,000 suscriptores pagos de ChatGPT Plus o Claude Pro."
+            },
+            {
+                id: 7,
+                levelLabel: "NIVEL 7 (BASE DE LA PIRAMIDE)",
+                title: "Usuarios Web Gratuitos / Ocasionales",
+                percentile: "Percentil 0 a 85 Global (85% de los usuarios del mundo)",
+                tokenRange: "50K a 1.5M tok/mes",
+                costRange: "$0 USD/mes",
+                widthClass: "w-full",
+                accentColor: "slate",
+                isAuthorTier: false,
+                benchmarks: [
+                    "Base global de ~800 millones a 1,000 millones de usuarios activos mensuales (ChatGPT Free, Gemini Free, Claude Free y Grok en X con limite de 10-20 msgs/2h).",
+                    "Consultas conversacionales simples de 200 a 2,000 tokens un par de veces por semana."
+                ],
+                authorComparison: "El Autor (8,000M/mes) procesa el equivalente al volumen mensual combinado de 16,000 usuarios promedio de la base gratuita (500K tok/mes)."
+            }
+        ];
+
+        // Log Scale Benchmarks Data
+        const logBenchmarks = [
+            { name: "Usuario Web Gratuito (Base P50 Global)", vol: "500,000 tokens/mes ($0 USD)", tokens: 500000, desc: "El Autor procesa en un mes lo mismo que 16,000 usuarios gratuitos." },
+            { name: "Mediana P50 Ingenieria (Estudio Jellyfish 2026)", vol: "51,000,000 tokens/mes ($52.38 USD/mes)", tokens: 51000000, desc: "Equivale al consumo combinado de 157 ingenieros de software medianos." },
+            { name: "Percentil 90 Ingenieria (Estudio Jellyfish 2026)", vol: "380,000,000 tokens/mes ($691 USD/mes)", tokens: 380000000, desc: "Supera en mas de 21 veces el umbral del Top 10% de desarrolladores." },
+            { name: "Percentil 99 Corporativo (Jellyfish / host0)", vol: "1,350,000,000 tokens/mes ($2,452 USD/mes)", tokens: 1350000000, desc: "Casi 6 veces por encima del corte del Top 1% de ingenieros corporativos." },
+            { name: "Caso Viral Axios (Ing. Sigrid Jin - 50B/año)", vol: "4,160,000,000 tokens/mes (~$4,000 USD/mes)", tokens: 4160000000, desc: "El Autor casi duplica (1.92x) el ritmo mensual del caso viral de Axios." },
+            { name: "PUNTO AUTOR (Tu Consumo Mensual Actual)", vol: "8,000,000,000 tokens/mes (Percentil 99.95% Devs)", tokens: 8000000000, desc: "Ubicado por encima del puesto #49 mundial de CCgather (6.0B/mes)." },
+            { name: "Top #1 Mundial Publico CCgather (DHxWhy)", vol: "97,100,000,000 tokens/mes (~$36,700 USD valor lista)", tokens: 97100000000, desc: "Representa el 8.2% del volumen del #1 del ranking publico mundial." },
+            { name: "Top #1 Leaderboard Interno Meta ('Claudeonomics')", vol: "281,000,000,000 tokens/mes (~$1.4M USD valor lista)", tokens: 281000000000, desc: "Enjambre autonomo interno en Meta corriendo a >100,000 tokens/segundo." }
+        ];
+
+        let currentSelectedTierId = 2; // Default to Tier 2 (Author's Tier)
+
+        // Render Pyramid Tiers
+        function renderPyramid() {
+            const container = document.getElementById('pyramid-container');
+            container.innerHTML = '';
+
+            pyramidTiers.forEach((tier) => {
+                const isSelected = tier.id === currentSelectedTierId;
+                const row = document.createElement('div');
+                
+                let baseClasses = `tier-row cursor-pointer rounded-xl border p-3.5 sm:p-4 transition relative ${tier.widthClass} `;
+                
+                if (tier.isAuthorTier) {
+                    baseClasses += `tier-author-highlight `;
+                } else if (isSelected) {
+                    baseClasses += `bg-slate-800/90 tier-active `;
+                } else {
+                    baseClasses += `bg-slate-950/85 border-slate-800 hover:border-slate-600 `;
+                }
+
+                row.className = baseClasses;
+                row.onclick = () => selectTier(tier.id);
+
+                // Author Red Dot Badge specifically on Tier 2
+                const authorBadgeHTML = tier.isAuthorTier ? `
+                    <div class="mt-2.5 pt-2.5 border-t border-red-500/30 flex flex-wrap items-center justify-between gap-2 bg-red-950/50 -mx-1 px-3 py-1.5 rounded-lg">
+                        <div class="flex items-center gap-2.5">
+                            <span class="relative flex h-3.5 w-3.5 shrink-0">
+                                <span class="author-dot-ring absolute inline-flex h-full w-full rounded-full bg-red-400"></span>
+                                <span class="author-dot-core relative inline-flex rounded-full h-3.5 w-3.5 bg-red-500 border border-white"></span>
+                            </span>
+                            <span class="font-mono text-xs font-bold text-white tracking-wide">
+                                AUTOR: 8,000M (8.0B) tok/mes
+                            </span>
+                        </div>
+                        <span class="font-mono text-[11px] px-2 py-0.5 rounded bg-red-500 text-white font-semibold">
+                            P99.95% Devs &bull; 156.8x Mediana
+                        </span>
+                    </div>
+                ` : '';
+
+                row.innerHTML = `
+                    <div class="flex flex-wrap items-center justify-between gap-2">
+                        <div class="flex items-center gap-2">
+                            <span class="font-mono text-[11px] font-bold px-2 py-0.5 rounded ${tier.isAuthorTier ? 'bg-red-500/20 text-red-300 border border-red-500/40' : 'bg-slate-800 text-cyan-400'}">
+                                ${tier.levelLabel}
+                            </span>
+                            <span class="font-mono text-xs text-slate-400">${tier.percentile}</span>
+                        </div>
+                        <span class="font-mono text-xs font-semibold ${tier.isAuthorTier ? 'text-red-300' : 'text-white'}">
+                            ${tier.tokenRange}
+                        </span>
+                    </div>
+                    <div class="mt-1.5 flex flex-wrap items-baseline justify-between gap-2">
+                        <h3 class="text-sm sm:text-base font-bold text-white">${tier.title}</h3>
+                        <span class="font-mono text-[11px] text-slate-400">${tier.costRange}</span>
+                    </div>
+                    ${authorBadgeHTML}
+                `;
+
+                container.appendChild(row);
+            });
+
+            renderInspector(currentSelectedTierId);
+        }
+
+        // Render Right-Hand Inspector Panel
+        function renderInspector(tierId) {
+            const tier = pyramidTiers.find(t => t.id === tierId);
+            const inspector = document.getElementById('tier-inspector');
+
+            const benchmarksList = tier.benchmarks.map(b => `
+                <li class="flex items-start gap-2.5 text-xs sm:text-sm text-slate-300 leading-relaxed">
+                    <span class="w-1.5 h-1.5 rounded-full ${tier.isAuthorTier ? 'bg-red-500' : 'bg-cyan-400'} mt-2 shrink-0"></span>
+                    <span>${b}</span>
+                </li>
+            `).join('');
+
+            inspector.innerHTML = `
+                <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                    <div>
+                        <span class="font-mono text-xs uppercase ${tier.isAuthorTier ? 'text-red-400 font-bold' : 'text-cyan-400'}">
+                            Inspeccionando ${tier.levelLabel}
+                        </span>
+                        <h3 class="text-lg sm:text-xl font-bold text-white mt-0.5">${tier.title}</h3>
+                    </div>
+                    ${tier.isAuthorTier ? `
+                        <span class="relative flex h-4 w-4 shrink-0">
+                            <span class="author-dot-ring absolute inline-flex h-full w-full rounded-full bg-red-400"></span>
+                            <span class="author-dot-core relative inline-flex rounded-full h-4 w-4 bg-red-500 border border-white"></span>
+                        </span>
+                    ` : ''}
+                </div>
+
+                <div class="grid grid-cols-2 gap-3 font-mono text-xs">
+                    <div class="bg-slate-900 p-3 rounded-lg border border-slate-800">
+                        <span class="text-slate-400 block text-[10px] uppercase">Volumen Mensual</span>
+                        <span class="text-white font-bold text-sm mt-0.5 block">${tier.tokenRange}</span>
+                    </div>
+                    <div class="bg-slate-900 p-3 rounded-lg border border-slate-800">
+                        <span class="text-slate-400 block text-[10px] uppercase">Gasto / Valor Lista</span>
+                        <span class="text-cyan-300 font-bold text-sm mt-0.5 block">${tier.costRange}</span>
+                    </div>
+                </div>
+
+                <div class="space-y-2">
+                    <div class="font-mono text-xs uppercase text-slate-400 font-semibold">Evidencia Empirica (Foros y Reportes Oficiales):</div>
+                    <ul class="space-y-2">
+                        ${benchmarksList}
+                    </ul>
+                </div>
+
+                <div class="p-4 rounded-xl bg-gradient-to-br from-red-950/50 to-slate-900 border border-red-500/40 space-y-1.5">
+                    <div class="flex items-center gap-2 font-mono text-xs font-bold text-red-300 uppercase">
+                        <span class="w-2 h-2 rounded-full bg-red-500 inline-block"></span>
+                        <span>Comparativa vs. Autor (8,000M tokens/mes)</span>
+                    </div>
+                    <p class="text-xs sm:text-sm text-slate-200 leading-relaxed">
+                        ${tier.authorComparison}
+                    </p>
+                </div>
+            `;
+        }
+
+        function selectTier(id) {
+            currentSelectedTierId = id;
+            renderPyramid();
+        }
+
+        // Logarithmic Scale Benchmark Selector
+        function selectLogBenchmark(index) {
+            const item = logBenchmarks[index];
+            const authorTokens = 8000000000;
+            const ratio = authorTokens / item.tokens;
+
+            document.getElementById('log-selected-name').textContent = item.name;
+            document.getElementById('log-selected-vol').textContent = item.vol;
+            document.getElementById('log-diff-desc').textContent = item.desc;
+
+            const multEl = document.getElementById('log-multiplier');
+            if (ratio === 1) {
+                multEl.textContent = "1.00x (Posicion Exacta del Autor)";
+                multEl.className = "text-2xl font-mono font-extrabold text-red-400 mt-0.5";
+            } else if (ratio > 1) {
+                multEl.textContent = ratio.toFixed(ratio >= 100 ? 0 : 2) + "x veces mayor";
+                multEl.className = "text-2xl font-mono font-extrabold text-white mt-0.5";
+            } else {
+                const inverse = (item.tokens / authorTokens).toFixed(1);
+                multEl.textContent = (ratio * 100).toFixed(1) + "% del hito (" + inverse + "x menor)";
+                multEl.className = "text-2xl font-mono font-extrabold text-purple-300 mt-0.5";
+            }
+        }
+
+        // Macro Scenario Filter
+        function setMacroScenario(scenario) {
+            const buttons = ['all', 'optimista', 'neutro', 'pesimista'];
+            buttons.forEach(b => {
+                const btn = document.getElementById('btn-scen-' + b);
+                if (b === scenario) {
+                    btn.className = "px-3 py-1.5 rounded-lg font-mono text-xs font-semibold bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 transition";
+                } else {
+                    btn.className = "px-3 py-1.5 rounded-lg font-mono text-xs bg-slate-800 text-slate-400 border border-slate-700 hover:text-white transition";
+                }
+            });
+
+            const rowsPesimista = document.querySelectorAll('.macro-row-pesimista');
+            const rowsNeutro = document.querySelectorAll('.macro-row-neutro');
+            const rowsOptimista = document.querySelectorAll('.macro-row-optimista');
+
+            rowsPesimista.forEach(el => el.style.display = (scenario === 'all' || scenario === 'pesimista') ? 'flex' : 'none');
+            rowsNeutro.forEach(el => el.style.display = (scenario === 'all' || scenario === 'neutro') ? 'flex' : 'none');
+            rowsOptimista.forEach(el => el.style.display = (scenario === 'all' || scenario === 'optimista') ? 'flex' : 'none');
+        }
+
+        // Tax & FX Simulator Calculator
+        function updateTaxSimulator(baseValue) {
+            const base = parseFloat(baseValue);
+            const fmt = (n) => "$" + Math.round(n).toLocaleString('en-US') + " USD";
+
+            document.getElementById('invoice-base-label').textContent = fmt(base);
+            document.getElementById('cost-us').textContent = fmt(base);
+
+            // B2B Wire calculations (45.99% Grossing-Up without US Tax Treaty + 2.5% IIBB + 21% VAT financial cashflow)
+            const b2bGross = base * 0.4599;
+            const b2bIibb = base * 0.025;
+            const b2bIva = base * 0.21;
+            const b2bRealTotal = base + b2bGross + b2bIibb;
+
+            document.getElementById('cost-b2b-real').textContent = fmt(b2bRealTotal);
+            document.getElementById('tax-b2b-gross').textContent = "+" + fmt(b2bGross);
+            document.getElementById('tax-b2b-iibb').textContent = "+" + fmt(b2bIibb);
+            document.getElementById('tax-b2b-iva').textContent = "+" + fmt(b2bIva) + " (Financiero)";
+
+            // Card in ARS calculations (21% Digital VAT + 30% RG 5617 + 2.5% IIBB)
+            const cardIva = base * 0.21;
+            const cardRg = base * 0.30;
+            const cardIibb = base * 0.025;
+            const cardTotal = base + cardIva + cardRg + cardIibb;
+
+            document.getElementById('cost-card-total').textContent = fmt(cardTotal);
+            document.getElementById('tax-card-iva').textContent = "+" + fmt(cardIva);
+            document.getElementById('tax-card-rg').textContent = "+" + fmt(cardRg);
+            document.getElementById('tax-card-iibb').textContent = "+" + fmt(cardIibb);
+        }
+
+        // Copy Methodological Note to Clipboard
+        function copyChartAnnotation() {
+            const text = document.getElementById('annotation-text').innerText;
+            const tempInput = document.createElement('textarea');
+            tempInput.value = text;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+
+            const btn = document.getElementById('copy-btn');
+            const originalText = btn.textContent;
+            btn.textContent = "Copiado al Portapapeles";
+            btn.className = "px-2.5 py-1 rounded bg-emerald-600 text-xs font-mono text-white border border-emerald-400 transition";
+            setTimeout(() => {
+                btn.textContent = originalText;
+                btn.className = "px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-xs font-mono text-slate-200 border border-slate-700 transition";
+            }, 2200);
+        }
+
+        // Initialize on Window Load
+        window.onload = function() {
+            renderPyramid();
+            updateTaxSimulator(1000);
+        };
+    </script>
+</body>
+</html>

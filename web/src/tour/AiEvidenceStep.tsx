@@ -81,7 +81,7 @@ function TokensContent() {
               {TOKEN_LOG_BENCHMARKS.map((b) => {
                 const widthPct = Math.max(8, Math.min(100, ((b.exp - 5.8) / (11.2 - 5.8)) * 100));
                 return (
-                  <div key={b.label} className={`ai-log-row ${b.tone === 'author' ? 'ai-log-row--author' : ''}`}>
+                  <div key={b.label} className="ai-log-row">
                     <span>{b.label}</span>
                     <div className="ai-log-bar-track">
                       <div className={`ai-log-bar-fill ai-log-bar-fill--${b.tone}`} style={{ width: `${widthPct}%` }} />

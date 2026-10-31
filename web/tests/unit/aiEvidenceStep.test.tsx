@@ -29,7 +29,7 @@ describe('sourced AI slides', () => {
     expect(screen.getByText('★ "Autor - últimos 30 días (8.000 M solo en claude code)"')).toBeDefined();
     expect(screen.getByText(/Muestra Jellyfish: telemetría corporativa de miles de ingenieros en cientos de empresas/)).toBeDefined();
     expect(screen.getAllByText(/1\.350 M – 5\.000 M/).length).toBeGreaterThan(0);
-    const tierBtn = screen.getByRole('button', { name: /Nivel 1 · Cúspide 24\/7/ });
+    const tierBtn = screen.getByRole('button', { name: /Nivel 1 · 24\/7/ });
     fireEvent.click(tierBtn);
     expect(tierBtn.getAttribute('aria-pressed')).toBe('true');
     expect(screen.getByText(/Enjambres autónomos y loops continuos/)).toBeDefined();

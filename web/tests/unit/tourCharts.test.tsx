@@ -18,7 +18,7 @@ describe('the charts of the Recorrido', () => {
   it('has a chart for step 1 and for steps 3 to 13 except 6 (the investor slide was removed), and the shell also knows steps 0 and 2', () => {
     expect(CHART_STEP_LIST).toEqual([3, 4, 5, 8, 12]);
     // step 2 is the map of production by province: its own component, not one of the charts that go side by side
-    expect([...CHART_STEPS].sort((a, b) => a - b)).toEqual([0, ...CHART_STEP_LIST.filter((s) => s !== 4), 14, 16, 17, 20, 21, 22, 23, 24, 26, 27, 28, 29]); // includes the evidence slides
+    expect([...CHART_STEPS].sort((a, b) => a - b)).toEqual([0, ...CHART_STEP_LIST.filter((s) => s !== 4), 14, 16, 17, 20, 21, 26, 27, 28, 29]); // includes the evidence slides
     expect(hasTourChart(0)).toBe(true);
     expect(hasTourChart(2)).toBe(false); // Producción por provincia is a view of the Recursos slide
     expect(hasTourChart(8)).toBe(true);

@@ -1,5 +1,5 @@
 import type { DataTable } from './types.js';
-import { ADOPTION, API_PRICES, ENTERPRISE, PERSONAL_USAGE, PYRAMID_LEVELS, RESEARCH_PLATFORMS, TOKEN_PROVIDERS } from '../tour/aiEvidence.js';
+import { ADOPTION, API_PRICES, ENTERPRISE, PERSONAL_USAGE, PYRAMID_LEVELS, RESEARCH_PLATFORMS, TOKEN_PROVIDERS, TOKEN_PYRAMID_TIERS } from '../tour/aiEvidence.js';
 import arxiv from '../tour/aiResearchCounts.json';
 
 export const apiPricesTable = (): DataTable => ({
@@ -15,6 +15,10 @@ export function aiEvidenceTables(step: number): DataTable[] {
     rows: [...ADOPTION.map((r) => [r.label, r.value, r.population, r.period, r.source.url, r.retrieved_at]), ...ENTERPRISE.map((r) => [r.label, r.value, r.period, '2025–2026; ver alcance', r.source.url, r.retrieved_at])]
   }];
   if (step === 28) return [{
+    id: 'ai-token-pyramid', title: 'Pirámide de consumo mensual de tokens por nivel (telemetría empresarial e investigación)',
+    columns: ['Nivel', 'Rango mensual', 'Título', 'Actores y alcance', 'Detalle metodológico', 'Fuentes', 'Consulta'],
+    rows: TOKEN_PYRAMID_TIERS.map((t) => [t.tier, t.monthlyTokens, t.title, t.actors, t.detail, t.refs.join(', '), '2026-10-30'])
+  }, {
     id: 'ai-token-publications', title: 'Métricas públicas de tokens: no comparables entre productos',
     columns: ['Producto', 'Métrica', 'Alcance', 'Percentiles mensuales por usuario', 'Fuente', 'Consulta'],
     rows: TOKEN_PROVIDERS.map((r) => [r.name, r.figure, r.scope, r.monthlyUserPercentiles, r.source.url, r.retrieved_at])
@@ -28,7 +32,7 @@ export function aiEvidenceTables(step: number): DataTable[] {
     rows: [[PERSONAL_USAGE.tokens, PERSONAL_USAGE.days, PERSONAL_USAGE.cacheIncluded, PERSONAL_USAGE.percentile, PERSONAL_USAGE.note, PERSONAL_USAGE.source.name, PERSONAL_USAGE.retrieved_at]]
   }];
   if (step === 26) return [{
-    id: 'ai-adoption-pyramid', title: 'Pirámide conceptual: ChatGPT y población mundial de referencia',
+    id: 'ai-adoption-pyramid', title: 'Pirámide de adopción global de modelos de lenguaje (ChatGPT, Claude, Gemini, Copilot, Meta AI, DeepSeek) y población mundial',
     columns: ['Nivel', 'Cantidad', 'Calificador', 'Fecha', 'Definición', 'Fuente', 'Consulta'],
     rows: PYRAMID_LEVELS.map((r) => [r.label, r.count, r.qualifier, r.period, r.note, r.source.url, r.retrieved_at])
   }];

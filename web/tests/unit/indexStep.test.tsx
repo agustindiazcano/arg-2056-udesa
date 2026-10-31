@@ -50,7 +50,7 @@ describe('the first slide: the title and the index', () => {
     expect(list[4]!.textContent).toBe(`5 · ${PRODUCTIVITY_TITLE}`);
     expect(list[10]!.textContent).toBe(`11 · ${AI_PYRAMID_TITLE}`);
     expect(list[12]!.textContent).toBe(`13 · ${FORECAST_UNCERTAINTY_TITLE}`);
-    expect(list.at(-1)!.textContent).toBe(`${rest.length} · Países con recursos y capital humano`);
+    expect(list.at(-1)!.textContent).toBe(`${rest.length} · ${FORECAST_UNCERTAINTY_TITLE}`);
   });
 
   it('uses the title each slide shows as its own heading', () => {
