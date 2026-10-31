@@ -23,6 +23,7 @@ import { SlotPortal } from '../../dashboard/SlotPortal';
 import type { Column } from './columns';
 import type { CameraMode } from './camera';
 import { createFigureColumn } from './figures3d';
+import { detailedInfantryModel } from './detailedInfantry';
 import type { FigureColumn } from './figures3d';
 import type { Graphics } from './graphics';
 import { cameraFor, clampZoom, coordAtKm, figuresVisible, gaitAmount, gaitPhaseAt, metersPerPixel, metersPerUnit, mixHex, timeScaleForZoom, WASD_SHIFT_FACTOR, WASD_SPEED_PX, wasdDelta, wheelZoomDelta } from './mapGeo';
@@ -433,13 +434,12 @@ class ArmyLayer implements CustomLayerInterface {
         if (!this.detailedModelsOn || this.column !== targetColumn) return;
         const group = new GroupCtor();
         const actors: Array<{ holder: Group; mixer: AnimationMixer | null }> = [];
+        let infantryIndex = 0;
         for (const pose of targetColumn.infantryPoses) {
           const modelId =
             pose.kind === 'leader'
               ? 'san-martin'
-              : pose.kind === 'foot_afro'
-                ? 'soldier-red'
-                : 'soldier-blue';
+              : detailedInfantryModel(infantryIndex++);
           const withMusket = pose.kind !== 'leader';
           const { scene: charScene, animations } = assets.cloneCharacter(modelId, withMusket);
           const holder = new GroupCtor();

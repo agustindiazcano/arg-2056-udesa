@@ -2,7 +2,7 @@
 
 Every task below has a brief (`docs/tasks/<slug>.md`, historical briefs in `docs/archived/`) and a prompt (`docs/TASKS.md`). The list of all tasks, with their blockers, is `docs/roadmap.md`; the status table is "Next Steps" in `docs/TASKS.md`. READY = can start now. BLOCKED = needs what the line says.
 
-- [x] Adjust detailed Andes model orientation and spacing, and reduce the sky intro formation for laptop screens. Branch `task/andes-model-orientation`; visual review pending.
+- [x] Adjust detailed Andes model orientation and spacing, show 30% red uniforms in detailed infantry, and reduce the sky intro formation for laptop screens. Branch `task/andes-model-orientation`; visual review pending.
 
 ## New corrections (`test/correcciones-nuevas.png`, plan in `docs/action-plan-correcciones-nuevas.md`)
 
