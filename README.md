@@ -15,7 +15,33 @@ Un relato interactivo, con datos, que une el Cruce de los Andes (1817) con el de
 
 La incertidumbre se muestra como abanico de percentiles; las cifras en disputa, como rangos; los vacíos, como «sin dato». Los supuestos y las reglas de datos están en [`AGENTS.md`](AGENTS.md) y [`docs/assumptions.md`](docs/assumptions.md).
 
-## El recorrido en imágenes
+<a id="indice"></a>
+
+## Índice
+
+- [El recorrido en imágenes](#el-recorrido-en-imagenes)
+- [Qué es](#que-es)
+- [Metodología y pipeline de datos](#metodologia-y-pipeline-de-datos)
+- [Stack](#stack)
+- [Las diapositivas de «Hacia el 2056»](#las-diapositivas-de-hacia-el-2056)
+- [Cómo correrlo](#como-correrlo)
+- [Estructura](#estructura)
+- [Instituciones](#instituciones)
+- [Autor](#autor)
+- [Referencias](#referencias)
+  - [Cruce de los Andes (1817)](#cruce-de-los-andes-1817)
+  - [Mapa y terreno](#mapa-y-terreno)
+  - [Marco conceptual](#marco-conceptual)
+  - [Productividad (diapositiva 5 de «Hacia el 2056», y el simulador)](#productividad-diapositiva-5-de-hacia-el-2056-y-el-simulador)
+  - [Economía, comercio, recursos y proyecciones (Recorrido «Hacia el 2056» y Data)](#economia-comercio-recursos-y-proyecciones-recorrido-hacia-el-2056-y-data)
+  - [Inteligencia artificial y el PBI (diapositiva 6 de «Hacia el 2056», y el simulador)](#inteligencia-artificial-y-el-pbi-diapositiva-6-de-hacia-el-2056-y-el-simulador)
+  - [Desarrollo humano, educación, población y difusión tecnológica (diapositivas 7 y 8 de «Hacia el 2056»)](#desarrollo-humano-educacion-poblacion-y-difusion-tecnologica-diapositivas-7-y-8-de-hacia-el-2056)
+  - [Referencias complementarias de Data](#referencias-complementarias-de-data)
+  - [IA: acceso, adopción, tokens e I+D (consulta 30-10-2026)](#ia-acceso-adopcion-tokens-e-id-consulta-30-10-2026)
+
+<a id="el-recorrido-en-imagenes"></a>
+
+## [El recorrido en imágenes](#indice)
 
 Capturas de la aplicación del 30 de octubre de 2026. La [galería completa](docs/screenshots.md) incluye el recorrido de los Andes y todas las diapositivas de «Hacia el 2056».
 
@@ -27,17 +53,23 @@ Capturas de la aplicación del 30 de octubre de 2026. La [galería completa](doc
 | Crecimiento compuesto | Productividad |
 | ![Calculadora y explicación de la regla del 70](docs/assets/screenshots/08-regla-70.jpg) | ![Comparación de la productividad total de los factores](docs/assets/screenshots/10-productividad.jpg) |
 
-## Qué es
+<a id="que-es"></a>
+
+## [Qué es](#indice)
 
 Un proyecto de **ciencia de datos y visualización**: toma datos abiertos de organismos oficiales e internacionales, los baja con un pipeline reproducible (cada archivo con su hash, su fuente y su fecha), los valida y los muestra en gráficos interactivos y mapas, 2D y 3D. Cada gráfico tiene su tabla, y cada número de la presentación está en la página Data con su referencia.
 
-## Metodología y pipeline de datos
+<a id="metodologia-y-pipeline-de-datos"></a>
+
+## [Metodología y pipeline de datos](#indice)
 
 1. **Pipelines automatizados vía API:** Para las series macroeconómicas y sectoriales internacionales y nacionales (Banco Mundial, FMI, Secretaría de Energía y Secretaría de Agricultura), se implementaron scripts en Python que consultan sus APIs oficiales (REST, SDMX y CKAN). Estos scripts limpian, normalizan unidades (e.g. dólares reales constantes de 2015, barriles equivalentes, toneladas) y exportan los resultados a archivos JSON estructurados y versionados en el repositorio (`worldGdp.json`, `energyArgentina.json`, `agroArgentina.json`, `imfWeo.json`, entre otros).
 2. **Extracción y normalización de fuentes oficiales:** Para publicaciones e informes periódicos que no cuentan con APIs abiertas (como las cuentas nacionales, informes de complejos exportadores y reportes de productividad del INDEC, o los informes de inversión de la Secretaría de Minería y USGS), los datos se extrajeron directamente de los documentos, cuadros estadísticos y balances oficiales primarios. Su consistencia interna y sumas de componentes se validan mediante pruebas automáticas.
 3. **Arquitectura desacoplada y trazabilidad:** Los datos no están hardcodeados de manera estática ni aislada en la interfaz: el frontend consume exclusivamente estos datasets estructurados y versionados (JSON y módulos tipados con TypeScript). Cada registro cuenta con metadatos explícitos de trazabilidad: organismo emisor, enlace o identificador de publicación, fecha de captura, período relevado y unidad de medida.
 
-## Stack
+<a id="stack"></a>
+
+## [Stack](#indice)
 
 | Capa | Tecnología |
 |---|---|
@@ -47,7 +79,9 @@ Un proyecto de **ciencia de datos y visualización**: toma datos abiertos de org
 | Calidad | pytest, Vitest, Playwright con axe (accesibilidad), ESLint, Ruff, presupuestos de tamaño del bundle y de los datos |
 | Entrega | GitHub Actions (CI) y Vercel |
 
-## Las diapositivas de «Hacia el 2056»
+<a id="las-diapositivas-de-hacia-el-2056"></a>
+
+## [Las diapositivas de «Hacia el 2056»](#indice)
 
 La presentación abre en una diapositiva con el título y el índice (la 0), y tiene 6 más:
 
@@ -58,7 +92,9 @@ La presentación abre en una diapositiva con el título y el índice (la 0), y t
 5. Productividad
 6. Cuarta revolución industrial: el impacto de la IA en la economía (tres escenarios a 2056, PBI por habitante y población)
 
-## Cómo correrlo
+<a id="como-correrlo"></a>
+
+## [Cómo correrlo](#indice)
 
 ```bash
 cd web
@@ -69,7 +105,9 @@ npm run dev
 
 Sin `VITE_MAPTILER_KEY` la escena de los Andes muestra un aviso y un fondo liso. La clave queda en el bundle: restringila por origen en MapTiler. Antes de un push: `python scripts/precheck.py` (corre ruff, pytest, la validación de datos, el lint, el chequeo de tipos y los tests de la web). Los tests de la web: `cd web && npm test`; los de Python: `pytest`.
 
-## Estructura
+<a id="estructura"></a>
+
+## [Estructura](#indice)
 
 | Carpeta | Contenido |
 |---|---|
@@ -79,7 +117,9 @@ Sin `VITE_MAPTILER_KEY` la escena de los Andes muestra un aviso y un fondo liso.
 | `scripts/` | Pipeline de datos (`datapipe`), descargas de las fuentes, chequeos y `precheck.py` |
 | `docs/` | Decisiones, supuestos, diseño y fuentes |
 
-## Instituciones
+<a id="instituciones"></a>
+
+## [Instituciones](#indice)
 
 Enlaces institucionales que aparecen en el footer del sitio:
 
@@ -88,17 +128,23 @@ Enlaces institucionales que aparecen en el footer del sitio:
 - [Contar con Datos](https://www.udesa.edu.ar/contar-con-datos)
 - [Secretaría de Innovación, Ciencia y Tecnología](https://www.argentina.gob.ar/jefatura/innovacion-ciencia-y-tecnologia)
 
-## Autor
+<a id="autor"></a>
+
+## [Autor](#indice)
 
 **Agustin Diaz-Cano, MS Candidate, Information Systems Engineering (UTN)**
 
 [LinkedIn](https://www.linkedin.com/in/agustindiazcano) · [Portfolio](https://www.agustindiazcano.com/)
 
-## Referencias
+<a id="referencias"></a>
+
+## [Referencias](#indice)
 
 La lista completa, con qué dato sale de cada fuente, está en [`docs/references.md`](docs/references.md).
 
-### Cruce de los Andes (1817)
+<a id="cruce-de-los-andes-1817"></a>
+
+### [Cruce de los Andes (1817)](#indice)
 
 1. UNCuyo, *Historia virtual de Mendoza*, «El Cruce de los Andes». <http://historiavirtual.mza.uncu.edu.ar/mendoza-independiente/cruce.html>
 2. Los Andes (Mendoza), nota sobre el Cruce de los Andes, con las instrucciones de San Martín a Las Heras del 15-01-1817. <https://www.losandes.com.ar/el-historico-cruce-de-1817-por-juan-marcelo-calabria>
@@ -123,16 +169,22 @@ La lista completa, con qué dato sale de cada fuente, está en [`docs/references
 
 Las cifras de bajas de Chacabuco no coinciden entre las fuentes 5, 10, 17, 18, 19 y 20: la pantalla usa las del parte de San Martín y dice cuáles son las otras.
 
-### Mapa y terreno
+<a id="mapa-y-terreno"></a>
+
+### [Mapa y terreno](#indice)
 
 21. MapTiler: imágenes satelitales, modelo de elevación Terrain-RGB v2 y geocodificador. <https://www.maptiler.com>
 22. © OpenStreetMap contributors (nombres y posiciones de los lugares). <https://www.openstreetmap.org/copyright>
 
-### Marco conceptual
+<a id="marco-conceptual"></a>
+
+### [Marco conceptual](#indice)
 
 23. Schwab, K. (2016). *La Cuarta Revolución Industrial*. Foro Económico Mundial.
 
-### Productividad (diapositiva 5 de «Hacia el 2056», y el simulador)
+<a id="productividad-diapositiva-5-de-hacia-el-2056-y-el-simulador"></a>
+
+### [Productividad (diapositiva 5 de «Hacia el 2056», y el simulador)](#indice)
 
 24. INDEC, Documento de trabajo N.º 52, *Productividad y stock de capital* (PTF y productividad laboral 2016-2025). <https://www.indec.gob.ar/ftp/cuadros/economia/productividad_stock_capital_10_26.pdf>
 25. Baumann Fonay, I. (2026). «PTF y PIB potencial de Argentina, 1990-2025». <https://macroargentina.substack.com/p/ptf-y-pib-potencial-de-argentina>, y su serie en Alphacast <https://www.alphacast.io/datasets/potential-gross-domestic-product-output-gap-tfp-53419>
@@ -141,7 +193,9 @@ Las cifras de bajas de Chacabuco no coinciden entre las fuentes 5, 10, 17, 18, 1
 
 Las dos mediciones de la PTF de 2025 no coinciden (INDEC +2,8 %, Baumann +4,2 %); la PWT llega hasta 2023. Las demás fuentes de la sección 4.1 de [`docs/references.md`](docs/references.md) (literatura de IA, contexto, descartadas) y su estado están allí.
 
-### Economía, comercio, recursos y proyecciones (Recorrido «Hacia el 2056» y Data)
+<a id="economia-comercio-recursos-y-proyecciones-recorrido-hacia-el-2056-y-data"></a>
+
+### [Economía, comercio, recursos y proyecciones (Recorrido «Hacia el 2056» y Data)](#indice)
 
 Todos los enlaces de los datos que usa la aplicación. La misma lista se ve en la sección Data de la aplicación y, con el detalle de cada cifra, en [`docs/references.md`](docs/references.md).
 
@@ -190,7 +244,9 @@ Todos los enlaces de los datos que usa la aplicación. La misma lista se ve en l
 56. Infobae (2026-05-16), LLL Oil, YPF. <https://www.infobae.com/economia/2026/05/16/lll-oil-como-es-el-megaproyecto-de-ypf-en-vaca-muerta-que-busca-generar-mas-de-usd-100000-millones-en-exportaciones/>
 57. LM Neuquén, inversiones comprometidas en Vaca Muerta en 2026. <https://mase.lmneuquen.com/empresas/vaca-muerta-los-yacimientos-mayores-compromisos-inversiones-2026-n1242081>
 
-### Inteligencia artificial y el PBI (diapositiva 6 de «Hacia el 2056», y el simulador)
+<a id="inteligencia-artificial-y-el-pbi-diapositiva-6-de-hacia-el-2056-y-el-simulador"></a>
+
+### [Inteligencia artificial y el PBI (diapositiva 6 de «Hacia el 2056», y el simulador)](#indice)
 
 Escenarios de crecimiento de Argentina con IA y estimaciones de otros analistas.
 
@@ -205,7 +261,9 @@ Escenarios de crecimiento de Argentina con IA y estimaciones de otros analistas.
 66. Penn Wharton Budget Model, «How AI could lift productivity and GDP growth». <https://knowledge.wharton.upenn.edu/articles/how-ai-could-lift-productivity-and-gdp-growth/>
 67. Forecasting Research Institute, efectos económicos de la IA. <https://forecastingresearch.org/economic-effects-of-ai>
 
-### Desarrollo humano, educación, población y difusión tecnológica (diapositivas 7 y 8 de «Hacia el 2056»)
+<a id="desarrollo-humano-educacion-poblacion-y-difusion-tecnologica-diapositivas-7-y-8-de-hacia-el-2056"></a>
+
+### [Desarrollo humano, educación, población y difusión tecnológica (diapositivas 7 y 8 de «Hacia el 2056»)](#indice)
 
 68. PNUD (UNDP), Human Development Report: serie histórica del IDH de Argentina (1990-2023) y comparación LATAM. <https://hdr.undp.org/data-center/human-development-index>
 69. OCDE, Resultados PISA (2012, 2018, 2022): puntajes medios en lectura, matemática y ciencias para Argentina y la región. <https://www.oecd.org/pisa/>
@@ -214,7 +272,9 @@ Escenarios de crecimiento de Argentina con IA y estimaciones de otros analistas.
 72. INDEC, Origen provincial de las exportaciones (OPEX): informes técnicos anuales 2023 y 2024 por provincia y grandes rubros. <https://www.indec.gob.ar/indec/web/Nivel4-Tema-3-2-40>
 
 
-### Referencias complementarias de Data
+<a id="referencias-complementarias-de-data"></a>
+
+### [Referencias complementarias de Data](#indice)
 
 Enlaces adicionales del catálogo de la sección Data (`web/src/datasets/references.ts`). Se conservan sus identificadores y estados de verificación; su inclusión no implica una nueva verificación de las fuentes originales.
 
@@ -288,7 +348,9 @@ Enlaces adicionales del catálogo de la sección Data (`web/src/datasets/referen
 - **S5** (leída): Ministerio de Seguridad de la Nación, Sistema Nacional de Información Criminal (SNIC), Tasas de presuntos hechos delictuosos por provincia cada 100.000 habitantes. <https://www.argentina.gob.ar/seguridad/estadisticas-criminales>
 
 
-### IA: acceso, adopción, tokens e I+D (consulta 30-10-2026)
+<a id="ia-acceso-adopcion-tokens-e-id-consulta-30-10-2026"></a>
+
+### [IA: acceso, adopción, tokens e I+D (consulta 30-10-2026)](#indice)
 
 La diapositiva 9 incorpora mapa LATAM y precios por token. Al final se agregan adopción empresarial, consumo de tokens, pirámide de adopción e I+D. Definiciones y límites: [registro de evidencia](docs/ai-evidence-2026-10-30.md).
 
@@ -339,4 +401,5 @@ La diapositiva 9 incorpora mapa LATAM y precios por token. Al final se agregan a
 - **AI74** (leída): The Pragmatic Engineer (Gergely Orosz, 2026), The Pulse: Interesting AI Coding Stats: síntesis de telemetría de consumo de tokens y adopción en equipos de ingeniería. <https://newsletter.pragmaticengineer.com/p/the-pulse-interesting-ai-coding-stats>
 
 > Las posiciones de los lugares son aproximadas, las fechas intermedias entre las documentadas son estimaciones marcadas como tales, y las cifras de efectivos varían según la fuente. Todo está señalado en [`docs/references.md`](docs/references.md).
+
 
