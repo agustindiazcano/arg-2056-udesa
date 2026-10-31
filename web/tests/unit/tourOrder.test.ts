@@ -6,7 +6,7 @@ import { buildSlides } from '../../src/datasets/slides';
 // first slide is the index (id 20, the title "Argentina 2056" and the list of the others). The numbers are the position: 0, 1, 2...
 describe('the order and the numbers of the slides of Hacia el 2056', () => {
   it('opens with the index and shows Productividad right after the GDP slide', () => {
-    expect(TOUR_ORDER).toEqual([20, 0, 8, 5, 12, 14, 3, 16, 17, 21, 22, 23, 24, 27, 28, 26, 29]);
+    expect(TOUR_ORDER).toEqual([20, 0, 8, 5, 12, 14, 3, 21, 16, 22, 23, 24, 27, 28, 26, 29, 17]);
     expect(TOUR_ORDER[0]).toBe(INDEX_STEP);
   });
 
@@ -24,8 +24,9 @@ describe('the order and the numbers of the slides of Hacia el 2056', () => {
     expect(stepNumber(2)).toBe(-1); // Producción por provincia is a view of the Recursos slide
     expect(stepNumber(4)).toBe(-1); // Exportaciones is a view of the Composición slide
     expect(stepNumber(3)).toBe(6); // the existing AI slide stays before the new draft slides
-    expect(stepNumber(16)).toBe(7);
-    expect(stepNumber(17)).toBe(8);
+    expect(stepNumber(21)).toBe(7); // AI access goes right after slide 6 (id 3)
+    expect(stepNumber(16)).toBe(8);
+    expect(stepNumber(17)).toBe(16); // forecast uncertainty is the last slide
   });
 
   it('puts the slides of the Data page in the same order, labelled with the same numbers (the index has no data)', () => {
@@ -36,8 +37,8 @@ describe('the order and the numbers of the slides of Hacia el 2056', () => {
   });
 });
 
-describe('the slides after the 8th', () => {
-  it('keeps access at 9 and appends adoption, tokens, the pyramid and research at 14 to 17', () => {
-    expect([21, 22, 23, 24, 27, 28, 26, 29].map(stepNumber)).toEqual([9, 10, 11, 12, 13, 14, 15, 16]);
+describe('the slides after the 6th', () => {
+  it('places AI access at 7 right after the 4IR slide and puts forecast uncertainty at the end (16)', () => {
+    expect([21, 16, 22, 23, 24, 27, 28, 26, 29, 17].map(stepNumber)).toEqual([7, 8, 9, 10, 11, 12, 13, 14, 15, 16]);
   });
 });

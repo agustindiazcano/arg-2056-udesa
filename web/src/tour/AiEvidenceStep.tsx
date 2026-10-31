@@ -8,11 +8,9 @@ import {
   AI_EVIDENCE_SLIDES,
   ENTERPRISE,
   PAID_LLM_WORLD_ESTIMATE,
-  PERSONAL_USAGE,
   PYRAMID_LEVELS,
   RESEARCH_PLATFORMS,
   TOKEN_LOG_BENCHMARKS,
-  TOKEN_PROVIDERS,
   TOKEN_PYRAMID_TIERS,
   paidPopulationShare
 } from './aiEvidence.js';
@@ -42,105 +40,97 @@ function AdoptionContent() {
 }
 
 function TokensContent() {
-  const [provider, setProvider] = useState('Claude');
   const [tierId, setTierId] = useState('author');
-  const record = TOKEN_PROVIDERS.find((p) => p.name === provider) ?? TOKEN_PROVIDERS[0];
   const activeTier = TOKEN_PYRAMID_TIERS.find((t) => t.id === tierId) ?? TOKEN_PYRAMID_TIERS[1]!;
-  return <div className="ai-evidence-grid">
-    <article className="ai-evidence-card">
-      <h3>Pirámide de consumo de tokens (7 niveles + caso real en Claude Code)</h3>
-      <p>De usuarios de chat a agentes autónomos · seleccioná un escalón para ver su escala</p>
-      <div className="ai-token-tier-list" role="group" aria-label="Pirámide de consumo mensual de tokens">
-        {TOKEN_PYRAMID_TIERS.map((t) => (
-          <button
-            type="button"
-            key={t.id}
-            className={`ai-token-tier-btn ${t.id === 'author' ? 'ai-token-tier-btn--author' : ''}`}
-            aria-pressed={tierId === t.id}
-            onClick={() => setTierId(t.id)}
-          >
-            <span className="ai-token-tier-tag">{t.tier}</span>
-            <strong>{t.monthlyTokens}</strong>
-          </button>
-        ))}
-      </div>
-      <div className="ai-personal">
-        <strong>{count(PERSONAL_USAGE.tokens)} tokens · últimos {PERSONAL_USAGE.days} días (Claude Code)</strong>
-        <span>{activeTier.title} · {activeTier.actors}</span>
-        <p>{activeTier.detail} <RefList ids={[activeTier.ref, 'AI55', 'AI56']} /></p>
-      </div>
-      <div className="ai-log-scale" aria-label="Comparador en escala logarítmica de tokens mensuales">
-        <strong className="ai-log-title">Escala logarítmica (10⁶ a 10¹¹ tokens/mes): 8.000 M = 156,8× la mediana de ingeniería (51 M)</strong>
-        {TOKEN_LOG_BENCHMARKS.map((b) => {
-          const widthPct = Math.max(8, Math.min(100, ((b.exp - 5.8) / (11.2 - 5.8)) * 100));
-          return (
-            <div key={b.label} className={`ai-log-row ${b.tone === 'author' ? 'ai-log-row--author' : ''}`}>
-              <span>{b.label}</span>
-              <div className="ai-log-bar-track">
-                <div className={`ai-log-bar-fill ai-log-bar-fill--${b.tone}`} style={{ width: `${widthPct}%` }} />
-              </div>
+  return (
+    <div className="ai-evidence-single">
+      <article className="ai-evidence-card ai-token-pyramid-card">
+        <div className="ai-tri-layout">
+          <div className="ai-tri-col">
+            <h3>Pirámide de consumo mensual de tokens (7 niveles)</h3>
+            <p>Seleccioná cualquier sección del triángulo para inspeccionar su escala</p>
+            <div className="ai-triangle-7" role="group" aria-label="Pirámide triangular de consumo mensual de tokens">
+              {TOKEN_PYRAMID_TIERS.map((t, idx) => (
+                <button
+                  type="button"
+                  key={t.id}
+                  className={`ai-tri-slice ai-tri-slice--${idx} ${t.id === 'author' ? 'ai-tri-slice--author' : ''}`}
+                  aria-pressed={tierId === t.id}
+                  onClick={() => setTierId(t.id)}
+                >
+                  <span className="ai-tri-slice-content">
+                    <span className="ai-tri-slice-tier">{t.tier}</span>
+                    <strong>{t.monthlyTokens}</strong>
+                  </span>
+                </button>
+              ))}
             </div>
-          );
-        })}
-      </div>
-    </article>
-    <article className="ai-evidence-card">
-      <h3>Qué publica cada proveedor y telemetría interna</h3>
-      <Segmented label="Proveedor" options={TOKEN_PROVIDERS.map((p) => ({ value: p.name, label: p.name }))} value={provider} onChange={setProvider} />
-      <strong className="ai-provider-figure">{record.figure}</strong>
-      <p>{record.scope}</p>
-      <RefList ids={[record.ref]} />
-      <div className="ai-percentile-pyramid" role="img" aria-label="Investigadores de OpenAI: percentil 90, más de 7.000 USD por día; mediana, más de 600 USD por día. Consumo valuado a precios de API, no cantidad de tokens ni facturación real.">
-        <div className="ai-pyramid-band ai-pyramid-band--top"><strong>OpenAI P90 · &gt;7.000 USD/día</strong><span>consumo equivalente API en investigación</span></div>
-        <div className="ai-pyramid-band ai-pyramid-band--base"><strong>OpenAI P50 · &gt;600 USD/día · Jellyfish P50 · 51 M tokens/mes</strong><span>mediana de investigadores internos vs. mediana de ingenieros corporativos</span></div>
-      </div>
-      <div className="ai-evidence-callout">
-        <strong>Por qué 8.000 M de tokens en 30 días es posible en programación agéntica</strong>
-        <p>En agentes de consola como Claude Code, cada iteración re-lee el contexto del repositorio: cerca del 99,5 % del volumen son tokens de entrada y lectura de caché (0,30 USD/M), y menos del 0,5 % es generación nueva (15 USD/M). Los percentiles mensuales de usuarios generales no se publican de forma uniforme entre plataformas. <RefList ids={['AI55', 'AI56', 'AI57', 'AI58']} /></p>
-      </div>
-    </article>
-  </div>;
+            <p className="ai-author-mini">★ &quot;Autor - últimos 30 días (8.000 M solo en claude code)&quot;</p>
+          </div>
+          <div className="ai-tri-side">
+            <div className="ai-personal">
+              <strong>{activeTier.tier} · {activeTier.monthlyTokens}</strong>
+              <span>{activeTier.title} — {activeTier.actors}</span>
+              <p>{activeTier.detail} <RefList ids={[activeTier.ref, 'AI55', 'AI56']} /></p>
+            </div>
+            <div className="ai-log-scale" aria-label="Comparador en escala logarítmica de tokens mensuales">
+              <strong className="ai-log-title">Escala logarítmica (10⁶ a 10¹¹ tokens/mes): 8.000 M = 156,8× la mediana de ingeniería (51 M)</strong>
+              {TOKEN_LOG_BENCHMARKS.map((b) => {
+                const widthPct = Math.max(8, Math.min(100, ((b.exp - 5.8) / (11.2 - 5.8)) * 100));
+                return (
+                  <div key={b.label} className={`ai-log-row ${b.tone === 'author' ? 'ai-log-row--author' : ''}`}>
+                    <span>{b.label}</span>
+                    <div className="ai-log-bar-track">
+                      <div className={`ai-log-bar-fill ai-log-bar-fill--${b.tone}`} style={{ width: `${widthPct}%` }} />
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      </article>
+    </div>
+  );
 }
 
 function PyramidContent() {
-  const [mode, setMode] = useState<'paid' | '0' | '1' | '2'>('paid');
-  const selectedIndex = mode === 'paid' ? 0 : Number(mode);
+  const [mode, setMode] = useState<'paid' | '0' | '1' | '2' | '3'>('paid');
+  const selectedIndex = mode === 'paid' ? 1 : Number(mode);
   const level = PYRAMID_LEVELS[selectedIndex]!;
-  const ratio = paidPopulationShare(PYRAMID_LEVELS[0].count, PYRAMID_LEVELS[2].count);
-  const weeklyRatio = paidPopulationShare(PYRAMID_LEVELS[1].count, PYRAMID_LEVELS[2].count);
+  const ratio = paidPopulationShare(PYRAMID_LEVELS[0].count, PYRAMID_LEVELS[3].count);
   return <div className="ai-evidence-grid">
     <article className="ai-evidence-card">
-      <h3>Del alcance global al acceso a modelos verdaderamente inteligentes</h3>
+      <h3>Pirámide global de los modelos de lenguaje (ChatGPT, Claude, Gemini, Copilot, Meta AI, DeepSeek)</h3>
       <Segmented
         label="Foco"
         options={[
           { value: 'paid', label: 'Población mundial que paga LLMs (por defecto)' },
-          { value: '0', label: '>50 M pagos (0,61 %)' },
-          { value: '1', label: '>900 M semanales (11 %)' },
-          { value: '2', label: '8.200 M mundo (100 %)' }
+          { value: '0', label: 'Cúspide agéntica / API' },
+          { value: '1', label: 'Pagos (~75–100 M)' },
+          { value: '2', label: 'Gratuitos (~1.300 M)' },
+          { value: '3', label: 'Mundo (8.200 M)' }
         ]}
         value={mode}
         onChange={setMode}
       />
-      <div className="ai-adoption-pyramid" role="group" aria-label="Pirámide conceptual de alcance y suscripción">
+      <div className="ai-triangle-4" role="group" aria-label="Pirámide triangular de adopción global de modelos de lenguaje">
         {PYRAMID_LEVELS.map((r, i) => (
           <button
             type="button"
             key={r.label}
-            className={`ai-pyramid-band ai-pyramid-level-${i}`}
+            className={`ai-tri4-slice ai-tri4-slice--${i}`}
             aria-pressed={selectedIndex === i}
-            onClick={() => setMode(i === 0 ? 'paid' : (String(i) as '1' | '2'))}
+            onClick={() => setMode(i === 1 ? 'paid' : (String(i) as '0' | '2' | '3'))}
           >
-            <strong>
-              {r.qualifier === 'Más de' ? '>' : '≈'}
-              {i === 2 ? '8.200' : i === 1 ? '900' : '50'} millones ({i === 0 ? '0,61 % del mundo' : i === 1 ? '≈11 % del mundo' : '100 % población mundial'})
-            </strong>
-            <span>{r.label}</span>
-            <small>{r.period}</small>
+            <span className="ai-tri-slice-content">
+              <strong>{r.shareBadge}</strong>
+              <span>{r.shortTitle}</span>
+            </span>
           </button>
         ))}
       </div>
-      <p className="ai-evidence-caption">Diagrama conceptual: áreas y anchos no proporcionales. Usuarios semanales y suscriptores son métricas distintas. La base es la población mundial de 2024 (8.200 millones). <RefList ids={['AI38', 'AI39']} /></p>
+      <p className="ai-evidence-caption">Pirámide multi-modelo: combina suscriptores pagos (&gt;50 M en ChatGPT + Claude, Gemini, Copilot y Cursor), difusión global del 18,8 % en edad activa (Microsoft AI Economy Institute), cuota empresarial (Menlo Ventures: Claude 40 %, OpenAI 27 %, Gemini 21 %) y población mundial ONU (8.200 M). <RefList ids={['AI38', 'AI39', 'AI66', 'AI67']} /></p>
     </article>
     <article className="ai-evidence-card">
       <h3>{mode === 'paid' ? '¿Cuántas personas del mundo pagan LLMs y por qué multiplican la productividad?' : level.label}</h3>
@@ -150,18 +140,18 @@ function PyramidContent() {
           <span>piso documentado (&gt;50 M en ChatGPT / 8.200 M)</span>
         </div>
         <div>
-          <strong>~0,7 a 1,0 %</strong>
-          <span>estimado global (~60–80 M sumando todos los LLMs pagos)</span>
+          <strong>~0,9 a 1,2 %</strong>
+          <span>estimado global (~75–100 M sumando Claude, Gemini, Copilot y Cursor)</span>
         </div>
       </div>
-      <strong className="ai-provider-figure">{level.qualifier} {count(level.count)} personas ({selectedIndex === 0 ? `${ratio.toLocaleString('es-AR', { maximumFractionDigits: 2 })} % del mundo` : selectedIndex === 1 ? `${weeklyRatio.toLocaleString('es-AR', { maximumFractionDigits: 1 })} % del mundo` : 'total mundial'})</strong>
+      <strong className="ai-provider-figure">{level.qualifier} {count(level.count)} personas ({level.shareBadge})</strong>
       <p>{level.note}</p>
-      <RefList ids={[level.ref]} />
+      <RefList ids={[level.ref, 'AI66', 'AI67']} />
       <div className="ai-evidence-callout">
-        <strong>Los modelos verdaderamente inteligentes están en el &lt;1 % pago</strong>
+        <strong>Los modelos verdaderamente inteligentes están en el ~1 % pago (Claude, GPT, Gemini, Copilot)</strong>
         <p>{PAID_LLM_WORLD_ESTIMATE.whyItMatters}</p>
       </div>
-      <p className="ai-evidence-caption">50 millones divididos por 8.200 millones = {ratio.toLocaleString('es-AR', { maximumFractionDigits: 2 })} % como comparación de escala. El plan de 20 USD es la puerta de entrada a modelos de razonamiento, mientras que los planes de 100 y 200 USD habilitan uso intensivo de agentes como Claude Code. Redibujo propio con datos de OpenAI y ONU. <RefList ids={['AI38', 'AI39', 'AI54']} /></p>
+      <p className="ai-evidence-caption">50 millones divididos por 8.200 millones = {ratio.toLocaleString('es-AR', { maximumFractionDigits: 2 })} % como piso documentado; sumando Claude Pro/Max, Gemini Advanced y Copilot Pro se ubica en ~0,9–1,2 % mundial. <RefList ids={['AI30', 'AI32', 'AI38', 'AI39', 'AI54', 'AI66', 'AI67']} /></p>
     </article>
   </div>;
 }

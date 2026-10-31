@@ -291,6 +291,7 @@ Order: C8, C7, C2, C3, C4, C5, C1, C6.
 - [ ] LATAM IVA digital y recargos en tarjeta (AI63–AI65): verificar alícuotas vigentes en cada jurisdicción (Uruguay 22 %, Chile 19 %, Colombia 19 %, Perú 18 % D.L. 1623, Rep. Dominicana 18 %, México 16 %, Venezuela 16 %, Ecuador 15 %, Honduras 15 %, Nicaragua 15 %, Costa Rica 13 %, El Salvador 13 %, Bolivia 13 %, Guatemala 12 %, Paraguay 10 %, Panamá 7 %, Brasil 3,5 % IOF Decreto 12.499/2025) y retención B2B en Argentina (+48,5 % grossing-up RG AFIP 739/99 + IVA).
 - [ ] Jellyfish 2026 Software Engineering Metrics Report (AI56): mediana 51 M, P90 380 M y P99 1.350 M tokens/mes por ingeniero de software; contrastar con telemetría de Claude Code y prompt caching (AI57, AI58).
 - [ ] Contraste macroeconómico 4IR (AI59–AI62): Goldman Sachs (+7 % PBI global / +1,5 pp anuales en desarrollados, AI59), FMI WP/25/76 (+0,8 a +1,3 % PTF acumulada en avanzadas vs. +0,1 a +0,4 % en emergentes, AI60), FMI AIPI (0,68 avanzadas vs. 0,46–0,48 Argentina/LATAM, AI61) y Anthropic Economic Index arXiv:2511.15080 (elasticidad ingreso-uso ~0,7 %, AI62).
+- [ ] Pirámide multi-modelo de adopción global de LLMs (AI66, AI67): Microsoft AI Economy Institute 2026 (~18,8 % de difusión global en edad activa; 28,8 % Norte Global vs. 16,2 % Sur Global, AI66) y Menlo Ventures 2025 (participación empresarial en LLMs: Anthropic Claude ~40 %, OpenAI ~27 %, Google Gemini ~21 %, AI67).
 
 ### Model assumptions
 - [ ] Ratificar bandas visuales del semáforo (<20 verde, 20–25 ámbar, >25 rojo). No afectan escenarios.

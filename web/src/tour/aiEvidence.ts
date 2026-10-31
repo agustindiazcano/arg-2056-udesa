@@ -58,7 +58,7 @@ export const PERSONAL_USAGE = {
   ratioVsEngineerMedian: 156.8,
   source: { name: 'Consumo personal declarado por el autor en Claude Code, últimos 30 días; conversación del 30-10-2026', url: null },
   retrieved_at: EVIDENCE_DATE,
-  note: '8.000 millones de tokens en los últimos 30 días (≈266,7 M/día; 156,8× la mediana de ingeniería P50 = 51 M de Jellyfish). En agentes de consola como Claude Code, ~99,5 % corresponde a lectura de caché e input continuo del código.'
+  note: '8.000 millones de tokens en los últimos 30 días en Claude Code (≈266,7 M/día; 156,8× la mediana de ingeniería P50 = 51 M de Jellyfish).'
 } as const;
 
 export interface TokenPyramidTier {
@@ -76,26 +76,26 @@ export const TOKEN_PYRAMID_TIERS: readonly TokenPyramidTier[] = [
     id: 't1',
     tier: 'Nivel 1 · Cúspide 24/7',
     title: 'Enjambres autónomos y loops continuos',
-    monthlyTokens: '25.000 M – 100.000 M+ tokens/mes',
-    actors: 'Clusters agénticos 24/7 y refactorización masiva sin supervisión humana',
+    monthlyTokens: '25.000 M – 100.000 M+ / mes',
+    actors: 'Clusters agénticos 24/7 y refactorización continua',
     detail: 'Casos extremos documentados de hasta 99.500 M tokens/mes en ejecución continua multi-agente con ~99,5 % de lectura de caché.',
     ref: 'AI57'
   },
   {
     id: 'author',
-    tier: '★ Punto Autor · Últimos 30 días',
-    title: '8.000 millones de tokens en 30 días (Claude Code)',
-    monthlyTokens: '8.000 M tokens / 30 días (≈266,7 M/día)',
-    actors: 'Consumo personal declarado por el autor (30-10-2026)',
-    detail: 'Equivale a 156,8 veces la mediana mensual de un ingeniero de software (P50 = 51 M, Jellyfish) y ~5,9 veces el umbral P99 corporativo (1.350 M).',
+    tier: '★ Autor · 30 días',
+    title: '★ "Autor - últimos 30 días (8.000 M solo en claude code)"',
+    monthlyTokens: '8.000 M tokens / 30 días',
+    actors: 'Claude Code (≈266,7 M/día · 156,8× P50 ingeniería)',
+    detail: '156,8 veces la mediana mensual de un ingeniero de software (P50 = 51 M, Jellyfish) y ~5,9 veces el umbral P99 corporativo (1.350 M).',
     ref: 'AI57'
   },
   {
     id: 't2',
     tier: 'Nivel 2 · Frontera / P99',
     title: 'Investigadores de OpenAI e ingenieros P99',
-    monthlyTokens: '1.350 M – 5.000 M tokens/mes',
-    actors: 'Investigadores internos de OpenAI (P50 >600 USD/día; P90 >7.000 USD/día API) y top 1 % de ingeniería (P99 = 1.350 M)',
+    monthlyTokens: '1.350 M – 5.000 M / mes',
+    actors: 'Investigadores de OpenAI (P50 >600 USD/día; P90 >7.000 USD/día API) y top 1 % de ingeniería (P99 = 1.350 M)',
     detail: 'Uso de múltiples agentes en paralelo para investigación, pruebas y generación de código.',
     ref: 'AI55'
   },
@@ -103,8 +103,8 @@ export const TOKEN_PYRAMID_TIERS: readonly TokenPyramidTier[] = [
     id: 't3',
     tier: 'Nivel 3 · P90 Ingeniería',
     title: 'Power users agénticos (planes Max / Ultra)',
-    monthlyTokens: '250 M – 1.000 M tokens/mes (P90 = 380 M)',
-    actors: 'Top 10 % de desarrolladores profesionales con agentes integrados en consola e IDE',
+    monthlyTokens: '250 M – 1.000 M / mes (P90 = 380 M)',
+    actors: 'Top 10 % de desarrolladores profesionales con agentes en consola e IDE',
     detail: 'Telemetría empresarial de Jellyfish ubica el percentil 90 de ingenieros activos en 380 millones de tokens mensuales.',
     ref: 'AI56'
   },
@@ -112,28 +112,28 @@ export const TOKEN_PYRAMID_TIERS: readonly TokenPyramidTier[] = [
     id: 't4',
     tier: 'Nivel 4 · P50 Ingeniería',
     title: 'Desarrollador profesional activo (mediana)',
-    monthlyTokens: '40 M – 150 M tokens/mes (P50 = 51 M)',
-    actors: 'Mediana de ingenieros de software en empresas con adopción de herramientas de IA',
+    monthlyTokens: '40 M – 150 M / mes (P50 = 51 M)',
+    actors: 'Mediana de ingenieros de software en empresas con herramientas de IA',
     detail: 'Pasó de ~12 M tokens/mes a inicios de 2025 a 51 M tokens/mes en diciembre de 2025 (+4,2× en un año).',
     ref: 'AI56'
   },
   {
     id: 't5',
-    tier: 'Nivel 5 · Suscriptor Pro (20 USD)',
-    title: 'Profesional con suscripción paga estándar',
-    monthlyTokens: '5 M – 30 M tokens/mes',
-    actors: '>50 M suscriptores pagos de ChatGPT y planes individuales de 20 USD/mes',
+    tier: 'Nivel 5 · Suscriptor Pro',
+    title: 'Profesional con suscripción paga estándar (20 USD)',
+    monthlyTokens: '5 M – 30 M / mes',
+    actors: 'Suscriptores pagos de ChatGPT, Claude Pro, Gemini Advanced y Copilot',
     detail: 'Uso diario de modelos de razonamiento, síntesis documental y asistencia profesional.',
     ref: 'AI38'
   },
   {
     id: 't6',
-    tier: 'Nivel 6 · Usuario gratuito / Base',
-    title: 'Chat web gratuito (~900 M semanales) y resto del mundo',
-    monthlyTokens: '0 a 3 M tokens/mes',
-    actors: '>900 M usuarios semanales (mayoría en nivel gratuito) y ~7.200 M de personas sin uso directo de LLMs',
+    tier: 'Nivel 6 · Base gratuita',
+    title: 'Chat web gratuito y resto del mundo',
+    monthlyTokens: '0 a 3 M / mes',
+    actors: '>1.200 M usuarios gratuitos de LLMs y población sin uso directo',
     detail: 'Consultas puntuales en modelos rápidos con límites de contexto y sin ejecución agéntica.',
-    ref: 'AI38'
+    ref: 'AI66'
   }
 ];
 
@@ -143,7 +143,7 @@ export const TOKEN_LOG_BENCHMARKS = [
   { label: 'Ingeniero mediana P50 (51 M)', tokensMillions: 51, exp: 7.71, tone: 'blue' },
   { label: 'Ingeniero P90 (380 M)', tokensMillions: 380, exp: 8.58, tone: 'blue' },
   { label: 'Ingeniero P99 (1.350 M)', tokensMillions: 1350, exp: 9.13, tone: 'warning' },
-  { label: '★ Autor últimos 30 días (8.000 M)', tokensMillions: 8000, exp: 9.9, tone: 'author' },
+  { label: '★ Autor 30 días (8.000 M)', tokensMillions: 8000, exp: 9.9, tone: 'author' },
   { label: 'Loop autónomo 24/7 (99.500 M)', tokensMillions: 99500, exp: 11.0, tone: 'optimistic' }
 ] as const;
 
@@ -157,18 +157,63 @@ export const TOKEN_PROVIDERS = [
 
 export const PAID_LLM_WORLD_ESTIMATE = {
   documentedChatGptPaid: 50_000_000,
-  estimatedAllLlmPaidRange: [60_000_000, 80_000_000] as const,
+  estimatedAllLlmPaidRange: [75_000_000, 100_000_000] as const,
   worldPopulation: 8_200_000_000,
   documentedSharePct: 0.61,
-  estimatedAllLlmSharePctRange: [0.73, 0.98] as const,
-  headline: '0,61 % a ~1 % de la población mundial (50 M a ~80 M de 8.200 M de personas)',
-  whyItMatters: 'Quienes pagan una suscripción (~0,61 % documentado en ChatGPT; ~0,7 % a 1 % sumando todos los proveedores) acceden a los modelos verdaderamente inteligentes —razonamiento extendido, ventana de contexto profunda y agentes de código y trabajo autónomo— que incrementan la productividad de forma alta. El ~11 % que usa versiones gratuitas interactúa con modelos acotados de consulta rápida.'
+  estimatedAllLlmSharePctRange: [0.91, 1.22] as const,
+  headline: '0,61 % piso documentado (>50 M en ChatGPT) a ~0,9–1,2 % estimado global (~75–100 M sumando Claude, Gemini, Copilot y Cursor sobre 8.200 M)',
+  whyItMatters: 'Quienes pagan una suscripción (~0,61 % documentado en ChatGPT; ~0,9 % a 1,2 % o ~75–100 M sumando Claude Pro/Max, Gemini Advanced, Microsoft Copilot, Cursor y Perplexity) acceden a los modelos verdaderamente inteligentes —razonamiento extendido, contexto profundo y agentes de código— que incrementan la productividad de forma alta. En el mercado empresarial de LLMs, Anthropic Claude lidera con ~40 %, seguido por OpenAI (~27 %) y Google Gemini (~21 %) según Menlo Ventures.'
 } as const;
 
 export const PYRAMID_LEVELS = [
-  { label: 'Suscriptores de consumo de ChatGPT (modelos inteligentes pagos)', count: 50_000_000, qualifier: 'Más de', period: '27-02-2026', ref: 'AI38', note: '0,61 % de la población mundial (>50 M sobre 8.200 M; ~60–80 M o ~0,7–1 % sumando todos los LLMs pagos). Acceden a los modelos de razonamiento profundo y agentes que incrementan de forma alta la productividad.', source: source('AI38'), retrieved_at: EVIDENCE_DATE },
-  { label: 'Usuarios semanales de ChatGPT (acceso mayormente gratuito)', count: 900_000_000, qualifier: 'Más de', period: '27-02-2026', ref: 'AI38', note: '≈11 % de la población mundial (>900 M sobre 8.200 M). Incluye usuarios gratuitos y pagos; el uso gratuito tiene límites estrictos de razonamiento y contexto.', source: source('AI38'), retrieved_at: EVIDENCE_DATE },
-  { label: 'Población mundial de referencia', count: 8_200_000_000, qualifier: 'Aproximadamente', period: '2024', ref: 'AI39', note: 'Referencia demográfica de la ONU (8.200 millones de personas): cerca del 89 % del mundo aún no usa LLMs de forma semanal y más del 99 % no paga por modelos de frontera.', source: source('AI39'), retrieved_at: EVIDENCE_DATE }
+  {
+    label: 'Cúspide agéntica y planes Pro / Max / API (Claude Code, Cursor, ChatGPT Pro, Gemini, Copilot)',
+    shortTitle: 'Cúspide agéntica y empresarial (Claude ~40 %, OpenAI ~27 %, Gemini ~21 %)',
+    shareBadge: '~0,1–0,2 % del mundo (~8–16 M) · Piso pago >50 M (0,61 %)',
+    count: 50_000_000,
+    qualifier: 'Más de',
+    period: '2025–2026',
+    ref: 'AI67',
+    note: 'En adopción empresarial y programación agéntica, Anthropic Claude lidera con ~40 % de cuota, seguido por OpenAI (~27 %) y Google Gemini (~21 %) según Menlo Ventures (2025). Incluye planes Max/Pro de 100–200 USD, Cursor y uso intensivo de API.',
+    source: source('AI67'),
+    retrieved_at: EVIDENCE_DATE
+  },
+  {
+    label: 'Suscriptores pagos de modelos de lenguaje (ChatGPT Plus, Claude Pro, Gemini Advanced, Copilot Pro)',
+    shortTitle: 'Suscriptores pagos de LLMs (~75–100 M globales; >50 M en ChatGPT)',
+    shareBadge: '0,61 % piso a ~0,9–1,2 % del mundo (~75–100 M)',
+    count: 85_000_000,
+    qualifier: 'Alrededor de',
+    period: '2026',
+    ref: 'AI38',
+    note: '0,61 % de la población mundial documentado solo en ChatGPT (>50 M sobre 8.200 M) y ~0,9–1,2 % (~75–100 M) sumando Claude Pro/Team, Google One AI Premium (Gemini), Microsoft 365 Copilot y Perplexity. Acceden a los modelos verdaderamente inteligentes que incrementan la productividad de forma alta.',
+    source: source('AI38'),
+    retrieved_at: EVIDENCE_DATE
+  },
+  {
+    label: 'Usuarios gratuitos de modelos de lenguaje (ChatGPT, Gemini, Meta AI, Copilot, Claude, DeepSeek)',
+    shortTitle: 'Usuarios gratuitos de LLMs (ChatGPT, Gemini, Meta AI, Copilot, DeepSeek)',
+    shareBadge: '~15 %–18 % del mundo (~1.200–1.500 M personas)',
+    count: 1_300_000_000,
+    qualifier: 'Alrededor de',
+    period: '2026',
+    ref: 'AI66',
+    note: 'El Microsoft AI Economy Institute (2026) estima que el 18,8 % de la población mundial en edad activa utiliza IA generativa (~1.200–1.500 M de personas entre ChatGPT >900 M semanales, Gemini, Meta AI, Copilot, Claude y DeepSeek), con brecha entre Norte Global (28,8 %) y Sur Global (16,2 %).',
+    source: source('AI66'),
+    retrieved_at: EVIDENCE_DATE
+  },
+  {
+    label: 'Población mundial fuera de los LLM (sobre 8.200 M de habitantes)',
+    shortTitle: 'Población mundial sin uso de LLMs (~6.700–7.000 M de 8.200 M)',
+    shareBadge: '~82 %–85 % sin uso directo (base 8.200 M ONU)',
+    count: 8_200_000_000,
+    qualifier: 'Aproximadamente',
+    period: '2024',
+    ref: 'AI39',
+    note: 'Referencia demográfica de la ONU (8.200 millones de habitantes): entre 82 % y 85 % de la población mundial aún no utiliza modelos de lenguaje y cerca del 99 % no accede a modelos pagos de frontera.',
+    source: source('AI39'),
+    retrieved_at: EVIDENCE_DATE
+  }
 ] as const;
 
 export const RESEARCH_PLATFORMS = [
@@ -178,7 +223,7 @@ export const RESEARCH_PLATFORMS = [
 
 export const AI_EVIDENCE_SLIDES = [
   { id: 27, title: 'Adopción de IA: de probar a transformar', lead: 'Incluso en IT y en grandes empresas, usar IA no equivale a integrarla en el trabajo', refs: ['AI35', 'AI36', 'AI37'] },
-  { id: 28, title: 'Tokens: quién consume y cuánto', lead: 'De la consulta ocasional al flujo agéntico de 8.000 millones de tokens en 30 días', refs: ['AI40', 'AI41', 'AI42', 'AI43', 'AI34', 'AI55', 'AI56', 'AI57', 'AI58'] },
-  { id: 26, title: 'La pirámide de adopción de los LLM', lead: 'Menos del 1 % del mundo paga por los modelos verdaderamente inteligentes que multiplican la productividad', refs: ['AI38', 'AI39', 'AI54'] },
+  { id: 28, title: 'Tokens: quién consume y cuánto', lead: 'Pirámide triangular de consumo mensual de tokens: de la consulta gratuita a los agentes 24/7', refs: ['AI40', 'AI41', 'AI42', 'AI43', 'AI34', 'AI55', 'AI56', 'AI57', 'AI58', 'AI66'] },
+  { id: 26, title: 'La pirámide de adopción de los LLM', lead: 'ChatGPT, Claude, Gemini, Copilot, Meta AI y DeepSeek: menos del 1,2 % del mundo paga por los modelos que multiplican la productividad', refs: ['AI38', 'AI39', 'AI66', 'AI67', 'AI30', 'AI32', 'AI54'] },
   { id: 29, title: 'IA e I+D: más publicaciones, ciclos más cortos', lead: 'La producción de preprints crece; el volumen por sí solo no mide calidad ni causalidad', refs: ['AI44', 'AI45', 'AI46', 'AI47', 'AI55'] }
 ] as const;

@@ -13,33 +13,35 @@ import { TOUR_ORDER } from '../../src/tour/chartSteps.js';
 afterEach(cleanup);
 
 describe('sourced AI slides', () => {
-  it.each(AI_EVIDENCE_SLIDES)('registers $title at the end with downloadable, sourced data', (def) => {
+  it.each(AI_EVIDENCE_SLIDES)('registers $title with downloadable, sourced data', (def) => {
     render(<AiEvidenceStep step={def.id} />);
     expect(screen.getByRole('heading', { level: 2, name: def.title })).toBeDefined();
-    expect(TOUR_ORDER.slice(-4)).toContain(def.id);
+    expect(TOUR_ORDER.slice(-5)).toContain(def.id);
     for (const id of def.refs) expect(REFERENCES.some((r) => r.id === id)).toBe(true);
     for (const table of aiEvidenceTables(def.id)) {
       expect(withMeta(table).retrievedAt).toBe('2026-10-30');
       for (const row of table.rows) expect(row).toHaveLength(table.columns.length);
     }
   });
-  it('lets readers inspect each token provider and the 7-tier token pyramid with the 30-day author point', () => {
+  it('shows the colorful triangular 7-tier token pyramid and compact white author line without the provider telemetry card', () => {
     render(<AiEvidenceStep step={28} />);
-    expect(screen.getByText(/8\.000\.000\.000 tokens · últimos 30 días/)).toBeDefined();
+    expect(screen.queryByText('Qué publica cada proveedor y telemetría interna')).toBeNull();
+    expect(screen.getByText('★ "Autor - últimos 30 días (8.000 M solo en claude code)"')).toBeDefined();
     expect(screen.getByText(/156,8× la mediana de ingeniería/)).toBeDefined();
-    fireEvent.click(screen.getByRole('button', { name: 'Gemini' }));
-    expect(screen.getByText('>3,2 × 10¹⁵ tokens/mes')).toBeDefined();
-    expect(screen.getByText(/no solamente la app Gemini/)).toBeDefined();
-    fireEvent.click(screen.getByRole('button', { name: 'ChatGPT' }));
-    expect(screen.getByText(/no tráfico exclusivo de ChatGPT/)).toBeDefined();
+    const tierBtn = screen.getByRole('button', { name: /Nivel 1 · Cúspide 24\/7/ });
+    fireEvent.click(tierBtn);
+    expect(tierBtn.getAttribute('aria-pressed')).toBe('true');
+    expect(screen.getByText(/Enjambres autónomos y loops continuos/)).toBeDefined();
   });
-  it('shows by default the world population share that pays for LLMs and why those frontier models drive high productivity', () => {
+  it('shows by default the world population share that pays for LLMs across major language models in a colorful triangular pyramid', () => {
     render(<AiEvidenceStep step={26} />);
     const defaultBtn = screen.getByRole('button', { name: /Población mundial que paga LLMs/ });
     expect(defaultBtn.getAttribute('aria-pressed')).toBe('true');
     expect(screen.getAllByText(/0,61 %/).length).toBeGreaterThan(0);
     expect(screen.getAllByText(/modelos verdaderamente inteligentes/).length).toBeGreaterThan(0);
     expect(screen.getAllByText(/incrementan la productividad de forma alta/).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/Claude/).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/Gemini/).length).toBeGreaterThan(0);
   });
   it('shows a keyboard-operable LATAM map including Chile and Peru and separates API from subscriptions', () => {
     render(<AiAccessStep />);
