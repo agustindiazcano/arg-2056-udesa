@@ -326,7 +326,7 @@ export function buildSlides(): SlideData[] {
   });
   const sim = simulate(DEFAULT_SIM);
 
-  return [
+  const all: SlideData[] = [
     slide(
       '0',
       `El PBI de Argentina desde ${WORLD_FIRST}`,
@@ -594,4 +594,5 @@ export function buildSlides(): SlideData[] {
       { id: 'reference', title: 'PBI del escenario de referencia (miles de millones de USD)', columns: ['Año', 'PBI'], rows: sim.years.map((y, i) => [y, sim.gdp[i] ?? null]) }
     ])
   ];
+  return [...all].sort((a, b) => (a.id === 'sim' ? 999 : stepNumber(Number(a.id))) - (b.id === 'sim' ? 999 : stepNumber(Number(b.id))));
 }

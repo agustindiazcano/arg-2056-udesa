@@ -29,7 +29,7 @@ beforeEach(() => {
 });
 afterEach(cleanup);
 
-describe('the rule of 70 calculator (slide 6)', () => {
+describe('the rule of 70 calculator', () => {
   it('opens at 3 % a year with the exact time and the two rules', () => {
     render(<Rule70Step />);
     expect(screen.getByRole('heading', { name: '¿Cuánto hay que crecer por año para duplicar el PBI? La regla del 70' })).toBeTruthy();
@@ -97,7 +97,7 @@ describe('the rule of 70 calculator (slide 6)', () => {
   it('says when the GDP of Argentina doubles: the year, from the GDP of 2026, at the rate chosen', () => {
     render(<Rule70Step />);
     const box = screen.getByRole('region', { name: /argentina/i });
-    expect(box.textContent).toContain(formatNumber(ARG_GDP_2026, 1)); // 621,8
+    expect(box.textContent).toContain(formatNumber(ARG_GDP_2026, 1));
     expect(box.textContent).toContain('2050');
     expect(box.textContent).toContain('23,4');
     fireEvent.change(rate(), { target: { value: '5' } });
@@ -115,17 +115,19 @@ describe('the rule of 70 calculator (slide 6)', () => {
     expect(growth().getAttribute('data-yaxis')).toBe('value');
   });
 
-  it('draws the error of the rules against the rate (200 points, 0.1 % to 20 %) as a second chart', () => {
+  it('hides the confusing rule-error chart and shows the plain-language Rule of 70 explainer instead', () => {
     render(<Rule70Step />);
     const charts = screen.getAllByTestId('echart');
-    expect(charts).toHaveLength(2);
-    expect(charts[1]!.getAttribute('data-points')).toBe('200');
+    expect(charts).toHaveLength(1);
+    expect(screen.queryByText(/Cuánto se equivoca cada regla, según la tasa/)).toBeNull();
+    expect(screen.getByRole('region', { name: /¿Cómo funciona la regla del 70 en forma simple\?/ })).toBeDefined();
+    expect(screen.getByRole('table', { name: 'Ejemplos prácticos de duplicación' })).toBeDefined();
   });
 
-  it('has a text alternative for each chart and the data of both as tables', () => {
+  it('has a text alternative for the growth chart and the data as a table', () => {
     render(<Rule70Step />);
     for (const chart of screen.getAllByTestId('echart')) expect(chart.getAttribute('aria-label')!.length).toBeGreaterThan(30);
-    expect(screen.getAllByText(/ver los datos/i).length).toBeGreaterThanOrEqual(2);
+    expect(screen.getAllByText(/ver los datos/i).length).toBeGreaterThanOrEqual(1);
   });
 
   it('carries no label about how real the data is', () => {

@@ -63,7 +63,7 @@ const TONE: Record<string, string> = { base: 'neutro / con fricción', moderate:
 
 type ChartKind = 'gdp' | 'percapita' | 'population';
 
-const CHART_TITLES: Record<ChartKind, string> = { gdp: 'PBI real de Argentina', percapita: 'PBI per cápita (miles de USD)', population: 'Población (millones)' };
+const CHART_TITLES: Record<ChartKind, string> = { gdp: 'PBI real de Argentina', percapita: 'PBI per cápita de Argentina (miles de USD)', population: 'Población de Argentina (millones)' };
 const CHART_ORDER: readonly ChartKind[] = ['gdp', 'percapita', 'population'];
 
 type Line = { name: string; values: Array<number | null>; color: string };
@@ -354,7 +354,7 @@ export function AiStep() {
           <div className="ai-scope-banner">
             {scope === 'arg' && (
               <span>
-                <strong>Contraste en la literatura (Goldman Sachs vs. FMI WP/25/76 y Acemoglu):</strong> La curva verde (Optimista) refleja el techo de economías frontera productoras de cómputo (EE. UU., AIPI 0,68). Con AIPI 0,47, ~45 % de informalidad y +51 % de sobrecosto a tokens importados, <strong>Argentina hoy se ubica entre la curva roja y la azul</strong> (+0,00 a +0,42 pp/año de impulso neto IA).
+                <strong>Curva verde, si Argentina creciera a la tasa del escenario optimista</strong> (+5,06 % anual medio 2026-2056: salto de adopción 2027-2030 y +1,5 pp/año de productividad de Goldman Sachs). Con la fricción actual (AIPI 0,47, ~45 % de informalidad y +51 % de sobrecosto a tokens importados), <strong>Argentina hoy se ubica entre la curva roja (Base, +2,80 %) y la azul (Moderado, +3,33 %)</strong>.
               </span>
             )}
             {scope === 'world' && (
@@ -421,34 +421,51 @@ export function AiStep() {
                     ? scopeData.rates.map((r) => <td key={r.id}>{pct(r.annualGrowthPct, 2)}</td>)
                     : rows.map((r) => <td key={r.id}>{pct(r.averageGrowth, 2)}</td>)}
                 </tr>
-                {scopeData && (
-                  <tr>
-                    <th scope="row">Impulso neto IA (literatura)</th>
-                    {scopeData.rates.map((r) => (
-                      <td key={r.id}>{r.aiBoostPp}</td>
-                    ))}
-                  </tr>
-                )}
                 <tr>
-                  <th scope="row">{scopeData ? 'PBI real (Índice 2026 = 100)' : 'PBI (miles de millones de USD)'}</th>
+                  <th scope="row">{scopeData ? 'Impulso neto IA (literatura)' : 'Aporte anual de la IA a la PTF'}</th>
+                  {scopeData
+                    ? scopeData.rates.map((r) => <td key={r.id}>{r.aiBoostPp}</td>)
+                    : AI_SCENARIOS.map((s) => <td key={s.id}>{`+${num(s.aiPoints[0], 1)} a +${num(s.aiPoints[1], 1)} pp/año`}</td>)}
+                </tr>
+                <tr>
+                  <th scope="row">{scopeData ? 'PBI real (Índice 2026 = 100)' : 'PBI real de Argentina (miles de millones de USD)'}</th>
                   {shownYear < 2026 && !scopeData
                     ? AI_SCENARIOS.map((s) => <td key={s.id}>{num(hist.values[shownYear - 1960] ?? 0)}</td>)
                     : gdpLines.map((s) => <td key={s.name}>{num(s.values[shownYear - 2026] ?? 0)}</td>)}
                 </tr>
-                <tr>
-                  <th scope="row">PBI per cápita Arg. (miles de USD)</th>
-                  {shownYear < 2026
-                    ? AI_SCENARIOS.map((s) => <td key={s.id}>{num(histPerCapita[shownYear - 1960] ?? 0, 2)}</td>)
-                    : perCapita.series.map((s) => <td key={s.name}>{num(s.values[shownYear - 2026] ?? 0, 2)}</td>)}
-                </tr>
-                <tr>
-                  <th scope="row">Población Arg. (millones)</th>
-                  {AI_SCENARIOS.map((s) => (
-                    <td key={s.id}>
-                      {num(shownYear < 2026 ? histPop[shownYear - 1960] ?? 0 : pop.values[shownYear - 2025] ?? pop.values.at(-1)!)}
-                    </td>
-                  ))}
-                </tr>
+                {scopeData ? (
+                  <>
+                    <tr>
+                      <th scope="row">{`Variación acumulada 2026-${shownYear}`}</th>
+                      {gdpLines.map((s) => (
+                        <td key={s.name}>{pct((s.values[shownYear - 2026] ?? 100) - 100, 1)}</td>
+                      ))}
+                    </tr>
+                    <tr>
+                      <th scope="row">Años para duplicar el PBI</th>
+                      {scopeData.rates.map((r) => (
+                        <td key={r.id}>{`${num(Math.log(2) / Math.log(1 + r.annualGrowthPct / 100), 1)} años`}</td>
+                      ))}
+                    </tr>
+                  </>
+                ) : (
+                  <>
+                    <tr>
+                      <th scope="row">PBI per cápita Arg. (miles de USD)</th>
+                      {shownYear < 2026
+                        ? AI_SCENARIOS.map((s) => <td key={s.id}>{num(histPerCapita[shownYear - 1960] ?? 0, 2)}</td>)
+                        : perCapita.series.map((s) => <td key={s.name}>{num(s.values[shownYear - 2026] ?? 0, 2)}</td>)}
+                    </tr>
+                    <tr>
+                      <th scope="row">Población Arg. (millones)</th>
+                      {AI_SCENARIOS.map((s) => (
+                        <td key={s.id}>
+                          {num(shownYear < 2026 ? histPop[shownYear - 1960] ?? 0 : pop.values[shownYear - 2025] ?? pop.values.at(-1)!)}
+                        </td>
+                      ))}
+                    </tr>
+                  </>
+                )}
               </tbody>
             </table>
             <ul className="ai-summary" aria-label="Resumen de los escenarios">

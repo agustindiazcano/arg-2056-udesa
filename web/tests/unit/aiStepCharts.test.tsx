@@ -89,10 +89,12 @@ describe('Slide 3 / AiStep charts matching Slide 5 styles and palette', () => {
 
     // Clarifies that the green Optimistic curve is for frontier economies and Argentina today is not on that train
     expect(container.textContent).toMatch(/Argentina hoy no está en ese tren/);
+    expect(container.textContent).toContain('Curva verde, si Argentina creciera a la tasa del escenario optimista');
 
     // Switches projection scope between Argentina, Mundo, and Frontier vs. Argentina
     fireEvent.click(screen.getByRole('button', { name: 'Mundo' }));
     expect(container.textContent).toMatch(/Proyección del PBI mundial/);
+    expect(container.textContent).not.toContain('Curva verde, si Argentina creciera a la tasa del escenario optimista');
     fireEvent.click(screen.getByRole('button', { name: /Se suben a la ola vs\. Como Argentina/ }));
     expect(container.textContent).toMatch(/Se suben a la ola: Frontera/);
 
