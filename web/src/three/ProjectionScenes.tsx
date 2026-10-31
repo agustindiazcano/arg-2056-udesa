@@ -1,8 +1,9 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { formatValue } from '../charts/format';
 import { demoBarsSpec, demoMapValues } from '../charts3d/projectionDemo';
 import type { Map3DSpec } from '../charts3d/types';
-import { useProvinces } from '../scenes/forecast/ProvinceMap';
+import { loadProvinces } from '../geo/provinces';
+import type { ProvincesGeo } from '../geo/provinces';
 import { PROVINCES } from '../types/province';
 import { Bars3D } from './Bars3D';
 import { Map3D } from './Map3D';
@@ -14,9 +15,36 @@ const noSelect = () => {};
 const MAP_TITLE = 'Argentina: valor por provincia';
 const BARS_TITLE = 'Provincias con mayor valor';
 
+type ProvincesLoadState =
+  | { status: 'loading' }
+  | { status: 'error'; message: string }
+  | { status: 'success'; geo: ProvincesGeo };
+
+function useProvincesGeo(baseUrl = '/geo'): ProvincesLoadState {
+  const [state, setState] = useState<ProvincesLoadState>({ status: 'loading' });
+
+  useEffect(() => {
+    let active = true;
+    loadProvinces(baseUrl)
+      .then(({ geo }) => {
+        if (!active) return;
+        setState({ status: 'success', geo });
+      })
+      .catch((err: unknown) => {
+        if (!active) return;
+        setState({ status: 'error', message: err instanceof Error ? err.message : String(err) });
+      });
+    return () => {
+      active = false;
+    };
+  }, [baseUrl]);
+
+  return state;
+}
+
 /** The projection test: the map of Argentina and a bar chart in 3D, each with a projected title, on made-up values. */
 export default function ProjectionScenes() {
-  const provinces = useProvinces();
+  const provinces = useProvincesGeo();
   const geo = provinces.status === 'success' ? provinces.geo : null;
 
   const mapSpec = useMemo<Map3DSpec | null>(() => {
