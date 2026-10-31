@@ -68,7 +68,7 @@ export interface TokenPyramidTier {
   monthlyTokens: string;
   actors: string;
   detail: string;
-  ref: string;
+  refs: readonly string[];
 }
 
 export const TOKEN_PYRAMID_TIERS: readonly TokenPyramidTier[] = [
@@ -77,45 +77,36 @@ export const TOKEN_PYRAMID_TIERS: readonly TokenPyramidTier[] = [
     tier: 'Nivel 1 · Cúspide 24/7',
     title: 'Enjambres autónomos y loops continuos',
     monthlyTokens: '25.000 M – 100.000 M+ / mes',
-    actors: 'Clusters agénticos 24/7 y refactorización continua',
-    detail: 'Casos extremos documentados de hasta 99.500 M tokens/mes en ejecución continua multi-agente con ~99,5 % de lectura de caché.',
-    ref: 'AI57'
-  },
-  {
-    id: 'author',
-    tier: '★ Autor · 30 días',
-    title: '★ "Autor - últimos 30 días (8.000 M solo en claude code)"',
-    monthlyTokens: '8.000 M tokens / 30 días',
-    actors: 'Claude Code (≈266,7 M/día · 156,8× P50 ingeniería)',
-    detail: '156,8 veces la mediana mensual de un ingeniero de software (P50 = 51 M, Jellyfish) y ~5,9 veces el umbral P99 corporativo (1.350 M).',
-    ref: 'AI57'
+    actors: 'Clusters agénticos 24/7 y refactorización continua sin intervención humana',
+    detail: 'Casos extremos documentados de hasta 99.500–100.000 M tokens/mes (top usuario público citado por OpenAI y telemetría de loops multi-agente continuos con ~99,5 % de lectura de caché).',
+    refs: ['AI57', 'AI70', 'AI72']
   },
   {
     id: 't2',
     tier: 'Nivel 2 · Frontera / P99',
-    title: 'Investigadores de OpenAI e ingenieros P99',
+    title: 'Cola extrema P99 de ingeniería e investigadores de frontera',
     monthlyTokens: '1.350 M – 5.000 M / mes',
-    actors: 'Investigadores de OpenAI (P50 >600 USD/día; P90 >7.000 USD/día API) y top 1 % de ingeniería (P99 = 1.350 M)',
-    detail: 'Uso de múltiples agentes en paralelo para investigación, pruebas y generación de código.',
-    ref: 'AI55'
+    actors: 'P99 corporativo (≥1.350 M), top 2 % de ingeniería (~2.000–2.200 M/mes) y P99 de Claude Code (~4.800 M/mes)',
+    detail: 'Respaldado por Jellyfish (umbral P99 = 1.350 M; quintil empresarial más intensivo ≈ 2.500 M/mes por desarrollador; top 2 % ≈ 500 M/semana; P99 de gasto ≈ 2.452 USD/mes), VibeCafé (P95–P99 general: 1.900–7.400 M/mes; P99 en Claude Code ≈ 4.800 M/mes) y OpenAI/Epoch AI (investigadores internos: P50 >600 USD/día y P90 >7.000 USD/día API).',
+    refs: ['AI55', 'AI68', 'AI69', 'AI70', 'AI72', 'AI73']
   },
   {
     id: 't3',
     tier: 'Nivel 3 · P90 Ingeniería',
-    title: 'Power users agénticos (planes Max / Ultra)',
+    title: 'Power users agénticos (planes Max / Ultra / Enterprise)',
     monthlyTokens: '250 M – 1.000 M / mes (P90 = 380 M)',
     actors: 'Top 10 % de desarrolladores profesionales con agentes en consola e IDE',
-    detail: 'Telemetría empresarial de Jellyfish ubica el percentil 90 de ingenieros activos en 380 millones de tokens mensuales.',
-    ref: 'AI56'
+    detail: 'Telemetría empresarial de Jellyfish ubica el P90 en 380 M tokens/mes. Según Cursor Insights, el 10 % superior de usuarios concentra cerca de 2/3 de todos los tokens consumidos.',
+    refs: ['AI56', 'AI68', 'AI71', 'AI74']
   },
   {
     id: 't4',
     tier: 'Nivel 4 · P50 Ingeniería',
-    title: 'Desarrollador profesional activo (mediana)',
+    title: 'Desarrollador profesional activo (mediana corporativa)',
     monthlyTokens: '40 M – 150 M / mes (P50 = 51 M)',
     actors: 'Mediana de ingenieros de software en empresas con herramientas de IA',
-    detail: 'Pasó de ~12 M tokens/mes a inicios de 2025 a 51 M tokens/mes en diciembre de 2025 (+4,2× en un año).',
-    ref: 'AI56'
+    detail: 'Jellyfish registra una mediana P50 = 51 M tokens/mes (~81 USD/mes; más de la mitad bajo 100 USD/mes). Anthropic documenta un promedio enterprise en Claude Code de ~13 USD/día activo (~150–250 USD/mes, con 90 % bajo 30 USD/día).',
+    refs: ['AI56', 'AI57', 'AI68', 'AI73']
   },
   {
     id: 't5',
@@ -123,8 +114,8 @@ export const TOKEN_PYRAMID_TIERS: readonly TokenPyramidTier[] = [
     title: 'Profesional con suscripción paga estándar (20 USD)',
     monthlyTokens: '5 M – 30 M / mes',
     actors: 'Suscriptores pagos de ChatGPT, Claude Pro, Gemini Advanced y Copilot',
-    detail: 'Uso diario de modelos de razonamiento, síntesis documental y asistencia profesional.',
-    ref: 'AI38'
+    detail: 'Uso diario de modelos de razonamiento, síntesis documental y asistencia profesional (~75–100 M de personas en el mundo).',
+    refs: ['AI38', 'AI30', 'AI32']
   },
   {
     id: 't6',
@@ -133,17 +124,18 @@ export const TOKEN_PYRAMID_TIERS: readonly TokenPyramidTier[] = [
     monthlyTokens: '0 a 3 M / mes',
     actors: '>1.200 M usuarios gratuitos de LLMs y población sin uso directo',
     detail: 'Consultas puntuales en modelos rápidos con límites de contexto y sin ejecución agéntica.',
-    ref: 'AI66'
+    refs: ['AI66', 'AI38']
   }
 ];
 
 export const TOKEN_LOG_BENCHMARKS = [
   { label: 'Chat web gratuito (~2 M)', tokensMillions: 2, exp: 6.3, tone: 'muted' },
   { label: 'Suscriptor Pro 20 USD (~15 M)', tokensMillions: 15, exp: 7.18, tone: 'blue' },
-  { label: 'Ingeniero mediana P50 (51 M)', tokensMillions: 51, exp: 7.71, tone: 'blue' },
-  { label: 'Ingeniero P90 (380 M)', tokensMillions: 380, exp: 8.58, tone: 'blue' },
-  { label: 'Ingeniero P99 (1.350 M)', tokensMillions: 1350, exp: 9.13, tone: 'warning' },
-  { label: '★ Autor 30 días (8.000 M)', tokensMillions: 8000, exp: 9.9, tone: 'author' },
+  { label: 'Ingeniero mediana P50 Jellyfish (51 M)', tokensMillions: 51, exp: 7.71, tone: 'blue' },
+  { label: 'Ingeniero P90 Jellyfish (380 M)', tokensMillions: 380, exp: 8.58, tone: 'blue' },
+  { label: 'Umbral P99 corporativo Jellyfish (1.350 M)', tokensMillions: 1350, exp: 9.13, tone: 'warning' },
+  { label: 'Quintil superior Jellyfish (~2.500 M)', tokensMillions: 2500, exp: 9.4, tone: 'warning' },
+  { label: 'Claude Code P99 VibeCafé (~4.800 M)', tokensMillions: 4800, exp: 9.68, tone: 'author' },
   { label: 'Loop autónomo 24/7 (99.500 M)', tokensMillions: 99500, exp: 11.0, tone: 'optimistic' }
 ] as const;
 
@@ -223,7 +215,7 @@ export const RESEARCH_PLATFORMS = [
 
 export const AI_EVIDENCE_SLIDES = [
   { id: 27, title: 'Adopción de IA: de probar a transformar', lead: 'Incluso en IT y en grandes empresas, usar IA no equivale a integrarla en el trabajo', refs: ['AI35', 'AI36', 'AI37'] },
-  { id: 28, title: 'Tokens: quién consume y cuánto', lead: 'Pirámide triangular de consumo mensual de tokens: de la consulta gratuita a los agentes 24/7', refs: ['AI40', 'AI41', 'AI42', 'AI43', 'AI34', 'AI55', 'AI56', 'AI57', 'AI58', 'AI66'] },
+  { id: 28, title: 'Tokens: quién consume y cuánto', lead: 'Pirámide triangular de consumo mensual de tokens: de la consulta gratuita a la cola P99 y agentes 24/7', refs: ['AI40', 'AI41', 'AI42', 'AI43', 'AI34', 'AI55', 'AI56', 'AI57', 'AI58', 'AI66', 'AI68', 'AI69', 'AI70', 'AI71', 'AI72', 'AI73', 'AI74'] },
   { id: 26, title: 'La pirámide de adopción de los LLM', lead: 'ChatGPT, Claude, Gemini, Copilot, Meta AI y DeepSeek: menos del 1,2 % del mundo paga por los modelos que multiplican la productividad', refs: ['AI38', 'AI39', 'AI66', 'AI67', 'AI30', 'AI32', 'AI54'] },
   { id: 29, title: 'IA e I+D: más publicaciones, ciclos más cortos', lead: 'La producción de preprints crece; el volumen por sí solo no mide calidad ni causalidad', refs: ['AI44', 'AI45', 'AI46', 'AI47', 'AI55'] }
 ] as const;

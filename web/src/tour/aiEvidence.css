@@ -13,7 +13,7 @@
 .ai-evidence-card p { color: var(--ink-2); font-size: .85rem; }
 .ai-evidence-chart { position: relative; flex: 1; min-height: 190px; }
 .ai-evidence-chart > * { position: absolute; inset: 0; width: 100%; height: 100%; }
-.ai-evidence-caption { font-size: .74rem !important; color: var(--ink-2); line-height: 1.45; margin: 0; }
+.ai-evidence-caption { font-size: .72rem !important; color: var(--ink-2); line-height: 1.4; margin: 0; }
 .ai-stat { font-size: clamp(2rem, 4vw, 3.5rem); color: var(--blue); line-height: 1.05; }
 .ai-stat-pair { display: flex; gap: var(--space-3); }
 .ai-stat-pair > div { display: flex; flex-direction: column; flex: 1; }
@@ -26,8 +26,8 @@
 .ai-provider-figure { font-size: clamp(1.1rem, 1.8vw, 1.55rem); margin-top: var(--space-1); }
 .ai-author-mini { color: var(--ink) !important; font-size: .76rem !important; font-weight: 600; text-align: center; padding-top: .25rem; letter-spacing: .01em; }
 .ai-triangle-7, .ai-triangle-4 { display: flex; flex-direction: column; align-items: stretch; gap: 3px; width: 100%; max-width: 640px; margin: 0 auto; padding: .25rem 0; }
-.ai-tri-slice, .ai-tri4-slice { position: relative; display: flex; align-items: center; justify-content: center; width: 100%; border: none; background: transparent; color: var(--ink); font: inherit; cursor: pointer; padding: .38rem .5rem; text-align: center; }
-.ai-tri-slice { min-height: 38px; }
+.ai-tri-slice, .ai-tri4-slice { position: relative; display: flex; align-items: center; justify-content: center; width: 100%; border: none; background: transparent; color: var(--ink); font: inherit; cursor: pointer; padding: .42rem .5rem; text-align: center; }
+.ai-tri-slice { min-height: 42px; }
 .ai-tri4-slice { min-height: 58px; }
 .ai-tri-slice::before, .ai-tri4-slice::before { content: ''; position: absolute; inset: 0; z-index: 0; transition: filter .15s ease; }
 .ai-tri-slice:hover::before, .ai-tri4-slice:hover::before { filter: brightness(1.18); }
@@ -38,13 +38,12 @@
 .ai-tri4-slice .ai-tri-slice-content strong { font-size: .86rem; color: var(--ink); }
 .ai-tri4-slice .ai-tri-slice-content span { font-size: .73rem; color: var(--ink-2); }
 .ai-tri-slice-tier { color: var(--ink-2); font-size: .7rem; }
-.ai-tri-slice--0::before { clip-path: polygon(50% 0%, 57.14% 100%, 42.86% 100%); background: color-mix(in srgb, var(--cat-4) 78%, var(--surface)); }
-.ai-tri-slice--1::before { clip-path: polygon(42.86% 0%, 57.14% 0%, 64.29% 100%, 35.71% 100%); background: color-mix(in srgb, var(--scenario-pessimistic) 85%, var(--surface)); }
-.ai-tri-slice--2::before { clip-path: polygon(35.71% 0%, 64.29% 0%, 71.43% 100%, 28.57% 100%); background: color-mix(in srgb, var(--cat-8) 76%, var(--surface)); }
-.ai-tri-slice--3::before { clip-path: polygon(28.57% 0%, 71.43% 0%, 78.57% 100%, 21.43% 100%); background: color-mix(in srgb, var(--state-warning) 78%, var(--surface)); }
-.ai-tri-slice--4::before { clip-path: polygon(21.43% 0%, 78.57% 0%, 85.71% 100%, 14.29% 100%); background: color-mix(in srgb, var(--scenario-optimistic) 76%, var(--surface)); }
-.ai-tri-slice--5::before { clip-path: polygon(14.29% 0%, 85.71% 0%, 92.86% 100%, 7.14% 100%); background: color-mix(in srgb, var(--blue) 76%, var(--surface)); }
-.ai-tri-slice--6::before { clip-path: polygon(7.14% 0%, 92.86% 0%, 100% 100%, 0% 100%); background: color-mix(in srgb, var(--cat-6) 72%, var(--surface)); }
+.ai-tri-slice--0::before { clip-path: polygon(50% 0%, 58.33% 100%, 41.67% 100%); background: color-mix(in srgb, var(--cat-4) 80%, var(--surface)); }
+.ai-tri-slice--1::before { clip-path: polygon(41.67% 0%, 58.33% 0%, 66.67% 100%, 33.33% 100%); background: color-mix(in srgb, var(--scenario-pessimistic) 85%, var(--surface)); }
+.ai-tri-slice--2::before { clip-path: polygon(33.33% 0%, 66.67% 0%, 75% 100%, 25% 100%); background: color-mix(in srgb, var(--state-warning) 80%, var(--surface)); }
+.ai-tri-slice--3::before { clip-path: polygon(25% 0%, 75% 0%, 83.33% 100%, 16.67% 100%); background: color-mix(in srgb, var(--scenario-optimistic) 78%, var(--surface)); }
+.ai-tri-slice--4::before { clip-path: polygon(16.67% 0%, 83.33% 0%, 91.67% 100%, 8.33% 100%); background: color-mix(in srgb, var(--blue) 76%, var(--surface)); }
+.ai-tri-slice--5::before { clip-path: polygon(8.33% 0%, 91.67% 0%, 100% 100%, 0% 100%); background: color-mix(in srgb, var(--cat-6) 72%, var(--surface)); }
 .ai-tri4-slice--0::before { clip-path: polygon(50% 0%, 62.5% 100%, 37.5% 100%); background: color-mix(in srgb, var(--scenario-pessimistic) 84%, var(--surface)); }
 .ai-tri4-slice--1::before { clip-path: polygon(37.5% 0%, 62.5% 0%, 75% 100%, 25% 100%); background: color-mix(in srgb, var(--state-warning) 80%, var(--surface)); }
 .ai-tri4-slice--2::before { clip-path: polygon(25% 0%, 75% 0%, 87.5% 100%, 12.5% 100%); background: color-mix(in srgb, var(--scenario-optimistic) 78%, var(--surface)); }
@@ -88,4 +87,4 @@
 .ai-scope-banner { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-2); padding: .45rem .75rem; margin-bottom: var(--space-2); background: color-mix(in srgb, var(--blue) 8%, var(--surface)); border-left: 3px solid var(--blue); border-radius: var(--radius-sm); font-size: .78rem; color: var(--ink-2); }
 .ai-scope-banner strong { color: var(--ink); }
 @media (max-width: 900px) { .ai-evidence-grid, .ai-tri-layout { grid-template-columns: minmax(0, 1fr); } .ai-evidence-card { min-height: 250px; overflow: visible; } .ai-evidence-column { min-height: auto; } }
-@media (max-height: 820px) { .ai-evidence-card { gap: .4rem; padding: .65rem; } .ai-evidence-card p { font-size: .78rem; } .ai-tri-slice { min-height: 32px; } .ai-tri4-slice { min-height: 48px; } .ai-stat-pair strong { font-size: 1.7rem; } }
+@media (max-height: 820px) { .ai-evidence-card { gap: .4rem; padding: .65rem; } .ai-evidence-card p { font-size: .78rem; } .ai-tri-slice { min-height: 34px; } .ai-tri4-slice { min-height: 48px; } .ai-stat-pair strong { font-size: 1.7rem; } }

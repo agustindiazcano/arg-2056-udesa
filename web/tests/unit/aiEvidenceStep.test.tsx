@@ -23,11 +23,12 @@ describe('sourced AI slides', () => {
       for (const row of table.rows) expect(row).toHaveLength(table.columns.length);
     }
   });
-  it('shows the colorful triangular 7-tier token pyramid and compact white author line without the provider telemetry card', () => {
+  it('shows the colorful triangular 6-tier token pyramid, Jellyfish/VibeCafé P99 methodology note, and compact white author footnote', () => {
     render(<AiEvidenceStep step={28} />);
     expect(screen.queryByText('Qué publica cada proveedor y telemetría interna')).toBeNull();
     expect(screen.getByText('★ "Autor - últimos 30 días (8.000 M solo en claude code)"')).toBeDefined();
-    expect(screen.getByText(/156,8× la mediana de ingeniería/)).toBeDefined();
+    expect(screen.getByText(/Muestra Jellyfish: telemetría corporativa de miles de ingenieros en cientos de empresas/)).toBeDefined();
+    expect(screen.getAllByText(/1\.350 M – 5\.000 M/).length).toBeGreaterThan(0);
     const tierBtn = screen.getByRole('button', { name: /Nivel 1 · Cúspide 24\/7/ });
     fireEvent.click(tierBtn);
     expect(tierBtn.getAttribute('aria-pressed')).toBe('true');

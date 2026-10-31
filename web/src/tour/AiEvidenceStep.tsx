@@ -40,21 +40,21 @@ function AdoptionContent() {
 }
 
 function TokensContent() {
-  const [tierId, setTierId] = useState('author');
+  const [tierId, setTierId] = useState('t2');
   const activeTier = TOKEN_PYRAMID_TIERS.find((t) => t.id === tierId) ?? TOKEN_PYRAMID_TIERS[1]!;
   return (
     <div className="ai-evidence-single">
       <article className="ai-evidence-card ai-token-pyramid-card">
         <div className="ai-tri-layout">
           <div className="ai-tri-col">
-            <h3>Pirámide de consumo mensual de tokens (7 niveles)</h3>
+            <h3>Pirámide de consumo mensual de tokens (6 niveles)</h3>
             <p>Seleccioná cualquier sección del triángulo para inspeccionar su escala</p>
             <div className="ai-triangle-7" role="group" aria-label="Pirámide triangular de consumo mensual de tokens">
               {TOKEN_PYRAMID_TIERS.map((t, idx) => (
                 <button
                   type="button"
                   key={t.id}
-                  className={`ai-tri-slice ai-tri-slice--${idx} ${t.id === 'author' ? 'ai-tri-slice--author' : ''}`}
+                  className={`ai-tri-slice ai-tri-slice--${idx}`}
                   aria-pressed={tierId === t.id}
                   onClick={() => setTierId(t.id)}
                 >
@@ -66,15 +66,18 @@ function TokensContent() {
               ))}
             </div>
             <p className="ai-author-mini">★ &quot;Autor - últimos 30 días (8.000 M solo en claude code)&quot;</p>
+            <p className="ai-evidence-caption">
+              Muestra Jellyfish: telemetría corporativa de miles de ingenieros en cientos de empresas utilizando Claude Code, Cursor y GitHub Copilot (P50 = 51 M / ~81 USD; P90 = 380 M; top 2 % ≈ 2.000–2.200 M; quintil empresarial más intensivo ≈ 2.500 M/mes; P99 gasto ≈ 2.452 USD/mes). VibeCafé ubica el P99 de Claude Code en ~4.800 M/mes (~160 M/día), Cursor reporta que el top 10 % concentra ~2/3 de los tokens y Anthropic estima ~13 USD/día activo (90 % &lt;30 USD/día). <RefList ids={['AI56', 'AI57', 'AI68', 'AI69', 'AI70', 'AI71', 'AI72', 'AI73', 'AI74']} />
+            </p>
           </div>
           <div className="ai-tri-side">
             <div className="ai-personal">
               <strong>{activeTier.tier} · {activeTier.monthlyTokens}</strong>
               <span>{activeTier.title} — {activeTier.actors}</span>
-              <p>{activeTier.detail} <RefList ids={[activeTier.ref, 'AI55', 'AI56']} /></p>
+              <p>{activeTier.detail} <RefList ids={activeTier.refs} /></p>
             </div>
             <div className="ai-log-scale" aria-label="Comparador en escala logarítmica de tokens mensuales">
-              <strong className="ai-log-title">Escala logarítmica (10⁶ a 10¹¹ tokens/mes): 8.000 M = 156,8× la mediana de ingeniería (51 M)</strong>
+              <strong className="ai-log-title">Escala logarítmica (10⁶ a 10¹¹ tokens/mes): P50 (51 M), P90 (380 M) y cola P99 (1.350 a 5.000 M)</strong>
               {TOKEN_LOG_BENCHMARKS.map((b) => {
                 const widthPct = Math.max(8, Math.min(100, ((b.exp - 5.8) / (11.2 - 5.8)) * 100));
                 return (
