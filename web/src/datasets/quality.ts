@@ -104,9 +104,9 @@ export const TABLE_META: Readonly<Record<string, TableMeta>> = {
   'forecast-uncertainty-draft': draft('Estructura conceptual de difusión tecnológica, costos de computación y sensibilidad distributiva'),
   'ai-plans-cost': meta('partial', 'Precios de lista de OpenAI, Anthropic y Google según blogs de comparación; impuestos de Argentina (RG 4240 y RG 5617) según notas contables; IVA general de cada país', '2026-10-23'),
   'ai-plans-taxes': meta('partial', 'Notas contables sobre RG 4240 y RG 5617 (Argentina); tasas generales de IVA o GST de cada país', '2026-10-23'),
-  'draft-22': draft('Esquema de temas del borrador'),
-  'draft-23': draft('Esquema de temas del borrador'),
-  'draft-24': draft('Esquema de temas del borrador'),
+
+
+
   'ai-api-prices': meta('real', 'Listas oficiales de Anthropic, OpenAI, Google y xAI; modelos y condiciones en cada fila', '2026-10-30'),
   'ai-enterprise-adoption': meta('real', 'Gallup Q4 2025; Yu et al. (2026), S&P 500; Yotzov et al., CEPR (2026). Muestras distintas, no sumables.', '2026-10-30'),
   'ai-token-pyramid': meta('real', 'Jellyfish (2026), VibeCafé (2026), Cursor Insights (2026), Anthropic, Epoch AI y OpenAI', '2026-10-30'),
