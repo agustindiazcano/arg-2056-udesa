@@ -1,6 +1,6 @@
 {
   "source": "Vercel Web Analytics API (visits/aggregate by country, one request per day)",
-  "retrieved_at": "2026-10-19",
+  "retrieved_at": "2026-10-26",
   "note": "Visitors are as Vercel counts them per day: someone who returns on another day is counted again, so the total of visitors is the sum of the daily visitors, not a count of distinct people.",
   "days": {
     "2026-09-14": {},
@@ -47,6 +47,23 @@
         "pageviews": 1,
         "visitors": 1
       }
-    }
+    },
+    "2026-10-19": {},
+    "2026-10-20": {
+      "AR": {
+        "pageviews": 2,
+        "visitors": 1
+      }
+    },
+    "2026-10-21": {
+      "DE": {
+        "pageviews": 2,
+        "visitors": 2
+      }
+    },
+    "2026-10-22": {},
+    "2026-10-23": {},
+    "2026-10-24": {},
+    "2026-10-25": {}
   }
 }
