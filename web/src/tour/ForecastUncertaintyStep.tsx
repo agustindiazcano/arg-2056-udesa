@@ -42,11 +42,11 @@ export function ForecastUncertaintyStep() {
                 'A su vez, los costos de inferencia se redujeron más de 280 veces entre 2022 y 2025 (Stanford HAI), abriendo una ventana de accesibilidad sin precedentes.'
               ]}
               how="Explorá las 4 pestañas para revisar rezagos históricos (CHAT/NBER), curvas de cómputo e inferencia (Stanford HAI/Epoch AI), revisiones de pronósticos del FMI, y los canales del escenario adverso."
-              refs={['D3', 'A1', 'A8', 'F1']}
+              refs={['D3', 'D6', 'D7', 'A1', 'A8', 'F1']}
             />
           </div>
           <p className="gdp-sub">
-            <RefList ids={['D3', 'A1', 'A8', 'F1']} />
+            <RefList ids={['D3', 'D6', 'D7', 'A1', 'A8', 'F1']} />
           </p>
         </div>
         <span className="draft-status">Series empíricas auditadas</span>
