@@ -1,12 +1,9 @@
 # Last Context
 
 ## State
-- Branch: `task/references-i18n-readme`, based on `task/slide4-header-plans`.
-- ES/EN translation plan: `docs/tasks/language-switch.md`.
-- Spanish README copied to `README.es.md`; `README.md` still needs a complete English translation.
-- Slide references dialog aggregates mounted references; CI for commit b8a6a09 passed (run 41217844127).
-- Added all slide 4 map and token-view sources to its references, plus a regression test; this follow-up needs CI.
-- Other slide coverage and visual behavior remain to be audited. Responsive carousel remains planned.
+- Branch `task/andes-model-orientation`, isolated worktree based on `bdd2db3`.
+- Detailed Andes infantry faces along its route and its full formation has more spacing; the sky intro uses a smaller responsive stage and wider camera view.
+- Added a formation regression test. Local tests are prohibited; verify CI on the pushed branch.
 
 ## Next step
-- Complete README translation and reference coverage audit, inspect CI, and request human review. Never merge or push to main.
+- Inspect cloud CI and visually review the Andes scene and sky intro on desktop and laptop; request human review. Never merge or push to main.

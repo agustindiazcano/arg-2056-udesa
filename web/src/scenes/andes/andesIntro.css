@@ -77,10 +77,10 @@
   pointer-events: none;
 }
 
-/* 3D march formation in the celeste sky right above the "Cruce de los Andes / 1817" text: appears first and large */
+/* 3D march formation in the celeste sky right above the "Cruce de los Andes / 1817" text */
 .andes-intro-march {
-  width: min(980px, 94vw);
-  height: clamp(290px, 50vh, 470px);
+  width: min(760px, 90vw);
+  height: min(34vh, 320px);
   margin-bottom: -1.2rem;
   pointer-events: none;
   animation: andes-march-in 0.22s ease-out both;

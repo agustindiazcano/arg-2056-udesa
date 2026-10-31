@@ -586,7 +586,7 @@ class ArmyLayer implements CustomLayerInterface {
         const pose = poses[i]!;
         const actor = this.detailedActors[i]!;
         actor.holder.position.set(pose.x, pose.y, pose.z);
-        actor.holder.rotation.y = pose.heading + Math.PI;
+        actor.holder.rotation.y = pose.heading;
         actor.holder.scale.setScalar(pose.scale * 0.62);
         if (amount > 0 && dt > 0) {
           actor.mixer?.update(dt * amount);
@@ -787,7 +787,7 @@ export function MapLibreRenderer({ initialView, route, columns, day, selectedId,
       if (!column || !at) continue;
       other.km = at.distanceKm;
       const herasArrived = mainArrived && id === 'las-heras' && at.distanceKm >= column.route.totalKm - ARRIVED_KM;
-      other.formation = herasArrived ? { dx: (battleWidth(layer.figureCount) + battleWidth(other.figureCount)) / 2 + 3 * 0.13 } : null;
+      other.formation = herasArrived ? { dx: ((battleWidth(layer.figureCount) + battleWidth(other.figureCount)) / 2 + 3 * 0.13) * (detailedModels ? 4 : 1) } : null;
       const near = distanceKm(centre.lng, centre.lat, at.lon, at.lat) < 60;
       other.active = figuresVisible(zoom, other.active) && near;
       if (other.active) withFigures.add(id);

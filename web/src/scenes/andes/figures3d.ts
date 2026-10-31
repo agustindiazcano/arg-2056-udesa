@@ -102,6 +102,8 @@ export function createFigureColumn(
     hideInfantryBoxes = false
   ) => {
     let i = 0;
+    // Detailed characters need more room than the schematic figures.
+    const spacing = hideInfantryBoxes ? 4 : 1;
     if (formation) {
       // formed to fight: every figure stands at its place of the line, around the head of the column, facing south (toward the enemy)
       sampleAlongExtended(path, leaderArc, sample);
@@ -110,14 +112,14 @@ export function createFigureColumn(
       head.z = sample.z;
     }
     slots.forEach((slot, n) => {
-      const s = leaderArc - slot.along;
+      const s = leaderArc - slot.along * spacing;
       if (formation) sample.heading = formation.north ? Math.PI : 0;
       else sampleAlongExtended(path, s, sample);
       const cos = Math.cos(sample.heading);
       const sin = Math.sin(sample.heading);
       // a line that faces north is the same line seen from the other side: the front is toward -z
-      const x = formation ? head.x + formation.dx + offsets[n]!.x : sample.x + cos * slot.lateral;
-      const z = formation ? head.z + (formation.north ? -offsets[n]!.z : offsets[n]!.z) : sample.z - sin * slot.lateral;
+      const x = formation ? head.x + formation.dx + offsets[n]!.x * spacing : sample.x + cos * slot.lateral * spacing;
+      const z = formation ? head.z + (formation.north ? -offsets[n]!.z : offsets[n]!.z) * spacing : sample.z - sin * slot.lateral * spacing;
       if (formation) sample.y = head.y;
       // with a `gaitPhase` (strides, from a clock) the legs keep their own pace whatever the speed of the army; without it they follow the distance walked
       const g = gaitAt(slot.kind, (gaitPhase ?? s / STRIDE) + n * PHASE_STEP, gaitAmount);
