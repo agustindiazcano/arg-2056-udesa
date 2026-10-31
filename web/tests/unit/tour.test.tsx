@@ -65,18 +65,18 @@ describe('Recorrido steps in the navbar', () => {
   });
 
   it('keeps the current step in the middle of the three numbers, held inside the steps that exist', () => {
-    // the ids go in the order they are shown: 20 0 8 5 12 14 3 16 17 21 22 23 24 25 26 (20 is the index; the buttons show their positions).
+    // the ids go in the order they are shown: 20 0 8 5 12 14 3 21 16 27 28 26 29 17 22 23 24 (20 is the index; the buttons show their positions).
     expect(stepWindow(20)).toEqual([20, 0, 8]);
     expect(stepWindow(0)).toEqual([20, 0, 8]);
     expect(stepWindow(8)).toEqual([0, 8, 5]);
     expect(stepWindow(5)).toEqual([8, 5, 12]);
     expect(stepWindow(12)).toEqual([5, 12, 14]);
     expect(stepWindow(14)).toEqual([12, 14, 3]);
-    expect(stepWindow(3)).toEqual([14, 3, 16]);
-    expect(stepWindow(16)).toEqual([3, 16, 17]);
-    expect(stepWindow(17)).toEqual([16, 17, 21]);
+    expect(stepWindow(3)).toEqual([14, 3, 21]);
+    expect(stepWindow(21)).toEqual([3, 21, 16]);
+    expect(stepWindow(16)).toEqual([21, 16, 27]);
     expect(stepWindow(26)).toEqual([28, 26, 29]);
-    expect(stepWindow(29)).toEqual([28, 26, 29]);
+    expect(stepWindow(24)).toEqual([22, 23, 24]);
   });
 
   it('Anterior and Siguiente move one step, and the last step disables Siguiente', () => {
@@ -89,7 +89,7 @@ describe('Recorrido steps in the navbar', () => {
     expect(steps().getAllByRole('button').map((b) => b.textContent)).toEqual(['Anterior', '2', '3', '4', 'Siguiente']);
     fireEvent.click(steps().getByRole('button', { name: 'Anterior' }));
     expect(useStore.getState().tourStep).toBe(8);
-    act(() => useStore.setState({ tourStep: 29 }));
+    act(() => useStore.setState({ tourStep: 24 }));
     expect((steps().getByRole('button', { name: 'Siguiente' }) as HTMLButtonElement).disabled).toBe(true);
   });
 
