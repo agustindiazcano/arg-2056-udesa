@@ -20,6 +20,11 @@ La incertidumbre se muestra como abanico de percentiles; las cifras en disputa, 
 ## Índice
 
 - [El recorrido en imágenes](#el-recorrido-en-imagenes)
+- [Modelos 3D del Ejército de los Andes (Meshy AI)](#modelos-3d-del-ejercito-de-los-andes-meshy-ai)
+  - [Gral. José de San Martín](#modelo-3d-san-martin)
+  - [Soldado de Uniforme Azul (Granaderos y Cazadores)](#modelo-3d-soldado-azul)
+  - [Soldado de Uniforme Rojo (Batallones N.º 7 y N.º 8)](#modelo-3d-soldado-rojo)
+  - [Fusil de chispa con bayoneta](#modelo-3d-fusil-de-chispa)
 - [Qué es](#que-es)
 - [Metodología y pipeline de datos](#metodologia-y-pipeline-de-datos)
 - [Stack](#stack)
@@ -52,6 +57,53 @@ Capturas de la aplicación del 30 de octubre de 2026. La [galería completa](doc
 | ![Minería, composición de exportaciones y mapa provincial](docs/assets/screenshots/02-recursos.jpg) | ![Mapa de costos de acceso a IA en Latinoamérica](docs/assets/screenshots/04-acceso-ia.jpg) |
 | Crecimiento compuesto | Productividad |
 | ![Calculadora y explicación de la regla del 70](docs/assets/screenshots/08-regla-70.jpg) | ![Comparación de la productividad total de los factores](docs/assets/screenshots/10-productividad.jpg) |
+
+<a id="modelos-3d-del-ejercito-de-los-andes-meshy-ai"></a>
+
+## [Modelos 3D del Ejército de los Andes (Meshy AI)](#indice)
+
+Los cuatro modelos 3D en formato `.glb` que representan los uniformes y el armamento del Ejército de los Andes fueron generados con **[Meshy AI](https://www.meshy.ai/)** y están disponibles directamente en el repositorio bajo `web/public/models/`.
+
+> **Licencia de los modelos 3D (Free to Use):** Todos estos modelos 3D son **free to use (de uso libre)** para cualquier proyecto educativo, histórico, personal o comercial, y **no es necesario dar créditos (no attribution required)**.
+
+| Modelo 3D | Unidad / Rol histórico | Archivo `.glb` en el repositorio | Licencia |
+| --- | --- | --- | --- |
+| **Gral. José de San Martín** | Estado Mayor — Comandante en Jefe del Ejército de los Andes | [`web/public/models/san-martin.glb`](web/public/models/san-martin.glb) | Free to use · Sin necesidad de dar créditos (Meshy AI) |
+| **Soldado de Uniforme Azul** | Regimiento de Granaderos y Cazadores de los Andes (con fusil de chispa en la espalda) | [`web/public/models/soldier-blue.glb`](web/public/models/soldier-blue.glb) | Free to use · Sin necesidad de dar créditos (Meshy AI) |
+| **Soldado de Uniforme Rojo** | Batallones N.º 7 y N.º 8 de Infantería de Línea — Pardos y Morenos (con fusil de chispa en la espalda) | [`web/public/models/soldier-red.glb`](web/public/models/soldier-red.glb) | Free to use · Sin necesidad de dar créditos (Meshy AI) |
+| **Fusil de chispa con bayoneta** | Armamento de infantería terciado en la espalda durante el cruce cordillerano | [`web/public/models/musket.glb`](web/public/models/musket.glb) | Free to use · Sin necesidad de dar créditos (Meshy AI) |
+
+<a id="modelo-3d-san-martin"></a>
+
+### [Gral. José de San Martín](#indice)
+
+Casaca azul oscuro con bordados dorados en cuello y puños, banda celeste cruzada al pecho, bicornio con escarapela y sable corvo de caballería. Enlace directo al modelo en el repositorio: [`web/public/models/san-martin.glb`](web/public/models/san-martin.glb) (*hecho con Meshy AI, free to use, no es necesario dar créditos*).
+
+![Modelo 3D del Gral. José de San Martín hecho con Meshy AI](docs/assets/models/san-martin-3d.jpg)
+
+<a id="modelo-3d-soldado-azul"></a>
+
+### [Soldado de Uniforme Azul (Granaderos y Cazadores)](#indice)
+
+Casaca azul turquí con vivos y vueltas punzó, chacó alto con penacho rojo, correaje blanco cruzado y el fusil de chispa montado en diagonal sobre la espalda (`mixamorig:Spine2`). Enlace directo al modelo en el repositorio: [`web/public/models/soldier-blue.glb`](web/public/models/soldier-blue.glb) (*hecho con Meshy AI, free to use, no es necesario dar créditos*).
+
+![Modelo 3D del Soldado de Uniforme Azul con fusil en la espalda hecho con Meshy AI](docs/assets/models/soldier-blue-3d.jpg)
+
+<a id="modelo-3d-soldado-rojo"></a>
+
+### [Soldado de Uniforme Rojo (Batallones N.º 7 y N.º 8)](#indice)
+
+Chaqueta roja de paño con solapas oscuras y pantalón blanco de brin de los Batallones N.º 7 y N.º 8 de Infantería de Línea (Pardos y Morenos), con el fusil de chispa sujeto a la espalda durante el ascenso. Enlace directo al modelo en el repositorio: [`web/public/models/soldier-red.glb`](web/public/models/soldier-red.glb) (*hecho con Meshy AI, free to use, no es necesario dar créditos*).
+
+![Modelo 3D del Soldado de Uniforme Rojo con fusil en la espalda hecho con Meshy AI](docs/assets/models/soldier-red-3d.jpg)
+
+<a id="modelo-3d-fusil-de-chispa"></a>
+
+### [Fusil de chispa con bayoneta](#indice)
+
+Fusil de chispa de infantería con bayoneta calada que se monta sobre la espalda de los soldados de línea en el visor `"Ver uniformes"`, en la marcha inicial del cielo celeste y en el modo `"Modelos detallados"` del Cruce de los Andes. Enlace directo al modelo en el repositorio: [`web/public/models/musket.glb`](web/public/models/musket.glb) (*hecho con Meshy AI, free to use, no es necesario dar créditos*).
+
+![Modelo 3D del Fusil de chispa hecho con Meshy AI](docs/assets/models/musket-3d.jpg)
 
 <a id="que-es"></a>
 

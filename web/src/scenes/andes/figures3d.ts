@@ -11,12 +11,31 @@ const STRIDE = 0.18;
 /** Each figure starts its stride at its own point of the cycle (deterministic), so the column does not step as one. */
 const PHASE_STEP = 0.37;
 
+export interface InfantryPose {
+  slotIndex: number;
+  kind: 'foot' | 'foot_afro' | 'leader';
+  x: number;
+  y: number;
+  z: number;
+  heading: number;
+  scale: number;
+  phase: number;
+}
+
 export interface FigureColumn {
   mesh: InstancedMesh;
   /** scene units from the head of the column to the last figure */
   length: number;
+  /** preallocated poses of infantry and leader slots, updated in place by `update` */
+  infantryPoses: InfantryPose[];
   /** puts every figure at its place with the head of the column at arc length `leaderArc` of the path */
-  update: (leaderArc: number, gaitPhase?: number, gaitAmount?: number, formation?: { dx: number; north?: boolean } | null) => void;
+  update: (
+    leaderArc: number,
+    gaitPhase?: number,
+    gaitAmount?: number,
+    formation?: { dx: number; north?: boolean } | null,
+    hideInfantryBoxes?: boolean
+  ) => void;
 }
 
 /**
@@ -42,6 +61,25 @@ export function createFigureColumn(
   if (mesh.instanceColor) mesh.instanceColor.needsUpdate = true;
   mesh.count = k;
 
+  const infantryPoses: InfantryPose[] = [];
+  const poseBySlot = new Array<InfantryPose | undefined>(slots.length);
+  slots.forEach((slot, n) => {
+    if (slot.kind === 'foot' || slot.kind === 'foot_afro' || slot.kind === 'leader') {
+      const pose: InfantryPose = {
+        slotIndex: n,
+        kind: slot.kind,
+        x: 0,
+        y: 0,
+        z: 0,
+        heading: 0,
+        scale: figureScale * slot.scale,
+        phase: n * PHASE_STEP
+      };
+      infantryPoses.push(pose);
+      poseBySlot[n] = pose;
+    }
+  });
+
   const sample: PathSample = { x: 0, y: 0, z: 0, heading: 0 };
   const base = new Matrix4();
   const local = new Matrix4();
@@ -50,12 +88,19 @@ export function createFigureColumn(
   const position = new Vector3();
   const partAt = new Vector3();
   const scale = new Vector3();
-  const one = new Vector3(figureScale, figureScale, figureScale);  const up = new Vector3(0, 1, 0);
+  const one = new Vector3(figureScale, figureScale, figureScale);
+  const up = new Vector3(0, 1, 0);
   const across = new Vector3(1, 0, 0);
 
   const offsets = battleSlots(slots);
   const head = { x: 0, y: 0, z: 0 };
-  const update = (leaderArc: number, gaitPhase?: number, gaitAmount = 1, formation?: { dx: number; north?: boolean } | null) => {
+  const update = (
+    leaderArc: number,
+    gaitPhase?: number,
+    gaitAmount = 1,
+    formation?: { dx: number; north?: boolean } | null,
+    hideInfantryBoxes = false
+  ) => {
     let i = 0;
     if (formation) {
       // formed to fight: every figure stands at its place of the line, around the head of the column, facing south (toward the enemy)
@@ -76,8 +121,24 @@ export function createFigureColumn(
       if (formation) sample.y = head.y;
       // with a `gaitPhase` (strides, from a clock) the legs keep their own pace whatever the speed of the army; without it they follow the distance walked
       const g = gaitAt(slot.kind, (gaitPhase ?? s / STRIDE) + n * PHASE_STEP, gaitAmount);
-      position.set(x, (ground(x, z) ?? sample.y) + g.bob, z);
-      base.compose(position, qHeading.setFromAxisAngle(up, sample.heading), one.setScalar(figureScale * slot.scale));
+      const y = (ground(x, z) ?? sample.y) + g.bob;
+      position.set(x, y, z);
+
+      const pose = poseBySlot[n];
+      if (pose) {
+        pose.x = x;
+        pose.y = y;
+        pose.z = z;
+        pose.heading = sample.heading;
+        pose.scale = figureScale * slot.scale;
+      }
+
+      const hideBoxes = hideInfantryBoxes && (slot.kind === 'foot' || slot.kind === 'foot_afro');
+      base.compose(
+        position,
+        qHeading.setFromAxisAngle(up, sample.heading),
+        one.setScalar(hideBoxes ? 0 : figureScale * slot.scale)
+      );
       for (const part of FIGURE_PARTS[slot.kind]) {
         const swings = part.leg ?? part.arm;
         if (swings) {
@@ -102,5 +163,10 @@ export function createFigureColumn(
     });
     mesh.instanceMatrix.needsUpdate = true;
   };
-  return { mesh, update, length: slots.length > 0 ? slots[slots.length - 1]!.along : 0 };
+  return {
+    mesh,
+    update,
+    infantryPoses,
+    length: slots.length > 0 ? slots[slots.length - 1]!.along : 0
+  };
 }

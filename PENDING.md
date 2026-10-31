@@ -13,6 +13,7 @@ Order: C8, C7, C2, C3, C4, C5, C1, C6.
 - [x] C5 `map-search`: search by province or department with autocomplete, keyboard navigation, normalization (accents/case) and seamless drilldown on the map. Branch `task/map-search`.
 - [x] C1 `res-minerals-extend`: added copper (116.7 Mt), boron (3rd world reserve), and molybdenum (2.2+ Mt) to mining totals and provincial breakdowns; added Taca Taca with NI 43-101 parameters; enabled search by mining project in MapSearch. Branch `task/res-minerals-extend`.
 - [x] C6 `province-profile-slide`: replaced mock data with audited official series for all 24 provinces (PBG de DNAP/INDEC, Empleo privado y público de OEDE/SIPA, Pobreza e indigencia de EPH/INDEC, Coparticipación efectiva real de Min. Economía/DNAP, Tasa de criminalidad de SNIC/Min. Seguridad, Exportaciones OPEX/INDEC, Población Censo 2022). Branch `task/data-province-profile`.
+- [x] `andes-uniform-models`: 3D GLB models for San Martín, blue soldiers, and red soldiers with muskets mounted on backs; "Modelos detallados" toggle button in Andes scene; "Ver uniformes" showcase popup in navbar (90vh height with zoom controls); 6-figure march formation (San Martín + 5 soldiers: 3 blue, 2 red) in AndesIntro above 1817; San Martín + 2 grenadiers escort on "Cruce de los Andes" button hover in Intro; README 3D model screenshots, index, repository links and Meshy AI free-to-use notice; slide 4 title updated to "El costo de acceder a la IA". Branch `task/andes-uniform-models`.
 - [ ] **Data to verify (human)**:
   - Slide 1: the places in the ranking of the ten compared countries (`ranks` in `web/src/tour/worldGdp.json`, computed from the World Bank WDI by `scripts/build_world_gdp.py`) and the LCN aggregate growth (`regionAggregate`, World Bank `NY.GDP.MKTP.KD.ZG`): check a few years on the World Bank site.
   - C1: Recursos de cobre 116,7 Mt (Secretaría de Minería ARMINERA 2025 p. 8).
@@ -317,3 +318,14 @@ Order: C8, C7, C2, C3, C4, C5, C1, C6.
 ## Done · Índice del README (2026-10-30)
 
 - [x] Índice con enlaces a todas las secciones y subsecciones, anclas explícitas y títulos enlazados de vuelta al índice.
+
+
+## Done · Modelos 3D de uniformes y Cruce de los Andes (2026-10-30)
+
+- [x] Fusil de chispa (`musket.glb`) montado en diagonal sobre la espalda (`mixamorig:Spine2`) de los dos soldados (`soldier-blue.glb` y `soldier-red.glb`).
+- [x] Botón `"Modelos detallados"` en los controles del Cruce de los Andes (`web/src/scenes/andes/index.tsx` y `MapLibreRenderer.tsx`) para activar los modelos 3D GLB en la infantería del cruce.
+- [x] Botón `"Ver uniformes"` en la barra de navegación (`web/src/app/Header.tsx`) que abre el pop-up 3D (`web/src/app/UniformsModal.tsx`) con los 3 modelos (`San Martín`, `Soldado de Uniforme Azul`, `Soldado de Uniforme Rojo` con fusiles a la espalda).
+- [x] En la pantalla de cielo celeste al abrir `"Cruce de los Andes"` (`web/src/scenes/andes/AndesIntro.tsx`), marcha 3D de San Martín adelante con 5 soldados detrás (3 azules y 2 rojos).
+- [x] Al hacer hover sobre el botón `"Cruce de los Andes"` en la intro (`web/src/intro/Intro.tsx`), aparece a la derecha encima del mapa de Argentina San Martín escoltado por dos granaderos.
+- [ ] Revisión humana visual de la escala y orientación del fusil en la espalda y las animaciones 3D en navegador.
+- [x] `README.md`: agregada sección e índice de «Modelos 3D del Ejército de los Andes (Meshy AI)» con capturas (`docs/assets/models/*.jpg`), enlaces directos a cada `.glb` en el repositorio y mención explícita de que fueron hechos con Meshy AI y son *free to use* sin necesidad de dar créditos.

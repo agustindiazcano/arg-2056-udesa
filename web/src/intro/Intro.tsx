@@ -6,6 +6,8 @@ import type { Section } from '../types/scene';
 import './intro.css';
 import { INSTITUTIONS } from '../ui/institutions';
 import { withMalvinas, type IntroShape } from './malvinasPath';
+import { CharacterStage3D } from '../scenes/andes/CharacterStage3D';
+import { INTRO_HOVER_ESCORT_FORMATION } from '../scenes/andes/uniformModels';
 
 const LAYERS = 3; // 2 sides and the top: fewer composited layers per province
 // speed of the lights (0.8): the prototype waits (350 to 1050 ms) / speed between changes
@@ -29,6 +31,8 @@ const ALL_SHORTCUTS: ReadonlyArray<{ section: Section; label: string }> = [
   { section: 'tour', label: 'Hacia el 2056' },
   { section: 'dashboard', label: 'Data Dashboard' }
 ];
+
+const ESCORT_COUNT = INTRO_HOVER_ESCORT_FORMATION.filter((p) => p.role !== 'leader').length;
 
 function viewBox(b: Box): string {
   return [b.x, b.y, b.w, b.h].map((v) => v.toFixed(1)).join(' ');
@@ -185,6 +189,27 @@ export function Intro({ onStart }: Props) {
             })}
           </div>
         </div>
+        {hoveredShortcut === 'andes' && (
+          <div
+            className="intro-andes-escort"
+            data-testid="intro-andes-escort"
+            data-leader="san-martin"
+            data-escorts={String(ESCORT_COUNT)}
+          >
+            <CharacterStage3D
+              placements={INTRO_HOVER_ESCORT_FORMATION}
+              animationMode="walk"
+              cameraPosition={[0, 1.55, 4.15]}
+              cameraLookAt={[0, 0.9, 0]}
+              cameraFov={34}
+              showPedestals
+              className="intro-andes-escort-stage"
+            />
+            <span className="intro-andes-escort-caption">
+              Gral. San Martín y escolta de Granaderos
+            </span>
+          </div>
+        )}
       </div>
 
       <main className="intro-copy">

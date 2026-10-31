@@ -98,6 +98,7 @@ export default function Scene() {
 
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [camera, setCamera] = useState<CameraMode>('free');
+  const [detailedModels, setDetailedModels] = useState(false);
   const [toggles] = useState<GraphicsToggles>(loadToggles);
   // the dates and events are a dropdown, closed at first, so the left side of the map stays free
   const [eventsOpen, setEventsOpen] = useState(false);
@@ -183,6 +184,7 @@ export default function Scene() {
           selectedId={selectedId}
           camera={camera}
           graphics={graphics}
+          detailedModels={detailedModels}
           followId={followId}
           onSelect={(id) => (id === null ? close() : select(id))}
           onTimeScale={setTimeScale}
@@ -268,6 +270,14 @@ export default function Scene() {
         </button>
         <button type="button" className="chip" aria-pressed={camera === 'free' && followId === null} onClick={freeCamera}>
           Cámara libre
+        </button>
+        <button
+          type="button"
+          className="chip"
+          aria-pressed={detailedModels}
+          onClick={() => setDetailedModels((v) => !v)}
+        >
+          Modelos detallados
         </button>
         <button
           type="button"
