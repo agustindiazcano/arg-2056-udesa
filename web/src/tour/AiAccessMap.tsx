@@ -4,7 +4,7 @@ import { ACCESS_COUNTRIES, effectiveCost, taxPct } from './aiAccess.js';
 import { accessBand } from './aiEvidence.js';
 import { RefList } from '../ui/RefLink.js';
 
-const names: Record<string, string> = {
+export const LATAM_COUNTRY_NAMES: Record<string, string> = {
   ARG: 'Argentina',
   FLK: 'Argentina',
   URY: 'Uruguay',
@@ -28,12 +28,12 @@ const names: Record<string, string> = {
 
 export function AiAccessMap({ price }: { price: number }) {
   const [active, setActive] = useState<string | null>('ARG');
-  const country = ACCESS_COUNTRIES.find((c) => c.name === names[active ?? '']);
+  const country = ACCESS_COUNTRIES.find((c) => c.name === LATAM_COUNTRY_NAMES[active ?? '']);
   return (
     <div className="ai-latam">
       <svg viewBox="0 0 360 370" role="group" aria-label="Mapa de América Latina: recargo sobre el precio de lista de IA. Brasil 3,5 %, Panamá 7 %, Paraguay 10 %, Guatemala 12 %, Costa Rica, El Salvador y Bolivia 13 %, Ecuador, Honduras y Nicaragua 15 %, México y Venezuela 16 %, Perú y República Dominicana 18 %, Chile y Colombia 19 %, Uruguay 22 %, Argentina 51 % en el supuesto de tarjeta en pesos.">
         {geometry.map((region) => {
-          const c = ACCESS_COUNTRIES.find((item) => item.name === names[region.id]);
+          const c = ACCESS_COUNTRIES.find((item) => item.name === LATAM_COUNTRY_NAMES[region.id]);
           const pct = c ? taxPct(c) : null;
           return <path key={region.id} d={region.path} fillRule="evenodd" className={`ai-country ai-country--${accessBand(pct)}`} tabIndex={0} role="button" aria-label={`${region.name}: ${pct === null ? 'sin dato comparable' : `${pct} % de recargo`}`} aria-pressed={active === region.id} onMouseEnter={() => setActive(region.id)} onFocus={() => setActive(region.id)} onClick={() => setActive(region.id)} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setActive(region.id); } }}><title>{region.name}</title></path>;
         })}

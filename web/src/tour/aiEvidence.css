@@ -51,9 +51,13 @@ button.ai-pyramid-band[aria-pressed='true'], button.ai-pyramid-band:focus-visibl
 .ai-access-main { overflow: auto; pointer-events: auto; }
 .ai-access-step .prov-side { grid-template-rows: minmax(0, 1.4fr) minmax(0, 1fr); }
 .ai-access-step .prov-side > .gdp-chart { overflow: auto; pointer-events: auto; }
-.ai-token-prices { padding: var(--space-2); font-size: .85rem; }
+.ai-token-prices { display: flex; flex-direction: column; gap: var(--space-2); padding: var(--space-2); font-size: .82rem; height: 100%; min-height: 0; }
 .ai-token-prices small { display: block; font-size: .7rem; font-weight: 400; }
-.ai-token-prices p { margin: var(--space-2) 0; }
+.ai-token-prices p { margin: .15rem 0; }
+.ai-token-grid { display: grid; grid-template-columns: minmax(210px, .95fr) minmax(0, 1.25fr); gap: var(--space-3); flex: 1; min-height: 0; align-items: start; }
+.ai-token-map-box { min-height: 220px; }
+.ai-token-map-box svg { max-height: 220px; }
+.ai-token-tables { display: flex; flex-direction: column; gap: .35rem; min-width: 0; }
 .ai-latam { display: flex; flex-direction: column; height: 100%; min-height: 290px; }
 .ai-latam svg { flex: 1; min-height: 180px; width: 100%; }
 .ai-country { stroke: var(--surface); stroke-width: .6; cursor: pointer; }

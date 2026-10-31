@@ -51,6 +51,11 @@ describe('sourced AI slides', () => {
     expect(peru.getAttribute('aria-pressed')).toBe('true');
     fireEvent.click(screen.getByRole('button', { name: 'Costo por token' }));
     expect(screen.getByRole('table', { name: 'Precios de API por millón de tokens' })).toBeDefined();
+    expect(screen.getByRole('group', { name: /Mapa semáforo de América Latina: sobrecosto porcentual y precio por millón de tokens/ })).toBeDefined();
+    expect(screen.getByText(/Sobrecosto por cada token en Argentina: \+51 %/)).toBeDefined();
+    const tokenChile = screen.getByRole('button', { name: /Chile: \+19 % por token/ });
+    fireEvent.click(tokenChile);
+    expect(tokenChile.getAttribute('aria-pressed')).toBe('true');
     expect(screen.getByText(/Una suscripción mensual no compra/)).toBeDefined();
   });
   it('changes research views while keeping the units visible', () => {
