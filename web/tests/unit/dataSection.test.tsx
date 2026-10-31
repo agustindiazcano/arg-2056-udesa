@@ -80,7 +80,7 @@ describe('the slides with data', () => {
   const slides = buildSlides();
 
   it('has a slide per step with data, in order, each with a number, a title and tables', () => {
-    expect(slides.map((s) => s.id)).toEqual(['0', '8', '5', '12', '14', '3', '16', '17', '21', '22', '23', '24', '25', '27', '28', '26', '29', 'sim']);
+    expect(slides.map((s) => s.id)).toEqual(['0', '8', '5', '12', '14', '3', '16', '17', '21', '22', '23', '24', '27', '28', '26', '29', 'sim']);
     for (const [i, s] of slides.entries()) {
       expect(s.title.length).toBeGreaterThan(0);
       // the number of the label is the position of the slide (0, 1, 2...), not its id

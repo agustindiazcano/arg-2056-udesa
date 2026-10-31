@@ -1,4 +1,4 @@
-import { ENCLAVE_TITLE, FORECAST_LIMITS_TITLE, PEERS_TITLE, SHOCKS_TITLE } from './slideTitles.js';
+import { ENCLAVE_TITLE, PEERS_TITLE, SHOCKS_TITLE } from './slideTitles.js';
 
 export interface DraftTopic {
   heading: string;
@@ -47,16 +47,6 @@ export const DRAFT_SLIDES: readonly DraftSlideDef[] = [
       { heading: 'Canadá', text: 'Energía, minerales críticos y agroforestal con educación de primer nivel y polos tecnológicos.' },
       { heading: 'Chile', text: 'Referente regional en cobre y litio, con regla fiscal y fondos de estabilización.' },
       { heading: 'Qué comparar', text: 'Reservas sobre producción y exportaciones, complejidad exportadora, valor agregado por habitante y cómo se captura y reinvierte la renta.' }
-    ]
-  },
-  {
-    id: 25,
-    title: FORECAST_LIMITS_TITLE,
-    lead: 'Los datos del pasado no alcanzan para anticipar las olas tecnológicas y políticas',
-    topics: [
-      { heading: 'Pronósticos que fallaron', text: 'Analistas e instituciones descartaron cripto, Tesla o SpaceX en sus primeros años; las consultoras políticas fallaron con los outsiders.' },
-      { heading: 'La IA generativa en 2021 y hoy', text: 'Casi sin atención en la política y las empresas en 2021, y foco universal hoy.' },
-      { heading: 'Ambigüedad y emoción', text: 'Medirlas hace falta pero no alcanza: las narrativas rotan más rápido que los datos.' }
     ]
   }
 ];

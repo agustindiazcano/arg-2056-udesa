@@ -9,7 +9,6 @@ import {
   DEVELOPMENT_TITLE,
   ENCLAVE_TITLE,
   EXPORTS_TITLE,
-  FORECAST_LIMITS_TITLE,
   FORECAST_UNCERTAINTY_TITLE,
   PEERS_TITLE,
   PRODUCTIVITY_TITLE,
@@ -45,7 +44,6 @@ export const SPECIAL_TITLES: Record<number, string> = {
   22: SHOCKS_TITLE,
   23: ENCLAVE_TITLE,
   24: PEERS_TITLE,
-  25: FORECAST_LIMITS_TITLE,
   26: AI_PYRAMID_TITLE,
   ...Object.fromEntries(DRAFT_SLIDES.map((d) => [d.id, d.title])),
   ...Object.fromEntries(AI_EVIDENCE_SLIDES.map((d) => [d.id, d.title]))

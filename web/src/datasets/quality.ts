@@ -107,7 +107,6 @@ export const TABLE_META: Readonly<Record<string, TableMeta>> = {
   'draft-22': draft('Esquema de temas del borrador'),
   'draft-23': draft('Esquema de temas del borrador'),
   'draft-24': draft('Esquema de temas del borrador'),
-  'draft-25': draft('Esquema de temas del borrador'),
   'ai-api-prices': meta('real', 'Listas oficiales de Anthropic, OpenAI, Google y xAI; modelos y condiciones en cada fila', '2026-10-30'),
   'ai-enterprise-adoption': meta('real', 'Gallup Q4 2025; Yu et al. (2026), S&P 500; Yotzov et al., CEPR (2026). Muestras distintas, no sumables.', '2026-10-30'),
   'ai-token-publications': meta('partial', 'Publicaciones oficiales de Anthropic, Google, OpenAI, Cursor y OpenRouter; percentiles mensuales de usuarios no disponibles en estas fuentes', '2026-10-30'),
