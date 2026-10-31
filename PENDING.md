@@ -2,8 +2,15 @@
 
 Every task below has a brief (`docs/tasks/<slug>.md`, historical briefs in `docs/archived/`) and a prompt (`docs/TASKS.md`). The list of all tasks, with their blockers, is `docs/roadmap.md`; the status table is "Next Steps" in `docs/TASKS.md`. READY = can start now. BLOCKED = needs what the line says.
 
+- [x] Adjust detailed Andes model orientation and spacing, show 30% red uniforms in detailed infantry, and reduce the sky intro formation for laptop screens. Branch `task/andes-model-orientation`; visual review pending.
+
 ## New corrections (`test/correcciones-nuevas.png`, plan in `docs/action-plan-correcciones-nuevas.md`)
 
+- [ ] Add a site-wide ES / EN language selector and translations. Plan: `docs/tasks/language-switch.md`.
+
+- [x] Replace slide reference chips with a shared references dialog; CI covers each slide and keyboard navigation. Human review of source associations and visual layout remains useful. Plan: `docs/tasks/references-responsive-carousel.md`.
+- [ ] Adapt slides for laptop/narrow screens with a secondary-chart carousel. Plan: `docs/tasks/references-responsive-carousel.md`.
+- [x] Update slide 4 subtitle and show the uniforms control only in Andes. Branch `task/slide4-header-plans`.
 - [x] Slide 4: use the existing Natural Earth 1:10m Malvinas outline on both Latin America maps, as non-selectable no-data geography. Branch `task/malvinas-slide4`.
 
 Order: C8, C7, C2, C3, C4, C5, C1, C6.

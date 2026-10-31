@@ -1,5 +1,6 @@
 import React, { useEffect, useId, useState } from 'react';
 import { RefList } from './RefLink.js';
+import { useSlideReferences } from './SlideReferences.js';
 
 export interface ChartHelpProps {
   title: string;
@@ -20,6 +21,7 @@ export function ChartHelp({ title, lead, paragraphs, how, refs = [] }: ChartHelp
   const [hover, setHover] = useState(false);
   const [open, setOpen] = useState(false);
   const dialogTitleId = useId();
+  const collected = useSlideReferences(refs.map((id) => ({ id })));
 
   useEffect(() => {
     if (!open) return;
@@ -112,7 +114,7 @@ export function ChartHelp({ title, lead, paragraphs, how, refs = [] }: ChartHelp
                   <p>{how}</p>
                 </div>
               )}
-              {refs.length > 0 && (
+              {!collected && refs.length > 0 && (
                 <div className="chart-help-modal-refs">
                   <strong>Referencias</strong>
                   <RefList ids={refs} />

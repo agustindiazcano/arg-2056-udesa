@@ -23,6 +23,7 @@ import { SlotPortal } from '../../dashboard/SlotPortal';
 import type { Column } from './columns';
 import type { CameraMode } from './camera';
 import { createFigureColumn } from './figures3d';
+import { detailedInfantryModel } from './detailedInfantry';
 import type { FigureColumn } from './figures3d';
 import type { Graphics } from './graphics';
 import { cameraFor, clampZoom, coordAtKm, figuresVisible, gaitAmount, gaitPhaseAt, metersPerPixel, metersPerUnit, mixHex, timeScaleForZoom, WASD_SHIFT_FACTOR, WASD_SPEED_PX, wasdDelta, wheelZoomDelta } from './mapGeo';
@@ -433,13 +434,12 @@ class ArmyLayer implements CustomLayerInterface {
         if (!this.detailedModelsOn || this.column !== targetColumn) return;
         const group = new GroupCtor();
         const actors: Array<{ holder: Group; mixer: AnimationMixer | null }> = [];
+        let infantryIndex = 0;
         for (const pose of targetColumn.infantryPoses) {
           const modelId =
             pose.kind === 'leader'
               ? 'san-martin'
-              : pose.kind === 'foot_afro'
-                ? 'soldier-red'
-                : 'soldier-blue';
+              : detailedInfantryModel(infantryIndex++);
           const withMusket = pose.kind !== 'leader';
           const { scene: charScene, animations } = assets.cloneCharacter(modelId, withMusket);
           const holder = new GroupCtor();
@@ -586,7 +586,7 @@ class ArmyLayer implements CustomLayerInterface {
         const pose = poses[i]!;
         const actor = this.detailedActors[i]!;
         actor.holder.position.set(pose.x, pose.y, pose.z);
-        actor.holder.rotation.y = pose.heading + Math.PI;
+        actor.holder.rotation.y = pose.heading;
         actor.holder.scale.setScalar(pose.scale * 0.62);
         if (amount > 0 && dt > 0) {
           actor.mixer?.update(dt * amount);
@@ -787,7 +787,7 @@ export function MapLibreRenderer({ initialView, route, columns, day, selectedId,
       if (!column || !at) continue;
       other.km = at.distanceKm;
       const herasArrived = mainArrived && id === 'las-heras' && at.distanceKm >= column.route.totalKm - ARRIVED_KM;
-      other.formation = herasArrived ? { dx: (battleWidth(layer.figureCount) + battleWidth(other.figureCount)) / 2 + 3 * 0.13 } : null;
+      other.formation = herasArrived ? { dx: ((battleWidth(layer.figureCount) + battleWidth(other.figureCount)) / 2 + 3 * 0.13) * (detailedModels ? 4 : 1) } : null;
       const near = distanceKm(centre.lng, centre.lat, at.lon, at.lat) < 60;
       other.active = figuresVisible(zoom, other.active) && near;
       if (other.active) withFigures.add(id);

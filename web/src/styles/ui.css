@@ -4070,3 +4070,13 @@ button.brand:focus-visible .brand-a {
 .prov-table tbody tr[data-selected] th {
   font-weight: 700;
 }
+.slide-references-button {
+  position: fixed;
+  right: var(--space-3);
+  bottom: var(--space-3);
+  z-index: 30;
+  pointer-events: auto;
+}
+.slide-references-backdrop { z-index: 1000; }
+.slide-references-list { list-style: none; margin: 0; padding: 0; }
+.slide-references-list li { margin: 0 0 var(--space-2); overflow-wrap: anywhere; }

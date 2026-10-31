@@ -21,10 +21,22 @@ function UniformIcon() {
   );
 }
 
+function UniformsControl() {
+  const [open, setOpen] = useState(false);
+  return (
+    <>
+      <button type="button" className="tab data-button" aria-expanded={open} aria-haspopup="dialog" onClick={() => setOpen((v) => !v)}>
+        <UniformIcon />
+        Ver uniformes
+      </button>
+      {open && <UniformsModal onClose={() => setOpen(false)} />}
+    </>
+  );
+}
+
 /** The brand (a way back to the intro), the sections (the steps of the Recorrido next to them, and the controls of the scene) and the Data button. */
 export function Header({ onHome }: { onHome?: () => void }) {
   const section = useStore((s) => s.section);
-  const [uniformsOpen, setUniformsOpen] = useState(false);
   const navRef = useCallback((el: HTMLDivElement | null) => useSlots.getState().set('nav', el), []);
   return (
     <header className="app-header">
@@ -39,16 +51,7 @@ export function Header({ onHome }: { onHome?: () => void }) {
         <SectionTabs />
         {section === 'tour' && <TourSteps />}
         <div className="header-end">
-          <button
-            type="button"
-            className="tab data-button"
-            aria-expanded={uniformsOpen}
-            aria-haspopup="dialog"
-            onClick={() => setUniformsOpen((v) => !v)}
-          >
-            <UniformIcon />
-            Ver uniformes
-          </button>
+          {section === 'andes' && <UniformsControl />}
           <DataButton />
         </div>
       </div>
@@ -57,7 +60,6 @@ export function Header({ onHome }: { onHome?: () => void }) {
         <SceneTabs />
         <div className="nav-slot" ref={navRef} />
       </div>
-      {uniformsOpen && <UniformsModal onClose={() => setUniformsOpen(false)} />}
     </header>
   );
 }

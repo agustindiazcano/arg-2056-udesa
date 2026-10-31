@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { REFERENCES } from '../datasets/references.js';
 import type { Reference } from '../datasets/types.js';
+import { useSlideReferences } from './SlideReferences.js';
 
 const BY_ID = new Map<string, { ref: Reference; num: number }>();
 const BY_URL = new Map<string, { ref: Reference; num: number }>();
@@ -48,12 +49,15 @@ export interface RefLinkProps {
  */
 export function RefLink({ id, url, label, fullLabel = false }: RefLinkProps) {
   const [hover, setHover] = useState(false);
+  const collected = useSlideReferences([{ id, url, label }]);
 
   const entry = (id ? BY_ID.get(id) : undefined) ?? (url ? BY_URL.get(url) : undefined);
   const num = entry?.num ?? 1;
   const resolvedUrl = entry?.ref.url ?? url ?? '#';
   const fullText = label ?? entry?.ref.label ?? id ?? '';
   const shortText = shortRefLabel(fullText);
+
+  if (collected) return null;
 
   return (
     <span
@@ -89,6 +93,8 @@ export function RefLink({ id, url, label, fullLabel = false }: RefLinkProps) {
  * Renders a list of compact numbered reference badges (`[1] FMI`, `[2] Banco Mundial`).
  */
 export function RefList({ ids }: { ids: readonly string[] }) {
+  const collected = useSlideReferences(ids.map((id) => ({ id })));
+  if (collected) return null;
   if (ids.length === 0) return null;
   return (
     <span className="ref-chip-list" aria-label="Referencias numeradas">

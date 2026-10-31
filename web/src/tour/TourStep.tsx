@@ -19,10 +19,15 @@ import { ForecastUncertaintyStep } from './ForecastUncertaintyStep.js';
 import { INDEX_STEP } from './chartSteps.js';
 import { TourSidebar } from './TourSidebar.js';
 import { AiEvidenceStep } from './AiEvidenceStep.js';
+import { SlideReferences } from '../ui/SlideReferences.js';
 
 /** The chart of a step of the Recorrido. One lazy chunk keeps ECharts out of the initial load. */
 export function TourStep({ step }: { step: number }) {
   if (step === INDEX_STEP) return <IndexStep />;
+  return <SlideReferences key={step}><TourStepContent step={step} /></SlideReferences>;
+}
+
+function TourStepContent({ step }: { step: number }) {
   if (step === 14) return <ProductivityStep />;
   if (step === 16) return <DevelopmentStep />;
   if (step === 17) return <ForecastUncertaintyStep />;
