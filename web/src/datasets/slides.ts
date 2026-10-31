@@ -518,7 +518,6 @@ export function buildSlides(): SlideData[] {
         ]
       }
     ], false, ['D1', 'D2', 'W1', 'S3']),
-    ...DRAFT_SLIDES.filter((d) => d.id !== 26).map((d) => slide(String(d.id), d.title, [{ id: `draft-${d.id}`, title: 'Temas de la diapositiva', columns: ['Tema', 'Descripción'], rows: d.topics.map((t) => [t.heading, t.text]) }], false)),
     ...AI_EVIDENCE_SLIDES.map((d) => slide(String(d.id), d.title, aiEvidenceTables(d.id), false, [...d.refs])),
     slide('17', FORECAST_UNCERTAINTY_TITLE, [
       {
@@ -591,6 +590,7 @@ export function buildSlides(): SlideData[] {
         ]
       }
     ], false, ['D3', 'A1', 'A8', 'F1']),
+    ...DRAFT_SLIDES.filter((d) => d.id !== 26).map((d) => slide(String(d.id), d.title, [{ id: `draft-${d.id}`, title: 'Temas de la diapositiva', columns: ['Tema', 'Descripción'], rows: d.topics.map((t) => [t.heading, t.text]) }], false)),
     slide('sim', 'Simulador del PBI', [
       { id: 'factors', title: 'Factores del escenario de referencia', columns: ['Factor', 'Valor', 'Unidad'], rows: SIM_FIELDS.map((f) => [f.label, DEFAULT_SIM[f.key], f.unit]) },
       { id: 'reference', title: 'PBI del escenario de referencia (miles de millones de USD)', columns: ['Año', 'PBI'], rows: sim.years.map((y, i) => [y, sim.gdp[i] ?? null]) }

@@ -16,7 +16,7 @@ describe('sourced AI slides', () => {
   it.each(AI_EVIDENCE_SLIDES)('registers $title with downloadable, sourced data', (def) => {
     render(<AiEvidenceStep step={def.id} />);
     expect(screen.getByRole('heading', { level: 2, name: def.title })).toBeDefined();
-    expect(TOUR_ORDER.slice(-5)).toContain(def.id);
+    expect(TOUR_ORDER).toContain(def.id);
     for (const id of def.refs) expect(REFERENCES.some((r) => r.id === id)).toBe(true);
     for (const table of aiEvidenceTables(def.id)) {
       expect(withMeta(table).retrievedAt).toBe('2026-10-30');
