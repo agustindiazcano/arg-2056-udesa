@@ -328,76 +328,76 @@ Escenarios de crecimiento de Argentina con IA y estimaciones de otros analistas.
 
 ### [Referencias complementarias de Data](#indice)
 
-Enlaces adicionales del catálogo de la sección Data (`web/src/datasets/references.ts`). Se conservan sus identificadores y estados de verificación; su inclusión no implica una nueva verificación de las fuentes originales.
+Enlaces adicionales del catálogo de la sección Data (`web/src/datasets/references.ts`). Su inclusión no implica una nueva verificación de las fuentes originales.
 
 **Cruce de los Andes**
 
-- **H6** (leída): UNCuyo, Historia virtual de Mendoza, «El Cruce de los Andes». <https://historiavirtual.mza.uncu.edu.ar/mendoza-independiente/cruce.html>
-- **H8** (por informe): Estado general del Ejército de los Andes (31-12-1816), en Espejo, El paso de los Andes. <https://archive.org/details/elpasodelosande00espegoog>
+- **H6**: UNCuyo, Historia virtual de Mendoza, «El Cruce de los Andes». <https://historiavirtual.mza.uncu.edu.ar/mendoza-independiente/cruce.html>
+- **H8**: Estado general del Ejército de los Andes (31-12-1816), en Espejo, El paso de los Andes. <https://archive.org/details/elpasodelosande00espegoog>
 
 **Productividad**
 
-- **P3** (citada): Baumann Fonay, serie de PTF y PIB potencial en Alphacast (los datos piden login). <https://www.alphacast.io/datasets/potential-gross-domestic-product-output-gap-tfp-9670>
-- **P4** (leída): Baumann Fonay en X (análisis de productividad y PTF). <https://x.com/ivanfbf/status/2050931628965278028>
-- **P5** (leída): Ministerio de Hacienda (2018), Crecimiento económico, PTF y PIB potencial en Argentina, Documento de trabajo n.º 1. <https://www.argentina.gob.ar/sites/default/files/crecimiento-economico-ptf-y-pib-potencial-en-argentina_1.pdf>
-- **P9** (leída): Anthropic, Estimating productivity gains. <https://www.anthropic.com/research/estimating-productivity-gains>
-- **P10c** (leída): METR (2025), Measuring the Impact of Early-2025 AI on Experienced Open-Source Developer Productivity: 19 % más tiempo con IA (desactualizado según METR). <https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/>
-- **P10d** (leída): Becker, Rush, Barnes y Rein (2025), el mismo estudio de METR en arXiv. <https://arxiv.org/abs/2507.09089>
-- **P10a** (citada): METR (19 % más lentos con IA), vía InfoQ. <https://www.infoq.com/news/2025/07/ai-productivity>
-- **P10b** (citada): METR, vía eWeek. <https://www.eweek.com/news/news-ai-tools-slow-developer-productivity-study/>
-- **P11a** (contexto): BID/INTAL, la IA en América Latina y el Caribe. <https://www.iadb.org/es/noticias/inteligencia-artificial-trae-amplios-beneficios-america-latina-y-el-caribe-estudio-bid>
-- **P11b** (contexto): FGV IBRE, productividad de Brasil 2024. <https://blogdoibre.fgv.br/node/2057>
-- **P11c** (contexto): BLS, productividad de Estados Unidos. <https://www.bls.gov/news.release/prod2.nr0.htm>
-- **P11d** (contexto): OECD, PBI por hora trabajada. <https://www.oecd.org/es/data/indicators/gdp-per-hour-worked.html>
-- **P11e** (contexto): DBnomics, espejo de la Penn World Table 10. <https://db.nomics.world/GGDC/penn10>
-- **P11f** (contexto): ABC (Paraguay), productividad regional. <https://www.abc.com.py/economia/2026/07/31/la-productividad-regional-cayo-04-anual-la-ia-busca-revertir-la-tendencia/>
-- **P12** (descartada): The Conference Board, TED summary tables (daba +6,8 % para Brasil en 2024, contradice a FGV). <https://www.conference-board.org/pdf_free/TED-SummaryTables-Charts-sep2025.pdf>
-- **P13a** (secundaria): El Observador (Uruguay) sobre el documento del INDEC. <https://www.elobservador.com.uy/argentina/economia-y-negocios/la-productividad-argentina-crecio-al-ritmo-mas-alto-1996-pero-cae-la-calidad-del-empleo-n6042872>
-- **P13b** (secundaria): Derecha Diario sobre el documento del INDEC. <https://derechadiario.com.ar/economia/productividad-registro-en-2025-mayor-avance-en-20-anos-bajo-gobierno-milei>
+- **P3**: Baumann Fonay, serie de PTF y PIB potencial en Alphacast (los datos piden login). <https://www.alphacast.io/datasets/potential-gross-domestic-product-output-gap-tfp-9670>
+- **P4**: Baumann Fonay en X (análisis de productividad y PTF). <https://x.com/ivanfbf/status/2050931628965278028>
+- **P5**: Ministerio de Hacienda (2018), Crecimiento económico, PTF y PIB potencial en Argentina, Documento de trabajo n.º 1. <https://www.argentina.gob.ar/sites/default/files/crecimiento-economico-ptf-y-pib-potencial-en-argentina_1.pdf>
+- **P9**: Anthropic, Estimating productivity gains. <https://www.anthropic.com/research/estimating-productivity-gains>
+- **P10c**: METR (2025), Measuring the Impact of Early-2025 AI on Experienced Open-Source Developer Productivity: 19 % más tiempo con IA (desactualizado según METR). <https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/>
+- **P10d**: Becker, Rush, Barnes y Rein (2025), el mismo estudio de METR en arXiv. <https://arxiv.org/abs/2507.09089>
+- **P10a**: METR (19 % más lentos con IA), vía InfoQ. <https://www.infoq.com/news/2025/07/ai-productivity>
+- **P10b**: METR, vía eWeek. <https://www.eweek.com/news/news-ai-tools-slow-developer-productivity-study/>
+- **P11a**: BID/INTAL, la IA en América Latina y el Caribe. <https://www.iadb.org/es/noticias/inteligencia-artificial-trae-amplios-beneficios-america-latina-y-el-caribe-estudio-bid>
+- **P11b**: FGV IBRE, productividad de Brasil 2024. <https://blogdoibre.fgv.br/node/2057>
+- **P11c**: BLS, productividad de Estados Unidos. <https://www.bls.gov/news.release/prod2.nr0.htm>
+- **P11d**: OECD, PBI por hora trabajada. <https://www.oecd.org/es/data/indicators/gdp-per-hour-worked.html>
+- **P11e**: DBnomics, espejo de la Penn World Table 10. <https://db.nomics.world/GGDC/penn10>
+- **P11f**: ABC (Paraguay), productividad regional. <https://www.abc.com.py/economia/2026/07/31/la-productividad-regional-cayo-04-anual-la-ia-busca-revertir-la-tendencia/>
+- **P12**: The Conference Board, TED summary tables (daba +6,8 % para Brasil en 2024, contradice a FGV). <https://www.conference-board.org/pdf_free/TED-SummaryTables-Charts-sep2025.pdf>
+- **P13a**: El Observador (Uruguay) sobre el documento del INDEC. <https://www.elobservador.com.uy/argentina/economia-y-negocios/la-productividad-argentina-crecio-al-ritmo-mas-alto-1996-pero-cae-la-calidad-del-empleo-n6042872>
+- **P13b**: Derecha Diario sobre el documento del INDEC. <https://derechadiario.com.ar/economia/productividad-registro-en-2025-mayor-avance-en-20-anos-bajo-gobierno-milei>
 
 **Desarrollo social**
 
-- **W1** (leída): Banco Mundial, World Development Indicators (WDI): esperanza de vida al nacer (SP.DYN.LE00.IN), mortalidad infantil (SP.DYN.IMRT.IN), índice de Gini (SI.POV.GINI), matrícula secundaria y terciaria (SE.SEC.ENRR, SE.TER.ENRR), años esperados de escolaridad (SE.SCH.LIFE) y gasto público en educación (SE.XPD.TOTL.GD.ZS). <https://data.worldbank.org/indicator/>
+- **W1**: Banco Mundial, World Development Indicators (WDI): esperanza de vida al nacer (SP.DYN.LE00.IN), mortalidad infantil (SP.DYN.IMRT.IN), índice de Gini (SI.POV.GINI), matrícula secundaria y terciaria (SE.SEC.ENRR, SE.TER.ENRR), años esperados de escolaridad (SE.SCH.LIFE) y gasto público en educación (SE.XPD.TOTL.GD.ZS). <https://data.worldbank.org/indicator/>
 
 **Recursos naturales**
 
-- **R15** (citada): Bolsa de Comercio de Rosario, Balance cárnico y lácteo 2025 (Expoagro, 2026-01-05): carne bovina, aviar y porcina y leche de 2025, estimados. <https://www.expoagro.com.ar/balance-carnico-y-lacteo-2025/>
+- **R15**: Bolsa de Comercio de Rosario, Balance cárnico y lácteo 2025 (Expoagro, 2026-01-05): carne bovina, aviar y porcina y leche de 2025, estimados. <https://www.expoagro.com.ar/balance-carnico-y-lacteo-2025/>
 
 **Proyectos RIGI**
 
-- **R14** (leída): Ministerio de Economía y Secretaría de Coordinación de Producción, Registro oficial del RIGI y resoluciones publicadas en el Boletín Oficial (Resolución 1771/2026 y concordantes). <https://www.boletinoficial.gob.ar>
+- **R14**: Ministerio de Economía y Secretaría de Coordinación de Producción, Registro oficial del RIGI y resoluciones publicadas en el Boletín Oficial (Resolución 1771/2026 y concordantes). <https://www.boletinoficial.gob.ar>
 
 **Mapa**
 
-- **M1** (usada): MapTiler, imágenes satelitales. <https://www.maptiler.com/cloud/>
-- **M2** (usada): MapTiler, modelo de elevación Terrain-RGB v2. <https://docs.maptiler.com/cloud/api/tiles/>
-- **M3** (usada): MapTiler Geocoding. <https://docs.maptiler.com/cloud/api/geocoding/>
-- **M6** (usada): MapLibre GL JS. <https://maplibre.org>
-- **M7** (usada): Three.js. <https://threejs.org>
+- **M1**: MapTiler, imágenes satelitales. <https://www.maptiler.com/cloud/>
+- **M2**: MapTiler, modelo de elevación Terrain-RGB v2. <https://docs.maptiler.com/cloud/api/tiles/>
+- **M3**: MapTiler Geocoding. <https://docs.maptiler.com/cloud/api/geocoding/>
+- **M6**: MapLibre GL JS. <https://maplibre.org>
+- **M7**: Three.js. <https://threejs.org>
 
 **Inteligencia artificial**
 
-- **A20** (citada): IVA RG 4240: qué es y cuánto se paga en 2026 (IVA de 21 % sobre servicios digitales del exterior). <https://nacho.com.ar/iva-netflix-cobraran-el-impuesto-a-los-usuarios-de-servicios-digitales/>
-- **A21** (citada): Global66, impuestos y percepción de Ganancias del 30 % (RG 5617) en compras y suscripciones en dólares, 2026. <https://www.global66.com/blog/como-afectan-los-impuestos-a-tus-gastos-digitales/>
-- **A22** (citada): SentiSight, precios de las suscripciones de IA en 2026 (ChatGPT, Claude, Gemini). <https://www.sentisight.ai/ai-price-comparison-gemini-chatgpt-claude-grok/>
-- **D7** (leída): Epoch AI, Compute Trends Across Three Eras of Machine Learning: cómputo de entrenamiento en FLOPs. <https://epoch.ai/blog/compute-trends-across-three-eras-of-machine-learning>
+- **A20**: IVA RG 4240: qué es y cuánto se paga en 2026 (IVA de 21 % sobre servicios digitales del exterior). <https://nacho.com.ar/iva-netflix-cobraran-el-impuesto-a-los-usuarios-de-servicios-digitales/>
+- **A21**: Global66, impuestos y percepción de Ganancias del 30 % (RG 5617) en compras y suscripciones en dólares, 2026. <https://www.global66.com/blog/como-afectan-los-impuestos-a-tus-gastos-digitales/>
+- **A22**: SentiSight, precios de las suscripciones de IA en 2026 (ChatGPT, Claude, Gemini). <https://www.sentisight.ai/ai-price-comparison-gemini-chatgpt-claude-grok/>
+- **D7**: Epoch AI, Compute Trends Across Three Eras of Machine Learning: cómputo de entrenamiento en FLOPs. <https://epoch.ai/blog/compute-trends-across-three-eras-of-machine-learning>
 
 **Difusión tecnológica**
 
-- **D6** (leída): Comin & Hobijn / NBER & Our World in Data, CHAT dataset: rezagos históricos de adopción masiva (>50%). <https://ourworldindata.org/technology-adoption>
+- **D6**: Comin & Hobijn / NBER & Our World in Data, CHAT dataset: rezagos históricos de adopción masiva (>50%). <https://ourworldindata.org/technology-adoption>
 
 **Agro**
 
-- **E12** (leída): SAGyP (Secretaría de Agricultura, Ganadería y Pesca), Estimaciones agrícolas por cultivo y provincia (campaña 2024/25, datos.gob.ar). <https://datos.magyp.gob.ar/dataset/estimaciones-agricolas>
+- **E12**: SAGyP (Secretaría de Agricultura, Ganadería y Pesca), Estimaciones agrícolas por cultivo y provincia (campaña 2024/25, datos.gob.ar). <https://datos.magyp.gob.ar/dataset/estimaciones-agricolas>
 
 **Perfil provincial**
 
-- **S1** (leída): Dirección Nacional de Asuntos Provinciales (DNAP) y Secretaría de Hacienda (Ministerio de Economía), Distribución geográfica del Producto Bruto y Valor Agregado Bruto provincial. <https://www.argentina.gob.ar/economia/hacienda/asuntosprovinciales>
-- **S2** (leída): Secretaría de Trabajo, Empleo y Seguridad Social (Ministerio de Capital Humano), OEDE / SIPA: Puestos de trabajo registrados del sector privado y público por provincia (2024-2025). <https://www.trabajo.gob.ar/estadisticas/oede/estadisticasprovinciales.asp>
-- **S3** (leída): INDEC, Encuesta Permanente de Hogares (EPH), Tasas de pobreza e indigencia por aglomerados urbanos (2024-2025). <https://www.indec.gob.ar/indec/web/Nivel4-Tema-4-46-152>
-- **S4** (leída): Ministerio de Economía, Dirección Nacional de Asuntos Provinciales (DNAP), Coparticipación federal y transferencias automáticas a provincias. <https://www.argentina.gob.ar/economia/hacienda/asuntosprovinciales/transferencias-gobiernos-locales>
-- **S6** (citada): PNUD Argentina, El Mapa del Desarrollo Humano en Argentina (IDH provincial, 2021); los valores se tomaron de la tabla de Wikipedia que lo reproduce. <https://www.undp.org/es/argentina/publicaciones/el-mapa-del-desarrollo-humano-en-argentina>
-- **S5** (leída): Ministerio de Seguridad de la Nación, Sistema Nacional de Información Criminal (SNIC), Tasas de presuntos hechos delictuosos por provincia cada 100.000 habitantes. <https://www.argentina.gob.ar/seguridad/estadisticas-criminales>
+- **S1**: Dirección Nacional de Asuntos Provinciales (DNAP) y Secretaría de Hacienda (Ministerio de Economía), Distribución geográfica del Producto Bruto y Valor Agregado Bruto provincial. <https://www.argentina.gob.ar/economia/hacienda/asuntosprovinciales>
+- **S2**: Secretaría de Trabajo, Empleo y Seguridad Social (Ministerio de Capital Humano), OEDE / SIPA: Puestos de trabajo registrados del sector privado y público por provincia (2024-2025). <https://www.trabajo.gob.ar/estadisticas/oede/estadisticasprovinciales.asp>
+- **S3**: INDEC, Encuesta Permanente de Hogares (EPH), Tasas de pobreza e indigencia por aglomerados urbanos (2024-2025). <https://www.indec.gob.ar/indec/web/Nivel4-Tema-4-46-152>
+- **S4**: Ministerio de Economía, Dirección Nacional de Asuntos Provinciales (DNAP), Coparticipación federal y transferencias automáticas a provincias. <https://www.argentina.gob.ar/economia/hacienda/asuntosprovinciales/transferencias-gobiernos-locales>
+- **S6**: PNUD Argentina, El Mapa del Desarrollo Humano en Argentina (IDH provincial, 2021); los valores se tomaron de la tabla de Wikipedia que lo reproduce. <https://www.undp.org/es/argentina/publicaciones/el-mapa-del-desarrollo-humano-en-argentina>
+- **S5**: Ministerio de Seguridad de la Nación, Sistema Nacional de Información Criminal (SNIC), Tasas de presuntos hechos delictuosos por provincia cada 100.000 habitantes. <https://www.argentina.gob.ar/seguridad/estadisticas-criminales>
 
 
 <a id="ia-acceso-adopcion-tokens-e-id-consulta-30-10-2026"></a>
@@ -406,51 +406,51 @@ Enlaces adicionales del catálogo de la sección Data (`web/src/datasets/referen
 
 La diapositiva 9 incorpora mapa LATAM y precios por token. Al final se agregan adopción empresarial, consumo de tokens, pirámide de adopción e I+D. Definiciones y límites: [registro de evidencia](docs/ai-evidence-2026-10-30.md).
 
-- **AI55** (leída): OpenAI, Research acceleration: The view inside OpenAI (06-09-2026): encuesta y telemetría interna; evidencia autodeclarada, no ensayo causal. <https://openai.com/index/research-acceleration-view-inside-openai/>
-- **AI30** (leída): Anthropic, precios oficiales de Claude Pro, Max, Ultra y API (consulta 30-10-2026). <https://claude.com/pricing>
-- **AI31** (leída): OpenAI, precios oficiales de API: GPT-6.1 Sol, tarifa Standard, contexto corto. <https://developers.openai.com/api/docs/pricing>
-- **AI32** (leída): Google, precios de Gemini API: Gemini 2.5 Pro, Standard, contexto hasta 200.000 tokens. <https://ai.google.dev/gemini-api/docs/pricing>
-- **AI33** (leída): xAI / SpaceXSI, Grok 4.7: modelos y precios de API. <https://docs.x.ai/developers/models>
-- **AI34** (leída): Cursor, Models & Pricing: costos dependen del modelo, del plan y del uso. <https://cursor.com/docs/models-and-pricing>
-- **AI35** (leída): Gallup, Frequent Use of AI in the Workplace Continued to Rise in Q4 (25-01-2026; trabajo de campo Q4 2025, EE. UU.). <https://www.gallup.com/workplace/701195/frequent-workplace-continued-rise.aspx>
-- **AI36** (leída): Yu et al., MIT FutureTech / CMU, AI Adoption in S&P 500 Firms (2026): integración empresarial en 2025; preprint. <https://arxiv.org/abs/2607.08920>
-- **AI37** (leída): Yotzov et al., Firms predict an AI productivity boom is coming, VoxEU/CEPR (2026), autores de Firm Data on AI, NBER 34836. <https://cepr.org/voxeu/columns/firms-predict-ai-productivity-boom-coming>
-- **AI38** (leída): OpenAI, Scaling AI for everyone (27-02-2026): más de 900 millones de usuarios semanales y 50 millones de suscriptores de consumo. <https://openai.com/index/scaling-ai-for-everyone/>
-- **AI39** (leída): ONU, World Population Prospects 2024, Summary of Results: población mundial de 8.200 millones en 2024. <https://www.un.org/development/desa/pd/sites/www.un.org.development.desa.pd/files/wpp2024_summary_of_results_final_web.pdf>
-- **AI40** (leída): Anthropic Economic Index, Cadences (26-06-2026): tokens por conversación y artefacto; percentiles normalizados, no usuarios mensuales. <https://www.anthropic.com/research/economic-index-june-2026-report>
-- **AI41** (leída): Google, Alphabet investor presentation (junio 2026): 3,2 × 10^15 tokens mensuales en sus productos y APIs. <https://blog.google/alphabet/investor-presentation-june-2026/>
-- **AI42** (leída): OpenAI, The next phase of enterprise AI (08-04-2026): más de 15.000 millones de tokens por minuto en API. <https://openai.com/index/next-phase-of-enterprise-ai/>
-- **AI43** (leída): OpenRouter, State of AI 2025: más de 100 billones (10^14) de tokens de su plataforma; muestra no representativa del mercado entero. <https://openrouter.ai/state-of-ai>
-- **AI44** (leída): arXiv, Monthly Submissions: conteos mensuales oficiales de nuevos envíos; CSV consultado el 30-10-2026. <https://arxiv.org/stats/monthly_submissions>
-- **AI45** (leída): Preprints.org, Annual Report 2025, página 3: 31.691 preprints publicados en 2025. <https://www.preprints.org/frontend/home/report/2025-annual-report>
-- **AI46** (leída): SocArXiv, informe de 2025 (2026): 3.162 trabajos aceptados; no equivale al total de envíos. <https://socopen.org/2026/>
-- **AI47** (leída): Google Research, Accelerating scientific breakthroughs with an AI co-scientist (2025): hipótesis y validación experimental previa. <https://research.google/blog/accelerating-scientific-breakthroughs-with-an-ai-co-scientist/>
-- **AI48** (leída): ARCA, percepción por operaciones en moneda extranjera: alícuota del 30 %, según operación y forma de pago. <https://www.afip.gob.ar/regimen-devolucion-percepciones/percepcion/importe.asp>
-- **AI49** (leída): ARCA, servicios digitales: IVA sobre servicios consumidos en Argentina y prestados desde el exterior. <https://www.afip.gob.ar/iva/servicios-digitales/obligados.asp>
-- **AI50** (leída): SII Chile, Circular 42/2020, IVA a servicios digitales prestados desde el exterior. <https://www.sii.cl/normativa_legislacion/circulares/2020/circu42.pdf>
-- **AI51** (leída): SAT México, guía de declaración del IVA de servicios digitales: tasa del 16 %. <https://sat.gob.mx/cs/Satellite?blobcol=urldata&blobkey=id&blobtable=MungoBlobs&blobwhere=1461175010301&ssbinary=true>
-- **AI52** (leída): DGI Uruguay, bienes y servicios gravados a la tasa básica del 22 %. <https://www.gub.uy/direccion-general-impositiva/comunicacion/publicaciones/son-bienes-servicios-gravados-tasa-basica-del-22>
-- **AI53** (usada): Natural Earth, Admin 0 Countries 1:110m, dominio público; geometría ilustrativa de América Latina. <https://www.naturalearthdata.com/downloads/110m-cultural-vectors/110m-admin-0-countries/>
-- **AI54** (contexto): Global AI Adoption Visualization, AI Bear: referencia visual de la infografía viral; cifras reemplazadas por fuentes primarias, sin sumar usuarios de distintas plataformas. <https://www.ai-bear.io/p/are-you-among-16-of-free-ai-users>
-- **AI56** (leída): Jellyfish, 2026 Software Engineering Metrics Report: distribución de consumo mensual de tokens por ingeniero (mediana 51 M, P90 380 M, P99 1.350 M). <https://jellyfish.co/library/state-of-engineering-management/>
-- **AI57** (leída): Anthropic, Claude Code — Manage costs effectively y Prompt caching: el código y el contexto se reenvían en cada turno; la lectura de caché reduce hasta 90 % el costo en dólares pero cuenta en el volumen de tokens procesados. <https://docs.anthropic.com/en/docs/claude-code/costs>
-- **AI58** (contexto): CCgather, Claude Code Leaderboard: registro comunitario de usuarios intensivos de programación agéntica (1.000 M a >15.000 M de tokens mensuales). <https://ccgather.com>
-- **AI59** (leída): Briggs, J. y Kodnani, D. (2023), Goldman Sachs Global Investment Research, The Potentially Large Effects of Artificial Intelligence on Economic Growth: +7 % del PBI global (~7 billones de USD) y +1,5 pp anuales de productividad en economías desarrolladas durante una década. <https://www.gspublishing.com/content/research/en/reports/2023/03/27/d64e052b-0f6e-45d7-967b-d7be35fabd16.html>
-- **AI60** (leída): Cerutti, E. et al. (2025), FMI Working Paper WP/25/76, AI Adoption and Inequality: Mind the Gap: brecha estructural en ganancias de PTF entre economías avanzadas (+0,8 a +1,3 % acumulado a 10 años) y emergentes (+0,1 a +0,4 %). <https://www.imf.org/en/Publications/WP/Issues/2025/04/11/AI-Adoption-and-Inequality-Mind-the-Gap-566125>
-- **AI61** (leída): Cazzaniga, M. et al. (2024), FMI Staff Discussion Note SDN/2024/001 y AI Preparedness Index (AIPI): índice de preparación para la IA (0,68 en economías avanzadas frente a 0,46–0,48 en Argentina y América Latina). <https://www.imf.org/en/Blogs/Articles/2024/06/17/mapping-the-worlds-readiness-for-artificial-intelligence-shows-prospects-diverge>
-- **AI62** (leída): Anthropic (2025), Anthropic Economic Index: Geography and Enterprise Usage (arXiv:2511.15080): elasticidad ingreso-uso de IA (~0,7 % más de uso per cápita por cada 1 % de mayor PBI per cápita) y sesgo hacia países de altos ingresos. <https://arxiv.org/abs/2511.15080>
-- **AI63** (leída): OCDE, CIAT y BID (2021–2025), VAT Digital Toolkit for Latin America and the Caribbean: alícuotas de IVA a servicios digitales transfronterizos en América Latina y el Caribe. <https://www.oecd.org/en/publications/vat-digital-toolkit-for-latin-america-and-the-caribbean_ff3da3bd-en.html>
-- **AI64** (leída): SUNAT Perú, Decreto Legislativo N.º 1623 (vigente desde diciembre de 2024): aplicación del IGV del 18 % a servicios digitales prestados por proveedores no domiciliados. <https://orientacion.sunat.gob.pe/servicios-digitales>
-- **AI65** (leída): Receita Federal do Brasil, Decreto N.º 12.499/2025: alícuota unificada de IOF del 3,5 % sobre compras y suscripciones internacionales con tarjeta en moneda extranjera. <https://www.planalto.gov.br/ccivil_03/_ato2023-2026/2025/decreto/d12499.htm>
-- **AI66** (leída): Microsoft AI Economy Institute (2026), Global AI Diffusion Report: ~18,8 % de la población mundial en edad activa utiliza herramientas de IA generativa (ChatGPT, Gemini, Copilot, Claude, Meta AI, DeepSeek); 28,8 % en el Norte Global vs. 16,2 % en el Sur Global. <https://www.microsoft.com/en-us/research/group/ai-economy-institute/>
-- **AI67** (leída): Menlo Ventures (2025), 2025: The State of Generative AI in the Enterprise: participación empresarial en modelos de lenguaje liderada por Anthropic Claude (~40 %), OpenAI (~27 %) y Google Gemini (~21 %). <https://menlovc.com/perspective/2025-the-state-of-generative-ai-in-the-enterprise/>
-- **AI68** (leída): Jellyfish (2026), The State of AI in Software Engineering: telemetría de miles de ingenieros en empresas (Claude Code, Cursor, GitHub Copilot); mediana ~81 USD/mes (51 M tokens), quintil superior ~2.500 M tokens/mes y P99 de gasto ~2.452 USD/mes. <https://jellyfish.co/state-of-ai-software-engineering/>
-- **AI69** (leída): WorkOS / Nicholas Arcolano, Head of AI Research en Jellyfish (2026), Token Maxing and Diminishing Returns: el top 2 % de ingenieros consume ~500 M de tokens por semana (~2.000–2.200 M/mes) en flujos multi-agente. <https://workos.com/blog/nicholas-arcolano-jellyfish-token-maxing-diminishing-returns>
-- **AI70** (leída): VibeCafé (abril 2026), Token Consumption Percentiles: distribución empírica P95–P99 de 63,4 M a 247 M tokens/día (~1.900 M a 7.400 M/mes) y P99 en Claude Code de ~160 M tokens/día (~4.800 M/mes). <https://vibecafe.ai/blogs/token-consumption-percentiles>
-- **AI71** (leída): Cursor Insights (2026), The Asymmetry of Token Consumption: el 10 % superior de usuarios concentra cerca de dos tercios de todos los tokens consumidos. <https://cursor.com/insights/the-asymmetry-of-token-consumption>
-- **AI72** (leída): Epoch AI (2026), OpenAI Coding Agent Spending: análisis del consumo interno de investigadores de OpenAI en agentes de código (mediana >600 USD/día y P90 >7.000 USD/día API). <https://epoch.ai/data-insights/openai-coding-agent-spending>
-- **AI73** (leída): Jellyfish (2026), Tokenomics for Your 2027 R&D Budget y Is Tokenmaxxing Cost-Effective?: análisis de quintiles corporativos y presupuestos de I+D en ingeniería asistida por IA. <https://jellyfish.co/blog/tokenomics-2027-rd-budget/>
-- **AI74** (leída): The Pragmatic Engineer (Gergely Orosz, 2026), The Pulse: Interesting AI Coding Stats: síntesis de telemetría de consumo de tokens y adopción en equipos de ingeniería. <https://newsletter.pragmaticengineer.com/p/the-pulse-interesting-ai-coding-stats>
+- **AI55**: OpenAI, Research acceleration: The view inside OpenAI (06-09-2026): encuesta y telemetría interna; evidencia autodeclarada, no ensayo causal. <https://openai.com/index/research-acceleration-view-inside-openai/>
+- **AI30**: Anthropic, precios oficiales de Claude Pro, Max, Ultra y API (consulta 30-10-2026). <https://claude.com/pricing>
+- **AI31**: OpenAI, precios oficiales de API: GPT-6.1 Sol, tarifa Standard, contexto corto. <https://developers.openai.com/api/docs/pricing>
+- **AI32**: Google, precios de Gemini API: Gemini 2.5 Pro, Standard, contexto hasta 200.000 tokens. <https://ai.google.dev/gemini-api/docs/pricing>
+- **AI33**: xAI / SpaceXSI, Grok 4.7: modelos y precios de API. <https://docs.x.ai/developers/models>
+- **AI34**: Cursor, Models & Pricing: costos dependen del modelo, del plan y del uso. <https://cursor.com/docs/models-and-pricing>
+- **AI35**: Gallup, Frequent Use of AI in the Workplace Continued to Rise in Q4 (25-01-2026; trabajo de campo Q4 2025, EE. UU.). <https://www.gallup.com/workplace/701195/frequent-workplace-continued-rise.aspx>
+- **AI36**: Yu et al., MIT FutureTech / CMU, AI Adoption in S&P 500 Firms (2026): integración empresarial en 2025; preprint. <https://arxiv.org/abs/2607.08920>
+- **AI37**: Yotzov et al., Firms predict an AI productivity boom is coming, VoxEU/CEPR (2026), autores de Firm Data on AI, NBER 34836. <https://cepr.org/voxeu/columns/firms-predict-ai-productivity-boom-coming>
+- **AI38**: OpenAI, Scaling AI for everyone (27-02-2026): más de 900 millones de usuarios semanales y 50 millones de suscriptores de consumo. <https://openai.com/index/scaling-ai-for-everyone/>
+- **AI39**: ONU, World Population Prospects 2024, Summary of Results: población mundial de 8.200 millones en 2024. <https://www.un.org/development/desa/pd/sites/www.un.org.development.desa.pd/files/wpp2024_summary_of_results_final_web.pdf>
+- **AI40**: Anthropic Economic Index, Cadences (26-06-2026): tokens por conversación y artefacto; percentiles normalizados, no usuarios mensuales. <https://www.anthropic.com/research/economic-index-june-2026-report>
+- **AI41**: Google, Alphabet investor presentation (junio 2026): 3,2 × 10^15 tokens mensuales en sus productos y APIs. <https://blog.google/alphabet/investor-presentation-june-2026/>
+- **AI42**: OpenAI, The next phase of enterprise AI (08-04-2026): más de 15.000 millones de tokens por minuto en API. <https://openai.com/index/next-phase-of-enterprise-ai/>
+- **AI43**: OpenRouter, State of AI 2025: más de 100 billones (10^14) de tokens de su plataforma; muestra no representativa del mercado entero. <https://openrouter.ai/state-of-ai>
+- **AI44**: arXiv, Monthly Submissions: conteos mensuales oficiales de nuevos envíos; CSV consultado el 30-10-2026. <https://arxiv.org/stats/monthly_submissions>
+- **AI45**: Preprints.org, Annual Report 2025, página 3: 31.691 preprints publicados en 2025. <https://www.preprints.org/frontend/home/report/2025-annual-report>
+- **AI46**: SocArXiv, informe de 2025 (2026): 3.162 trabajos aceptados; no equivale al total de envíos. <https://socopen.org/2026/>
+- **AI47**: Google Research, Accelerating scientific breakthroughs with an AI co-scientist (2025): hipótesis y validación experimental previa. <https://research.google/blog/accelerating-scientific-breakthroughs-with-an-ai-co-scientist/>
+- **AI48**: ARCA, percepción por operaciones en moneda extranjera: alícuota del 30 %, según operación y forma de pago. <https://www.afip.gob.ar/regimen-devolucion-percepciones/percepcion/importe.asp>
+- **AI49**: ARCA, servicios digitales: IVA sobre servicios consumidos en Argentina y prestados desde el exterior. <https://www.afip.gob.ar/iva/servicios-digitales/obligados.asp>
+- **AI50**: SII Chile, Circular 42/2020, IVA a servicios digitales prestados desde el exterior. <https://www.sii.cl/normativa_legislacion/circulares/2020/circu42.pdf>
+- **AI51**: SAT México, guía de declaración del IVA de servicios digitales: tasa del 16 %. <https://sat.gob.mx/cs/Satellite?blobcol=urldata&blobkey=id&blobtable=MungoBlobs&blobwhere=1461175010301&ssbinary=true>
+- **AI52**: DGI Uruguay, bienes y servicios gravados a la tasa básica del 22 %. <https://www.gub.uy/direccion-general-impositiva/comunicacion/publicaciones/son-bienes-servicios-gravados-tasa-basica-del-22>
+- **AI53**: Natural Earth, Admin 0 Countries 1:110m, dominio público; geometría ilustrativa de América Latina. <https://www.naturalearthdata.com/downloads/110m-cultural-vectors/110m-admin-0-countries/>
+- **AI54**: Global AI Adoption Visualization, AI Bear: referencia visual de la infografía viral; cifras reemplazadas por fuentes primarias, sin sumar usuarios de distintas plataformas. <https://www.ai-bear.io/p/are-you-among-16-of-free-ai-users>
+- **AI56**: Jellyfish, 2026 Software Engineering Metrics Report: distribución de consumo mensual de tokens por ingeniero (mediana 51 M, P90 380 M, P99 1.350 M). <https://jellyfish.co/library/state-of-engineering-management/>
+- **AI57**: Anthropic, Claude Code — Manage costs effectively y Prompt caching: el código y el contexto se reenvían en cada turno; la lectura de caché reduce hasta 90 % el costo en dólares pero cuenta en el volumen de tokens procesados. <https://docs.anthropic.com/en/docs/claude-code/costs>
+- **AI58**: CCgather, Claude Code Leaderboard: registro comunitario de usuarios intensivos de programación agéntica (1.000 M a >15.000 M de tokens mensuales). <https://ccgather.com>
+- **AI59**: Briggs, J. y Kodnani, D. (2023), Goldman Sachs Global Investment Research, The Potentially Large Effects of Artificial Intelligence on Economic Growth: +7 % del PBI global (~7 billones de USD) y +1,5 pp anuales de productividad en economías desarrolladas durante una década. <https://www.gspublishing.com/content/research/en/reports/2023/03/27/d64e052b-0f6e-45d7-967b-d7be35fabd16.html>
+- **AI60**: Cerutti, E. et al. (2025), FMI Working Paper WP/25/76, AI Adoption and Inequality: Mind the Gap: brecha estructural en ganancias de PTF entre economías avanzadas (+0,8 a +1,3 % acumulado a 10 años) y emergentes (+0,1 a +0,4 %). <https://www.imf.org/en/Publications/WP/Issues/2025/04/11/AI-Adoption-and-Inequality-Mind-the-Gap-566125>
+- **AI61**: Cazzaniga, M. et al. (2024), FMI Staff Discussion Note SDN/2024/001 y AI Preparedness Index (AIPI): índice de preparación para la IA (0,68 en economías avanzadas frente a 0,46–0,48 en Argentina y América Latina). <https://www.imf.org/en/Blogs/Articles/2024/06/17/mapping-the-worlds-readiness-for-artificial-intelligence-shows-prospects-diverge>
+- **AI62**: Anthropic (2025), Anthropic Economic Index: Geography and Enterprise Usage (arXiv:2511.15080): elasticidad ingreso-uso de IA (~0,7 % más de uso per cápita por cada 1 % de mayor PBI per cápita) y sesgo hacia países de altos ingresos. <https://arxiv.org/abs/2511.15080>
+- **AI63**: OCDE, CIAT y BID (2021–2025), VAT Digital Toolkit for Latin America and the Caribbean: alícuotas de IVA a servicios digitales transfronterizos en América Latina y el Caribe. <https://www.oecd.org/en/publications/vat-digital-toolkit-for-latin-america-and-the-caribbean_ff3da3bd-en.html>
+- **AI64**: SUNAT Perú, Decreto Legislativo N.º 1623 (vigente desde diciembre de 2024): aplicación del IGV del 18 % a servicios digitales prestados por proveedores no domiciliados. <https://orientacion.sunat.gob.pe/servicios-digitales>
+- **AI65**: Receita Federal do Brasil, Decreto N.º 12.499/2025: alícuota unificada de IOF del 3,5 % sobre compras y suscripciones internacionales con tarjeta en moneda extranjera. <https://www.planalto.gov.br/ccivil_03/_ato2023-2026/2025/decreto/d12499.htm>
+- **AI66**: Microsoft AI Economy Institute (2026), Global AI Diffusion Report: ~18,8 % de la población mundial en edad activa utiliza herramientas de IA generativa (ChatGPT, Gemini, Copilot, Claude, Meta AI, DeepSeek); 28,8 % en el Norte Global vs. 16,2 % en el Sur Global. <https://www.microsoft.com/en-us/research/group/ai-economy-institute/>
+- **AI67**: Menlo Ventures (2025), 2025: The State of Generative AI in the Enterprise: participación empresarial en modelos de lenguaje liderada por Anthropic Claude (~40 %), OpenAI (~27 %) y Google Gemini (~21 %). <https://menlovc.com/perspective/2025-the-state-of-generative-ai-in-the-enterprise/>
+- **AI68**: Jellyfish (2026), The State of AI in Software Engineering: telemetría de miles de ingenieros en empresas (Claude Code, Cursor, GitHub Copilot); mediana ~81 USD/mes (51 M tokens), quintil superior ~2.500 M tokens/mes y P99 de gasto ~2.452 USD/mes. <https://jellyfish.co/state-of-ai-software-engineering/>
+- **AI69**: WorkOS / Nicholas Arcolano, Head of AI Research en Jellyfish (2026), Token Maxing and Diminishing Returns: el top 2 % de ingenieros consume ~500 M de tokens por semana (~2.000–2.200 M/mes) en flujos multi-agente. <https://workos.com/blog/nicholas-arcolano-jellyfish-token-maxing-diminishing-returns>
+- **AI70**: VibeCafé (abril 2026), Token Consumption Percentiles: distribución empírica P95–P99 de 63,4 M a 247 M tokens/día (~1.900 M a 7.400 M/mes) y P99 en Claude Code de ~160 M tokens/día (~4.800 M/mes). <https://vibecafe.ai/blogs/token-consumption-percentiles>
+- **AI71**: Cursor Insights (2026), The Asymmetry of Token Consumption: el 10 % superior de usuarios concentra cerca de dos tercios de todos los tokens consumidos. <https://cursor.com/insights/the-asymmetry-of-token-consumption>
+- **AI72**: Epoch AI (2026), OpenAI Coding Agent Spending: análisis del consumo interno de investigadores de OpenAI en agentes de código (mediana >600 USD/día y P90 >7.000 USD/día API). <https://epoch.ai/data-insights/openai-coding-agent-spending>
+- **AI73**: Jellyfish (2026), Tokenomics for Your 2027 R&D Budget y Is Tokenmaxxing Cost-Effective?: análisis de quintiles corporativos y presupuestos de I+D en ingeniería asistida por IA. <https://jellyfish.co/blog/tokenomics-2027-rd-budget/>
+- **AI74**: The Pragmatic Engineer (Gergely Orosz, 2026), The Pulse: Interesting AI Coding Stats: síntesis de telemetría de consumo de tokens y adopción en equipos de ingeniería. <https://newsletter.pragmaticengineer.com/p/the-pulse-interesting-ai-coding-stats>
 
 > Las posiciones de los lugares son aproximadas, las fechas intermedias entre las documentadas son estimaciones marcadas como tales, y las cifras de efectivos varían según la fuente. Todo está señalado en [`docs/references.md`](docs/references.md).
 

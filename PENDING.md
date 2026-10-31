@@ -6,6 +6,8 @@ Every task below has a brief (`docs/tasks/<slug>.md`, historical briefs in `docs
 
 ## New corrections (`test/correcciones-nuevas.png`, plan in `docs/action-plan-correcciones-nuevas.md`)
 
+- [x] Remove reference status labels from both README versions while retaining source links. Branch `task/readme-source-labels`.
+
 - [ ] Add a site-wide ES / EN language selector and translations. Plan: `docs/tasks/language-switch.md`.
 
 - [x] Replace slide reference chips with a shared references dialog; CI covers each slide and keyboard navigation. Human review of source associations and visual layout remains useful. Plan: `docs/tasks/references-responsive-carousel.md`.
