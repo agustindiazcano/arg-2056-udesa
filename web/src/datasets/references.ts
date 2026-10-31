@@ -1,4 +1,5 @@
 import type { Reference } from './types.js';
+import { AI_EVIDENCE_REFS } from '../tour/aiEvidenceRefs.js';
 
 /** The links behind the data of the slides, as in `docs/references.md` (section 4.1) plus the map sources and the Cruce de los Andes. */
 export const REFERENCES: readonly Reference[] = [
@@ -112,6 +113,7 @@ export const REFERENCES: readonly Reference[] = [
   { id: 'S3', group: 'Perfil provincial', status: 'leída', label: 'INDEC, Encuesta Permanente de Hogares (EPH), Tasas de pobreza e indigencia por aglomerados urbanos (2024-2025)', url: 'https://www.indec.gob.ar/indec/web/Nivel4-Tema-4-46-152' },
   { id: 'S4', group: 'Perfil provincial', status: 'leída', label: 'Ministerio de Economía, Dirección Nacional de Asuntos Provinciales (DNAP), Coparticipación federal y transferencias automáticas a provincias', url: 'https://www.argentina.gob.ar/economia/hacienda/asuntosprovinciales/transferencias-gobiernos-locales' },
   { id: 'S6', group: 'Perfil provincial', status: 'citada', label: 'PNUD Argentina, El Mapa del Desarrollo Humano en Argentina (IDH provincial, 2021); los valores se tomaron de la tabla de Wikipedia que lo reproduce', url: 'https://www.undp.org/es/argentina/publicaciones/el-mapa-del-desarrollo-humano-en-argentina' },
-  { id: 'S5', group: 'Perfil provincial', status: 'leída', label: 'Ministerio de Seguridad de la Nación, Sistema Nacional de Información Criminal (SNIC), Tasas de presuntos hechos delictuosos por provincia cada 100.000 habitantes', url: 'https://www.argentina.gob.ar/seguridad/estadisticas-criminales' }
+  { id: 'S5', group: 'Perfil provincial', status: 'leída', label: 'Ministerio de Seguridad de la Nación, Sistema Nacional de Información Criminal (SNIC), Tasas de presuntos hechos delictuosos por provincia cada 100.000 habitantes', url: 'https://www.argentina.gob.ar/seguridad/estadisticas-criminales' },
+  ...AI_EVIDENCE_REFS
 ];
 

@@ -8,8 +8,11 @@ import { RefList } from '../ui/RefLink.js';
 import { Segmented } from '../ui/Segmented.js';
 import { ACCESS_COUNTRIES, PLANS, accessRows, taxPct } from './aiAccess.js';
 import { AI_ACCESS_TITLE } from './slideTitles.js';
+import { AiAccessMap } from './AiAccessMap.js';
+import { AiTokenPrices } from './AiTokenPrices.js';
+import './aiEvidence.css';
 
-const REFS = ['A20', 'A21', 'A22'] as const;
+const REFS = ['AI30', 'AI48', 'AI49', 'AI50', 'AI63', 'AI64', 'AI65'] as const;
 const usd = (v: number, digits = 1): string => `${formatNumber(v, digits)} USD`;
 
 /**
@@ -17,6 +20,7 @@ const usd = (v: number, digits = 1): string => `${formatNumber(v, digits)} USD`;
  * of 30 %. A stacked bar per country (list price plus taxes) for the plan the visitor picks, and a table with the extra cost per month and per year.
  */
 export function AiAccessStep() {
+  const [view, setView] = useState<'bars' | 'map' | 'api'>('map');
   const [planId, setPlanId] = useState(PLANS[0]!.id);
   const plan = PLANS.find((p) => p.id === planId) ?? PLANS[0]!;
   const rows = useMemo(() => accessRows(plan.price), [plan]);
@@ -27,7 +31,7 @@ export function AiAccessStep() {
   const chart = useMemo(() => buildAccessStack(rows, { summary }), [rows, summary]);
 
   return (
-    <section className="gdp-step prov-step" aria-label={AI_ACCESS_TITLE}>
+    <section className="gdp-step prov-step ai-access-step" aria-label={AI_ACCESS_TITLE}>
       <header className="gdp-head">
         <Reveal k="head" className="gdp-title">
           <div className="slide-title-row">
@@ -36,38 +40,39 @@ export function AiAccessStep() {
               title={AI_ACCESS_TITLE}
               lead="Dólares por mes, precio de lista más impuestos, pagando con tarjeta"
               paragraphs={[
-                'Los planes de los asistentes de IA cuestan lo mismo en dólares en casi todo el mundo: unos 20 USD el plan básico y 100 o 200 USD los planes de más uso.',
-                `En Argentina el pago con tarjeta suma el IVA de servicios digitales del exterior (21 %) y una percepción a cuenta de Ganancias o Bienes Personales (30 %): ${taxPct(argCountry)} % sobre el precio de lista, sin contar Ingresos Brutos provinciales ni comisiones del banco.`,
-                'En los otros países el recargo es el IVA general (el 10 % de Japón y Australia, el 22 % de Uruguay); en Estados Unidos no hay impuesto nacional y el impuesto estatal a las ventas varía.'
+                'Tomamos 20 USD mensuales como referencia de entrada, el precio mensual de Claude Pro. También se comparan 100 USD (Claude Max) y 200 USD (Claude Ultra), según la lista consultada el 30 de octubre de 2026. No todos los productos ofrecen los mismos planes.',
+                `En el supuesto argentino de un servicio digital del exterior alcanzado por IVA (21 %) y cancelación de tarjeta en pesos alcanzada por percepción (30 %), el desembolso suma ${taxPct(argCountry)} % sobre el precio de lista. El tratamiento puede variar con la forma de pago. Se excluyen Ingresos Brutos y comisiones.`,
+                'En el resto de América Latina rige el IVA digital o general sobre servicios transfronterizos (Uruguay 22 %, Chile y Colombia 19 %, Perú y Rep. Dominicana 18 %, México y Venezuela 16 %, Ecuador, Honduras y Nicaragua 15 %, Costa Rica, El Salvador y Bolivia 13 %, Guatemala 12 %, Paraguay 10 %, Panamá 7 %) o el IOF de Brasil (3,5 %); en Estados Unidos no hay impuesto nacional.'
               ]}
-              how="Elegí un plan arriba. La barra azul es el precio de lista y la roja, lo que se agrega en impuestos. La tabla muestra cuánto paga de más una persona en un año."
+              how="Elegí plan y vista: mapa de LATAM, barras por país o precios de API por millón de tokens. El semáforo mide el recargo del supuesto tributario, no calidad ni poder adquisitivo."
               refs={[...REFS]}
             />
           </div>
           <p className="gdp-sub">
-            Lo mismo cuesta más en Argentina · <RefList ids={REFS} />
+            ¿Cuánto más cuesta en Argentina acceder a modelos de IA frente a EE. UU., Chile, Perú y toda la región? · Referencia: planes de 20 USD/mes · <RefList ids={REFS} />
           </p>
         </Reveal>
         <div className="tour-controls">
           <Segmented label="Plan" options={PLANS.map((p) => ({ value: p.id, label: p.label }))} value={planId} onChange={setPlanId} />
+          <Segmented label="Comparación" options={[{ value: 'map', label: 'Mapa LATAM' }, { value: 'bars', label: 'Barras' }, { value: 'api', label: 'Costo por token' }]} value={view} onChange={setView} />
         </div>
       </header>
 
       <div className="prov-grid">
         <Reveal k="chart" className="gdp-chart rule70-card">
           <div className="rule70-card-head">
-            <strong>{plan.label}: costo mensual con impuestos</strong>
-            <div className="rule70-legend">
+            <strong>{view === 'api' ? 'Costo por token: suscripción y API son distintos' : `${plan.label}: costo mensual con impuestos`}</strong>
+            {view === 'bars' && <div className="rule70-legend">
               <span className="ai-legend-item">
                 <span className="rule70-key" style={{ background: 'var(--blue)' }} aria-hidden="true" /> Precio de lista
               </span>
               <span className="ai-legend-item">
-                <span className="rule70-key" style={{ background: 'var(--scenario-pessimistic, #d03b3b)' }} aria-hidden="true" /> Impuestos
+                <span className="rule70-key" style={{ background: 'var(--scenario-pessimistic)' }} aria-hidden="true" /> Impuestos
               </span>
-            </div>
+            </div>}
           </div>
-          <div className="rule70-chart ai-main-chart">
-            <EChart option={chart.option} aria-label={summary} />
+          <div className="rule70-chart ai-main-chart ai-access-main">
+            {view === 'bars' ? <EChart option={chart.option} aria-label={summary} /> : view === 'map' ? <AiAccessMap price={plan.price} /> : <AiTokenPrices />}
           </div>
         </Reveal>
 
@@ -89,7 +94,7 @@ export function AiAccessStep() {
                 {rows.map((r) => (
                   <tr key={r.country}>
                     <th scope="row">
-                      <img src={r.flag} alt="" width={20} height={15} />
+                      {r.flag ? <img src={r.flag} alt="" width={20} height={15} /> : null}
                       {r.country}
                     </th>
                     <td>{usd(r.taxes)}</td>
@@ -103,14 +108,19 @@ export function AiAccessStep() {
 
           <Reveal k="notes" delay={0.14} className="gdp-chart rule70-card" role="region" aria-label="Qué significa">
             <div className="rule70-card-head">
-              <strong>Qué significa para Argentina</strong>
+              <strong>Qué significa para Argentina y la región</strong>
             </div>
             <ul className="ai-access-notes">
               <li>
-                El {plan.label.toLowerCase()} sale {usd(arg.total)} por mes: {usd(arg.taxes)} más que el precio de lista, {usd(arg.yearlyExtra, 0)} por año.
+                El {plan.label.toLowerCase()} sale {usd(arg.total)} por mes en Argentina (+51 %): {usd(arg.taxes)} más que en Estados Unidos (0 % nacional, {usd(plan.price, 1)}), {usd(arg.yearlyExtra, 0)} de sobrecosto al año.
               </li>
-              <li>Quien paga en Argentina abona {taxPct(argCountry)} % más que quien paga en Estados Unidos por exactamente el mismo plan.</li>
-              <li>Con el 30 % a cuenta de Ganancias o Bienes Personales, parte puede recuperarse en la declaración anual; el IVA no.</li>
+              <li>
+                En la región el recargo típico es el IVA digital: Uruguay 22 %, Chile y Colombia 19 %, Perú y Rep. Dominicana 18 %, México y Venezuela 16 %, Ecuador 15 %, Costa Rica y Bolivia 13 %, Paraguay 10 %, Panamá 7 % y Brasil 3,5 % (IOF).
+              </li>
+              <li>
+                Para empresas argentinas (B2B por giro al exterior), al no existir convenio de doble imposición con EE. UU., rige retención de Ganancias (Art. 104 inc. i) con grossing-up del 45,99 % más ~2,5 % de IIBB (+48,5 % de costo hundido).
+              </li>
+              <li>Con tarjeta en pesos, el 30 % (RG 5617) es percepción a cuenta de Ganancias o Bienes Personales; para monotributistas, informales o estudiantes opera como costo directo.</li>
             </ul>
           </Reveal>
         </div>

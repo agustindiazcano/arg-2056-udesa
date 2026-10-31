@@ -19,4 +19,4 @@ export const SHOCKS_TITLE = 'Choques históricos y el trabajo que no se reasigna
 export const ENCLAVE_TITLE = 'Recursos naturales: cuándo no alcanzan';
 export const PEERS_TITLE = 'Países con recursos y capital humano';
 export const FORECAST_LIMITS_TITLE = 'Lo que los datos no anticipan: olas, narrativas y pronósticos';
-export const AI_PYRAMID_TITLE = 'Quién usa la IA: la pirámide y los tokens';
+export const AI_PYRAMID_TITLE = 'La pirámide de adopción de los LLM';

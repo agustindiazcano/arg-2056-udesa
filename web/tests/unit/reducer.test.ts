@@ -242,13 +242,13 @@ describe('Reducer', () => {
     const tour: State = { ...initialState, scene: 'economy', section: 'tour' };
 
     it('the arrow keys move the step, not the scene, in the order the slides are shown (12 then 14 then 3), and stop at the first and the last', () => {
-      let state = reduce({ ...tour, tourStep: 12 }, { type: 'nextScene' });
-      expect(state).toMatchObject({ tourStep: 14, scene: 'economy' });
-      expect(reduce(state, { type: 'nextScene' }).tourStep).toBe(3);
+      let state = reduce({ ...tour, tourStep: 21 }, { type: 'nextScene' });
+      expect(state).toMatchObject({ tourStep: 28, scene: 'economy' });
+      expect(reduce(state, { type: 'nextScene' }).tourStep).toBe(16);
       state = reduce(state, { type: 'prevScene' });
-      expect(state.tourStep).toBe(12);
+      expect(state.tourStep).toBe(21);
       state = reduce(state, { type: 'prevScene' });
-      expect(state.tourStep).toBe(5);
+      expect(state.tourStep).toBe(3);
       state = reduce(state, { type: 'prevScene' });
       expect(state.tourStep).toBe(8);
       state = reduce(state, { type: 'prevScene' });

@@ -136,45 +136,6 @@ button.brand:focus-visible .brand-n {
   align-items: center;
 }
 
-/* ---- development deadline badge in navbar ------------------------------------------------------------------ */
-
-.dev-deadline-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.45rem;
-  padding: 0.22rem 0.65rem;
-  font-size: 0.72rem;
-  font-weight: 600;
-  letter-spacing: 0.02em;
-  color: var(--ink);
-  background: color-mix(in srgb, var(--state-critical) 88%, var(--intro-black));
-  border: 1px solid color-mix(in srgb, var(--state-critical) 85%, var(--ink));
-  border-radius: var(--radius-md);
-  box-shadow: 0 0 10px color-mix(in srgb, var(--state-critical) 40%, transparent), inset 0 1px 0 color-mix(in srgb, var(--ink) 20%, transparent);
-  white-space: nowrap;
-  user-select: none;
-}
-
-.dev-deadline-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background-color: var(--ink);
-  box-shadow: 0 0 4px var(--ink);
-  animation: pulse-dot 2s infinite ease-in-out;
-}
-
-@keyframes pulse-dot {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.45; transform: scale(0.85); }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .dev-deadline-dot {
-    animation: none;
-  }
-}
-
 /* ---- tabs --------------------------------------------------------------------------------------------------- */
 
 
@@ -3859,6 +3820,9 @@ button.brand:focus-visible .brand-a {
 }
 
 .rigi-projects {
+  flex: 1 1 auto;
+  min-height: 0;
+  pointer-events: auto;
   margin: 0;
   padding: 0;
   list-style: none;

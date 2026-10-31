@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import React from 'react';
-import { describe, it, expect, vi } from 'vitest';
-import { render } from '@testing-library/react';
+import { afterEach, describe, it, expect, vi } from 'vitest';
+import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 
 vi.mock('../../src/charts/EChart.js', () => ({
   EChart: ({ option, 'aria-label': label }: { option?: object; 'aria-label'?: string }) => (
@@ -13,6 +13,8 @@ import { AiStep } from '../../src/tour/AiStep.js';
 import { buildFluidLines, buildLines } from '../../src/charts/builders/tourCharts.js';
 import { tokens } from '../../src/styles/tokens.js';
 
+afterEach(cleanup);
+
 interface ChartOption {
   xAxis?: { splitLine?: { show?: boolean } };
   yAxis?: { splitLine?: { lineStyle?: { color?: string; type?: string } } };
@@ -20,6 +22,7 @@ interface ChartOption {
     name?: string;
     areaStyle?: unknown;
     lineStyle?: { width?: number; shadowBlur?: number };
+    markPoint?: unknown;
   }>;
 }
 
@@ -69,7 +72,7 @@ describe('Slide 3 / AiStep charts matching Slide 5 styles and palette', () => {
     }
   });
 
-  it('AiStep renders clean cards with rule70-card classes, headers and legend', () => {
+  it('AiStep renders clean cards, country flags per curve, and switches between Argentina, Mundo, and Frontier vs. Argentina', () => {
     const { container, unmount } = render(<AiStep />);
 
     // Cards use rule70-card and rule70-card-head
@@ -79,9 +82,21 @@ describe('Slide 3 / AiStep charts matching Slide 5 styles and palette', () => {
     const heads = container.querySelectorAll('.rule70-card-head');
     expect(heads.length).toBeGreaterThanOrEqual(3);
 
-    // Legend uses rule70-legend and rule70-key line indicators
+    // Legend uses rule70-legend and rule70-key line indicators plus country flags per curve
     const keys = container.querySelectorAll('.rule70-key');
     expect(keys.length).toBeGreaterThanOrEqual(3);
+    expect(container.querySelectorAll('.ai-curve-flags img').length).toBeGreaterThanOrEqual(9);
+
+    // Clarifies that the green Optimistic curve is for frontier economies and Argentina today is not on that train
+    expect(container.textContent).toMatch(/Argentina hoy no está en ese tren/);
+    expect(container.textContent).toContain('Curva verde, si Argentina creciera a la tasa del escenario optimista');
+
+    // Switches projection scope between Argentina, Mundo, and Frontier vs. Argentina
+    fireEvent.click(screen.getByRole('button', { name: 'Mundo' }));
+    expect(container.textContent).toMatch(/Proyección del PBI mundial/);
+    expect(container.textContent).not.toContain('Curva verde, si Argentina creciera a la tasa del escenario optimista');
+    fireEvent.click(screen.getByRole('button', { name: /Se suben a la ola vs\. Como Argentina/ }));
+    expect(container.textContent).toMatch(/Se suben a la ola: Frontera/);
 
     // Indicators table uses rule70-table
     const table = container.querySelector('table.rule70-table');

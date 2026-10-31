@@ -1,4 +1,6 @@
 import { withMeta } from './quality.js';
+import { aiEvidenceTables, apiPricesTable } from './aiEvidenceTables.js';
+import { AI_EVIDENCE_SLIDES } from '../tour/aiEvidence.js';
 import { PROVINCES } from '../types/province.js';
 import { GDP_MOCK } from '../tour/gdpMock.js';
 import agro from '../tour/agroArgentina.json';
@@ -24,7 +26,6 @@ import { AI_ANALYSTS, AI_SCENARIOS, US_SCENARIOS } from '../tour/aiScenarios.js'
 import { OTHER_CROPS } from '../tour/agroOtherCrops.js';
 import { LIVESTOCK, LITRES_TO_TONNES, livestockParts } from '../tour/livestockArgentina.js';
 import { ACCESS_COUNTRIES, PLANS, accessRows } from '../tour/aiAccess.js';
-import { DRAFT_SLIDES } from '../tour/draftSlides.js';
 import { AI_ACCESS_TITLE, COMPOSITION_TITLE, DEVELOPMENT_TITLE, FORECAST_UNCERTAINTY_TITLE, RESOURCES_TITLE } from '../tour/slideTitles.js';
 import { exportRows } from '../tour/exportsData.js';
 import { countriesTable } from '../tour/rule70Countries.js';
@@ -325,7 +326,7 @@ export function buildSlides(): SlideData[] {
   });
   const sim = simulate(DEFAULT_SIM);
 
-  return [
+  const all: SlideData[] = [
     slide(
       '0',
       `El PBI de Argentina desde ${WORLD_FIRST}`,
@@ -368,7 +369,22 @@ export function buildSlides(): SlideData[] {
       ...servicesTables()
     ], true, ['W3', 'W5', 'I1', 'F1', 'X1', 'X2', 'X3', 'E2', 'E7', 'E1', 'E10']),
     slide('14', 'Productividad', productivityTables(), false, ['P6', 'P7', 'P7b', 'P1', 'P8', 'P9']),
-    slide('3', TOUR_CHARTS[3]!.title, [chartTable(3), ...aiTables(), perCapitaTable(), aiPopulationTable()], true, ['A1', 'A2', 'A3', 'A4', 'A5', 'A6', 'A7', 'A8', 'A9', 'A10']),
+    slide('3', TOUR_CHARTS[3]!.title, [chartTable(3), ...aiTables(), perCapitaTable(), aiPopulationTable()], true, ['A1', 'A2', 'A3', 'A4', 'A5', 'A6', 'A7', 'A8', 'A9', 'A10', 'P8', 'P9', 'AI59', 'AI60', 'AI61', 'AI62']),
+    slide('21', AI_ACCESS_TITLE, [
+      {
+        id: 'ai-plans-cost',
+        title: 'Costo mensual de los planes de IA con impuestos, pagando con tarjeta (USD)',
+        columns: ['País', 'Plan (USD)', 'Impuestos (%)', 'Impuestos (USD)', 'Total por mes (USD)', 'De más por año (USD)'],
+        rows: PLANS.flatMap((p) => accessRows(p.price).map((r) => [r.country, p.price, ACCESS_COUNTRIES.find((c) => c.name === r.country)!.taxes.reduce((s, t) => s + t.pct, 0), Math.round(r.taxes * 100) / 100, Math.round(r.total * 100) / 100, Math.round(r.yearlyExtra * 100) / 100]))
+      },
+      {
+        id: 'ai-plans-taxes',
+        title: 'Impuestos que se suman al precio de lista por país',
+        columns: ['País', 'Impuesto', 'Porcentaje'],
+        rows: ACCESS_COUNTRIES.flatMap((c) => (c.taxes.length === 0 ? [[c.name, 'Sin impuesto nacional', 0]] : c.taxes.map((t) => [c.name, t.label, t.pct])))
+      },
+      apiPricesTable()
+    ], false, ['AI30', 'AI31', 'AI32', 'AI33', 'AI34', 'AI48', 'AI49', 'AI50', 'AI51', 'AI52', 'AI53', 'AI63', 'AI64', 'AI65']),
     slide('16', DEVELOPMENT_TITLE, [
       {
         id: 'hdi-series',
@@ -501,6 +517,7 @@ export function buildSlides(): SlideData[] {
         ]
       }
     ], false, ['D1', 'D2', 'W1', 'S3']),
+    ...AI_EVIDENCE_SLIDES.map((d) => slide(String(d.id), d.title, aiEvidenceTables(d.id), false, [...d.refs])),
     slide('17', FORECAST_UNCERTAINTY_TITLE, [
       {
         id: 'tech-diffusion-lags',
@@ -572,24 +589,10 @@ export function buildSlides(): SlideData[] {
         ]
       }
     ], false, ['D3', 'A1', 'A8', 'F1']),
-    slide('21', AI_ACCESS_TITLE, [
-      {
-        id: 'ai-plans-cost',
-        title: 'Costo mensual de los planes de IA con impuestos, pagando con tarjeta (USD)',
-        columns: ['País', 'Plan (USD)', 'Impuestos (%)', 'Impuestos (USD)', 'Total por mes (USD)', 'De más por año (USD)'],
-        rows: PLANS.flatMap((p) => accessRows(p.price).map((r) => [r.country, p.price, ACCESS_COUNTRIES.find((c) => c.name === r.country)!.taxes.reduce((s, t) => s + t.pct, 0), Math.round(r.taxes * 100) / 100, Math.round(r.total * 100) / 100, Math.round(r.yearlyExtra * 100) / 100]))
-      },
-      {
-        id: 'ai-plans-taxes',
-        title: 'Impuestos que se suman al precio de lista por país',
-        columns: ['País', 'Impuesto', 'Porcentaje'],
-        rows: ACCESS_COUNTRIES.flatMap((c) => (c.taxes.length === 0 ? [[c.name, 'Sin impuesto nacional', 0]] : c.taxes.map((t) => [c.name, t.label, t.pct])))
-      }
-    ], false, ['A20', 'A21', 'A22']),
-    ...DRAFT_SLIDES.map((d) => slide(String(d.id), d.title, [{ id: `draft-${d.id}`, title: 'Temas de la diapositiva', columns: ['Tema', 'Descripción'], rows: d.topics.map((t) => [t.heading, t.text]) }], false)),
     slide('sim', 'Simulador del PBI', [
       { id: 'factors', title: 'Factores del escenario de referencia', columns: ['Factor', 'Valor', 'Unidad'], rows: SIM_FIELDS.map((f) => [f.label, DEFAULT_SIM[f.key], f.unit]) },
       { id: 'reference', title: 'PBI del escenario de referencia (miles de millones de USD)', columns: ['Año', 'PBI'], rows: sim.years.map((y, i) => [y, sim.gdp[i] ?? null]) }
     ])
   ];
+  return [...all].sort((a, b) => (a.id === 'sim' ? 999 : stepNumber(Number(a.id))) - (b.id === 'sim' ? 999 : stepNumber(Number(b.id))));
 }

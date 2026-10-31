@@ -18,6 +18,7 @@ import { DRAFT_SLIDES } from './draftSlides.js';
 import { ForecastUncertaintyStep } from './ForecastUncertaintyStep.js';
 import { INDEX_STEP } from './chartSteps.js';
 import { TourSidebar } from './TourSidebar.js';
+import { AiEvidenceStep } from './AiEvidenceStep.js';
 
 /** The chart of a step of the Recorrido. One lazy chunk keeps ECharts out of the initial load. */
 export function TourStep({ step }: { step: number }) {
@@ -26,6 +27,7 @@ export function TourStep({ step }: { step: number }) {
   if (step === 16) return <DevelopmentStep />;
   if (step === 17) return <ForecastUncertaintyStep />;
   if (step === 21) return <AiAccessStep />;
+  if ([26, 27, 28, 29].includes(step)) return <AiEvidenceStep step={step} />;
   const draft = DRAFT_SLIDES.find((d) => d.id === step);
   if (draft) return <DraftSlide def={draft} />;
   // every other step has the side panel with the text and the references, next to its chart

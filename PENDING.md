@@ -255,3 +255,50 @@ Order: C8, C7, C2, C3, C4, C5, C1, C6.
 - [ ] `recorrido` (branch `task/recorrido`): intro polish (subtitle, black shortcut buttons, footer with the three institution logos as links) and a black navbar done; waiting for CI and review. Open: the Data Science Lab logo has a non-black background, and the footer logos need a minimum size on phones.
 - [ ] `micro-fixes` (branch `task/micro-fixes`): nav sections, Recorrido mode and intro buttons done; waiting for CI and review. Open: the Recorrido has no sourced narrative yet (it reuses the data scenes), and the 3D charts of the reference image `test/recorrido-dashboard-2.png` (no longer in the repo) are not reproduced.
 - [ ] `map3d-hover-zoom` (branch `task/map3d-hover-zoom`): the 3D charts of the Recorrido no longer grow, zoom or vanish by themselves (canvas laid over its box, `dashboard.css` loaded by the Recorrido, hover never navigates); step 0 with a timeline bar, GDP and GDP per capita tables (Argentina pinned) and region bars that follow the clock; all 3D bars open from almost the side; cleaner floor; only +, - and reset buttons; spinner and chunk prefetch; Data Dashboard hidden (flag `arg2056.showDashboard`). Waiting for CI and review. Open: delete the unused code (`tour3d/` still-camera and SVG versions, `TourChart.tsx` passes through to `tour3d/TourChart3D.tsx`), the other Recorrido slides still use made-up data, and the 3D lines of step 0 keep their own camera.
+
+- [x] Remove the development deadline badge from the navbar (task/remove-dev-badge).
+
+- [x] Enable scrolling in the lower-left RIGI projects list with constrained flex height and pointer events (task/rigi-projects-scroll).
+
+- [x] Replace map search emoji with SVG and include all Data reference URLs in README (39 missing links added).
+
+- [x] Generate black README banner from the two newest test images dated 2026-10-30 and place it above the title.
+
+- [x] Department minimap labels appear only on hover or selection; idle municipality labels hidden (task/department-hover-labels). CI regression tests added; no local tests run.
+
+## IA: acceso, adopción, tokens e I+D (2026-10-30)
+
+### Done
+- [x] Diapositiva 9: subtítulo de sobrecosto argentino, referencia mensual de 20 USD, niveles de 100/200 USD, mapa LATAM y tabla de precios API por millón de tokens.
+- [x] Al final: adopción empresarial (27), consumo/percentiles (28), pirámide documentada (26, reemplaza el esquema previo) e I+D (29); menú, índice, Data y exportación conectados.
+- [x] Fuentes AI30–AI55 incorporadas en Data y README. Registro metodológico: docs/ai-evidence-2026-10-30.md.
+- [x] arXiv y cartografía archivados con SOURCE.md; agregación reproducible sin red. Tests escritos para CI, no ejecutados localmente.
+
+### Data to verify (human)
+- [ ] Claude Pro/Max/Ultra: 20/100/200 USD mensuales (AI30, consulta 30-10-2026), condiciones y nombres actuales; no equivalencia de cupos.
+- [ ] Tarifas API, USD por millón, entrada/salida/lectura de caché: Sonnet 4.6 3/15/0,30; GPT-6.1 Sol Standard contexto corto 2/10/0,10; Gemini 2.5 Pro Standard prompt hasta 200k 1,25/10/0,125; Grok 4.7 2/6/caché null. Validar AI30–AI33 y tratamientos de contexto/herramientas.
+- [ ] Cursor: 0,25 USD adicionales por millón en modelos elegibles Teams/Enterprise (AI34); no todos los planes.
+- [ ] Semáforo conserva supuestos de Argentina 21+30=51 %, Chile 19 %, Uruguay 22 %, México 16 %; contrastar aplicación concreta al checkout y forma de pago con ARCA/SII/DGI/SAT (AI48–AI52). Otros países grises.
+- [ ] Gallup IT Q4 2025: 77 % algún uso, 57 % frecuente, 31 % diario; crecimiento trimestral 76→77 % (AI35). Categorías anidadas.
+- [ ] S&P 500 2025: 11 % integración profunda y 10 % adicional productiva (AI36, preprint, clasificación de 10-K).
+- [ ] Encuestas nov. 2025–ene. 2026: aproximadamente 70 % adopción y 89 % sin impacto declarado en ventas por empleado en los tres años anteriores (AI37); no mezclar muestras.
+- [ ] OpenAI: >50 millones de suscriptores de consumo y >900 millones de usuarios semanales (27-02-2026, AI38), no todos de 20 USD ni todos los LLM. ONU: 8.200 millones en 2024 (AI39). 50/8200≈0,61 % es comparación de escala con fechas distintas, no tasa exacta ni cota superior.
+- [ ] Google: >3,2×10^15 tokens/mes, todos sus productos/APIs (junio 2026, AI41); OpenAI: >15.000 millones tokens/min en API (abril 2026, AI42). No ChatGPT/Gemini app exclusivamente.
+- [ ] Investigadores internos de OpenAI, agosto 2026: mediana >600 y p90 >7.000 USD/día equivalentes a tarifa API (AI55), no tokens ni factura real. No extrapolar percentiles al público.
+- [ ] Autor: 8.000 millones tokens Claude Code últimos 30 días, declarado el 30-10-2026; confirmar desglose entrada/salida/caché. Percentil y composición caché null.
+- [ ] arXiv nuevos envíos 2020–2025: 178.329; 181.630; 185.692; 208.493; 244.031; 284.486 (AI44, CSV archivado). Preprints.org 31.691 publicados y SocArXiv 3.162 aceptados en 2025 (AI45–AI46); no sumables.
+- [ ] AI co-scientist: reconstrucción de hipótesis con experimentos humanos previos, no reemplazo de todo el proceso; no afirmar genéricamente que meses de ciencia se vuelven días (AI47).
+- [ ] LATAM IVA digital y recargos en tarjeta (AI63–AI65): verificar alícuotas vigentes en cada jurisdicción (Uruguay 22 %, Chile 19 %, Colombia 19 %, Perú 18 % D.L. 1623, Rep. Dominicana 18 %, México 16 %, Venezuela 16 %, Ecuador 15 %, Honduras 15 %, Nicaragua 15 %, Costa Rica 13 %, El Salvador 13 %, Bolivia 13 %, Guatemala 12 %, Paraguay 10 %, Panamá 7 %, Brasil 3,5 % IOF Decreto 12.499/2025) y retención B2B en Argentina (+48,5 % grossing-up RG AFIP 739/99 + IVA).
+- [ ] Jellyfish 2026 Software Engineering Metrics Report (AI56): mediana 51 M, P90 380 M y P99 1.350 M tokens/mes por ingeniero de software; contrastar con telemetría de Claude Code y prompt caching (AI57, AI58).
+- [ ] Contraste macroeconómico 4IR (AI59–AI62): Goldman Sachs (+7 % PBI global / +1,5 pp anuales en desarrollados, AI59), FMI WP/25/76 (+0,8 a +1,3 % PTF acumulada en avanzadas vs. +0,1 a +0,4 % en emergentes, AI60), FMI AIPI (0,68 avanzadas vs. 0,46–0,48 Argentina/LATAM, AI61) y Anthropic Economic Index arXiv:2511.15080 (elasticidad ingreso-uso ~0,7 %, AI62).
+- [ ] Pirámide multi-modelo de adopción global de LLMs (AI66, AI67): Microsoft AI Economy Institute 2026 (~18,8 % de difusión global en edad activa; 28,8 % Norte Global vs. 16,2 % Sur Global, AI66) y Menlo Ventures 2025 (participación empresarial en LLMs: Anthropic Claude ~40 %, OpenAI ~27 %, Google Gemini ~21 %, AI67).
+- [ ] Cola extrema P99 de consumo mensual de tokens en ingeniería de software (AI68–AI74): Jellyfish State of AI in Software Engineering y Tokenomics 2027 (mediana ~81 USD / 51 M tokens, quintil empresarial superior ~2.500 M/mes, top 2 % ~500 M/semana ≈ 2.000–2.200 M/mes, P99 de gasto ~2.452 USD/mes, AI68, AI69, AI73), VibeCafé Token Consumption Percentiles (P95–P99: 1.900–7.400 M/mes; Claude Code P99 ≈ 4.800 M/mes, AI70), Cursor Insights (top 10 % concentra ~2/3 de tokens, AI71), Epoch AI / OpenAI Coding Agent Spending (AI72) y The Pragmatic Engineer (AI74).
+
+### Model assumptions
+- [ ] Ratificar bandas visuales del semáforo (<20 verde, 20–25 ámbar, >25 rojo). No afectan escenarios.
+- [ ] Pirámides conceptuales: anchos ilustrativos, no proporciones de población ni gasto. Falta una distribución pública comparable de tokens por usuario-mes; no se fabrican umbrales.
+
+### Visual debt
+- [ ] Revisión humana de cuatro nuevas láminas y mapa LATAM en 1366×768 y pantalla grande.
+
+- [x] Revisión del agente en navegador a 1366×768: pirámides, adopción e I+D; corregido ancho de las bandas y scroll de costos. Captura local tmp/ai-evidence/research-preview.png. Se mantiene revisión humana pendiente.

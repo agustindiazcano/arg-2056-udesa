@@ -21,7 +21,7 @@ describe('the Data page after the series migration', () => {
   const REMOVED = ['6'];
   const MOVED: Record<string, string> = { '11': '12', '9': '8', '10': '8', '13': '8', '1': '12', '7': '8', '2': '8', '4': '12' }; // 9, 10 and 13 are tabs of the Resources slide (8)
   const kept = fixture.filter((s) => !REMOVED.includes(s.id));
-  const remaining = [...kept.filter((s) => !(s.id in MOVED)), { id: '16' }, { id: '17' }, ...['21', '22', '23', '24', '25', '26'].map((id) => ({ id }))]; // 21 to 26: the AI access cost slide and the five outline slides (2026-10-23)
+  const remaining = [...kept.filter((s) => !(s.id in MOVED)), { id: '16' }, { id: '17' }, ...['21', '26', '27', '28', '29'].map((id) => ({ id }))];
 
   it('keeps every slide of main except the removed and the merged ones', () => {
     // the order of the slides changed on 2026-10-15 (14 goes after 1): the same slides, not the same order

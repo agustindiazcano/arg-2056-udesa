@@ -40,17 +40,17 @@ export const STEP_INFO: Record<number, StepInfo> = {
     refs: ['W3']
   },
   3: {
-    heading: 'Cuarta revolución industrial: la IA y el PBI de Argentina',
+    heading: 'Cuarta revolución industrial: de la euforia al ajuste estructural',
     paragraphs: [
-      'Tres escenarios del PBI real de Argentina hasta 2056, con un modelo simple de contabilidad del crecimiento: capital, trabajo y productividad total de los factores (PTF), más un impulso de la inteligencia artificial a la PTF que empieza bajo y crece de a poco. Todos parten del PBI de 2026 (el mismo valor de las otras diapositivas).',
-      'Base: 2,8 a 3,2 % anual hasta 2030 y 2,5 a 3,0 % después; la IA suma 0,1 a 0,2 puntos por año. Moderado: 3,3 a 3,8 % y 3,0 a 3,5 %; la IA suma 0,3 a 0,4 puntos. Optimista: 10 a 11 % anual hasta 2030 (el escenario extremo de Anthropic: el nivel del PBI sube 32,4 % sobre el base) y 4,0 a 4,5 % después (la productividad suma 1,5 puntos por año, como estima Goldman Sachs); es el límite alto de lo que dicen esos estudios, hechos para Estados Unidos. El gráfico usa el punto medio de cada rango.',
-      'Argentina parte con poca adopción de la IA en las empresas (alrededor de una de cada cinco) y detrás de Chile, México y Brasil en preparación. Por eso el impulso es menor y más lento que en Estados Unidos, donde los mismos escenarios suman entre 0,1 y 0,8 puntos por año.',
-      'Los analistas dan resultados muy distintos para el efecto de la IA en el nivel del PBI: de 1 a 1,8 % en diez años (Acemoglu) y 1,5 % a 2035 (Penn Wharton), a 7 % mundial en diez años (Goldman Sachs), hasta 15 % mundial a 2035 (PwC) y 8,3 o 32,4 % a 2030 en los escenarios sustancial y extremo de Anthropic. Todos suponen que los beneficios no son automáticos: dependen de energía, de que las empresas adopten la IA, de las habilidades y de las políticas.'
+      'Tres escenarios del PBI real hasta 2056 con contabilidad del crecimiento (capital, trabajo y PTF) más el impulso de la inteligencia artificial. La literatura reciente marca un contraste profundo: mientras Goldman Sachs (Briggs y Kodnani, 2023) proyectó +1,5 puntos porcentuales anuales de productividad (+7 % en el PBI global en 10 años), Daron Acemoglu (MIT, NBER w32487) aplicó el teorema de Hulten y estimó apenas +0,9 % a +1,6 % acumulado en una década (~0,1 a 0,15 pp/año).',
+      'La curva verde (Optimista) representa el techo teórico de economías frontera productoras de cómputo y modelos (Estados Unidos, Australia, Alemania, con un Índice de Preparación para la IA del FMI de 0,68). Argentina hoy no está en ese tren: tiene un AIPI de 0,47 (FMI), cerca de 45 % de informalidad laboral y es importadora neta de tokens con un sobrecosto fiscal de hasta 51 %.',
+      'El documento de trabajo del FMI «Mind the Gap» (WP/25/76) y el Anthropic Economic Index (arXiv:2511.15080) confirman que las ganancias de PTF se concentran en países de altos ingresos, mientras que en economías emergentes con fricción estructural el impulso neto de la IA es de ~0,00 pp/año en el caso pesimista, +0,17 pp/año en el neutro y +0,42 pp/año en el optimista.',
+      'Con el selector «Proyección» podés alternar entre el PBI de Argentina, la proyección agregada del Mundo y la comparación directa entre el grupo de países que se suben a la ola (Frontera) y los países con fricción estructural como Argentina.'
     ],
-    how: 'Compará la distancia entre las tres líneas en 2056, en el PBI y en el PBI por habitante, y mirá la tabla con el crecimiento, la población y los años para duplicar el PBI. La diferencia entre el escenario base y el optimista es lo que podrían sumar la IA, los recursos y la ejecución de proyectos juntos. Las tablas de Data traen los rangos completos, la comparación con Estados Unidos y las estimaciones de cada analista.',
+    how: 'Usá el botón «Proyección» arriba para comparar Argentina, el Mundo y los dos grupos de países (los que se suben a la ola vs. como Argentina). Mirá las banderas en cada curva: EE. UU., Australia y Alemania en la curva verde (frontera); España, Chile y Uruguay en la intermedia; Argentina, Brasil y México en la curva con fricción.',
     data: 'parcial',
-    note: 'Los escenarios salen de un informe pasado por el responsable, con rangos de crecimiento, no de un modelo de este proyecto; el gráfico toma el punto medio. 2026 es el mismo valor de las otras diapositivas (crecimiento del FMI). Las estimaciones de los analistas y sus enlaces no se verificaron en los originales. Ninguna es una predicción.',
-    refs: ['P8', 'P9', 'A1', 'A2', 'A3', 'A4', 'A5', 'A6', 'A7', 'A8', 'A9', 'A10']
+    note: 'Los escenarios salen de un informe pasado por el responsable y de la síntesis de Goldman Sachs, FMI WP/25/76, FMI AIPI, Acemoglu (NBER w32487) y Anthropic Economic Index. 2026 es el mismo valor de las otras diapositivas (crecimiento del FMI).',
+    refs: ['P8', 'P9', 'A1', 'A2', 'A3', 'A4', 'A5', 'A6', 'A7', 'A8', 'A9', 'A10', 'AI59', 'AI60', 'AI61', 'AI62']
   },
   4: {
     heading: 'De qué viven las exportaciones',
@@ -89,7 +89,7 @@ export const STEP_INFO: Record<number, StepInfo> = {
     how: 'Elegí la pestaña: Minería (barra gris 2024, azul la proyección a 2035), Hidrocarburos (línea llena la producción de petróleo; la punteada y la franja, lo esperado), Agro (toneladas por campaña de los cuatro cultivos) y Stock (valor de lo que hay bajo la tierra). Los proyectos, la serie desde 1950 y las toneladas, superficie y rendimiento por campaña están en las tablas de la sección Data.',
     data: 'parcial',
     note: 'Minería: Secretaría de Minería, ARMINERA 2025, leído a mano de imágenes; la proyección es de la Secretaría. Hidrocarburos: la historia de 2015 a 2025 es real (Secretaría de Energía, datos abiertos); la proyección y la franja son de prueba. Agro: toneladas reales del MAGyP (series nacionales). Stock: las barras son de prueba; las cantidades físicas vienen de ARMINERA 2025. Las listas de proyectos del RIGI son de prensa y no están verificadas.',
-    refs: ['E3', 'E4', 'E5', 'E6', 'E8', 'R1', 'R2', 'R3', 'R6', 'R8', 'R10']
+    refs: ['E3', 'E4', 'E5', 'E6', 'E8', 'R1', 'R2', 'R3', 'R4', 'R5', 'R6', 'R8', 'R10']
   },
   12: {
     heading: 'De qué se compone el PBI y qué se exporta',
@@ -102,5 +102,5 @@ export const STEP_INFO: Record<number, StepInfo> = {
     data: 'real',
     note: 'INDEC, cuadro 4 del informe de avance del nivel de actividad del segundo trimestre de 2026: precios de 2004, datos preliminares. A precios corrientes las proporciones cambian.',
     refs: ['E2', 'E7']
-  },
+  }
 };

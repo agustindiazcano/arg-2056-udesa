@@ -9,10 +9,20 @@ describe('cost of the AI plans by country', () => {
     expect(effectiveCost(200, arg)).toBeCloseTo(302, 6);
   });
 
-  it('charges no national tax in the United States, so the list price is the cost', () => {
+  it('charges no national tax in the United States, and includes Chile, Peru and Latin American peers', () => {
     const usa = ACCESS_COUNTRIES.find((c) => c.name === 'Estados Unidos')!;
+    const chl = ACCESS_COUNTRIES.find((c) => c.name === 'Chile')!;
+    const per = ACCESS_COUNTRIES.find((c) => c.name === 'Perú')!;
+    const col = ACCESS_COUNTRIES.find((c) => c.name === 'Colombia')!;
+    const bra = ACCESS_COUNTRIES.find((c) => c.name === 'Brasil')!;
     expect(taxPct(usa)).toBe(0);
     expect(effectiveCost(100, usa)).toBe(100);
+    expect(taxPct(chl)).toBe(19);
+    expect(effectiveCost(20, chl)).toBeCloseTo(23.8, 6);
+    expect(taxPct(per)).toBe(18);
+    expect(effectiveCost(20, per)).toBeCloseTo(23.6, 6);
+    expect(taxPct(col)).toBe(19);
+    expect(taxPct(bra)).toBeCloseTo(3.5, 6);
   });
 
   it('offers the plans of 20, 100 and 200 dollars', () => {

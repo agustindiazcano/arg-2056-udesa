@@ -47,9 +47,10 @@ describe('the first slide: the title and the index', () => {
     expect(list).toHaveLength(rest.length);
     expect(list.map((li) => li.textContent)).toEqual(indexItems().map((i) => `${i.number} · ${i.title}`));
     expect(list[0]!.textContent).toBe('1 · El PBI de Argentina desde 1960');
-    expect(list[4]!.textContent).toBe(`5 · ${PRODUCTIVITY_TITLE}`);
-    expect(list[7]!.textContent).toBe(`8 · ${FORECAST_UNCERTAINTY_TITLE}`);
-    expect(list.at(-1)!.textContent).toBe(`${rest.length} · ${AI_PYRAMID_TITLE}`);
+    expect(list[6]!.textContent).toBe(`7 · ${AI_PYRAMID_TITLE}`);
+    expect(list[9]!.textContent).toBe(`10 · ${PRODUCTIVITY_TITLE}`);
+    expect(list[12]!.textContent).toBe(`13 · ${FORECAST_UNCERTAINTY_TITLE}`);
+    expect(list.at(-1)!.textContent).toBe(`${rest.length} · ${FORECAST_UNCERTAINTY_TITLE}`);
   });
 
   it('uses the title each slide shows as its own heading', () => {
@@ -71,7 +72,7 @@ describe('the first slide: the title and the index', () => {
 
   it('opens a slide when its title is chosen', () => {
     render(<IndexStep />);
-    fireEvent.click(screen.getByRole('button', { name: `5 · ${PRODUCTIVITY_TITLE}` }));
+    fireEvent.click(screen.getByRole('button', { name: `10 · ${PRODUCTIVITY_TITLE}` }));
     expect(useStore.getState().tourStep).toBe(14);
   });
 
