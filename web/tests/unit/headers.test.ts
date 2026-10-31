@@ -62,7 +62,7 @@ describe('headers.config.json: the Content-Security-Policy', () => {
       'style-src': ["'self'", "'unsafe-inline'"],
       'img-src': ["'self'", 'data:', 'blob:', 'https://api.maptiler.com'],
       'font-src': ["'self'"],
-      'connect-src': ["'self'", 'https://api.maptiler.com'],
+      'connect-src': ["'self'", 'blob:', 'https://api.maptiler.com'],
       'worker-src': ["'self'", 'blob:'],
       'object-src': ["'none'"],
       'base-uri': ["'self'"],

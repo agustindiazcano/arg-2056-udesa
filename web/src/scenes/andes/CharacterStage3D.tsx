@@ -7,10 +7,6 @@ import {
   type UniformModelId
 } from './uniformModels';
 
-if (typeof window !== 'undefined' && 'WebGLRenderingContext' in window) {
-  void loadUniformAssets().catch(() => undefined);
-}
-
 export const MIN_ZOOM_SCALE = 0.55;
 export const MAX_ZOOM_SCALE = 2.6;
 
