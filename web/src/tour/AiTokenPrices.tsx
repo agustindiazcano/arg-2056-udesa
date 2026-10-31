@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import geometry from './latamGeometry.json';
+import { latamGeometry as geometry } from './latamGeometry.js';
 import { ACCESS_COUNTRIES, effectiveCost, taxPct } from './aiAccess.js';
 import { LATAM_COUNTRY_NAMES } from './AiAccessMap.js';
 import { API_PRICES, accessBand } from './aiEvidence.js';
@@ -48,6 +48,7 @@ export function AiTokenPrices() {
             aria-label={`Mapa semáforo de América Latina: sobrecosto porcentual y precio por millón de tokens de ${model.model} en cada país. Argentina +51 % (${fmtUsd(effectiveCost(model.output, argCountry))} salida), Uruguay +22 %, Chile y Colombia +19 %, Perú +18 %, México +16 %, Brasil +3,5 %.`}
           >
             {geometry.map((region) => {
+              if (region.id === 'FLK') return <path key={region.id} d={region.path} fillRule="evenodd" className="ai-country ai-country--missing" aria-hidden="true" />;
               const c = ACCESS_COUNTRIES.find((item) => item.name === LATAM_COUNTRY_NAMES[region.id]);
               const pct = c ? taxPct(c) : null;
               const outCost = c ? fmtUsd(effectiveCost(model.output, c)) : null;
