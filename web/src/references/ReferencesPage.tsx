@@ -8,7 +8,6 @@ import { SceneError, SceneLoading } from '../ui/SceneStatus.js';
 import { VisitsSection } from '../analytics/VisitsSection.js';
 import { filterReferences, groupByType, resolveDerived } from './selectors.js';
 import { REFERENCES } from '../datasets/references.js';
-import { STEP_INFO } from '../tour/stepInfo.js';
 
 const TYPE_LABEL: Record<PublisherType, string> = {
   official: 'Oficial',
@@ -123,7 +122,7 @@ export function ReferencesPage({ references, extra }: { references: References; 
       : '';
 
   return (
-    <main data-catalog-refs={REFERENCES.length + Object.keys(STEP_INFO).length} style={{ maxWidth: '60rem', margin: '0 auto', padding: 'var(--space-lg) var(--space-md)', color: 'var(--ink)' }}>
+    <main data-catalog-refs={REFERENCES.length} style={{ maxWidth: '60rem', margin: '0 auto', padding: 'var(--space-lg) var(--space-md)', color: 'var(--ink)' }}>
       <header>
         <h1>Fuentes y atribuciones</h1>
         {sources.length === 0 ? (
