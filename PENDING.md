@@ -308,3 +308,8 @@ Order: C8, C7, C2, C3, C4, C5, C1, C6.
 - [x] Diapositiva 0: cuatro logos institucionales existentes debajo de Argentina 2056, sobre fondo negro.
 - [x] Capturas de las 14 diapositivas (0–13) y dos vistas del cruce de los Andes; galería en docs/screenshots.md y selección en README.
 - [ ] Revisión humana del tamaño de los logos y de la selección de capturas.
+
+## Done · README institucional y autor (2026-10-30)
+
+- [x] Enlace al hackathon Contar con Datos de UdeSA y los cuatro enlaces institucionales del footer.
+- [x] Autor con la titulación indicada y enlaces confirmados de LinkedIn y portfolio.
