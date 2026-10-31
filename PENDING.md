@@ -11,6 +11,7 @@ Every task below has a brief (`docs/tasks/<slug>.md`, historical briefs in `docs
 - [x] Replace slide reference chips with a shared references dialog; CI covers each slide and keyboard navigation. Human review of source associations and visual layout remains useful. Plan: `docs/tasks/references-responsive-carousel.md`.
 - [ ] Adapt slides for laptop/narrow screens with a secondary-chart carousel. Plan: `docs/tasks/references-responsive-carousel.md`.
 - [x] Update slide 4 subtitle and show the uniforms control only in Andes. Branch `task/slide4-header-plans`.
+- [x] Slide 4: use the existing Natural Earth 1:10m Malvinas outline on both Latin America maps, as non-selectable no-data geography. Branch `task/malvinas-slide4`.
 
 Order: C8, C7, C2, C3, C4, C5, C1, C6.
 - [x] C8 `map-zoom-limits`: ZOOM_MAX 8 -> 32 in `web/src/charts/navState.ts` (country and department maps); tests updated. Branch `task/map-zoom-limits`.

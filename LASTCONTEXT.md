@@ -1,13 +1,12 @@
 # Last Context
 
 ## State
-- Branch: `task/references-i18n-readme`, based on `task/slide4-header-plans`.
-- `README.md` translated to English; `README.es.md` is an exact copy of the original. All 168 original URLs are retained.
-- ES/EN site translation plan: `docs/tasks/language-switch.md`.
-- Shared slide references dialog includes the uncertainty slide's D6/D7 sources. CI run 41220647407 passed, including a keyboard/dialog pass over all data slides.
-- Human review of source associations and visual layout is still recommended.
-- Responsive carousel remains planned in `docs/tasks/references-responsive-carousel.md`.
-- Malvinas branch passed CI (run 41216885522). Leave untracked `.worktrees/` untouched.
+- Branch: `task/references-i18n-readme`; PR #164 is open against `main`.
+- Merged current `main` into the PR branch, retaining the slide 4 Malvinas outline: Natural Earth 1:10m, projected with the map and shown as non-selectable no-data geography (D-geo-1).
+- Slide references use a shared accessible dialog; CI run 41220647407 passed, including keyboard and slide coverage. Human review of source associations and visual layout remains recommended.
+- `README.md` is in English; `README.es.md` preserves the original Spanish. The separate `task/readme-source-labels` branch removes source-status labels and has not been merged.
+- ES/EN site translation and the responsive carousel remain planned in `docs/tasks/language-switch.md` and `docs/tasks/references-responsive-carousel.md`.
+- Leave the untracked `.worktrees/` directory untouched.
 
 ## Next step
-- Push README changes, inspect CI, and request human review. Never merge or push to main.
+- Push the conflict resolution, check CI for the updated branch, and request human review of PR #164. Never merge or push to `main`.
