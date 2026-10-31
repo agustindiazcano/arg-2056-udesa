@@ -67,6 +67,12 @@ export const CharacterStage3D: React.FC<CharacterStage3DProps> = ({
   const zoomScaleRef = useRef(zoomScale);
   zoomScaleRef.current = zoomScale;
   const dragRef = useRef<{ active: boolean; lastX: number }>({ active: false, lastX: 0 });
+  const renderRef = useRef<() => void>(() => undefined);
+
+  useEffect(() => {
+    zoomScaleRef.current = zoomScale;
+    renderRef.current();
+  }, [zoomScale]);
 
   useEffect(() => {
     const host = hostRef.current;
@@ -203,14 +209,27 @@ export const CharacterStage3D: React.FC<CharacterStage3DProps> = ({
         const clock = new THREE.Clock();
         setLoaded(true);
 
-        const tick = () => {
+        const renderFrame = () => {
           if (cancelled || !host.isConnected) return;
-          const dt = Math.min(clock.getDelta(), 0.05);
-          const elapsed = clock.elapsedTime;
-
           updateCameraFromZoom();
+          stageGroup.rotation.y = yawOffsetRef.current;
+          renderer.render(scene, camera);
+        };
+        renderRef.current = renderFrame;
 
-          if (!prefersReducedMotion) {
+        if (prefersReducedMotion) {
+          renderFrame();
+        } else {
+          let lastTime = 0;
+          const tick = (now: number) => {
+            if (cancelled || !host.isConnected) return;
+            rafId = window.requestAnimationFrame(tick);
+            if (now - lastTime < 32) return;
+            const dt = lastTime > 0 ? Math.min((now - lastTime) / 1000, 0.05) : 0.016;
+            lastTime = now;
+
+            updateCameraFromZoom();
+
             for (const mixer of mixers) {
               mixer.update(dt);
             }
@@ -218,18 +237,18 @@ export const CharacterStage3D: React.FC<CharacterStage3DProps> = ({
               yawOffsetRef.current += dt * 0.28;
             }
             if (marchBob) {
+              const elapsed = clock.elapsedTime;
               for (const node of characterNodes) {
                 node.group.position.z = node.baseZ + Math.sin(elapsed * 1.4 + node.phase) * 0.06;
               }
             }
-          }
 
-          stageGroup.rotation.y = yawOffsetRef.current;
-          renderer.render(scene, camera);
+            stageGroup.rotation.y = yawOffsetRef.current;
+            renderer.render(scene, camera);
+          };
+
           rafId = window.requestAnimationFrame(tick);
-        };
-
-        rafId = window.requestAnimationFrame(tick);
+        }
 
         const onResize = () => {
           if (!host) return;
@@ -238,6 +257,7 @@ export const CharacterStage3D: React.FC<CharacterStage3DProps> = ({
           camera.aspect = w / h;
           camera.updateProjectionMatrix();
           renderer.setSize(w, h, false);
+          renderFrame();
         };
 
         let resizeObserver: ResizeObserver | null = null;
@@ -249,6 +269,7 @@ export const CharacterStage3D: React.FC<CharacterStage3DProps> = ({
         }
 
         cleanupFn = () => {
+          renderRef.current = () => undefined;
           if (resizeObserver) {
             resizeObserver.disconnect();
           } else {
@@ -299,6 +320,7 @@ export const CharacterStage3D: React.FC<CharacterStage3DProps> = ({
     const dx = e.clientX - dragRef.current.lastX;
     dragRef.current.lastX = e.clientX;
     yawOffsetRef.current += dx * 0.01;
+    renderRef.current();
   };
 
   const handlePointerUp = () => {
@@ -314,6 +336,7 @@ export const CharacterStage3D: React.FC<CharacterStage3DProps> = ({
       MAX_ZOOM_SCALE
     );
     zoomScaleRef.current = next;
+    renderRef.current();
     onZoomScaleChange?.(next);
   };
 
