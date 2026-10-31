@@ -91,7 +91,7 @@ export function AndesIntro({ ready, skip = false, onDone }: AndesIntroProps) {
             animationMode="walk"
             cameraPosition={[0, 1.4, 3.2]}
             cameraLookAt={[0, 0.92, 0]}
-            cameraFov={38}
+            cameraFov={48}
             marchBob
             className="andes-intro-march-stage"
           />
