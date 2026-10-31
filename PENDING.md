@@ -302,3 +302,9 @@ Order: C8, C7, C2, C3, C4, C5, C1, C6.
 - [ ] Revisión humana de cuatro nuevas láminas y mapa LATAM en 1366×768 y pantalla grande.
 
 - [x] Revisión del agente en navegador a 1366×768: pirámides, adopción e I+D; corregido ancho de las bandas y scroll de costos. Captura local tmp/ai-evidence/research-preview.png. Se mantiene revisión humana pendiente.
+
+## Done · Logos y capturas (2026-10-30)
+
+- [x] Diapositiva 0: cuatro logos institucionales existentes debajo de Argentina 2056, sobre fondo negro.
+- [x] Capturas de las 14 diapositivas (0–13) y dos vistas del cruce de los Andes; galería en docs/screenshots.md y selección en README.
+- [ ] Revisión humana del tamaño de los logos y de la selección de capturas.
