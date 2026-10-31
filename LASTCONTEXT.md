@@ -5,7 +5,8 @@
 - Captured all 14 tour slides (0–13) and two Andes views through the browser.
 - Images: `docs/assets/screenshots/`; full gallery: `docs/screenshots.md`; six selected images in README.
 - Browser captures cropped to presentation content, excluding browser chrome and desktop overlay.
-- No local test suites or validators run, per RULE #1. GitHub Actions validation pending push.
+- No local test suites or validators run, per RULE #1. GitHub Actions run 41159578255 passed for implementation commit 6054175 (web, e2e, python, terrain, data).
 - Human review: logo scale and screenshot selection. No data/model parameters changed.
 - Untracked user folders `test/` and `tmp/` preserved.
-- Next: push branch, read CI status, fix any failures, then open PR; never merge.
+- Branch pushed; CI passed before PR creation. Next: human PR review; never merge automatically.
+
