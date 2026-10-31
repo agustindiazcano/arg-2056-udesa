@@ -4,6 +4,7 @@ import { ChartHelp } from '../ui/ChartHelp.js';
 import { RefLink } from '../ui/RefLink.js';
 import { useTourLayout } from './useTourLayout.js';
 import { STEP_INFO } from './stepInfo.js';
+import { useSlideReferences } from '../ui/SlideReferences.js';
 
 const BY_ID = new Map(REFERENCES.map((r) => [r.id, r]));
 
@@ -15,6 +16,7 @@ export function TourSidebar({ step }: { step: number }) {
   const open = useTourLayout((s) => s.sideOpen);
   const toggle = useTourLayout((s) => s.toggleSide);
   const info = STEP_INFO[step];
+  const collected = useSlideReferences((info?.refs ?? []).map((id) => ({ id })));
   if (!info) return null;
   const refs = info.refs.map((id) => BY_ID.get(id)).filter((r) => r !== undefined);
 
@@ -44,7 +46,7 @@ export function TourSidebar({ step }: { step: number }) {
         <summary>Cómo leer este gráfico</summary>
         <p>{info.how}</p>
       </details>
-      {refs.length > 0 && (
+      {!collected && refs.length > 0 && (
         <div className="tour-side-refs">
           <strong>Referencias</strong>
           <ul className="ref-chip-ul">

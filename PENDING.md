@@ -4,6 +4,8 @@ Every task below has a brief (`docs/tasks/<slug>.md`, historical briefs in `docs
 
 ## New corrections (`test/correcciones-nuevas.png`, plan in `docs/action-plan-correcciones-nuevas.md`)
 
+- [ ] Add a site-wide ES / EN language selector and translations. Plan: `docs/tasks/language-switch.md`.
+
 - [ ] Replace slide reference chips with a references dialog and adapt slides for laptop/narrow screens with a secondary-chart carousel. Plan: `docs/tasks/references-responsive-carousel.md`.
 - [x] Update slide 4 subtitle and show the uniforms control only in Andes. Branch `task/slide4-header-plans`.
 
