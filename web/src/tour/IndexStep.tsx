@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import { Reveal } from '../motion/Reveal.js';
 import { useStore } from '../state/store.js';
 import { indexItems } from './indexData.js';
+import { INSTITUTIONS } from '../ui/institutions.js';
 
 /**
  * The first slide of the Recorrido: the text "Argentina 2056" and the index, the list of the other slides with their number and title.
@@ -16,6 +17,11 @@ export function IndexStep() {
         <h1 className="index-title">
           <span className="a">Argentina</span> <span className="n">2056</span>
         </h1>
+        <ul className="index-logos" aria-label="Instituciones">
+          {INSTITUTIONS.map(({ name, src }) => (
+            <li key={name}><img src={src} alt={name} /></li>
+          ))}
+        </ul>
       </Reveal>
       <Reveal k="list" delay={0.1} className="gdp-chart index-card">
         <nav aria-label="Índice">

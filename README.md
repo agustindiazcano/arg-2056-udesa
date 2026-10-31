@@ -13,6 +13,18 @@ Un relato interactivo, con datos, que une el Cruce de los Andes (1817) con el de
 
 La incertidumbre se muestra como abanico de percentiles; las cifras en disputa, como rangos; los vacíos, como «sin dato». Los supuestos y las reglas de datos están en [`AGENTS.md`](AGENTS.md) y [`docs/assumptions.md`](docs/assumptions.md).
 
+## El recorrido en imágenes
+
+Capturas de la aplicación del 30 de octubre de 2026. La [galería completa](docs/screenshots.md) incluye el recorrido de los Andes y todas las diapositivas de «Hacia el 2056».
+
+| Portada e índice | Cruce de los Andes |
+| --- | --- |
+| ![Diapositiva 0: Argentina 2056 con los cuatro logos institucionales](docs/assets/screenshots/00-indice.jpg) | ![Rutas del cruce sobre el relieve de los Andes](docs/assets/screenshots/andes-recorrido.jpg) |
+| Recursos naturales | Acceso a la inteligencia artificial |
+| ![Minería, composición de exportaciones y mapa provincial](docs/assets/screenshots/02-recursos.jpg) | ![Mapa de costos de acceso a IA en Latinoamérica](docs/assets/screenshots/04-acceso-ia.jpg) |
+| Crecimiento compuesto | Productividad |
+| ![Calculadora y explicación de la regla del 70](docs/assets/screenshots/08-regla-70.jpg) | ![Comparación de la productividad total de los factores](docs/assets/screenshots/10-productividad.jpg) |
+
 ## Qué es
 
 Un proyecto de **ciencia de datos y visualización**: toma datos abiertos de organismos oficiales e internacionales, los baja con un pipeline reproducible (cada archivo con su hash, su fuente y su fecha), los valida y los muestra en gráficos interactivos y mapas, 2D y 3D. Cada gráfico tiene su tabla, y cada número de la presentación está en la página Data con su referencia.

@@ -2213,10 +2213,38 @@ main.scene-container {
 
 .index-head {
   display: flex;
+  flex-direction: column;
+  gap: clamp(1.5rem, 4vh, 3rem);
   align-items: center;
   justify-content: center;
   height: 100%;
   pointer-events: none;
+}
+
+.index-logos {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: center;
+  gap: 1.5rem;
+  width: min(100%, 26rem);
+  box-sizing: border-box;
+  margin: 0;
+  padding: 1.5rem;
+  list-style: none;
+  background: var(--intro-black);
+}
+
+.index-logos li {
+  display: flex;
+  justify-content: center;
+  min-width: 0;
+}
+
+.index-logos img {
+  display: block;
+  max-width: 100%;
+  height: 2.6rem;
+  object-fit: contain;
 }
 
 .index-title {
