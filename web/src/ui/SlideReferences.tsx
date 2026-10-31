@@ -35,7 +35,8 @@ export function SlideReferences({ children }: { children: React.ReactNode }) {
         const targets = dialog?.querySelectorAll<HTMLElement>('button, a[href]');
         if (!targets?.length) return;
         const first = targets[0]!; const last = targets[targets.length - 1]!;
-        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+        if (!dialog?.contains(document.activeElement)) { e.preventDefault(); first.focus(); }
+        else if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
         else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
       }
     };

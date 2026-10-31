@@ -31,6 +31,19 @@ describe('slide references', () => {
     expect(within(dialog).getByText(`[${refNumber('W5')}]`)).toBeTruthy();
   });
 
+  it('keeps tab navigation inside the dialog', () => {
+    render(<SlideReferences><RefList ids={['F1']} /></SlideReferences>);
+    fireEvent.click(screen.getByRole('button', { name: 'Referencias' }));
+    const dialog = screen.getByRole('dialog');
+    const close = within(dialog).getByRole('button', { name: 'Cerrar' });
+    const link = within(dialog).getByRole('link');
+    expect(document.activeElement).toBe(close);
+    fireEvent.keyDown(window, { key: 'Tab', shiftKey: true });
+    expect(document.activeElement).toBe(link);
+    fireEvent.keyDown(window, { key: 'Tab' });
+    expect(document.activeElement).toBe(close);
+  });
+
   it('includes sources from the access slide map and token views before switching views', () => {
     render(<SlideReferences><AiAccessStep /></SlideReferences>);
     fireEvent.click(screen.getByRole('button', { name: 'Referencias' }));
