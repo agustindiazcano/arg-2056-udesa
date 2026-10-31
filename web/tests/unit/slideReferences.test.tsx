@@ -5,6 +5,7 @@ import { cleanup, fireEvent, render, screen, within } from '@testing-library/rea
 import { SlideReferences } from '../../src/ui/SlideReferences';
 import { RefList, refNumber } from '../../src/ui/RefLink';
 import { ChartHelp } from '../../src/ui/ChartHelp';
+import { AiAccessStep } from '../../src/tour/AiAccessStep';
 
 afterEach(cleanup);
 
@@ -28,5 +29,13 @@ describe('slide references', () => {
     const dialog = screen.getByRole('dialog');
     expect(within(dialog).queryByText(`[${refNumber('F1')}]`)).toBeNull();
     expect(within(dialog).getByText(`[${refNumber('W5')}]`)).toBeTruthy();
+  });
+
+  it('includes sources from the access slide map and token views before switching views', () => {
+    render(<SlideReferences><AiAccessStep /></SlideReferences>);
+    fireEvent.click(screen.getByRole('button', { name: 'Referencias' }));
+    const dialog = screen.getByRole('dialog', { name: 'Referencias' });
+    expect(within(dialog).getByText(`[${refNumber('AI53')}]`)).toBeTruthy();
+    expect(within(dialog).getByText(`[${refNumber('AI31')}]`)).toBeTruthy();
   });
 });

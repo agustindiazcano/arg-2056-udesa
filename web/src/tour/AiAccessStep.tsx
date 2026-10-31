@@ -12,7 +12,7 @@ import { AiAccessMap } from './AiAccessMap.js';
 import { AiTokenPrices } from './AiTokenPrices.js';
 import './aiEvidence.css';
 
-const REFS = ['AI30', 'AI48', 'AI49', 'AI50', 'AI63', 'AI64', 'AI65'] as const;
+const REFS = ['AI30', 'AI31', 'AI32', 'AI33', 'AI34', 'AI48', 'AI49', 'AI50', 'AI51', 'AI52', 'AI53', 'AI63', 'AI64', 'AI65'] as const;
 const usd = (v: number, digits = 1): string => `${formatNumber(v, digits)} USD`;
 
 /**
