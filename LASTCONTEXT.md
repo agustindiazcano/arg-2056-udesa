@@ -1,12 +1,9 @@
 # Current state
-- Branch: `task/slide-logos-readme`, based on updated main `834ba9d`.
-- Slide 0 (`IndexStep.tsx`) reuses the four existing `INSTITUTIONS` logos under Argentina 2056.
-- Responsive two-column logo panel on a black token background; alternative text names every institution.
-- Captured all 14 tour slides (0–13) and two Andes views through the browser.
-- Images: `docs/assets/screenshots/`; full gallery: `docs/screenshots.md`; six selected images in README.
-- Browser captures cropped to presentation content, excluding browser chrome and desktop overlay.
-- No local test suites or validators run, per RULE #1. GitHub Actions run 41159578255 passed for implementation commit 6054175 (web, e2e, python, terrain, data).
-- Human review: logo scale and screenshot selection. No data/model parameters changed.
-- Untracked user folders `test/` and `tmp/` preserved.
-- Branch pushed; CI passed before PR creation. Next: human PR review; never merge automatically.
-
+- Branch: `task/readme-author-links`, based on main `90e4a54` (PR #158 merged).
+- README now identifies the project as developed for UdeSA's Contar con Datos hackathon and links its page.
+- Added all four institutional links from `web/src/ui/institutions.ts`.
+- Added Autor: Agustin Diaz-Cano, MS Candidate, Information Systems Engineering (UTN).
+- Author links: https://www.linkedin.com/in/agustindiazcano and https://www.agustindiazcano.com/ (confirmed through public portfolio and GitHub profile).
+- Documentation only. CI push/pull_request paths-ignore excludes Markdown-only changes; no local tests run.
+- Existing slide logos and screenshot gallery preserved. User folders `test/` and `tmp/` preserved.
+- Next: push, inspect available CI runs and open documentation PR for human review; never merge automatically.

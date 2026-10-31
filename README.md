@@ -2,6 +2,8 @@
 
 # Argentina 2056: del Cruce de los Andes a la Cuarta Revolución Industrial
 
+Proyecto desarrollado para el hackathon [Contar con Datos de la Universidad de San Andrés](https://www.udesa.edu.ar/contar-con-datos).
+
 Un relato interactivo, con datos, que une el Cruce de los Andes (1817) con el desafío de Argentina hacia 2056: recursos, economía, población y el impacto de la inteligencia artificial y la automatización (la «Cuarta Revolución Industrial» en el sentido de Klaus Schwab, Foro Económico Mundial).
 
 - **Los Andes**: mapa 3D con satélite y relieve reales; la marcha de la columna principal del Ejército de los Andes, las otras columnas del cruce y el encuentro de las fuerzas, con figuras en miniatura.
@@ -76,6 +78,21 @@ Sin `VITE_MAPTILER_KEY` la escena de los Andes muestra un aviso y un fondo liso.
 | `data/` | Archivos crudos con hash y fuente, salidas procesadas y esquemas JSON |
 | `scripts/` | Pipeline de datos (`datapipe`), descargas de las fuentes, chequeos y `precheck.py` |
 | `docs/` | Decisiones, supuestos, diseño y fuentes |
+
+## Instituciones
+
+Enlaces institucionales que aparecen en el footer del sitio:
+
+- [Universidad de San Andrés](https://www.udesa.edu.ar)
+- [Data Science Lab, Universidad de San Andrés](https://www.udesa.edu.ar/data-science-lab)
+- [Contar con Datos](https://www.udesa.edu.ar/contar-con-datos)
+- [Secretaría de Innovación, Ciencia y Tecnología](https://www.argentina.gob.ar/jefatura/innovacion-ciencia-y-tecnologia)
+
+## Autor
+
+**Agustin Diaz-Cano, MS Candidate, Information Systems Engineering (UTN)**
+
+[LinkedIn](https://www.linkedin.com/in/agustindiazcano) · [Portfolio](https://www.agustindiazcano.com/)
 
 ## Referencias
 
