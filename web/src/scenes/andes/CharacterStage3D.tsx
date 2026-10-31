@@ -204,7 +204,7 @@ export const CharacterStage3D: React.FC<CharacterStage3DProps> = ({
         setLoaded(true);
 
         const tick = () => {
-          if (cancelled) return;
+          if (cancelled || !host.isConnected) return;
           const dt = Math.min(clock.getDelta(), 0.05);
           const elapsed = clock.elapsedTime;
 

@@ -5,7 +5,7 @@ import { ANDES_INTRO_MARCH_FORMATION } from './uniformModels';
 import './andesIntro.css';
 
 /** The least time the loading screen stays, so the march and title can be seen even when the map is ready at once. */
-export const INTRO_MIN_MS = 2200;
+export const INTRO_MIN_MS = 1200;
 /** The most it waits for the map: after this it leaves anyway (a slow network must not hold the scene). */
 export const INTRO_MAX_MS = 8000;
 /** How long it takes to leave (the clouds fade out); the same number is in `andesIntro.css`. */
