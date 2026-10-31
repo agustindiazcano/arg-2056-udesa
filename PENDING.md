@@ -313,3 +313,7 @@ Order: C8, C7, C2, C3, C4, C5, C1, C6.
 
 - [x] Enlace al hackathon Contar con Datos de UdeSA y los cuatro enlaces institucionales del footer.
 - [x] Autor con la titulación indicada y enlaces confirmados de LinkedIn y portfolio.
+
+## Done · Índice del README (2026-10-30)
+
+- [x] Índice con enlaces a todas las secciones y subsecciones, anclas explícitas y títulos enlazados de vuelta al índice.
